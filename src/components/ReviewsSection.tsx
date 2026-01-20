@@ -70,50 +70,50 @@ const ReviewsSection = () => {
   const visibleReviews = getVisibleReviews();
 
   return (
-    <section id="отзывы" className="py-12 relative overflow-hidden">
+    <section id="отзывы" className="py-10 sm:py-12 relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-48 h-48 rounded-full bg-neon-cyan/5 blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-48 h-48 rounded-full bg-neon-magenta/5 blur-3xl" />
+        <div className="absolute top-1/4 left-1/4 w-32 sm:w-48 h-32 sm:h-48 rounded-full bg-neon-cyan/5 blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-32 sm:w-48 h-32 sm:h-48 rounded-full bg-neon-magenta/5 blur-3xl" />
       </div>
 
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center mb-10">
-          <span className="inline-block px-4 py-2 rounded-full neon-border text-sm font-medium text-primary mb-3">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
+        <div className="text-center mb-6 sm:mb-10">
+          <span className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-full neon-border text-xs sm:text-sm font-medium text-primary mb-2 sm:mb-3">
             ОТЗЫВЫ
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black">
             <span className="text-foreground">ЧТО ГОВОРЯТ </span>
             <span className="neon-text">КЛИЕНТЫ</span>
           </h2>
         </div>
 
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-3xl mx-auto">
           <div className="relative">
             {/* Two review cards side by side */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {visibleReviews.map((review) => (
-                <div key={review.id} className="glass-card rounded-2xl p-6">
-                  <Quote className="w-6 h-6 text-primary/30 mb-3" />
+                <div key={review.id} className="glass-card rounded-xl sm:rounded-2xl p-4 sm:p-5">
+                  <Quote className="w-5 h-5 sm:w-6 sm:h-6 text-primary/30 mb-2 sm:mb-3" />
                   
-                  <p className="text-sm md:text-base text-foreground leading-relaxed mb-4">
+                  <p className="text-xs sm:text-sm text-foreground leading-relaxed mb-3 sm:mb-4 line-clamp-4">
                     "{review.content}"
                   </p>
 
-                  <div className="flex items-center justify-between flex-wrap gap-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-full neon-border flex items-center justify-center bg-background">
-                        <span className="text-sm font-bold neon-text">{review.avatar}</span>
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full neon-border flex items-center justify-center bg-background">
+                        <span className="text-xs sm:text-sm font-bold neon-text">{review.avatar}</span>
                       </div>
                       <div>
-                        <h4 className="text-sm font-bold text-foreground">{review.name}</h4>
-                        <p className="text-xs text-muted-foreground">{review.role}</p>
+                        <h4 className="text-xs sm:text-sm font-bold text-foreground">{review.name}</h4>
+                        <p className="text-[10px] sm:text-xs text-muted-foreground">{review.role}</p>
                       </div>
                     </div>
 
                     <div className="flex gap-0.5">
                       {[...Array(review.rating)].map((_, i) => (
-                        <Star key={i} className="w-3 h-3 fill-primary text-primary" />
+                        <Star key={i} className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-primary text-primary" />
                       ))}
                     </div>
                   </div>
@@ -122,15 +122,15 @@ const ReviewsSection = () => {
             </div>
 
             {/* Navigation */}
-            <div className="flex items-center justify-center gap-3 mt-6">
+            <div className="flex items-center justify-center gap-2 sm:gap-3 mt-4 sm:mt-6">
               <button
                 onClick={handlePrev}
-                className="w-10 h-10 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
               >
-                <ChevronLeft className="w-5 h-5 text-primary" />
+                <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
               </button>
 
-              <div className="flex gap-2">
+              <div className="flex gap-1.5 sm:gap-2">
                 {Array.from({ length: Math.ceil(reviews.length / 2) }).map((_, index) => (
                   <button
                     key={index}
@@ -138,10 +138,10 @@ const ReviewsSection = () => {
                       setIsAutoPlaying(false);
                       setCurrentIndex(index * 2);
                     }}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
                       Math.floor(currentIndex / 2) === index
-                        ? 'w-6 bg-primary neon-glow-cyan'
-                        : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
+                        ? 'w-4 sm:w-6 bg-primary neon-glow-cyan'
+                        : 'w-1.5 sm:w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50'
                     }`}
                   />
                 ))}
@@ -149,9 +149,9 @@ const ReviewsSection = () => {
 
               <button
                 onClick={handleNext}
-                className="w-10 h-10 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
+                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
               >
-                <ChevronRight className="w-5 h-5 text-primary" />
+                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
               </button>
             </div>
           </div>

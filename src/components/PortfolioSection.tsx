@@ -42,14 +42,14 @@ const PortfolioSection = () => {
   const sizes = ['col-span-2 row-span-2', 'col-span-1 row-span-1', 'col-span-1 row-span-2', 'col-span-2 row-span-1'];
 
   return (
-    <section id="работы" className="py-16 relative overflow-hidden">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-12">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black">
+    <section id="работы" className="py-12 sm:py-16 relative overflow-hidden">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black">
             <span className="text-foreground">НАШИ </span>
             <span className="neon-text">РАБОТЫ</span>
           </h2>
-          <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-sm sm:text-base">
+          <p className="text-muted-foreground mt-3 sm:mt-4 max-w-xl mx-auto text-xs sm:text-sm md:text-base px-4">
             От единичных подарков до корпоративных тиражей. Посмотрите, как мы воплощаем идеи в жизнь.
           </p>
         </div>
@@ -58,12 +58,12 @@ const PortfolioSection = () => {
         <div className="relative">
           <button
             onClick={handlePrev}
-            className="absolute -left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
+            className="absolute -left-1 sm:-left-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-10 sm:h-10 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
           >
-            <ChevronLeft className="w-5 h-5 text-primary" />
+            <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
           </button>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[120px] md:auto-rows-[150px]">
+          <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[100px] sm:auto-rows-[120px] md:auto-rows-[140px] mx-6 sm:mx-8">
             {visibleImages.map((image, index) => (
               <div
                 key={`${image.id}-${index}`}
@@ -83,9 +83,9 @@ const PortfolioSection = () => {
 
           <button
             onClick={handleNext}
-            className="absolute -right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
+            className="absolute -right-1 sm:-right-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-10 sm:h-10 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
           >
-            <ChevronRight className="w-5 h-5 text-primary" />
+            <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
           </button>
         </div>
 
