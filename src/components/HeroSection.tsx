@@ -1,31 +1,8 @@
-import { useEffect, useRef } from 'react';
 import heroImage from '@/assets/hero-bg.jpg';
 
 const HeroSection = () => {
-  const heroRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate-fade-up');
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    const elements = heroRef.current?.querySelectorAll('.animate-on-scroll');
-    elements?.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <section
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
-    >
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <img
@@ -45,32 +22,26 @@ const HeroSection = () => {
       {/* Content */}
       <div className="relative z-10 container mx-auto px-6 text-center pt-20">
         <div className="animate-fade-up" style={{ animationDelay: '0.2s' }}>
-          <span className="inline-block px-4 py-2 rounded-full neon-border text-sm font-medium text-primary mb-6">
-            🎨 Создаём уникальное с 2018 года
+          <span className="inline-block px-4 py-2 rounded-full bg-background/50 border border-border text-xs font-medium text-foreground mb-6">
+            с 2019 года
           </span>
         </div>
 
-        <h1 className="animate-fade-up text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-tight mb-6" style={{ animationDelay: '0.4s' }}>
-          <span className="text-foreground">МАСТЕРСКАЯ СУВЕНИРОВ:</span>
-          <br />
-          <span className="neon-text">ПЕЧАТЬ ВАШЕЙ ИСТОРИИ</span>
-          <br />
-          <span className="text-foreground">НА ТЕКСТИЛЕ</span>
+        <h1 className="animate-fade-up text-3xl sm:text-4xl md:text-5xl font-black leading-tight mb-4" style={{ animationDelay: '0.4s' }}>
+          <span className="neon-text">Мастерская сувениров</span>
         </h1>
 
-        <p className="animate-fade-up text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10" style={{ animationDelay: '0.6s' }}>
-          Создавайте уникальные вещи с нами. От футболок до шоперов, 
-          от одной штуки до крупных тиражей.
+        <p className="animate-fade-up text-lg sm:text-xl italic text-muted-foreground mb-6" style={{ animationDelay: '0.5s' }}>
+          Впечатления для жизни, имидж для бизнеса
+        </p>
+
+        <p className="animate-fade-up text-base sm:text-lg text-muted-foreground max-w-xl mx-auto mb-10" style={{ animationDelay: '0.6s' }}>
+          Создавай уникальные вещи с нами. От одной штуки до крупных тиражей.
         </p>
 
         <div className="animate-fade-up" style={{ animationDelay: '0.8s' }}>
           <button className="gradient-btn px-8 py-4 rounded-xl text-lg font-bold text-background">
-            <span className="relative z-10 flex items-center gap-2">
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-              ЗАПУСТИТЬ КОНФИГУРАТОР ДИЗАЙНА
-            </span>
+            <span className="relative z-10">СДЕЛАТЬ ЗАКАЗ</span>
           </button>
         </div>
 
