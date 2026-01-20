@@ -2,7 +2,7 @@ import heroImage from '@/assets/hero-bg.jpg';
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="главная" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <img
@@ -21,29 +21,23 @@ const HeroSection = () => {
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-6 text-center pt-20">
-        <div className="animate-fade-up" style={{ animationDelay: '0.2s' }}>
-          <span className="inline-block px-4 py-2 rounded-full bg-background/50 border border-border text-xs font-medium text-foreground mb-6">
-            с 2019 года
-          </span>
-        </div>
-
-        <h1 className="animate-fade-up text-3xl sm:text-4xl md:text-5xl font-black leading-tight mb-4" style={{ animationDelay: '0.4s' }}>
-          <span className="neon-text">Мастерская сувениров</span>
+        <h1 className="animate-fade-up text-2xl sm:text-3xl md:text-4xl font-black leading-tight mb-3" style={{ animationDelay: '0.2s' }}>
+          <span className="neon-text">МАСТЕРСКАЯ СУВЕНИРОВ</span>
         </h1>
 
-        <p className="animate-fade-up text-lg sm:text-xl italic text-muted-foreground mb-6" style={{ animationDelay: '0.5s' }}>
+        <p className="animate-fade-up text-base sm:text-lg italic text-muted-foreground mb-4" style={{ animationDelay: '0.3s' }}>
           Впечатления для жизни, имидж для бизнеса
         </p>
 
-        <p className="animate-fade-up text-base sm:text-lg text-muted-foreground max-w-xl mx-auto mb-10" style={{ animationDelay: '0.6s' }}>
-          Создавай уникальные вещи с нами. От одной штуки до крупных тиражей.
-        </p>
-
-        <div className="animate-fade-up" style={{ animationDelay: '0.8s' }}>
-          <button className="gradient-btn px-8 py-4 rounded-xl text-lg font-bold text-background">
+        <div className="animate-fade-up mb-6" style={{ animationDelay: '0.4s' }}>
+          <button className="gradient-btn-pulse px-8 py-4 rounded-xl text-lg font-bold text-background">
             <span className="relative z-10">СДЕЛАТЬ ЗАКАЗ</span>
           </button>
         </div>
+
+        <p className="animate-fade-up text-sm sm:text-base text-muted-foreground max-w-xl mx-auto mb-10" style={{ animationDelay: '0.5s' }}>
+          Создавай уникальные вещи с нами. От одной штуки до крупных тиражей.
+        </p>
 
         {/* Scroll indicator */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">

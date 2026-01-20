@@ -63,11 +63,11 @@ const PortfolioSection = () => {
             <ChevronLeft className="w-5 h-5 text-primary" />
           </button>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 auto-rows-[120px] md:auto-rows-[150px]">
+          <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[120px] md:auto-rows-[150px]">
             {visibleImages.map((image, index) => (
               <div
                 key={`${image.id}-${index}`}
-                className={`relative group overflow-hidden rounded-xl cursor-pointer ${sizes[index % sizes.length]}`}
+                className={`relative group overflow-hidden cursor-pointer ${sizes[index % sizes.length]}`}
                 onClick={() => setSelectedImage(image.src)}
               >
                 <img
@@ -76,7 +76,7 @@ const PortfolioSection = () => {
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-background/0 group-hover:bg-background/20 transition-all duration-300" />
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 neon-border rounded-xl" />
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 border border-primary" />
               </div>
             ))}
           </div>

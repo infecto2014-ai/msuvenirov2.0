@@ -60,6 +60,15 @@ const ReviewsSection = () => {
     setCurrentIndex((prev) => (prev + 1) % reviews.length);
   };
 
+  // Get 2 reviews at a time
+  const getVisibleReviews = () => {
+    const first = reviews[currentIndex];
+    const second = reviews[(currentIndex + 1) % reviews.length];
+    return [first, second];
+  };
+
+  const visibleReviews = getVisibleReviews();
+
   return (
     <section id="отзывы" className="py-12 relative overflow-hidden">
       {/* Background */}
@@ -79,35 +88,37 @@ const ReviewsSection = () => {
           </h2>
         </div>
 
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <div className="relative">
-            {/* Main review card */}
-            <div className="glass-card rounded-2xl p-6 md:p-8">
-              <Quote className="w-8 h-8 text-primary/30 mb-4" />
-              
-              <div className="min-h-[100px]">
-                <p className="text-base md:text-lg text-foreground leading-relaxed mb-6">
-                  "{reviews[currentIndex].content}"
-                </p>
-              </div>
+            {/* Two review cards side by side */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {visibleReviews.map((review) => (
+                <div key={review.id} className="glass-card rounded-2xl p-6">
+                  <Quote className="w-6 h-6 text-primary/30 mb-3" />
+                  
+                  <p className="text-sm md:text-base text-foreground leading-relaxed mb-4">
+                    "{review.content}"
+                  </p>
 
-              <div className="flex items-center justify-between flex-wrap gap-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full neon-border flex items-center justify-center bg-background">
-                    <span className="text-base font-bold neon-text">{reviews[currentIndex].avatar}</span>
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-foreground">{reviews[currentIndex].name}</h4>
-                    <p className="text-xs text-muted-foreground">{reviews[currentIndex].role}</p>
+                  <div className="flex items-center justify-between flex-wrap gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-full neon-border flex items-center justify-center bg-background">
+                        <span className="text-sm font-bold neon-text">{review.avatar}</span>
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-bold text-foreground">{review.name}</h4>
+                        <p className="text-xs text-muted-foreground">{review.role}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-0.5">
+                      {[...Array(review.rating)].map((_, i) => (
+                        <Star key={i} className="w-3 h-3 fill-primary text-primary" />
+                      ))}
+                    </div>
                   </div>
                 </div>
-
-                <div className="flex gap-0.5">
-                  {[...Array(reviews[currentIndex].rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-primary text-primary" />
-                  ))}
-                </div>
-              </div>
+              ))}
             </div>
 
             {/* Navigation */}
@@ -120,15 +131,15 @@ const ReviewsSection = () => {
               </button>
 
               <div className="flex gap-2">
-                {reviews.map((_, index) => (
+                {Array.from({ length: Math.ceil(reviews.length / 2) }).map((_, index) => (
                   <button
                     key={index}
                     onClick={() => {
                       setIsAutoPlaying(false);
-                      setCurrentIndex(index);
+                      setCurrentIndex(index * 2);
                     }}
                     className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                      index === currentIndex
+                      Math.floor(currentIndex / 2) === index
                         ? 'w-6 bg-primary neon-glow-cyan'
                         : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
                     }`}
