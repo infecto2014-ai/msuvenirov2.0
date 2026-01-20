@@ -6,7 +6,7 @@ const reviews = [
     id: 1,
     name: 'Алексей Морозов',
     role: 'CEO, TechStart',
-    content: 'Заказывали мерч для всей команды — 50 футболок и 20 худи. Качество печати превосходное, сроки соблюдены. Ребята реально профессионалы своего дела!',
+    content: 'Заказывали мерч для всей команды — 50 футболок и 20 худи. Качество печати превосходное, сроки соблюдены. Ребята реально профессионалы!',
     rating: 5,
     avatar: 'А',
   },
@@ -30,7 +30,7 @@ const reviews = [
     id: 4,
     name: 'Екатерина Новикова',
     role: 'Блогер',
-    content: 'Создала свою линейку мерча для подписчиков. Мастерская помогла с дизайном и воплотила всё идеально. Рекомендую!',
+    content: 'Создала свою линейку мерча для подписчиков. Мастерская помогла с дизайном и воплотила всё идеально!',
     rating: 5,
     avatar: 'Е',
   },
@@ -61,62 +61,62 @@ const ReviewsSection = () => {
   };
 
   return (
-    <section id="отзывы" className="py-24 relative overflow-hidden">
+    <section id="отзывы" className="py-12 relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-neon-cyan/5 blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 rounded-full bg-neon-magenta/5 blur-3xl" />
+        <div className="absolute top-1/4 left-1/4 w-48 h-48 rounded-full bg-neon-cyan/5 blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-48 h-48 rounded-full bg-neon-magenta/5 blur-3xl" />
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
-        <div className="text-center mb-16">
-          <span className="inline-block px-4 py-2 rounded-full neon-border text-sm font-medium text-primary mb-4">
+        <div className="text-center mb-10">
+          <span className="inline-block px-4 py-2 rounded-full neon-border text-sm font-medium text-primary mb-3">
             ОТЗЫВЫ
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black">
             <span className="text-foreground">ЧТО ГОВОРЯТ </span>
             <span className="neon-text">КЛИЕНТЫ</span>
           </h2>
         </div>
 
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-2xl mx-auto">
           <div className="relative">
             {/* Main review card */}
-            <div className="glass-card rounded-3xl p-8 md:p-12">
-              <Quote className="w-12 h-12 text-primary/30 mb-6" />
+            <div className="glass-card rounded-2xl p-6 md:p-8">
+              <Quote className="w-8 h-8 text-primary/30 mb-4" />
               
-              <div className="min-h-[150px]">
-                <p className="text-xl md:text-2xl text-foreground leading-relaxed mb-8">
+              <div className="min-h-[100px]">
+                <p className="text-base md:text-lg text-foreground leading-relaxed mb-6">
                   "{reviews[currentIndex].content}"
                 </p>
               </div>
 
-              <div className="flex items-center justify-between flex-wrap gap-4">
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-full neon-border flex items-center justify-center bg-background">
-                    <span className="text-xl font-bold neon-text">{reviews[currentIndex].avatar}</span>
+              <div className="flex items-center justify-between flex-wrap gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full neon-border flex items-center justify-center bg-background">
+                    <span className="text-base font-bold neon-text">{reviews[currentIndex].avatar}</span>
                   </div>
                   <div>
-                    <h4 className="text-lg font-bold text-foreground">{reviews[currentIndex].name}</h4>
-                    <p className="text-muted-foreground">{reviews[currentIndex].role}</p>
+                    <h4 className="text-sm font-bold text-foreground">{reviews[currentIndex].name}</h4>
+                    <p className="text-xs text-muted-foreground">{reviews[currentIndex].role}</p>
                   </div>
                 </div>
 
-                <div className="flex gap-1">
+                <div className="flex gap-0.5">
                   {[...Array(reviews[currentIndex].rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-primary text-primary" />
+                    <Star key={i} className="w-4 h-4 fill-primary text-primary" />
                   ))}
                 </div>
               </div>
             </div>
 
             {/* Navigation */}
-            <div className="flex items-center justify-center gap-4 mt-8">
+            <div className="flex items-center justify-center gap-3 mt-6">
               <button
                 onClick={handlePrev}
-                className="w-12 h-12 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
+                className="w-10 h-10 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
               >
-                <ChevronLeft className="w-6 h-6 text-primary" />
+                <ChevronLeft className="w-5 h-5 text-primary" />
               </button>
 
               <div className="flex gap-2">
@@ -129,7 +129,7 @@ const ReviewsSection = () => {
                     }}
                     className={`w-2 h-2 rounded-full transition-all duration-300 ${
                       index === currentIndex
-                        ? 'w-8 bg-primary neon-glow-cyan'
+                        ? 'w-6 bg-primary neon-glow-cyan'
                         : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
                     }`}
                   />
@@ -138,9 +138,9 @@ const ReviewsSection = () => {
 
               <button
                 onClick={handleNext}
-                className="w-12 h-12 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
+                className="w-10 h-10 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
               >
-                <ChevronRight className="w-6 h-6 text-primary" />
+                <ChevronRight className="w-5 h-5 text-primary" />
               </button>
             </div>
           </div>
