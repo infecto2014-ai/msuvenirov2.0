@@ -21,7 +21,24 @@ const PortfolioSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  const itemsPerView = 4;
+  // Responsive items per view
+  const getItemsPerView = () => {
+    if (typeof window !== 'undefined') {
+      if (window.innerWidth < 640) return 2;
+      if (window.innerWidth < 1024) return 3;
+      return 4;
+    }
+    return 4;
+  };
+
+  const [itemsPerView, setItemsPerView] = useState(getItemsPerView());
+
+  useState(() => {
+    const handleResize = () => setItemsPerView(getItemsPerView());
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  });
+
   const maxIndex = Math.max(0, portfolioImages.length - itemsPerView);
 
   const handlePrev = () => {
@@ -39,8 +56,6 @@ const PortfolioSection = () => {
     visibleImages.push(...portfolioImages.slice(0, itemsPerView - visibleImages.length));
   }
 
-  const sizes = ['col-span-2 row-span-2', 'col-span-1 row-span-1', 'col-span-1 row-span-2', 'col-span-2 row-span-1'];
-
   return (
     <section id="работы" className="py-12 sm:py-16 relative overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6">
@@ -54,20 +69,21 @@ const PortfolioSection = () => {
           </p>
         </div>
 
-        {/* Carousel */}
+        {/* Carousel with uniform grid */}
         <div className="relative">
           <button
             onClick={handlePrev}
-            className="absolute -left-1 sm:-left-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-10 sm:h-10 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
+            className="absolute -left-2 sm:-left-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-10 sm:h-10 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
           >
             <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
           </button>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[100px] sm:auto-rows-[120px] md:auto-rows-[140px] mx-6 sm:mx-8">
+          {/* Uniform grid - all same size, no gaps */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 mx-6 sm:mx-10">
             {visibleImages.map((image, index) => (
               <div
                 key={`${image.id}-${index}`}
-                className={`relative group overflow-hidden cursor-pointer ${sizes[index % sizes.length]}`}
+                className="relative group overflow-hidden cursor-pointer aspect-square"
                 onClick={() => setSelectedImage(image.src)}
               >
                 <img
@@ -75,15 +91,15 @@ const PortfolioSection = () => {
                   alt={image.alt}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-background/0 group-hover:bg-background/20 transition-all duration-300" />
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 border border-primary" />
+                <div className="absolute inset-0 bg-background/0 group-hover:bg-background/30 transition-all duration-300" />
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ring-2 ring-inset ring-primary" />
               </div>
             ))}
           </div>
 
           <button
             onClick={handleNext}
-            className="absolute -right-1 sm:-right-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-10 sm:h-10 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
+            className="absolute -right-2 sm:-right-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 sm:w-10 sm:h-10 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
           >
             <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
           </button>
@@ -108,14 +124,14 @@ const PortfolioSection = () => {
       {/* Modal */}
       {selectedImage && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-background/90 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-background/90 backdrop-blur-sm p-4"
           onClick={() => setSelectedImage(null)}
         >
           <button
             onClick={() => setSelectedImage(null)}
-            className="absolute top-6 right-6 w-12 h-12 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
+            className="absolute top-4 right-4 sm:top-6 sm:right-6 w-10 h-10 sm:w-12 sm:h-12 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
           >
-            <X className="w-6 h-6 text-primary" />
+            <X className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
           </button>
           <img
             src={selectedImage}
