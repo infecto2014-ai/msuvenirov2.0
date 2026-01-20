@@ -1,0 +1,113 @@
+import { MapPin, Phone, Mail } from 'lucide-react';
+
+const Footer = () => {
+  return (
+    <footer id="контакты" className="py-16 relative overflow-hidden border-t border-border/50">
+      {/* Background effects */}
+      <div className="absolute inset-0 bg-gradient-to-t from-muted/20 to-transparent" />
+      
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+          {/* Logo and about */}
+          <div className="lg:col-span-2">
+            <a href="#" className="flex items-center gap-3 mb-6 group">
+              <div className="w-14 h-14 rounded-lg neon-border flex items-center justify-center bg-background group-hover:neon-glow transition-all duration-300">
+                <span className="text-3xl font-black neon-text">М</span>
+              </div>
+              <div>
+                <span className="text-xl font-bold text-foreground">Мастерская</span>
+                <span className="block text-sm text-muted-foreground">сувениров</span>
+              </div>
+            </a>
+            <p className="text-muted-foreground max-w-md mb-6">
+              Создаём уникальные вещи с 2018 года. Печать на текстиле любой сложности — 
+              от единичных экземпляров до крупных тиражей.
+            </p>
+            <button className="gradient-btn px-6 py-3 rounded-lg font-semibold text-background">
+              <span className="relative z-10">Запустить конфигуратор</span>
+            </button>
+          </div>
+
+          {/* Contact info */}
+          <div>
+            <h4 className="text-lg font-bold text-foreground mb-6">Контакты</h4>
+            <ul className="space-y-4">
+              <li>
+                <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 text-muted-foreground hover:text-primary transition-colors group">
+                  <MapPin className="w-5 h-5 mt-0.5 text-primary shrink-0" />
+                  <span>Калининград, ТЦ Экватор, 2 этаж, Генерала Челнокова 11 стр 1</span>
+                </a>
+              </li>
+              <li>
+                <a href="tel:+79521142350" className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors group">
+                  <Phone className="w-5 h-5 text-primary shrink-0" />
+                  <span>+7 952 114-23-50</span>
+                </a>
+              </li>
+              <li>
+                <a href="mailto:Msuvenirov39@gmail.com" className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors group">
+                  <Mail className="w-5 h-5 text-primary shrink-0" />
+                  <span>Msuvenirov39@gmail.com</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Social links */}
+          <div>
+            <h4 className="text-lg font-bold text-foreground mb-6">Мы в соцсетях</h4>
+            <div className="flex gap-4">
+              <a
+                href="https://vk.com/msuvenirov39"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-12 h-12 rounded-lg neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
+              >
+                <svg className="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12.785 16.241s.288-.032.436-.194c.136-.148.132-.427.132-.427s-.02-1.304.576-1.496c.588-.19 1.341 1.26 2.14 1.818.605.422 1.064.33 1.064.33l2.137-.03s1.117-.071.587-.964c-.043-.073-.308-.661-1.588-1.87-1.34-1.264-1.16-1.059.453-3.246.983-1.332 1.376-2.145 1.253-2.493-.117-.332-.84-.244-.84-.244l-2.406.015s-.178-.025-.31.056c-.13.079-.212.262-.212.262s-.382 1.03-.89 1.907c-1.07 1.85-1.499 1.948-1.674 1.832-.407-.267-.305-1.075-.305-1.648 0-1.793.267-2.54-.521-2.733-.262-.065-.454-.107-1.123-.114-.858-.009-1.585.003-1.996.208-.274.136-.485.44-.356.457.159.022.519.099.71.363.246.341.237 1.107.237 1.107s.142 2.11-.33 2.371c-.325.18-.77-.187-1.725-1.865-.489-.859-.859-1.81-.859-1.81s-.07-.176-.198-.272c-.154-.115-.37-.151-.37-.151l-2.286.015s-.343.01-.469.163c-.112.136-.009.418-.009.418s1.781 4.232 3.799 6.36c1.851 1.952 3.953 1.824 3.953 1.824h.953z"/>
+                </svg>
+              </a>
+              <a
+                href="https://t.me/msuvenirov39"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-12 h-12 rounded-lg neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
+              >
+                <svg className="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                </svg>
+              </a>
+              <a
+                href="https://instagram.com/msuvenirov39"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-12 h-12 rounded-lg neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
+              >
+                <svg className="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="mt-12 pt-8 border-t border-border/30 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-muted-foreground text-sm">
+            © 2024 Мастерская сувениров. Все права защищены.
+          </p>
+          <div className="flex gap-6 text-sm">
+            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+              Политика конфиденциальности
+            </a>
+            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+              Условия использования
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
