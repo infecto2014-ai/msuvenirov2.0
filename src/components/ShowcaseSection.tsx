@@ -73,22 +73,22 @@ const ShowcaseSection = () => {
   };
 
   return (
-    <section id="витрина" className="py-16 relative overflow-hidden">
+    <section id="витрина" className="py-12 sm:py-16 relative overflow-hidden">
       {/* Background effects */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/20 to-background" />
       
-      <div className="max-w-4xl mx-auto px-6 relative z-10">
-        <div className="relative flex items-center justify-center gap-4">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 relative z-10">
+        <div className="relative flex items-center justify-center">
           {/* Navigation Left */}
           <button
             onClick={handlePrev}
-            className="absolute left-0 z-20 w-10 h-10 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
+            className="absolute left-0 sm:-left-2 z-20 w-8 h-8 sm:w-10 sm:h-10 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
           >
-            <ChevronLeft className="w-5 h-5 text-primary" />
+            <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
           </button>
 
           {/* Products */}
-          <div className="flex items-center justify-center gap-4 py-6">
+          <div className="flex items-center justify-center gap-2 sm:gap-4 py-4 sm:py-6 px-8 sm:px-12">
             {getVisibleProducts().map((product) => {
               const isActive = product.offset === 0;
               
@@ -109,13 +109,13 @@ const ShowcaseSection = () => {
                   {/* Neon rings */}
                   {isActive && (
                     <>
-                      <div className="neon-ring w-48 h-48 -top-4 -left-4" style={{ animationDelay: '0s' }} />
-                      <div className="neon-ring w-56 h-56 -top-8 -left-8" style={{ animationDelay: '0.5s', borderColor: 'hsl(var(--neon-magenta))', boxShadow: '0 0 15px hsl(var(--neon-magenta) / 0.6)' }} />
+                      <div className="neon-ring w-36 sm:w-44 h-36 sm:h-44 -top-2 sm:-top-4 -left-2 sm:-left-4" style={{ animationDelay: '0s' }} />
+                      <div className="neon-ring w-44 sm:w-52 h-44 sm:h-52 -top-6 sm:-top-8 -left-6 sm:-left-8" style={{ animationDelay: '0.5s', borderColor: 'hsl(var(--neon-magenta))', boxShadow: '0 0 15px hsl(var(--neon-magenta) / 0.6)' }} />
                     </>
                   )}
 
-                  <div className={`relative glass-card rounded-2xl p-4 ${isActive ? 'neon-glow' : ''}`}>
-                    <div className="w-36 h-36 flex items-center justify-center mb-3">
+                  <div className={`relative glass-card rounded-xl sm:rounded-2xl p-3 sm:p-4 ${isActive ? 'neon-glow' : ''}`}>
+                    <div className="w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center mb-2 sm:mb-3">
                       <img
                         src={product.image}
                         alt={product.name}
@@ -127,9 +127,9 @@ const ShowcaseSection = () => {
                     
                     {isActive && (
                       <div className="text-center">
-                        <h3 className="text-lg font-bold text-foreground mb-1">{product.name}</h3>
-                        <p className="text-xs text-muted-foreground mb-2">{product.description}</p>
-                        <span className="text-base font-bold neon-text">{product.price}</span>
+                        <h3 className="text-sm sm:text-base font-bold text-foreground mb-1">{product.name}</h3>
+                        <p className="text-[10px] sm:text-xs text-muted-foreground mb-1 sm:mb-2">{product.description}</p>
+                        <span className="text-sm sm:text-base font-bold neon-text">{product.price}</span>
                       </div>
                     )}
                   </div>
@@ -141,22 +141,22 @@ const ShowcaseSection = () => {
           {/* Navigation Right */}
           <button
             onClick={handleNext}
-            className="absolute right-0 z-20 w-10 h-10 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
+            className="absolute right-0 sm:-right-2 z-20 w-8 h-8 sm:w-10 sm:h-10 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
           >
-            <ChevronRight className="w-5 h-5 text-primary" />
+            <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
           </button>
         </div>
 
         {/* Dots indicator */}
-        <div className="flex items-center justify-center gap-2 mt-6">
+        <div className="flex items-center justify-center gap-1.5 sm:gap-2 mt-4 sm:mt-6">
           {products.map((_, index) => (
             <button
               key={index}
               onClick={() => setActiveIndex(index)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
                 index === activeIndex
-                  ? 'w-6 bg-primary neon-glow-cyan'
-                  : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
+                  ? 'w-4 sm:w-6 bg-primary neon-glow-cyan'
+                  : 'w-1.5 sm:w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50'
               }`}
             />
           ))}
