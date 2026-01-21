@@ -1,3 +1,10 @@
+import { useRef } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, FreeMode } from 'swiper/modules';
+import type { Swiper as SwiperType } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/free-mode';
+
 import client1 from '@/assets/clients/client-1.png';
 import client2 from '@/assets/clients/client-2.png';
 import client3 from '@/assets/clients/client-3.png';
@@ -19,8 +26,19 @@ const clients = [
 ];
 
 const TrustSection = () => {
-  // Triple the clients for seamless infinite loop
-  const repeatedClients = [...clients, ...clients, ...clients];
+  const swiperRef = useRef<SwiperType | null>(null);
+
+  const handleMouseEnter = () => {
+    if (swiperRef.current?.autoplay) {
+      swiperRef.current.autoplay.stop();
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (swiperRef.current?.autoplay) {
+      swiperRef.current.autoplay.start();
+    }
+  };
 
   return (
     <section className="py-10 sm:py-14 relative overflow-hidden">
@@ -33,38 +51,69 @@ const TrustSection = () => {
           </h2>
         </div>
 
-        {/* Marquee Container */}
-        <div className="relative overflow-hidden">
+        {/* Swiper Container */}
+        <div 
+          className="relative"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
           {/* Gradient fade edges */}
-          <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+          <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-20 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-20 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
           
-          {/* Marquee Track */}
-          <div className="group flex">
-            <div className="flex animate-marquee group-hover:[animation-play-state:paused]">
-              {repeatedClients.map((client, index) => (
-                <div
-                  key={`${client.id}-${index}`}
-                  className="relative flex items-center justify-center px-6 sm:px-10 py-4 flex-shrink-0"
-                >
+          <Swiper
+            modules={[Autoplay, FreeMode]}
+            onSwiper={(swiper) => {
+              swiperRef.current = swiper;
+            }}
+            spaceBetween={20}
+            slidesPerView="auto"
+            loop={true}
+            freeMode={{
+              enabled: true,
+              momentum: true,
+              momentumRatio: 0.5,
+            }}
+            autoplay={{
+              delay: 0,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: false, // We handle this manually
+            }}
+            speed={4000}
+            grabCursor={true}
+            className="!overflow-visible"
+          >
+            {clients.map((client) => (
+              <SwiperSlide 
+                key={client.id} 
+                className="!w-auto"
+              >
+                <div className="relative flex items-center justify-center px-4 sm:px-6 py-4">
                   {/* Neon glow background */}
                   <div 
-                    className="absolute inset-0 rounded-xl opacity-60 transition-opacity duration-300"
+                    className="absolute inset-0 rounded-xl opacity-60 transition-opacity duration-300 group-hover:opacity-100"
                     style={{
                       background: 'radial-gradient(ellipse at center, rgba(0, 255, 255, 0.12) 0%, rgba(168, 85, 247, 0.08) 30%, transparent 60%)',
                     }}
                   />
                   
-                  {/* Logo */}
+                  {/* Protected Logo - pointer-events: none makes clicks pass through */}
                   <img
                     src={client.logo}
-                    alt={client.name}
-                    className="relative z-10 h-12 sm:h-16 md:h-20 w-auto max-w-[120px] sm:max-w-[150px] object-contain"
+                    alt=""
+                    aria-hidden="true"
+                    draggable={false}
+                    onContextMenu={(e) => e.preventDefault()}
+                    className="relative z-10 h-12 sm:h-16 md:h-20 w-auto max-w-[100px] sm:max-w-[130px] md:max-w-[150px] object-contain select-none pointer-events-none"
+                    style={{
+                      WebkitUserDrag: 'none',
+                      userSelect: 'none',
+                    } as React.CSSProperties}
                   />
                 </div>
-              ))}
-            </div>
-          </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
       </div>
     </section>
