@@ -146,24 +146,24 @@ const ReviewsSection = () => {
             {/* Fixed height container to prevent layout shift */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {visibleReviews.map((review) => (
-                <div key={review.id} className="glass-card rounded-xl sm:rounded-2xl p-4 sm:p-5 flex flex-col h-[280px] sm:h-[240px]">
+                <div key={review.id} className="glass-card rounded-xl sm:rounded-2xl p-4 sm:p-5 flex flex-col h-[350px]">
                   <Quote className="w-5 h-5 sm:w-6 sm:h-6 text-primary/30 mb-2 sm:mb-3 flex-shrink-0" />
                   
-                  <div className="flex-1 min-h-0 flex flex-col">
-                    <p className="text-xs sm:text-sm text-foreground leading-relaxed line-clamp-4 flex-1">
+                  <div className="flex-1 min-h-0 flex flex-col gap-2">
+                    <p className="text-xs sm:text-sm text-foreground leading-relaxed line-clamp-4">
                       "{review.content}"
                     </p>
                     {review.content.length > 120 && (
                       <button
                         onClick={() => setSelectedReview(review)}
-                        className="text-primary text-xs sm:text-sm mt-2 hover:underline transition-all flex-shrink-0"
+                        className="text-primary text-xs sm:text-sm hover:underline transition-all flex-shrink-0"
                       >
                         Читать далее...
                       </button>
                     )}
                   </div>
 
-                  <div className="flex items-center justify-between flex-wrap gap-2 mt-3 sm:mt-4 pt-3 border-t border-primary/10 flex-shrink-0">
+                  <div className="flex items-center justify-between flex-wrap gap-2 mt-auto pt-3 border-t border-primary/10 flex-shrink-0">
                     <div className="flex items-center gap-2 sm:gap-3">
                       <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full neon-border flex items-center justify-center bg-background">
                         <span className="text-xs sm:text-sm font-bold neon-text">{review.avatar}</span>
