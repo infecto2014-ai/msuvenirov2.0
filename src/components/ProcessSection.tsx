@@ -16,7 +16,7 @@ const steps = [
   {
     icon: Printer,
     title: 'Печать',
-    description: 'Наши мастера воплотят ваш дизайн с использованием лучших технологий',
+    description: 'Наши мастера воплотят ваш дизайн',
     color: 'neon-magenta',
   },
   {
