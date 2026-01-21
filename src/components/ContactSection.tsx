@@ -7,7 +7,7 @@ const ContactSection = () => {
       <div className="absolute top-0 left-0 w-64 h-64 bg-neon-cyan/10 rounded-full blur-3xl" />
       <div className="absolute bottom-0 right-0 w-64 h-64 bg-neon-magenta/10 rounded-full blur-3xl" />
       
-      <div className="container mx-auto px-4 sm:px-6 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-12 xl:px-24 max-w-6xl relative z-10">
         {/* Section Header */}
         <div className="text-center mb-12 sm:mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase mb-4">

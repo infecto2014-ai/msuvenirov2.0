@@ -30,7 +30,7 @@ const HeroSection = () => {
       {/* Main Content */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center container mx-auto px-4 sm:px-6 text-center pt-20">
         {/* Main Heading */}
-        <h1 className="animate-fade-up text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black leading-none mb-4 sm:mb-6" style={{ animationDelay: '0.2s' }}>
+        <h1 className="animate-fade-up text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-none mb-4 sm:mb-6" style={{ animationDelay: '0.2s' }}>
           <span className="neon-text uppercase tracking-tight">Мастерская</span>
           <br />
           <span className="neon-text uppercase tracking-tight">сувениров</span>
@@ -66,23 +66,6 @@ const HeroSection = () => {
         </div>
       </div>
 
-      {/* Bottom Banner Slogan */}
-      <div className="relative z-10 w-full py-8 sm:py-10 md:py-12 animate-fade-up" style={{ animationDelay: '0.6s' }}>
-        <div className="container mx-auto px-4 sm:px-6">
-          <p 
-            className="text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-black uppercase tracking-[0.15em] sm:tracking-[0.2em]"
-            style={{ 
-              background: 'linear-gradient(90deg, hsl(var(--neon-cyan)), hsl(var(--neon-purple)), hsl(var(--neon-magenta)))',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              WebkitTextStroke: '1px hsl(var(--primary) / 0.3)',
-              textShadow: '0 0 40px hsl(var(--neon-cyan) / 0.3)'
-            }}
-          >
-            Впечатления для жизни • Имидж для бизнеса
-          </p>
-        </div>
-      </div>
     </section>
   );
 };
