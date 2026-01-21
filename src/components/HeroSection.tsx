@@ -1,5 +1,5 @@
 import heroImage from '@/assets/hero-bg.jpg';
-import { ChevronDown } from 'lucide-react';
+import { Droplet } from 'lucide-react';
 
 const HeroSection = () => {
   const handleOrderClick = () => {
@@ -10,7 +10,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section id="главная" className="relative min-h-screen flex flex-col overflow-hidden">
+    <section id="главная" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <img
@@ -28,7 +28,7 @@ const HeroSection = () => {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 md:w-96 h-64 md:h-96 rounded-full bg-neon-purple/10 blur-3xl" />
 
       {/* Main Content */}
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center container mx-auto px-4 sm:px-6 text-center pt-24">
+      <div className="relative z-10 flex flex-col items-center justify-center container mx-auto px-4 sm:px-6 text-center">
         {/* Main Heading */}
         <h1 className="animate-fade-up text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-none mb-4 sm:mb-6" style={{ animationDelay: '0.2s' }}>
           <span className="neon-text uppercase tracking-tight">Мастерская</span>
@@ -51,22 +51,13 @@ const HeroSection = () => {
           </button>
         </div>
 
-        {/* Scroll indicator */}
-        <div className="animate-fade-up flex flex-col items-center gap-2" style={{ animationDelay: '0.5s' }}>
+        {/* Scroll indicator - Drop style */}
+        <div className="animate-fade-up flex flex-col items-center" style={{ animationDelay: '0.5s' }}>
           <div className="animate-bounce">
-            <div className="w-10 h-14 sm:w-12 sm:h-16 rounded-full neon-border flex items-center justify-center">
-              <ChevronDown className="w-5 h-5 sm:w-6 sm:h-6 text-primary animate-glow-pulse" />
+            <div className="relative w-8 h-12 sm:w-10 sm:h-14 neon-border rounded-[50%_50%_50%_50%_/_60%_60%_40%_40%] flex items-center justify-center">
+              <Droplet className="w-4 h-4 sm:w-5 sm:h-5 text-primary animate-glow-pulse fill-primary/30" />
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Bottom Banner Slogan */}
-      <div className="relative z-10 w-full py-6 sm:py-8 md:py-10 animate-fade-up" style={{ animationDelay: '0.6s' }}>
-        <div className="container mx-auto px-4 sm:px-6">
-          <p className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black uppercase tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-magenta" style={{ WebkitTextStroke: '1px hsl(var(--primary) / 0.5)' }}>
-            Впечатления для жизни, имидж для бизнеса
-          </p>
         </div>
       </div>
     </section>
