@@ -3,6 +3,10 @@ import { X, Phone, Image, Loader2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
+import InputMask from 'react-input-mask';
+
+const MAX_COMMENT_LENGTH = 300;
+const MAX_PHOTOS = 10;
 
 const FloatingOrderButton = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,39 +16,62 @@ const FloatingOrderButton = () => {
     phone: '',
     comment: '',
   });
-  const [photo, setPhoto] = useState<File | null>(null);
-  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [photos, setPhotos] = useState<File[]>([]);
+  const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
+    if (name === 'comment' && value.length > MAX_COMMENT_LENGTH) {
+      return;
+    }
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setPhoto(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPhotoPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({ ...prev, phone: e.target.value }));
   };
 
-  const removePhoto = () => {
-    setPhoto(null);
-    setPhotoPreview(null);
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    const remainingSlots = MAX_PHOTOS - photos.length;
+    const filesToAdd = files.slice(0, remainingSlots);
+
+    if (files.length > remainingSlots) {
+      toast({
+        title: 'Ограничение',
+        description: `Можно прикрепить максимум ${MAX_PHOTOS} изображений`,
+        variant: 'destructive',
+      });
+    }
+
+    const newPhotos = [...photos, ...filesToAdd];
+    setPhotos(newPhotos);
+
+    // Generate previews
+    filesToAdd.forEach(file => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPhotoPreviews(prev => [...prev, reader.result as string]);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Reset file input
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
   };
 
+  const removePhoto = (index: number) => {
+    setPhotos(prev => prev.filter((_, i) => i !== index));
+    setPhotoPreviews(prev => prev.filter((_, i) => i !== index));
+  };
+
   const resetForm = () => {
     setFormData({ name: '', phone: '', comment: '' });
-    setPhoto(null);
-    setPhotoPreview(null);
+    setPhotos([]);
+    setPhotoPreviews([]);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -53,10 +80,12 @@ const FloatingOrderButton = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.name.trim() || !formData.phone.trim()) {
+    // Validate phone format
+    const phoneDigits = formData.phone.replace(/\D/g, '');
+    if (!formData.name.trim() || phoneDigits.length < 11) {
       toast({
         title: 'Ошибка',
-        description: 'Пожалуйста, заполните имя и телефон',
+        description: 'Пожалуйста, заполните имя и телефон полностью',
         variant: 'destructive',
       });
       return;
@@ -69,11 +98,14 @@ const FloatingOrderButton = () => {
       submitFormData.append('name', formData.name.trim());
       submitFormData.append('phone', formData.phone.trim());
       submitFormData.append('comment', formData.comment.trim());
-      if (photo) {
-        submitFormData.append('photo', photo);
-      }
+      
+      // Add all photos
+      photos.forEach((photo, index) => {
+        submitFormData.append(`photo_${index}`, photo);
+      });
+      submitFormData.append('photoCount', photos.length.toString());
 
-      const { data, error } = await supabase.functions.invoke('send-telegram', {
+      const { error } = await supabase.functions.invoke('send-telegram', {
         body: submitFormData,
       });
 
@@ -112,7 +144,7 @@ const FloatingOrderButton = () => {
 
       {/* Order Modal */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="sm:max-w-md bg-card border-border/50 backdrop-blur-xl">
+        <DialogContent className="sm:max-w-md bg-card border-border/50 backdrop-blur-xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-xl sm:text-2xl font-bold neon-text text-center">
               Оставить заявку
@@ -137,74 +169,98 @@ const FloatingOrderButton = () => {
               />
             </div>
 
-            {/* Phone */}
+            {/* Phone with mask */}
             <div>
               <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-1.5">
                 Телефон *
               </label>
-              <input
+              <InputMask
+                mask="+7 (999) 999-99-99"
+                value={formData.phone}
+                onChange={handlePhoneChange}
                 type="tel"
                 id="phone"
                 name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
                 className="w-full px-4 py-3 rounded-lg bg-muted/50 border border-border/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
                 placeholder="+7 (900) 123-45-67"
                 required
               />
             </div>
 
-            {/* Comment */}
+            {/* Comment with character counter */}
             <div>
-              <label htmlFor="comment" className="block text-sm font-medium text-foreground mb-1.5">
-                Комментарий
-              </label>
+              <div className="flex justify-between items-center mb-1.5">
+                <label htmlFor="comment" className="block text-sm font-medium text-foreground">
+                  Комментарий
+                </label>
+                <span className={`text-xs ${formData.comment.length >= MAX_COMMENT_LENGTH ? 'text-destructive' : 'text-muted-foreground'}`}>
+                  {formData.comment.length}/{MAX_COMMENT_LENGTH}
+                </span>
+              </div>
               <textarea
                 id="comment"
                 name="comment"
                 value={formData.comment}
                 onChange={handleInputChange}
+                maxLength={MAX_COMMENT_LENGTH}
                 rows={3}
                 className="w-full px-4 py-3 rounded-lg bg-muted/50 border border-border/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors resize-none"
                 placeholder="Опишите ваш заказ..."
               />
             </div>
 
-            {/* Photo Upload */}
+            {/* Photo Upload - Multiple */}
             <div>
-              <label className="block text-sm font-medium text-foreground mb-1.5">
-                Прикрепить фото
-              </label>
-              <div className="flex items-center gap-3">
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={handlePhotoChange}
-                  accept="image/*"
-                  className="hidden"
-                  id="photo-upload"
-                />
-                <label
-                  htmlFor="photo-upload"
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-muted/50 border border-border/50 text-muted-foreground hover:text-foreground hover:border-primary cursor-pointer transition-colors"
-                >
-                  <Image className="w-5 h-5" />
-                  <span className="text-sm">Выбрать файл</span>
+              <div className="flex justify-between items-center mb-1.5">
+                <label className="block text-sm font-medium text-foreground">
+                  Прикрепить фото
                 </label>
-                {photoPreview && (
-                  <div className="relative">
-                    <img
-                      src={photoPreview}
-                      alt="Preview"
-                      className="w-12 h-12 rounded-lg object-cover border border-border/50"
+                <span className="text-xs text-muted-foreground">
+                  {photos.length}/{MAX_PHOTOS}
+                </span>
+              </div>
+              <div className="space-y-3">
+                {/* Photo previews grid */}
+                {photoPreviews.length > 0 && (
+                  <div className="grid grid-cols-5 gap-2">
+                    {photoPreviews.map((preview, index) => (
+                      <div key={index} className="relative aspect-square">
+                        <img
+                          src={preview}
+                          alt={`Preview ${index + 1}`}
+                          className="w-full h-full rounded-lg object-cover border border-border/50"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removePhoto(index)}
+                          className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Upload button */}
+                {photos.length < MAX_PHOTOS && (
+                  <div className="flex items-center">
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      onChange={handlePhotoChange}
+                      accept="image/*"
+                      multiple
+                      className="hidden"
+                      id="photo-upload"
                     />
-                    <button
-                      type="button"
-                      onClick={removePhoto}
-                      className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center"
+                    <label
+                      htmlFor="photo-upload"
+                      className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-muted/50 border border-border/50 text-muted-foreground hover:text-foreground hover:border-primary cursor-pointer transition-colors"
                     >
-                      <X className="w-3 h-3" />
-                    </button>
+                      <Image className="w-5 h-5" />
+                      <span className="text-sm">Выбрать файлы</span>
+                    </label>
                   </div>
                 )}
               </div>

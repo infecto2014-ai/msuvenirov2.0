@@ -2,10 +2,25 @@ import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import ProtectedLogo from './ProtectedLogo';
 
+// Check if currently open (Kaliningrad time UTC+2, 10:00-20:00)
+const getWorkingStatus = () => {
+  const now = new Date();
+  // Get current time in Kaliningrad (UTC+2)
+  const kaliningradOffset = 2 * 60; // minutes
+  const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+  const kaliningradTime = new Date(utc + kaliningradOffset * 60000);
+  
+  const hours = kaliningradTime.getHours();
+  const isOpen = hours >= 10 && hours < 20;
+  
+  return { isOpen, hours };
+};
+
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('главная');
+  const [workingStatus, setWorkingStatus] = useState(getWorkingStatus);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -15,13 +30,21 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Update working status every minute
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setWorkingStatus(getWorkingStatus());
+    }, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
   // Scrollspy with Intersection Observer
   useEffect(() => {
     const sectionIds = ['главная', 'работы', 'процесс', 'отзывы', 'контакты'];
     
     const observerOptions = {
       root: null,
-      rootMargin: '-20% 0px -60% 0px', // Trigger when section is in middle of viewport
+      rootMargin: '-20% 0px -60% 0px',
       threshold: 0,
     };
 
@@ -63,6 +86,14 @@ const Header = () => {
     }
   };
 
+  const handleOrderClick = () => {
+    const orderButton = document.querySelector('[data-order-button]') as HTMLButtonElement;
+    if (orderButton) {
+      orderButton.click();
+    }
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-background/90 backdrop-blur-md border-b border-border/50' : ''}`}>
       <div className="container mx-auto px-4 sm:px-6 py-3 sm:py-4">
@@ -93,13 +124,18 @@ const Header = () => {
 
           {/* Working Hours + Social Icons + Order Button - visible on md and up */}
           <div className="hidden md:flex items-center gap-2 lg:gap-4 ml-auto">
-            {/* Working Hours */}
+            {/* Working Hours with Status */}
             <div className="flex items-center gap-1.5">
-              <svg className="w-4 h-4 text-neon-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12 6 12 12 16 14" />
-              </svg>
-              <span className="text-xs lg:text-sm text-muted-foreground whitespace-nowrap">10:00 – 20:00</span>
+              <div 
+                className={`w-2 h-2 rounded-full ${
+                  workingStatus.isOpen 
+                    ? 'bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.6)]' 
+                    : 'bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.6)]'
+                }`}
+              />
+              <span className="text-xs lg:text-sm text-muted-foreground whitespace-nowrap">
+                {workingStatus.isOpen ? '10:00 – 20:00' : 'Закрыто'}
+              </span>
             </div>
             
             <a
@@ -122,7 +158,10 @@ const Header = () => {
                 <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
               </svg>
             </a>
-            <button className="gradient-btn-pulse px-3 lg:px-5 py-1.5 lg:py-2 rounded-lg text-xs lg:text-sm font-semibold text-background ml-1 lg:ml-2">
+            <button 
+              onClick={handleOrderClick}
+              className="gradient-btn-pulse px-3 lg:px-5 py-1.5 lg:py-2 rounded-lg text-xs lg:text-sm font-semibold text-background ml-1 lg:ml-2"
+            >
               <span className="relative z-10">Заказать</span>
             </button>
           </div>
@@ -155,6 +194,19 @@ const Header = () => {
                   {link.label}
                 </a>
               ))}
+              
+              {/* Working status in mobile menu */}
+              <div className="flex items-center gap-2 py-1 text-sm text-muted-foreground">
+                <div 
+                  className={`w-2 h-2 rounded-full ${
+                    workingStatus.isOpen 
+                      ? 'bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.6)]' 
+                      : 'bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.6)]'
+                  }`}
+                />
+                <span>{workingStatus.isOpen ? 'Открыто до 20:00' : 'Сейчас закрыто'}</span>
+              </div>
+              
               <div className="flex gap-2 sm:gap-3 pt-2 border-t border-border/50">
                 <a
                   href="https://vk.com/msuvenirov39"
@@ -177,7 +229,10 @@ const Header = () => {
                   </svg>
                 </a>
               </div>
-              <button className="gradient-btn-pulse px-4 sm:px-5 py-2.5 rounded-lg text-sm font-semibold text-background mt-1">
+              <button 
+                onClick={handleOrderClick}
+                className="gradient-btn-pulse px-4 sm:px-5 py-2.5 rounded-lg text-sm font-semibold text-background mt-1"
+              >
                 <span className="relative z-10">Заказать</span>
               </button>
             </div>

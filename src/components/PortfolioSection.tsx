@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { X } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import portfolio1 from '@/assets/portfolio-1.jpg';
 import portfolio2 from '@/assets/portfolio-2.jpg';
 import portfolio3 from '@/assets/portfolio-3.jpg';
@@ -18,7 +18,65 @@ const portfolioImages = [
 ];
 
 const PortfolioSection = () => {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const minSwipeDistance = 50;
+
+  const handlePrev = useCallback(() => {
+    if (selectedIndex !== null) {
+      setSelectedIndex(selectedIndex === 0 ? portfolioImages.length - 1 : selectedIndex - 1);
+    }
+  }, [selectedIndex]);
+
+  const handleNext = useCallback(() => {
+    if (selectedIndex !== null) {
+      setSelectedIndex((selectedIndex + 1) % portfolioImages.length);
+    }
+  }, [selectedIndex]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (selectedIndex === null) return;
+      
+      if (e.key === 'ArrowLeft') {
+        handlePrev();
+      } else if (e.key === 'ArrowRight') {
+        handleNext();
+      } else if (e.key === 'Escape') {
+        setSelectedIndex(null);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedIndex, handlePrev, handleNext]);
+
+  // Swipe handlers
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    
+    if (isLeftSwipe) {
+      handleNext();
+    } else if (isRightSwipe) {
+      handlePrev();
+    }
+  };
 
   return (
     <section id="работы" className="py-10 sm:py-12 relative overflow-hidden">
@@ -35,11 +93,11 @@ const PortfolioSection = () => {
 
         {/* 2 rows x 4 columns Static Grid - Compact squares */}
         <div className="grid grid-cols-4 gap-2 sm:gap-3 max-w-5xl mx-auto">
-          {portfolioImages.map((image) => (
+          {portfolioImages.map((image, index) => (
             <div
               key={image.id}
               className="relative group overflow-hidden cursor-pointer aspect-square rounded-lg sm:rounded-xl"
-              onClick={() => setSelectedImage(image.src)}
+              onClick={() => setSelectedIndex(index)}
             >
               <img
                 src={image.src}
@@ -53,24 +111,59 @@ const PortfolioSection = () => {
         </div>
       </div>
 
-      {/* Modal */}
-      {selectedImage && (
+      {/* Lightbox Modal */}
+      {selectedIndex !== null && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-background/90 backdrop-blur-sm p-4"
-          onClick={() => setSelectedImage(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 backdrop-blur-sm"
+          onClick={() => setSelectedIndex(null)}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
         >
+          {/* Close button */}
           <button
-            onClick={() => setSelectedImage(null)}
-            className="absolute top-4 right-4 sm:top-6 sm:right-6 w-10 h-10 sm:w-12 sm:h-12 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
+            onClick={() => setSelectedIndex(null)}
+            className="absolute top-4 right-4 sm:top-6 sm:right-6 w-10 h-10 sm:w-12 sm:h-12 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300 z-10"
           >
             <X className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
           </button>
+
+          {/* Previous button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handlePrev();
+            }}
+            className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300 z-10"
+          >
+            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+          </button>
+
+          {/* Next button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleNext();
+            }}
+            className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300 z-10"
+          >
+            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+          </button>
+
+          {/* Image */}
           <img
-            src={selectedImage}
-            alt="Увеличенное изображение"
-            className="max-w-[90vw] max-h-[85vh] object-contain rounded-2xl neon-glow"
+            src={portfolioImages[selectedIndex].src}
+            alt={portfolioImages[selectedIndex].alt}
+            className="max-w-[85vw] max-h-[80vh] object-contain rounded-2xl neon-glow"
             onClick={(e) => e.stopPropagation()}
           />
+
+          {/* Image counter */}
+          <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full bg-background/80 backdrop-blur-sm neon-border">
+            <span className="text-sm text-foreground">
+              {selectedIndex + 1} / {portfolioImages.length}
+            </span>
+          </div>
         </div>
       )}
     </section>
