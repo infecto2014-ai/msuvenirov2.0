@@ -10,7 +10,7 @@ const HeroSection = () => {
   };
 
   const handleScrollDown = () => {
-    const nextSection = document.getElementById('работы');
+    const nextSection = document.getElementById('витрина');
     if (nextSection) {
       nextSection.scrollIntoView({ behavior: 'smooth' });
     }
