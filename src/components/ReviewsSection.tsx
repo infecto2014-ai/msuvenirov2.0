@@ -149,14 +149,14 @@ const ReviewsSection = () => {
                 <div key={review.id} className="glass-card rounded-xl sm:rounded-2xl p-4 sm:p-5 flex flex-col h-[280px] sm:h-[240px]">
                   <Quote className="w-5 h-5 sm:w-6 sm:h-6 text-primary/30 mb-2 sm:mb-3 flex-shrink-0" />
                   
-                  <div className="flex-1 min-h-0 overflow-hidden">
-                    <p className="text-xs sm:text-sm text-foreground leading-relaxed line-clamp-4">
+                  <div className="flex-1 min-h-0 flex flex-col">
+                    <p className="text-xs sm:text-sm text-foreground leading-relaxed line-clamp-4 flex-1">
                       "{review.content}"
                     </p>
                     {review.content.length > 120 && (
                       <button
                         onClick={() => setSelectedReview(review)}
-                        className="text-primary text-xs sm:text-sm mt-2 hover:underline transition-all"
+                        className="text-primary text-xs sm:text-sm mt-2 hover:underline transition-all flex-shrink-0"
                       >
                         Читать далее...
                       </button>
