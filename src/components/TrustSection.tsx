@@ -14,7 +14,7 @@ import client6 from '@/assets/clients/client-6.png';
 import client7 from '@/assets/clients/client-7.png';
 import client8 from '@/assets/clients/client-8.png';
 
-const clients = [
+const baseClients = [
   { id: 1, name: 'Клиент 1', logo: client1 },
   { id: 2, name: 'Арле Парк', logo: client2 },
   { id: 3, name: 'Fonbet', logo: client3 },
@@ -23,6 +23,13 @@ const clients = [
   { id: 6, name: 'Клиент 6', logo: client6 },
   { id: 7, name: 'Клиент 7', logo: client7 },
   { id: 8, name: 'Котик', logo: client8 },
+];
+
+// Duplicate clients 3x to ensure smooth looping on ultra-wide screens
+const clients = [
+  ...baseClients.map((c, i) => ({ ...c, id: i + 1 })),
+  ...baseClients.map((c, i) => ({ ...c, id: i + 9 })),
+  ...baseClients.map((c, i) => ({ ...c, id: i + 17 })),
 ];
 
 const TrustSection = () => {
@@ -83,6 +90,7 @@ const TrustSection = () => {
           }}
           speed={4000}
           grabCursor={true}
+          centeredSlides={true}
           className="!overflow-visible"
         >
           {clients.map((client) => (

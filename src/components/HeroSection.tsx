@@ -30,19 +30,19 @@ const HeroSection = () => {
       {/* Main Content */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center container mx-auto px-4 sm:px-6 text-center pt-20">
         {/* Main Heading */}
-        <h1 className="animate-fade-up text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-none mb-4 sm:mb-6" style={{ animationDelay: '0.2s' }}>
+        <h1 className="animate-fade-up text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-none mb-6 sm:mb-6" style={{ animationDelay: '0.2s' }}>
           <span className="neon-text uppercase tracking-tight">Мастерская</span>
           <br />
           <span className="neon-text uppercase tracking-tight">сувениров</span>
         </h1>
 
         {/* Subheading */}
-        <p className="animate-fade-up text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-2xl mx-auto mb-10 sm:mb-12" style={{ animationDelay: '0.3s' }}>
+        <p className="animate-fade-up text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-2xl mx-auto mb-8 sm:mb-12" style={{ animationDelay: '0.3s' }}>
           Создавай уникальные вещи с нами. От одной штуки до крупных тиражей.
         </p>
 
         {/* CTA Button */}
-        <div className="animate-fade-up mb-12 sm:mb-16" style={{ animationDelay: '0.4s' }}>
+        <div className="animate-fade-up mb-10 sm:mb-16" style={{ animationDelay: '0.4s' }}>
           <button 
             onClick={handleOrderClick}
             className="gradient-btn-pulse px-10 sm:px-12 py-4 sm:py-5 rounded-xl text-lg sm:text-xl md:text-2xl font-bold text-background"
