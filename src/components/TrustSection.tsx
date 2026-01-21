@@ -1,6 +1,6 @@
 import client1 from '@/assets/clients/client-1.png';
 import client2 from '@/assets/clients/client-2.png';
-import client3 from '@/assets/clients/client-3.jpg';
+import client3 from '@/assets/clients/client-3.png';
 import client4 from '@/assets/clients/client-4.png';
 import client5 from '@/assets/clients/client-5.png';
 import client6 from '@/assets/clients/client-6.png';
@@ -19,6 +19,9 @@ const clients = [
 ];
 
 const TrustSection = () => {
+  // Triple the clients for seamless infinite loop
+  const repeatedClients = [...clients, ...clients, ...clients];
+
   return (
     <section className="py-10 sm:py-14 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/10 to-background" />
@@ -30,40 +33,38 @@ const TrustSection = () => {
           </h2>
         </div>
 
-        {/* Logo Grid with Neon Backlight */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6 max-w-5xl mx-auto">
-          {clients.map((client) => (
-            <div
-              key={client.id}
-              className="group relative flex items-center justify-center p-4 sm:p-6 rounded-xl transition-all duration-300"
-              style={{
-                background: 'radial-gradient(ellipse at center, rgba(0, 255, 255, 0.08) 0%, rgba(255, 0, 255, 0.05) 40%, transparent 70%)',
-              }}
-            >
-              {/* Neon glow background - intensifies on hover */}
-              <div 
-                className="absolute inset-0 rounded-xl opacity-60 group-hover:opacity-100 transition-opacity duration-300"
-                style={{
-                  background: 'radial-gradient(ellipse at center, rgba(0, 255, 255, 0.15) 0%, rgba(168, 85, 247, 0.1) 30%, transparent 60%)',
-                }}
-              />
-              
-              {/* Extra glow layer for hover effect */}
-              <div 
-                className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-300"
-                style={{
-                  boxShadow: '0 0 30px rgba(0, 255, 255, 0.3), 0 0 60px rgba(168, 85, 247, 0.2)',
-                }}
-              />
-              
-              {/* Logo */}
-              <img
-                src={client.logo}
-                alt={client.name}
-                className="relative z-10 w-full h-16 sm:h-20 md:h-24 object-contain transition-transform duration-300 group-hover:scale-110"
-              />
+        {/* Marquee Container */}
+        <div className="relative overflow-hidden">
+          {/* Gradient fade edges */}
+          <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+          
+          {/* Marquee Track */}
+          <div className="group flex">
+            <div className="flex animate-marquee group-hover:[animation-play-state:paused]">
+              {repeatedClients.map((client, index) => (
+                <div
+                  key={`${client.id}-${index}`}
+                  className="relative flex items-center justify-center px-6 sm:px-10 py-4 flex-shrink-0"
+                >
+                  {/* Neon glow background */}
+                  <div 
+                    className="absolute inset-0 rounded-xl opacity-60 transition-opacity duration-300"
+                    style={{
+                      background: 'radial-gradient(ellipse at center, rgba(0, 255, 255, 0.12) 0%, rgba(168, 85, 247, 0.08) 30%, transparent 60%)',
+                    }}
+                  />
+                  
+                  {/* Logo */}
+                  <img
+                    src={client.logo}
+                    alt={client.name}
+                    className="relative z-10 h-12 sm:h-16 md:h-20 w-auto max-w-[120px] sm:max-w-[150px] object-contain"
+                  />
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </section>
