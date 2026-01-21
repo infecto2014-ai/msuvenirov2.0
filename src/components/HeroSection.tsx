@@ -29,15 +29,15 @@ const HeroSection = () => {
           Впечатления для жизни, имидж для бизнеса
         </p>
 
-        <div className="animate-fade-up mb-5" style={{ animationDelay: '0.4s' }}>
+        <p className="animate-fade-up text-xs sm:text-sm md:text-base text-muted-foreground max-w-md mx-auto mb-8" style={{ animationDelay: '0.4s' }}>
+          Создавай уникальные вещи с нами. От одной штуки до крупных тиражей.
+        </p>
+
+        <div className="animate-fade-up" style={{ animationDelay: '0.5s' }}>
           <button className="gradient-btn-pulse px-6 sm:px-8 py-3 sm:py-4 rounded-xl text-sm sm:text-base md:text-lg font-bold text-background">
             <span className="relative z-10">СДЕЛАТЬ ЗАКАЗ</span>
           </button>
         </div>
-
-        <p className="animate-fade-up text-xs sm:text-sm md:text-base text-muted-foreground max-w-md mx-auto" style={{ animationDelay: '0.5s' }}>
-          Создавай уникальные вещи с нами. От одной штуки до крупных тиражей.
-        </p>
 
         {/* Scroll indicator */}
         <div className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 animate-bounce">

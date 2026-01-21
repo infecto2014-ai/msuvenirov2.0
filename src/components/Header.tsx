@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
+import ProtectedLogo from './ProtectedLogo';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -26,14 +27,8 @@ const Header = () => {
       <div className="container mx-auto px-4 sm:px-6 py-3 sm:py-4">
         <nav className="flex items-center justify-between gap-4">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2 sm:gap-3 group flex-shrink-0">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg neon-border flex items-center justify-center bg-background group-hover:neon-glow transition-all duration-300">
-              <span className="text-lg sm:text-xl font-black neon-text">М</span>
-            </div>
-            <div className="hidden xs:block">
-              <span className="text-sm sm:text-base font-bold text-foreground">Мастерская</span>
-              <span className="block text-[10px] sm:text-xs text-muted-foreground">сувениров</span>
-            </div>
+          <a href="#" className="flex items-center flex-shrink-0">
+            <ProtectedLogo height={40} className="sm:h-[45px]" />
           </a>
 
           {/* Desktop Navigation - visible on md and up */}

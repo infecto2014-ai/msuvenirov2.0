@@ -1,4 +1,5 @@
 import { MapPin, Phone, Mail } from 'lucide-react';
+import ProtectedLogo from './ProtectedLogo';
 
 const Footer = () => {
   return (
@@ -10,14 +11,8 @@ const Footer = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 lg:gap-12">
           {/* Logo and about */}
           <div className="sm:col-span-2">
-            <a href="#" className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6 group">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg neon-border flex items-center justify-center bg-background group-hover:neon-glow transition-all duration-300">
-                <span className="text-xl sm:text-2xl font-black neon-text">М</span>
-              </div>
-              <div>
-                <span className="text-base sm:text-lg font-bold text-foreground">Мастерская</span>
-                <span className="block text-xs sm:text-sm text-muted-foreground">сувениров</span>
-              </div>
+            <a href="#" className="flex items-center mb-4 sm:mb-6 group">
+              <ProtectedLogo height={45} />
             </a>
             <p className="text-muted-foreground text-xs sm:text-sm max-w-md">
               Создаём уникальные вещи с 2019 года. Печать на текстиле любой сложности — 
@@ -42,9 +37,9 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="mailto:Msuvenirov39@gmail.com" className="flex items-center gap-2 sm:gap-3 text-muted-foreground hover:text-primary transition-colors group text-xs sm:text-sm">
+                <a href="mailto:msuvenirov39@yandex.ru" className="flex items-center gap-2 sm:gap-3 text-muted-foreground hover:text-primary transition-colors group text-xs sm:text-sm">
                   <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0" />
-                  <span>Msuvenirov39@gmail.com</span>
+                  <span>msuvenirov39@yandex.ru</span>
                 </a>
               </li>
             </ul>
