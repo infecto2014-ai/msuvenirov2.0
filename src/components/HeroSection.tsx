@@ -1,5 +1,5 @@
 import { ChevronDown } from 'lucide-react';
-import portfolio1 from '@/assets/portfolio-1.jpg';
+import heroImage from '@/assets/hero-bg.jpg';
 
 const HeroSection = () => {
   const handleOrderClick = () => {
@@ -14,7 +14,7 @@ const HeroSection = () => {
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <img
-          src={portfolio1}
+          src={heroImage}
           alt="Печать на текстиле"
           className="w-full h-full object-cover opacity-30"
         />
