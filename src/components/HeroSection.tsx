@@ -51,12 +51,17 @@ const HeroSection = () => {
           </button>
         </div>
 
-        {/* Scroll indicator - Mouse style */}
+        {/* Scroll indicator - Droplet style without frame */}
         <div className="animate-fade-up flex flex-col items-center" style={{ animationDelay: '0.5s' }}>
           <div className="animate-bounce">
-            <div className="w-8 h-12 sm:w-10 sm:h-14 rounded-full neon-border flex items-start justify-center pt-2">
-              <div className="w-1 h-2 sm:w-1.5 sm:h-3 rounded-full bg-primary animate-glow-pulse" />
-            </div>
+            <svg 
+              className="w-8 h-10 sm:w-10 sm:h-12 text-primary animate-glow-pulse"
+              viewBox="0 0 24 30" 
+              fill="currentColor"
+              style={{ filter: 'drop-shadow(0 0 10px hsl(var(--primary)))' }}
+            >
+              <path d="M12 0C12 0 4 10 4 17C4 21.418 7.582 25 12 25C16.418 25 20 21.418 20 17C20 10 12 0 12 0Z" />
+            </svg>
           </div>
         </div>
       </div>

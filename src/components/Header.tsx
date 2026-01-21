@@ -44,8 +44,17 @@ const Header = () => {
             ))}
           </div>
 
-          {/* Social Icons + Order Button - visible on md and up */}
-          <div className="hidden md:flex items-center gap-2 lg:gap-3 ml-auto">
+          {/* Working Hours + Social Icons + Order Button - visible on md and up */}
+          <div className="hidden md:flex items-center gap-2 lg:gap-4 ml-auto">
+            {/* Working Hours */}
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted/30 border border-border/50">
+              <svg className="w-4 h-4 text-neon-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              <span className="text-xs lg:text-sm text-muted-foreground whitespace-nowrap">10:00 – 20:00</span>
+            </div>
+            
             <a
               href="https://vk.com/msuvenirov39"
               target="_blank"

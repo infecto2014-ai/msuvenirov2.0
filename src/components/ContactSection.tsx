@@ -1,4 +1,4 @@
-import { MapPin, Phone, Mail, Send } from 'lucide-react';
+import { MapPin, Phone, Mail, Send, Clock } from 'lucide-react';
 
 const ContactSection = () => {
   return (
@@ -36,6 +36,19 @@ const ContactSection = () => {
                 </div>
               </div>
 
+              {/* Working Hours */}
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl bg-neon-purple/20 flex items-center justify-center flex-shrink-0 neon-glow">
+                  <Clock className="w-6 h-6 text-neon-purple" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">Режим работы</h4>
+                  <p className="text-foreground text-base sm:text-lg">
+                    с 10:00 до 20:00 без выходных
+                  </p>
+                </div>
+              </div>
+
               {/* Phone */}
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 rounded-xl bg-neon-magenta/20 flex items-center justify-center flex-shrink-0 neon-glow-magenta">
@@ -52,18 +65,36 @@ const ContactSection = () => {
                 </div>
               </div>
 
+              {/* Telegram */}
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl bg-neon-cyan/20 flex items-center justify-center flex-shrink-0 neon-glow-cyan">
+                  <Send className="w-6 h-6 text-neon-cyan" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">Telegram</h4>
+                  <a 
+                    href="https://t.me/Msuvenirov39zakaz" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-foreground text-base sm:text-lg hover:text-primary transition-colors"
+                  >
+                    Написать нам
+                  </a>
+                </div>
+              </div>
+
               {/* Email */}
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-neon-purple/20 flex items-center justify-center flex-shrink-0 neon-glow">
-                  <Mail className="w-6 h-6 text-neon-purple" />
+                <div className="w-12 h-12 rounded-xl bg-neon-magenta/20 flex items-center justify-center flex-shrink-0 neon-glow-magenta">
+                  <Mail className="w-6 h-6 text-neon-magenta" />
                 </div>
                 <div>
                   <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">Email</h4>
                   <a 
-                    href="mailto:msuvenirov39@yandex.ru" 
+                    href="mailto:Msuvenirov39@yandex.ru" 
                     className="text-foreground text-base sm:text-lg hover:text-primary transition-colors"
                   >
-                    msuvenirov39@yandex.ru
+                    Msuvenirov39@yandex.ru
                   </a>
                 </div>
               </div>
@@ -77,7 +108,7 @@ const ContactSection = () => {
               <div className="flex gap-4">
                 {/* VK Button */}
                 <a
-                  href="#"
+                  href="https://vk.com/msuvenirov39"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-14 h-14 rounded-xl bg-muted/30 border border-border/50 flex items-center justify-center hover:border-neon-cyan hover:bg-neon-cyan/10 hover:shadow-[0_0_20px_hsl(var(--neon-cyan)/0.3)] transition-all duration-300 group"
@@ -94,7 +125,7 @@ const ContactSection = () => {
 
                 {/* Telegram Button */}
                 <a
-                  href="#"
+                  href="https://t.me/msuvenirov39"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-14 h-14 rounded-xl bg-muted/30 border border-border/50 flex items-center justify-center hover:border-neon-magenta hover:bg-neon-magenta/10 hover:shadow-[0_0_20px_hsl(var(--neon-magenta)/0.3)] transition-all duration-300 group"
