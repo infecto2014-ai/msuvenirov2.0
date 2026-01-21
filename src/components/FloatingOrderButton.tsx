@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import { X, Send, Image, Loader2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
@@ -102,6 +102,7 @@ const FloatingOrderButton = () => {
     <>
       {/* Floating Action Button */}
       <button
+        data-order-button
         onClick={() => setIsOpen(true)}
         className="fixed bottom-6 right-6 z-50 w-14 h-14 sm:w-16 sm:h-16 rounded-full gradient-btn-pulse flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-300"
         aria-label="Открыть форму заказа"
