@@ -28,6 +28,13 @@ const steps = [
 ];
 
 const ProcessSection = () => {
+  const handleOrderClick = () => {
+    const orderButton = document.querySelector('[data-order-button]') as HTMLButtonElement;
+    if (orderButton) {
+      orderButton.click();
+    }
+  };
+
   return (
     <section id="процесс" className="py-10 sm:py-12 relative overflow-hidden">
       {/* Background */}
@@ -84,6 +91,16 @@ const ProcessSection = () => {
               );
             })}
           </div>
+        </div>
+
+        {/* Order Button */}
+        <div className="text-center mt-8 sm:mt-10">
+          <button 
+            onClick={handleOrderClick}
+            className="gradient-btn-pulse px-8 sm:px-10 py-3 sm:py-4 rounded-xl text-base sm:text-lg font-bold text-background"
+          >
+            <span className="relative z-10">ЗАКАЗАТЬ</span>
+          </button>
         </div>
       </div>
     </section>

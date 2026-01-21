@@ -47,7 +47,7 @@ const Header = () => {
           {/* Working Hours + Social Icons + Order Button - visible on md and up */}
           <div className="hidden md:flex items-center gap-2 lg:gap-4 ml-auto">
             {/* Working Hours */}
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted/30 border border-border/50">
+            <div className="flex items-center gap-1.5">
               <svg className="w-4 h-4 text-neon-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10" />
                 <polyline points="12 6 12 12 16 14" />

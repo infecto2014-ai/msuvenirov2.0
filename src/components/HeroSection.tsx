@@ -1,5 +1,5 @@
-import heroImage from '@/assets/hero-bg.jpg';
-import { MousePointer2 } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
+import portfolio1 from '@/assets/portfolio-1.jpg';
 
 const HeroSection = () => {
   const handleOrderClick = () => {
@@ -14,11 +14,11 @@ const HeroSection = () => {
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <img
-          src={heroImage}
+          src={portfolio1}
           alt="Печать на текстиле"
-          className="w-full h-full object-cover opacity-40"
+          className="w-full h-full object-cover opacity-30"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/70 to-background" />
         <div className="absolute inset-0 bg-gradient-to-r from-neon-cyan/10 via-transparent to-neon-magenta/10" />
       </div>
 
@@ -51,21 +51,16 @@ const HeroSection = () => {
           </button>
         </div>
 
-        {/* Scroll indicator - Droplet style without frame */}
-        <div className="animate-fade-up flex flex-col items-center" style={{ animationDelay: '0.5s' }}>
+        {/* Scroll indicator - Clean animated arrow */}
+        <div className="animate-fade-up" style={{ animationDelay: '0.5s' }}>
           <div className="animate-bounce">
-            <svg 
-              className="w-8 h-10 sm:w-10 sm:h-12 text-primary animate-glow-pulse"
-              viewBox="0 0 24 30" 
-              fill="currentColor"
-              style={{ filter: 'drop-shadow(0 0 10px hsl(var(--primary)))' }}
-            >
-              <path d="M12 0C12 0 4 10 4 17C4 21.418 7.582 25 12 25C16.418 25 20 21.418 20 17C20 10 12 0 12 0Z" />
-            </svg>
+            <ChevronDown 
+              className="w-8 h-8 sm:w-10 sm:h-10 text-primary"
+              style={{ filter: 'drop-shadow(0 0 12px hsl(var(--primary))) drop-shadow(0 0 24px hsl(var(--primary)))' }}
+            />
           </div>
         </div>
       </div>
-
     </section>
   );
 };
