@@ -44,77 +44,78 @@ const TrustSection = () => {
     <section className="py-10 sm:py-14 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/10 to-background" />
       
+      {/* Title - centered with container */}
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className="text-center mb-8 sm:mb-10">
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">
             НАМ <span className="neon-text">ДОВЕРЯЮТ</span>
           </h2>
         </div>
-
-        {/* Swiper Container */}
-        <div 
-          className="relative"
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
+      </div>
+      
+      {/* Full-width Swiper Container - Edge to Edge */}
+      <div 
+        className="relative w-full"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        {/* Gradient fade edges - now at true viewport edges */}
+        <div className="absolute left-0 top-0 bottom-0 w-24 sm:w-32 md:w-40 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-32 md:w-40 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+        
+        <Swiper
+          modules={[Autoplay, FreeMode]}
+          onSwiper={(swiper) => {
+            swiperRef.current = swiper;
+          }}
+          spaceBetween={20}
+          slidesPerView="auto"
+          loop={true}
+          freeMode={{
+            enabled: true,
+            momentum: true,
+            momentumRatio: 0.5,
+          }}
+          autoplay={{
+            delay: 0,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: false,
+          }}
+          speed={4000}
+          grabCursor={true}
+          className="!overflow-visible"
         >
-          {/* Gradient fade edges */}
-          <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-20 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-20 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
-          
-          <Swiper
-            modules={[Autoplay, FreeMode]}
-            onSwiper={(swiper) => {
-              swiperRef.current = swiper;
-            }}
-            spaceBetween={20}
-            slidesPerView="auto"
-            loop={true}
-            freeMode={{
-              enabled: true,
-              momentum: true,
-              momentumRatio: 0.5,
-            }}
-            autoplay={{
-              delay: 0,
-              disableOnInteraction: false,
-              pauseOnMouseEnter: false, // We handle this manually
-            }}
-            speed={4000}
-            grabCursor={true}
-            className="!overflow-visible"
-          >
-            {clients.map((client) => (
-              <SwiperSlide 
-                key={client.id} 
-                className="!w-auto"
-              >
-                <div className="relative flex items-center justify-center px-4 sm:px-6 py-4">
-                  {/* Neon glow background */}
-                  <div 
-                    className="absolute inset-0 rounded-xl opacity-60 transition-opacity duration-300 group-hover:opacity-100"
-                    style={{
-                      background: 'radial-gradient(ellipse at center, rgba(0, 255, 255, 0.12) 0%, rgba(168, 85, 247, 0.08) 30%, transparent 60%)',
-                    }}
-                  />
-                  
-                  {/* Protected Logo - pointer-events: none makes clicks pass through */}
-                  <img
-                    src={client.logo}
-                    alt=""
-                    aria-hidden="true"
-                    draggable={false}
-                    onContextMenu={(e) => e.preventDefault()}
-                    className="relative z-10 h-12 sm:h-16 md:h-20 w-auto max-w-[100px] sm:max-w-[130px] md:max-w-[150px] object-contain select-none pointer-events-none"
-                    style={{
-                      WebkitUserDrag: 'none',
-                      userSelect: 'none',
-                    } as React.CSSProperties}
-                  />
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
+          {clients.map((client) => (
+            <SwiperSlide 
+              key={client.id} 
+              className="!w-auto"
+            >
+              <div className="relative flex items-center justify-center px-4 sm:px-6 py-4">
+                {/* Neon glow background */}
+                <div 
+                  className="absolute inset-0 rounded-xl opacity-60 transition-opacity duration-300"
+                  style={{
+                    background: 'radial-gradient(ellipse at center, rgba(0, 255, 255, 0.12) 0%, rgba(168, 85, 247, 0.08) 30%, transparent 60%)',
+                  }}
+                />
+                
+                {/* Protected Logo */}
+                <img
+                  src={client.logo}
+                  alt=""
+                  aria-hidden="true"
+                  draggable={false}
+                  onContextMenu={(e) => e.preventDefault()}
+                  className="relative z-10 h-12 sm:h-16 md:h-20 w-auto max-w-[100px] sm:max-w-[130px] md:max-w-[150px] object-contain select-none pointer-events-none"
+                  style={{
+                    WebkitUserDrag: 'none',
+                    userSelect: 'none',
+                  } as React.CSSProperties}
+                />
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
     </section>
   );
