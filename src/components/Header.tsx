@@ -5,6 +5,7 @@ import ProtectedLogo from './ProtectedLogo';
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('главная');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -14,13 +15,53 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Scrollspy with Intersection Observer
+  useEffect(() => {
+    const sectionIds = ['главная', 'работы', 'процесс', 'отзывы', 'контакты'];
+    
+    const observerOptions = {
+      root: null,
+      rootMargin: '-20% 0px -60% 0px', // Trigger when section is in middle of viewport
+      threshold: 0,
+    };
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+    sectionIds.forEach((id) => {
+      const element = document.getElementById(id);
+      if (element) {
+        observer.observe(element);
+      }
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   const navLinks = [
-    { href: '#главная', label: 'Главная' },
-    { href: '#работы', label: 'Наши работы' },
-    { href: '#процесс', label: 'Как заказать?' },
-    { href: '#отзывы', label: 'Отзывы' },
-    { href: '#контакты', label: 'Контакты' },
+    { href: '#главная', label: 'Главная', id: 'главная' },
+    { href: '#работы', label: 'Наши работы', id: 'работы' },
+    { href: '#процесс', label: 'Как заказать?', id: 'процесс' },
+    { href: '#отзывы', label: 'Отзывы', id: 'отзывы' },
+    { href: '#контакты', label: 'Контакты', id: 'контакты' },
   ];
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const targetId = href.replace('#', '');
+    const element = document.getElementById(targetId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      setIsMobileMenuOpen(false);
+    }
+  };
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-background/90 backdrop-blur-md border-b border-border/50' : ''}`}>
@@ -37,9 +78,27 @@ const Header = () => {
               <a
                 key={link.href}
                 href={link.href}
-                className="text-xs lg:text-sm text-muted-foreground hover:text-primary transition-colors relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:after:w-full whitespace-nowrap"
+                onClick={(e) => handleNavClick(e, link.href)}
+                className={`text-xs lg:text-sm transition-all duration-300 relative whitespace-nowrap
+                  ${activeSection === link.id 
+                    ? 'text-neon-cyan font-semibold' 
+                    : 'text-muted-foreground hover:text-primary'
+                  }
+                `}
+                style={activeSection === link.id ? {
+                  textShadow: '0 0 10px hsl(var(--neon-cyan) / 0.8), 0 0 20px hsl(var(--neon-cyan) / 0.5)',
+                } : undefined}
               >
                 {link.label}
+                {/* Active indicator dot */}
+                <span 
+                  className={`absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-neon-cyan transition-all duration-300
+                    ${activeSection === link.id ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}
+                  `}
+                  style={{
+                    boxShadow: '0 0 8px hsl(var(--neon-cyan)), 0 0 16px hsl(var(--neon-cyan) / 0.5)',
+                  }}
+                />
               </a>
             ))}
           </div>
@@ -97,8 +156,16 @@ const Header = () => {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors py-1"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  className={`text-sm transition-all duration-300 py-1
+                    ${activeSection === link.id 
+                      ? 'text-neon-cyan font-semibold' 
+                      : 'text-muted-foreground hover:text-primary'
+                    }
+                  `}
+                  style={activeSection === link.id ? {
+                    textShadow: '0 0 10px hsl(var(--neon-cyan) / 0.8), 0 0 20px hsl(var(--neon-cyan) / 0.5)',
+                  } : undefined}
                 >
                   {link.label}
                 </a>

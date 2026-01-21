@@ -7,7 +7,7 @@ const ContactSection = () => {
       <div className="absolute top-0 left-0 w-64 h-64 bg-neon-cyan/10 rounded-full blur-3xl" />
       <div className="absolute bottom-0 right-0 w-64 h-64 bg-neon-magenta/10 rounded-full blur-3xl" />
       
-      <div className="container mx-auto px-4 sm:px-6 lg:px-12 xl:px-24 max-w-6xl relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
         {/* Section Header */}
         <div className="text-center mb-12 sm:mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase mb-4">
@@ -19,7 +19,15 @@ const ContactSection = () => {
         {/* Two Column Layout */}
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
           {/* Left Column - Contact Info */}
-          <div className="glass-card p-6 sm:p-8 rounded-2xl flex flex-col">
+          <div className="relative">
+            {/* Neon backlight glow */}
+            <div 
+              className="absolute -inset-3 sm:-inset-4 rounded-3xl opacity-60 blur-2xl"
+              style={{
+                background: 'radial-gradient(ellipse at center, hsl(var(--neon-cyan) / 0.25) 0%, hsl(var(--neon-purple) / 0.15) 50%, transparent 70%)',
+              }}
+            />
+            <div className="relative glass-card p-6 sm:p-8 rounded-2xl flex flex-col h-full">
             {/* Contact List */}
             <div className="space-y-6 mb-8">
               {/* Address */}
@@ -135,10 +143,19 @@ const ContactSection = () => {
                 </a>
               </div>
             </div>
+            </div>
           </div>
 
           {/* Right Column - Map */}
-          <div className="glass-card p-2 rounded-2xl overflow-hidden min-h-[400px] lg:min-h-0">
+          <div className="relative">
+            {/* Neon backlight glow */}
+            <div 
+              className="absolute -inset-3 sm:-inset-4 rounded-3xl opacity-60 blur-2xl"
+              style={{
+                background: 'radial-gradient(ellipse at center, hsl(var(--neon-magenta) / 0.25) 0%, hsl(var(--neon-purple) / 0.15) 50%, transparent 70%)',
+              }}
+            />
+            <div className="relative glass-card p-2 rounded-2xl overflow-hidden min-h-[400px] lg:min-h-0">
             <div className="w-full h-full min-h-[380px] rounded-xl overflow-hidden">
               <iframe
                 src="https://yandex.ru/map-widget/v1/?um=constructor%3A8c8d9e8d5c8e8d5c8e8d5c8e8d5c8e8d&amp;source=constructor&ll=20.472047%2C54.729422&z=16&pt=20.472047,54.729422,pm2rdm"
@@ -153,6 +170,7 @@ const ContactSection = () => {
                 }}
                 title="Карта проезда к Мастерской сувениров"
               />
+            </div>
             </div>
           </div>
         </div>
