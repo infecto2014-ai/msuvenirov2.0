@@ -79,26 +79,14 @@ const Header = () => {
                 key={link.href}
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
-                className={`text-xs lg:text-sm transition-all duration-300 relative whitespace-nowrap
+                className={`text-xs lg:text-sm transition-all duration-300 whitespace-nowrap
                   ${activeSection === link.id 
-                    ? 'text-neon-cyan font-semibold' 
-                    : 'text-muted-foreground hover:text-primary'
+                    ? 'text-primary font-medium' 
+                    : 'text-muted-foreground hover:text-foreground'
                   }
                 `}
-                style={activeSection === link.id ? {
-                  textShadow: '0 0 10px hsl(var(--neon-cyan) / 0.8), 0 0 20px hsl(var(--neon-cyan) / 0.5)',
-                } : undefined}
               >
                 {link.label}
-                {/* Active indicator dot */}
-                <span 
-                  className={`absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-neon-cyan transition-all duration-300
-                    ${activeSection === link.id ? 'opacity-100 scale-100' : 'opacity-0 scale-0'}
-                  `}
-                  style={{
-                    boxShadow: '0 0 8px hsl(var(--neon-cyan)), 0 0 16px hsl(var(--neon-cyan) / 0.5)',
-                  }}
-                />
               </a>
             ))}
           </div>
@@ -159,13 +147,10 @@ const Header = () => {
                   onClick={(e) => handleNavClick(e, link.href)}
                   className={`text-sm transition-all duration-300 py-1
                     ${activeSection === link.id 
-                      ? 'text-neon-cyan font-semibold' 
-                      : 'text-muted-foreground hover:text-primary'
+                      ? 'text-primary font-medium' 
+                      : 'text-muted-foreground hover:text-foreground'
                     }
                   `}
-                  style={activeSection === link.id ? {
-                    textShadow: '0 0 10px hsl(var(--neon-cyan) / 0.8), 0 0 20px hsl(var(--neon-cyan) / 0.5)',
-                  } : undefined}
                 >
                   {link.label}
                 </a>

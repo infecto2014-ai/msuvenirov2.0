@@ -17,91 +17,77 @@ const ContactSection = () => {
         </div>
 
         {/* Two Column Layout */}
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-10">
           {/* Left Column - Contact Info */}
-          <div className="relative">
+          <div className="relative flex">
             {/* Neon backlight glow */}
             <div 
-              className="absolute -inset-3 sm:-inset-4 rounded-3xl opacity-60 blur-2xl"
+              className="absolute -inset-3 sm:-inset-4 rounded-3xl opacity-60 blur-2xl -z-10"
               style={{
                 background: 'radial-gradient(ellipse at center, hsl(var(--neon-cyan) / 0.25) 0%, hsl(var(--neon-purple) / 0.15) 50%, transparent 70%)',
               }}
             />
-            <div className="relative glass-card p-6 sm:p-8 rounded-2xl flex flex-col h-full">
+            <div className="relative glass-card p-6 sm:p-8 rounded-2xl flex flex-col w-full">
             {/* Contact List */}
-            <div className="space-y-6 mb-8">
+            <div className="flex flex-col gap-5 mb-6">
               {/* Address */}
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-neon-cyan/20 flex items-center justify-center flex-shrink-0 neon-glow-cyan">
-                  <MapPin className="w-6 h-6 text-neon-cyan" />
+              <div className="flex items-center gap-4">
+                <div className="w-11 h-11 rounded-xl bg-neon-cyan/20 flex items-center justify-center flex-shrink-0 neon-glow-cyan">
+                  <MapPin className="w-5 h-5 text-neon-cyan" />
                 </div>
-                <div>
-                  <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">Адрес</h4>
-                  <p className="text-foreground text-base sm:text-lg">
-                    Калининград, ТЦ Экватор, 2 этаж,<br />
-                    Генерала Челнокова 11 стр 1
+                <div className="flex flex-col">
+                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Адрес</h4>
+                  <p className="text-foreground text-sm sm:text-base leading-tight">
+                    Калининград, ТЦ Экватор, 2 этаж, Генерала Челнокова 11 стр 1
                   </p>
                 </div>
               </div>
 
               {/* Working Hours */}
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-neon-purple/20 flex items-center justify-center flex-shrink-0 neon-glow">
-                  <Clock className="w-6 h-6 text-neon-purple" />
+              <div className="flex items-center gap-4">
+                <div className="w-11 h-11 rounded-xl bg-neon-purple/20 flex items-center justify-center flex-shrink-0 neon-glow">
+                  <Clock className="w-5 h-5 text-neon-purple" />
                 </div>
-                <div>
-                  <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">Режим работы</h4>
-                  <p className="text-foreground text-base sm:text-lg">
-                    с 10:00 до 20:00 без выходных
-                  </p>
+                <div className="flex flex-col">
+                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Режим работы</h4>
+                  <p className="text-foreground text-sm sm:text-base">с 10:00 до 20:00 без выходных</p>
                 </div>
               </div>
 
               {/* Phone */}
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-neon-magenta/20 flex items-center justify-center flex-shrink-0 neon-glow-magenta">
-                  <Phone className="w-6 h-6 text-neon-magenta" />
+              <div className="flex items-center gap-4">
+                <div className="w-11 h-11 rounded-xl bg-neon-magenta/20 flex items-center justify-center flex-shrink-0 neon-glow-magenta">
+                  <Phone className="w-5 h-5 text-neon-magenta" />
                 </div>
-                <div>
-                  <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">Телефон</h4>
-                  <a 
-                    href="tel:+79521142350" 
-                    className="text-foreground text-base sm:text-lg hover:text-primary transition-colors"
-                  >
+                <div className="flex flex-col">
+                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Телефон</h4>
+                  <a href="tel:+79521142350" className="text-foreground text-sm sm:text-base hover:text-primary transition-colors">
                     +7 952 114-23-50
                   </a>
                 </div>
               </div>
 
               {/* Telegram */}
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-neon-cyan/20 flex items-center justify-center flex-shrink-0 neon-glow-cyan">
-                  <Send className="w-6 h-6 text-neon-cyan" />
+              <div className="flex items-center gap-4">
+                <div className="w-11 h-11 rounded-xl bg-neon-cyan/20 flex items-center justify-center flex-shrink-0 neon-glow-cyan">
+                  <Send className="w-5 h-5 text-neon-cyan" />
                 </div>
-                <div>
-                  <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">Telegram</h4>
-                  <a 
-                    href="https://t.me/Msuvenirov39zakaz" 
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-foreground text-base sm:text-lg hover:text-primary transition-colors"
-                  >
+                <div className="flex flex-col">
+                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Telegram</h4>
+                  <a href="https://t.me/Msuvenirov39zakaz" target="_blank" rel="noopener noreferrer" className="text-foreground text-sm sm:text-base hover:text-primary transition-colors">
                     Написать нам
                   </a>
                 </div>
               </div>
 
               {/* Email */}
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-neon-magenta/20 flex items-center justify-center flex-shrink-0 neon-glow-magenta">
-                  <Mail className="w-6 h-6 text-neon-magenta" />
+              <div className="flex items-center gap-4">
+                <div className="w-11 h-11 rounded-xl bg-neon-magenta/20 flex items-center justify-center flex-shrink-0 neon-glow-magenta">
+                  <Mail className="w-5 h-5 text-neon-magenta" />
                 </div>
-                <div>
-                  <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-1">Email</h4>
-                  <a 
-                    href="mailto:Msuvenirov39@yandex.ru" 
-                    className="text-foreground text-base sm:text-lg hover:text-primary transition-colors"
-                  >
+                <div className="flex flex-col">
+                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Email</h4>
+                  <a href="mailto:Msuvenirov39@yandex.ru" className="text-foreground text-sm sm:text-base hover:text-primary transition-colors">
                     Msuvenirov39@yandex.ru
                   </a>
                 </div>
@@ -109,11 +95,11 @@ const ContactSection = () => {
             </div>
 
             {/* Social Networks */}
-            <div className="mt-auto pt-6 border-t border-border/30">
-              <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">
+            <div className="mt-auto pt-5 border-t border-border/30">
+              <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
                 Мы в соцсетях
               </h4>
-              <div className="flex gap-4">
+              <div className="flex gap-3">
                 {/* VK Button */}
                 <a
                   href="https://vk.com/msuvenirov39"
@@ -147,30 +133,27 @@ const ContactSection = () => {
           </div>
 
           {/* Right Column - Map */}
-          <div className="relative">
+          <div className="relative flex">
             {/* Neon backlight glow */}
             <div 
-              className="absolute -inset-3 sm:-inset-4 rounded-3xl opacity-60 blur-2xl"
+              className="absolute -inset-3 sm:-inset-4 rounded-3xl opacity-60 blur-2xl -z-10"
               style={{
                 background: 'radial-gradient(ellipse at center, hsl(var(--neon-magenta) / 0.25) 0%, hsl(var(--neon-purple) / 0.15) 50%, transparent 70%)',
               }}
             />
-            <div className="relative glass-card p-2 rounded-2xl overflow-hidden min-h-[400px] lg:min-h-0">
-            <div className="w-full h-full min-h-[380px] rounded-xl overflow-hidden">
+            <div className="relative glass-card p-2 rounded-2xl overflow-hidden w-full min-h-[350px] lg:min-h-0">
               <iframe
                 src="https://yandex.ru/map-widget/v1/?um=constructor%3A8c8d9e8d5c8e8d5c8e8d5c8e8d5c8e8d&amp;source=constructor&ll=20.472047%2C54.729422&z=16&pt=20.472047,54.729422,pm2rdm"
                 width="100%"
                 height="100%"
                 frameBorder="0"
                 allowFullScreen
-                className="w-full h-full min-h-[380px]"
+                className="w-full h-full min-h-[340px] rounded-xl"
                 style={{
                   filter: 'invert(90%) hue-rotate(180deg) contrast(1.1) saturate(0.8)',
-                  borderRadius: '0.75rem'
                 }}
                 title="Карта проезда к Мастерской сувениров"
               />
-            </div>
             </div>
           </div>
         </div>
