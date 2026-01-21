@@ -6,6 +6,7 @@ import ProcessSection from '@/components/ProcessSection';
 import ReviewsSection from '@/components/ReviewsSection';
 import TrustSection from '@/components/TrustSection';
 import Footer from '@/components/Footer';
+import FloatingOrderButton from '@/components/FloatingOrderButton';
 
 const Index = () => {
   return (
@@ -20,6 +21,7 @@ const Index = () => {
         <TrustSection />
       </main>
       <Footer />
+      <FloatingOrderButton />
     </div>
   );
 };
