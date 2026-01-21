@@ -1,5 +1,4 @@
-import heroImage from '@/assets/hero-bg.jpg';
-import { MousePointer2 } from 'lucide-react';
+import heroImage from '@/assets/hero-printing.jpg';
 
 const HeroSection = () => {
   const handleOrderClick = () => {
