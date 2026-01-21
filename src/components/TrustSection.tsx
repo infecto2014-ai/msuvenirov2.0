@@ -1,9 +1,4 @@
-import { useRef } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, FreeMode } from 'swiper/modules';
-import type { Swiper as SwiperType } from 'swiper';
-import 'swiper/css';
-import 'swiper/css/free-mode';
+import { useRef, useEffect, useState } from 'react';
 
 import client1 from '@/assets/clients/client-1.png';
 import client2 from '@/assets/clients/client-2.png';
@@ -25,27 +20,52 @@ const baseClients = [
   { id: 8, name: 'Котик', logo: client8 },
 ];
 
-// Duplicate clients 3x to ensure smooth looping on ultra-wide screens
+// Duplicate 4x to ensure smooth looping on ultra-wide screens
 const clients = [
   ...baseClients.map((c, i) => ({ ...c, id: i + 1 })),
   ...baseClients.map((c, i) => ({ ...c, id: i + 9 })),
   ...baseClients.map((c, i) => ({ ...c, id: i + 17 })),
+  ...baseClients.map((c, i) => ({ ...c, id: i + 25 })),
 ];
 
 const TrustSection = () => {
-  const swiperRef = useRef<SwiperType | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const animationRef = useRef<number>();
+  const scrollPositionRef = useRef(0);
 
-  const handleMouseEnter = () => {
-    if (swiperRef.current?.autoplay) {
-      swiperRef.current.autoplay.stop();
-    }
-  };
+  useEffect(() => {
+    const scrollContainer = scrollRef.current;
+    if (!scrollContainer) return;
 
-  const handleMouseLeave = () => {
-    if (swiperRef.current?.autoplay) {
-      swiperRef.current.autoplay.start();
-    }
-  };
+    const scrollWidth = scrollContainer.scrollWidth / 2;
+    const speed = 0.5; // pixels per frame
+
+    const animate = () => {
+      if (!isPaused) {
+        scrollPositionRef.current += speed;
+        
+        // Reset position when we've scrolled half the content (seamless loop)
+        if (scrollPositionRef.current >= scrollWidth) {
+          scrollPositionRef.current = 0;
+        }
+        
+        if (scrollContainer) {
+          scrollContainer.style.transform = `translateX(-${scrollPositionRef.current}px)`;
+        }
+      }
+      
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animationRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [isPaused]);
 
   return (
     <section className="py-10 sm:py-14 relative overflow-hidden">
@@ -60,48 +80,31 @@ const TrustSection = () => {
         </div>
       </div>
       
-      {/* Full-width Swiper Container - Edge to Edge */}
+      {/* Full-width carousel - Edge to Edge */}
       <div 
-        className="relative w-full"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+        className="relative w-full overflow-hidden"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
       >
-        {/* Gradient fade edges - now at true viewport edges */}
+        {/* Gradient fade edges */}
         <div className="absolute left-0 top-0 bottom-0 w-24 sm:w-32 md:w-40 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-32 md:w-40 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
         
-        <Swiper
-          modules={[Autoplay, FreeMode]}
-          onSwiper={(swiper) => {
-            swiperRef.current = swiper;
-          }}
-          spaceBetween={20}
-          slidesPerView="auto"
-          loop={true}
-          freeMode={{
-            enabled: true,
-            momentum: true,
-            momentumRatio: 0.5,
-          }}
-          autoplay={{
-            delay: 0,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: false,
-          }}
-          speed={4000}
-          grabCursor={true}
-          centeredSlides={true}
-          className="!overflow-visible"
+        {/* Scrolling container */}
+        <div 
+          ref={scrollRef}
+          className="flex items-center will-change-transform"
+          style={{ width: 'fit-content' }}
         >
           {clients.map((client) => (
-            <SwiperSlide 
+            <div 
               key={client.id} 
-              className="!w-auto"
+              className="flex-shrink-0 px-4 sm:px-6"
             >
-              <div className="relative flex items-center justify-center px-4 sm:px-6 py-4">
+              <div className="relative flex items-center justify-center py-4">
                 {/* Neon glow background */}
                 <div 
-                  className="absolute inset-0 rounded-xl opacity-60 transition-opacity duration-300"
+                  className="absolute inset-0 rounded-xl opacity-60"
                   style={{
                     background: 'radial-gradient(ellipse at center, rgba(0, 255, 255, 0.12) 0%, rgba(168, 85, 247, 0.08) 30%, transparent 60%)',
                   }}
@@ -121,9 +124,9 @@ const TrustSection = () => {
                   } as React.CSSProperties}
                 />
               </div>
-            </SwiperSlide>
+            </div>
           ))}
-        </Swiper>
+        </div>
       </div>
     </section>
   );

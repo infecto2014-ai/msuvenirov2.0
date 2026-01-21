@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Star, Quote, User } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Star, Quote } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -143,13 +143,13 @@ const ReviewsSection = () => {
 
         <div className="max-w-3xl mx-auto">
           <div className="relative">
-            {/* Two review cards side by side */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            {/* Fixed height container to prevent layout shift */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 min-h-[220px] sm:min-h-[200px]">
               {visibleReviews.map((review) => (
-                <div key={review.id} className="glass-card rounded-xl sm:rounded-2xl p-4 sm:p-5 flex flex-col">
+                <div key={review.id} className="glass-card rounded-xl sm:rounded-2xl p-4 sm:p-5 flex flex-col h-full min-h-[200px] sm:min-h-[180px]">
                   <Quote className="w-5 h-5 sm:w-6 sm:h-6 text-primary/30 mb-2 sm:mb-3 flex-shrink-0" />
                   
-                  <div className="flex-1 min-h-0">
+                  <div className="flex-1 min-h-0 overflow-hidden">
                     <p className="text-xs sm:text-sm text-foreground leading-relaxed line-clamp-4">
                       "{review.content}"
                     </p>
@@ -163,7 +163,7 @@ const ReviewsSection = () => {
                     )}
                   </div>
 
-                  <div className="flex items-center justify-between flex-wrap gap-2 mt-3 sm:mt-4 pt-3 border-t border-primary/10">
+                  <div className="flex items-center justify-between flex-wrap gap-2 mt-3 sm:mt-4 pt-3 border-t border-primary/10 flex-shrink-0">
                     <div className="flex items-center gap-2 sm:gap-3">
                       <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full neon-border flex items-center justify-center bg-background">
                         <span className="text-xs sm:text-sm font-bold neon-text">{review.avatar}</span>

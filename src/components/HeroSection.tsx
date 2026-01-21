@@ -9,6 +9,13 @@ const HeroSection = () => {
     }
   };
 
+  const handleScrollDown = () => {
+    const nextSection = document.getElementById('работы');
+    if (nextSection) {
+      nextSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section id="главная" className="relative min-h-screen flex flex-col overflow-hidden">
       {/* Background */}
@@ -51,15 +58,20 @@ const HeroSection = () => {
           </button>
         </div>
 
-        {/* Scroll indicator - Clean animated arrow */}
-        <div className="animate-fade-up" style={{ animationDelay: '0.5s' }}>
+        {/* Scroll indicator - Clickable */}
+        <button
+          onClick={handleScrollDown}
+          className="animate-fade-up cursor-pointer hover:scale-110 transition-transform duration-300"
+          style={{ animationDelay: '0.5s' }}
+          aria-label="Прокрутить вниз"
+        >
           <div className="animate-bounce">
             <ChevronDown 
               className="w-8 h-8 sm:w-10 sm:h-10 text-primary"
               style={{ filter: 'drop-shadow(0 0 12px hsl(var(--primary))) drop-shadow(0 0 24px hsl(var(--primary)))' }}
             />
           </div>
-        </div>
+        </button>
       </div>
     </section>
   );
