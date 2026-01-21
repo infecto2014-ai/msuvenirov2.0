@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Star, Quote } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Star, Quote, X } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from '@/components/ui/dialog';
 
 const reviews = [
@@ -90,7 +91,28 @@ const reviews = [
 const ReviewsSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const [selectedReview, setSelectedReview] = useState<typeof reviews[0] | null>(null);
+  const [selectedReviewIndex, setSelectedReviewIndex] = useState<number | null>(null);
+
+  const selectedReview = selectedReviewIndex !== null ? reviews[selectedReviewIndex] : null;
+
+  const handleModalPrev = () => {
+    if (selectedReviewIndex !== null) {
+      setSelectedReviewIndex(selectedReviewIndex === 0 ? reviews.length - 1 : selectedReviewIndex - 1);
+    }
+  };
+
+  const handleModalNext = () => {
+    if (selectedReviewIndex !== null) {
+      setSelectedReviewIndex((selectedReviewIndex + 1) % reviews.length);
+    }
+  };
+
+  const openReviewModal = (reviewId: number) => {
+    const index = reviews.findIndex(r => r.id === reviewId);
+    if (index !== -1) {
+      setSelectedReviewIndex(index);
+    }
+  };
 
   useEffect(() => {
     if (!isAutoPlaying) return;
@@ -145,42 +167,52 @@ const ReviewsSection = () => {
           <div className="relative">
             {/* Fixed height container to prevent layout shift */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-              {visibleReviews.map((review) => (
-                <div key={review.id} className="glass-card rounded-xl sm:rounded-2xl p-4 sm:p-5 flex flex-col h-[350px]">
-                  <Quote className="w-5 h-5 sm:w-6 sm:h-6 text-primary/30 mb-2 sm:mb-3 flex-shrink-0" />
-                  
-                  <div className="flex-1 min-h-0 flex flex-col gap-2">
-                    <p className="text-xs sm:text-sm text-foreground leading-relaxed line-clamp-4">
-                      "{review.content}"
-                    </p>
-                    {review.content.length > 120 && (
-                      <button
-                        onClick={() => setSelectedReview(review)}
-                        className="text-primary text-xs sm:text-sm hover:underline transition-all flex-shrink-0"
-                      >
-                        Читать далее...
-                      </button>
-                    )}
-                  </div>
-
-                  <div className="flex items-center justify-between flex-wrap gap-2 mt-auto pt-3 border-t border-primary/10 flex-shrink-0">
-                    <div className="flex items-center gap-2 sm:gap-3">
-                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full neon-border flex items-center justify-center bg-background">
-                        <span className="text-xs sm:text-sm font-bold neon-text">{review.avatar}</span>
-                      </div>
-                      <div>
-                        <h4 className="text-xs sm:text-sm font-bold text-foreground">{review.name}</h4>
-                      </div>
+              {visibleReviews.map((review) => {
+                const isLongText = review.content.length > 150;
+                return (
+                  <div 
+                    key={review.id} 
+                    className="glass-card rounded-xl sm:rounded-2xl p-4 sm:p-5 flex flex-col h-[280px] cursor-pointer hover:border-primary/30 transition-all"
+                    onClick={() => openReviewModal(review.id)}
+                  >
+                    <Quote className="w-5 h-5 sm:w-6 sm:h-6 text-primary/30 mb-2 flex-shrink-0" />
+                    
+                    <div className="flex flex-col">
+                      <p className={`text-xs sm:text-sm text-foreground leading-relaxed ${isLongText ? 'line-clamp-4' : ''}`}>
+                        "{review.content}"
+                      </p>
+                      {isLongText && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openReviewModal(review.id);
+                          }}
+                          className="text-primary text-xs sm:text-sm hover:underline transition-all text-left mt-2 flex-shrink-0"
+                        >
+                          Читать далее...
+                        </button>
+                      )}
                     </div>
 
-                    <div className="flex gap-0.5">
-                      {[...Array(review.rating)].map((_, i) => (
-                        <Star key={i} className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-primary text-primary" />
-                      ))}
+                    <div className="flex items-center justify-between flex-wrap gap-2 mt-auto pt-3 border-t border-primary/10 flex-shrink-0">
+                      <div className="flex items-center gap-2 sm:gap-3">
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full neon-border flex items-center justify-center bg-background">
+                          <span className="text-xs sm:text-sm font-bold neon-text">{review.avatar}</span>
+                        </div>
+                        <div>
+                          <h4 className="text-xs sm:text-sm font-bold text-foreground">{review.name}</h4>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-0.5">
+                        {[...Array(review.rating)].map((_, i) => (
+                          <Star key={i} className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-primary text-primary" />
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Navigation */}
@@ -220,8 +252,8 @@ const ReviewsSection = () => {
         </div>
       </div>
 
-      {/* Full Review Modal */}
-      <Dialog open={!!selectedReview} onOpenChange={() => setSelectedReview(null)}>
+      {/* Full Review Modal with Navigation */}
+      <Dialog open={selectedReviewIndex !== null} onOpenChange={() => setSelectedReviewIndex(null)}>
         <DialogContent className="glass-card border-primary/20 max-w-md">
           <DialogHeader>
             <div className="flex items-center gap-3 mb-2">
@@ -230,6 +262,7 @@ const ReviewsSection = () => {
               </div>
               <div>
                 <DialogTitle className="text-foreground">{selectedReview?.name}</DialogTitle>
+                <DialogDescription className="sr-only">Полный текст отзыва от {selectedReview?.name}</DialogDescription>
                 <div className="flex gap-0.5 mt-1">
                   {selectedReview && [...Array(selectedReview.rating)].map((_, i) => (
                     <Star key={i} className="w-3 h-3 fill-primary text-primary" />
@@ -243,6 +276,27 @@ const ReviewsSection = () => {
             <p className="text-sm text-foreground leading-relaxed">
               "{selectedReview?.content}"
             </p>
+          </div>
+          
+          {/* Modal Navigation Arrows */}
+          <div className="flex items-center justify-between mt-4 pt-3 border-t border-primary/10">
+            <button
+              onClick={handleModalPrev}
+              className="flex items-center gap-1 text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              Предыдущий
+            </button>
+            <span className="text-xs text-muted-foreground">
+              {selectedReviewIndex !== null ? selectedReviewIndex + 1 : 0} / {reviews.length}
+            </span>
+            <button
+              onClick={handleModalNext}
+              className="flex items-center gap-1 text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors"
+            >
+              Следующий
+              <ChevronRight className="w-4 h-4" />
+            </button>
           </div>
         </DialogContent>
       </Dialog>
