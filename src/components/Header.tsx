@@ -98,13 +98,13 @@ const Header = () => {
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-background/90 backdrop-blur-md border-b border-border/50' : ''}`}>
       <div className="container mx-auto px-4 sm:px-6 py-3 sm:py-4">
         <nav className="flex items-center justify-between gap-4">
-          {/* Logo */}
+          {/* Logo - increased by 10% */}
           <a href="#" className="flex items-center flex-shrink-0">
-            <ProtectedLogo height={40} className="sm:h-[45px]" />
+            <ProtectedLogo height={44} className="sm:h-[50px]" />
           </a>
 
-          {/* Desktop Navigation - visible on md and up */}
-          <div className="hidden md:flex items-center gap-4 lg:gap-6 xl:gap-8 ml-8">
+          {/* Desktop Navigation - centered between logo and right block */}
+          <div className="hidden md:flex flex-1 items-center justify-center gap-4 lg:gap-6 xl:gap-8">
             {navLinks.map((link) => (
               <a
                 key={link.href}
@@ -123,7 +123,7 @@ const Header = () => {
           </div>
 
           {/* Working Hours + Social Icons + Order Button - visible on md and up */}
-          <div className="hidden md:flex items-center gap-2 lg:gap-4 ml-auto">
+          <div className="hidden md:flex items-center gap-2 lg:gap-4 flex-shrink-0">
             {/* Working Hours with Status */}
             <div className="flex items-center gap-1.5">
               <div 
