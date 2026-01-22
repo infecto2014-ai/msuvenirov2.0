@@ -3,8 +3,12 @@ import { MapPin, Phone, Mail, Send, Clock } from 'lucide-react';
 const ContactSection = () => {
   return (
     <section id="контакты" className="relative py-16 sm:py-20 md:py-24 overflow-hidden">
+      {/* Background with smooth transition from TrustSection */}
+      <div className="absolute inset-0 bg-[hsl(260,25%,6%)]" />
+      <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-background to-transparent" />
+      
       {/* Background glow effects */}
-      <div className="absolute top-0 left-0 w-64 h-64 bg-neon-cyan/10 rounded-full blur-3xl" />
+      <div className="absolute top-1/4 left-0 w-64 h-64 bg-neon-cyan/10 rounded-full blur-3xl" />
       <div className="absolute bottom-0 right-0 w-64 h-64 bg-neon-magenta/10 rounded-full blur-3xl" />
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">

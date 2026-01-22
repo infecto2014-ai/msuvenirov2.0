@@ -25,9 +25,12 @@ const HeroSection = () => {
           alt="Печать на текстиле"
           className="w-full h-full object-cover opacity-30"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/70 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/70 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-r from-neon-cyan/10 via-transparent to-neon-magenta/10" />
       </div>
+      
+      {/* Smooth transition to next section */}
+      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-b from-transparent via-[hsl(260,30%,8%)/50] to-[hsl(260,30%,8%)] z-0" />
 
       {/* Neon decorative elements */}
       <div className="absolute top-1/4 left-10 w-24 md:w-32 h-24 md:h-32 rounded-full bg-neon-cyan/20 blur-3xl animate-float" />

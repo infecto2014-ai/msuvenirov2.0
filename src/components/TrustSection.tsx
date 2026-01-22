@@ -69,7 +69,9 @@ const TrustSection = () => {
 
   return (
     <section className="py-10 sm:py-14 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/10 to-background" />
+      {/* Background with smooth transition to ContactSection */}
+      <div className="absolute inset-0 bg-background" />
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-b from-transparent to-[hsl(260,25%,6%)]" />
       
       {/* Title - centered with container */}
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
