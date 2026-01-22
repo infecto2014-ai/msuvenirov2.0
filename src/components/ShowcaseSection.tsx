@@ -92,8 +92,10 @@ const ShowcaseSection = () => {
 
   return (
     <section id="витрина" className="py-16 sm:py-24 relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-[hsl(260,30%,8%)] to-background" />
+      {/* Background with smooth transitions */}
+      <div className="absolute inset-0 bg-[hsl(260,30%,8%)]" />
+      <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-background to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
       
       {/* Ambient glow effects */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[hsl(var(--neon-magenta)/0.15)] rounded-full blur-[120px] pointer-events-none" />
