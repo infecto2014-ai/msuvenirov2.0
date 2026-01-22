@@ -30,15 +30,15 @@ const products = [
   },
   {
     id: 3,
-    name: 'Кружка',
-    methods: 'Сублимация, Гравировка, УФ',
-    image: nftMug,
-  },
-  {
-    id: 4,
     name: 'Шоппер',
     methods: 'DTF, Шелкография, Сублимация',
     image: nftShopper,
+  },
+  {
+    id: 4,
+    name: 'Кружка',
+    methods: 'Сублимация, Гравировка, УФ',
+    image: nftMug,
   },
   {
     id: 5,
@@ -48,9 +48,33 @@ const products = [
   },
   {
     id: 6,
+    name: 'Бутылочка для воды',
+    methods: 'УФ-печать',
+    image: nftMug, // Временно используем похожее изображение
+  },
+  {
+    id: 7,
+    name: 'Брелоки/Значки',
+    methods: 'Цифровая печать, УФ',
+    image: nftCards, // Временно
+  },
+  {
+    id: 8,
+    name: 'Акриловый стенд',
+    methods: 'УФ-печать',
+    image: nftCards, // Временно
+  },
+  {
+    id: 9,
     name: 'Бейсболка',
     methods: 'DTF, Шелкография',
-    image: nftCards,
+    image: nftCards, // Временно
+  },
+  {
+    id: 10,
+    name: '3D стикеры',
+    methods: 'Эпоксидная смола',
+    image: nftCards, // Временно
   },
 ];
 
@@ -148,10 +172,10 @@ const ShowcaseSection = () => {
                       <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 bg-background/40 backdrop-blur-xl border-t border-white/10">
                         <div className="flex items-center justify-between gap-3">
                           <div className="flex-1 min-w-0">
-                            <h3 className="text-white font-bold text-base sm:text-lg truncate">
+                            <h3 className="text-white font-bold text-sm sm:text-base truncate">
                               {product.name}
                             </h3>
-                            <p className="text-white/90 text-[11px] sm:text-xs leading-tight">
+                            <p className="text-white/80 text-[10px] sm:text-[11px] leading-tight mt-0.5">
                               {product.methods}
                             </p>
                           </div>
