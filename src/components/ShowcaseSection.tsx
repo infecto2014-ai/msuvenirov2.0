@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Navigation, Pagination } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
@@ -18,38 +18,38 @@ import nftCards from '@/assets/nft-cards.jpg';
 const products = [
   {
     id: 1,
-    name: 'Premium T-Shirt',
-    price: 'от 990 ₽',
+    name: 'Футболка',
+    methods: 'DTF, Шелкография, Сублимация',
     image: nftTshirt,
   },
   {
     id: 2,
-    name: 'Premium Hoodie',
-    price: 'от 2490 ₽',
+    name: 'Худи',
+    methods: 'DTF, Шелкография, Сублимация',
     image: nftHoodie,
   },
   {
     id: 3,
-    name: 'Premium Mug',
-    price: 'от 490 ₽',
+    name: 'Кружка',
+    methods: 'Сублимация, Гравировка, УФ',
     image: nftMug,
   },
   {
     id: 4,
-    name: 'Tote Bag',
-    price: 'от 590 ₽',
+    name: 'Шоппер',
+    methods: 'DTF, Шелкография, Сублимация',
     image: nftShopper,
   },
   {
     id: 5,
-    name: 'Notebook & Pen',
-    price: 'от 690 ₽',
+    name: 'Канцелярия',
+    methods: 'Цифровая печать, УФ',
     image: nftNotebook,
   },
   {
     id: 6,
-    name: 'Business Cards',
-    price: 'от 290 ₽',
+    name: 'Бейсболка',
+    methods: 'DTF, Шелкография',
     image: nftCards,
   },
 ];
@@ -151,8 +151,8 @@ const ShowcaseSection = () => {
                             <h3 className="text-white font-bold text-base sm:text-lg truncate">
                               {product.name}
                             </h3>
-                            <p className="text-primary font-semibold text-sm sm:text-base">
-                              {product.price}
+                            <p className="text-white/90 text-[11px] sm:text-xs leading-tight">
+                              {product.methods}
                             </p>
                           </div>
                           
