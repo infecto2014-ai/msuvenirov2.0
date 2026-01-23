@@ -18,4 +18,33 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    // Optimize chunks for better caching
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Separate vendor chunks for better caching
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'swiper': ['swiper'],
+          'radix-ui': [
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-accordion',
+            '@radix-ui/react-toast',
+          ],
+        },
+      },
+    },
+    // Minification settings (Vite uses esbuild by default, which is fast)
+    minify: 'esbuild',
+    // Target modern browsers for smaller bundles
+    target: 'es2020',
+    // Enable CSS code splitting
+    cssCodeSplit: true,
+    // Generate source maps only in development
+    sourcemap: mode === 'development',
+  },
+  // Optimize dependencies
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'swiper'],
+  },
 }));

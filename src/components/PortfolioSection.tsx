@@ -195,6 +195,8 @@ const PortfolioSection = () => {
                     alt={`${image.alt} — печать на заказ в Калининграде`}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     loading="lazy"
+                    decoding="async"
+                    style={{ willChange: 'transform' }}
                   />
                   <div className="absolute inset-0 bg-background/0 group-hover:bg-background/20 transition-all duration-300" aria-hidden="true" />
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ring-2 ring-inset ring-primary/50 rounded-xl sm:rounded-2xl" aria-hidden="true" />

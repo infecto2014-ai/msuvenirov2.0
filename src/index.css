@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
+/* Preload font with display swap for better performance */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -70,7 +71,18 @@
 
   html {
     scroll-behavior: smooth;
+  /* Smooth scrolling with performance optimization */
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+
+  /* Optimize rendering for elements with transforms */
+  .will-change-transform {
+    will-change: transform;
+  }
+}
 }
 
 @layer components {
@@ -98,10 +110,12 @@
     box-shadow: var(--shadow-neon-magenta);
   }
 
+  /* Standard gradient button - GPU accelerated with transform */
   .gradient-btn {
     @apply relative overflow-hidden font-bold uppercase tracking-wider;
     background: var(--gradient-glow);
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    will-change: transform;
   }
 
   .gradient-btn::before {
@@ -119,11 +133,13 @@
     transform: translateY(-2px);
   }
 
+  /* Slow neon pulse animation - GPU accelerated using opacity and box-shadow only */
   .gradient-btn-pulse {
     @apply relative overflow-hidden font-bold uppercase tracking-wider;
     background: var(--gradient-glow);
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     animation: neon-pulse 2s ease-in-out infinite;
+    will-change: opacity, box-shadow;
   }
 
   .gradient-btn-pulse::before {
@@ -148,10 +164,26 @@
     animation: pulse-ring 2s ease-in-out infinite;
   }
 
+  /* Optimized glass-card for mobile - reduced blur on smaller screens */
   .glass-card {
-    @apply backdrop-blur-md border;
+    @apply border;
     background: hsl(var(--card) / 0.7);
     border-color: hsl(var(--border) / 0.5);
+  }
+  
+  /* Apply backdrop-blur only on devices that handle it well */
+  @media (min-width: 768px) {
+    .glass-card {
+      @apply backdrop-blur-md;
+    }
+  }
+  
+  /* Lighter blur for mobile to prevent jank */
+  @media (max-width: 767px) {
+    .glass-card {
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
   }
 }
 
@@ -201,6 +233,7 @@
   }
 }
 
+/* GPU-accelerated glow pulse - uses opacity and box-shadow (composited properties) */
 @keyframes glowPulse {
   0%, 100% {
     opacity: 1;
@@ -212,41 +245,55 @@
   }
 }
 
+/* GPU-accelerated float animation - uses transform only */
 @keyframes float {
   0%, 100% {
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
   }
   50% {
-    transform: translateY(-10px);
+    transform: translate3d(0, -10px, 0);
   }
 }
 
+/* GPU-accelerated rotation - uses transform only */
 @keyframes rotateSlow {
   from {
-    transform: rotate(0deg);
+    transform: rotate3d(0, 0, 1, 0deg);
   }
   to {
-    transform: rotate(360deg);
+    transform: rotate3d(0, 0, 1, 360deg);
   }
 }
 
+/* GPU-accelerated pulse ring - uses opacity and transform */
 @keyframes pulse-ring {
   0%, 100% {
     opacity: 0.6;
-    transform: scale(1);
+    transform: scale3d(1, 1, 1);
   }
   50% {
     opacity: 1;
-    transform: scale(1.02);
+    transform: scale3d(1.02, 1.02, 1);
   }
 }
 
+/* GPU-accelerated marquee - uses translate3d for hardware acceleration */
 @keyframes marquee {
   0% {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
   100% {
-    transform: translateX(-33.333%);
+    transform: translate3d(-33.333%, 0, 0);
+  }
+}
+
+/* Neon pulse animation for buttons */
+@keyframes neon-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px hsl(var(--neon-cyan) / 0.4), 0 0 40px hsl(var(--neon-magenta) / 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px hsl(var(--neon-cyan) / 0.6), 0 0 60px hsl(var(--neon-magenta) / 0.4);
   }
 }
 

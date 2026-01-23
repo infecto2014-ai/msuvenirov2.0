@@ -16,9 +16,16 @@ const HeroSection = () => {
     }
   };
   return <section id="главная" className="relative min-h-screen flex flex-col overflow-hidden" aria-label="Главный экран">
-      {/* Background */}
+      {/* Background - priority loading for hero image */}
       <div className="absolute inset-0 z-0">
-        <img src={heroImage} alt="DTF-печать на футболках и текстиле в Калининграде — Мастерская сувениров" className="w-full h-full object-cover opacity-30" />
+        <img 
+          src={heroImage} 
+          alt="DTF-печать на футболках и текстиле в Калининграде — Мастерская сувениров" 
+          className="w-full h-full object-cover opacity-30"
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/70 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-r from-neon-cyan/10 via-transparent to-neon-magenta/10" />
       </div>
@@ -26,11 +33,17 @@ const HeroSection = () => {
       {/* Smooth transition to next section */}
       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-b from-transparent via-[hsl(260,30%,8%)/50] to-[hsl(260,30%,8%)] z-0" />
 
-      {/* Neon decorative elements */}
-      <div className="absolute top-1/4 left-10 w-24 md:w-32 h-24 md:h-32 rounded-full bg-neon-cyan/20 blur-3xl animate-float" aria-hidden="true" />
-      <div className="absolute bottom-1/4 right-10 w-32 md:w-40 h-32 md:h-40 rounded-full bg-neon-magenta/20 blur-3xl animate-float" style={{
-      animationDelay: '1s'
-    }} aria-hidden="true" />
+      {/* Neon decorative elements - GPU accelerated with will-change */}
+      <div 
+        className="absolute top-1/4 left-10 w-24 md:w-32 h-24 md:h-32 rounded-full bg-neon-cyan/20 blur-3xl animate-float" 
+        aria-hidden="true"
+        style={{ willChange: 'transform' }}
+      />
+      <div 
+        className="absolute bottom-1/4 right-10 w-32 md:w-40 h-32 md:h-40 rounded-full bg-neon-magenta/20 blur-3xl animate-float" 
+        style={{ animationDelay: '1s', willChange: 'transform' }} 
+        aria-hidden="true"
+      />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 md:w-96 h-64 md:h-96 rounded-full bg-neon-purple/10 blur-3xl" aria-hidden="true" />
 
       {/* Main Content */}

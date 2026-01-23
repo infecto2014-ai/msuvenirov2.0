@@ -156,6 +156,7 @@ const ShowcaseSection = () => {
                     className={`relative transition-all duration-500 ${
                       isActive ? 'scale-100' : 'scale-90 opacity-60'
                     }`}
+                    style={{ willChange: isActive ? 'auto' : 'transform, opacity' }}
                   >
                     {/* Card */}
                     <div
@@ -165,18 +166,20 @@ const ShowcaseSection = () => {
                           : ''
                       }`}
                     >
-                      {/* Image */}
+                      {/* Image with lazy loading and GPU acceleration */}
                       <figure className="aspect-[3/4] w-full">
                         <img
                           src={product.image}
                           alt={`${product.name} с печатью на заказ в Калининграде — ${product.methods}`}
                           className="w-full h-full object-cover"
                           loading="lazy"
+                          decoding="async"
+                          style={{ willChange: 'transform' }}
                         />
                       </figure>
 
-                      {/* Glassmorphism Info Panel */}
-                      <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 bg-background/40 backdrop-blur-xl border-t border-white/10">
+                      {/* Glassmorphism Info Panel - optimized blur for mobile */}
+                      <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 bg-background/50 sm:bg-background/40 backdrop-blur-md sm:backdrop-blur-xl border-t border-white/10">
                         <div className="flex items-center justify-between gap-3">
                           <div className="flex-1 min-w-0">
                             <h3 className="text-white font-bold text-sm sm:text-base truncate">
