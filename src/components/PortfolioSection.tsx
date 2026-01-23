@@ -17,6 +17,16 @@ import portfolio7 from '@/assets/portfolio-7.jpg';
 import portfolio8 from '@/assets/portfolio-8.jpg';
 import portfolio9 from '@/assets/portfolio-9.jpg';
 import portfolio10 from '@/assets/portfolio-10.jpg';
+import portfolio11 from '@/assets/portfolio-11.jpg';
+import portfolio12 from '@/assets/portfolio-12.jpg';
+import portfolio13 from '@/assets/portfolio-13.jpg';
+import portfolio14 from '@/assets/portfolio-14.jpg';
+import portfolio15 from '@/assets/portfolio-15.jpg';
+import portfolio16 from '@/assets/portfolio-16.jpg';
+import portfolio17 from '@/assets/portfolio-17.jpg';
+import portfolio18 from '@/assets/portfolio-18.jpg';
+import portfolio19 from '@/assets/portfolio-19.jpg';
+import portfolio20 from '@/assets/portfolio-20.jpg';
 
 const portfolioImages = [
   { id: 1, src: portfolio1, alt: 'Мерч Harry Potter' },
@@ -29,6 +39,16 @@ const portfolioImages = [
   { id: 8, src: portfolio8, alt: 'Футболка и кепка' },
   { id: 9, src: portfolio9, alt: 'Маски KOELNER' },
   { id: 10, src: portfolio10, alt: 'Маски За Родину' },
+  { id: 11, src: portfolio11, alt: 'Футболки BLACKPINK' },
+  { id: 12, src: portfolio12, alt: 'Мерч Stray Kids' },
+  { id: 13, src: portfolio13, alt: 'Игрушка с вышивкой' },
+  { id: 14, src: portfolio14, alt: 'Чашка с надписью' },
+  { id: 15, src: portfolio15, alt: 'Футболки с котом' },
+  { id: 16, src: portfolio16, alt: 'Медаль' },
+  { id: 17, src: portfolio17, alt: 'Зонт с принтом' },
+  { id: 18, src: portfolio18, alt: 'Бокалы с гравировкой' },
+  { id: 19, src: portfolio19, alt: 'Кружки серебряные' },
+  { id: 20, src: portfolio20, alt: 'Корпоративные футболки' },
 ];
 
 const PortfolioSection = () => {
