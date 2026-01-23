@@ -1,15 +1,24 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { X, Phone, Image, Loader2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import InputMask from 'react-input-mask';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const MAX_COMMENT_LENGTH = 300;
 const MAX_PHOTOS = 10;
+const FORM_STORAGE_KEY = 'orderFormData';
+
+interface SavedFormData {
+  name: string;
+  phone: string;
+  comment: string;
+  photoPreviews: string[];
+}
 
 const FloatingOrderButton = () => {
+  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -20,6 +29,39 @@ const FloatingOrderButton = () => {
   const [photos, setPhotos] = useState<File[]>([]);
   const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Restore form data from sessionStorage on mount
+  useEffect(() => {
+    const savedData = sessionStorage.getItem(FORM_STORAGE_KEY);
+    if (savedData) {
+      try {
+        const parsed: SavedFormData = JSON.parse(savedData);
+        setFormData({
+          name: parsed.name || '',
+          phone: parsed.phone || '',
+          comment: parsed.comment || '',
+        });
+        setPhotoPreviews(parsed.photoPreviews || []);
+        // Auto-open modal if there was saved data
+        setIsOpen(true);
+        // Clear storage after restoring
+        sessionStorage.removeItem(FORM_STORAGE_KEY);
+      } catch (e) {
+        sessionStorage.removeItem(FORM_STORAGE_KEY);
+      }
+    }
+  }, []);
+
+  // Save form data before navigating away
+  const saveFormData = () => {
+    const dataToSave: SavedFormData = {
+      name: formData.name,
+      phone: formData.phone,
+      comment: formData.comment,
+      photoPreviews: photoPreviews,
+    };
+    sessionStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(dataToSave));
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -273,7 +315,10 @@ const FloatingOrderButton = () => {
               <Link
                 to="/privacy-policy"
                 className="text-primary hover:underline"
-                onClick={() => setIsOpen(false)}
+                onClick={() => {
+                  saveFormData();
+                  setIsOpen(false);
+                }}
               >
                 Персональных данных
               </Link>{' '}
@@ -281,7 +326,10 @@ const FloatingOrderButton = () => {
               <Link
                 to="/public-offer"
                 className="text-primary hover:underline"
-                onClick={() => setIsOpen(false)}
+                onClick={() => {
+                  saveFormData();
+                  setIsOpen(false);
+                }}
               >
                 Публичной оферты
               </Link>.
