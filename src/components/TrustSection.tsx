@@ -120,6 +120,8 @@ const TrustSection = () => {
                   aria-hidden="true"
                   draggable={false}
                   onContextMenu={(e) => e.preventDefault()}
+                  loading="lazy"
+                  decoding="async"
                   className="relative z-10 h-12 sm:h-16 md:h-20 w-auto max-w-[100px] sm:max-w-[130px] md:max-w-[150px] object-contain select-none pointer-events-none"
                   style={{
                     WebkitUserDrag: 'none',
