@@ -12,16 +12,23 @@ import portfolio2 from '@/assets/portfolio-2.jpg';
 import portfolio3 from '@/assets/portfolio-3.jpg';
 import portfolio4 from '@/assets/portfolio-4.jpg';
 import portfolio5 from '@/assets/portfolio-5.jpg';
+import portfolio6 from '@/assets/portfolio-6.jpg';
+import portfolio7 from '@/assets/portfolio-7.jpg';
+import portfolio8 from '@/assets/portfolio-8.jpg';
+import portfolio9 from '@/assets/portfolio-9.jpg';
+import portfolio10 from '@/assets/portfolio-10.jpg';
 
 const portfolioImages = [
-  { id: 1, src: portfolio1, alt: 'Работа 1' },
-  { id: 2, src: portfolio2, alt: 'Работа 2' },
-  { id: 3, src: portfolio3, alt: 'Работа 3' },
-  { id: 4, src: portfolio4, alt: 'Работа 4' },
-  { id: 5, src: portfolio5, alt: 'Работа 5' },
-  { id: 6, src: portfolio1, alt: 'Работа 6' },
-  { id: 7, src: portfolio2, alt: 'Работа 7' },
-  { id: 8, src: portfolio3, alt: 'Работа 8' },
+  { id: 1, src: portfolio1, alt: 'Мерч Harry Potter' },
+  { id: 2, src: portfolio2, alt: 'Кружка Kaliningrad' },
+  { id: 3, src: portfolio3, alt: 'Футболка Punch-Out' },
+  { id: 4, src: portfolio4, alt: 'Детская футболка' },
+  { id: 5, src: portfolio5, alt: 'Худи с мангой' },
+  { id: 6, src: portfolio6, alt: 'Новогодний шар' },
+  { id: 7, src: portfolio7, alt: 'Шоппер Калининград' },
+  { id: 8, src: portfolio8, alt: 'Футболка и кепка' },
+  { id: 9, src: portfolio9, alt: 'Маски KOELNER' },
+  { id: 10, src: portfolio10, alt: 'Маски За Родину' },
 ];
 
 const PortfolioSection = () => {
