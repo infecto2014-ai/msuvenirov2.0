@@ -27,6 +27,16 @@ import portfolio17 from '@/assets/portfolio-17.jpg';
 import portfolio18 from '@/assets/portfolio-18.jpg';
 import portfolio19 from '@/assets/portfolio-19.jpg';
 import portfolio20 from '@/assets/portfolio-20.jpg';
+import portfolio21 from '@/assets/portfolio-21.jpg';
+import portfolio22 from '@/assets/portfolio-22.jpg';
+import portfolio23 from '@/assets/portfolio-23.jpg';
+import portfolio24 from '@/assets/portfolio-24.jpg';
+import portfolio25 from '@/assets/portfolio-25.jpg';
+import portfolio26 from '@/assets/portfolio-26.jpg';
+import portfolio27 from '@/assets/portfolio-27.jpg';
+import portfolio28 from '@/assets/portfolio-28.jpg';
+import portfolio29 from '@/assets/portfolio-29.jpg';
+import portfolio30 from '@/assets/portfolio-30.jpg';
 
 const portfolioImages = [
   { id: 1, src: portfolio1, alt: 'Мерч Harry Potter' },
@@ -49,6 +59,16 @@ const portfolioImages = [
   { id: 18, src: portfolio18, alt: 'Бокалы с гравировкой' },
   { id: 19, src: portfolio19, alt: 'Кружки серебряные' },
   { id: 20, src: portfolio20, alt: 'Корпоративные футболки' },
+  { id: 21, src: portfolio21, alt: 'Футболка с фотоколлажем' },
+  { id: 22, src: portfolio22, alt: 'Футболка с детскими фото' },
+  { id: 23, src: portfolio23, alt: 'Футболка Maximovich' },
+  { id: 24, src: portfolio24, alt: 'Брелоки к 23 февраля' },
+  { id: 25, src: portfolio25, alt: 'Кружки для семьи' },
+  { id: 26, src: portfolio26, alt: 'Вымпел Гортранс' },
+  { id: 27, src: portfolio27, alt: 'Футболка ITZY' },
+  { id: 28, src: portfolio28, alt: 'Футболка Кант' },
+  { id: 29, src: portfolio29, alt: 'Магниты-календари' },
+  { id: 30, src: portfolio30, alt: 'Кружки с детскими рисунками' },
 ];
 
 const PortfolioSection = () => {
