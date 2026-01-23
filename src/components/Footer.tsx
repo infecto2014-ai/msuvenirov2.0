@@ -60,7 +60,7 @@ const Footer = () => {
                 </svg>
               </a>
               <a
-                href="https://t.me/msuvenirov39"
+                href="https://t.me/msuvenirov39zakaz"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
@@ -76,7 +76,7 @@ const Footer = () => {
         {/* Bottom bar */}
         <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-border/30 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
           <p className="text-muted-foreground text-xs sm:text-sm text-center sm:text-left">
-            © 2024 Мастерская сувениров. Все права защищены.
+            © 2019 Мастерская сувениров. Все права защищены.
           </p>
           <div className="flex gap-4 sm:gap-6 text-xs sm:text-sm">
             <a 

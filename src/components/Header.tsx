@@ -149,7 +149,7 @@ const Header = () => {
               </svg>
             </a>
             <a
-              href="https://t.me/msuvenirov39"
+              href="https://t.me/msuvenirov39zakaz"
               target="_blank"
               rel="noopener noreferrer"
               className="w-8 h-8 lg:w-10 lg:h-10 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
@@ -259,7 +259,7 @@ const Header = () => {
                   </svg>
                 </a>
                 <a
-                  href="https://t.me/msuvenirov39"
+                  href="https://t.me/msuvenirov39zakaz"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 rounded-full neon-border flex items-center justify-center bg-background"
