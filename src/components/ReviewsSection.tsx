@@ -153,15 +153,15 @@ const ReviewsSection = () => {
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
-        <div className="text-center mb-6 sm:mb-10">
+        <header className="text-center mb-6 sm:mb-10">
           <span className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-full neon-border text-xs sm:text-sm font-medium text-primary mb-2 sm:mb-3">
             ОТЗЫВЫ
           </span>
           <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black">
-            <span className="text-foreground">ЧТО ГОВОРЯТ </span>
-            <span className="neon-text">КЛИЕНТЫ</span>
+            <span className="text-foreground">Отзывы наших </span>
+            <span className="neon-text">клиентов</span>
           </h2>
-        </div>
+        </header>
 
         <div className="max-w-3xl mx-auto">
           <div className="relative">

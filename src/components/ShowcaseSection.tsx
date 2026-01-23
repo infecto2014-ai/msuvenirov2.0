@@ -107,14 +107,14 @@ const ShowcaseSection = () => {
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
         {/* Section Title */}
-        <div className="text-center mb-12">
+        <header className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
-            <span className="neon-text">Наша продукция</span>
+            <span className="neon-text">Печать на текстиле и сувенирах</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Выберите товар и создайте уникальный дизайн
+            Футболки, худи, кружки, шопперы и другие изделия с вашим дизайном
           </p>
-        </div>
+        </header>
 
         {/* Swiper Carousel */}
         <div className="relative px-4 sm:px-8">
@@ -166,13 +166,14 @@ const ShowcaseSection = () => {
                       }`}
                     >
                       {/* Image */}
-                      <div className="aspect-[3/4] w-full">
+                      <figure className="aspect-[3/4] w-full">
                         <img
                           src={product.image}
-                          alt={product.name}
+                          alt={`${product.name} с печатью на заказ в Калининграде — ${product.methods}`}
                           className="w-full h-full object-cover"
+                          loading="lazy"
                         />
-                      </div>
+                      </figure>
 
                       {/* Glassmorphism Info Panel */}
                       <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 bg-background/40 backdrop-blur-xl border-t border-white/10">

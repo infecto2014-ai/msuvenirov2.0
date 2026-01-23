@@ -134,17 +134,17 @@ const PortfolioSection = () => {
   };
 
   return (
-    <section id="работы" className="py-12 sm:py-16 relative overflow-hidden">
+    <section id="работы" className="py-12 sm:py-16 relative overflow-hidden" aria-label="Портфолио работ">
       <div className="container mx-auto px-4 sm:px-6">
-        <div className="text-center mb-8 sm:mb-10">
+        <header className="text-center mb-8 sm:mb-10">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black">
-            <span className="text-foreground">НАШИ </span>
-            <span className="neon-text">РАБОТЫ</span>
+            <span className="text-foreground">Примеры </span>
+            <span className="neon-text">наших работ</span>
           </h2>
           <p className="text-muted-foreground mt-3 sm:mt-4 max-w-xl mx-auto text-sm sm:text-base px-4">
-            От единичных подарков до корпоративных тиражей. Посмотрите, как мы воплощаем идеи в жизнь.
+            Футболки, худи, кружки, корпоративные подарки — от единичных экземпляров до крупных тиражей
           </p>
-        </div>
+        </header>
 
         {/* Carousel */}
         <div className="relative max-w-6xl mx-auto">
@@ -186,18 +186,19 @@ const PortfolioSection = () => {
           >
             {portfolioImages.map((image, index) => (
               <SwiperSlide key={image.id}>
-                <div
+                <figure
                   className="relative group overflow-hidden cursor-pointer aspect-[4/3] rounded-xl sm:rounded-2xl"
                   onClick={() => setSelectedIndex(index)}
                 >
                   <img
                     src={image.src}
-                    alt={image.alt}
+                    alt={`${image.alt} — печать на заказ в Калининграде`}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-background/0 group-hover:bg-background/20 transition-all duration-300" />
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ring-2 ring-inset ring-primary/50 rounded-xl sm:rounded-2xl" />
-                </div>
+                  <div className="absolute inset-0 bg-background/0 group-hover:bg-background/20 transition-all duration-300" aria-hidden="true" />
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ring-2 ring-inset ring-primary/50 rounded-xl sm:rounded-2xl" aria-hidden="true" />
+                </figure>
               </SwiperSlide>
             ))}
           </Swiper>
