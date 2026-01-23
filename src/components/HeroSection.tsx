@@ -48,7 +48,7 @@ const HeroSection = () => {
 
         {/* Subheading with keywords */}
         <p className="animate-fade-up text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-2xl mx-auto mb-8 sm:mb-12" style={{ animationDelay: '0.3s' }}>
-          DTF-печать на текстиле и сувенирах от 1 штуки. Срочные заказы за 24 часа.
+          Печать на текстиле и сувенирах от 1 штуки. Срочные заказы за 1 час.
         </p>
 
         {/* CTA Button */}
