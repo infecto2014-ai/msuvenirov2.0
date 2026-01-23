@@ -8,73 +8,77 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-import nftTshirt from '@/assets/nft-tshirt.jpg';
-import nftHoodie from '@/assets/nft-hoodie.jpg';
-import nftMug from '@/assets/nft-mug.jpg';
-import nftShopper from '@/assets/nft-shopper.jpg';
-import nftNotebook from '@/assets/nft-notebook.jpg';
-import nftCards from '@/assets/nft-cards.jpg';
+import imgTshirt from '@/assets/showcase/tshirt.jpg';
+import imgHoodie from '@/assets/showcase/hoodie.jpg';
+import imgShopper from '@/assets/showcase/shopper.jpg';
+import imgMug from '@/assets/showcase/mug.jpg';
+import imgStationery from '@/assets/showcase/stationery.jpg';
+import imgBottle from '@/assets/showcase/bottle.jpg';
+import imgKeychains from '@/assets/showcase/keychains.jpg';
+import imgAcrylicStand from '@/assets/showcase/acrylic-stand.jpg';
+import imgCap from '@/assets/showcase/cap.jpg';
+import imgStickers3d from '@/assets/showcase/stickers-3d.jpg';
 
 const products = [
   {
     id: 1,
     name: 'Футболка',
     methods: 'DTF, Шелкография, Сублимация',
-    image: nftTshirt,
+    image: imgTshirt,
   },
   {
     id: 2,
     name: 'Худи',
     methods: 'DTF, Шелкография, Сублимация',
-    image: nftHoodie,
+    image: imgHoodie,
   },
   {
     id: 3,
     name: 'Шоппер',
     methods: 'DTF, Шелкография, Сублимация',
-    image: nftShopper,
+    image: imgShopper,
   },
   {
     id: 4,
     name: 'Кружка',
     methods: 'Сублимация, Гравировка, УФ',
-    image: nftMug,
+    image: imgMug,
   },
   {
     id: 5,
     name: 'Канцелярия',
     methods: 'Цифровая печать, УФ',
-    image: nftNotebook,
+    image: imgStationery,
   },
   {
     id: 6,
     name: 'Бутылочка для воды',
     methods: 'УФ-печать',
-    image: nftMug, // Временно используем похожее изображение
+    image: imgBottle,
   },
   {
     id: 7,
     name: 'Брелоки/Значки',
     methods: 'Цифровая печать, УФ',
-    image: nftCards, // Временно
+    image: imgKeychains,
   },
   {
     id: 8,
     name: 'Акриловый стенд',
     methods: 'УФ-печать',
-    image: nftCards, // Временно
+    image: imgAcrylicStand,
   },
   {
     id: 9,
     name: 'Бейсболка',
     methods: 'DTF, Шелкография',
-    image: nftCards, // Временно
+    image: imgCap,
   },
   {
     id: 10,
     name: '3D стикеры',
     methods: 'Эпоксидная смола',
-    image: nftCards, // Временно
+    image: imgStickers3d,
   },
 ];
 
