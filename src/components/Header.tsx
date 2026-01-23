@@ -40,7 +40,7 @@ const Header = () => {
 
   // Scrollspy with Intersection Observer
   useEffect(() => {
-    const sectionIds = ['главная', 'работы', 'процесс', 'отзывы', 'контакты'];
+    const sectionIds = ['главная', 'о-нас', 'работы', 'отзывы', 'контакты'];
     
     const observerOptions = {
       root: null,
@@ -70,8 +70,8 @@ const Header = () => {
 
   const navLinks = [
     { href: '#главная', label: 'Главная', id: 'главная' },
+    { href: '#о-нас', label: 'О нас', id: 'о-нас' },
     { href: '#работы', label: 'Наши работы', id: 'работы' },
-    { href: '#процесс', label: 'Как заказать?', id: 'процесс' },
     { href: '#отзывы', label: 'Отзывы', id: 'отзывы' },
     { href: '#контакты', label: 'Контакты', id: 'контакты' },
   ];
@@ -134,7 +134,7 @@ const Header = () => {
                 }`}
               />
               <span className="text-xs lg:text-sm text-muted-foreground whitespace-nowrap">
-                {workingStatus.isOpen ? '10:00 – 20:00' : 'Закрыто'}
+                10:00 – 20:00 {workingStatus.isOpen ? '(открыто)' : '(закрыто)'}
               </span>
             </div>
             
@@ -219,7 +219,7 @@ const Header = () => {
                       }`}
                     />
                     <span className="text-muted-foreground">
-                      {workingStatus.isOpen ? '10:00 – 20:00 (открыто)' : 'Сейчас закрыто'}
+                      10:00 – 20:00 {workingStatus.isOpen ? '(открыто)' : '(закрыто)'}
                     </span>
                   </div>
                 </div>

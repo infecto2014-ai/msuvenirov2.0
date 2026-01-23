@@ -203,15 +203,15 @@ const PortfolioSection = () => {
             ))}
           </Swiper>
 
-          {/* Navigation Arrows */}
+          {/* Navigation Arrows - centered vertically relative to images */}
           <button
-            className="portfolio-prev absolute left-0 sm:-left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full neon-border flex items-center justify-center bg-background/90 backdrop-blur-sm hover:neon-glow transition-all duration-300"
+            className="portfolio-prev absolute left-0 sm:-left-4 top-[calc(50%-1.5rem)] -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full neon-border flex items-center justify-center bg-background/90 backdrop-blur-sm hover:neon-glow transition-all duration-300"
             onClick={() => swiperInstance?.slidePrev()}
           >
             <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
           </button>
           <button
-            className="portfolio-next absolute right-0 sm:-right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full neon-border flex items-center justify-center bg-background/90 backdrop-blur-sm hover:neon-glow transition-all duration-300"
+            className="portfolio-next absolute right-0 sm:-right-4 top-[calc(50%-1.5rem)] -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full neon-border flex items-center justify-center bg-background/90 backdrop-blur-sm hover:neon-glow transition-all duration-300"
             onClick={() => swiperInstance?.slideNext()}
           >
             <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
