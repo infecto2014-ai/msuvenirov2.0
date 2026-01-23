@@ -1,4 +1,5 @@
 import { MapPin, Phone, Mail } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import ProtectedLogo from './ProtectedLogo';
 
 const Footer = () => {
@@ -79,16 +80,18 @@ const Footer = () => {
             © 2019 Мастерская сувениров. Все права защищены.
           </p>
           <div className="flex gap-4 sm:gap-6 text-xs sm:text-sm">
-            <a 
-              href="/documents/privacy-policy.pdf" 
-              download="Политика_конфиденциальности.pdf"
+            <Link 
+              to="/privacy-policy"
               className="text-muted-foreground hover:text-primary transition-colors"
             >
               Политика конфиденциальности
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-              Условия использования
-            </a>
+            </Link>
+            <Link 
+              to="/public-offer"
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
+              Публичная оферта
+            </Link>
           </div>
         </div>
       </div>

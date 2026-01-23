@@ -270,13 +270,13 @@ const FloatingOrderButton = () => {
             {/* Consent Text */}
             <p className="text-xs text-muted-foreground text-center leading-relaxed">
               Нажимая кнопку «Отправить заявку», я даю согласие на обработку{' '}
-              <a
-                href="/documents/privacy-policy.pdf"
-                download="Политика_конфиденциальности.pdf"
+              <Link
+                to="/privacy-policy"
                 className="text-primary hover:underline"
+                onClick={() => setIsOpen(false)}
               >
-                персональных данных
-              </a>{' '}
+                Персональных данных
+              </Link>{' '}
               и принимаю условия{' '}
               <Link
                 to="/public-offer"
