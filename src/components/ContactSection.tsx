@@ -13,12 +13,12 @@ const ContactSection = () => {
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
         {/* Section Header */}
-        <div className="text-center mb-12 sm:mb-16">
+        <header className="text-center mb-12 sm:mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase mb-4">
-            <span className="neon-text">Как нас найти</span>
+            <span className="neon-text">Контакты в Калининграде</span>
           </h2>
-          <div className="w-24 h-1 mx-auto bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-magenta rounded-full" />
-        </div>
+          <div className="w-24 h-1 mx-auto bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-magenta rounded-full" aria-hidden="true" />
+        </header>
 
         {/* Two Column Layout */}
         <div className="grid lg:grid-cols-2 gap-6 lg:gap-10">

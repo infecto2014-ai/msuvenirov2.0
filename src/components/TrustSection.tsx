@@ -75,11 +75,12 @@ const TrustSection = () => {
       
       {/* Title - centered with container */}
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
-        <div className="text-center mb-8 sm:mb-10">
+        <header className="text-center mb-8 sm:mb-10">
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">
-            НАМ <span className="neon-text">ДОВЕРЯЮТ</span>
+            <span className="text-foreground">Корпоративные клиенты </span>
+            <span className="neon-text">доверяют нам</span>
           </h2>
-        </div>
+        </header>
       </div>
       
       {/* Full-width carousel - Edge to Edge */}

@@ -41,15 +41,15 @@ const ProcessSection = () => {
       <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/10 to-background" />
       
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
-        <div className="text-center mb-8 sm:mb-10">
+        <header className="text-center mb-8 sm:mb-10">
           <span className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-full neon-border text-xs sm:text-sm font-medium text-primary mb-2 sm:mb-3">
             КАК ЭТО РАБОТАЕТ
           </span>
           <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black">
-            <span className="neon-text">ПРОЦЕСС</span>
-            <span className="text-foreground"> СОЗДАНИЯ</span>
+            <span className="neon-text">Этапы заказа</span>
+            <span className="text-foreground"> печати</span>
           </h2>
-        </div>
+        </header>
 
         {/* Process steps */}
         <div className="relative max-w-4xl mx-auto">
