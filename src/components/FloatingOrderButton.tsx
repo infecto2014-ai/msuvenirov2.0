@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import InputMask from 'react-input-mask';
+import { Link } from 'react-router-dom';
 
 const MAX_COMMENT_LENGTH = 300;
 const MAX_PHOTOS = 10;
@@ -276,7 +277,14 @@ const FloatingOrderButton = () => {
               >
                 персональных данных
               </a>{' '}
-              и принимаю условия Публичной оферты.
+              и принимаю условия{' '}
+              <Link
+                to="/public-offer"
+                className="text-primary hover:underline"
+                onClick={() => setIsOpen(false)}
+              >
+                Публичной оферты
+              </Link>.
             </p>
 
             {/* Buttons Row */}
