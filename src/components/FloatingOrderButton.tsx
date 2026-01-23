@@ -271,8 +271,7 @@ const FloatingOrderButton = () => {
               Нажимая кнопку «Отправить заявку», я даю согласие на обработку{' '}
               <a
                 href="/documents/privacy-policy.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
+                download="Политика_конфиденциальности.pdf"
                 className="text-primary hover:underline"
               >
                 персональных данных

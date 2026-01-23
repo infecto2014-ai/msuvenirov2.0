@@ -79,7 +79,11 @@ const Footer = () => {
             © 2024 Мастерская сувениров. Все права защищены.
           </p>
           <div className="flex gap-4 sm:gap-6 text-xs sm:text-sm">
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+            <a 
+              href="/documents/privacy-policy.pdf" 
+              download="Политика_конфиденциальности.pdf"
+              className="text-muted-foreground hover:text-primary transition-colors"
+            >
               Политика конфиденциальности
             </a>
             <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
