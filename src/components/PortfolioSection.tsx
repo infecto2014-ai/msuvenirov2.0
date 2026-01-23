@@ -1,5 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination } from 'swiper/modules';
+import type { Swiper as SwiperType } from 'swiper';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
 import portfolio1 from '@/assets/portfolio-1.jpg';
 import portfolio2 from '@/assets/portfolio-2.jpg';
 import portfolio3 from '@/assets/portfolio-3.jpg';
@@ -19,6 +26,7 @@ const portfolioImages = [
 
 const PortfolioSection = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
@@ -36,7 +44,7 @@ const PortfolioSection = () => {
     }
   }, [selectedIndex]);
 
-  // Keyboard navigation
+  // Keyboard navigation for lightbox
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (selectedIndex === null) return;
@@ -54,7 +62,7 @@ const PortfolioSection = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedIndex, handlePrev, handleNext]);
 
-  // Swipe handlers
+  // Swipe handlers for lightbox
   const onTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null);
     setTouchStart(e.targetTouches[0].clientX);
@@ -79,35 +87,87 @@ const PortfolioSection = () => {
   };
 
   return (
-    <section id="работы" className="py-10 sm:py-12 relative overflow-hidden">
+    <section id="работы" className="py-12 sm:py-16 relative overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6">
-        <div className="text-center mb-6 sm:mb-8">
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black">
+        <div className="text-center mb-8 sm:mb-10">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black">
             <span className="text-foreground">НАШИ </span>
             <span className="neon-text">РАБОТЫ</span>
           </h2>
-          <p className="text-muted-foreground mt-2 sm:mt-3 max-w-xl mx-auto text-xs sm:text-sm md:text-base px-4">
+          <p className="text-muted-foreground mt-3 sm:mt-4 max-w-xl mx-auto text-sm sm:text-base px-4">
             От единичных подарков до корпоративных тиражей. Посмотрите, как мы воплощаем идеи в жизнь.
           </p>
         </div>
 
-        {/* 2 rows x 4 columns Static Grid - Compact squares */}
-        <div className="grid grid-cols-4 gap-2 sm:gap-3 max-w-5xl mx-auto">
-          {portfolioImages.map((image, index) => (
-            <div
-              key={image.id}
-              className="relative group overflow-hidden cursor-pointer aspect-square rounded-lg sm:rounded-xl"
-              onClick={() => setSelectedIndex(index)}
-            >
-              <img
-                src={image.src}
-                alt={image.alt}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-background/0 group-hover:bg-background/20 transition-all duration-300" />
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ring-2 ring-inset ring-primary/50 rounded-lg sm:rounded-xl" />
-            </div>
-          ))}
+        {/* Carousel */}
+        <div className="relative max-w-6xl mx-auto">
+          <Swiper
+            slidesPerView={1}
+            spaceBetween={16}
+            grabCursor={true}
+            loop={true}
+            pagination={{
+              clickable: true,
+              bulletClass: 'swiper-pagination-bullet !bg-muted-foreground/30 !w-2 !h-2 sm:!w-3 sm:!h-3 !mx-1 transition-all duration-300',
+              bulletActiveClass: '!bg-primary !w-6 sm:!w-8 !rounded-full neon-glow-cyan',
+            }}
+            navigation={{
+              nextEl: '.portfolio-next',
+              prevEl: '.portfolio-prev',
+            }}
+            breakpoints={{
+              480: {
+                slidesPerView: 1.5,
+                spaceBetween: 16,
+              },
+              640: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+              },
+              768: {
+                slidesPerView: 2.5,
+                spaceBetween: 24,
+              },
+              1024: {
+                slidesPerView: 3,
+                spaceBetween: 28,
+              },
+            }}
+            modules={[Navigation, Pagination]}
+            onSwiper={setSwiperInstance}
+            className="!pb-12 sm:!pb-14"
+          >
+            {portfolioImages.map((image, index) => (
+              <SwiperSlide key={image.id}>
+                <div
+                  className="relative group overflow-hidden cursor-pointer aspect-[4/3] rounded-xl sm:rounded-2xl"
+                  onClick={() => setSelectedIndex(index)}
+                >
+                  <img
+                    src={image.src}
+                    alt={image.alt}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-background/0 group-hover:bg-background/20 transition-all duration-300" />
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ring-2 ring-inset ring-primary/50 rounded-xl sm:rounded-2xl" />
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+
+          {/* Navigation Arrows */}
+          <button
+            className="portfolio-prev absolute left-0 sm:-left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full neon-border flex items-center justify-center bg-background/90 backdrop-blur-sm hover:neon-glow transition-all duration-300"
+            onClick={() => swiperInstance?.slidePrev()}
+          >
+            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+          </button>
+          <button
+            className="portfolio-next absolute right-0 sm:-right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full neon-border flex items-center justify-center bg-background/90 backdrop-blur-sm hover:neon-glow transition-all duration-300"
+            onClick={() => swiperInstance?.slideNext()}
+          >
+            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
+          </button>
         </div>
       </div>
 
@@ -166,6 +226,14 @@ const PortfolioSection = () => {
           </div>
         </div>
       )}
+
+      {/* Custom Swiper Styles */}
+      <style>{`
+        #работы .swiper-pagination {
+          position: relative !important;
+          margin-top: 0.5rem !important;
+        }
+      `}</style>
     </section>
   );
 };
