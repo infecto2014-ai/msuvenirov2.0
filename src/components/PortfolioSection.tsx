@@ -41,7 +41,7 @@ import portfolio30 from '@/assets/portfolio-30.jpg';
 const portfolioImages = [
   { id: 1, src: portfolio10, alt: 'Маски За Родину' },
   { id: 2, src: portfolio29, alt: 'Магниты-календари' },
-  { id: 3, src: portfolio9, alt: 'Маски KOELNER' },
+  { id: 3, src: portfolio23, alt: 'Футболка Vladimirovich' },
   { id: 4, src: portfolio1, alt: 'Мерч Harry Potter' },
   { id: 5, src: portfolio11, alt: 'Футболки BLACKPINK' },
   { id: 6, src: portfolio18, alt: 'Бокалы с гравировкой' },
