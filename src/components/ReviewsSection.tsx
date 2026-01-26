@@ -1,16 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Star, Quote, ChevronDown, ChevronUp, Send } from 'lucide-react';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { toast } from 'sonner';
+import { ChevronLeft, ChevronRight, Star, Quote, ChevronDown, ChevronUp } from 'lucide-react';
 
 const reviews = [
   {
@@ -150,140 +139,9 @@ const ReviewCard = ({ review }: ReviewCardProps) => {
   );
 };
 
-// Star Rating Component for the form
-interface StarRatingProps {
-  rating: number;
-  onRatingChange: (rating: number) => void;
-}
-
-const StarRating = ({ rating, onRatingChange }: StarRatingProps) => {
-  const [hoverRating, setHoverRating] = useState(0);
-
-  return (
-    <div className="flex gap-1">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <button
-          key={star}
-          type="button"
-          onClick={() => onRatingChange(star)}
-          onMouseEnter={() => setHoverRating(star)}
-          onMouseLeave={() => setHoverRating(0)}
-          className="p-1 transition-transform hover:scale-110"
-        >
-          <Star
-            className={`w-6 h-6 sm:w-7 sm:h-7 transition-colors ${
-              star <= (hoverRating || rating)
-                ? 'fill-primary text-primary'
-                : 'text-muted-foreground/30'
-            }`}
-          />
-        </button>
-      ))}
-    </div>
-  );
-};
-
-// Review Form Component
-const ReviewForm = ({ onClose }: { onClose: () => void }) => {
-  const [name, setName] = useState('');
-  const [content, setContent] = useState('');
-  const [rating, setRating] = useState(0);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!name.trim()) {
-      toast.error('Пожалуйста, введите ваше имя');
-      return;
-    }
-    if (!content.trim()) {
-      toast.error('Пожалуйста, напишите отзыв');
-      return;
-    }
-    if (rating === 0) {
-      toast.error('Пожалуйста, поставьте оценку');
-      return;
-    }
-
-    setIsSubmitting(true);
-    
-    // Simulate submission (can be connected to backend later)
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    toast.success('Спасибо за ваш отзыв! Он будет опубликован после модерации.');
-    setName('');
-    setContent('');
-    setRating(0);
-    setIsSubmitting(false);
-    onClose();
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label htmlFor="review-name" className="block text-sm font-medium text-foreground mb-1.5">
-          Ваше имя
-        </label>
-        <Input
-          id="review-name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Введите имя"
-          className="bg-background border-primary/20 focus:border-primary"
-          maxLength={50}
-        />
-      </div>
-
-      <div>
-        <label htmlFor="review-content" className="block text-sm font-medium text-foreground mb-1.5">
-          Ваш отзыв
-        </label>
-        <Textarea
-          id="review-content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="Расскажите о вашем опыте..."
-          className="bg-background border-primary/20 focus:border-primary min-h-[100px]"
-          maxLength={500}
-        />
-        <p className="text-xs text-muted-foreground mt-1 text-right">
-          {content.length}/500
-        </p>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-foreground mb-1.5">
-          Ваша оценка
-        </label>
-        <StarRating rating={rating} onRatingChange={setRating} />
-      </div>
-
-      <Button
-        type="submit"
-        disabled={isSubmitting}
-        className="w-full neon-border bg-primary/10 hover:bg-primary/20 text-primary font-semibold"
-      >
-        {isSubmitting ? (
-          <span className="flex items-center gap-2">
-            <div className="w-4 h-4 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
-            Отправка...
-          </span>
-        ) : (
-          <span className="flex items-center gap-2">
-            <Send className="w-4 h-4" />
-            Отправить отзыв
-          </span>
-        )}
-      </Button>
-    </form>
-  );
-};
-
 const ReviewsSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const [isFormOpen, setIsFormOpen] = useState(false);
 
   useEffect(() => {
     if (!isAutoPlaying) return;
@@ -375,27 +233,6 @@ const ReviewsSection = () => {
               >
                 <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
               </button>
-            </div>
-
-            {/* Write Review Button */}
-            <div className="flex justify-center mt-6">
-              <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-                <DialogTrigger asChild>
-                  <Button
-                    className="neon-border bg-primary/10 hover:bg-primary/20 text-primary font-semibold px-6"
-                  >
-                    Написать отзыв
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-md">
-                  <DialogHeader>
-                    <DialogTitle className="text-xl font-bold neon-text">
-                      Оставить отзыв
-                    </DialogTitle>
-                  </DialogHeader>
-                  <ReviewForm onClose={() => setIsFormOpen(false)} />
-                </DialogContent>
-              </Dialog>
             </div>
           </div>
         </div>
