@@ -38,7 +38,7 @@ const Header = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Scrollspy with Intersection Observer
+  // Scrollspy with Intersection Observer - with retry for lazy-loaded sections
   useEffect(() => {
     const sectionIds = ['главная', 'о-нас', 'работы', 'отзывы', 'контакты'];
     
@@ -57,15 +57,47 @@ const Header = () => {
     };
 
     const observer = new IntersectionObserver(observerCallback, observerOptions);
+    
+    // Track observed elements to avoid duplicates
+    const observedElements = new Set<Element>();
 
-    sectionIds.forEach((id) => {
-      const element = document.getElementById(id);
-      if (element) {
-        observer.observe(element);
+    const observeSections = () => {
+      sectionIds.forEach((id) => {
+        const element = document.getElementById(id);
+        if (element && !observedElements.has(element)) {
+          observer.observe(element);
+          observedElements.add(element);
+        }
+      });
+    };
+
+    // Initial observation
+    observeSections();
+    
+    // Re-check for lazy-loaded sections periodically
+    const retryInterval = setInterval(() => {
+      observeSections();
+      // Stop retrying once all sections are found
+      if (observedElements.size >= sectionIds.length) {
+        clearInterval(retryInterval);
       }
+    }, 500);
+
+    // Also use MutationObserver to catch dynamically added sections
+    const mutationObserver = new MutationObserver(() => {
+      observeSections();
+    });
+    
+    mutationObserver.observe(document.body, { 
+      childList: true, 
+      subtree: true 
     });
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      mutationObserver.disconnect();
+      clearInterval(retryInterval);
+    };
   }, []);
 
   const navLinks = [
