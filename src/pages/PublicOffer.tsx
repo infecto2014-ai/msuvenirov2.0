@@ -166,7 +166,7 @@ const PublicOffer = () => {
                 ИП «Мастерская сувениров»<br />
                 Адрес: г. Калининград, ТЦ Экватор, 2 этаж, Генерала Челнокова 11 стр 1<br />
                 Телефон: +7 952 114-23-50<br />
-                Email: msuvenirov39@yandex.ru
+                email: msuvenirov39@yandex.ru
               </p>
             </div>
           </section>
