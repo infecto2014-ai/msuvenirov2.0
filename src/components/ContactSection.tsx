@@ -90,9 +90,9 @@ const ContactSection = () => {
                   <Mail className="w-5 h-5 text-neon-magenta" />
                 </div>
                 <div className="flex flex-col">
-                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Email</h4>
-                  <a href="mailto:Msuvenirov39@yandex.ru" className="text-foreground text-sm sm:text-base hover:text-primary transition-colors">
-                    Msuvenirov39@yandex.ru
+                <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">email</h4>
+                  <a href="mailto:msuvenirov39@yandex.ru" className="text-foreground text-sm sm:text-base hover:text-primary transition-colors">
+                    msuvenirov39@yandex.ru
                   </a>
                 </div>
               </div>
