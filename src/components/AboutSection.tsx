@@ -14,7 +14,7 @@ const features = [
   {
     icon: Zap,
     title: 'Срочные заказы',
-    description: 'Изготовление за 24 часа при наличии готового макета',
+    description: 'Изготовление за 1 час при наличии готового макета',
   },
   {
     icon: Shield,
@@ -35,10 +35,6 @@ const AboutSection = () => {
           <span className="inline-block px-4 py-2 rounded-full neon-border text-xs sm:text-sm font-medium text-primary mb-3">
             О КОМПАНИИ
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-6">
-            <span className="neon-text">Мастерская сувениров</span>
-            <span className="text-foreground"> в Калининграде</span>
-          </h2>
           <p className="text-muted-foreground text-base sm:text-lg max-w-3xl mx-auto leading-relaxed">
             Мы — команда профессионалов, специализирующаяся на <strong>печати на текстиле</strong> и 
             изготовлении <strong>сувенирной продукции</strong>. С 2019 года наше собственное производство 
