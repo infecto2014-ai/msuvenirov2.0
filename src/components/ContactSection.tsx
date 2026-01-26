@@ -15,7 +15,7 @@ const ContactSection = () => {
         {/* Section Header */}
         <header className="text-center mb-12 sm:mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase mb-4">
-            <span className="neon-text">Контакты в Калининграде</span>
+            <span className="neon-text">КОНТАКТЫ</span>
           </h2>
           <div className="w-24 h-1 mx-auto bg-gradient-to-r from-neon-cyan via-neon-purple to-neon-magenta rounded-full" aria-hidden="true" />
         </header>
