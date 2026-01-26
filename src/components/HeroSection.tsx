@@ -1,5 +1,6 @@
 import { ChevronDown } from 'lucide-react';
 import heroImage from '@/assets/hero-bg.jpg';
+
 const HeroSection = () => {
   const handleOrderClick = () => {
     const orderButton = document.querySelector('[data-order-button]') as HTMLButtonElement;
@@ -7,6 +8,7 @@ const HeroSection = () => {
       orderButton.click();
     }
   };
+
   const handleScrollDown = () => {
     const nextSection = document.getElementById('витрина');
     if (nextSection) {
@@ -15,7 +17,9 @@ const HeroSection = () => {
       });
     }
   };
-  return <section id="главная" className="relative min-h-screen flex flex-col overflow-hidden" aria-label="Главный экран">
+
+  return (
+    <section id="главная" className="relative min-h-screen flex flex-col overflow-hidden" aria-label="Главный экран">
       {/* Background - priority loading for hero image */}
       <div className="absolute inset-0 z-0">
         <img 
@@ -49,40 +53,52 @@ const HeroSection = () => {
       {/* Main Content */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center container mx-auto px-4 sm:px-6 text-center pt-20">
         {/* Main Heading - H1 with primary keyword */}
-        <h1 className="animate-fade-up text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-none mb-6 sm:mb-6" style={{
-        animationDelay: '0.2s'
-      }}>
-          <span className="neon-text uppercase tracking-tight">ПЕЧАТЬ </span>
+        <h1 
+          className="animate-fade-up text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-none mb-6 sm:mb-6" 
+          style={{ animationDelay: '0.2s' }}
+        >
+          <span className="neon-text uppercase tracking-tight">МАСТЕРСКАЯ</span>
           <br />
-          <span className="text-foreground uppercase tracking-tight text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">в Калининграде</span>
+          <span className="text-foreground uppercase tracking-tight text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">СУВЕНИРОВ</span>
         </h1>
 
         {/* Subheading with keywords */}
-        <p className="animate-fade-up text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-2xl mx-auto mb-8 sm:mb-12" style={{
-        animationDelay: '0.3s'
-      }}>На текстиле и сувенирах от 1 штуки.
-Срочные заказы за 1 час.</p>
+        <p 
+          className="animate-fade-up text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-2xl mx-auto mb-8 sm:mb-12" 
+          style={{ animationDelay: '0.3s' }}
+        >
+          Впечатления для близких, имидж для бизнеса
+        </p>
 
         {/* CTA Button */}
-        <div className="animate-fade-up mb-10 sm:mb-16" style={{
-        animationDelay: '0.4s'
-      }}>
-          <button onClick={handleOrderClick} className="gradient-btn-pulse px-10 sm:px-12 py-4 sm:py-5 rounded-xl text-lg sm:text-xl md:text-2xl font-bold text-background" aria-label="Оформить заказ на печать">
+        <div className="animate-fade-up mb-10 sm:mb-16" style={{ animationDelay: '0.4s' }}>
+          <button 
+            onClick={handleOrderClick} 
+            className="gradient-btn-pulse px-10 sm:px-12 py-4 sm:py-5 rounded-xl text-lg sm:text-xl md:text-2xl font-bold text-background" 
+            aria-label="Оформить заказ на печать"
+          >
             <span className="relative z-10">СДЕЛАТЬ ЗАКАЗ</span>
           </button>
         </div>
 
         {/* Scroll indicator - Clickable */}
-        <button onClick={handleScrollDown} className="animate-fade-up cursor-pointer hover:scale-110 transition-transform duration-300" style={{
-        animationDelay: '0.5s'
-      }} aria-label="Прокрутить к каталогу продукции">
+        <button 
+          onClick={handleScrollDown} 
+          className="animate-fade-up cursor-pointer hover:scale-110 transition-transform duration-300" 
+          style={{ animationDelay: '0.5s' }} 
+          aria-label="Прокрутить к каталогу продукции"
+        >
           <div className="animate-bounce">
-            <ChevronDown className="w-8 h-8 sm:w-10 sm:h-10 text-primary" style={{
-            filter: 'drop-shadow(0 0 12px hsl(var(--primary))) drop-shadow(0 0 24px hsl(var(--primary)))'
-          }} aria-hidden="true" />
+            <ChevronDown 
+              className="w-8 h-8 sm:w-10 sm:h-10 text-primary" 
+              style={{ filter: 'drop-shadow(0 0 12px hsl(var(--primary))) drop-shadow(0 0 24px hsl(var(--primary)))' }} 
+              aria-hidden="true" 
+            />
           </div>
         </button>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default HeroSection;
