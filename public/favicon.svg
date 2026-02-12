@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <style>
+    @media (prefers-color-scheme: light) {
+      .bg { fill: #1a1a2e; }
+      .icon { fill: #ffffff; }
+    }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #ffffff; }
+      .icon { fill: #1a1a2e; }
+    }
+  </style>
+  <rect class="bg" width="256" height="256" rx="40" ry="40"/>
+  <g transform="translate(128,128) scale(0.85) translate(-128,-128)">
+    <g transform="translate(18, 20) scale(1.05)">
+      <path class="icon" d="
+        M128,28 
+        C128,28 108,28 98,38
+        C88,48 85,58 80,58
+        C75,58 55,48 45,43
+        L20,88
+        C20,88 45,103 55,108
+        C60,110 62,108 62,115
+        L58,218
+        L198,218
+        L194,115
+        C194,108 196,110 201,108
+        C211,103 236,88 236,88
+        L211,43
+        C201,48 181,58 176,58
+        C171,58 168,48 158,38
+        C148,28 128,28 128,28z
+        M108,28
+        C108,28 118,55 128,55
+        C138,55 148,28 148,28
+      "/>
+    </g>
+  </g>
+</svg>
