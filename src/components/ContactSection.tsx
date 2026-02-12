@@ -42,7 +42,7 @@ const ContactSection = () => {
                 <div className="flex flex-col">
                   <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Адрес</h4>
                   <p className="text-foreground text-sm sm:text-base leading-tight">
-                    Калининград, ТЦ Экватор, 2 этаж, Генерала Челнокова 9
+                    Калининград<br />ТЦ Экватор, 2 этаж, Генерала Челнокова 9
                   </p>
                 </div>
               </div>
