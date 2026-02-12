@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { X, Phone, Image, Loader2 } from 'lucide-react';
+import { X, Phone, Image, Loader2, Check, Tag } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
@@ -32,6 +32,11 @@ const FloatingOrderButton = () => {
   const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Promo verification state
+  const [promoStatus, setPromoStatus] = useState<'idle' | 'checking' | 'valid' | 'invalid'>('idle');
+  const [promoMessage, setPromoMessage] = useState('');
+  const [promoVerified, setPromoVerified] = useState(false);
+
   // Restore form data from sessionStorage on mount
   useEffect(() => {
     const savedData = sessionStorage.getItem(FORM_STORAGE_KEY);
@@ -45,9 +50,7 @@ const FloatingOrderButton = () => {
           promo: parsed.promo || '',
         });
         setPhotoPreviews(parsed.photoPreviews || []);
-        // Auto-open modal if there was saved data
         setIsOpen(true);
-        // Clear storage after restoring
         sessionStorage.removeItem(FORM_STORAGE_KEY);
       } catch (e) {
         sessionStorage.removeItem(FORM_STORAGE_KEY);
@@ -55,7 +58,6 @@ const FloatingOrderButton = () => {
     }
   }, []);
 
-  // Save form data before navigating away
   const saveFormData = () => {
     const dataToSave: SavedFormData = {
       name: formData.name,
@@ -71,6 +73,12 @@ const FloatingOrderButton = () => {
     const { name, value } = e.target;
     if (name === 'comment' && value.length > MAX_COMMENT_LENGTH) {
       return;
+    }
+    if (name === 'promo') {
+      // Reset promo verification when code changes
+      setPromoStatus('idle');
+      setPromoMessage('');
+      setPromoVerified(false);
     }
     setFormData(prev => ({ ...prev, [name]: value }));
   };
@@ -95,7 +103,6 @@ const FloatingOrderButton = () => {
     const newPhotos = [...photos, ...filesToAdd];
     setPhotos(newPhotos);
 
-    // Generate previews
     filesToAdd.forEach(file => {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -104,7 +111,6 @@ const FloatingOrderButton = () => {
       reader.readAsDataURL(file);
     });
 
-    // Reset file input
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -119,20 +125,69 @@ const FloatingOrderButton = () => {
     setFormData({ name: '', phone: '', comment: '', promo: '' });
     setPhotos([]);
     setPhotoPreviews([]);
+    setPromoStatus('idle');
+    setPromoMessage('');
+    setPromoVerified(false);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
+    }
+  };
+
+  const verifyPromo = async () => {
+    const code = formData.promo.trim();
+    if (!code) {
+      toast({ title: 'Введите промокод', variant: 'destructive' });
+      return;
+    }
+
+    setPromoStatus('checking');
+    setPromoMessage('');
+
+    try {
+      const { data, error } = await supabase.functions.invoke('verify-promo', {
+        body: { code },
+      });
+
+      if (error) throw error;
+
+      if (data.valid) {
+        setPromoStatus('valid');
+        setPromoMessage(data.description || data.message);
+        setPromoVerified(true);
+        toast({ title: '✅ ' + data.message });
+      } else {
+        setPromoStatus('invalid');
+        setPromoMessage(data.message);
+        setPromoVerified(false);
+        toast({ title: data.message, variant: 'destructive' });
+      }
+    } catch (error) {
+      console.error('Promo verify error:', error);
+      setPromoStatus('invalid');
+      setPromoMessage('Ошибка при проверке промокода');
+      setPromoVerified(false);
+      toast({ title: 'Ошибка при проверке промокода', variant: 'destructive' });
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validate phone format
     const phoneDigits = formData.phone.replace(/\D/g, '');
     if (!formData.name.trim() || phoneDigits.length < 11) {
       toast({
         title: 'Ошибка',
         description: 'Пожалуйста, заполните имя и телефон полностью',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    // If promo is entered but not verified, block submission
+    if (formData.promo.trim() && !promoVerified) {
+      toast({
+        title: 'Проверьте промокод',
+        description: 'Нажмите «Применить», чтобы проверить промокод, или очистите поле',
         variant: 'destructive',
       });
       return;
@@ -145,9 +200,11 @@ const FloatingOrderButton = () => {
       submitFormData.append('name', formData.name.trim());
       submitFormData.append('phone', formData.phone.trim());
       submitFormData.append('comment', formData.comment.trim());
-      submitFormData.append('promo', formData.promo.trim());
+      // Only send verified promo
+      if (promoVerified) {
+        submitFormData.append('promo', formData.promo.trim().toUpperCase());
+      }
       
-      // Add all photos
       photos.forEach((photo, index) => {
         submitFormData.append(`photo_${index}`, photo);
       });
@@ -178,9 +235,10 @@ const FloatingOrderButton = () => {
     }
   };
 
+  const promoHasValue = formData.promo.trim().length > 0;
+
   return (
     <>
-      {/* Floating Action Button */}
       <button
         data-order-button
         onClick={() => setIsOpen(true)}
@@ -190,7 +248,6 @@ const FloatingOrderButton = () => {
         <Phone className="w-6 h-6 sm:w-7 sm:h-7 text-background" />
       </button>
 
-      {/* Order Modal */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="sm:max-w-md bg-card border-border/50 backdrop-blur-xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
@@ -217,7 +274,7 @@ const FloatingOrderButton = () => {
               />
             </div>
 
-            {/* Phone with mask */}
+            {/* Phone */}
             <div>
               <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-1.5">
                 Телефон *
@@ -235,7 +292,7 @@ const FloatingOrderButton = () => {
               />
             </div>
 
-            {/* Comment with character counter */}
+            {/* Comment */}
             <div>
               <div className="flex justify-between items-center mb-1.5">
                 <label htmlFor="comment" className="block text-sm font-medium text-foreground">
@@ -257,23 +314,71 @@ const FloatingOrderButton = () => {
               />
             </div>
 
-            {/* Promo Code */}
+            {/* Promo Code with verify button */}
             <div>
               <label htmlFor="promo" className="block text-sm font-medium text-foreground mb-1.5">
                 Промокод
               </label>
-              <input
-                type="text"
-                id="promo"
-                name="promo"
-                value={formData.promo}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 rounded-lg bg-muted/50 border border-border/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
-                placeholder="Введите промокод"
-              />
+              <div className="flex gap-2">
+                <div className="relative flex-1">
+                  <input
+                    type="text"
+                    id="promo"
+                    name="promo"
+                    value={formData.promo}
+                    onChange={handleInputChange}
+                    disabled={promoVerified}
+                    className={`w-full px-4 py-3 rounded-lg bg-muted/50 border text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors ${
+                      promoStatus === 'valid'
+                        ? 'border-green-500/70'
+                        : promoStatus === 'invalid'
+                        ? 'border-destructive/70'
+                        : 'border-border/50'
+                    } ${promoVerified ? 'opacity-70' : ''}`}
+                    placeholder="Введите промокод"
+                  />
+                  {promoStatus === 'valid' && (
+                    <Check className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-green-500" />
+                  )}
+                </div>
+                {promoHasValue && !promoVerified && (
+                  <button
+                    type="button"
+                    onClick={verifyPromo}
+                    disabled={promoStatus === 'checking'}
+                    className="px-4 py-3 rounded-lg bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20 transition-colors text-sm font-medium shrink-0 disabled:opacity-50 flex items-center gap-1.5"
+                  >
+                    {promoStatus === 'checking' ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Tag className="w-4 h-4" />
+                    )}
+                    Применить
+                  </button>
+                )}
+                {promoVerified && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormData(prev => ({ ...prev, promo: '' }));
+                      setPromoStatus('idle');
+                      setPromoMessage('');
+                      setPromoVerified(false);
+                    }}
+                    className="px-3 py-3 rounded-lg bg-muted/50 border border-border/50 text-muted-foreground hover:text-foreground transition-colors text-sm shrink-0"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+              {promoMessage && (
+                <p className={`text-xs mt-1.5 ${promoStatus === 'valid' ? 'text-green-500' : 'text-destructive'}`}>
+                  {promoMessage}
+                </p>
+              )}
             </div>
 
-            {/* Photo Upload - Multiple */}
+            {/* Photo Upload */}
             <div>
               <div className="flex justify-between items-center mb-1.5">
                 <label className="block text-sm font-medium text-foreground">
@@ -284,7 +389,6 @@ const FloatingOrderButton = () => {
                 </span>
               </div>
               <div className="space-y-3">
-                {/* Photo previews grid */}
                 {photoPreviews.length > 0 && (
                   <div className="grid grid-cols-5 gap-2">
                     {photoPreviews.map((preview, index) => (
@@ -306,7 +410,6 @@ const FloatingOrderButton = () => {
                   </div>
                 )}
 
-                {/* Upload button */}
                 {photos.length < MAX_PHOTOS && (
                   <div className="flex items-center">
                     <input
@@ -330,16 +433,13 @@ const FloatingOrderButton = () => {
               </div>
             </div>
 
-            {/* Consent Text */}
+            {/* Consent */}
             <p className="text-xs text-muted-foreground text-center leading-relaxed">
               Нажимая кнопку «Отправить заявку», я даю согласие на обработку{' '}
               <Link
                 to="/privacy-policy"
                 className="text-primary hover:underline"
-                onClick={() => {
-                  saveFormData();
-                  setIsOpen(false);
-                }}
+                onClick={() => { saveFormData(); setIsOpen(false); }}
               >
                 Персональных данных
               </Link>{' '}
@@ -347,18 +447,14 @@ const FloatingOrderButton = () => {
               <Link
                 to="/public-offer"
                 className="text-primary hover:underline"
-                onClick={() => {
-                  saveFormData();
-                  setIsOpen(false);
-                }}
+                onClick={() => { saveFormData(); setIsOpen(false); }}
               >
                 Публичной оферты
               </Link>.
             </p>
 
-            {/* Buttons Row */}
+            {/* Buttons */}
             <div className="flex items-center gap-3">
-              {/* Telegram Button */}
               <a
                 href="https://t.me/Msuvenirov39zakaz"
                 target="_blank"
@@ -371,7 +467,6 @@ const FloatingOrderButton = () => {
                 </svg>
               </a>
 
-              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={isLoading}
