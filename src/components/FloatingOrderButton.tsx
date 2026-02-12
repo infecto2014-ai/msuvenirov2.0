@@ -14,6 +14,7 @@ interface SavedFormData {
   name: string;
   phone: string;
   comment: string;
+  promo: string;
   photoPreviews: string[];
 }
 
@@ -25,6 +26,7 @@ const FloatingOrderButton = () => {
     name: '',
     phone: '',
     comment: '',
+    promo: '',
   });
   const [photos, setPhotos] = useState<File[]>([]);
   const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
@@ -40,6 +42,7 @@ const FloatingOrderButton = () => {
           name: parsed.name || '',
           phone: parsed.phone || '',
           comment: parsed.comment || '',
+          promo: parsed.promo || '',
         });
         setPhotoPreviews(parsed.photoPreviews || []);
         // Auto-open modal if there was saved data
@@ -58,6 +61,7 @@ const FloatingOrderButton = () => {
       name: formData.name,
       phone: formData.phone,
       comment: formData.comment,
+      promo: formData.promo,
       photoPreviews: photoPreviews,
     };
     sessionStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(dataToSave));
@@ -112,7 +116,7 @@ const FloatingOrderButton = () => {
   };
 
   const resetForm = () => {
-    setFormData({ name: '', phone: '', comment: '' });
+    setFormData({ name: '', phone: '', comment: '', promo: '' });
     setPhotos([]);
     setPhotoPreviews([]);
     if (fileInputRef.current) {
@@ -141,6 +145,7 @@ const FloatingOrderButton = () => {
       submitFormData.append('name', formData.name.trim());
       submitFormData.append('phone', formData.phone.trim());
       submitFormData.append('comment', formData.comment.trim());
+      submitFormData.append('promo', formData.promo.trim());
       
       // Add all photos
       photos.forEach((photo, index) => {
@@ -249,6 +254,22 @@ const FloatingOrderButton = () => {
                 rows={3}
                 className="w-full px-4 py-3 rounded-lg bg-muted/50 border border-border/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors resize-none"
                 placeholder="Опишите ваш заказ..."
+              />
+            </div>
+
+            {/* Promo Code */}
+            <div>
+              <label htmlFor="promo" className="block text-sm font-medium text-foreground mb-1.5">
+                Промокод
+              </label>
+              <input
+                type="text"
+                id="promo"
+                name="promo"
+                value={formData.promo}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 rounded-lg bg-muted/50 border border-border/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+                placeholder="Введите промокод"
               />
             </div>
 
