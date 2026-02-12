@@ -164,7 +164,7 @@ const PublicOffer = () => {
               <h2 className="text-xl font-bold text-foreground mb-3">9. Контактная информация</h2>
               <p className="text-muted-foreground leading-relaxed">
                 ИП «Мастерская сувениров»<br />
-                Адрес: г. Калининград, ТЦ Экватор, 2 этаж, Генерала Челнокова 11 стр 1<br />
+                Адрес: г. Калининград, ТЦ Экватор, 2 этаж, Генерала Челнокова 9<br />
                 Телефон: +7 952 114-23-50<br />
                 email: msuvenirov39@yandex.ru
               </p>

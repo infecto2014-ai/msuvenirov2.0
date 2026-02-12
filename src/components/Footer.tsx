@@ -28,7 +28,7 @@ const Footer = () => {
               <li>
                 <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" className="flex items-start gap-2 sm:gap-3 text-muted-foreground hover:text-primary transition-colors group text-xs sm:text-sm">
                   <MapPin className="w-4 h-4 sm:w-5 sm:h-5 mt-0.5 text-primary shrink-0" />
-                  <span>Калининград, ТЦ Экватор, 2 этаж, Генерала Челнокова 11 стр 1</span>
+                  <span>Калининград, ТЦ Экватор, 2 этаж, Генерала Челнокова 9</span>
                 </a>
               </li>
               <li>
