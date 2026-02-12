@@ -23,14 +23,16 @@ serve(async (req) => {
     const name = formData.get('name') as string;
     const phone = formData.get('phone') as string;
     const comment = formData.get('comment') as string;
+    const promo = formData.get('promo') as string;
     const photoCount = parseInt(formData.get('photoCount') as string || '0', 10);
 
     // Build message text
+    const promoLine = promo ? `\n🎟 Промокод: ${promo}` : '';
     const messageText = `📩 Новая заявка с сайта!
 
 👤 Имя: ${name || 'Не указано'}
 📞 Телефон: ${phone || 'Не указан'}
-💬 Комментарий: ${comment || 'Нет комментария'}`;
+💬 Комментарий: ${comment || 'Нет комментария'}${promoLine}`;
 
     // Collect all photos
     const photos: File[] = [];
