@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Menu, X, Phone, MapPin, Clock, Mail, Send } from 'lucide-react';
 import ProtectedLogo from './ProtectedLogo';
 
