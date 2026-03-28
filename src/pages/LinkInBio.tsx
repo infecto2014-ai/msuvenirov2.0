@@ -9,6 +9,7 @@ const links = [
     href: 'tel:+79521142350',
     icon: Phone,
     external: false,
+    color: '#00FF00',
   },
   {
     label: 'Telegram',
@@ -16,6 +17,7 @@ const links = [
     icon: null,
     iconType: 'telegram',
     external: true,
+    color: '#1E90FF',
   },
   {
     label: 'MAX',
@@ -23,6 +25,7 @@ const links = [
     icon: null,
     iconType: 'max',
     external: true,
+    color: '#8A2BE2',
   },
   {
     label: 'ВКонтакте',
@@ -30,6 +33,7 @@ const links = [
     icon: null,
     iconType: 'vk',
     external: true,
+    color: '#4169E1',
   },
   {
     label: 'Instagram',
@@ -131,7 +135,12 @@ const LinkInBio = () => {
                 href={link.href}
                 {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 onClick={(e) => handleClick(link, e)}
-                className="group w-full gradient-btn-pulse flex items-center justify-center gap-3 px-5 py-4 rounded-xl text-background font-semibold text-base transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0"
+                style={
+                  (link as any).color
+                    ? { background: (link as any).color }
+                    : { background: 'var(--gradient-glow)' }
+                }
+                className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl text-background font-semibold text-base transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.98] active:translate-y-0"
               >
                 <span className="relative z-10 flex items-center justify-center gap-3">
                   {getIcon(link)}
