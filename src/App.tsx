@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 const NotFound = lazy(() => import("./pages/NotFound"));
 const PublicOffer = lazy(() => import("./pages/PublicOffer"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const LinkInBio = lazy(() => import("./pages/LinkInBio"));
 
 // Loading fallback for lazy loaded pages
 const PageLoader = () => (
@@ -38,6 +39,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/public-offer" element={<PublicOffer />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/card" element={<LinkInBio />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

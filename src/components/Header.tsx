@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Menu, X, Phone, MapPin, Clock, Mail, Send } from 'lucide-react';
 import ProtectedLogo from './ProtectedLogo';
 
@@ -17,6 +18,7 @@ const getWorkingStatus = () => {
 };
 
 const Header = () => {
+  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('главная');
@@ -106,10 +108,16 @@ const Header = () => {
     { href: '#работы', label: 'Наши работы', id: 'работы' },
     { href: '#отзывы', label: 'Отзывы', id: 'отзывы' },
     { href: '#контакты', label: 'Контакты', id: 'контакты' },
+    { href: '/card', label: 'Визитка', id: 'визитка' },
   ];
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
+    if (href.startsWith('/')) {
+      navigate(href);
+      setIsMobileMenuOpen(false);
+      return;
+    }
     const targetId = href.replace('#', '');
     const element = document.getElementById(targetId);
     if (element) {
