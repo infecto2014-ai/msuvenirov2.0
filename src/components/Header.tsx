@@ -18,6 +18,7 @@ const getWorkingStatus = () => {
 };
 
 const Header = () => {
+  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('главная');
