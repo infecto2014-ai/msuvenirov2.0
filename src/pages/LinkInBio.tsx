@@ -2,12 +2,8 @@ import { Phone, Home, Mail } from 'lucide-react';
 import ProtectedLogo from '@/components/ProtectedLogo';
 import heroImage from '@/assets/hero-bg.jpg';
 import maxLogo from '@/assets/logo_max.svg';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
 
 const BUTTON_COLOR = '#E0FFFF';
-const MAX_FILES = 10;
 
 const links = [
   {
@@ -98,67 +94,6 @@ const getIcon = (link: typeof links[0]) => {
 };
 
 const LinkInBio = () => {
-  const [filesDialogOpen, setFilesDialogOpen] = useState(false);
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [isSending, setIsSending] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleClick = (link: typeof links[0], e: React.MouseEvent) => {
-    if ((link as any).action === 'openFiles') {
-      e.preventDefault();
-      setFilesDialogOpen(true);
-    }
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    const newFiles = Array.from(e.target.files);
-    setSelectedFiles(prev => {
-      const combined = [...prev, ...newFiles];
-      return combined.slice(0, MAX_FILES);
-    });
-    if (fileInputRef.current) fileInputRef.current.value = '';
-  };
-
-  const removeFile = (index: number) => {
-    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
-  };
-
-  const handleSendFiles = async () => {
-    if (selectedFiles.length === 0) {
-      toast.error('Прикрепите хотя бы один файл');
-      return;
-    }
-
-    setIsSending(true);
-    try {
-      const formData = new FormData();
-      formData.append('name', 'Визитка (отправка файлов)');
-      formData.append('phone', '');
-      formData.append('comment', `Отправлено ${selectedFiles.length} файл(ов) через визитку`);
-      formData.append('promo', '');
-      formData.append('photoCount', selectedFiles.length.toString());
-
-      selectedFiles.forEach((file, i) => {
-        formData.append(`photo_${i}`, file);
-      });
-
-      const { error } = await supabase.functions.invoke('send-telegram', {
-        body: formData,
-      });
-
-      if (error) throw error;
-
-      toast.success('Файлы успешно отправлены!');
-      setSelectedFiles([]);
-      setFilesDialogOpen(false);
-    } catch {
-      toast.error('Ошибка при отправке файлов');
-    } finally {
-      setIsSending(false);
-    }
-  };
-
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Hero-style background */}
@@ -188,7 +123,6 @@ const LinkInBio = () => {
                 key={link.label}
                 href={link.href}
                 {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                onClick={(e) => handleClick(link, e)}
                 style={{ background: BUTTON_COLOR }}
                 className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl text-black font-semibold text-base transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.98] active:translate-y-0"
               >
@@ -206,68 +140,6 @@ const LinkInBio = () => {
           © {new Date().getFullYear()} Мастерская сувениров
         </p>
       </div>
-
-      {/* Files Dialog */}
-      <Dialog open={filesDialogOpen} onOpenChange={setFilesDialogOpen}>
-        <DialogContent className="max-w-sm mx-auto">
-          <DialogHeader>
-            <DialogTitle>Отправить файлы</DialogTitle>
-          </DialogHeader>
-
-          <div className="flex flex-col gap-4">
-            <p className="text-sm text-muted-foreground">
-              Прикрепите до {MAX_FILES} файлов любого формата
-            </p>
-
-            <input
-              ref={fileInputRef}
-              type="file"
-              multiple
-              onChange={handleFileChange}
-              className="hidden"
-              accept="*/*"
-            />
-
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={selectedFiles.length >= MAX_FILES}
-              className="w-full py-3 rounded-lg border-2 border-dashed border-muted-foreground/30 text-sm text-muted-foreground hover:border-primary/50 transition-colors disabled:opacity-50"
-            >
-              {selectedFiles.length >= MAX_FILES
-                ? `Максимум ${MAX_FILES} файлов`
-                : 'Нажмите, чтобы выбрать файлы'}
-            </button>
-
-            {selectedFiles.length > 0 && (
-              <div className="flex flex-col gap-2 max-h-48 overflow-y-auto">
-                {selectedFiles.map((file, i) => (
-                  <div key={i} className="flex items-center justify-between gap-2 bg-muted/50 rounded-lg px-3 py-2 text-sm">
-                    <span className="truncate flex-1">{file.name}</span>
-                    <button
-                      type="button"
-                      onClick={() => removeFile(i)}
-                      className="text-destructive hover:text-destructive/80 text-xs font-medium flex-shrink-0"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <button
-              type="button"
-              onClick={handleSendFiles}
-              disabled={isSending || selectedFiles.length === 0}
-              style={{ background: BUTTON_COLOR }}
-              className="w-full py-3 rounded-xl text-black font-semibold text-base transition-all hover:shadow-lg disabled:opacity-50"
-            >
-              {isSending ? 'Отправка...' : 'Отправить'}
-            </button>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
