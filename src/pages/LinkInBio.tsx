@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import ProtectedLogo from '@/components/ProtectedLogo';
 import heroImage from '@/assets/hero-bg.jpg';
 import maxLogo from '@/assets/logo_max.svg';
+import sbpLogo from '@/assets/sbp.svg';
 
 const BUTTON_COLOR = '#E0FFFF';
 
@@ -155,9 +156,7 @@ const LinkInBio = () => {
             className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl text-black font-semibold text-base transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.98] active:translate-y-0"
           >
             <span className="relative z-10 flex items-center justify-center gap-3">
-              <svg className="w-6 h-6 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M3 6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6zm5.5 2a.75.75 0 0 0-.75.75v6.5a.75.75 0 0 0 1.5 0v-6.5A.75.75 0 0 0 8.5 8zm3.25.75a.75.75 0 0 1 1.5 0v6.5a.75.75 0 0 1-1.5 0v-6.5zM15.5 8a.75.75 0 0 0-.75.75v6.5a.75.75 0 0 0 1.5 0v-6.5A.75.75 0 0 0 15.5 8z"/>
-              </svg>
+              <img src={sbpLogo} alt="СБП" className="w-6 h-6 flex-shrink-0" />
               <span>Оплатить по СБП</span>
             </span>
           </a>
