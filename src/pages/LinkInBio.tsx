@@ -1,5 +1,7 @@
 import { Phone, Upload, Home, ExternalLink } from 'lucide-react';
 import ProtectedLogo from '@/components/ProtectedLogo';
+import heroImage from '@/assets/hero-bg.jpg';
+import maxLogo from '@/assets/logo_max.svg';
 
 const links = [
   {
@@ -11,7 +13,7 @@ const links = [
   {
     label: 'Telegram',
     href: 'https://t.me/msuvenirov39zakaz',
-    icon: null, // custom SVG
+    icon: null,
     iconType: 'telegram',
     external: true,
   },
@@ -37,7 +39,7 @@ const links = [
     external: true,
   },
   {
-    label: 'Отправить файл через сайт',
+    label: 'Отправить файл',
     href: '#order',
     icon: Upload,
     external: false,
@@ -59,7 +61,7 @@ const TelegramIcon = ({ className }: { className?: string }) => (
 
 const VKIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M12.785 16.241s.288-.032.436-.194c.136-.148.132-.427.132-.427s-.02-1.304.576-1.496c.588-.19 1.341 1.26 2.14 1.818.605.422 1.064.33 1.064.33l2.137-.03s1.117-.071.587-.964c-.043-.073-.308-.661-1.588-1.87-1.34-1.264-1.16-1.059.453-3.246.983-1.332 1.376-2.145 1.253-2.493-.117-.332-.84-.244-.84-.244l-2.406.015s-.178-.025-.31.056c-.13.079-.212.262-.212.262s-.382 1.03-.89 1.907c-1.07 1.85-1.499 1.948-1.674 1.832-.407-.267-.305-1.075-.305-1.648 0-1.793.267-2.54-.521-2.733-.262-.065-.454-.107-1.123-.114-.858-.009-1.585.003-1.996.208-.274.136-.485.44-.356.457.159.022.519.099.71.363.246.341.237 1.107.237 1.107s.142 2.11-.33 2.371c-.325.18-.77-.187-1.725-1.865-.489-.859-.859-1.81-.859-1.81s-.07-.176-.198-.272c-.154-.115-.37-.151-.37-.151l-2.286.015s-.343.01-.469.163c-.112.136-.009.418-.009.418s1.781 4.232 3.799 6.36c1.851 1.952 3.953 1.824 3.953 1.824h.953z" />
+    <path d="M15.684 0H8.316C1.592 0 0 1.592 0 8.316v7.368C0 22.408 1.592 24 8.316 24h7.368C22.408 24 24 22.408 24 15.684V8.316C24 1.592 22.408 0 15.684 0zm3.692 17.123h-1.744c-.66 0-.862-.523-2.049-1.712-1.033-1.006-1.49-1.142-1.744-1.142-.356 0-.458.102-.458.593v1.562c0 .422-.135.678-1.253.678-1.846 0-3.896-1.118-5.335-3.202C4.624 10.857 4 8.57 4 8.096c0-.254.102-.491.593-.491h1.744c.44 0 .61.203.78.677.863 2.49 2.303 4.675 2.896 4.675.22 0 .322-.102.322-.66V9.721c-.068-1.186-.695-1.287-.695-1.71 0-.204.17-.407.44-.407h2.744c.373 0 .508.203.508.643v3.473c0 .372.17.508.271.508.22 0 .407-.136.813-.542 1.254-1.406 2.151-3.574 2.151-3.574.119-.254.322-.491.763-.491h1.744c.525 0 .644.27.525.643-.22 1.017-2.354 4.031-2.354 4.031-.186.305-.254.44 0 .78.186.254.796.779 1.203 1.253.745.847 1.32 1.558 1.473 2.049.17.475-.085.72-.576.72z"/>
   </svg>
 );
 
@@ -72,17 +74,15 @@ const InstagramIcon = ({ className }: { className?: string }) => (
 );
 
 const MaxIcon = ({ className }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15H8v-2h3v2zm5-4H8v-2h8v2zm0-4H8V7h8v2z" />
-  </svg>
+  <img src={maxLogo} alt="MAX" className={className} />
 );
 
 const getIcon = (link: typeof links[0]) => {
   if (link.icon) {
     const Icon = link.icon;
-    return <Icon className="w-5 h-5 flex-shrink-0" />;
+    return <Icon className="w-6 h-6 flex-shrink-0" />;
   }
-  const cls = "w-5 h-5 flex-shrink-0";
+  const cls = "w-6 h-6 flex-shrink-0";
   switch ((link as any).iconType) {
     case 'telegram': return <TelegramIcon className={cls} />;
     case 'vk': return <VKIcon className={cls} />;
@@ -102,7 +102,13 @@ const LinkInBio = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Hero-style background */}
+      <div className="absolute inset-0">
+        <img src={heroImage} alt="" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-background/85 backdrop-blur-sm" />
+      </div>
+
       {/* Background decoration */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-primary/5 blur-3xl" />
@@ -125,13 +131,13 @@ const LinkInBio = () => {
                 href={link.href}
                 {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 onClick={(e) => handleClick(link, e)}
-                className="group w-full flex items-center gap-3 px-5 py-4 rounded-xl neon-border bg-card/70 text-foreground font-medium text-sm transition-all duration-200 hover:neon-glow hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0"
+                className="group w-full gradient-btn-pulse flex items-center justify-center gap-3 px-5 py-4 rounded-xl text-background font-semibold text-base transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0"
               >
-                <span className="text-primary transition-colors duration-200 group-hover:text-secondary">
+                <span className="relative z-10 flex items-center justify-center gap-3">
                   {getIcon(link)}
+                  <span>{link.label}</span>
+                  {isExternal && <ExternalLink className="w-4 h-4 opacity-60" />}
                 </span>
-                <span className="flex-1">{link.label}</span>
-                {isExternal && <ExternalLink className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />}
               </a>
             );
           })}
