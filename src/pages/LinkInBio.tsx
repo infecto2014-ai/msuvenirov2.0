@@ -109,6 +109,15 @@ const LinkInBio = () => {
         <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-secondary/5 blur-3xl" />
       </div>
 
+      {/* Back button — desktop only */}
+      <Link
+        to="/"
+        className="hidden md:flex fixed top-6 left-6 z-20 items-center gap-2 text-foreground/70 hover:text-foreground transition-colors bg-background/60 backdrop-blur-sm rounded-full px-4 py-2"
+      >
+        <ArrowLeft className="w-5 h-5" />
+        <span className="text-sm font-medium">На главную</span>
+      </Link>
+
       <div className="relative z-10 flex flex-col items-center px-6 py-10 max-w-md mx-auto min-h-screen">
         {/* Logo */}
         <div className="mb-10">
