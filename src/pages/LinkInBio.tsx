@@ -52,13 +52,6 @@ const links = [
     external: true,
   },
   {
-    label: 'Отправить файл',
-    href: '#files',
-    icon: Upload,
-    external: false,
-    action: 'openFiles',
-  },
-  {
     label: 'Посетить сайт',
     href: '/',
     icon: Home,

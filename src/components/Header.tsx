@@ -204,7 +204,7 @@ const Header = () => {
               rel="noopener noreferrer"
               className="w-8 h-8 lg:w-10 lg:h-10 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300"
             >
-              <img src="/assets/logo_max.svg" alt="MAX" className="w-4 h-4 lg:w-5 lg:h-5" />
+              <img src="/assets/logo_max.svg" alt="MAX" className="w-4 h-4 lg:w-5 lg:h-5 invert" />
             </a>
             <button
               onClick={handleOrderClick}
@@ -322,7 +322,7 @@ const Header = () => {
                   rel="noopener noreferrer"
                   className="w-10 h-10 rounded-full neon-border flex items-center justify-center bg-background"
                 >
-                  <img src="/assets/logo_max.svg" alt="MAX" className="w-5 h-5" />
+                  <img src="/assets/logo_max.svg" alt="MAX" className="w-5 h-5 invert" />
                 </a>
               </div>
               
