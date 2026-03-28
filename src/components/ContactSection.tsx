@@ -87,7 +87,7 @@ const ContactSection = () => {
               {/* MAX */}
               <div className="flex items-center gap-4">
                 <div className="w-11 h-11 rounded-xl bg-neon-purple/20 flex items-center justify-center flex-shrink-0 neon-glow">
-                  <img src="/assets/logo_max.svg" alt="MAX" className="w-5 h-5" />
+                  <img src="/assets/logo_max.svg" alt="MAX" className="w-5 h-5" style={{ filter: 'brightness(0) saturate(100%) invert(43%) sepia(96%) saturate(1234%) hue-rotate(238deg) brightness(101%) contrast(101%)' }} />
                 </div>
                 <div className="flex flex-col">
                   <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">MAX</h4>
