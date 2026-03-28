@@ -106,6 +106,7 @@ const Header = () => {
     { href: '#работы', label: 'Наши работы', id: 'работы' },
     { href: '#отзывы', label: 'Отзывы', id: 'отзывы' },
     { href: '#контакты', label: 'Контакты', id: 'контакты' },
+    { href: '/card', label: 'Визитка', id: 'визитка' },
   ];
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
