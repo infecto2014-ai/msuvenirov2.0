@@ -1,5 +1,4 @@
-import { useState, useRef } from 'react';
-import { Phone, Upload, Home, Mail } from 'lucide-react';
+import { Phone, Home, Mail } from 'lucide-react';
 import ProtectedLogo from '@/components/ProtectedLogo';
 import heroImage from '@/assets/hero-bg.jpg';
 import maxLogo from '@/assets/logo_max.svg';
