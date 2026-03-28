@@ -87,7 +87,7 @@ const ContactSection = () => {
               {/* MAX */}
               <div className="flex items-center gap-4">
                 <div className="w-11 h-11 rounded-xl bg-neon-purple/20 flex items-center justify-center flex-shrink-0 neon-glow">
-                  <img src="/assets/logo_max.svg" alt="MAX" className="w-5 h-5" />
+                  <img src="/assets/logo_max.svg" alt="MAX" className="w-5 h-5" style={{ filter: 'brightness(0) saturate(100%) invert(43%) sepia(96%) saturate(1234%) hue-rotate(238deg) brightness(101%) contrast(101%)' }} />
                 </div>
                 <div className="flex flex-col">
                   <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">MAX</h4>
@@ -153,7 +153,7 @@ const ContactSection = () => {
                   className="w-14 h-14 rounded-xl bg-muted/30 border border-border/50 flex items-center justify-center hover:border-neon-purple hover:bg-neon-purple/10 hover:shadow-[0_0_20px_hsl(var(--neon-purple)/0.3)] transition-all duration-300 group"
                   aria-label="MAX"
                 >
-                  <img src="/assets/logo_max.svg" alt="MAX" className="w-7 h-7 opacity-60 group-hover:opacity-100 transition-opacity" />
+                  <img src="/assets/logo_max.svg" alt="MAX" className="w-7 h-7 opacity-60 group-hover:opacity-100 transition-opacity" style={{ filter: 'brightness(0) saturate(100%) invert(43%) sepia(96%) saturate(1234%) hue-rotate(238deg) brightness(101%) contrast(101%)' }} />
                 </a>
               </div>
             </div>
