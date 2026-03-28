@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import ProtectedLogo from '@/components/ProtectedLogo';
 import heroImage from '@/assets/hero-bg.jpg';
 import maxLogo from '@/assets/logo_max.svg';
+import sbpLogo from '@/assets/sbp.svg';
 
 const BUTTON_COLOR = '#E0FFFF';
 
