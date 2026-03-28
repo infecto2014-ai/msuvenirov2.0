@@ -131,6 +131,17 @@ const ContactSection = () => {
                 >
                   <Send className="w-6 h-6 text-muted-foreground group-hover:text-neon-magenta transition-colors" />
                 </a>
+
+                {/* MAX Button */}
+                <a
+                  href="https://max.ru/u/f9LHodD0cOLo7HDSJw672fSH82yru_atZ9KDVODSf_2mghJHg1xe7H2qOC8"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-14 h-14 rounded-xl bg-muted/30 border border-border/50 flex items-center justify-center hover:border-neon-purple hover:bg-neon-purple/10 hover:shadow-[0_0_20px_hsl(var(--neon-purple)/0.3)] transition-all duration-300 group"
+                  aria-label="MAX"
+                >
+                  <img src="/assets/logo_max.svg" alt="MAX" className="w-7 h-7 opacity-60 group-hover:opacity-100 transition-opacity" />
+                </a>
               </div>
             </div>
             </div>
