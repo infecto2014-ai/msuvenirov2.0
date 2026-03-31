@@ -146,21 +146,21 @@ const LinkInBio = () => {
                 href={link.href}
                 {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 style={{ background: BUTTON_COLOR }}
-                className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl text-black font-semibold text-base transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.98] active:translate-y-0"
+                className="group w-full relative flex items-center justify-center px-5 py-4 rounded-xl text-black font-semibold text-base transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.98] active:translate-y-0"
               >
-                <span className="relative z-10 flex items-center justify-center gap-3">
+                <span className="flex items-center justify-center gap-3">
                   {getIcon(link)}
                   <span>{link.label}</span>
-                  {isEmail && (
-                    <button
-                      onClick={handleCopyEmail}
-                      className="ml-1 p-1 rounded-md hover:bg-black/10 transition-colors"
-                      title="Скопировать почту"
-                    >
-                      {copied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-black/60" />}
-                    </button>
-                  )}
                 </span>
+                {isEmail && (
+                  <button
+                    onClick={handleCopyEmail}
+                    className="absolute right-4 p-1 rounded-md hover:bg-black/10 transition-colors"
+                    title="Скопировать почту"
+                  >
+                    {copied ? <Check className="w-5 h-5 text-green-600" /> : <Copy className="w-5 h-5 text-black/60" />}
+                  </button>
+                )}
               </a>
             );
           })}
