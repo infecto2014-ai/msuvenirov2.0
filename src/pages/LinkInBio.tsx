@@ -97,6 +97,15 @@ const getIcon = (link: typeof links[0]) => {
 };
 
 const LinkInBio = () => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyEmail = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigator.clipboard.writeText('msuvenirov39@yandex.ru');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Hero-style background */}
