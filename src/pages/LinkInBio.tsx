@@ -36,25 +36,19 @@ const links = [
     external: false,
   },
   {
+    label: 'Посетить сайт',
+    href: '/',
+    icon: Globe,
+    external: false,
+  },
+  {
     label: 'ВКонтакте',
     href: 'https://vk.com/msuvenirov39',
     icon: null,
     iconType: 'vk',
     external: true,
   },
-  {
-    label: 'Instagram',
-    href: 'https://instagram.com/msuvenirov39',
-    icon: null,
-    iconType: 'instagram',
-    external: true,
-  },
-  {
-    label: 'Посетить сайт',
-    href: '/',
-    icon: Home,
-    external: false,
-  },
+];
 ];
 
 const TelegramIcon = ({ className }: { className?: string }) => (
