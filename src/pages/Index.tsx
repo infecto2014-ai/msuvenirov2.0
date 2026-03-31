@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
+import FloatingOrderButton from '@/components/FloatingOrderButton';
 
 
 // Lazy load below-the-fold sections for better LCP
@@ -62,7 +63,7 @@ const Index = () => {
       <Suspense fallback={null}>
         <Footer />
       </Suspense>
-      
+      <FloatingOrderButton />
     </div>
   );
 };
