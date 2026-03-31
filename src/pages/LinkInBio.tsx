@@ -1,4 +1,4 @@
-import { Phone, Home, Mail, ArrowLeft, Copy, Check } from 'lucide-react';
+import { Phone, Globe, Mail, ArrowLeft, Copy, Check } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ProtectedLogo from '@/components/ProtectedLogo';
