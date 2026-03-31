@@ -242,11 +242,9 @@ const FloatingOrderButton = () => {
       <button
         data-order-button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 sm:w-16 sm:h-16 rounded-full gradient-btn-pulse flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-300"
+        className="hidden"
         aria-label="Открыть форму заказа"
-      >
-        <Send className="w-6 h-6 sm:w-7 sm:h-7 text-background" />
-      </button>
+      />
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="sm:max-w-md bg-card border-border/50 backdrop-blur-xl max-h-[90vh] overflow-y-auto">
