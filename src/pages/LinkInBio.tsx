@@ -49,7 +49,6 @@ const links = [
     external: true,
   },
 ];
-];
 
 const TelegramIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
