@@ -139,6 +139,7 @@ const LinkInBio = () => {
         <div className="w-full flex flex-col gap-3">
           {links.map((link) => {
             const isExternal = link.external;
+            const isEmail = link.href.startsWith('mailto:');
             return (
               <a
                 key={link.label}
@@ -150,6 +151,15 @@ const LinkInBio = () => {
                 <span className="relative z-10 flex items-center justify-center gap-3">
                   {getIcon(link)}
                   <span>{link.label}</span>
+                  {isEmail && (
+                    <button
+                      onClick={handleCopyEmail}
+                      className="ml-1 p-1 rounded-md hover:bg-black/10 transition-colors"
+                      title="Скопировать почту"
+                    >
+                      {copied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-black/60" />}
+                    </button>
+                  )}
                 </span>
               </a>
             );
