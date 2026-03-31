@@ -1,4 +1,4 @@
-import { Phone, Home, Mail, ArrowLeft, Copy, Check } from 'lucide-react';
+import { Phone, Globe, Mail, ArrowLeft, Copy, Check } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ProtectedLogo from '@/components/ProtectedLogo';
@@ -36,24 +36,17 @@ const links = [
     external: false,
   },
   {
+    label: 'Посетить сайт',
+    href: '/',
+    icon: Globe,
+    external: false,
+  },
+  {
     label: 'ВКонтакте',
     href: 'https://vk.com/msuvenirov39',
     icon: null,
     iconType: 'vk',
     external: true,
-  },
-  {
-    label: 'Instagram',
-    href: 'https://instagram.com/msuvenirov39',
-    icon: null,
-    iconType: 'instagram',
-    external: true,
-  },
-  {
-    label: 'Посетить сайт',
-    href: '/',
-    icon: Home,
-    external: false,
   },
 ];
 
