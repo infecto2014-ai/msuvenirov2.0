@@ -1,4 +1,5 @@
-import { Phone, Home, Mail, ArrowLeft } from 'lucide-react';
+import { Phone, Home, Mail, ArrowLeft, Copy, Check } from 'lucide-react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ProtectedLogo from '@/components/ProtectedLogo';
 import heroImage from '@/assets/hero-bg.jpg';
@@ -96,6 +97,15 @@ const getIcon = (link: typeof links[0]) => {
 };
 
 const LinkInBio = () => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyEmail = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigator.clipboard.writeText('msuvenirov39@yandex.ru');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Hero-style background */}
@@ -129,6 +139,7 @@ const LinkInBio = () => {
         <div className="w-full flex flex-col gap-3">
           {links.map((link) => {
             const isExternal = link.external;
+            const isEmail = link.href.startsWith('mailto:');
             return (
               <a
                 key={link.label}
@@ -140,6 +151,15 @@ const LinkInBio = () => {
                 <span className="relative z-10 flex items-center justify-center gap-3">
                   {getIcon(link)}
                   <span>{link.label}</span>
+                  {isEmail && (
+                    <button
+                      onClick={handleCopyEmail}
+                      className="ml-1 p-1 rounded-md hover:bg-black/10 transition-colors"
+                      title="Скопировать почту"
+                    >
+                      {copied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4 text-black/60" />}
+                    </button>
+                  )}
                 </span>
               </a>
             );
