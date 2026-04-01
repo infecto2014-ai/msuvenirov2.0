@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import {
   Accordion,
   AccordionContent,
@@ -8,11 +9,13 @@ import {
 const faqs = [
   {
     question: 'Сколько стоит печать на футболке?',
-    answer: 'Стоимость печати зависит от размера изображения, количества цветов и тиража. Цена DTF-печати начинается от 300 рублей за принт. Точную стоимость рассчитаем после получения макета — отправьте заявку, и мы ответим в течение часа.',
+    answer: 'Стоимость печати зависит от размера изображения, количества цветов и тиража. Точную стоимость рассчитаем после получения макета — отправьте заявку, и мы ответим в течение часа.',
+    link: '/price',
+    linkText: 'Посмотреть стоимость в прайс-листе',
   },
   {
     question: 'Какие сроки изготовления заказа?',
-    answer: 'Стандартный срок изготовления — 2-5 рабочих дней в зависимости от объёма заказа. Срочные заказы выполняем за 24 часа при наличии готового макета. Для корпоративных тиражей сроки обсуждаются индивидуально.',
+    answer: 'Стандартный срок изготовления — 2-5 рабочих дней в зависимости от объёма заказа. Срочные заказы выполняем за 1 час при наличии готового макета. Для корпоративных тиражей сроки обсуждаются индивидуально.',
   },
   {
     question: 'Есть ли доставка?',
@@ -58,7 +61,15 @@ const FAQSection = () => {
                   {faq.question}
                 </AccordionTrigger>
                 <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-5">
-                  {faq.answer}
+                  <p>{faq.answer}</p>
+                  {'link' in faq && faq.link && (
+                    <Link 
+                      to={faq.link} 
+                      className="inline-block mt-3 text-sm font-semibold text-primary hover:text-primary/80 underline underline-offset-4 transition-colors"
+                    >
+                      {faq.linkText} →
+                    </Link>
+                  )}
                 </AccordionContent>
               </AccordionItem>
             ))}
