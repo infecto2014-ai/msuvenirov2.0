@@ -566,7 +566,7 @@ const WideFormatSection = () => (
         </div>
         <div>
           <h2 className="text-base sm:text-lg font-bold text-foreground">Широкоформатная печать</h2>
-          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Баннеры, плёнки, вывески и интерьерная печать</p>
+          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Печать баннеров, плёнок, вывесок и наклеек — наружная и интерьерная реклама в Калининграде</p>
         </div>
       </div>
     </AccordionTrigger>
