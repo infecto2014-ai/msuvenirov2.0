@@ -22,6 +22,7 @@ const badgePrices = [
   { name: 'Значок на цанге, круг 25 мм', qty25: '200', qty100: '185', qty200: '170', qty300: '155', qty400: '140', qty500: '125' },
   { name: 'Значок на цанге, круг 30 мм', qty25: '250', qty100: '230', qty200: '210', qty300: '190', qty400: '170', qty500: '150' },
   { name: 'Значок на цанге, круг 35 мм', qty25: '310', qty100: '285', qty200: '260', qty300: '240', qty400: '210', qty500: '190' },
+  { name: 'Брелок металлический', qty25: '500', qty100: '420', qty200: '400', qty300: '380', qty400: '350', qty500: '330' },
 ];
 const fabricProducts = [
   { name: 'Футболка унисекс 160–180 гр', price: 'от 400 ₽' },
@@ -138,7 +139,7 @@ const BadgeSection = () => (
           <CircleDot className="w-5 h-5 text-primary" />
         </div>
         <div>
-          <h3 className="text-base sm:text-lg font-bold text-foreground">Значки</h3>
+          <h3 className="text-base sm:text-lg font-bold text-foreground">Значки и брелоки</h3>
           <p className="text-xs sm:text-sm text-muted-foreground font-normal">Закатные значки, значки на цанге с полимерной смолой, брелоки</p>
         </div>
       </div>
