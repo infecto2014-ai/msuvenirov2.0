@@ -148,7 +148,7 @@ const MugSection = () => (
         </div>
         <div>
           <h2 className="text-base sm:text-lg font-bold text-foreground">Кружки</h2>
-          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Кружки с сублимацией — белые, хамелеон, глиттер, мрамор и другие</p>
+          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Печать на кружках методом сублимации — идеально для корпоративных подарков и промоакций</p>
         </div>
       </div>
     </AccordionTrigger>
