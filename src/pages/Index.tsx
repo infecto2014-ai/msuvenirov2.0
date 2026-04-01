@@ -1,4 +1,5 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import FloatingOrderButton from '@/components/FloatingOrderButton';
@@ -24,6 +25,20 @@ const SectionLoader = () => (
 );
 
 const Index = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace('#', '');
+      // Delay to allow lazy sections to render
+      const timer = setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [location.hash]);
+
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Header />
