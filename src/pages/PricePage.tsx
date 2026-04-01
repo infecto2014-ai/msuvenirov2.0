@@ -213,6 +213,23 @@ const PriceSection = ({ category }: { category: typeof souvenirs }) => (
   </AccordionItem>
 );
 
+const PricePage = () => {
+  return (
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      <Header />
+      <main className="pt-24 sm:pt-28 pb-12 sm:pb-16">
+        <div className="container mx-auto px-4 sm:px-6">
+          <header className="text-center mb-8 sm:mb-12">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black">
+              <span className="text-foreground">Наш </span>
+              <span className="neon-text">прайс-лист</span>
+            </h1>
+            <p className="text-muted-foreground mt-3 sm:mt-4 max-w-xl mx-auto text-sm sm:text-base">
+              Актуальные цены на все виды печати и сувенирной продукции. Точную стоимость уточняйте у менеджера.
+            </p>
+          </header>
+
+          <div className="max-w-3xl mx-auto">
             <Accordion type="multiple" defaultValue={['Печать на ткани']}>
               <FabricPrintingSection />
               {categories.map((cat) => (
@@ -221,7 +238,6 @@ const PriceSection = ({ category }: { category: typeof souvenirs }) => (
             </Accordion>
           </div>
 
-          {/* CTA */}
           <div className="text-center mt-10 sm:mt-14">
             <p className="text-muted-foreground text-sm mb-4">
               Нужен расчёт для тиража или индивидуального заказа?
