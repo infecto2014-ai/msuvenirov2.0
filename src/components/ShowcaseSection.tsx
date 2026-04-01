@@ -195,7 +195,10 @@ const ShowcaseSection = () => {
                             <h3 className="text-white font-bold text-sm sm:text-base truncate">
                               {product.name}
                             </h3>
-                            <p className="text-white/80 text-[10px] sm:text-[11px] leading-tight mt-0.5">
+                            <p className="text-[hsl(var(--neon-cyan))] text-xs sm:text-sm font-bold mt-0.5">
+                              {product.price}
+                            </p>
+                            <p className="text-white/60 text-[10px] sm:text-[11px] leading-tight mt-0.5">
                               {product.methods}
                             </p>
                           </div>
