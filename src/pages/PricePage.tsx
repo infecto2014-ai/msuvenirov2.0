@@ -3,7 +3,7 @@ import Footer from '@/components/Footer';
 import FloatingOrderButton from '@/components/FloatingOrderButton';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Shirt, Gift, FileText, Maximize, Coffee, CircleDot } from 'lucide-react';
+import { Shirt, Gift, FileText, Maximize, Coffee, CircleDot, CalendarDays } from 'lucide-react';
 
 const mugPrices = [
   { name: 'Кружка белая', qty1: '650', qty10: '450', qty30: '350', qty100: '315', qty200: '250' },
@@ -101,6 +101,39 @@ const wideFormatPrices = [
   { name: 'Баннерная ткань (склейка, пробивание люверсов)', price: '1 300' },
   { name: 'Печать на плёнке OneVision (сетка на самоклеющейся основе)', price: '1 450' },
   { name: 'Накатка виниловой плёнки на ПВХ-пластик 3–10 мм', price: 'от 4 800' },
+];
+
+const quarterlyCalendars = [
+  { name: '«Стандарт+» (4 поля)', midi50: '612', mini50: '402', midi100: '582', mini100: '372' },
+  { name: '«Стандарт» (2 поля)', midi50: '396', mini50: '270', midi100: '390', mini100: '343' },
+  { name: '«Классик» (1 поле)', midi50: '342', mini50: '253', midi100: '336', mini100: '252' },
+  { name: '«Одноблочный» (2 поля)', midi50: '336', mini50: '270', midi100: '300', mini100: '258' },
+];
+
+const wallCalendars = [
+  { name: 'Плакат (1 лист)', qty1_20: '180', qty21_50: '175', qty51_100: '170', qty100plus: '166' },
+  { name: 'Перекидной А4 (13 листов)', qty1_20: '696', qty21_50: '540', qty51_100: '480', qty100plus: '420' },
+  { name: 'Перекидной А3 (13 листов)', qty1_20: '1 392', qty21_50: '1 080', qty51_100: '960', qty100plus: '840' },
+];
+
+const desktopCalendars = [
+  { name: 'Обычный домик', qty20: '62', qty50: '55', qty100: '46' },
+  { name: 'Домик с отрывными месяцами', qty20: '270', qty50: '264', qty100: '240' },
+];
+
+const pocketCalendars = [
+  { qty: 'до 100 шт.', price: '624' },
+  { qty: '200 шт.', price: '1 170' },
+  { qty: '300 шт.', price: '1 796' },
+  { qty: '500 шт.', price: '2 184' },
+  { qty: '1 000 шт.', price: '4 056' },
+  { qty: '10 000 шт.', price: '17 160' },
+];
+
+const calendarOptions = [
+  { name: 'Металлические планки', price: '85' },
+  { name: 'Магнитный курсор с подложкой', price: '100' },
+  { name: 'Матовая ламинация', price: '35' },
 ];
 
 const categories = [souvenirs];
@@ -609,7 +642,181 @@ const PriceSection = ({ category }: { category: typeof souvenirs }) => (
   </AccordionItem>
 );
 
-const PricePage = () => {
+const CalendarSection = () => (
+  <AccordionItem value="Календари" className="border border-border/50 rounded-xl overflow-hidden mb-4 neon-border">
+    <AccordionTrigger className="px-4 sm:px-6 py-4 sm:py-5 hover:no-underline hover:bg-muted/30 transition-colors">
+      <div className="flex items-center gap-3 text-left">
+        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+          <CalendarDays className="w-5 h-5 text-primary" />
+        </div>
+        <div>
+          <h3 className="text-base sm:text-lg font-bold text-foreground">Календари</h3>
+          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Квартальные, настенные, настольные и карманные календари</p>
+        </div>
+      </div>
+    </AccordionTrigger>
+    <AccordionContent className="px-0 pb-0">
+      <Accordion type="multiple" className="px-4 sm:px-6 py-3 space-y-3">
+        {/* Квартальные */}
+        <AccordionItem value="quarterly" className="border border-border/30 rounded-lg overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
+            Квартальные календари
+          </AccordionTrigger>
+          <AccordionContent className="px-0 pb-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/30">
+                    <TableHead className="font-bold text-foreground" rowSpan={2}>Вид календаря</TableHead>
+                    <TableHead className="font-bold text-foreground text-center" colSpan={2}>50 шт</TableHead>
+                    <TableHead className="font-bold text-foreground text-center" colSpan={2}>100 шт</TableHead>
+                  </TableRow>
+                  <TableRow className="bg-muted/20">
+                    <TableHead className="font-bold text-foreground text-center text-xs">МИДИ</TableHead>
+                    <TableHead className="font-bold text-foreground text-center text-xs">МИНИ</TableHead>
+                    <TableHead className="font-bold text-foreground text-center text-xs">МИДИ</TableHead>
+                    <TableHead className="font-bold text-foreground text-center text-xs">МИНИ</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {quarterlyCalendars.map((item) => (
+                    <TableRow key={item.name} className="hover:bg-primary/5 transition-colors">
+                      <TableCell className="font-medium text-foreground">{item.name}</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.midi50} ₽</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.mini50} ₽</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.midi100} ₽</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.mini100} ₽</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        {/* Настенные и плакатные */}
+        <AccordionItem value="wall" className="border border-border/30 rounded-lg overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
+            Настенные и плакатные календари
+          </AccordionTrigger>
+          <AccordionContent className="px-0 pb-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/30">
+                    <TableHead className="font-bold text-foreground">Формат</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">1–20 шт</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">21–50 шт</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">51–100 шт</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">100+ шт</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {wallCalendars.map((item) => (
+                    <TableRow key={item.name} className="hover:bg-primary/5 transition-colors">
+                      <TableCell className="font-medium text-foreground">{item.name}</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty1_20} ₽</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty21_50} ₽</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty51_100} ₽</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty100plus} ₽</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        {/* Настольные домики */}
+        <AccordionItem value="desktop" className="border border-border/30 rounded-lg overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
+            Настольные календари «Домики»
+          </AccordionTrigger>
+          <AccordionContent className="px-0 pb-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/30">
+                    <TableHead className="font-bold text-foreground">Вид домика</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">до 20 шт</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">50 шт</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">100 шт</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {desktopCalendars.map((item) => (
+                    <TableRow key={item.name} className="hover:bg-primary/5 transition-colors">
+                      <TableCell className="font-medium text-foreground">{item.name}</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty20} ₽</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty50} ₽</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty100} ₽</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        {/* Карманные */}
+        <AccordionItem value="pocket" className="border border-border/30 rounded-lg overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
+            Карманные календари
+          </AccordionTrigger>
+          <AccordionContent className="px-0 pb-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/30">
+                    <TableHead className="font-bold text-foreground">Тираж</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">Цена за тираж</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {pocketCalendars.map((item) => (
+                    <TableRow key={item.qty} className="hover:bg-primary/5 transition-colors">
+                      <TableCell className="font-medium text-foreground">{item.qty}</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.price} ₽</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        {/* Дополнительные опции */}
+        <AccordionItem value="calendar-options" className="border border-border/30 rounded-lg overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
+            Дополнительные опции
+          </AccordionTrigger>
+          <AccordionContent className="px-0 pb-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/30">
+                    <TableHead className="font-bold text-foreground">Услуга</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">Цена</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {calendarOptions.map((item) => (
+                    <TableRow key={item.name} className="hover:bg-primary/5 transition-colors">
+                      <TableCell className="font-medium text-foreground">{item.name}</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.price} ₽</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </AccordionContent>
+  </AccordionItem>
+);
+
+
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Header />
@@ -632,6 +839,7 @@ const PricePage = () => {
               <BadgeSection />
               <WideFormatSection />
               <PolygraphySection />
+              <CalendarSection />
               {categories.map((cat) => (
                 <PriceSection key={cat.title} category={cat} />
               ))}
