@@ -342,7 +342,7 @@ const FabricPrintingSection = () => {
             <Shirt className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h3 className="text-base sm:text-lg font-bold text-foreground">Печать на ткани</h3>
+            <h2 className="text-base sm:text-lg font-bold text-foreground">Печать на ткани</h2>
             <p className="text-xs sm:text-sm text-muted-foreground font-normal">Футболки, худи, шопперы и другой текстиль с вашим дизайном</p>
           </div>
         </div>
