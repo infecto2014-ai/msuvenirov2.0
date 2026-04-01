@@ -665,6 +665,7 @@ const PricePage = () => {
               <BadgeSection />
               <WideFormatSection />
               <PolygraphySection />
+              <CalendarSection />
               {categories.map((cat) => (
                 <PriceSection key={cat.title} category={cat} />
               ))}
