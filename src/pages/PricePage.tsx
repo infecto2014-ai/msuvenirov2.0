@@ -147,7 +147,7 @@ const MugSection = () => (
           <Coffee className="w-5 h-5 text-primary" />
         </div>
         <div>
-          <h3 className="text-base sm:text-lg font-bold text-foreground">Кружки</h3>
+          <h2 className="text-base sm:text-lg font-bold text-foreground">Кружки</h2>
           <p className="text-xs sm:text-sm text-muted-foreground font-normal">Кружки с сублимацией — белые, хамелеон, глиттер, мрамор и другие</p>
         </div>
       </div>
