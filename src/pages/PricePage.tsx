@@ -29,11 +29,14 @@ const badgePricesBreloki = [
 ];
 
 const magnetPrices = [
-  { name: 'Прямоугольник 40×60 мм', qty25: '31', qty100: '30', qty200: '26', qty300: '24', qty400: '24', qty500: '23' },
-  { name: 'Квадрат 60×60 мм', qty25: '34', qty100: '31', qty200: '27', qty300: '26', qty400: '25', qty500: '24' },
-  { name: 'Прямоугольник 60×80 мм', qty25: '37', qty100: '34', qty200: '30', qty300: '29', qty400: '26', qty500: '25' },
-  { name: 'Круг 68×68 мм', qty25: '34', qty100: '31', qty200: '27', qty300: '26', qty400: '25', qty500: '24' },
-  { name: 'Круг 50×50 мм', qty25: '31', qty100: '30', qty200: '26', qty300: '24', qty400: '24', qty500: '23' },
+  { name: 'Магнит винил 0,4–0,7 мм Прямоугольник 40×60 мм', qty100: '35', qty200: '30', qty300: '28', qty400: '28', qty500: '26' },
+  { name: 'Магнит винил 0,4–0,7 мм Квадрат 60×60 мм', qty100: '36', qty200: '31', qty300: '30', qty400: '29', qty500: '28' },
+  { name: 'Магнит винил 0,4–0,7 мм Прямоугольник 60×80 мм', qty100: '39', qty200: '35', qty300: '33', qty400: '30', qty500: '29' },
+  { name: 'Магнит винил 0,4–0,7 мм Круг 68×68 мм', qty100: '36', qty200: '31', qty300: '30', qty400: '29', qty500: '28' },
+  { name: 'Магнит винил 0,4–0,7 мм Круг 50×50 мм', qty100: '35', qty200: '30', qty300: '28', qty400: '28', qty500: '26' },
+  { name: 'Магнит акрил 105×105 мм', qty100: '160', qty200: '140', qty300: '120', qty400: '110', qty500: '90' },
+  { name: 'Магнит акрил 105×70 мм', qty100: '160', qty200: '140', qty300: '120', qty400: '110', qty500: '90' },
+  { name: 'Магнит акрил 80×55 мм', qty100: '130', qty200: '100', qty300: '90', qty400: '80', qty500: '75' },
 ];
 const fabricProducts = [
   { name: 'Футболка унисекс 160–180 гр', price: 'от 400 ₽' },
@@ -142,6 +145,33 @@ const MugSection = () => (
   </AccordionItem>
 );
 
+const MagnetTable = ({ items }: { items: Array<{ name: string; qty100: string; qty200: string; qty300: string; qty400: string; qty500: string }> }) => (
+  <Table>
+    <TableHeader>
+      <TableRow className="bg-muted/30">
+        <TableHead className="font-bold text-foreground">Наименование</TableHead>
+        <TableHead className="font-bold text-foreground text-center">100 шт</TableHead>
+        <TableHead className="font-bold text-foreground text-center">200 шт</TableHead>
+        <TableHead className="font-bold text-foreground text-center">300 шт</TableHead>
+        <TableHead className="font-bold text-foreground text-center">400 шт</TableHead>
+        <TableHead className="font-bold text-foreground text-center">500 шт</TableHead>
+      </TableRow>
+    </TableHeader>
+    <TableBody>
+      {items.map((item) => (
+        <TableRow key={item.name} className="hover:bg-primary/5 transition-colors">
+          <TableCell className="font-medium text-foreground">{item.name}</TableCell>
+          <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty100} ₽</TableCell>
+          <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty200} ₽</TableCell>
+          <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty300} ₽</TableCell>
+          <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty400} ₽</TableCell>
+          <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty500} ₽</TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
+);
+
 const QtyTable = ({ items }: { items: Array<{ name: string; qty25: string; qty100: string; qty200: string; qty300: string; qty400: string; qty500: string }> }) => (
   <Table>
     <TableHeader>
@@ -210,11 +240,11 @@ const BadgeSection = () => (
 
         <AccordionItem value="magnity" className="border border-border/30 rounded-lg overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
-            Магниты (винил 0,4–0,7 мм)
+            Магниты
           </AccordionTrigger>
           <AccordionContent className="px-0 pb-0">
             <div className="overflow-x-auto">
-              <QtyTable items={magnetPrices} />
+              <MagnetTable items={magnetPrices} />
             </div>
           </AccordionContent>
         </AccordionItem>
