@@ -154,7 +154,8 @@ const MugSection = () => (
     </AccordionTrigger>
     <AccordionContent className="px-0 pb-0">
       <div className="overflow-x-auto">
-        <Table>
+        <Table aria-label="Цены на кружки с печатью">
+          <caption className="sr-only">Прайс-лист на кружки с сублимацией — цены за штуку в зависимости от тиража</caption>
           <TableHeader>
             <TableRow className="bg-muted/30">
               <TableHead className="font-bold text-foreground">Наименование</TableHead>
