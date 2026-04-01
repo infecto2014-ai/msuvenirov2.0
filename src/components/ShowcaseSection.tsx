@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Navigation, Pagination } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
-import { ShoppingBag } from 'lucide-react';
+import { ShoppingBag, FileText } from 'lucide-react';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/navigation';
@@ -24,60 +25,70 @@ const products = [
     id: 1,
     name: 'Футболка',
     methods: 'DTF, Шелкография, Сублимация',
+    price: 'от 1 350 ₽',
     image: imgTshirt,
   },
   {
     id: 2,
     name: 'Худи',
     methods: 'DTF, Шелкография, Сублимация',
+    price: 'от 2 350 ₽',
     image: imgHoodie,
   },
   {
     id: 3,
     name: 'Шоппер',
     methods: 'DTF, Шелкография, Сублимация',
+    price: 'от 900 ₽',
     image: imgShopper,
   },
   {
     id: 4,
     name: 'Кружка',
     methods: 'Сублимация, Гравировка, УФ',
+    price: 'от 450 ₽',
     image: imgMug,
   },
   {
     id: 5,
     name: 'Канцелярия',
     methods: 'Цифровая печать, УФ',
+    price: 'от 60 ₽',
     image: imgStationery,
   },
   {
     id: 6,
     name: 'Бутылочка для воды',
     methods: 'УФ-печать',
+    price: 'от 800 ₽',
     image: imgBottle,
   },
   {
     id: 7,
     name: 'Брелоки/Значки',
     methods: 'Цифровая печать, УФ',
+    price: 'от 100 ₽',
     image: imgKeychains,
   },
   {
     id: 8,
     name: 'Акриловый стенд',
     methods: 'УФ-печать',
+    price: 'от 500 ₽',
     image: imgAcrylicStand,
   },
   {
     id: 9,
     name: 'Бейсболка',
     methods: 'DTF, Шелкография',
+    price: 'от 1 000 ₽',
     image: imgCap,
   },
   {
     id: 10,
     name: '3D стикеры',
     methods: 'Эпоксидная смола',
+    price: 'от 500 ₽',
     image: imgStickers3d,
   },
 ];
@@ -185,7 +196,10 @@ const ShowcaseSection = () => {
                             <h3 className="text-white font-bold text-sm sm:text-base truncate">
                               {product.name}
                             </h3>
-                            <p className="text-white/80 text-[10px] sm:text-[11px] leading-tight mt-0.5">
+                            <p className="text-[hsl(var(--neon-cyan))] text-xs sm:text-sm font-bold mt-0.5">
+                              {product.price}
+                            </p>
+                            <p className="text-white/60 text-[10px] sm:text-[11px] leading-tight mt-0.5">
                               {product.methods}
                             </p>
                           </div>
@@ -229,6 +243,17 @@ const ShowcaseSection = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </button>
+        </div>
+
+        {/* Price List Button */}
+        <div className="text-center mt-10">
+          <Link
+            to="/price"
+            className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))] text-white font-bold text-sm sm:text-base hover:scale-105 transition-transform duration-300 shadow-lg shadow-[hsl(var(--neon-cyan)/0.3)]"
+          >
+            <FileText className="w-5 h-5" />
+            Прайс на наши услуги
+          </Link>
         </div>
       </div>
 
