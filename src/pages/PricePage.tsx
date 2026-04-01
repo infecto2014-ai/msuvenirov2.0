@@ -999,14 +999,14 @@ const PricePage = () => {
           </header>
 
           <section className="max-w-3xl mx-auto" aria-label="Каталог услуг и цен">
-            <Accordion type="multiple" defaultValue={['Печать на ткани']}>
+            <Accordion type="multiple" defaultValue={['Подарки']}>
+              <GiftsSection />
               <FabricPrintingSection />
               <MugSection />
               <BadgeSection />
               <WideFormatSection />
               <PolygraphySection />
               <CalendarSection />
-              <GiftsSection />
             </Accordion>
           </section>
 
