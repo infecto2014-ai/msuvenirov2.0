@@ -24,10 +24,10 @@ const fabricProducts = [
 ];
 
 const printingPrices = [
-  { format: 'А6', qty1_4: '600 ₽', qty5_10: '450 ₽' },
-  { format: 'А5', qty1_4: '600 ₽', qty5_10: '510 ₽' },
-  { format: 'А4', qty1_4: '900 ₽', qty5_10: '760 ₽' },
-  { format: 'А3', qty1_4: '1 300 ₽', qty5_10: '1 100 ₽' },
+  { format: 'А6', qty1_4: '600 ₽', qty5_10: '350 ₽', qty20_50: '280 ₽' },
+  { format: 'А5', qty1_4: '600 ₽', qty5_10: '450 ₽', qty20_50: '330 ₽' },
+  { format: 'А4', qty1_4: '900 ₽', qty5_10: '650 ₽', qty20_50: '450 ₽' },
+  { format: 'А3', qty1_4: '1 300 ₽', qty5_10: '900 ₽', qty20_50: '680 ₽' },
 ];
 
 const souvenirs = {
@@ -178,7 +178,8 @@ const FabricPrintingSection = () => {
                   <TableHead className="font-bold text-foreground">Формат</TableHead>
                   <TableHead className="font-bold text-foreground text-center">1–4 шт</TableHead>
                   <TableHead className="font-bold text-foreground text-center">5–10 шт</TableHead>
-                  <TableHead className="font-bold text-foreground text-center">11+ шт</TableHead>
+                  <TableHead className="font-bold text-foreground text-center">20–50 шт</TableHead>
+                  <TableHead className="font-bold text-foreground text-center">50+ шт</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -187,6 +188,7 @@ const FabricPrintingSection = () => {
                     <TableCell className="font-medium text-foreground">{row.format}</TableCell>
                     <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{row.qty1_4}</TableCell>
                     <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{row.qty5_10}</TableCell>
+                    <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{row.qty20_50}</TableCell>
                     <TableCell className="text-center">
                       <button
                         onClick={() => handleCalculate(row.format)}
