@@ -136,9 +136,8 @@ const FabricPrintingSection = () => {
                     <TableCell className="text-center">
                       <button
                         onClick={() => handleCalculate(row.format)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold gradient-btn gradient-btn-pulse"
                       >
-                        <Calculator className="w-3 h-3" />
                         Рассчитать
                       </button>
                     </TableCell>
