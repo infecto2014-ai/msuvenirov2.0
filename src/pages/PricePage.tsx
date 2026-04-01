@@ -3,7 +3,7 @@ import Footer from '@/components/Footer';
 import FloatingOrderButton from '@/components/FloatingOrderButton';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Shirt, Gift, FileText, Maximize, Coffee } from 'lucide-react';
+import { Shirt, Gift, FileText, Maximize, Coffee, CircleDot } from 'lucide-react';
 
 const mugPrices = [
   { name: 'Кружка белая', qty1: '650', qty10: '450', qty30: '350', qty100: '315', qty200: '250' },
@@ -14,6 +14,15 @@ const mugPrices = [
   { name: 'Кружка золото/серебро/стекло', qty1: '1 320', qty10: '790', qty30: '730', qty100: '660', qty200: '530' },
 ];
 
+const badgePrices = [
+  { name: 'Значок закатный 38 мм', qty25: '85', qty100: '45', qty200: '38', qty300: '35', qty400: '32', qty500: '30' },
+  { name: 'Значок закатный 56 мм', qty25: '100', qty100: '49', qty200: '45', qty300: '41', qty400: '38', qty500: '33' },
+  { name: 'Брелок акриловый 40x56 мм', qty25: '130', qty100: '65,10', qty200: '59,70', qty300: '54,30', qty400: '48,80', qty500: '43,40' },
+  { name: 'Значок на цанге, круг 15 мм', qty25: '120', qty100: '110', qty200: '100', qty300: '92', qty400: '85', qty500: '75' },
+  { name: 'Значок на цанге, круг 25 мм', qty25: '200', qty100: '185', qty200: '170', qty300: '155', qty400: '140', qty500: '125' },
+  { name: 'Значок на цанге, круг 30 мм', qty25: '250', qty100: '230', qty200: '210', qty300: '190', qty400: '170', qty500: '150' },
+  { name: 'Значок на цанге, круг 35 мм', qty25: '310', qty100: '285', qty200: '260', qty300: '240', qty400: '210', qty500: '190' },
+];
 const fabricProducts = [
   { name: 'Футболка унисекс 160–180 гр', price: 'от 400 ₽' },
   { name: 'Футболка детская 160–180 гр', price: 'от 300 ₽' },
@@ -121,6 +130,51 @@ const MugSection = () => (
   </AccordionItem>
 );
 
+const BadgeSection = () => (
+  <AccordionItem value="Значки" className="border border-border/50 rounded-xl overflow-hidden mb-4 neon-border">
+    <AccordionTrigger className="px-4 sm:px-6 py-4 sm:py-5 hover:no-underline hover:bg-muted/30 transition-colors">
+      <div className="flex items-center gap-3 text-left">
+        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+          <CircleDot className="w-5 h-5 text-primary" />
+        </div>
+        <div>
+          <h3 className="text-base sm:text-lg font-bold text-foreground">Значки</h3>
+          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Закатные значки, значки на цанге с полимерной смолой, брелоки</p>
+        </div>
+      </div>
+    </AccordionTrigger>
+    <AccordionContent className="px-0 pb-0">
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-muted/30">
+              <TableHead className="font-bold text-foreground">Наименование</TableHead>
+              <TableHead className="font-bold text-foreground text-center">25 шт</TableHead>
+              <TableHead className="font-bold text-foreground text-center">100 шт</TableHead>
+              <TableHead className="font-bold text-foreground text-center">200 шт</TableHead>
+              <TableHead className="font-bold text-foreground text-center">300 шт</TableHead>
+              <TableHead className="font-bold text-foreground text-center">400 шт</TableHead>
+              <TableHead className="font-bold text-foreground text-center">500 шт</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {badgePrices.map((item) => (
+              <TableRow key={item.name} className="hover:bg-primary/5 transition-colors">
+                <TableCell className="font-medium text-foreground">{item.name}</TableCell>
+                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty25} ₽</TableCell>
+                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty100} ₽</TableCell>
+                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty200} ₽</TableCell>
+                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty300} ₽</TableCell>
+                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty400} ₽</TableCell>
+                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty500} ₽</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </AccordionContent>
+  </AccordionItem>
+);
 const FabricPrintingSection = () => {
   const handleCalculate = (format: string) => {
     const orderBtn = document.querySelector('[data-order-button]') as HTMLElement;
@@ -286,6 +340,7 @@ const PricePage = () => {
             <Accordion type="multiple" defaultValue={['Печать на ткани']}>
               <FabricPrintingSection />
               <MugSection />
+              <BadgeSection />
               {categories.map((cat) => (
                 <PriceSection key={cat.title} category={cat} />
               ))}
