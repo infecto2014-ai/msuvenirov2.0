@@ -142,6 +142,35 @@ const MugSection = () => (
   </AccordionItem>
 );
 
+const QtyTable = ({ items }: { items: Array<{ name: string; qty25: string; qty100: string; qty200: string; qty300: string; qty400: string; qty500: string }> }) => (
+  <Table>
+    <TableHeader>
+      <TableRow className="bg-muted/30">
+        <TableHead className="font-bold text-foreground">Наименование</TableHead>
+        <TableHead className="font-bold text-foreground text-center">25 шт</TableHead>
+        <TableHead className="font-bold text-foreground text-center">100 шт</TableHead>
+        <TableHead className="font-bold text-foreground text-center">200 шт</TableHead>
+        <TableHead className="font-bold text-foreground text-center">300 шт</TableHead>
+        <TableHead className="font-bold text-foreground text-center">400 шт</TableHead>
+        <TableHead className="font-bold text-foreground text-center">500 шт</TableHead>
+      </TableRow>
+    </TableHeader>
+    <TableBody>
+      {items.map((item) => (
+        <TableRow key={item.name} className="hover:bg-primary/5 transition-colors">
+          <TableCell className="font-medium text-foreground">{item.name}</TableCell>
+          <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty25} ₽</TableCell>
+          <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty100} ₽</TableCell>
+          <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty200} ₽</TableCell>
+          <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty300} ₽</TableCell>
+          <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty400} ₽</TableCell>
+          <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty500} ₽</TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
+);
+
 const BadgeSection = () => (
   <AccordionItem value="Значки" className="border border-border/50 rounded-xl overflow-hidden mb-4 neon-border">
     <AccordionTrigger className="px-4 sm:px-6 py-4 sm:py-5 hover:no-underline hover:bg-muted/30 transition-colors">
@@ -150,40 +179,46 @@ const BadgeSection = () => (
           <CircleDot className="w-5 h-5 text-primary" />
         </div>
         <div>
-          <h3 className="text-base sm:text-lg font-bold text-foreground">Значки и брелоки</h3>
-          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Закатные значки, значки на цанге с полимерной смолой, брелоки</p>
+          <h3 className="text-base sm:text-lg font-bold text-foreground">Значки, брелоки, магниты</h3>
+          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Закатные значки, значки на цанге, брелоки, магниты на виниле</p>
         </div>
       </div>
     </AccordionTrigger>
     <AccordionContent className="px-0 pb-0">
-      <div className="overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow className="bg-muted/30">
-              <TableHead className="font-bold text-foreground">Наименование</TableHead>
-              <TableHead className="font-bold text-foreground text-center">25 шт</TableHead>
-              <TableHead className="font-bold text-foreground text-center">100 шт</TableHead>
-              <TableHead className="font-bold text-foreground text-center">200 шт</TableHead>
-              <TableHead className="font-bold text-foreground text-center">300 шт</TableHead>
-              <TableHead className="font-bold text-foreground text-center">400 шт</TableHead>
-              <TableHead className="font-bold text-foreground text-center">500 шт</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {badgePrices.map((item) => (
-              <TableRow key={item.name} className="hover:bg-primary/5 transition-colors">
-                <TableCell className="font-medium text-foreground">{item.name}</TableCell>
-                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty25} ₽</TableCell>
-                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty100} ₽</TableCell>
-                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty200} ₽</TableCell>
-                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty300} ₽</TableCell>
-                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty400} ₽</TableCell>
-                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty500} ₽</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+      <Accordion type="multiple" className="px-4 sm:px-6 py-3 space-y-3">
+        <AccordionItem value="znachki" className="border border-border/30 rounded-lg overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
+            Значки
+          </AccordionTrigger>
+          <AccordionContent className="px-0 pb-0">
+            <div className="overflow-x-auto">
+              <QtyTable items={badgePricesZnachki} />
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="breloki" className="border border-border/30 rounded-lg overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
+            Брелоки
+          </AccordionTrigger>
+          <AccordionContent className="px-0 pb-0">
+            <div className="overflow-x-auto">
+              <QtyTable items={badgePricesBreloki} />
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="magnity" className="border border-border/30 rounded-lg overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
+            Магниты (винил 0,4–0,7 мм)
+          </AccordionTrigger>
+          <AccordionContent className="px-0 pb-0">
+            <div className="overflow-x-auto">
+              <QtyTable items={magnetPrices} />
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </AccordionContent>
   </AccordionItem>
 );
