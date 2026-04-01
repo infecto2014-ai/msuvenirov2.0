@@ -434,7 +434,7 @@ const PolygraphySection = () => (
         </div>
         <div>
           <h2 className="text-base sm:text-lg font-bold text-foreground">Полиграфия</h2>
-          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Блокноты, листовки, флаеры, визитки</p>
+          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Цветная печать визиток, листовок, флаеров и блокнотов — оперативно и по доступным ценам</p>
         </div>
       </div>
     </AccordionTrigger>
