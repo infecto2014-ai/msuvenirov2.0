@@ -24,10 +24,10 @@ const fabricProducts = [
 ];
 
 const printingPrices = [
-  { format: 'А6', qty1_4: '600 ₽', qty5_10: '450 ₽' },
-  { format: 'А5', qty1_4: '600 ₽', qty5_10: '510 ₽' },
-  { format: 'А4', qty1_4: '900 ₽', qty5_10: '760 ₽' },
-  { format: 'А3', qty1_4: '1 300 ₽', qty5_10: '1 100 ₽' },
+  { format: 'А6', qty1_4: '600 ₽', qty5_10: '350 ₽', qty20_50: '280 ₽' },
+  { format: 'А5', qty1_4: '600 ₽', qty5_10: '450 ₽', qty20_50: '330 ₽' },
+  { format: 'А4', qty1_4: '900 ₽', qty5_10: '650 ₽', qty20_50: '450 ₽' },
+  { format: 'А3', qty1_4: '1 300 ₽', qty5_10: '900 ₽', qty20_50: '680 ₽' },
 ];
 
 const souvenirs = {
