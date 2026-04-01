@@ -770,7 +770,10 @@ const CalendarSection = () => (
         {/* Карманные */}
         <AccordionItem value="pocket" className="border border-border/30 rounded-lg overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
-            Карманные календари
+            <div>
+              <span>Карманные календари</span>
+              <p className="text-xs font-normal text-muted-foreground mt-1">60×90 мм</p>
+            </div>
           </AccordionTrigger>
           <AccordionContent className="px-0 pb-0">
             <div className="overflow-x-auto">
