@@ -433,7 +433,7 @@ const PolygraphySection = () => (
           <FileText className="w-5 h-5 text-primary" />
         </div>
         <div>
-          <h3 className="text-base sm:text-lg font-bold text-foreground">Полиграфия</h3>
+          <h2 className="text-base sm:text-lg font-bold text-foreground">Полиграфия</h2>
           <p className="text-xs sm:text-sm text-muted-foreground font-normal">Блокноты, листовки, флаеры, визитки</p>
         </div>
       </div>
