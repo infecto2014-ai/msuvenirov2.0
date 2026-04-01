@@ -103,6 +103,39 @@ const wideFormatPrices = [
   { name: 'Накатка виниловой плёнки на ПВХ-пластик 3–10 мм', price: 'от 4 800' },
 ];
 
+const quarterlyCalendars = [
+  { name: '«Стандарт+» (4 поля)', midi50: '612', mini50: '402', midi100: '582', mini100: '372' },
+  { name: '«Стандарт» (2 поля)', midi50: '396', mini50: '270', midi100: '390', mini100: '343' },
+  { name: '«Классик» (1 поле)', midi50: '342', mini50: '253', midi100: '336', mini100: '252' },
+  { name: '«Одноблочный» (2 поля)', midi50: '336', mini50: '270', midi100: '300', mini100: '258' },
+];
+
+const wallCalendars = [
+  { name: 'Плакат (1 лист)', qty1_20: '180', qty21_50: '175', qty51_100: '170', qty100plus: '166' },
+  { name: 'Перекидной А4 (13 листов)', qty1_20: '696', qty21_50: '540', qty51_100: '480', qty100plus: '420' },
+  { name: 'Перекидной А3 (13 листов)', qty1_20: '1 392', qty21_50: '1 080', qty51_100: '960', qty100plus: '840' },
+];
+
+const desktopCalendars = [
+  { name: 'Обычный домик', qty20: '62', qty50: '55', qty100: '46' },
+  { name: 'Домик с отрывными месяцами', qty20: '270', qty50: '264', qty100: '240' },
+];
+
+const pocketCalendars = [
+  { qty: 'до 100 шт.', price: '624' },
+  { qty: '200 шт.', price: '1 170' },
+  { qty: '300 шт.', price: '1 796' },
+  { qty: '500 шт.', price: '2 184' },
+  { qty: '1 000 шт.', price: '4 056' },
+  { qty: '10 000 шт.', price: '17 160' },
+];
+
+const calendarOptions = [
+  { name: 'Металлические планки', price: '85' },
+  { name: 'Магнитный курсор с подложкой', price: '100' },
+  { name: 'Матовая ламинация', price: '35' },
+];
+
 const categories = [souvenirs];
 
 const MugSection = () => (
