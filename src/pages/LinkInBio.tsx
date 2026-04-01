@@ -42,6 +42,12 @@ const links = [
     external: false,
   },
   {
+    label: 'Прайс-лист',
+    href: '/price',
+    icon: FileText,
+    external: false,
+  },
+  {
     label: 'ВКонтакте',
     href: 'https://vk.com/msuvenirov39',
     icon: null,
