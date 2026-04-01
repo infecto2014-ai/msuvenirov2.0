@@ -385,7 +385,7 @@ const WideFormatSection = () => (
   </AccordionItem>
 );
 
-
+const PriceSection = ({ category }: { category: typeof souvenirs }) => (
   <AccordionItem value={category.title} className="border border-border/50 rounded-xl overflow-hidden mb-4 neon-border">
     <AccordionTrigger className="px-4 sm:px-6 py-4 sm:py-5 hover:no-underline hover:bg-muted/30 transition-colors">
       <div className="flex items-center gap-3 text-left">
