@@ -3,7 +3,16 @@ import Footer from '@/components/Footer';
 import FloatingOrderButton from '@/components/FloatingOrderButton';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Shirt, Gift, FileText, Maximize } from 'lucide-react';
+import { Shirt, Gift, FileText, Maximize, Coffee } from 'lucide-react';
+
+const mugPrices = [
+  { name: 'Кружка белая', qty1: '650', qty10: '450', qty30: '350', qty100: '315', qty200: '250' },
+  { name: 'Кружка белая, цветная внутри или ручка', qty1: '750', qty10: '550', qty30: '470', qty100: '425', qty200: '340' },
+  { name: 'Кружка ХАМЕЛЕОН', qty1: '1 100', qty10: '980', qty30: '890', qty100: '815', qty200: '650' },
+  { name: 'Кружка глиттер градиент', qty1: '1 630', qty10: '980', qty30: '890', qty100: '815', qty200: '650' },
+  { name: 'Кружка мрамор/зеркальное золото или серебро', qty1: '1 945', qty10: '1 170', qty30: '1 070', qty100: '970', qty200: '780' },
+  { name: 'Кружка золото/серебро/стекло', qty1: '1 320', qty10: '790', qty30: '730', qty100: '660', qty200: '530' },
+];
 
 const fabricProducts = [
   { name: 'Футболка унисекс 160–180 гр', price: 'от 400 ₽' },
@@ -67,6 +76,50 @@ const wideFormat = {
 };
 
 const categories = [souvenirs, polygraphy, wideFormat];
+
+const MugSection = () => (
+  <AccordionItem value="Кружки" className="border border-border/50 rounded-xl overflow-hidden mb-4 neon-border">
+    <AccordionTrigger className="px-4 sm:px-6 py-4 sm:py-5 hover:no-underline hover:bg-muted/30 transition-colors">
+      <div className="flex items-center gap-3 text-left">
+        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+          <Coffee className="w-5 h-5 text-primary" />
+        </div>
+        <div>
+          <h3 className="text-base sm:text-lg font-bold text-foreground">Кружки</h3>
+          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Кружки с сублимацией — белые, хамелеон, глиттер, мрамор и другие</p>
+        </div>
+      </div>
+    </AccordionTrigger>
+    <AccordionContent className="px-0 pb-0">
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-muted/30">
+              <TableHead className="font-bold text-foreground">Наименование</TableHead>
+              <TableHead className="font-bold text-foreground text-center">1 шт</TableHead>
+              <TableHead className="font-bold text-foreground text-center">10 шт</TableHead>
+              <TableHead className="font-bold text-foreground text-center">30 шт</TableHead>
+              <TableHead className="font-bold text-foreground text-center">100 шт</TableHead>
+              <TableHead className="font-bold text-foreground text-center">200 шт</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {mugPrices.map((item) => (
+              <TableRow key={item.name} className="hover:bg-primary/5 transition-colors">
+                <TableCell className="font-medium text-foreground">{item.name}</TableCell>
+                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty1} ₽</TableCell>
+                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty10} ₽</TableCell>
+                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty30} ₽</TableCell>
+                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty100} ₽</TableCell>
+                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty200} ₽</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </AccordionContent>
+  </AccordionItem>
+);
 
 const FabricPrintingSection = () => {
   const handleCalculate = (format: string) => {
@@ -230,6 +283,7 @@ const PricePage = () => {
           <div className="max-w-3xl mx-auto">
             <Accordion type="multiple" defaultValue={['Печать на ткани']}>
               <FabricPrintingSection />
+              <MugSection />
               {categories.map((cat) => (
                 <PriceSection key={cat.title} category={cat} />
               ))}
