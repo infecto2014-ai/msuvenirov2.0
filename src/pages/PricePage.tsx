@@ -340,7 +340,7 @@ const PricePage = () => {
             <Accordion type="multiple" defaultValue={['Печать на ткани']}>
               <FabricPrintingSection />
               <MugSection />
-              {categories.map((cat) => (
+              <BadgeSection />
                 <PriceSection key={cat.title} category={cat} />
               ))}
             </Accordion>
