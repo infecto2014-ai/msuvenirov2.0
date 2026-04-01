@@ -148,7 +148,7 @@ const MugSection = () => (
         </div>
         <div>
           <h2 className="text-base sm:text-lg font-bold text-foreground">Кружки</h2>
-          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Кружки с сублимацией — белые, хамелеон, глиттер, мрамор и другие</p>
+          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Печать на кружках методом сублимации — идеально для корпоративных подарков и промоакций</p>
         </div>
       </div>
     </AccordionTrigger>
@@ -249,7 +249,7 @@ const BadgeSection = () => (
         </div>
         <div>
           <h2 className="text-base sm:text-lg font-bold text-foreground">Значки, брелоки, магниты</h2>
-          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Закатные значки, значки на цанге, брелоки, магниты, стикеры 3D</p>
+          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Изготовление закатных значков, брелоков, магнитов и 3D-стикеров — мерч, промо, сувениры</p>
         </div>
       </div>
     </AccordionTrigger>
@@ -342,8 +342,8 @@ const FabricPrintingSection = () => {
             <Shirt className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h2 className="text-base sm:text-lg font-bold text-foreground">Печать на ткани</h2>
-            <p className="text-xs sm:text-sm text-muted-foreground font-normal">Футболки, худи, шопперы и другой текстиль с вашим дизайном</p>
+          <h2 className="text-base sm:text-lg font-bold text-foreground">Печать на ткани</h2>
+            <p className="text-xs sm:text-sm text-muted-foreground font-normal">DTF-печать на футболках, худи, шопперах — от 1 штуки, своё производство в Калининграде</p>
           </div>
         </div>
       </AccordionTrigger>
@@ -434,7 +434,7 @@ const PolygraphySection = () => (
         </div>
         <div>
           <h2 className="text-base sm:text-lg font-bold text-foreground">Полиграфия</h2>
-          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Блокноты, листовки, флаеры, визитки</p>
+          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Цветная печать визиток, листовок, флаеров и блокнотов — оперативно и по доступным ценам</p>
         </div>
       </div>
     </AccordionTrigger>
@@ -566,7 +566,7 @@ const WideFormatSection = () => (
         </div>
         <div>
           <h2 className="text-base sm:text-lg font-bold text-foreground">Широкоформатная печать</h2>
-          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Баннеры, плёнки, вывески и интерьерная печать</p>
+          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Печать баннеров, плёнок, вывесок и наклеек — наружная и интерьерная реклама в Калининграде</p>
         </div>
       </div>
     </AccordionTrigger>
@@ -653,7 +653,7 @@ const CalendarSection = () => (
         </div>
         <div>
           <h2 className="text-base sm:text-lg font-bold text-foreground">Календари</h2>
-          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Квартальные, настенные, настольные и карманные календари</p>
+          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Печать календарей любого типа — квартальные, настенные, настольные и карманные с вашим дизайном</p>
         </div>
       </div>
     </AccordionTrigger>
@@ -834,11 +834,11 @@ const PricePage = () => {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Helmet>
-        <title>Цены на печать и сувениры в Калининграде | Мастерская сувениров</title>
+        <title>Прайс на полиграфию и печать сувениров в Калининграде | Мастерская сувениров</title>
         <meta name="description" content="Прайс-лист: печать на футболках, кружках, визитки, баннеры, календари, значки в Калининграде. Цены от производителя. Закажите расчёт!" />
         <meta name="keywords" content="прайс печать калининград, цены полиграфия калининград, печать на футболках цена, визитки калининград, широкоформатная печать, сувениры на заказ, календари печать, значки брелоки" />
         <link rel="canonical" href="https://msuvenirov.ru/price" />
-        <meta property="og:title" content="Цены на печать и сувениры в Калининграде | Мастерская сувениров" />
+        <meta property="og:title" content="Прайс на полиграфию и печать сувениров в Калининграде | Мастерская сувениров" />
         <meta property="og:description" content="Актуальные цены на печать, полиграфию и сувенирную продукцию. Собственное производство в Калининграде." />
         <meta property="og:url" content="https://msuvenirov.ru/price" />
         <meta property="og:type" content="website" />
@@ -904,11 +904,11 @@ const PricePage = () => {
         <div className="container mx-auto px-4 sm:px-6">
           <header className="text-center mb-8 sm:mb-12">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-black">
-              <span className="text-foreground">Прайс-лист на услуги печати </span>
-              <span className="neon-text">и сувенирную продукцию</span>
+              <span className="text-foreground">Прайс-лист на полиграфию </span>
+              <span className="neon-text">и печать сувениров в Калининграде</span>
             </h1>
             <p className="text-muted-foreground mt-3 sm:mt-4 max-w-xl mx-auto text-sm sm:text-base">
-              Актуальные цены на все виды печати и сувенирной продукции в Калининграде. Точную стоимость уточняйте у менеджера.
+              Актуальные цены на DTF-печать, широкоформатную печать, визитки, календари и сувенирную продукцию. Собственное производство — точную стоимость уточняйте у менеджера.
             </p>
           </header>
 
