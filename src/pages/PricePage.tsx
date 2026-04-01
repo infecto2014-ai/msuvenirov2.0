@@ -151,10 +151,10 @@ const FabricPrintingSection = () => {
         {/* Доп. информация */}
         <div className="px-4 sm:px-6 py-4 bg-muted/20 border-t border-border/30 space-y-1.5">
           <p className="text-xs sm:text-sm text-muted-foreground">
-            <span className="font-semibold text-foreground">Дополнительное нанесение</span> на другой стороне изделия — <span className="neon-text font-semibold">30%</span> от указанной стоимости.
+            <span className="font-semibold text-foreground">Дополнительное нанесение</span> на другой стороне изделия — <span className="neon-text font-semibold">70%</span> от указанной стоимости.
           </p>
           <p className="text-xs sm:text-sm text-muted-foreground">
-            Возможна добавочная стоимость за сложность нанесения — уточняйте у менеджера.
+            Возможна добавочная стоимость за сложность нанесения. Стоимость метода сублимации и шелкографии — уточняйте у менеджера.
           </p>
         </div>
       </AccordionContent>
