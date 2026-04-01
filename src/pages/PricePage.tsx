@@ -214,7 +214,7 @@ const BadgeSection = () => (
         </div>
         <div>
           <h3 className="text-base sm:text-lg font-bold text-foreground">Значки, брелоки, магниты</h3>
-          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Закатные значки, значки на цанге, брелоки, магниты на виниле</p>
+          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Закатные значки, значки на цанге, брелоки, магниты, стикеры 3D</p>
         </div>
       </div>
     </AccordionTrigger>
