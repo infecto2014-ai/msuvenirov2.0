@@ -283,6 +283,7 @@ const PricePage = () => {
           <div className="max-w-3xl mx-auto">
             <Accordion type="multiple" defaultValue={['Печать на ткани']}>
               <FabricPrintingSection />
+              <MugSection />
               {categories.map((cat) => (
                 <PriceSection key={cat.title} category={cat} />
               ))}
