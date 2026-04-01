@@ -905,9 +905,7 @@ const PricePage = () => {
               <WideFormatSection />
               <PolygraphySection />
               <CalendarSection />
-              {categories.map((cat) => (
-                <PriceSection key={cat.title} category={cat} />
-              ))}
+              <GiftsSection />
             </Accordion>
           </section>
 
