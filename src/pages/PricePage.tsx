@@ -342,8 +342,8 @@ const FabricPrintingSection = () => {
             <Shirt className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h2 className="text-base sm:text-lg font-bold text-foreground">Печать на ткани</h2>
-            <p className="text-xs sm:text-sm text-muted-foreground font-normal">Футболки, худи, шопперы и другой текстиль с вашим дизайном</p>
+          <h2 className="text-base sm:text-lg font-bold text-foreground">Печать на ткани</h2>
+            <p className="text-xs sm:text-sm text-muted-foreground font-normal">DTF-печать на футболках, худи, шопперах — от 1 штуки, своё производство в Калининграде</p>
           </div>
         </div>
       </AccordionTrigger>
