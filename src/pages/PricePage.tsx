@@ -256,6 +256,39 @@ const BadgeSection = () => (
             </div>
           </AccordionContent>
         </AccordionItem>
+
+        <AccordionItem value="stikery3d" className="border border-border/30 rounded-lg overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
+            Стикеры 3D из эпоксидной смолы
+          </AccordionTrigger>
+          <AccordionContent className="px-0 pb-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/30">
+                    <TableHead className="font-bold text-foreground">Тип вырубки</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">Стоимость за 1 см²</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow className="hover:bg-primary/5 transition-colors">
+                    <TableCell className="font-medium text-foreground">Простая вырубка</TableCell>
+                    <TableCell className="text-center whitespace-nowrap neon-text font-semibold">5 ₽/см²</TableCell>
+                  </TableRow>
+                  <TableRow className="hover:bg-primary/5 transition-colors">
+                    <TableCell className="font-medium text-foreground">Сложная вырубка</TableCell>
+                    <TableCell className="text-center whitespace-nowrap neon-text font-semibold">6,5 ₽/см²</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+            <div className="px-4 py-3 bg-muted/20 border-t border-border/30">
+              <p className="text-xs sm:text-sm text-muted-foreground">
+                Минимальная сумма заказа — <span className="neon-text font-semibold">2 000 ₽</span>
+              </p>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
       </Accordion>
     </AccordionContent>
   </AccordionItem>
