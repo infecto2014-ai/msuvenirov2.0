@@ -736,7 +736,7 @@ const CalendarSection = () => (
         {/* Настольные домики */}
         <AccordionItem value="desktop" className="border border-border/30 rounded-lg overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
-            <div>
+            <div className="text-left">
               <span>Настольные календари «Домики»</span>
               <p className="text-xs font-normal text-muted-foreground mt-1">200×95 мм</p>
             </div>
