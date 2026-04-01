@@ -660,7 +660,10 @@ const CalendarSection = () => (
         {/* Квартальные */}
         <AccordionItem value="quarterly" className="border border-border/30 rounded-lg overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
-            Квартальные календари
+            <div>
+              <span>Квартальные календари</span>
+              <p className="text-xs font-normal text-muted-foreground mt-1">МИНИ — ширина 297 мм, МИДИ — ширина 335 мм</p>
+            </div>
           </AccordionTrigger>
           <AccordionContent className="px-0 pb-0">
             <div className="overflow-x-auto">
