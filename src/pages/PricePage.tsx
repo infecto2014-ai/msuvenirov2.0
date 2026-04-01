@@ -268,7 +268,7 @@ const BadgeSection = () => (
 
         <AccordionItem value="breloki" className="border border-border/30 rounded-lg overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
-            Брелоки
+            <h3 className="text-sm font-bold text-foreground">Брелоки</h3>
           </AccordionTrigger>
           <AccordionContent className="px-0 pb-0">
             <div className="overflow-x-auto">
