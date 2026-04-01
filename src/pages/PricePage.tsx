@@ -368,7 +368,10 @@ const WideFormatSection = () => (
           <TableHeader>
             <TableRow className="bg-muted/30">
               <TableHead className="font-bold text-foreground">Наименование</TableHead>
-              <TableHead className="font-bold text-foreground text-right">Стоимость 1 м²</TableHead>
+              <TableHead className="font-bold text-foreground text-right">
+                <div>Стоимость</div>
+                <div className="text-xs font-normal text-muted-foreground">1 м²</div>
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
