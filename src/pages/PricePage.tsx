@@ -357,6 +357,138 @@ const FabricPrintingSection = () => {
   );
 };
 
+const PolygraphySection = () => (
+  <AccordionItem value="Полиграфия" className="border border-border/50 rounded-xl overflow-hidden mb-4 neon-border">
+    <AccordionTrigger className="px-4 sm:px-6 py-4 sm:py-5 hover:no-underline hover:bg-muted/30 transition-colors">
+      <div className="flex items-center gap-3 text-left">
+        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+          <FileText className="w-5 h-5 text-primary" />
+        </div>
+        <div>
+          <h3 className="text-base sm:text-lg font-bold text-foreground">Полиграфия</h3>
+          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Блокноты, листовки, флаеры, визитки</p>
+        </div>
+      </div>
+    </AccordionTrigger>
+    <AccordionContent className="px-0 pb-0">
+      <Accordion type="multiple" className="px-4 sm:px-6 py-3 space-y-3">
+        {/* Блокнот */}
+        <AccordionItem value="bloknot" className="border border-border/30 rounded-lg overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
+            Блокнот
+          </AccordionTrigger>
+          <AccordionContent className="px-0 pb-0">
+            <p className="px-4 py-2 text-xs text-muted-foreground">
+              40 листов 80 гр/м², обложка цветная 240 гр/м², сборка на металлическую пружину
+            </p>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/30">
+                    <TableHead className="font-bold text-foreground">Формат</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">20 шт</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">50 шт</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">100 шт</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">200 шт</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">300 шт</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {notebookPrices.map((item) => (
+                    <TableRow key={item.name} className="hover:bg-primary/5 transition-colors">
+                      <TableCell className="font-medium text-foreground">{item.name}</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty20} ₽</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty50} ₽</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty100} ₽</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty200} ₽</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty300} ₽</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        {/* Оперативная полиграфия */}
+        <AccordionItem value="operative" className="border border-border/30 rounded-lg overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
+            Оперативная полиграфия (Листовки, флаеры, плакаты)
+          </AccordionTrigger>
+          <AccordionContent className="px-0 pb-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/30">
+                    <TableHead className="font-bold text-foreground" rowSpan={2}>Формат</TableHead>
+                    <TableHead className="font-bold text-foreground" rowSpan={2}>Плотность</TableHead>
+                    <TableHead className="font-bold text-foreground text-center" colSpan={3}>
+                      <div>1-сторонняя</div>
+                      <div className="text-xs font-normal text-muted-foreground">50 / 100 / 200 шт</div>
+                    </TableHead>
+                    <TableHead className="font-bold text-foreground text-center" colSpan={3}>
+                      <div>2-сторонняя</div>
+                      <div className="text-xs font-normal text-muted-foreground">50 / 100 / 200 шт</div>
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {operativePrices.map((row, i) => (
+                    <TableRow key={i} className="hover:bg-primary/5 transition-colors">
+                      <TableCell className="font-medium text-foreground">{row.format}</TableCell>
+                      <TableCell className="text-muted-foreground text-xs">{row.paper}</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{row.s50}</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{row.s100}</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{row.s200}</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{row.d50}</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{row.d100}</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{row.d200}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        {/* Визитки */}
+        <AccordionItem value="vizitki" className="border border-border/30 rounded-lg overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
+            Визитки
+          </AccordionTrigger>
+          <AccordionContent className="px-0 pb-0">
+            <p className="px-4 py-2 text-xs text-muted-foreground">
+              Бумага: глянцевая или матовая 300 гр/м²
+            </p>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/30">
+                    <TableHead className="font-bold text-foreground">Вид печати</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">100 шт</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">300 шт</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">500 шт</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {businessCardPrices.map((item) => (
+                    <TableRow key={item.name} className="hover:bg-primary/5 transition-colors">
+                      <TableCell className="font-medium text-foreground">{item.name}</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty100} ₽</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty300} ₽</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty500} ₽</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </AccordionContent>
+  </AccordionItem>
+);
+
 const WideFormatSection = () => (
   <AccordionItem value="Широкоформатная печать" className="border border-border/50 rounded-xl overflow-hidden mb-4 neon-border">
     <AccordionTrigger className="px-4 sm:px-6 py-4 sm:py-5 hover:no-underline hover:bg-muted/30 transition-colors">
