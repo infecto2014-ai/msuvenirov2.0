@@ -903,9 +903,8 @@ const PricePage = () => {
       <main className="pt-24 sm:pt-28 pb-12 sm:pb-16">
         <div className="container mx-auto px-4 sm:px-6">
           <header className="text-center mb-8 sm:mb-12">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black">
-              <span className="text-foreground">Прайс-лист на полиграфию </span>
-              <span className="neon-text">и печать сувениров в Калининграде</span>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black neon-text">
+              Прайс-лист
             </h1>
             <p className="text-muted-foreground mt-3 sm:mt-4 max-w-xl mx-auto text-sm sm:text-base">
               Актуальные цены на DTF-печать, широкоформатную печать, визитки, календари и сувенирную продукцию. Собственное производство — точную стоимость уточняйте у менеджера.
