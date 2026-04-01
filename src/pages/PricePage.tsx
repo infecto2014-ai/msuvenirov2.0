@@ -147,14 +147,15 @@ const MugSection = () => (
           <Coffee className="w-5 h-5 text-primary" />
         </div>
         <div>
-          <h3 className="text-base sm:text-lg font-bold text-foreground">Кружки</h3>
+          <h2 className="text-base sm:text-lg font-bold text-foreground">Кружки</h2>
           <p className="text-xs sm:text-sm text-muted-foreground font-normal">Кружки с сублимацией — белые, хамелеон, глиттер, мрамор и другие</p>
         </div>
       </div>
     </AccordionTrigger>
     <AccordionContent className="px-0 pb-0">
       <div className="overflow-x-auto">
-        <Table>
+        <Table aria-label="Цены на кружки с печатью">
+          <caption className="sr-only">Прайс-лист на кружки с сублимацией — цены за штуку в зависимости от тиража</caption>
           <TableHeader>
             <TableRow className="bg-muted/30">
               <TableHead className="font-bold text-foreground">Наименование</TableHead>
@@ -247,7 +248,7 @@ const BadgeSection = () => (
           <CircleDot className="w-5 h-5 text-primary" />
         </div>
         <div>
-          <h3 className="text-base sm:text-lg font-bold text-foreground">Значки, брелоки, магниты</h3>
+          <h2 className="text-base sm:text-lg font-bold text-foreground">Значки, брелоки, магниты</h2>
           <p className="text-xs sm:text-sm text-muted-foreground font-normal">Закатные значки, значки на цанге, брелоки, магниты, стикеры 3D</p>
         </div>
       </div>
@@ -256,7 +257,7 @@ const BadgeSection = () => (
       <Accordion type="multiple" className="px-4 sm:px-6 py-3 space-y-3">
         <AccordionItem value="znachki" className="border border-border/30 rounded-lg overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
-            Значки
+            <h3 className="text-sm font-bold text-foreground">Значки</h3>
           </AccordionTrigger>
           <AccordionContent className="px-0 pb-0">
             <div className="overflow-x-auto">
@@ -267,7 +268,7 @@ const BadgeSection = () => (
 
         <AccordionItem value="breloki" className="border border-border/30 rounded-lg overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
-            Брелоки
+            <h3 className="text-sm font-bold text-foreground">Брелоки</h3>
           </AccordionTrigger>
           <AccordionContent className="px-0 pb-0">
             <div className="overflow-x-auto">
@@ -278,7 +279,7 @@ const BadgeSection = () => (
 
         <AccordionItem value="magnity" className="border border-border/30 rounded-lg overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
-            Магниты
+            <h3 className="text-sm font-bold text-foreground">Магниты</h3>
           </AccordionTrigger>
           <AccordionContent className="px-0 pb-0">
             <p className="px-4 py-2 text-sm font-bold neon-text">Магнит винил 0,4–0,7 мм</p>
@@ -293,7 +294,7 @@ const BadgeSection = () => (
 
         <AccordionItem value="stikery3d" className="border border-border/30 rounded-lg overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
-            Стикеры 3D из эпоксидной смолы
+            <h3 className="text-sm font-bold text-foreground">Стикеры 3D из эпоксидной смолы</h3>
           </AccordionTrigger>
           <AccordionContent className="px-0 pb-0">
             <div className="overflow-x-auto">
@@ -341,7 +342,7 @@ const FabricPrintingSection = () => {
             <Shirt className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h3 className="text-base sm:text-lg font-bold text-foreground">Печать на ткани</h3>
+            <h2 className="text-base sm:text-lg font-bold text-foreground">Печать на ткани</h2>
             <p className="text-xs sm:text-sm text-muted-foreground font-normal">Футболки, худи, шопперы и другой текстиль с вашим дизайном</p>
           </div>
         </div>
@@ -351,7 +352,7 @@ const FabricPrintingSection = () => {
         <Accordion type="multiple" className="px-4 sm:px-6 py-3">
           <AccordionItem value="products" className="border border-border/30 rounded-lg overflow-hidden">
             <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
-              Изделие
+              <h3 className="text-sm font-bold text-foreground">Изделие</h3>
             </AccordionTrigger>
             <AccordionContent className="px-0 pb-0">
               <Table>
@@ -432,7 +433,7 @@ const PolygraphySection = () => (
           <FileText className="w-5 h-5 text-primary" />
         </div>
         <div>
-          <h3 className="text-base sm:text-lg font-bold text-foreground">Полиграфия</h3>
+          <h2 className="text-base sm:text-lg font-bold text-foreground">Полиграфия</h2>
           <p className="text-xs sm:text-sm text-muted-foreground font-normal">Блокноты, листовки, флаеры, визитки</p>
         </div>
       </div>
@@ -442,7 +443,7 @@ const PolygraphySection = () => (
         {/* Блокнот */}
         <AccordionItem value="bloknot" className="border border-border/30 rounded-lg overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
-            Блокнот
+            <h3 className="text-sm font-bold text-foreground">Блокнот</h3>
           </AccordionTrigger>
           <AccordionContent className="px-0 pb-0">
             <p className="px-4 py-2 text-xs text-muted-foreground">
@@ -480,7 +481,7 @@ const PolygraphySection = () => (
         {/* Оперативная полиграфия */}
         <AccordionItem value="operative" className="border border-border/30 rounded-lg overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
-            Оперативная полиграфия (Листовки, флаеры, плакаты) — цветная печать
+            <h3 className="text-sm font-bold text-foreground">Оперативная полиграфия (Листовки, флаеры, плакаты) — цветная печать</h3>
           </AccordionTrigger>
           <AccordionContent className="px-0 pb-0">
             <div className="overflow-x-auto">
@@ -521,7 +522,7 @@ const PolygraphySection = () => (
         {/* Визитки */}
         <AccordionItem value="vizitki" className="border border-border/30 rounded-lg overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
-            Визитки
+            <h3 className="text-sm font-bold text-foreground">Визитки</h3>
           </AccordionTrigger>
           <AccordionContent className="px-0 pb-0">
             <p className="px-4 py-2 text-xs text-muted-foreground">
@@ -564,7 +565,7 @@ const WideFormatSection = () => (
           <Maximize className="w-5 h-5 text-primary" />
         </div>
         <div>
-          <h3 className="text-base sm:text-lg font-bold text-foreground">Широкоформатная печать</h3>
+          <h2 className="text-base sm:text-lg font-bold text-foreground">Широкоформатная печать</h2>
           <p className="text-xs sm:text-sm text-muted-foreground font-normal">Баннеры, плёнки, вывески и интерьерная печать</p>
         </div>
       </div>
@@ -603,7 +604,7 @@ const PriceSection = ({ category }: { category: typeof souvenirs }) => (
           {category.icon}
         </div>
         <div>
-          <h3 className="text-base sm:text-lg font-bold text-foreground">{category.title}</h3>
+          <h2 className="text-base sm:text-lg font-bold text-foreground">{category.title}</h2>
           <p className="text-xs sm:text-sm text-muted-foreground font-normal">{category.description}</p>
         </div>
       </div>
@@ -651,7 +652,7 @@ const CalendarSection = () => (
           <CalendarDays className="w-5 h-5 text-primary" />
         </div>
         <div>
-          <h3 className="text-base sm:text-lg font-bold text-foreground">Календари</h3>
+          <h2 className="text-base sm:text-lg font-bold text-foreground">Календари</h2>
           <p className="text-xs sm:text-sm text-muted-foreground font-normal">Квартальные, настенные, настольные и карманные календари</p>
         </div>
       </div>
@@ -801,7 +802,7 @@ const CalendarSection = () => (
         {/* Дополнительные опции */}
         <AccordionItem value="calendar-options" className="border border-border/30 rounded-lg overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
-            Дополнительные опции
+            <h3 className="text-sm font-bold text-foreground">Дополнительные опции</h3>
           </AccordionTrigger>
           <AccordionContent className="px-0 pb-0">
             <div className="overflow-x-auto">
@@ -833,28 +834,68 @@ const PricePage = () => {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Helmet>
-        <title>Прайс-лист — Мастерская сувениров Калининград | Цены на печать</title>
-        <meta name="description" content="Актуальные цены на печать на футболках, кружках, значках, баннерах и полиграфию в Калининграде. DTF-печать, сублимация, широкоформатная печать. Мастерская сувениров." />
-        <meta name="keywords" content="прайс печать на футболках калининград, цены dtf печать, стоимость печати на кружках, широкоформатная печать калининград, полиграфия калининград, значки на заказ цена" />
+        <title>Цены на печать и сувениры в Калининграде | Мастерская сувениров</title>
+        <meta name="description" content="Прайс-лист: печать на футболках, кружках, визитки, баннеры, календари, значки в Калининграде. Цены от производителя. Закажите расчёт!" />
+        <meta name="keywords" content="прайс печать калининград, цены полиграфия калининград, печать на футболках цена, визитки калининград, широкоформатная печать, сувениры на заказ, календари печать, значки брелоки" />
         <link rel="canonical" href="https://msuvenirov.ru/price" />
-        <meta property="og:title" content="Прайс-лист — Мастерская сувениров Калининград" />
-        <meta property="og:description" content="Цены на печать на футболках, кружках, значках, баннерах и полиграфию. Собственное производство в Калининграде." />
+        <meta property="og:title" content="Цены на печать и сувениры в Калининграде | Мастерская сувениров" />
+        <meta property="og:description" content="Актуальные цены на печать, полиграфию и сувенирную продукцию. Собственное производство в Калининграде." />
         <meta property="og:url" content="https://msuvenirov.ru/price" />
         <meta property="og:type" content="website" />
+        <meta property="og:locale" content="ru_RU" />
+        <meta property="og:site_name" content="Мастерская сувениров" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebPage",
-          "name": "Прайс-лист — Мастерская сувениров",
-          "description": "Актуальные цены на печать на футболках, кружках, значках, баннерах и полиграфию в Калининграде.",
+          "name": "Прайс-лист — Мастерская сувениров Калининград",
+          "description": "Актуальные цены на печать на футболках, кружках, значках, баннерах, полиграфию и календари в Калининграде.",
           "url": "https://msuvenirov.ru/price",
+          "mainEntity": {
+            "@type": "OfferCatalog",
+            "name": "Прайс-лист Мастерской сувениров",
+            "itemListElement": [
+              {
+                "@type": "OfferCatalog",
+                "name": "Печать на ткани",
+                "description": "DTF-печать на футболках, худи, шопперах от 1 штуки"
+              },
+              {
+                "@type": "OfferCatalog",
+                "name": "Полиграфия",
+                "description": "Визитки, листовки, блокноты, плакаты — цветная печать"
+              },
+              {
+                "@type": "OfferCatalog",
+                "name": "Широкоформатная печать",
+                "description": "Баннеры, плёнки, вывески, печать на ПВХ-пластике"
+              },
+              {
+                "@type": "OfferCatalog",
+                "name": "Календари",
+                "description": "Квартальные, настенные, настольные и карманные календари"
+              },
+              {
+                "@type": "OfferCatalog",
+                "name": "Значки, брелоки, магниты",
+                "description": "Закатные значки, брелоки, виниловые и акриловые магниты, стикеры 3D"
+              },
+              {
+                "@type": "OfferCatalog",
+                "name": "Кружки с печатью",
+                "description": "Сублимация на кружках — белые, хамелеон, глиттер, мрамор"
+              }
+            ]
+          },
           "publisher": {
             "@type": "LocalBusiness",
             "name": "Мастерская сувениров",
             "address": {
               "@type": "PostalAddress",
               "addressLocality": "Калининград",
+              "addressRegion": "Калининградская область",
               "addressCountry": "RU"
-            }
+            },
+            "url": "https://msuvenirov.ru"
           }
         })}</script>
       </Helmet>
@@ -863,15 +904,15 @@ const PricePage = () => {
         <div className="container mx-auto px-4 sm:px-6">
           <header className="text-center mb-8 sm:mb-12">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-black">
-              <span className="text-foreground">Наш </span>
-              <span className="neon-text">прайс-лист</span>
+              <span className="text-foreground">Прайс-лист на услуги печати </span>
+              <span className="neon-text">и сувенирную продукцию</span>
             </h1>
             <p className="text-muted-foreground mt-3 sm:mt-4 max-w-xl mx-auto text-sm sm:text-base">
-              Актуальные цены на все виды печати и сувенирной продукции. Точную стоимость уточняйте у менеджера.
+              Актуальные цены на все виды печати и сувенирной продукции в Калининграде. Точную стоимость уточняйте у менеджера.
             </p>
           </header>
 
-          <div className="max-w-3xl mx-auto">
+          <section className="max-w-3xl mx-auto" aria-label="Каталог услуг и цен">
             <Accordion type="multiple" defaultValue={['Печать на ткани']}>
               <FabricPrintingSection />
               <MugSection />
@@ -883,7 +924,7 @@ const PricePage = () => {
                 <PriceSection key={cat.title} category={cat} />
               ))}
             </Accordion>
-          </div>
+          </section>
 
           <div className="text-center mt-10 sm:mt-14">
             <p className="text-muted-foreground text-sm mb-4">
