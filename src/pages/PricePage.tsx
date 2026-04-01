@@ -139,7 +139,7 @@ const BadgeSection = () => (
           <CircleDot className="w-5 h-5 text-primary" />
         </div>
         <div>
-          <h3 className="text-base sm:text-lg font-bold text-foreground">Значки</h3>
+          <h3 className="text-base sm:text-lg font-bold text-foreground">Значки и брелоки</h3>
           <p className="text-xs sm:text-sm text-muted-foreground font-normal">Закатные значки, значки на цанге с полимерной смолой, брелоки</p>
         </div>
       </div>
