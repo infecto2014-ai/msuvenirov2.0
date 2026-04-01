@@ -1,5 +1,6 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import FloatingOrderButton from '@/components/FloatingOrderButton';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Shirt, Gift, FileText, Maximize } from 'lucide-react';
@@ -151,10 +152,10 @@ const FabricPrintingSection = () => {
         {/* Доп. информация */}
         <div className="px-4 sm:px-6 py-4 bg-muted/20 border-t border-border/30 space-y-1.5">
           <p className="text-xs sm:text-sm text-muted-foreground">
-            <span className="font-semibold text-foreground">Дополнительное нанесение</span> на другой стороне изделия — <span className="neon-text font-semibold">30%</span> от указанной стоимости.
+            <span className="font-semibold text-foreground">Дополнительное нанесение</span> на другой стороне изделия — <span className="neon-text font-semibold">70%</span> от указанной стоимости.
           </p>
           <p className="text-xs sm:text-sm text-muted-foreground">
-            Возможна добавочная стоимость за сложность нанесения — уточняйте у менеджера.
+            Возможна добавочная стоимость за сложность нанесения. Стоимость метода сублимации и шелкографии — уточняйте у менеджера.
           </p>
         </div>
       </AccordionContent>
@@ -249,6 +250,7 @@ const PricePage = () => {
         </div>
       </main>
       <Footer />
+      <FloatingOrderButton />
     </div>
   );
 };
