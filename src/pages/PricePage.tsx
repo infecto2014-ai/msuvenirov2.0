@@ -833,6 +833,32 @@ const CalendarSection = () => (
 const PricePage = () => {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      <Helmet>
+        <title>Прайс-лист — Мастерская сувениров Калининград | Цены на печать</title>
+        <meta name="description" content="Актуальные цены на печать на футболках, кружках, значках, баннерах и полиграфию в Калининграде. DTF-печать, сублимация, широкоформатная печать. Мастерская сувениров." />
+        <meta name="keywords" content="прайс печать на футболках калининград, цены dtf печать, стоимость печати на кружках, широкоформатная печать калининград, полиграфия калининград, значки на заказ цена" />
+        <link rel="canonical" href="https://msuvenirov.ru/price" />
+        <meta property="og:title" content="Прайс-лист — Мастерская сувениров Калининград" />
+        <meta property="og:description" content="Цены на печать на футболках, кружках, значках, баннерах и полиграфию. Собственное производство в Калининграде." />
+        <meta property="og:url" content="https://msuvenirov.ru/price" />
+        <meta property="og:type" content="website" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Прайс-лист — Мастерская сувениров",
+          "description": "Актуальные цены на печать на футболках, кружках, значках, баннерах и полиграфию в Калининграде.",
+          "url": "https://msuvenirov.ru/price",
+          "publisher": {
+            "@type": "LocalBusiness",
+            "name": "Мастерская сувениров",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Калининград",
+              "addressCountry": "RU"
+            }
+          }
+        })}</script>
+      </Helmet>
       <Header />
       <main className="pt-24 sm:pt-28 pb-12 sm:pb-16">
         <div className="container mx-auto px-4 sm:px-6">
@@ -871,6 +897,11 @@ const PricePage = () => {
               Получить расчёт
             </a>
           </div>
+
+          <p className="text-center text-xs text-muted-foreground mt-8 max-w-xl mx-auto">
+            Информация на данной странице носит исключительно информационный характер и не является публичной офертой. 
+            Точные цены и условия уточняйте у менеджера.
+          </p>
         </div>
       </main>
       <Footer />
