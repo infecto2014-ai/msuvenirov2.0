@@ -77,7 +77,7 @@ const notebookPrices = [
 ];
 
 const operativePrices = [
-  { format: 'А3 (Плакаты)', paper: 'Тонкая (80 гр)', s50: '65', s100: '56', s200: '45', d50: '110', d100: '97', d200: '86' },
+  { format: 'А3', paper: 'Тонкая (80 гр)', s50: '65', s100: '56', s200: '45', d50: '110', d100: '97', d200: '86' },
   { format: '', paper: 'Плотная (115–300 гр)', s50: '120', s100: '108', s200: '96', d50: '195', d100: '175', d200: '155' },
   { format: 'А4', paper: 'Тонкая (80 гр)', s50: '40', s100: '34', s200: '30', d50: '60', d100: '54', d200: '48' },
   { format: '', paper: 'Плотная (115–300 гр)', s50: '80', s100: '70', s200: '62', d50: '125', d100: '113', d200: '100' },
@@ -479,7 +479,7 @@ const PolygraphySection = () => (
         {/* Оперативная полиграфия */}
         <AccordionItem value="operative" className="border border-border/30 rounded-lg overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
-            Оперативная полиграфия (Листовки, флаеры, плакаты)
+            Оперативная полиграфия (Листовки, флаеры, плакаты) — цветная печать
           </AccordionTrigger>
           <AccordionContent className="px-0 pb-0">
             <div className="overflow-x-auto">
