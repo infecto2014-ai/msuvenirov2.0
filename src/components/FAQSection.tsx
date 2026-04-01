@@ -61,7 +61,15 @@ const FAQSection = () => {
                   {faq.question}
                 </AccordionTrigger>
                 <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-5">
-                  {faq.answer}
+                  <p>{faq.answer}</p>
+                  {'link' in faq && faq.link && (
+                    <Link 
+                      to={faq.link} 
+                      className="inline-block mt-3 text-sm font-semibold text-primary hover:text-primary/80 underline underline-offset-4 transition-colors"
+                    >
+                      {faq.linkText} →
+                    </Link>
+                  )}
                 </AccordionContent>
               </AccordionItem>
             ))}
