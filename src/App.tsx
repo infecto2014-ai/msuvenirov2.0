@@ -41,6 +41,7 @@ const App = () => (
             <Route path="/public-offer" element={<PublicOffer />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/card" element={<LinkInBio />} />
+            <Route path="/price" element={<PricePage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
