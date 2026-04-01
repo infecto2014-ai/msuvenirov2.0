@@ -77,16 +77,16 @@ const notebookPrices = [
 ];
 
 const operativePrices = [
-  { format: 'А3 (Плакаты)', paper: 'Тонкая (80 гр)', s50: '63', s100: '56', s200: '45', d50: '108', d100: '97', d200: '86' },
+  { format: 'А3 (Плакаты)', paper: 'Тонкая (80 гр)', s50: '65', s100: '56', s200: '45', d50: '110', d100: '97', d200: '86' },
   { format: '', paper: 'Плотная (115–300 гр)', s50: '120', s100: '108', s200: '96', d50: '195', d100: '175', d200: '155' },
-  { format: 'А4', paper: 'Тонкая (80 гр)', s50: '38', s100: '34', s200: '30', d50: '60', d100: '54', d200: '48' },
-  { format: '', paper: 'Плотная (115–300 гр)', s50: '78', s100: '70', s200: '62', d50: '125', d100: '113', d200: '100' },
-  { format: 'А5', paper: 'Тонкая (80 гр)', s50: '23', s100: '20', s200: '18', d50: '34', d100: '30', d200: '27' },
-  { format: '', paper: 'Плотная (115–300 гр)', s50: '39', s100: '35', s200: '31', d50: '63', d100: '56', d200: '50' },
-  { format: '1/3 А4 (Еврофлаер)', paper: 'Тонкая (80 гр)', s50: '16', s100: '14', s200: '13', d50: '23', d100: '20', d200: '18' },
-  { format: '', paper: 'Плотная (115–300 гр)', s50: '26', s100: '23', s200: '21', d50: '43', d100: '38', d200: '34' },
-  { format: 'А6', paper: 'Тонкая (80 гр)', s50: '23', s100: '20', s200: '18', d50: '23', d100: '20', d200: '18' },
-  { format: '', paper: 'Плотная (115–300 гр)', s50: '20', s100: '18', s200: '16', d50: '32', d100: '29', d200: '25' },
+  { format: 'А4', paper: 'Тонкая (80 гр)', s50: '40', s100: '34', s200: '30', d50: '60', d100: '54', d200: '48' },
+  { format: '', paper: 'Плотная (115–300 гр)', s50: '80', s100: '70', s200: '62', d50: '125', d100: '113', d200: '100' },
+  { format: 'А5', paper: 'Тонкая (80 гр)', s50: '25', s100: '20', s200: '18', d50: '35', d100: '30', d200: '27' },
+  { format: '', paper: 'Плотная (115–300 гр)', s50: '40', s100: '35', s200: '31', d50: '65', d100: '56', d200: '50' },
+  { format: '1/3 А4 (Еврофлаер)', paper: 'Тонкая (80 гр)', s50: '15', s100: '14', s200: '13', d50: '25', d100: '20', d200: '18' },
+  { format: '', paper: 'Плотная (115–300 гр)', s50: '25', s100: '23', s200: '21', d50: '45', d100: '38', d200: '34' },
+  { format: 'А6', paper: 'Тонкая (80 гр)', s50: '25', s100: '20', s200: '18', d50: '25', d100: '20', d200: '18' },
+  { format: '', paper: 'Плотная (115–300 гр)', s50: '20', s100: '18', s200: '16', d50: '30', d100: '29', d200: '25' },
 ];
 
 const businessCardPrices = [
@@ -660,7 +660,7 @@ const CalendarSection = () => (
         {/* Квартальные */}
         <AccordionItem value="quarterly" className="border border-border/30 rounded-lg overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
-            <div>
+            <div className="text-left">
               <span>Квартальные календари</span>
               <p className="text-xs font-normal text-muted-foreground mt-1">МИНИ — ширина 297 мм, МИДИ — ширина 335 мм</p>
             </div>
@@ -700,7 +700,7 @@ const CalendarSection = () => (
         {/* Настенные и плакатные */}
         <AccordionItem value="wall" className="border border-border/30 rounded-lg overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
-            <div>
+            <div className="text-left">
               <span>Настенные и плакатные календари</span>
               <p className="text-xs font-normal text-muted-foreground mt-1">Бумага 170 гр</p>
             </div>
@@ -736,7 +736,7 @@ const CalendarSection = () => (
         {/* Настольные домики */}
         <AccordionItem value="desktop" className="border border-border/30 rounded-lg overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
-            <div>
+            <div className="text-left">
               <span>Настольные календари «Домики»</span>
               <p className="text-xs font-normal text-muted-foreground mt-1">200×95 мм</p>
             </div>
@@ -770,7 +770,7 @@ const CalendarSection = () => (
         {/* Карманные */}
         <AccordionItem value="pocket" className="border border-border/30 rounded-lg overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
-            <div>
+            <div className="text-left">
               <span>Карманные календари</span>
               <p className="text-xs font-normal text-muted-foreground mt-1">60×90 мм</p>
             </div>
