@@ -770,15 +770,18 @@ const CalendarSection = () => (
 );
 
 const GiftsSection = () => (
-  <AccordionItem value="Подарки" className="border border-border/50 rounded-xl overflow-hidden mb-4 neon-border">
-    <AccordionTrigger className="px-4 sm:px-6 py-4 sm:py-5 hover:no-underline hover:bg-muted/30 transition-colors">
+  <AccordionItem value="Подарки" className="border-2 border-primary/40 rounded-xl overflow-hidden mb-4 neon-border ring-1 ring-primary/20 shadow-[0_0_15px_-3px_hsl(var(--primary)/0.3)]">
+    <AccordionTrigger className="px-4 sm:px-6 py-4 sm:py-5 hover:no-underline hover:bg-primary/5 transition-colors bg-primary/5">
       <div className="flex items-center gap-3 text-left">
-        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+        <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center shrink-0">
           <Gift className="w-5 h-5 text-primary" />
         </div>
         <div>
-          <h2 className="text-base sm:text-lg font-bold text-foreground">Подарки с вашим дизайном</h2>
-          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Индивидуальная печать от 1 шт.</p>
+          <div className="flex items-center gap-2 flex-wrap">
+            <h2 className="text-base sm:text-lg font-bold text-foreground">Подарки с вашим дизайном</h2>
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-primary/20 text-primary border border-primary/30">Для вас</span>
+          </div>
+          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Индивидуальная печать от 1 шт. — идеальный подарок для себя и близких</p>
         </div>
       </div>
     </AccordionTrigger>
