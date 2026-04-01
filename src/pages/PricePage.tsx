@@ -14,15 +14,26 @@ const mugPrices = [
   { name: 'Кружка золото/серебро/стекло', qty1: '1 320', qty10: '790', qty30: '730', qty100: '660', qty200: '530' },
 ];
 
-const badgePrices = [
+const badgePricesZnachki = [
   { name: 'Значок закатный 38 мм', qty25: '85', qty100: '45', qty200: '38', qty300: '35', qty400: '32', qty500: '30' },
   { name: 'Значок закатный 56 мм', qty25: '100', qty100: '49', qty200: '45', qty300: '41', qty400: '38', qty500: '33' },
-  { name: 'Брелок акриловый 40x56 мм', qty25: '130', qty100: '65', qty200: '60', qty300: '54', qty400: '49', qty500: '43' },
   { name: 'Значок на цанге, круг 15 мм', qty25: '120', qty100: '110', qty200: '100', qty300: '92', qty400: '85', qty500: '75' },
   { name: 'Значок на цанге, круг 25 мм', qty25: '200', qty100: '185', qty200: '170', qty300: '155', qty400: '140', qty500: '125' },
   { name: 'Значок на цанге, круг 30 мм', qty25: '250', qty100: '230', qty200: '210', qty300: '190', qty400: '170', qty500: '150' },
   { name: 'Значок на цанге, круг 35 мм', qty25: '310', qty100: '285', qty200: '260', qty300: '240', qty400: '210', qty500: '190' },
+];
+
+const badgePricesBreloki = [
+  { name: 'Брелок акриловый 40x56 мм', qty25: '130', qty100: '65', qty200: '60', qty300: '54', qty400: '49', qty500: '43' },
   { name: 'Брелок металлический', qty25: '500', qty100: '420', qty200: '400', qty300: '380', qty400: '350', qty500: '330' },
+];
+
+const magnetPrices = [
+  { name: 'Прямоугольник 40×60 мм', qty25: '31', qty100: '30', qty200: '26', qty300: '24', qty400: '24', qty500: '23' },
+  { name: 'Квадрат 60×60 мм', qty25: '34', qty100: '31', qty200: '27', qty300: '26', qty400: '25', qty500: '24' },
+  { name: 'Прямоугольник 60×80 мм', qty25: '37', qty100: '34', qty200: '30', qty300: '29', qty400: '26', qty500: '25' },
+  { name: 'Круг 68×68 мм', qty25: '34', qty100: '31', qty200: '27', qty300: '26', qty400: '25', qty500: '24' },
+  { name: 'Круг 50×50 мм', qty25: '31', qty100: '30', qty200: '26', qty300: '24', qty400: '24', qty500: '23' },
 ];
 const fabricProducts = [
   { name: 'Футболка унисекс 160–180 гр', price: 'от 400 ₽' },
@@ -131,6 +142,35 @@ const MugSection = () => (
   </AccordionItem>
 );
 
+const QtyTable = ({ items }: { items: Array<{ name: string; qty25: string; qty100: string; qty200: string; qty300: string; qty400: string; qty500: string }> }) => (
+  <Table>
+    <TableHeader>
+      <TableRow className="bg-muted/30">
+        <TableHead className="font-bold text-foreground">Наименование</TableHead>
+        <TableHead className="font-bold text-foreground text-center">25 шт</TableHead>
+        <TableHead className="font-bold text-foreground text-center">100 шт</TableHead>
+        <TableHead className="font-bold text-foreground text-center">200 шт</TableHead>
+        <TableHead className="font-bold text-foreground text-center">300 шт</TableHead>
+        <TableHead className="font-bold text-foreground text-center">400 шт</TableHead>
+        <TableHead className="font-bold text-foreground text-center">500 шт</TableHead>
+      </TableRow>
+    </TableHeader>
+    <TableBody>
+      {items.map((item) => (
+        <TableRow key={item.name} className="hover:bg-primary/5 transition-colors">
+          <TableCell className="font-medium text-foreground">{item.name}</TableCell>
+          <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty25} ₽</TableCell>
+          <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty100} ₽</TableCell>
+          <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty200} ₽</TableCell>
+          <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty300} ₽</TableCell>
+          <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty400} ₽</TableCell>
+          <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty500} ₽</TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
+);
+
 const BadgeSection = () => (
   <AccordionItem value="Значки" className="border border-border/50 rounded-xl overflow-hidden mb-4 neon-border">
     <AccordionTrigger className="px-4 sm:px-6 py-4 sm:py-5 hover:no-underline hover:bg-muted/30 transition-colors">
@@ -139,40 +179,46 @@ const BadgeSection = () => (
           <CircleDot className="w-5 h-5 text-primary" />
         </div>
         <div>
-          <h3 className="text-base sm:text-lg font-bold text-foreground">Значки и брелоки</h3>
-          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Закатные значки, значки на цанге с полимерной смолой, брелоки</p>
+          <h3 className="text-base sm:text-lg font-bold text-foreground">Значки, брелоки, магниты</h3>
+          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Закатные значки, значки на цанге, брелоки, магниты на виниле</p>
         </div>
       </div>
     </AccordionTrigger>
     <AccordionContent className="px-0 pb-0">
-      <div className="overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow className="bg-muted/30">
-              <TableHead className="font-bold text-foreground">Наименование</TableHead>
-              <TableHead className="font-bold text-foreground text-center">25 шт</TableHead>
-              <TableHead className="font-bold text-foreground text-center">100 шт</TableHead>
-              <TableHead className="font-bold text-foreground text-center">200 шт</TableHead>
-              <TableHead className="font-bold text-foreground text-center">300 шт</TableHead>
-              <TableHead className="font-bold text-foreground text-center">400 шт</TableHead>
-              <TableHead className="font-bold text-foreground text-center">500 шт</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {badgePrices.map((item) => (
-              <TableRow key={item.name} className="hover:bg-primary/5 transition-colors">
-                <TableCell className="font-medium text-foreground">{item.name}</TableCell>
-                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty25} ₽</TableCell>
-                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty100} ₽</TableCell>
-                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty200} ₽</TableCell>
-                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty300} ₽</TableCell>
-                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty400} ₽</TableCell>
-                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty500} ₽</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+      <Accordion type="multiple" className="px-4 sm:px-6 py-3 space-y-3">
+        <AccordionItem value="znachki" className="border border-border/30 rounded-lg overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
+            Значки
+          </AccordionTrigger>
+          <AccordionContent className="px-0 pb-0">
+            <div className="overflow-x-auto">
+              <QtyTable items={badgePricesZnachki} />
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="breloki" className="border border-border/30 rounded-lg overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
+            Брелоки
+          </AccordionTrigger>
+          <AccordionContent className="px-0 pb-0">
+            <div className="overflow-x-auto">
+              <QtyTable items={badgePricesBreloki} />
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="magnity" className="border border-border/30 rounded-lg overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
+            Магниты (винил 0,4–0,7 мм)
+          </AccordionTrigger>
+          <AccordionContent className="px-0 pb-0">
+            <div className="overflow-x-auto">
+              <QtyTable items={magnetPrices} />
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </AccordionContent>
   </AccordionItem>
 );
