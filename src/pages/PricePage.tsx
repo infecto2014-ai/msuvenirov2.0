@@ -996,12 +996,12 @@ const PricePage = () => {
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-black neon-text">
               Прайс-лист
             </h1>
-            <p className="text-muted-foreground mt-3 sm:mt-4 max-w-xl mx-auto text-sm sm:text-base">
-              Актуальные цены на DTF-печать, широкоформатную печать, визитки, календари и сувенирную продукцию. Собственное производство — точную стоимость уточняйте у менеджера.
-            </p>
-          </header>
+             <p className="text-muted-foreground mt-3 sm:mt-4 max-w-3xl mx-auto text-sm sm:text-base">
+               Актуальные цены на DTF-печать, широкоформатную печать, визитки, календари и сувенирную продукцию. Собственное производство — точную стоимость уточняйте у менеджера.
+             </p>
+           </header>
 
-          <section className="max-w-3xl mx-auto" aria-label="Каталог услуг и цен">
+           <section className="max-w-3xl mx-auto" aria-label="Каталог услуг и цен">
             <Accordion type="multiple" defaultValue={['Подарки']}>
               <GiftsSection />
               <FabricPrintingSection />
