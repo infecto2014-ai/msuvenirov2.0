@@ -245,8 +245,12 @@ const BadgeSection = () => (
             Магниты
           </AccordionTrigger>
           <AccordionContent className="px-0 pb-0">
+            <p className="px-4 py-2 text-sm font-bold text-foreground">Магнит винил 0,4–0,7 мм</p>
             <div className="overflow-x-auto">
-              <MagnetTable items={magnetPrices} />
+              <MagnetTable items={magnetVinylPrices} />
+            </div>
+            <div className="overflow-x-auto mt-4">
+              <MagnetTable items={magnetAcrylPrices} />
             </div>
           </AccordionContent>
         </AccordionItem>
