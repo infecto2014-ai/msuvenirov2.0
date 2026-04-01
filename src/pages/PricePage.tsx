@@ -769,6 +769,133 @@ const CalendarSection = () => (
   </AccordionItem>
 );
 
+const GiftsSection = () => (
+  <AccordionItem value="Подарки" className="border border-border/50 rounded-xl overflow-hidden mb-4 neon-border">
+    <AccordionTrigger className="px-4 sm:px-6 py-4 sm:py-5 hover:no-underline hover:bg-muted/30 transition-colors">
+      <div className="flex items-center gap-3 text-left">
+        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+          <Gift className="w-5 h-5 text-primary" />
+        </div>
+        <div>
+          <h2 className="text-base sm:text-lg font-bold text-foreground">Подарки с вашим дизайном</h2>
+          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Индивидуальная печать от 1 шт.</p>
+        </div>
+      </div>
+    </AccordionTrigger>
+    <AccordionContent className="px-0 pb-0">
+      <Accordion type="multiple" className="px-4 sm:px-6 py-3 space-y-3">
+        <AccordionItem value="clothes" className="border border-border/30 rounded-lg overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
+            <div className="text-left">
+              <h3 className="text-sm font-bold text-foreground">Одежда со смыслом</h3>
+              <p className="text-xs font-normal text-muted-foreground mt-1">Футболки, худи, шоперы, кепки</p>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent className="px-0 pb-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader><TableRow className="bg-muted/30"><TableHead className="font-bold text-foreground">Наименование</TableHead><TableHead className="font-bold text-foreground text-right">Цена</TableHead></TableRow></TableHeader>
+                <TableBody>
+                  <TableRow><TableCell className="font-medium text-foreground" colSpan={2}><span className="text-muted-foreground text-xs">Футболка хлопок 100% 180 гр</span></TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground pl-6">с печатью формата А5</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">1 350 ₽</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground pl-6">с печатью формата А4</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">1 650 ₽</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground pl-6">с печатью формата А3</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">1 950 ₽</TableCell></TableRow>
+                  <TableRow><TableCell className="font-medium text-foreground" colSpan={2}><span className="text-muted-foreground text-xs">Худи ПЕТЛЯ 100% хлопок</span></TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground pl-6">с печатью формата А5</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">2 350 ₽</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground pl-6">с печатью формата А4</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">2 650 ₽</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground pl-6">с печатью формата А3</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">2 950 ₽</TableCell></TableRow>
+                  <TableRow><TableCell className="font-medium text-foreground" colSpan={2}><span className="text-muted-foreground text-xs">Шопер хлопок 100%</span></TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground pl-6">с печатью формата А5</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">900 ₽</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground pl-6">с печатью формата А4</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">1 200 ₽</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground">Бейсболка велюр</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">1 100 ₽</TableCell></TableRow>
+                </TableBody>
+              </Table>
+            </div>
+            <div className="px-4 py-3 bg-muted/20 border-t border-border/30">
+              <p className="text-xs sm:text-sm font-semibold text-foreground mb-2">Цена печати на вашем изделии:</p>
+              <div className="space-y-1 text-xs sm:text-sm text-muted-foreground">
+                <p>формата А5 — <span className="neon-text font-semibold">600 ₽</span></p>
+                <p>формата А4 — <span className="neon-text font-semibold">900 ₽</span></p>
+                <p>формата А3 — <span className="neon-text font-semibold">1 300 ₽</span></p>
+              </div>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="dishes" className="border border-border/30 rounded-lg overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
+            <div className="text-left">
+              <h3 className="text-sm font-bold text-foreground">Посуда и уют</h3>
+              <p className="text-xs font-normal text-muted-foreground mt-1">Кружки и подушки</p>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent className="px-0 pb-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader><TableRow className="bg-muted/30"><TableHead className="font-bold text-foreground">Наименование</TableHead><TableHead className="font-bold text-foreground text-right">Цена</TableHead></TableRow></TableHeader>
+                <TableBody>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground">Кружка белая ПРЕМИУМ 330 мл</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">650 ₽</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground">Кружка цв. внутри ПРЕМИУМ 330 мл</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">750 ₽</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground">Кружка ХАМЕЛЕОН 330 мл</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">1 100 ₽</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground">Кружка Пивная 630 мл</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">1 200 ₽</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground">Подушка с наволочкой на молнии</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">1 450 ₽</TableCell></TableRow>
+                </TableBody>
+              </Table>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="photogifts" className="border border-border/30 rounded-lg overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
+            <div className="text-left">
+              <h3 className="text-sm font-bold text-foreground">Фотоподарки на память</h3>
+              <p className="text-xs font-normal text-muted-foreground mt-1">Пазлы, магниты, брелоки</p>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent className="px-0 pb-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader><TableRow className="bg-muted/30"><TableHead className="font-bold text-foreground">Наименование</TableHead><TableHead className="font-bold text-foreground text-right">Цена</TableHead></TableRow></TableHeader>
+                <TableBody>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground">Пазл формата А3</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">950 ₽</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground">Пазл формата А4</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">850 ₽</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground">Пазл формата А5</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">650 ₽</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground">Пазл сердце</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">850 ₽</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground">Магнит Акрил 105×105 мм, 105×70 мм</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">250 ₽</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground">Брелок Акрил 55×40 мм</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">150 ₽</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground">Брелок Металлический 50×37 мм</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">500 ₽</TableCell></TableRow>
+                </TableBody>
+              </Table>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="fun-stuff" className="border border-border/30 rounded-lg overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
+            <div className="text-left">
+              <h3 className="text-sm font-bold text-foreground">Прикольные мелочи</h3>
+              <p className="text-xs font-normal text-muted-foreground mt-1">Значки, коврики для мышки, вымпелы</p>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent className="px-0 pb-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader><TableRow className="bg-muted/30"><TableHead className="font-bold text-foreground">Наименование</TableHead><TableHead className="font-bold text-foreground text-right">Цена</TableHead></TableRow></TableHeader>
+                <TableBody>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground">Значки закатные от 10 шт</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">100 ₽/шт</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground">Коврик для мыши</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">800 ₽</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground">Вымпел</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">1 100 ₽</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground">Новогодний шар 70 мм</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">450 ₽</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground">Медаль металлическая</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">400 ₽</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground">3D стикер 3 шт</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">500 ₽</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground">Наклейка на авто</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">от 700 ₽</TableCell></TableRow>
+                </TableBody>
+              </Table>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </AccordionContent>
+  </AccordionItem>
+);
+
 const PricePage = () => {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
