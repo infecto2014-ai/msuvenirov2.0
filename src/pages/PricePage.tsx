@@ -103,7 +103,7 @@ const wideFormatPrices = [
   { name: 'Накатка виниловой плёнки на ПВХ-пластик 3–10 мм', price: 'от 4 800' },
 ];
 
-const categories = [souvenirs, polygraphy];
+const categories = [souvenirs];
 
 const MugSection = () => (
   <AccordionItem value="Кружки" className="border border-border/50 rounded-xl overflow-hidden mb-4 neon-border">
