@@ -4,20 +4,21 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Shirt, Gift, FileText, Maximize } from 'lucide-react';
 
-const fabricPrinting = {
-  icon: <Shirt className="w-5 h-5 text-primary" />,
-  title: 'Печать на ткани',
-  description: 'Футболки, худи, толстовки, шопперы и другой текстиль с вашим дизайном',
-  items: [
-    { name: 'Футболка с печатью (DTF)', from: 'от 1 200 ₽', note: 'A4 формат, хлопок' },
-    { name: 'Худи с печатью', from: 'от 2 800 ₽', note: 'DTF / сублимация' },
-    { name: 'Толстовка с печатью', from: 'от 2 500 ₽', note: 'DTF / сублимация' },
-    { name: 'Шоппер с печатью', from: 'от 800 ₽', note: 'DTF печать' },
-    { name: 'Кепка с печатью', from: 'от 900 ₽', note: 'DTF / вышивка' },
-    { name: 'Детская футболка', from: 'от 1 000 ₽', note: 'A4 формат' },
-  ],
-  examples: ['Корпоративные футболки', 'Мерч для фан-клубов', 'Семейные комплекты'],
-};
+const fabricProducts = [
+  { name: 'Футболка унисекс 160–180 гр', price: 'от 400 ₽' },
+  { name: 'Футболка детская 160–180 гр', price: 'от 300 ₽' },
+  { name: 'Футболка оверсайз от 180 гр', price: 'от 700 ₽' },
+  { name: 'Худи', price: 'от 1 300 ₽' },
+  { name: 'Бейсболка', price: 'от 250 ₽' },
+  { name: 'Шоппер', price: 'от 200 ₽' },
+];
+
+const printingPrices = [
+  { format: 'А6', qty1_4: '600 ₽', qty5_10: '450 ₽' },
+  { format: 'А5', qty1_4: '600 ₽', qty5_10: '510 ₽' },
+  { format: 'А4', qty1_4: '900 ₽', qty5_10: '760 ₽' },
+  { format: 'А3', qty1_4: '1 300 ₽', qty5_10: '1 100 ₽' },
+];
 
 const souvenirs = {
   icon: <Gift className="w-5 h-5 text-primary" />,
