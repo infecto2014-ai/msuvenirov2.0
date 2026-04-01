@@ -86,22 +86,16 @@ const polygraphy = {
   examples: ['Фирменный стиль', 'Рекламные материалы', 'Промо-наклейки'],
 };
 
-const wideFormat = {
-  icon: <Maximize className="w-5 h-5 text-primary" />,
-  title: 'Широкоформатная печать',
-  description: 'Баннеры, вывески, постеры, наклейки на авто и интерьерная печать',
-  items: [
-    { name: 'Баннер (м²)', from: 'от 500 ₽', note: 'Литой / ламинированный' },
-    { name: 'Постер A1', from: 'от 400 ₽', note: 'Фотобумага / матовая' },
-    { name: 'Наклейка на авто (м²)', from: 'от 1 200 ₽', note: 'Плёнка Oracal' },
-    { name: 'Интерьерная печать (м²)', from: 'от 800 ₽', note: 'Холст / фотообои' },
-    { name: 'Рулонный стенд (ролл-ап)', from: 'от 3 500 ₽', note: '85×200 см' },
-    { name: 'Вывеска / табличка', from: 'от 1 000 ₽', note: 'ПВХ / композит' },
-  ],
-  examples: ['Оформление витрин', 'Выставочные стенды', 'Реклама на транспорте'],
-};
+const wideFormatPrices = [
+  { name: 'Плёнка самоклеящаяся с печатью (белая глянцевая, матовая)', price: '1 050' },
+  { name: 'Плёнка самоклеящаяся с печатью (белая глянцевая, матовая) с контурным резом', price: '1 350' },
+  { name: 'Плёнка самоклеящаяся (белая и цветная / глянцевая, матовая) с контурным резом, на монтажке', price: '2 300' },
+  { name: 'Баннерная ткань (склейка, пробивание люверсов)', price: '1 300' },
+  { name: 'Печать на плёнке OneVision (сетка на самоклеющейся основе)', price: '1 450' },
+  { name: 'Накатка виниловой плёнки на ПВХ-пластик 3–10 мм', price: 'от 4 800' },
+];
 
-const categories = [souvenirs, polygraphy, wideFormat];
+const categories = [souvenirs, polygraphy];
 
 const MugSection = () => (
   <AccordionItem value="Кружки" className="border border-border/50 rounded-xl overflow-hidden mb-4 neon-border">
@@ -355,6 +349,42 @@ const FabricPrintingSection = () => {
   );
 };
 
+const WideFormatSection = () => (
+  <AccordionItem value="Широкоформатная печать" className="border border-border/50 rounded-xl overflow-hidden mb-4 neon-border">
+    <AccordionTrigger className="px-4 sm:px-6 py-4 sm:py-5 hover:no-underline hover:bg-muted/30 transition-colors">
+      <div className="flex items-center gap-3 text-left">
+        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+          <Maximize className="w-5 h-5 text-primary" />
+        </div>
+        <div>
+          <h3 className="text-base sm:text-lg font-bold text-foreground">Широкоформатная печать</h3>
+          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Баннеры, плёнки, вывески и интерьерная печать</p>
+        </div>
+      </div>
+    </AccordionTrigger>
+    <AccordionContent className="px-0 pb-0">
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-muted/30">
+              <TableHead className="font-bold text-foreground">Наименование</TableHead>
+              <TableHead className="font-bold text-foreground text-right">Стоимость 1 м²</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {wideFormatPrices.map((item) => (
+              <TableRow key={item.name} className="hover:bg-primary/5 transition-colors">
+                <TableCell className="font-medium text-foreground">{item.name}</TableCell>
+                <TableCell className="text-right whitespace-nowrap neon-text font-semibold">{item.price} ₽</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </AccordionContent>
+  </AccordionItem>
+);
+
 const PriceSection = ({ category }: { category: typeof souvenirs }) => (
   <AccordionItem value={category.title} className="border border-border/50 rounded-xl overflow-hidden mb-4 neon-border">
     <AccordionTrigger className="px-4 sm:px-6 py-4 sm:py-5 hover:no-underline hover:bg-muted/30 transition-colors">
@@ -424,6 +454,7 @@ const PricePage = () => {
               <FabricPrintingSection />
               <MugSection />
               <BadgeSection />
+              <WideFormatSection />
               {categories.map((cat) => (
                 <PriceSection key={cat.title} category={cat} />
               ))}
