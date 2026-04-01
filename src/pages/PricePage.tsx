@@ -2,22 +2,23 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Shirt, Gift, FileText, Maximize } from 'lucide-react';
+import { Shirt, Gift, FileText, Maximize, Calculator } from 'lucide-react';
 
-const fabricPrinting = {
-  icon: <Shirt className="w-5 h-5 text-primary" />,
-  title: 'Печать на ткани',
-  description: 'Футболки, худи, толстовки, шопперы и другой текстиль с вашим дизайном',
-  items: [
-    { name: 'Футболка с печатью (DTF)', from: 'от 1 200 ₽', note: 'A4 формат, хлопок' },
-    { name: 'Худи с печатью', from: 'от 2 800 ₽', note: 'DTF / сублимация' },
-    { name: 'Толстовка с печатью', from: 'от 2 500 ₽', note: 'DTF / сублимация' },
-    { name: 'Шоппер с печатью', from: 'от 800 ₽', note: 'DTF печать' },
-    { name: 'Кепка с печатью', from: 'от 900 ₽', note: 'DTF / вышивка' },
-    { name: 'Детская футболка', from: 'от 1 000 ₽', note: 'A4 формат' },
-  ],
-  examples: ['Корпоративные футболки', 'Мерч для фан-клубов', 'Семейные комплекты'],
-};
+const fabricProducts = [
+  { name: 'Футболка унисекс 160–180 гр', price: 'от 400 ₽' },
+  { name: 'Футболка детская 160–180 гр', price: 'от 300 ₽' },
+  { name: 'Футболка оверсайз от 180 гр', price: 'от 700 ₽' },
+  { name: 'Худи', price: 'от 1 300 ₽' },
+  { name: 'Бейсболка', price: 'от 250 ₽' },
+  { name: 'Шоппер', price: 'от 200 ₽' },
+];
+
+const printingPrices = [
+  { format: 'А6', qty1_4: '600 ₽', qty5_10: '450 ₽' },
+  { format: 'А5', qty1_4: '600 ₽', qty5_10: '510 ₽' },
+  { format: 'А4', qty1_4: '900 ₽', qty5_10: '760 ₽' },
+  { format: 'А3', qty1_4: '1 300 ₽', qty5_10: '1 100 ₽' },
+];
 
 const souvenirs = {
   icon: <Gift className="w-5 h-5 text-primary" />,
@@ -64,9 +65,107 @@ const wideFormat = {
   examples: ['Оформление витрин', 'Выставочные стенды', 'Реклама на транспорте'],
 };
 
-const categories = [fabricPrinting, souvenirs, polygraphy, wideFormat];
+const categories = [souvenirs, polygraphy, wideFormat];
 
-const PriceSection = ({ category }: { category: typeof fabricPrinting }) => (
+const FabricPrintingSection = () => {
+  const handleCalculate = (format: string) => {
+    const orderBtn = document.querySelector('[data-order-button]') as HTMLElement;
+    if (orderBtn) orderBtn.click();
+  };
+
+  return (
+    <AccordionItem value="Печать на ткани" className="border border-border/50 rounded-xl overflow-hidden mb-4 neon-border">
+      <AccordionTrigger className="px-4 sm:px-6 py-4 sm:py-5 hover:no-underline hover:bg-muted/30 transition-colors">
+        <div className="flex items-center gap-3 text-left">
+          <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+            <Shirt className="w-5 h-5 text-primary" />
+          </div>
+          <div>
+            <h3 className="text-base sm:text-lg font-bold text-foreground">Печать на ткани</h3>
+            <p className="text-xs sm:text-sm text-muted-foreground font-normal">Футболки, худи, шопперы и другой текстиль с вашим дизайном</p>
+          </div>
+        </div>
+      </AccordionTrigger>
+      <AccordionContent className="px-0 pb-0">
+        {/* Изделия */}
+        <Accordion type="multiple" className="px-4 sm:px-6 py-3">
+          <AccordionItem value="products" className="border border-border/30 rounded-lg overflow-hidden">
+            <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
+              Изделие
+            </AccordionTrigger>
+            <AccordionContent className="px-0 pb-0">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/30">
+                    <TableHead className="font-bold text-foreground">Наименование</TableHead>
+                    <TableHead className="font-bold text-foreground text-right">Цена</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {fabricProducts.map((item) => (
+                    <TableRow key={item.name} className="hover:bg-primary/5 transition-colors">
+                      <TableCell className="font-medium text-foreground">{item.name}</TableCell>
+                      <TableCell className="text-right whitespace-nowrap neon-text font-semibold">{item.price}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+
+        {/* Цена нанесения */}
+        <div className="px-4 sm:px-6 pb-4">
+          <h4 className="text-sm font-bold text-foreground mb-3">Цена нанесения (DTF)</h4>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-muted/30">
+                  <TableHead className="font-bold text-foreground">Формат</TableHead>
+                  <TableHead className="font-bold text-foreground text-center">1–4 шт</TableHead>
+                  <TableHead className="font-bold text-foreground text-center">5–10 шт</TableHead>
+                  <TableHead className="font-bold text-foreground text-center">11+ шт</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {printingPrices.map((row) => (
+                  <TableRow key={row.format} className="hover:bg-primary/5 transition-colors">
+                    <TableCell className="font-medium text-foreground">{row.format}</TableCell>
+                    <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{row.qty1_4}</TableCell>
+                    <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{row.qty5_10}</TableCell>
+                    <TableCell className="text-center">
+                      <button
+                        onClick={() => handleCalculate(row.format)}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors"
+                      >
+                        <Calculator className="w-3 h-3" />
+                        Рассчитать
+                      </button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+
+        {/* Примеры работ */}
+        <div className="px-4 sm:px-6 py-4 bg-muted/20 border-t border-border/30">
+          <p className="text-xs text-muted-foreground mb-2 font-semibold uppercase tracking-wider">Примеры работ:</p>
+          <div className="flex flex-wrap gap-2">
+            {['Корпоративные футболки', 'Мерч для фан-клубов', 'Семейные комплекты'].map((ex) => (
+              <span key={ex} className="px-3 py-1.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                {ex}
+              </span>
+            ))}
+          </div>
+        </div>
+      </AccordionContent>
+    </AccordionItem>
+  );
+};
+
+const PriceSection = ({ category }: { category: typeof souvenirs }) => (
   <AccordionItem value={category.title} className="border border-border/50 rounded-xl overflow-hidden mb-4 neon-border">
     <AccordionTrigger className="px-4 sm:px-6 py-4 sm:py-5 hover:no-underline hover:bg-muted/30 transition-colors">
       <div className="flex items-center gap-3 text-left">
@@ -100,8 +199,6 @@ const PriceSection = ({ category }: { category: typeof fabricPrinting }) => (
           </TableBody>
         </Table>
       </div>
-
-      {/* Примеры работ */}
       <div className="px-4 sm:px-6 py-4 bg-muted/20 border-t border-border/30">
         <p className="text-xs text-muted-foreground mb-2 font-semibold uppercase tracking-wider">Примеры работ:</p>
         <div className="flex flex-wrap gap-2">
@@ -134,13 +231,13 @@ const PricePage = () => {
 
           <div className="max-w-3xl mx-auto">
             <Accordion type="multiple" defaultValue={['Печать на ткани']}>
+              <FabricPrintingSection />
               {categories.map((cat) => (
                 <PriceSection key={cat.title} category={cat} />
               ))}
             </Accordion>
           </div>
 
-          {/* CTA */}
           <div className="text-center mt-10 sm:mt-14">
             <p className="text-muted-foreground text-sm mb-4">
               Нужен расчёт для тиража или индивидуального заказа?
