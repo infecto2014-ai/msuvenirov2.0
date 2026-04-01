@@ -175,8 +175,7 @@ const BadgeSection = () => (
     </AccordionContent>
   </AccordionItem>
 );
-
-
+const FabricPrintingSection = () => {
   const handleCalculate = (format: string) => {
     const orderBtn = document.querySelector('[data-order-button]') as HTMLElement;
     if (orderBtn) orderBtn.click();
