@@ -178,7 +178,8 @@ const FabricPrintingSection = () => {
                   <TableHead className="font-bold text-foreground">Формат</TableHead>
                   <TableHead className="font-bold text-foreground text-center">1–4 шт</TableHead>
                   <TableHead className="font-bold text-foreground text-center">5–10 шт</TableHead>
-                  <TableHead className="font-bold text-foreground text-center">11+ шт</TableHead>
+                  <TableHead className="font-bold text-foreground text-center">20–50 шт</TableHead>
+                  <TableHead className="font-bold text-foreground text-center">50+ шт</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -187,6 +188,7 @@ const FabricPrintingSection = () => {
                     <TableCell className="font-medium text-foreground">{row.format}</TableCell>
                     <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{row.qty1_4}</TableCell>
                     <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{row.qty5_10}</TableCell>
+                    <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{row.qty20_50}</TableCell>
                     <TableCell className="text-center">
                       <button
                         onClick={() => handleCalculate(row.format)}
