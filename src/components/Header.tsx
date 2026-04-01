@@ -109,6 +109,7 @@ const Header = () => {
     { href: '#отзывы', label: 'Отзывы', id: 'отзывы' },
     { href: '#контакты', label: 'Контакты', id: 'контакты' },
     { href: '/card', label: 'Визитка', id: 'визитка' },
+    { href: '/price', label: 'Прайс-лист', id: 'прайс' },
   ];
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -162,21 +163,8 @@ const Header = () => {
             ))}
           </div>
 
-          {/* Working Hours + Social Icons + Order Button - visible on md and up */}
+          {/* Social Icons + Order Button - visible on md and up */}
           <div className="hidden md:flex items-center gap-2 lg:gap-4 flex-shrink-0">
-            {/* Working Hours with Status */}
-            <div className="flex items-center gap-1.5">
-              <div 
-                className={`w-2 h-2 rounded-full ${
-                  workingStatus.isOpen 
-                    ? 'bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.6)]' 
-                    : 'bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.6)]'
-                }`}
-              />
-              <span className="text-xs lg:text-sm text-muted-foreground whitespace-nowrap">
-                10:00 – 20:00 {workingStatus.isOpen ? '(открыто)' : '(закрыто)'}
-              </span>
-            </div>
             
             <a
               href="https://vk.com/msuvenirov39"
