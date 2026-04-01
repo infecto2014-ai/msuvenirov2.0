@@ -250,6 +250,7 @@ const PricePage = () => {
         </div>
       </main>
       <Footer />
+      <FloatingOrderButton />
     </div>
   );
 };
