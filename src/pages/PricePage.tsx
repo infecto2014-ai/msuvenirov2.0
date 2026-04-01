@@ -582,53 +582,6 @@ const WideFormatSection = () => (
   </AccordionItem>
 );
 
-const PriceSection = ({ category }: { category: typeof souvenirs }) => (
-  <AccordionItem value={category.title} className="border border-border/50 rounded-xl overflow-hidden mb-4 neon-border">
-    <AccordionTrigger className="px-4 sm:px-6 py-4 sm:py-5 hover:no-underline hover:bg-muted/30 transition-colors">
-      <div className="flex items-center gap-3 text-left">
-        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-          {category.icon}
-        </div>
-        <div>
-          <h2 className="text-base sm:text-lg font-bold text-foreground">{category.title}</h2>
-          <p className="text-xs sm:text-sm text-muted-foreground font-normal">{category.description}</p>
-        </div>
-      </div>
-    </AccordionTrigger>
-    <AccordionContent className="px-0 pb-0">
-      <div className="overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow className="bg-muted/30">
-              <TableHead className="font-bold text-foreground">Наименование</TableHead>
-              <TableHead className="font-bold text-foreground text-right">Цена</TableHead>
-              <TableHead className="font-bold text-foreground hidden sm:table-cell">Примечание</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {category.items.map((item) => (
-              <TableRow key={item.name} className="hover:bg-primary/5 transition-colors">
-                <TableCell className="font-medium text-foreground">{item.name}</TableCell>
-                <TableCell className="text-right whitespace-nowrap neon-text font-semibold">{item.from}</TableCell>
-                <TableCell className="text-muted-foreground hidden sm:table-cell">{item.note}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-      <div className="px-4 sm:px-6 py-4 bg-muted/20 border-t border-border/30">
-        <p className="text-xs text-muted-foreground mb-2 font-semibold uppercase tracking-wider">Примеры работ:</p>
-        <div className="flex flex-wrap gap-2">
-          {category.examples.map((ex) => (
-            <span key={ex} className="px-3 py-1.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
-              {ex}
-            </span>
-          ))}
-        </div>
-      </div>
-    </AccordionContent>
-  </AccordionItem>
-);
 
 const CalendarSection = () => (
   <AccordionItem value="Календари" className="border border-border/50 rounded-xl overflow-hidden mb-4 neon-border">
