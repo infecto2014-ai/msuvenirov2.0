@@ -243,6 +243,17 @@ const ShowcaseSection = () => {
             </svg>
           </button>
         </div>
+
+        {/* Price List Button */}
+        <div className="text-center mt-10">
+          <Link
+            to="/price"
+            className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))] text-white font-bold text-sm sm:text-base hover:scale-105 transition-transform duration-300 shadow-lg shadow-[hsl(var(--neon-cyan)/0.3)]"
+          >
+            <FileText className="w-5 h-5" />
+            Прайс на наши услуги
+          </Link>
+        </div>
       </div>
 
       {/* Custom Swiper Styles */}
