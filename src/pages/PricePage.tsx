@@ -123,7 +123,7 @@ const calendarOptions = [
   { name: 'Матовая ламинация', price: '35' },
 ];
 
-const categories = [souvenirs];
+
 
 const MugSection = () => (
   <AccordionItem value="Кружки" className="border border-border/50 rounded-xl overflow-hidden mb-4 neon-border">
