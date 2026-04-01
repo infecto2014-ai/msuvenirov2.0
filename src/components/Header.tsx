@@ -130,6 +130,12 @@ const Header = () => {
       return;
     }
     const targetId = href.replace('#', '');
+    // If not on homepage, navigate there first with hash
+    if (location.pathname !== '/') {
+      navigate('/' + href);
+      setIsMobileMenuOpen(false);
+      return;
+    }
     const element = document.getElementById(targetId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
