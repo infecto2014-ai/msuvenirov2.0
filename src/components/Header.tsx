@@ -23,6 +23,16 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('главная');
   const [workingStatus, setWorkingStatus] = useState(getWorkingStatus);
+  const location = useLocation();
+
+  // Set active section based on route
+  useEffect(() => {
+    if (location.pathname === '/price') {
+      setActiveSection('прайс');
+    } else if (location.pathname === '/card') {
+      setActiveSection('визитка');
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     const handleScroll = () => {
