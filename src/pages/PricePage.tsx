@@ -104,29 +104,29 @@ const wideFormatPrices = [
 ];
 
 const quarterlyCalendars = [
-  { name: '«Стандарт+» (4 поля)', midi50: '612', mini50: '402', midi100: '582', mini100: '372' },
-  { name: '«Стандарт» (2 поля)', midi50: '396', mini50: '270', midi100: '390', mini100: '343' },
-  { name: '«Классик» (1 поле)', midi50: '342', mini50: '253', midi100: '336', mini100: '252' },
-  { name: '«Одноблочный» (2 поля)', midi50: '336', mini50: '270', midi100: '300', mini100: '258' },
+  { name: '«Стандарт+» (4 поля)', midi50: '610', mini50: '400', midi100: '580', mini100: '370' },
+  { name: '«Стандарт» (2 поля)', midi50: '395', mini50: '270', midi100: '390', mini100: '345' },
+  { name: '«Классик» (1 поле)', midi50: '340', mini50: '255', midi100: '335', mini100: '250' },
+  { name: '«Одноблочный» (2 поля)', midi50: '335', mini50: '270', midi100: '300', mini100: '260' },
 ];
 
 const wallCalendars = [
-  { name: 'Плакат (1 лист)', qty1_20: '180', qty21_50: '175', qty51_100: '170', qty100plus: '166' },
-  { name: 'Перекидной А4 (13 листов)', qty1_20: '696', qty21_50: '540', qty51_100: '480', qty100plus: '420' },
-  { name: 'Перекидной А3 (13 листов)', qty1_20: '1 392', qty21_50: '1 080', qty51_100: '960', qty100plus: '840' },
+  { name: 'Плакат (1 лист А3)', qty1_20: '180', qty21_50: '175', qty51_100: '170', qty100plus: '165' },
+  { name: 'Перекидной А4 (13 листов)', qty1_20: '695', qty21_50: '540', qty51_100: '480', qty100plus: '420' },
+  { name: 'Перекидной А3 (13 листов)', qty1_20: '1 390', qty21_50: '1 080', qty51_100: '960', qty100plus: '840' },
 ];
 
 const desktopCalendars = [
-  { name: 'Обычный домик', qty20: '62', qty50: '55', qty100: '46' },
-  { name: 'Домик с отрывными месяцами', qty20: '270', qty50: '264', qty100: '240' },
+  { name: 'Обычный домик', qty20: '60', qty50: '55', qty100: '45' },
+  { name: 'Домик с отрывными месяцами', qty20: '270', qty50: '265', qty100: '240' },
 ];
 
 const pocketCalendars = [
-  { qty: 'до 100 шт.', price: '624' },
+  { qty: 'до 100 шт.', price: '625' },
   { qty: '200 шт.', price: '1 170' },
-  { qty: '300 шт.', price: '1 796' },
-  { qty: '500 шт.', price: '2 184' },
-  { qty: '1 000 шт.', price: '4 056' },
+  { qty: '300 шт.', price: '1 795' },
+  { qty: '500 шт.', price: '2 185' },
+  { qty: '1 000 шт.', price: '4 055' },
   { qty: '10 000 шт.', price: '17 160' },
 ];
 
@@ -660,7 +660,10 @@ const CalendarSection = () => (
         {/* Квартальные */}
         <AccordionItem value="quarterly" className="border border-border/30 rounded-lg overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
-            Квартальные календари
+            <div>
+              <span>Квартальные календари</span>
+              <p className="text-xs font-normal text-muted-foreground mt-1">МИНИ — ширина 297 мм, МИДИ — ширина 335 мм</p>
+            </div>
           </AccordionTrigger>
           <AccordionContent className="px-0 pb-0">
             <div className="overflow-x-auto">
@@ -697,7 +700,10 @@ const CalendarSection = () => (
         {/* Настенные и плакатные */}
         <AccordionItem value="wall" className="border border-border/30 rounded-lg overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
-            Настенные и плакатные календари
+            <div>
+              <span>Настенные и плакатные календари</span>
+              <p className="text-xs font-normal text-muted-foreground mt-1">Бумага 170 гр</p>
+            </div>
           </AccordionTrigger>
           <AccordionContent className="px-0 pb-0">
             <div className="overflow-x-auto">
@@ -730,7 +736,10 @@ const CalendarSection = () => (
         {/* Настольные домики */}
         <AccordionItem value="desktop" className="border border-border/30 rounded-lg overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
-            Настольные календари «Домики»
+            <div>
+              <span>Настольные календари «Домики»</span>
+              <p className="text-xs font-normal text-muted-foreground mt-1">200×95 мм</p>
+            </div>
           </AccordionTrigger>
           <AccordionContent className="px-0 pb-0">
             <div className="overflow-x-auto">
@@ -761,7 +770,10 @@ const CalendarSection = () => (
         {/* Карманные */}
         <AccordionItem value="pocket" className="border border-border/30 rounded-lg overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
-            Карманные календари
+            <div>
+              <span>Карманные календари</span>
+              <p className="text-xs font-normal text-muted-foreground mt-1">60×90 мм</p>
+            </div>
           </AccordionTrigger>
           <AccordionContent className="px-0 pb-0">
             <div className="overflow-x-auto">
