@@ -834,28 +834,68 @@ const PricePage = () => {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Helmet>
-        <title>Прайс-лист — Мастерская сувениров Калининград | Цены на печать</title>
-        <meta name="description" content="Актуальные цены на печать на футболках, кружках, значках, баннерах и полиграфию в Калининграде. DTF-печать, сублимация, широкоформатная печать. Мастерская сувениров." />
-        <meta name="keywords" content="прайс печать на футболках калининград, цены dtf печать, стоимость печати на кружках, широкоформатная печать калининград, полиграфия калининград, значки на заказ цена" />
+        <title>Цены на печать и сувениры в Калининграде | Мастерская сувениров</title>
+        <meta name="description" content="Прайс-лист: печать на футболках, кружках, визитки, баннеры, календари, значки в Калининграде. Цены от производителя. Закажите расчёт!" />
+        <meta name="keywords" content="прайс печать калининград, цены полиграфия калининград, печать на футболках цена, визитки калининград, широкоформатная печать, сувениры на заказ, календари печать, значки брелоки" />
         <link rel="canonical" href="https://msuvenirov.ru/price" />
-        <meta property="og:title" content="Прайс-лист — Мастерская сувениров Калининград" />
-        <meta property="og:description" content="Цены на печать на футболках, кружках, значках, баннерах и полиграфию. Собственное производство в Калининграде." />
+        <meta property="og:title" content="Цены на печать и сувениры в Калининграде | Мастерская сувениров" />
+        <meta property="og:description" content="Актуальные цены на печать, полиграфию и сувенирную продукцию. Собственное производство в Калининграде." />
         <meta property="og:url" content="https://msuvenirov.ru/price" />
         <meta property="og:type" content="website" />
+        <meta property="og:locale" content="ru_RU" />
+        <meta property="og:site_name" content="Мастерская сувениров" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebPage",
-          "name": "Прайс-лист — Мастерская сувениров",
-          "description": "Актуальные цены на печать на футболках, кружках, значках, баннерах и полиграфию в Калининграде.",
+          "name": "Прайс-лист — Мастерская сувениров Калининград",
+          "description": "Актуальные цены на печать на футболках, кружках, значках, баннерах, полиграфию и календари в Калининграде.",
           "url": "https://msuvenirov.ru/price",
+          "mainEntity": {
+            "@type": "OfferCatalog",
+            "name": "Прайс-лист Мастерской сувениров",
+            "itemListElement": [
+              {
+                "@type": "OfferCatalog",
+                "name": "Печать на ткани",
+                "description": "DTF-печать на футболках, худи, шопперах от 1 штуки"
+              },
+              {
+                "@type": "OfferCatalog",
+                "name": "Полиграфия",
+                "description": "Визитки, листовки, блокноты, плакаты — цветная печать"
+              },
+              {
+                "@type": "OfferCatalog",
+                "name": "Широкоформатная печать",
+                "description": "Баннеры, плёнки, вывески, печать на ПВХ-пластике"
+              },
+              {
+                "@type": "OfferCatalog",
+                "name": "Календари",
+                "description": "Квартальные, настенные, настольные и карманные календари"
+              },
+              {
+                "@type": "OfferCatalog",
+                "name": "Значки, брелоки, магниты",
+                "description": "Закатные значки, брелоки, виниловые и акриловые магниты, стикеры 3D"
+              },
+              {
+                "@type": "OfferCatalog",
+                "name": "Кружки с печатью",
+                "description": "Сублимация на кружках — белые, хамелеон, глиттер, мрамор"
+              }
+            ]
+          },
           "publisher": {
             "@type": "LocalBusiness",
             "name": "Мастерская сувениров",
             "address": {
               "@type": "PostalAddress",
               "addressLocality": "Калининград",
+              "addressRegion": "Калининградская область",
               "addressCountry": "RU"
-            }
+            },
+            "url": "https://msuvenirov.ru"
           }
         })}</script>
       </Helmet>
@@ -864,15 +904,15 @@ const PricePage = () => {
         <div className="container mx-auto px-4 sm:px-6">
           <header className="text-center mb-8 sm:mb-12">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-black">
-              <span className="text-foreground">Наш </span>
-              <span className="neon-text">прайс-лист</span>
+              <span className="text-foreground">Прайс-лист на услуги печати </span>
+              <span className="neon-text">и сувенирную продукцию</span>
             </h1>
             <p className="text-muted-foreground mt-3 sm:mt-4 max-w-xl mx-auto text-sm sm:text-base">
-              Актуальные цены на все виды печати и сувенирной продукции. Точную стоимость уточняйте у менеджера.
+              Актуальные цены на все виды печати и сувенирной продукции в Калининграде. Точную стоимость уточняйте у менеджера.
             </p>
           </header>
 
-          <div className="max-w-3xl mx-auto">
+          <section className="max-w-3xl mx-auto" aria-label="Каталог услуг и цен">
             <Accordion type="multiple" defaultValue={['Печать на ткани']}>
               <FabricPrintingSection />
               <MugSection />
@@ -884,7 +924,7 @@ const PricePage = () => {
                 <PriceSection key={cat.title} category={cat} />
               ))}
             </Accordion>
-          </div>
+          </section>
 
           <div className="text-center mt-10 sm:mt-14">
             <p className="text-muted-foreground text-sm mb-4">
