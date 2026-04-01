@@ -604,7 +604,7 @@ const PriceSection = ({ category }: { category: typeof souvenirs }) => (
           {category.icon}
         </div>
         <div>
-          <h3 className="text-base sm:text-lg font-bold text-foreground">{category.title}</h3>
+          <h2 className="text-base sm:text-lg font-bold text-foreground">{category.title}</h2>
           <p className="text-xs sm:text-sm text-muted-foreground font-normal">{category.description}</p>
         </div>
       </div>
