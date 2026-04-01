@@ -891,6 +891,27 @@ const GiftsSection = () => (
             </div>
           </AccordionContent>
         </AccordionItem>
+        <AccordionItem value="operative-print" className="border border-border/30 rounded-lg overflow-hidden">
+          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
+            <h3 className="text-sm font-bold text-foreground">Оперативная полиграфия</h3>
+          </AccordionTrigger>
+          <AccordionContent className="px-0 pb-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader><TableRow className="bg-muted/30"><TableHead className="font-bold text-foreground">Услуга</TableHead><TableHead className="font-bold text-foreground text-right">Цена</TableHead></TableRow></TableHeader>
+                <TableBody>
+                  <TableRow><TableCell className="font-medium text-foreground" colSpan={2}><span className="text-muted-foreground text-xs">Печать формата А4</span></TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground pl-6">ч/б</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">15 ₽</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground pl-6">цв</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">25 ₽</TableCell></TableRow>
+                  <TableRow><TableCell className="font-medium text-foreground" colSpan={2}><span className="text-muted-foreground text-xs">Печать формата А3</span></TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground pl-6">ч/б</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">30 ₽</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground pl-6">цв</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">40 ₽</TableCell></TableRow>
+                  <TableRow className="hover:bg-primary/5"><TableCell className="font-medium text-foreground">Редактирование документа</TableCell><TableCell className="text-right whitespace-nowrap neon-text font-semibold">от 50 ₽</TableCell></TableRow>
+                </TableBody>
+              </Table>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
       </Accordion>
     </AccordionContent>
   </AccordionItem>
