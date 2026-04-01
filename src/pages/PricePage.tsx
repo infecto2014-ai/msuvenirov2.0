@@ -565,7 +565,7 @@ const WideFormatSection = () => (
           <Maximize className="w-5 h-5 text-primary" />
         </div>
         <div>
-          <h3 className="text-base sm:text-lg font-bold text-foreground">Широкоформатная печать</h3>
+          <h2 className="text-base sm:text-lg font-bold text-foreground">Широкоформатная печать</h2>
           <p className="text-xs sm:text-sm text-muted-foreground font-normal">Баннеры, плёнки, вывески и интерьерная печать</p>
         </div>
       </div>
