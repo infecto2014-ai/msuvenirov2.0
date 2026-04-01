@@ -145,6 +145,33 @@ const MugSection = () => (
   </AccordionItem>
 );
 
+const MagnetTable = ({ items }: { items: Array<{ name: string; qty100: string; qty200: string; qty300: string; qty400: string; qty500: string }> }) => (
+  <Table>
+    <TableHeader>
+      <TableRow className="bg-muted/30">
+        <TableHead className="font-bold text-foreground">Наименование</TableHead>
+        <TableHead className="font-bold text-foreground text-center">100 шт</TableHead>
+        <TableHead className="font-bold text-foreground text-center">200 шт</TableHead>
+        <TableHead className="font-bold text-foreground text-center">300 шт</TableHead>
+        <TableHead className="font-bold text-foreground text-center">400 шт</TableHead>
+        <TableHead className="font-bold text-foreground text-center">500 шт</TableHead>
+      </TableRow>
+    </TableHeader>
+    <TableBody>
+      {items.map((item) => (
+        <TableRow key={item.name} className="hover:bg-primary/5 transition-colors">
+          <TableCell className="font-medium text-foreground">{item.name}</TableCell>
+          <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty100} ₽</TableCell>
+          <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty200} ₽</TableCell>
+          <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty300} ₽</TableCell>
+          <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty400} ₽</TableCell>
+          <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty500} ₽</TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
+);
+
 const QtyTable = ({ items }: { items: Array<{ name: string; qty25: string; qty100: string; qty200: string; qty300: string; qty400: string; qty500: string }> }) => (
   <Table>
     <TableHeader>
