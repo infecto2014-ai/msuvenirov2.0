@@ -77,6 +77,50 @@ const wideFormat = {
 
 const categories = [souvenirs, polygraphy, wideFormat];
 
+const MugSection = () => (
+  <AccordionItem value="Кружки" className="border border-border/50 rounded-xl overflow-hidden mb-4 neon-border">
+    <AccordionTrigger className="px-4 sm:px-6 py-4 sm:py-5 hover:no-underline hover:bg-muted/30 transition-colors">
+      <div className="flex items-center gap-3 text-left">
+        <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+          <Coffee className="w-5 h-5 text-primary" />
+        </div>
+        <div>
+          <h3 className="text-base sm:text-lg font-bold text-foreground">Кружки</h3>
+          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Кружки с сублимацией — белые, хамелеон, глиттер, мрамор и другие</p>
+        </div>
+      </div>
+    </AccordionTrigger>
+    <AccordionContent className="px-0 pb-0">
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-muted/30">
+              <TableHead className="font-bold text-foreground">Наименование</TableHead>
+              <TableHead className="font-bold text-foreground text-center">1 шт</TableHead>
+              <TableHead className="font-bold text-foreground text-center">10 шт</TableHead>
+              <TableHead className="font-bold text-foreground text-center">30 шт</TableHead>
+              <TableHead className="font-bold text-foreground text-center">100 шт</TableHead>
+              <TableHead className="font-bold text-foreground text-center">200 шт</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {mugPrices.map((item) => (
+              <TableRow key={item.name} className="hover:bg-primary/5 transition-colors">
+                <TableCell className="font-medium text-foreground">{item.name}</TableCell>
+                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty1} ₽</TableCell>
+                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty10} ₽</TableCell>
+                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty30} ₽</TableCell>
+                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty100} ₽</TableCell>
+                <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{item.qty200} ₽</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </AccordionContent>
+  </AccordionItem>
+);
+
 const FabricPrintingSection = () => {
   const handleCalculate = (format: string) => {
     const orderBtn = document.querySelector('[data-order-button]') as HTMLElement;
