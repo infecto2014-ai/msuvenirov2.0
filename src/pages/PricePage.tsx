@@ -653,7 +653,7 @@ const CalendarSection = () => (
         </div>
         <div>
           <h2 className="text-base sm:text-lg font-bold text-foreground">Календари</h2>
-          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Квартальные, настенные, настольные и карманные календари</p>
+          <p className="text-xs sm:text-sm text-muted-foreground font-normal">Печать календарей любого типа — квартальные, настенные, настольные и карманные с вашим дизайном</p>
         </div>
       </div>
     </AccordionTrigger>
