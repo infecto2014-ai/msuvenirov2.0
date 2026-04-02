@@ -433,13 +433,13 @@ const FloatingOrderButton = () => {
 
             {/* Consent */}
             <p className="text-xs text-muted-foreground text-center leading-relaxed">
-              Нажимая кнопку «Отправить заявку», я даю согласие на обработку{' '}
+              Нажимая кнопку «Отправить заявку», вы даёте согласие на обработку{' '}
               <Link
                 to="/privacy-policy"
                 className="text-primary hover:underline"
                 onClick={() => { saveFormData(); setIsOpen(false); }}
               >
-                Персональных данных
+                персональных данных
               </Link>{' '}
               и принимаете условия{' '}
               <Link
