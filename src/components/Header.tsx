@@ -322,8 +322,8 @@ const Header = () => {
 
               <div className="flex gap-3 mt-1">
                 <a href="tel:+79521142350" aria-label="Позвонить"
-                  className="w-12 h-12 rounded-full bg-green-500 hover:bg-green-600 flex items-center justify-center transition-colors shadow-[0_0_15px_rgba(34,197,94,0.4)]">
-                  <Phone className="w-5 h-5 text-white" />
+                  className="w-12 h-12 rounded-full bg-green-500 hover:bg-green-600 flex items-center justify-center transition-all duration-300 shadow-[0_0_15px_rgba(34,197,94,0.4)]">
+                  <Phone className="w-5 h-5 text-background" />
                 </a>
                 <button onClick={handleOrderClick} className="gradient-btn-pulse flex-1 py-3 rounded-lg text-sm font-semibold text-background">
                   <span className="relative z-10">Заказать</span>

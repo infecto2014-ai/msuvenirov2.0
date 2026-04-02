@@ -68,7 +68,7 @@ const TrustSection = () => {
   }, [isPaused]);
 
   return (
-    <section className="py-10 sm:py-14 relative overflow-hidden">
+    <section className="py-10 sm:py-14 relative overflow-hidden" aria-label="Корпоративные клиенты">
       {/* Background with smooth transition to ContactSection */}
       <div className="absolute inset-0 bg-background" />
       <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-b from-transparent to-[hsl(260,25%,6%)]" />

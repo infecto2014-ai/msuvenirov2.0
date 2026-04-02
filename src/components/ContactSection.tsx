@@ -2,7 +2,7 @@ import { MapPin, Phone, Mail, Send, Clock } from 'lucide-react';
 
 const ContactSection = () => {
   return (
-    <section id="контакты" className="relative py-16 sm:py-20 md:py-24 overflow-hidden">
+    <section id="контакты" className="relative py-16 sm:py-24 overflow-hidden" aria-label="Контактная информация">
       {/* Background with smooth transition from TrustSection */}
       <div className="absolute inset-0 bg-[hsl(260,25%,6%)]" />
       <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-background to-transparent" />

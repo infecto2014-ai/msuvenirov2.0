@@ -244,6 +244,9 @@ const PortfolioSection = () => {
           onTouchStart={onTouchStart}
           onTouchMove={onTouchMove}
           onTouchEnd={onTouchEnd}
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Фото: ${portfolioItems[selectedIndex].title}`}
         >
           <button
             onClick={() => setSelectedIndex(null)}
