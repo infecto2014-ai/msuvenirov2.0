@@ -64,6 +64,14 @@ const TechnologySection = () => {
               Мы используем <strong className="text-foreground">профессиональное оборудование</strong> и 
               сертифицированные чернила, что гарантирует долговечность и безопасность готовых изделий.
             </p>
+
+            <Link
+              to="/faq"
+              className="inline-flex items-center gap-2 mt-2 px-5 py-2.5 rounded-full neon-border text-sm font-medium text-primary hover:neon-glow transition-all duration-300"
+            >
+              <HelpCircle className="w-4 h-4" />
+              Другие методы печати, сроки и ответы на вопросы
+            </Link>
           </div>
 
           {/* Benefits Grid */}
