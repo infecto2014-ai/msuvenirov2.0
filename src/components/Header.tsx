@@ -39,16 +39,36 @@ const Header = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Scrollspy
+  // Scrollspy — tracks which section is currently in view
   useEffect(() => {
+    if (location.pathname !== '/') return;
     const sectionIds = ['главная', 'о-нас', 'работы', 'отзывы', 'контакты'];
+    const visibleSections = new Map<string, IntersectionObserverEntry>();
+
+    const pickActive = () => {
+      let best: string | null = null;
+      let bestTop = Infinity;
+      visibleSections.forEach((entry, id) => {
+        if (entry.isIntersecting) {
+          const top = entry.boundingClientRect.top;
+          // Pick the section whose top is closest to (but above) the viewport centre
+          if (Math.abs(top) < Math.abs(bestTop)) {
+            bestTop = top;
+            best = id;
+          }
+        }
+      });
+      if (best) setActiveSection(best);
+    };
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) setActiveSection(entry.target.id);
+          visibleSections.set(entry.target.id, entry);
         });
+        pickActive();
       },
-      { root: null, rootMargin: '-20% 0px -60% 0px', threshold: 0 }
+      { root: null, rootMargin: '-10% 0px -40% 0px', threshold: [0, 0.1, 0.3, 0.5, 1] }
     );
     const observedElements = new Set<Element>();
     const observeSections = () => {
@@ -72,7 +92,7 @@ const Header = () => {
       mutationObserver.disconnect();
       clearInterval(retryInterval);
     };
-  }, []);
+  }, [location.pathname]);
 
   const navLinks = [
     { href: '#главная', label: 'Главная', id: 'главная' },
