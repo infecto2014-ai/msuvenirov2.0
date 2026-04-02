@@ -126,8 +126,8 @@ const Header = () => {
             <ProtectedLogo height={40} className="xl:h-[44px]" />
           </a>
 
-          {/* Nav */}
-          <nav aria-label="Основная навигация" className="flex-1 min-w-0">
+          {/* Nav — centered */}
+          <nav aria-label="Основная навигация" className="flex-1 flex justify-center min-w-0">
             <ul className="flex items-center gap-0.5 xl:gap-1">
               {navLinks.map((link) => (
                 <li key={link.href}>
