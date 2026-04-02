@@ -119,8 +119,8 @@ const ShowcaseSection = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
         {/* Section Title */}
         <header className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
-            <span className="neon-text">Печать на текстиле и сувенирах</span>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-foreground">
+            Печать на текстиле и сувенирах
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Футболки, худи, кружки, шопперы и другие изделия с вашим дизайном
