@@ -200,6 +200,7 @@ const Header = () => {
               <span className="relative z-10">Заказать</span>
             </button>
           </div>
+          </div>
         </div>
 
         {/* === MOBILE: single row === */}
