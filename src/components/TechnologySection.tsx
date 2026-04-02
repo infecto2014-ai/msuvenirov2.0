@@ -9,7 +9,7 @@ const TechnologySection = () => {
       <div className="absolute top-1/4 right-0 w-64 h-64 bg-neon-cyan/10 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 left-0 w-64 h-64 bg-neon-magenta/10 rounded-full blur-3xl" />
 
-      <div className="container mx-auto px-4 sm:px-6 relative z-10 max-w-3xl">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-10">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-4">
