@@ -28,13 +28,20 @@ const ReviewForm = ({ onClose }: { onClose: () => void }) => {
 
     setIsSubmitting(true);
     try {
-      const { error } = await supabase.from('reviews').insert({
+      const { data, error } = await supabase.from('reviews').insert({
         name: trimmedName,
         content: trimmedContent,
         rating,
-      });
+      }).select('id').single();
 
       if (error) throw error;
+
+      // Fire-and-forget: notify Telegram
+      if (data?.id) {
+        supabase.functions.invoke('notify-review', {
+          body: { name: trimmedName, content: trimmedContent, rating, review_id: data.id },
+        }).catch(() => {});
+      }
 
       setIsSubmitted(true);
     } catch {
