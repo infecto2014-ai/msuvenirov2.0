@@ -112,6 +112,7 @@ const PortfolioSection = () => {
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [activeSlide, setActiveSlide] = useState(0);
 
   const minSwipeDistance = 50;
 
