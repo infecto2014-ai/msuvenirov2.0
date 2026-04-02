@@ -239,7 +239,7 @@ const Header = () => {
 
       {/* === MOBILE MENU === */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden animate-fade-in bg-background/98 backdrop-blur-xl border-t border-border/30">
+        <div className="lg:hidden animate-fade-in bg-background/98 backdrop-blur-xl border-t border-border/30 max-h-[calc(100vh-3.5rem)] overflow-y-auto">
           <div className="container mx-auto px-4 sm:px-6 py-5">
             <div className="flex flex-col gap-4">
               <nav aria-label="Мобильная навигация">
@@ -322,8 +322,8 @@ const Header = () => {
 
               <div className="flex gap-3 mt-1">
                 <a href="tel:+79521142350" aria-label="Позвонить"
-                  className="w-12 h-12 rounded-full bg-green-500 hover:bg-green-600 flex items-center justify-center transition-colors shadow-[0_0_15px_rgba(34,197,94,0.4)]">
-                  <Phone className="w-5 h-5 text-white" />
+                  className="w-12 h-12 rounded-full bg-green-500 hover:bg-green-600 flex items-center justify-center transition-all duration-300 shadow-[0_0_15px_rgba(34,197,94,0.4)]">
+                  <Phone className="w-5 h-5 text-background" />
                 </a>
                 <button onClick={handleOrderClick} className="gradient-btn-pulse flex-1 py-3 rounded-lg text-sm font-semibold text-background">
                   <span className="relative z-10">Заказать</span>

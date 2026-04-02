@@ -106,7 +106,7 @@ const ShowcaseSection = () => {
   };
 
   return (
-    <section id="витрина" className="py-16 sm:py-24 relative overflow-hidden">
+    <section id="витрина" className="py-16 sm:py-24 relative overflow-hidden" aria-label="Каталог продукции">
       {/* Background with smooth transitions */}
       <div className="absolute inset-0 bg-[hsl(260,30%,8%)]" />
       <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-background to-transparent" />

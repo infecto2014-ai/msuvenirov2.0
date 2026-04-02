@@ -161,7 +161,7 @@ const PortfolioSection = () => {
   };
 
   return (
-    <section id="работы" className="py-16 sm:py-24 relative overflow-hidden" aria-label="Портфолио работ">
+    <section id="работы" className="py-16 sm:py-24 relative overflow-hidden" aria-label="Портфолио работ" role="region">
       <div className="container mx-auto px-4 sm:px-6">
         {/* Header */}
         <header className="text-center mb-8 sm:mb-12">
@@ -244,6 +244,9 @@ const PortfolioSection = () => {
           onTouchStart={onTouchStart}
           onTouchMove={onTouchMove}
           onTouchEnd={onTouchEnd}
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Фото: ${portfolioItems[selectedIndex].title}`}
         >
           <button
             onClick={() => setSelectedIndex(null)}

@@ -139,7 +139,7 @@ const ReviewsSection = () => {
   const activePage = Math.floor(currentIndex / 2);
 
   return (
-    <section id="отзывы" className="py-16 sm:py-24 relative overflow-hidden">
+    <section id="отзывы" className="py-16 sm:py-24 relative overflow-hidden" aria-label="Отзывы клиентов">
       {/* Background */}
       <div className="absolute inset-0" />
 
