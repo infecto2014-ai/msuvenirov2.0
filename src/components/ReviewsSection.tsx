@@ -144,10 +144,7 @@ const ReviewsSection = () => {
   return (
     <section id="отзывы" className="py-14 sm:py-20 relative overflow-hidden">
       {/* Background */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/3 left-1/4 w-64 h-64 rounded-full bg-primary/5 blur-[100px]" />
-        <div className="absolute bottom-1/3 right-1/4 w-64 h-64 rounded-full bg-primary/3 blur-[100px]" />
-      </div>
+      <div className="absolute inset-0" />
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         {/* Header */}
