@@ -441,13 +441,13 @@ const FloatingOrderButton = () => {
               >
                 Персональных данных
               </Link>{' '}
-              и принимаю условия{' '}
+              и принимаете условия{' '}
               <Link
                 to="/public-offer"
                 className="text-primary hover:underline"
                 onClick={() => { saveFormData(); setIsOpen(false); }}
               >
-                Публичной оферты
+                публичной оферты
               </Link>.
             </p>
 
