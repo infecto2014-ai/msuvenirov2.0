@@ -1,9 +1,6 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
-import { ChevronLeft, ChevronRight, Star, Quote, ChevronDown, ChevronUp, MessageSquarePlus, ArrowRight, ExternalLink } from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight, Star, Quote, ChevronUp, ArrowRight, ExternalLink } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
-
-const ReviewForm = lazy(() => import('@/components/ReviewForm'));
 
 const YANDEX_MAPS_URL = 'https://yandex.ru/maps/-/CHuaBZFR';
 
@@ -92,7 +89,6 @@ const ReviewCard = ({ review }: { review: Review }) => {
 const ReviewsSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const [showForm, setShowForm] = useState(false);
   const [allReviews, setAllReviews] = useState<Review[]>(staticReviews);
 
   useEffect(() => {
@@ -238,31 +234,7 @@ const ReviewsSection = () => {
             </button>
           </div>
         </div>
-
-        {/* CTA */}
-        <div className="flex justify-center mt-8 sm:mt-12">
-          <button
-            onClick={() => setShowForm(true)}
-            className="flex items-center gap-2.5 px-7 py-3.5 rounded-full border-2 border-primary bg-transparent text-primary font-semibold text-sm sm:text-base hover:bg-primary/10 hover:shadow-[0_0_24px_hsl(var(--primary)/0.3)] transition-all duration-300 group"
-          >
-            <MessageSquarePlus className="w-5 h-5" />
-            Оставить отзыв
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-          </button>
-        </div>
       </div>
-
-      {/* Review Form Dialog */}
-      <Dialog open={showForm} onOpenChange={setShowForm}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-foreground">Оставить отзыв</DialogTitle>
-          </DialogHeader>
-          <Suspense fallback={<div className="py-8 flex justify-center"><div className="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin" /></div>}>
-            <ReviewForm onClose={() => setShowForm(false)} />
-          </Suspense>
-        </DialogContent>
-      </Dialog>
     </section>
   );
 };
