@@ -12,6 +12,7 @@ const PublicOffer = lazy(() => import("./pages/PublicOffer"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const LinkInBio = lazy(() => import("./pages/LinkInBio"));
 const PricePage = lazy(() => import("./pages/PricePage"));
+const FAQPage = lazy(() => import("./pages/FAQPage"));
 
 // Loading fallback for lazy loaded pages
 const PageLoader = () => (
@@ -42,6 +43,7 @@ const App = () => (
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/card" element={<LinkInBio />} />
             <Route path="/price" element={<PricePage />} />
+            <Route path="/faq" element={<FAQPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
