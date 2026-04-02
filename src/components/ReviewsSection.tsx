@@ -1,9 +1,6 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
-import { ChevronLeft, ChevronRight, Star, Quote, ChevronDown, ChevronUp, MessageSquarePlus, ArrowRight, ExternalLink } from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight, Star, Quote, ChevronUp, ArrowRight, ExternalLink } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
-
-const ReviewForm = lazy(() => import('@/components/ReviewForm'));
 
 const YANDEX_MAPS_URL = 'https://yandex.ru/maps/-/CHuaBZFR';
 
