@@ -112,6 +112,7 @@ const PortfolioSection = () => {
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const [activeSlide, setActiveSlide] = useState(0);
 
   const minSwipeDistance = 50;
 
@@ -182,11 +183,7 @@ const PortfolioSection = () => {
             spaceBetween={16}
             grabCursor={true}
             loop={true}
-            pagination={{
-              clickable: true,
-              bulletClass: 'swiper-pagination-bullet !bg-muted-foreground/50 !w-3 !h-3 sm:!w-3.5 sm:!h-3.5 !mx-2 transition-all duration-300 hover:!bg-muted-foreground/80',
-              bulletActiveClass: '!bg-primary !w-8 sm:!w-10 !rounded-full !shadow-[0_0_16px_hsl(var(--primary)/0.6)]',
-            }}
+            pagination={false}
             navigation={{
               nextEl: '.portfolio-next',
               prevEl: '.portfolio-prev',
@@ -199,7 +196,8 @@ const PortfolioSection = () => {
             }}
             modules={[Navigation, Pagination]}
             onSwiper={setSwiperInstance}
-            className="!pb-20 sm:!pb-24"
+            onSlideChange={(swiper) => setActiveSlide(swiper.realIndex)}
+            className="!pb-4"
           >
             {portfolioItems.map((item, index) => (
               <SwiperSlide key={item.id}>
@@ -225,11 +223,14 @@ const PortfolioSection = () => {
           </button>
         </div>
 
-        {/* CTA Button */}
-        <div className="flex justify-center mt-6 sm:mt-8">
+        {/* Slide Counter + CTA */}
+        <div className="flex items-center justify-center gap-6 mt-5 sm:mt-6">
+          <span className="text-sm font-semibold text-primary tabular-nums tracking-wide drop-shadow-[0_0_8px_hsl(var(--primary)/0.5)]">
+            {activeSlide + 1} <span className="text-muted-foreground/60">/</span> {portfolioItems.length}
+          </span>
           <button
             onClick={handleOrderClick}
-            className="flex items-center gap-2.5 px-8 py-4 rounded-full bg-primary text-primary-foreground font-semibold text-sm sm:text-base hover:bg-primary/90 hover:shadow-[0_0_30px_hsl(var(--primary)/0.4)] transition-all duration-300 group"
+            className="flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-primary text-primary-foreground font-semibold text-sm sm:text-base hover:bg-primary/90 hover:shadow-[0_0_30px_hsl(var(--primary)/0.4)] transition-all duration-300"
           >
             <MessageSquare className="w-5 h-5" />
             Хочу похожий принт!
@@ -290,19 +291,6 @@ const PortfolioSection = () => {
         </div>
       )}
 
-      <style>{`
-        #работы .swiper-pagination {
-          position: relative !important;
-          margin-top: 1rem !important;
-        }
-        #работы .swiper-pagination-bullet {
-          opacity: 1 !important;
-        }
-        #работы .swiper-pagination-bullet-active {
-          background: hsl(var(--primary)) !important;
-          box-shadow: 0 0 12px 4px hsl(var(--primary) / 0.7), 0 0 24px 8px hsl(var(--primary) / 0.3) !important;
-        }
-      `}</style>
     </section>
   );
 };
