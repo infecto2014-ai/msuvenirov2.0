@@ -112,10 +112,10 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border/30">
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-background/90 backdrop-blur-md border-b border-border/30 shadow-lg' : 'bg-transparent border-b border-transparent'}`}>
       <div className="container mx-auto px-4 sm:px-6">
         {/* Desktop: single row */}
-        <div className="hidden lg:flex items-center h-14 gap-4">
+        <div className="hidden lg:flex items-center h-14">
           {/* Logo */}
           <a
             href="/"
