@@ -31,6 +31,8 @@ const Header = () => {
       setActiveSection('прайс');
     } else if (location.pathname === '/card') {
       setActiveSection('визитка');
+    } else if (location.pathname === '/faq') {
+      setActiveSection('faq');
     }
   }, [location.pathname]);
 
