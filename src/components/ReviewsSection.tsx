@@ -89,7 +89,6 @@ const ReviewCard = ({ review }: { review: Review }) => {
 const ReviewsSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const [showForm, setShowForm] = useState(false);
   const [allReviews, setAllReviews] = useState<Review[]>(staticReviews);
 
   useEffect(() => {
