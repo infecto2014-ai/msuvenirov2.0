@@ -120,6 +120,7 @@ const Header = () => {
     { href: '#контакты', label: 'Контакты', id: 'контакты' },
     { href: '/card', label: 'Визитка', id: 'визитка' },
     { href: '/price', label: 'Прайс-лист', id: 'прайс' },
+    { href: '/faq', label: 'FAQ', id: 'faq' },
   ];
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
