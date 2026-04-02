@@ -155,8 +155,8 @@ const PortfolioSection = () => {
   };
 
   const handleOrderClick = () => {
-    const event = new CustomEvent('openOrderForm');
-    window.dispatchEvent(event);
+    const orderButton = document.querySelector('[data-order-button]') as HTMLButtonElement;
+    if (orderButton) orderButton.click();
   };
 
   return (
