@@ -235,30 +235,6 @@ const ReviewsSection = () => {
           </div>
         </div>
 
-        {/* CTA */}
-        <div className="flex justify-center mt-8 sm:mt-12">
-          <button
-            onClick={() => setShowForm(true)}
-            className="flex items-center gap-2.5 px-7 py-3.5 rounded-full border-2 border-primary bg-transparent text-primary font-semibold text-sm sm:text-base hover:bg-primary/10 hover:shadow-[0_0_24px_hsl(var(--primary)/0.3)] transition-all duration-300 group"
-          >
-            <MessageSquarePlus className="w-5 h-5" />
-            Оставить отзыв
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-          </button>
-        </div>
-      </div>
-
-      {/* Review Form Dialog */}
-      <Dialog open={showForm} onOpenChange={setShowForm}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-foreground">Оставить отзыв</DialogTitle>
-          </DialogHeader>
-          <Suspense fallback={<div className="py-8 flex justify-center"><div className="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin" /></div>}>
-            <ReviewForm onClose={() => setShowForm(false)} />
-          </Suspense>
-        </DialogContent>
-      </Dialog>
     </section>
   );
 };
