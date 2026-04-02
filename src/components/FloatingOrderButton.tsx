@@ -393,7 +393,7 @@ const FloatingOrderButton = () => {
                       <div key={index} className="relative aspect-square">
                         <img
                           src={preview}
-                          alt={`Preview ${index + 1}`}
+                          alt={`Фото ${index + 1}`}
                           className="w-full h-full rounded-lg object-cover border border-border/50"
                         />
                         <button
@@ -433,21 +433,21 @@ const FloatingOrderButton = () => {
 
             {/* Consent */}
             <p className="text-xs text-muted-foreground text-center leading-relaxed">
-              Нажимая кнопку «Отправить заявку», я даю согласие на обработку{' '}
+              Нажимая кнопку «Отправить заявку», вы даёте согласие на обработку{' '}
               <Link
                 to="/privacy-policy"
                 className="text-primary hover:underline"
                 onClick={() => { saveFormData(); setIsOpen(false); }}
               >
-                Персональных данных
+                персональных данных
               </Link>{' '}
-              и принимаю условия{' '}
+              и принимаете условия{' '}
               <Link
                 to="/public-offer"
                 className="text-primary hover:underline"
                 onClick={() => { saveFormData(); setIsOpen(false); }}
               >
-                Публичной оферты
+                публичной оферты
               </Link>.
             </p>
 
