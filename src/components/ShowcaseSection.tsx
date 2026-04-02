@@ -119,8 +119,8 @@ const ShowcaseSection = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
         {/* Section Title */}
         <header className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
-            <span className="neon-text">Печать на текстиле и сувенирах</span>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-foreground">
+            Печать на текстиле и сувенирах
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Футболки, худи, кружки, шопперы и другие изделия с вашим дизайном
@@ -196,9 +196,6 @@ const ShowcaseSection = () => {
                             <h3 className="text-white font-bold text-sm sm:text-base truncate">
                               {product.name}
                             </h3>
-                            <p className="text-[hsl(var(--neon-cyan))] text-xs sm:text-sm font-bold mt-0.5">
-                              {product.price}
-                            </p>
                             <p className="text-white/60 text-[10px] sm:text-[11px] leading-tight mt-0.5">
                               {product.methods}
                             </p>
@@ -246,7 +243,7 @@ const ShowcaseSection = () => {
         </div>
 
         {/* Price List Button */}
-        <div className="text-center mt-4 sm:mt-5">
+        <div className="text-center mt-1 sm:mt-2">
           <Link
             to="/price"
             className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))] text-white font-bold text-sm sm:text-base hover:scale-105 transition-transform duration-300 shadow-lg shadow-[hsl(var(--neon-cyan)/0.3)]"
