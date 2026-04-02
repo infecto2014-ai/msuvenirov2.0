@@ -12,6 +12,7 @@ const PublicOffer = lazy(() => import("./pages/PublicOffer"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const LinkInBio = lazy(() => import("./pages/LinkInBio"));
 const PricePage = lazy(() => import("./pages/PricePage"));
+const FAQPage = lazy(() => import("./pages/FAQPage"));
 
 // Loading fallback for lazy loaded pages
 const PageLoader = () => (
