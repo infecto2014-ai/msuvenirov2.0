@@ -181,7 +181,7 @@ const PrivacyPolicy = () => {
               <h2 className="text-xl font-bold text-foreground mb-3">9. Контактная информация</h2>
               <p className="text-muted-foreground leading-relaxed">
                 Индивидуальный предприниматель Леднева Анна Сергеевна<br />
-                Адрес: г. Калининград, ТЦ Экватор, 2 этаж, Генерала Челнокова 9<br />
+                Адрес: г. Калининград, ТЦ Экватор, 2 этаж, ул. Ген. Челнокова 11, стр. 1<br />
                 Телефон: +7 952 114-23-50<br />
                 E-mail: msuvenirov39@yandex.ru
               </p>
