@@ -36,7 +36,7 @@ const ReviewCard = ({ review }: { review: Review }) => {
   const isLongText = review.content.length > TEXT_THRESHOLD;
 
   return (
-    <div className="bg-card/60 backdrop-blur-sm border border-border/30 rounded-2xl p-5 sm:p-6 flex flex-col min-h-[240px] hover:border-primary/20 transition-all duration-300">
+    <div className="bg-card border border-border/40 rounded-2xl p-5 sm:p-6 flex flex-col min-h-[240px] hover:border-primary/20 transition-all duration-300">
       <Quote className="w-5 h-5 text-primary/20 mb-3 flex-shrink-0" />
 
       <div className="flex flex-col flex-1">
