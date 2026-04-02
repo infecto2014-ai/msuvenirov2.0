@@ -393,7 +393,7 @@ const FloatingOrderButton = () => {
                       <div key={index} className="relative aspect-square">
                         <img
                           src={preview}
-                          alt={`Preview ${index + 1}`}
+                          alt={`Фото ${index + 1}`}
                           className="w-full h-full rounded-lg object-cover border border-border/50"
                         />
                         <button
