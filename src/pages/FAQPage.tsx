@@ -1,7 +1,6 @@
-import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Search, MessageCircle, Phone, Send, ChevronDown } from 'lucide-react';
+import { MessageCircle, Phone, Send, Printer, Package, CreditCard, Palette, Gift, Sparkles, Truck } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import {
@@ -14,7 +13,8 @@ import {
 type FAQCategory = {
   id: string;
   label: string;
-  icon: string;
+  subtitle: string;
+  icon: React.ReactNode;
   questions: { q: string; a: string }[];
 };
 
@@ -22,7 +22,8 @@ const categories: FAQCategory[] = [
   {
     id: 'printing',
     label: 'Методы печати',
-    icon: '🖨️',
+    subtitle: 'DTF, сублимация, широкоформатная и УФ-печать — особенности и преимущества каждой технологии',
+    icon: <Printer className="w-5 h-5 text-primary" />,
     questions: [
       {
         q: 'Какие виды печати вы используете?',
@@ -53,7 +54,8 @@ const categories: FAQCategory[] = [
   {
     id: 'order',
     label: 'Заказ и сроки',
-    icon: '📦',
+    subtitle: 'Как оформить заказ, сроки изготовления и возможность срочной печати',
+    icon: <Package className="w-5 h-5 text-primary" />,
     questions: [
       {
         q: 'Какие сроки изготовления заказа?',
@@ -80,7 +82,8 @@ const categories: FAQCategory[] = [
   {
     id: 'price',
     label: 'Оплата и цены',
-    icon: '💰',
+    subtitle: 'Стоимость услуг, скидки на оптовые заказы и способы оплаты',
+    icon: <CreditCard className="w-5 h-5 text-primary" />,
     questions: [
       {
         q: 'Сколько стоит печать на футболке?',
@@ -99,7 +102,8 @@ const categories: FAQCategory[] = [
   {
     id: 'design',
     label: 'Требования к макетам',
-    icon: '🎨',
+    subtitle: 'Форматы файлов, разрешение, цветовые пространства и помощь с дизайном',
+    icon: <Palette className="w-5 h-5 text-primary" />,
     questions: [
       {
         q: 'Как подготовить макет для печати?',
@@ -118,7 +122,8 @@ const categories: FAQCategory[] = [
   {
     id: 'products',
     label: 'Продукция и возможности',
-    icon: '🎁',
+    subtitle: 'Ассортимент изделий для индивидуальной и корпоративной печати',
+    icon: <Gift className="w-5 h-5 text-primary" />,
     questions: [
       {
         q: 'На каких изделиях вы можете напечатать?',
@@ -137,7 +142,8 @@ const categories: FAQCategory[] = [
   {
     id: 'care',
     label: 'Уход за изделиями',
-    icon: '🧺',
+    subtitle: 'Рекомендации по стирке, хранению и эксплуатации изделий с принтом',
+    icon: <Sparkles className="w-5 h-5 text-primary" />,
     questions: [
       {
         q: 'Как правильно ухаживать за вещами с принтом?',
@@ -156,7 +162,8 @@ const categories: FAQCategory[] = [
   {
     id: 'delivery',
     label: 'Доставка в Калининграде',
-    icon: '🚚',
+    subtitle: 'Способы получения заказа, стоимость доставки и адрес мастерской',
+    icon: <Truck className="w-5 h-5 text-primary" />,
     questions: [
       {
         q: 'Есть ли доставка по Калининграду?',
@@ -192,23 +199,6 @@ const faqJsonLd = {
 };
 
 const FAQPage = () => {
-  const [search, setSearch] = useState('');
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
-
-  const filtered = useMemo(() => {
-    let items = activeCategory
-      ? allQuestions.filter((q) => q.categoryId === activeCategory)
-      : allQuestions;
-
-    if (search.trim()) {
-      const s = search.toLowerCase();
-      items = items.filter(
-        (q) => q.q.toLowerCase().includes(s) || q.a.toLowerCase().includes(s)
-      );
-    }
-    return items;
-  }, [search, activeCategory]);
-
   return (
     <>
       <Helmet>
@@ -237,104 +227,57 @@ const FAQPage = () => {
             <p className="text-muted-foreground text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
               Ответы на популярные вопросы о печати на футболках, кружках и корпоративных заказах
             </p>
-
-            {/* Search */}
-            <div className="mt-8 max-w-xl mx-auto relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Поиск по вопросам..."
-                aria-label="Поиск по часто задаваемым вопросам"
-                className="w-full pl-12 pr-4 py-3.5 rounded-xl glass-card border border-border/50 bg-card/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all text-sm sm:text-base"
-              />
-            </div>
           </div>
         </section>
 
-        {/* Categories */}
-        <section className="container mx-auto px-4 sm:px-6 mb-8">
-          <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
-            <button
-              onClick={() => setActiveCategory(null)}
-              className={`px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 ${
-                activeCategory === null
-                  ? 'bg-primary text-primary-foreground shadow-[var(--shadow-neon-cyan)]'
-                  : 'glass-card text-muted-foreground hover:text-foreground border border-border/50'
-              }`}
-            >
-              Все вопросы
-            </button>
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 ${
-                  activeCategory === cat.id
-                    ? 'bg-primary text-primary-foreground shadow-[var(--shadow-neon-cyan)]'
-                    : 'glass-card text-muted-foreground hover:text-foreground border border-border/50'
-                }`}
-              >
-                <span className="mr-1.5">{cat.icon}</span>
-                {cat.label}
-              </button>
-            ))}
-          </div>
-        </section>
-
-        {/* FAQ List */}
+        {/* FAQ Sections */}
         <section className="container mx-auto px-4 sm:px-6">
-          <div className="max-w-3xl mx-auto">
-            {filtered.length === 0 ? (
-              <div className="text-center py-12 glass-card rounded-xl">
-                <p className="text-muted-foreground text-sm">
-                  Ничего не найдено. Попробуйте изменить запрос или{' '}
-                  <button
-                    onClick={() => {
-                      setSearch('');
-                      setActiveCategory(null);
-                    }}
-                    className="text-primary underline underline-offset-4"
-                  >
-                    сбросить фильтры
-                  </button>
-                </p>
-              </div>
-            ) : (
-              <Accordion type="single" collapsible className="space-y-4">
-                {filtered.map((item, i) => (
-                  <AccordionItem
-                    key={`${item.categoryId}-${i}`}
-                    value={`item-${i}`}
-                    className="glass-card rounded-xl px-6 border-border/50 data-[state=open]:neon-glow transition-all duration-300"
-                  >
-                    <AccordionTrigger
-                      className="text-left text-sm sm:text-base font-semibold text-foreground hover:text-primary hover:no-underline py-5"
-                      aria-label={item.q}
-                    >
-                      <div className="flex flex-col gap-1">
-                        <span>{item.q}</span>
-                        {!activeCategory && (
-                          <span className="text-xs font-normal text-muted-foreground">
-                            {item.category}
-                          </span>
-                        )}
+          <div className="max-w-4xl mx-auto">
+            <Accordion type="multiple" className="space-y-4">
+              {categories.map((cat) => (
+                <AccordionItem
+                  key={cat.id}
+                  value={cat.id}
+                  className="border border-border/50 rounded-xl overflow-hidden neon-border"
+                >
+                  <AccordionTrigger className="px-4 sm:px-6 py-4 sm:py-5 hover:no-underline hover:bg-muted/30 transition-colors">
+                    <div className="flex items-center gap-3 text-left">
+                      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                        {cat.icon}
                       </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-5">
-                      {item.a}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            )}
+                      <div>
+                        <h2 className="text-base sm:text-lg font-bold text-foreground">{cat.label}</h2>
+                        <p className="text-xs sm:text-sm text-muted-foreground font-normal">{cat.subtitle}</p>
+                      </div>
+                    </div>
+                  </AccordionTrigger>
+                  <AccordionContent className="px-0 pb-0">
+                    <Accordion type="single" collapsible className="px-4 sm:px-6 py-3 space-y-3">
+                      {cat.questions.map((item, i) => (
+                        <AccordionItem
+                          key={i}
+                          value={`${cat.id}-${i}`}
+                          className="border border-border/30 rounded-lg overflow-hidden"
+                        >
+                          <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-semibold text-foreground text-left">
+                            {item.q}
+                          </AccordionTrigger>
+                          <AccordionContent className="px-4 pb-4 text-sm text-muted-foreground leading-relaxed">
+                            {item.a}
+                          </AccordionContent>
+                        </AccordionItem>
+                      ))}
+                    </Accordion>
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
           </div>
         </section>
 
         {/* CTA Block */}
         <section className="container mx-auto px-4 sm:px-6 mt-16">
-          <div className="max-w-3xl mx-auto glass-card rounded-2xl p-8 sm:p-10 text-center relative overflow-hidden">
+          <div className="max-w-4xl mx-auto glass-card rounded-2xl p-8 sm:p-10 text-center relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
             <div className="relative z-10">
               <MessageCircle className="w-10 h-10 text-primary mx-auto mb-4" />
