@@ -166,9 +166,7 @@ const PortfolioSection = () => {
         {/* Header */}
         <header className="text-center mb-8 sm:mb-12">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black">
-            <span className="text-foreground">Примеры </span>
-            <span className="text-primary">наших </span>
-            <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">работ</span>
+            <span className="neon-text">Примеры наших работ</span>
           </h2>
           <p className="text-muted-foreground mt-3 sm:mt-4 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed px-4">
             Создаём уникальные вещи — от масок и футболок до сложных календарей и корпоративных подарков.
