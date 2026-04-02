@@ -161,7 +161,7 @@ const PortfolioSection = () => {
   };
 
   return (
-    <section id="работы" className="py-14 sm:py-20 relative overflow-hidden" aria-label="Портфолио работ">
+    <section id="работы" className="py-16 sm:py-24 relative overflow-hidden" aria-label="Портфолио работ">
       <div className="container mx-auto px-4 sm:px-6">
         {/* Header */}
         <header className="text-center mb-8 sm:mb-12">

@@ -109,7 +109,7 @@ const TrustSection = () => {
                 <div 
                   className="absolute inset-0 rounded-xl opacity-60"
                   style={{
-                    background: 'radial-gradient(ellipse at center, rgba(0, 255, 255, 0.12) 0%, rgba(168, 85, 247, 0.08) 30%, transparent 60%)',
+                    background: 'radial-gradient(ellipse at center, hsl(var(--neon-cyan) / 0.12) 0%, hsl(var(--neon-purple) / 0.08) 30%, transparent 60%)',
                   }}
                 />
                 
