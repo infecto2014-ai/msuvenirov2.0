@@ -293,7 +293,14 @@ const PortfolioSection = () => {
       <style>{`
         #работы .swiper-pagination {
           position: relative !important;
-          margin-top: 0.5rem !important;
+          margin-top: 1rem !important;
+        }
+        #работы .swiper-pagination-bullet {
+          opacity: 1 !important;
+        }
+        #работы .swiper-pagination-bullet-active {
+          background: hsl(var(--primary)) !important;
+          box-shadow: 0 0 12px 4px hsl(var(--primary) / 0.7), 0 0 24px 8px hsl(var(--primary) / 0.3) !important;
         }
       `}</style>
     </section>
