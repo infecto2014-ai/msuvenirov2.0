@@ -106,29 +106,33 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border/30">
       <div className="container mx-auto px-4 sm:px-6">
-        {/* Row 1: Logo left, Address right */}
-        <div className="hidden lg:flex items-center justify-between h-12 border-b border-border/20">
+        {/* Desktop: Logo spanning both rows on the left */}
+        <div className="hidden lg:grid grid-cols-[auto_1fr] gap-x-6" style={{ gridTemplateRows: 'auto auto' }}>
+          {/* Logo — spans 2 rows */}
           <a
             href="/"
             onClick={(e) => { e.preventDefault(); navigate('/'); }}
-            className="flex items-center flex-shrink-0 cursor-pointer"
+            className="row-span-2 flex items-center flex-shrink-0 cursor-pointer self-center"
             aria-label="На главную"
           >
-            <ProtectedLogo height={36} className="sm:h-[40px]" />
+            <ProtectedLogo height={56} className="xl:h-[64px]" />
           </a>
-          <a
-            href="https://yandex.ru/maps/-/CHuaBZFR"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <MapPin className="w-3.5 h-3.5 text-primary flex-shrink-0" />
-            <span>г. Калининград, ТЦ Экватор, 2 этаж, ул. Ген. Челнокова 11</span>
-          </a>
-        </div>
 
-        {/* Row 2: Nav links | Socials | Call | Order */}
-        <div className="hidden lg:flex items-center justify-between h-12">
+          {/* Row 1 right: Address */}
+          <div className="flex items-center justify-end h-11 border-b border-border/20">
+            <a
+              href="https://yandex.ru/maps/-/CHuaBZFR"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <MapPin className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+              <span>г. Калининград, ТЦ Экватор, 2 этаж, ул. Ген. Челнокова 11</span>
+            </a>
+          </div>
+
+          {/* Row 2 right: Nav + Socials + CTA */}
+          <div className="flex items-center justify-between h-12">
           {/* Nav */}
           <nav aria-label="Основная навигация">
             <ul className="flex items-center gap-1 xl:gap-2">
