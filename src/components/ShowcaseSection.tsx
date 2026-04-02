@@ -199,9 +199,6 @@ const ShowcaseSection = () => {
                             <p className="text-white/60 text-[10px] sm:text-[11px] leading-tight mt-0.5">
                               {product.methods}
                             </p>
-                            <p className="text-white/60 text-[10px] sm:text-[11px] leading-tight mt-0.5">
-                              {product.methods}
-                            </p>
                           </div>
                           
                           {isActive && (
