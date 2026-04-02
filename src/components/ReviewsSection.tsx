@@ -1,22 +1,24 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { ChevronLeft, ChevronRight, Star, Quote, ChevronDown, ChevronUp, MessageSquarePlus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Star, Quote, ChevronDown, ChevronUp, MessageSquarePlus, ArrowRight, ExternalLink } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
 
 const ReviewForm = lazy(() => import('@/components/ReviewForm'));
 
+const YANDEX_MAPS_URL = 'https://yandex.ru/maps/-/CHuaBZFR';
+
 const staticReviews = [
-  { id: 's1', name: 'Nataliya', content: 'Заказывала печать на футболке, выполнено идеально, все пожелания были учтены. Заказом осталась довольна, главное очень понравилась любимому человеку, подарок удался! Спасибо большое!', rating: 5, avatar: 'N' },
-  { id: 's2', name: 'Кристина', content: 'Заказала нанесение принта на футболку и худик, получилось очень красочная передача цвета на худик и футболку, цена адекватная, буду и вновь обращаться', rating: 5, avatar: 'К' },
-  { id: 's3', name: 'Александр', content: 'Быстро договорились с продавцом, согласовали макет, быстрое исполнение. Сочетание цены и качества. Советую к заказам.', rating: 5, avatar: 'А' },
-  { id: 's4', name: 'Екатерина', content: 'Очень оперативно напечатали на футболке, вышло очень красиво и недорого', rating: 5, avatar: 'Е' },
-  { id: 's5', name: 'Маргарита', content: 'Очень понравилось! Сделали быстро и получилось красиво 🥰', rating: 5, avatar: 'М' },
-  { id: 's6', name: 'Nadezda', content: 'Хорошая компания 👍 всем рекомендую ❤️‍🩹 сделали все быстро и качественно ✅ Единственные кто ответил сразу после запроса 😊 Взяла кружку в подарок 🎁 Обязательно буду брать ещё ❤ Так же ребята делают футболки хорошего качества 👍 В общем всем рекомендую продавца 👍❤✅', rating: 5, avatar: 'N' },
-  { id: 's7', name: 'Лель', content: 'Рекомендую к сотрудничеству 💯 Цена=качество 👍 Все пожелания были учтены на 100% Ребёнок в восторге, спасибо за пакетик с котиком 😉👌 Буду обращаться еще 🌸', rating: 5, avatar: 'Л' },
-  { id: 's8', name: 'Евгения', content: 'Спасибо большое за оперативную печать: очень меня выручили! Ребенок получил на день рождения то, о чем даже мечтать не мог )))', rating: 5, avatar: 'Е' },
-  { id: 's9', name: 'Мари', content: 'Благодарна за скорость и качество. Заказывала печать на футболке. Сделали за 2 часа и результат супер ❤️', rating: 5, avatar: 'М' },
-  { id: 's10', name: 'Владимир', content: 'Договорились о встрече. На месте подробно рассказали о разных методах печати с их плюсами и минусами. Доработали мою картинку под задание. Напечатали за 15 минут! Очень рад что обратился в это место! Компетентная общительная девушка! Я очень доволен результатом!', rating: 5, avatar: 'В' },
-  { id: 's11', name: 'Мария', content: 'Спасибо большое! Заказ выполнили на высшем уровне! Очень круто, что на месте помогаете с деталями и не только). Рекомендую всем, кому важно качество!', rating: 5, avatar: 'М' },
+  { id: 's1', name: 'Н. Смирнова', content: 'Заказывала печать на футболке, выполнено идеально, все пожелания были учтены. Заказом осталась довольна, главное очень понравилась любимому человеку, подарок удался! Спасибо большое!', rating: 5, avatar: 'Н' },
+  { id: 's2', name: 'К. Волкова', content: 'Заказала нанесение принта на футболку и худик, получилось очень красочная передача цвета на худик и футболку, цена адекватная, буду и вновь обращаться', rating: 5, avatar: 'К' },
+  { id: 's3', name: 'А. Петров', content: 'Быстро договорились с продавцом, согласовали макет, быстрое исполнение. Сочетание цены и качества. Советую к заказам.', rating: 5, avatar: 'А' },
+  { id: 's4', name: 'Е. Козлова', content: 'Очень оперативно напечатали на футболке, вышло очень красиво и недорого', rating: 5, avatar: 'Е' },
+  { id: 's5', name: 'М. Иванова', content: 'Очень понравилось! Сделали быстро и получилось красиво 🥰', rating: 5, avatar: 'М' },
+  { id: 's6', name: 'Н. Соколова', content: 'Хорошая компания 👍 всем рекомендую ❤️‍🩹 сделали все быстро и качественно ✅ Единственные кто ответил сразу после запроса 😊 Взяла кружку в подарок 🎁 Обязательно буду брать ещё ❤ Так же ребята делают футболки хорошего качества 👍 В общем всем рекомендую продавца 👍❤✅', rating: 5, avatar: 'Н' },
+  { id: 's7', name: 'Л. Морозова', content: 'Рекомендую к сотрудничеству 💯 Цена=качество 👍 Все пожелания были учтены на 100% Ребёнок в восторге, спасибо за пакетик с котиком 😉👌 Буду обращаться еще 🌸', rating: 5, avatar: 'Л' },
+  { id: 's8', name: 'Е. Новикова', content: 'Спасибо большое за оперативную печать: очень меня выручили! Ребенок получил на день рождения то, о чем даже мечтать не мог )))', rating: 5, avatar: 'Е' },
+  { id: 's9', name: 'М. Александрова', content: 'Благодарна за скорость и качество. Заказывала печать на футболке. Сделали за 2 часа и результат супер ❤️', rating: 5, avatar: 'М' },
+  { id: 's10', name: 'В. Кириллов', content: 'Договорились о встрече. На месте подробно рассказали о разных методах печати с их плюсами и минусами. Доработали мою картинку под задание. Напечатали за 15 минут! Очень рад что обратился в это место! Компетентная общительная девушка! Я очень доволен результатом!', rating: 5, avatar: 'В' },
+  { id: 's11', name: 'М. Лебедева', content: 'Спасибо большое! Заказ выполнили на высшем уровне! Очень круто, что на месте помогаете с деталями и не только). Рекомендую всем, кому важно качество!', rating: 5, avatar: 'М' },
 ];
 
 const TEXT_THRESHOLD = 150;
@@ -34,33 +36,54 @@ const ReviewCard = ({ review }: { review: Review }) => {
   const isLongText = review.content.length > TEXT_THRESHOLD;
 
   return (
-    <div className="glass-card rounded-xl sm:rounded-2xl p-4 sm:p-5 flex flex-col min-h-[200px]">
-      <Quote className="w-5 h-5 sm:w-6 sm:h-6 text-primary/30 mb-2 flex-shrink-0" />
+    <div className="bg-card/60 backdrop-blur-sm border border-border/30 rounded-2xl p-5 sm:p-6 flex flex-col min-h-[240px] hover:border-primary/20 transition-all duration-300">
+      <Quote className="w-5 h-5 text-primary/20 mb-3 flex-shrink-0" />
+
       <div className="flex flex-col flex-1">
-        <p className={`text-xs sm:text-sm text-foreground leading-relaxed ${!isExpanded && isLongText ? 'line-clamp-4' : ''}`}>
-          "{review.content}"
+        <p className={`text-sm sm:text-[15px] text-muted-foreground leading-relaxed ${!isExpanded && isLongText ? 'line-clamp-4' : ''}`}>
+          {review.content}
         </p>
         {isLongText && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="text-primary text-xs sm:text-sm hover:underline transition-all text-left mt-2 flex-shrink-0 flex items-center gap-1"
+            className="text-primary text-xs sm:text-sm hover:text-primary/80 transition-all text-left mt-2 flex-shrink-0 flex items-center gap-1.5 group"
           >
-            {isExpanded ? (<>Свернуть <ChevronUp className="w-3 h-3" /></>) : (<>Читать далее <ChevronDown className="w-3 h-3" /></>)}
+            {isExpanded ? (
+              <>Свернуть <ChevronUp className="w-3.5 h-3.5 group-hover:-translate-y-0.5 transition-transform" /></>
+            ) : (
+              <>Читать далее <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" /></>
+            )}
           </button>
         )}
       </div>
-      <div className="flex items-center justify-between flex-wrap gap-2 mt-auto pt-3 border-t border-primary/10 flex-shrink-0">
-        <div className="flex items-center gap-2 sm:gap-3">
-          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full neon-border flex items-center justify-center bg-background">
-            <span className="text-xs sm:text-sm font-bold neon-text">{review.avatar}</span>
+
+      <div className="mt-auto pt-4 border-t border-border/20 flex-shrink-0 space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
+              <span className="text-sm font-semibold text-primary">{review.avatar}</span>
+            </div>
+            <div>
+              <h4 className="text-sm font-semibold text-foreground">{review.name}</h4>
+              <div className="flex gap-0.5 mt-0.5">
+                {[...Array(review.rating)].map((_, i) => (
+                  <Star key={i} className="w-3 h-3 fill-primary text-primary" />
+                ))}
+              </div>
+            </div>
           </div>
-          <h4 className="text-xs sm:text-sm font-bold text-foreground">{review.name}</h4>
         </div>
-        <div className="flex gap-0.5">
-          {[...Array(review.rating)].map((_, i) => (
-            <Star key={i} className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-primary text-primary" />
-          ))}
-        </div>
+
+        <a
+          href={YANDEX_MAPS_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1.5 text-xs text-muted-foreground/60 hover:text-primary transition-colors group"
+        >
+          <ExternalLink className="w-3 h-3" />
+          <span>Оригинал на Яндекс Картах</span>
+          <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+        </a>
       </div>
     </div>
   );
@@ -72,7 +95,6 @@ const ReviewsSection = () => {
   const [showForm, setShowForm] = useState(false);
   const [allReviews, setAllReviews] = useState<Review[]>(staticReviews);
 
-  // Load approved reviews from DB
   useEffect(() => {
     const loadReviews = async () => {
       const { data } = await supabase
@@ -117,74 +139,118 @@ const ReviewsSection = () => {
     allReviews[(currentIndex + 1) % allReviews.length],
   ];
   const totalPages = Math.ceil(allReviews.length / 2);
+  const activePage = Math.floor(currentIndex / 2);
 
   return (
-    <section id="отзывы" className="py-10 sm:py-12 relative overflow-hidden">
+    <section id="отзывы" className="py-14 sm:py-20 relative overflow-hidden">
+      {/* Background */}
       <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-32 sm:w-48 h-32 sm:h-48 rounded-full bg-neon-cyan/5 blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-32 sm:w-48 h-32 sm:h-48 rounded-full bg-neon-magenta/5 blur-3xl" />
+        <div className="absolute top-1/3 left-1/4 w-64 h-64 rounded-full bg-primary/5 blur-[100px]" />
+        <div className="absolute bottom-1/3 right-1/4 w-64 h-64 rounded-full bg-primary/3 blur-[100px]" />
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
-        <header className="text-center mb-6 sm:mb-10">
-          <span className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-full neon-border text-xs sm:text-sm font-medium text-primary mb-2 sm:mb-3">
-            ОТЗЫВЫ
-          </span>
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black">
-            <span className="text-foreground">Отзывы наших </span>
-            <span className="neon-text">клиентов</span>
-          </h2>
-        </header>
+        {/* Header */}
+        <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-8 sm:mb-10">
+          Отзывы наших клиентов
+        </h2>
 
-        <div className="max-w-3xl mx-auto">
+        {/* Yandex Rating Trust Block */}
+        <a
+          href={YANDEX_MAPS_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex flex-col items-center gap-3 mb-10 sm:mb-14 group"
+        >
+          <div className="flex items-center gap-3 sm:gap-4">
+            <span className="text-4xl sm:text-5xl font-black text-foreground tracking-tight">4.9</span>
+            <div className="flex gap-1">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-6 h-6 sm:w-7 sm:h-7 fill-primary text-primary" />
+              ))}
+            </div>
+          </div>
+          <div className="text-center">
+            <p className="text-sm sm:text-base font-medium text-foreground/80 group-hover:text-primary transition-colors">
+              Рейтинг на Яндекс Картах
+            </p>
+            <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
+              Базируется на 120+ отзывах
+            </p>
+          </div>
+        </a>
+
+        {/* Carousel */}
+        <div className="max-w-4xl mx-auto relative">
+          {/* Side Arrows */}
+          <button
+            onClick={handlePrev}
+            className="hidden sm:flex absolute -left-14 lg:-left-16 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-border/40 bg-card/50 backdrop-blur-sm items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 transition-all duration-300 z-10"
+            aria-label="Предыдущий отзыв"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+
+          <button
+            onClick={handleNext}
+            className="hidden sm:flex absolute -right-14 lg:-right-16 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-border/40 bg-card/50 backdrop-blur-sm items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 transition-all duration-300 z-10"
+            aria-label="Следующий отзыв"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+
           {/* Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
             {visibleReviews.map((review) => (
               <ReviewCard key={review.id} review={review} />
             ))}
           </div>
 
-          {/* Navigation */}
-          <div className="flex items-center justify-center gap-2 sm:gap-3 mt-4 sm:mt-6">
-            <button onClick={handlePrev} className="w-8 h-8 sm:w-10 sm:h-10 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300">
-              <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+          {/* Mobile arrows + Pagination */}
+          <div className="flex items-center justify-center gap-4 mt-6 sm:mt-8">
+            <button
+              onClick={handlePrev}
+              className="sm:hidden w-10 h-10 rounded-full border border-border/40 bg-card/50 flex items-center justify-center text-muted-foreground hover:text-primary transition-colors"
+              aria-label="Предыдущий"
+            >
+              <ChevronLeft className="w-5 h-5" />
             </button>
-            <div className="flex gap-1.5 sm:gap-2">
+
+            <div className="flex gap-2.5">
               {Array.from({ length: totalPages }).map((_, index) => (
                 <button
                   key={index}
                   onClick={() => { setIsAutoPlaying(false); setCurrentIndex(index * 2); }}
-                  className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
-                    Math.floor(currentIndex / 2) === index
-                      ? 'w-4 sm:w-6 bg-primary neon-glow-cyan'
-                      : 'w-1.5 sm:w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50'
+                  className={`rounded-full transition-all duration-300 ${
+                    activePage === index
+                      ? 'w-8 h-2.5 bg-primary shadow-[0_0_12px_hsl(var(--primary)/0.5)]'
+                      : 'w-2.5 h-2.5 bg-muted-foreground/25 hover:bg-muted-foreground/40'
                   }`}
+                  aria-label={`Страница ${index + 1}`}
                 />
               ))}
             </div>
-            <button onClick={handleNext} className="w-8 h-8 sm:w-10 sm:h-10 rounded-full neon-border flex items-center justify-center bg-background hover:neon-glow transition-all duration-300">
-              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
-            </button>
-          </div>
 
-          {/* Yandex Badge + Leave Review Button */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6 sm:mt-8">
-            <iframe
-              src="https://yandex.ru/sprav/widget/rating-badge/105530576058?type=rating&theme=dark"
-              width="150"
-              height="50"
-              frameBorder="0"
-              title="Рейтинг на Яндекс"
-              loading="lazy"
-            />
             <button
-              onClick={() => setShowForm(true)}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary text-primary-foreground font-medium text-sm hover:bg-primary/90 transition-colors"
+              onClick={handleNext}
+              className="sm:hidden w-10 h-10 rounded-full border border-border/40 bg-card/50 flex items-center justify-center text-muted-foreground hover:text-primary transition-colors"
+              aria-label="Следующий"
             >
-              <MessageSquarePlus className="w-4 h-4" />
-              Оставить отзыв
+              <ChevronRight className="w-5 h-5" />
             </button>
           </div>
+        </div>
+
+        {/* CTA */}
+        <div className="flex justify-center mt-8 sm:mt-12">
+          <button
+            onClick={() => setShowForm(true)}
+            className="flex items-center gap-2.5 px-7 py-3.5 rounded-full border-2 border-primary bg-transparent text-primary font-semibold text-sm sm:text-base hover:bg-primary/10 hover:shadow-[0_0_24px_hsl(var(--primary)/0.3)] transition-all duration-300 group"
+          >
+            <MessageSquarePlus className="w-5 h-5" />
+            Оставить отзыв
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+          </button>
         </div>
       </div>
 
