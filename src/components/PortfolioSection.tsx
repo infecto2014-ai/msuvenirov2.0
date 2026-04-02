@@ -223,11 +223,14 @@ const PortfolioSection = () => {
           </button>
         </div>
 
-        {/* CTA Button */}
-        <div className="flex justify-center mt-6 sm:mt-8">
+        {/* Slide Counter + CTA */}
+        <div className="flex items-center justify-center gap-6 mt-5 sm:mt-6">
+          <span className="text-sm font-semibold text-primary tabular-nums tracking-wide drop-shadow-[0_0_8px_hsl(var(--primary)/0.5)]">
+            {activeSlide + 1} <span className="text-muted-foreground/60">/</span> {portfolioItems.length}
+          </span>
           <button
             onClick={handleOrderClick}
-            className="flex items-center gap-2.5 px-8 py-4 rounded-full bg-primary text-primary-foreground font-semibold text-sm sm:text-base hover:bg-primary/90 hover:shadow-[0_0_30px_hsl(var(--primary)/0.4)] transition-all duration-300 group"
+            className="flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-primary text-primary-foreground font-semibold text-sm sm:text-base hover:bg-primary/90 hover:shadow-[0_0_30px_hsl(var(--primary)/0.4)] transition-all duration-300"
           >
             <MessageSquare className="w-5 h-5" />
             Хочу похожий принт!
