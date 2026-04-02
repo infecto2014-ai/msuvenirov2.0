@@ -234,7 +234,7 @@ const ReviewsSection = () => {
             </button>
           </div>
         </div>
-
+      </div>
     </section>
   );
 };
