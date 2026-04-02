@@ -19,7 +19,7 @@ const faqs = [
   },
   {
     question: 'Есть ли доставка?',
-    answer: 'Да, мы осуществляем доставку по Калининграду и Калининградской области. Также вы можете забрать заказ самовывозом из нашей мастерской в ТЦ Экватор (2 этаж, ул. Генерала Челнокова 11, стр 1). Работаем без выходных с 10:00 до 20:00.',
+    answer: 'Да, мы осуществляем доставку по Калининграду и Калининградской области. Также вы можете забрать заказ самовывозом из нашей мастерской в ТЦ Экватор (2 этаж, ул. Ген. Челнокова 11, стр. 1). Работаем без выходных с 10:00 до 20:00.',
   },
   {
     question: 'Какой минимальный тираж?',
@@ -43,8 +43,8 @@ const FAQSection = () => {
           <span className="inline-block px-4 py-2 rounded-full neon-border text-xs sm:text-sm font-medium text-primary mb-3">
             FAQ
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black">
-            <span className="neon-text">Частые вопросы</span>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-foreground">
+            Частые вопросы
           </h2>
         </div>
 

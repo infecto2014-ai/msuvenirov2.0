@@ -3,8 +3,8 @@ import { Clock, Package, Pencil, HeartHandshake } from 'lucide-react';
 const reasons = [
   {
     icon: Clock,
-    title: 'Срочные заказы за 24 часа',
-    description: 'Успеем к любому дедлайну — даже если нужно вчера',
+    title: 'Срочные заказы за 1 час',
+    description: 'Успеем к любому дедлайну — при наличии готового макета',
   },
   {
     icon: Package,
@@ -44,7 +44,7 @@ const WhyUsSection = () => {
             Почему выбирают нас?
           </h2>
           <p className="text-muted-foreground text-sm sm:text-base max-w-2xl mx-auto">
-            Более 5 лет мы помогаем клиентам создавать уникальные изделия
+            С 2019 года помогаем клиентам создавать уникальные изделия
           </p>
         </div>
 
