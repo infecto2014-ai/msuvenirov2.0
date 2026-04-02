@@ -76,7 +76,7 @@ const WhyUsSection = () => {
         <div className="text-center">
           <button
             onClick={handleOrderClick}
-            className="relative px-10 sm:px-14 py-4 sm:py-5 rounded-2xl font-bold text-sm sm:text-base text-white bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))] shadow-[0_0_30px_hsl(var(--neon-cyan)/0.3),0_0_60px_hsl(var(--neon-magenta)/0.2)] hover:shadow-[0_0_40px_hsl(var(--neon-cyan)/0.5),0_0_80px_hsl(var(--neon-magenta)/0.35)] hover:scale-105 transition-all duration-300 animate-[cta-breathe_3s_ease-in-out_infinite]"
+            className="relative px-10 sm:px-14 py-4 sm:py-5 rounded-2xl font-bold text-sm sm:text-base text-background bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))] shadow-[0_0_30px_hsl(var(--neon-cyan)/0.3),0_0_60px_hsl(var(--neon-magenta)/0.2)] hover:shadow-[0_0_40px_hsl(var(--neon-cyan)/0.5),0_0_80px_hsl(var(--neon-magenta)/0.35)] hover:scale-105 transition-all duration-300 animate-[cta-breathe_3s_ease-in-out_infinite]"
           >
             ПОЛУЧИТЬ БЕСПЛАТНУЮ КОНСУЛЬТАЦИЮ
           </button>

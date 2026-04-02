@@ -190,13 +190,13 @@ const ShowcaseSection = () => {
                       </figure>
 
                       {/* Glassmorphism Info Panel - optimized blur for mobile */}
-                      <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 bg-background/50 sm:bg-background/40 backdrop-blur-md sm:backdrop-blur-xl border-t border-white/10">
+                      <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 bg-background/50 sm:bg-background/40 backdrop-blur-md sm:backdrop-blur-xl border-t border-foreground/10">
                         <div className="flex items-center justify-between gap-3">
                           <div className="flex-1 min-w-0">
-                            <h3 className="text-white font-bold text-sm sm:text-base truncate">
+                            <h3 className="text-foreground font-bold text-sm sm:text-base truncate">
                               {product.name}
                             </h3>
-                            <p className="text-white/60 text-[10px] sm:text-[11px] leading-tight mt-0.5">
+                            <p className="text-muted-foreground text-[10px] sm:text-[11px] leading-tight mt-0.5">
                               {product.methods}
                             </p>
                           </div>
@@ -206,7 +206,7 @@ const ShowcaseSection = () => {
                               onClick={handleOrderClick}
                               className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))] flex items-center justify-center hover:scale-110 transition-transform duration-300 shadow-lg shadow-[hsl(var(--neon-cyan)/0.3)]"
                             >
-                              <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                              <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 text-background" />
                             </button>
                           )}
                         </div>
@@ -246,7 +246,7 @@ const ShowcaseSection = () => {
         <div className="text-center mt-1 sm:mt-2">
           <Link
             to="/price"
-            className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))] text-white font-bold text-sm sm:text-base hover:scale-105 transition-transform duration-300 shadow-lg shadow-[hsl(var(--neon-cyan)/0.3)]"
+            className="inline-flex items-center gap-2 px-8 py-3 rounded-full bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))] text-background font-bold text-sm sm:text-base hover:scale-105 transition-transform duration-300 shadow-lg shadow-[hsl(var(--neon-cyan)/0.3)]"
           >
             <FileText className="w-5 h-5" />
             Прайс на наши услуги

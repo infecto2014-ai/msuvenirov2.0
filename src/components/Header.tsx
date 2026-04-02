@@ -202,9 +202,9 @@ const Header = () => {
             <a
               href="tel:+79521142350"
               aria-label="Позвонить"
-              className="w-9 h-9 rounded-full bg-green-500 hover:bg-green-600 flex items-center justify-center transition-colors shadow-[0_0_10px_rgba(34,197,94,0.3)]"
+              className="w-9 h-9 rounded-full bg-green-500 hover:bg-green-600 flex items-center justify-center transition-all duration-300 shadow-[0_0_10px_rgba(34,197,94,0.3)] hover:shadow-[0_0_16px_rgba(34,197,94,0.5)]"
             >
-              <Phone className="w-4 h-4 text-white" />
+              <Phone className="w-4 h-4 text-background" />
             </a>
 
             <button
