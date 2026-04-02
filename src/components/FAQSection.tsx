@@ -43,8 +43,8 @@ const FAQSection = () => {
           <span className="inline-block px-4 py-2 rounded-full neon-border text-xs sm:text-sm font-medium text-primary mb-3">
             FAQ
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black">
-            <span className="neon-text">Частые вопросы</span>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-foreground">
+            Частые вопросы
           </h2>
         </div>
 

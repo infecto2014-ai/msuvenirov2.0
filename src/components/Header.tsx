@@ -249,7 +249,7 @@ const Header = () => {
                 <a href="https://yandex.ru/maps/-/CHuaBZFR" target="_blank" rel="noopener noreferrer"
                   className="flex items-start gap-3 text-muted-foreground hover:text-foreground transition-colors">
                   <MapPin className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                  <span>г. Калининград, ТЦ Экватор, 2 этаж, ул. Ген. Челнокова 11, стр. 1</span>
+                  <span>Калининград, ТЦ Экватор, 2 этаж, ул. Ген. Челнокова 11, стр. 1</span>
                 </a>
                 <div className="flex items-center gap-3 text-muted-foreground">
                   <Clock className="w-4 h-4 text-primary flex-shrink-0" />

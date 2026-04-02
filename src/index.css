@@ -71,9 +71,6 @@
 
   html {
     scroll-behavior: smooth;
-  /* Smooth scrolling with performance optimization */
-  html {
-    scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -82,7 +79,6 @@
   .will-change-transform {
     will-change: transform;
   }
-}
 }
 
 @layer components {

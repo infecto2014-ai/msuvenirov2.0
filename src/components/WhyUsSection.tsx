@@ -44,7 +44,7 @@ const WhyUsSection = () => {
             Почему выбирают нас?
           </h2>
           <p className="text-muted-foreground text-sm sm:text-base max-w-2xl mx-auto">
-            Более 5 лет мы помогаем клиентам создавать уникальные изделия
+            С 2019 года помогаем клиентам создавать уникальные изделия
           </p>
         </div>
 

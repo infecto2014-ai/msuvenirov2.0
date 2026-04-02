@@ -10,13 +10,13 @@ import client7 from '@/assets/clients/client-7.png';
 import client8 from '@/assets/clients/client-8.png';
 
 const baseClients = [
-  { id: 1, name: 'Клиент 1', logo: client1 },
+  { id: 1, name: 'Корпоративный партнёр', logo: client1 },
   { id: 2, name: 'Арле Парк', logo: client2 },
   { id: 3, name: 'Fonbet', logo: client3 },
   { id: 4, name: 'Папаша Бенне', logo: client4 },
   { id: 5, name: 'Неудержимые', logo: client5 },
-  { id: 6, name: 'Клиент 6', logo: client6 },
-  { id: 7, name: 'Клиент 7', logo: client7 },
+  { id: 6, name: 'Партнёр', logo: client6 },
+  { id: 7, name: 'Постоянный клиент', logo: client7 },
   { id: 8, name: 'Котик', logo: client8 },
 ];
 
