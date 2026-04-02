@@ -1,4 +1,4 @@
-import { Palette, Droplets, Timer, Sparkles, HelpCircle } from 'lucide-react';
+import { Palette, Droplets, Timer, Sparkles, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const benefits = [
@@ -67,10 +67,10 @@ const TechnologySection = () => {
 
             <Link
               to="/faq"
-              className="inline-flex items-center gap-2 mt-2 px-5 py-2.5 rounded-full neon-border text-sm font-medium text-primary hover:neon-glow transition-all duration-300"
+              className="inline-flex items-center gap-2 mt-2 px-6 py-3 rounded-full border-2 border-primary bg-transparent text-sm font-semibold text-primary hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(0,245,255,0.3)] transition-all duration-300 group"
             >
-              <HelpCircle className="w-4 h-4" />
-              Другие методы печати, сроки и ответы на вопросы
+              Цены, сроки и частые вопросы
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
             </Link>
           </div>
 
