@@ -262,7 +262,7 @@ const Header = () => {
                   <Phone className="w-4 h-4 text-primary flex-shrink-0" />
                   <span>+7 (952) 114-23-50</span>
                 </a>
-                <a href="https://t.me/Msuvenirov39zakaz" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors">
+                <a href="https://t.me/msuvenirov39zakaz" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors">
                   <Send className="w-4 h-4 text-primary flex-shrink-0" />
                   <span>Написать в Telegram</span>
                 </a>
