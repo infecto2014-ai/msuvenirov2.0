@@ -77,7 +77,7 @@ const ContactSection = () => {
                 </div>
                 <div className="flex flex-col">
                   <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Telegram</h4>
-                  <a href="https://t.me/Msuvenirov39zakaz" target="_blank" rel="noopener noreferrer" className="text-foreground text-sm sm:text-base hover:text-primary transition-colors">
+                  <a href="https://t.me/msuvenirov39zakaz" target="_blank" rel="noopener noreferrer" className="text-foreground text-sm sm:text-base hover:text-primary transition-colors">
                     Написать нам
                   </a>
                 </div>
