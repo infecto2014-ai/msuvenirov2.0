@@ -1,4 +1,4 @@
-import { Palette, Droplets, Timer, Sparkles, HelpCircle } from 'lucide-react';
+import { Palette, Droplets, Timer, Sparkles, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const benefits = [
