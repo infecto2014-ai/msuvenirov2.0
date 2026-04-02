@@ -184,8 +184,8 @@ const PortfolioSection = () => {
             loop={true}
             pagination={{
               clickable: true,
-              bulletClass: 'swiper-pagination-bullet !bg-muted-foreground/25 !w-2.5 !h-2.5 sm:!w-3 sm:!h-3 !mx-1.5 transition-all duration-300',
-              bulletActiveClass: '!bg-primary !w-7 sm:!w-9 !rounded-full !shadow-[0_0_12px_hsl(var(--primary)/0.5)]',
+              bulletClass: 'swiper-pagination-bullet !bg-muted-foreground/50 !w-3 !h-3 sm:!w-3.5 sm:!h-3.5 !mx-2 transition-all duration-300 hover:!bg-muted-foreground/80',
+              bulletActiveClass: '!bg-primary !w-8 sm:!w-10 !rounded-full !shadow-[0_0_16px_hsl(var(--primary)/0.6)]',
             }}
             navigation={{
               nextEl: '.portfolio-next',
@@ -199,7 +199,7 @@ const PortfolioSection = () => {
             }}
             modules={[Navigation, Pagination]}
             onSwiper={setSwiperInstance}
-            className="!pb-14 sm:!pb-16"
+            className="!pb-20 sm:!pb-24"
           >
             {portfolioItems.map((item, index) => (
               <SwiperSlide key={item.id}>
