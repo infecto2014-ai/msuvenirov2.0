@@ -359,6 +359,9 @@ const FabricPrintingSection = () => {
                   ))}
                 </TableBody>
               </Table>
+              <p className="text-xs text-muted-foreground px-4 py-3 leading-relaxed">
+                * Итоговая стоимость зависит от модели, цвета и количества изделий. Для точного расчёта свяжитесь с менеджером.
+              </p>
             </AccordionContent>
           </AccordionItem>
         </Accordion>
