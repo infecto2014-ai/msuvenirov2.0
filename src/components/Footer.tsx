@@ -23,7 +23,7 @@ const Footer = () => {
 
           {/* Contact info */}
           <div>
-            <h4 className="text-sm sm:text-base font-bold text-foreground mb-4 sm:mb-6">Контакты</h4>
+            <span className="text-sm sm:text-base font-bold text-foreground mb-4 sm:mb-6">Контакты</span>
             <ul className="space-y-3 sm:space-y-4">
               <li>
               <a href="https://yandex.ru/maps/-/CHuaBZFR" target="_blank" rel="noopener noreferrer" className="flex items-start gap-2 sm:gap-3 text-muted-foreground hover:text-primary transition-colors group text-xs sm:text-sm">

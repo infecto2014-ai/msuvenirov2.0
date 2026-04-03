@@ -61,7 +61,7 @@ const ReviewCard = ({ review }: { review: Review }) => {
               <span className="text-sm font-semibold text-primary">{review.avatar}</span>
             </div>
             <div>
-              <h4 className="text-sm font-semibold text-foreground">{review.name}</span>
+              <span className="text-sm font-semibold text-foreground">{review.name}</span>
               <div className="flex gap-0.5 mt-0.5">
                 {[...Array(review.rating)].map((_, i) => (
                   <Star key={i} className="w-3 h-3 fill-primary text-primary" />
