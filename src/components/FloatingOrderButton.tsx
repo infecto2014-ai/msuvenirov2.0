@@ -211,6 +211,7 @@ const FloatingOrderButton = () => {
       });
       submitFormData.append('photoCount', photos.length.toString());
 
+      const supabase = await import('@/integrations/supabase/client').then(m => m.supabase);
       const { error } = await supabase.functions.invoke('send-telegram', {
         body: submitFormData,
       });

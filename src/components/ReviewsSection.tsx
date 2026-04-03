@@ -93,6 +93,7 @@ const ReviewsSection = () => {
 
   useEffect(() => {
     const loadReviews = async () => {
+      const supabase = await import('@/integrations/supabase/client').then(m => m.supabase);
       const { data } = await supabase
         .from('reviews')
         .select('id, name, content, rating, created_at')
