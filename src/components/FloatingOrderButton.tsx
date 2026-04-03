@@ -7,7 +7,7 @@ import InputMask from 'react-input-mask';
 import { Link, useLocation } from 'react-router-dom';
 
 const MAX_COMMENT_LENGTH = 300;
-const MAX_PHOTOS = 10;
+const MAX_FILES = 10;
 const FORM_STORAGE_KEY = 'orderFormData';
 
 interface SavedFormData {
