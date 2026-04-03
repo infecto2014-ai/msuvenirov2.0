@@ -74,10 +74,10 @@ const HeroSection = () => {
           className="animate-fade-up flex items-center gap-3 sm:gap-4 mb-8 sm:mb-12"
           style={{ animationDelay: '0.35s' }}
         >
-          <span className="px-4 py-2 rounded-full border border-primary/30 bg-primary/5 text-sm sm:text-base font-semibold text-primary">
+          <span className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-primary/30 bg-primary/5 text-xs sm:text-base font-semibold text-primary">
             DTF-печать от 280 ₽
           </span>
-          <span className="px-4 py-2 rounded-full border border-border/30 bg-card/30 text-sm sm:text-base font-semibold text-foreground">
+          <span className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-border/30 bg-card/30 text-xs sm:text-base font-semibold text-foreground">
             ⚡ Срочно за 24ч
           </span>
         </div>
