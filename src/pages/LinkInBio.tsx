@@ -135,6 +135,16 @@ const LinkInBio = () => {
             <span>Смотреть прайс-лист</span>
           </Link>
 
+          {/* Перейти на сайт */}
+          <Link
+            to="/"
+            className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl font-bold text-base transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] border-2 border-primary bg-primary/10 text-primary hover:bg-primary/20 hover:shadow-[0_0_20px_hsl(var(--neon-cyan)/0.3)]"
+          >
+            <Globe className="w-5 h-5" />
+            <span>Перейти на сайт</span>
+            <ExternalLink className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
+          </Link>
+
           {/* VK */}
           <a
             href="https://vk.com/msuvenirov39"
