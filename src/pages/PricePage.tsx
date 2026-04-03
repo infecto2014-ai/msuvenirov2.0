@@ -1017,12 +1017,15 @@ const PricePage = () => {
             <p className="text-muted-foreground text-sm mb-4">
               Нужен расчёт для тиража или индивидуального заказа?
             </p>
-            <a
-              href="/#контакты"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm gradient-btn gradient-btn-pulse"
+            <button
+              onClick={() => {
+                const orderButton = document.querySelector('[data-order-button]') as HTMLButtonElement;
+                if (orderButton) orderButton.click();
+              }}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm text-background gradient-btn gradient-btn-pulse"
             >
               Получить расчёт
-            </a>
+            </button>
           </div>
 
           <p className="text-center text-xs text-muted-foreground mt-8 max-w-xl mx-auto">
