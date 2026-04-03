@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 const FloatingOrderButton = lazy(() => import('@/components/FloatingOrderButton'));
+const PWAInstallBanner = lazy(() => import('@/components/PWAInstallBanner'));
 
 // Lazy load below-the-fold sections for better LCP
 const AboutSection = lazy(() => import('@/components/AboutSection'));
@@ -76,6 +77,9 @@ const Index = () => {
       </Suspense>
       <Suspense fallback={null}>
         <FloatingOrderButton />
+      </Suspense>
+      <Suspense fallback={null}>
+        <PWAInstallBanner />
       </Suspense>
     </div>
   );
