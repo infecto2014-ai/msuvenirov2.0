@@ -152,12 +152,6 @@
     transform: translateY(-2px);
   }
 
-  .neon-ring {
-    @apply absolute rounded-full border-2;
-    border-color: hsl(var(--neon-cyan));
-    box-shadow: 0 0 15px hsl(var(--neon-cyan) / 0.6), inset 0 0 15px hsl(var(--neon-cyan) / 0.2);
-    animation: pulse-ring 2s ease-in-out infinite;
-  }
 
   /* Optimized glass-card for mobile - reduced blur on smaller screens */
   .glass-card {
@@ -199,13 +193,6 @@
     animation: float 3s ease-in-out infinite;
   }
 
-  .animate-rotate-slow {
-    animation: rotateSlow 20s linear infinite;
-  }
-
-  .text-shadow-neon {
-    text-shadow: 0 0 10px hsl(var(--neon-cyan) / 0.8), 0 0 20px hsl(var(--neon-cyan) / 0.5);
-  }
 }
 
 @keyframes fadeUp {
@@ -250,27 +237,6 @@
   }
 }
 
-/* GPU-accelerated rotation - uses transform only */
-@keyframes rotateSlow {
-  from {
-    transform: rotate3d(0, 0, 1, 0deg);
-  }
-  to {
-    transform: rotate3d(0, 0, 1, 360deg);
-  }
-}
-
-/* GPU-accelerated pulse ring - uses opacity and transform */
-@keyframes pulse-ring {
-  0%, 100% {
-    opacity: 0.6;
-    transform: scale3d(1, 1, 1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale3d(1.02, 1.02, 1);
-  }
-}
 
 /* GPU-accelerated marquee - uses translate3d for hardware acceleration */
 @keyframes marquee {
