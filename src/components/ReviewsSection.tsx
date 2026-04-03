@@ -3,6 +3,8 @@ import { ChevronLeft, ChevronRight, Star, Quote, ChevronUp, ArrowRight, External
 import { supabase } from '@/integrations/supabase/client';
 
 const YANDEX_MAPS_URL = 'https://yandex.ru/maps/-/CHuaBZFR';
+const YANDEX_REVIEW_URL = 'https://yandex.ru/maps/-/CHuaBZFR';
+const TWOGIS_REVIEW_URL = 'https://2gis.ru/kaliningrad/firm/70000001076498451/tab/reviews';
 
 const staticReviews = [
   { id: 's1', name: 'Н. Смирнова', content: 'Заказывала печать на футболке, выполнено идеально, все пожелания были учтены. Заказом осталась довольна, главное очень понравилась любимому человеку, подарок удался! Спасибо большое!', rating: 5, avatar: 'Н' },
@@ -173,6 +175,30 @@ const ReviewsSection = () => {
             </p>
           </div>
         </a>
+
+        {/* Review CTA Buttons */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-10 sm:mb-14">
+          <a
+            href={YANDEX_REVIEW_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-primary/30 bg-primary/10 text-primary font-semibold text-sm hover:bg-primary/20 hover:border-primary/50 transition-all duration-300 group"
+          >
+            <Star className="w-4 h-4 fill-primary" />
+            Отзыв на Яндекс Картах
+            <ExternalLink className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity" />
+          </a>
+          <a
+            href={TWOGIS_REVIEW_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-accent/30 bg-accent/10 text-accent-foreground font-semibold text-sm hover:bg-accent/20 hover:border-accent/50 transition-all duration-300 group"
+          >
+            <Star className="w-4 h-4 fill-current" />
+            Отзыв на 2ГИС
+            <ExternalLink className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity" />
+          </a>
+        </div>
 
         {/* Carousel */}
         <div className="max-w-4xl mx-auto relative">
