@@ -75,7 +75,7 @@ const HeroSection = () => {
           style={{ animationDelay: '0.35s' }}
         >
           <span className="px-4 py-2 rounded-full border border-primary/30 bg-primary/5 text-sm sm:text-base font-semibold text-primary">
-            DTF-печать от <span className="text-lg sm:text-xl font-black">490 ₽</span>
+            DTF-печать от <span className="text-lg sm:text-xl font-black">280 ₽</span>
           </span>
           <span className="px-4 py-2 rounded-full border border-border/30 bg-card/30 text-sm sm:text-base font-medium text-muted-foreground">
             ⚡ Срочно за 24ч
