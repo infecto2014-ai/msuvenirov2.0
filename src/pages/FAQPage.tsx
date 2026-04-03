@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { MessageCircle, Phone, Send, Printer, Package, CreditCard, Palette, Gift, Sparkles, Truck } from 'lucide-react';
+import { MessageCircle, Phone, Send, Printer, Package, CreditCard, Palette, Gift, Sparkles, Truck, Ruler } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import {
@@ -9,6 +9,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 
 type FAQCategory = {
   id: string;
