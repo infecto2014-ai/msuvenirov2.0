@@ -388,29 +388,38 @@ const FloatingOrderButton = () => {
               )}
             </div>
 
-            {/* Photo Upload */}
+            {/* File Upload */}
             <div>
               <div className="flex justify-between items-center mb-1.5">
                 <label className="block text-sm font-medium text-foreground">
-                  Прикрепить фото
+                  Прикрепить файлы
                 </label>
                 <span className="text-xs text-muted-foreground">
-                  {photos.length}/{MAX_PHOTOS}
+                  {files.length}/{MAX_FILES}
                 </span>
               </div>
               <div className="space-y-3">
-                {photoPreviews.length > 0 && (
+                {filePreviews.length > 0 && (
                   <div className="grid grid-cols-5 gap-2">
-                    {photoPreviews.map((preview, index) => (
+                    {filePreviews.map((preview, index) => (
                       <div key={index} className="relative aspect-square">
-                        <img
-                          src={preview}
-                          alt={`Фото ${index + 1}`}
-                          className="w-full h-full rounded-lg object-cover border border-border/50"
-                        />
+                        {preview ? (
+                          <img
+                            src={preview}
+                            alt={fileNames[index] || `Файл ${index + 1}`}
+                            className="w-full h-full rounded-lg object-cover border border-border/50"
+                          />
+                        ) : (
+                          <div className="w-full h-full rounded-lg border border-border/50 bg-muted/30 flex flex-col items-center justify-center p-1">
+                            <Paperclip className="w-4 h-4 text-muted-foreground mb-0.5" />
+                            <span className="text-[10px] text-muted-foreground text-center leading-tight truncate w-full px-0.5">
+                              {fileNames[index]?.split('.').pop()?.toUpperCase() || 'FILE'}
+                            </span>
+                          </div>
+                        )}
                         <button
                           type="button"
-                          onClick={() => removePhoto(index)}
+                          onClick={() => removeFile(index)}
                           className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center"
                         >
                           <X className="w-3 h-3" />
@@ -420,22 +429,21 @@ const FloatingOrderButton = () => {
                   </div>
                 )}
 
-                {photos.length < MAX_PHOTOS && (
+                {files.length < MAX_FILES && (
                   <div className="flex items-center">
                     <input
                       type="file"
                       ref={fileInputRef}
-                      onChange={handlePhotoChange}
-                      accept="image/*"
+                      onChange={handleFileChange}
                       multiple
                       className="hidden"
-                      id="photo-upload"
+                      id="file-upload"
                     />
                     <label
-                      htmlFor="photo-upload"
+                      htmlFor="file-upload"
                       className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-muted/50 border border-border/50 text-muted-foreground hover:text-foreground hover:border-primary cursor-pointer transition-colors"
                     >
-                      <Image className="w-5 h-5" />
+                      <Paperclip className="w-5 h-5" />
                       <span className="text-sm">Выбрать файлы</span>
                     </label>
                   </div>
