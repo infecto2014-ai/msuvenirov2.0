@@ -29,8 +29,10 @@ const NotFound = () => {
           to="/"
           className="gradient-btn inline-flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-base transition-all duration-300 hover:scale-105"
         >
-          <Home className="w-5 h-5" />
-          Вернуться на главную
+          <span className="relative z-10 inline-flex items-center gap-2">
+            <Home className="w-5 h-5" />
+            Вернуться на главную
+          </span>
         </Link>
       </div>
     </div>
