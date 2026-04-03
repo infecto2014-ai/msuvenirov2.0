@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Star, Quote, ChevronUp, ArrowRight, ExternalLink } from 'lucide-react';
 
 
