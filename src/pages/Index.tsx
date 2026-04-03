@@ -78,6 +78,9 @@ const Index = () => {
       <Suspense fallback={null}>
         <FloatingOrderButton />
       </Suspense>
+      <Suspense fallback={null}>
+        <PWAInstallBanner />
+      </Suspense>
     </div>
   );
 };
