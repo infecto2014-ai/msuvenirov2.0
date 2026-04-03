@@ -221,7 +221,7 @@ const SizeTable = ({ type }: { type: string }) => {
   if (type === '__size_tshirt__') {
     return (
       <div className="overflow-x-auto -mx-2">
-        <p className="text-xs text-muted-foreground mb-3 px-2">Бесшовные футболки унисекс из 100% хлопка плотностью 160 г/м². Подходят для DTF и сублимационной печати. Все размеры указаны в сантиметрах.</p>
+        <p className="text-xs text-muted-foreground mb-3 px-2">Бесшовные футболки унисекс из 100% хлопка плотностью 160 г/м². Подходят для DTF-печати, термотрансферных плёнок и шелкографии. Все размеры указаны в сантиметрах.</p>
         <Table>
           <TableHeader>
             <TableRow className="border-border/50">
