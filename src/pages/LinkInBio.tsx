@@ -106,12 +106,7 @@ const LinkInBio = () => {
     setTimeout(() => setCopied(false), 2000);
   };
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Hero-style background */}
-      <div className="absolute inset-0">
-        <img src={heroImage} alt="" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-background/85 backdrop-blur-sm" />
-      </div>
+    <div className="min-h-screen relative overflow-hidden bg-background">
 
       {/* Background decoration */}
       <div className="absolute inset-0 pointer-events-none">
