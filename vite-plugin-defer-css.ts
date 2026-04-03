@@ -11,10 +11,10 @@ export default function deferCss(): Plugin {
     enforce: 'post',
     apply: 'build',
     transformIndexHtml(html) {
-      // Convert <link rel="stylesheet" href="..."> to non-blocking
+      // Convert any <link rel="stylesheet" ...> pointing to /assets/*.css to non-blocking
       return html.replace(
-        /<link\s+rel="stylesheet"\s+crossorigin\s+href="(\/assets\/[^"]+\.css)"\s*\/?>/g,
-        (_, href) =>
+        /<link\s+([^>]*?)rel="stylesheet"([^>]*?)href="(\/assets\/[^"]+\.css)"([^>]*?)\s*\/?>/g,
+        (_, before, mid, href, after) =>
           `<link rel="preload" href="${href}" as="style" onload="this.onload=null;this.rel='stylesheet'">\n` +
           `<noscript><link rel="stylesheet" href="${href}"></noscript>`
       );
