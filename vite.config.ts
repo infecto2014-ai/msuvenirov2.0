@@ -20,29 +20,29 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    // Optimize chunks for better caching
     rollupOptions: {
       output: {
-        manualChunks: {
-          // Separate vendor chunks for better caching
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'supabase': ['@supabase/supabase-js'],
-          'swiper': ['swiper'],
-          'radix-ui': [
-            '@radix-ui/react-dialog',
-            '@radix-ui/react-accordion',
-            '@radix-ui/react-toast',
-          ],
+        manualChunks(id) {
+          // React core — small, cached long-term
+          if (id.includes('react-dom') || id.includes('react-router-dom')) {
+            return 'react-vendor';
+          }
+          // Swiper is heavy — isolate for lazy-loaded sections only
+          if (id.includes('swiper')) {
+            return 'swiper';
+          }
+          // Supabase — only needed by reviews & order form
+          if (id.includes('@supabase')) {
+            return 'supabase';
+          }
+          // Let radix components split naturally with their consuming chunks
+          // instead of forcing them into one big bundle
         },
       },
     },
-    // Minification settings (Vite uses esbuild by default, which is fast)
     minify: 'esbuild',
-    // Target modern browsers for smaller bundles
     target: 'es2020',
-    // Enable CSS code splitting
     cssCodeSplit: true,
-    // Generate source maps only in development
     sourcemap: mode === 'development',
   },
   // Optimize dependencies
