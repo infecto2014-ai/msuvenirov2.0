@@ -216,10 +216,10 @@ const FloatingOrderButton = () => {
         submitFormData.append('promo', formData.promo.trim().toUpperCase());
       }
       
-      photos.forEach((photo, index) => {
-        submitFormData.append(`photo_${index}`, photo);
+      files.forEach((file, index) => {
+        submitFormData.append(`file_${index}`, file);
       });
-      submitFormData.append('photoCount', photos.length.toString());
+      submitFormData.append('fileCount', files.length.toString());
 
       const supabase = await import('@/integrations/supabase/client').then(m => m.supabase);
       const { error } = await supabase.functions.invoke('send-telegram', {
