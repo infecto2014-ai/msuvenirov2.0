@@ -144,6 +144,7 @@ const FloatingOrderButton = () => {
     setPromoMessage('');
 
     try {
+      const supabase = await import('@/integrations/supabase/client').then(m => m.supabase);
       const { data, error } = await supabase.functions.invoke('verify-promo', {
         body: { code },
       });
