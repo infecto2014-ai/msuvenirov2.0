@@ -54,11 +54,11 @@ const HeroSection = () => {
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center container mx-auto px-4 sm:px-6 text-center pt-20">
         {/* Main Heading - H1 with primary keyword */}
         <h1 
-          className="animate-fade-up text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-none mb-6 sm:mb-6" 
+          className="animate-fade-up text-5xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-none mb-6 sm:mb-6" 
         >
           <span className="neon-text uppercase tracking-tight">МАСТЕРСКАЯ</span>
           <br />
-          <span className="text-foreground uppercase tracking-tight text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">СУВЕНИРОВ</span>
+          <span className="text-foreground uppercase tracking-tight text-4xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">СУВЕНИРОВ</span>
         </h1>
 
         {/* Subheading with keywords */}
@@ -74,10 +74,10 @@ const HeroSection = () => {
           className="animate-fade-up flex items-center gap-3 sm:gap-4 mb-8 sm:mb-12"
           style={{ animationDelay: '0.35s' }}
         >
-          <span className="px-4 py-2 rounded-full border border-primary/30 bg-primary/5 text-sm sm:text-base font-semibold text-primary">
+          <span className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-primary/30 bg-primary/5 text-xs sm:text-base font-semibold text-primary">
             DTF-печать от 280 ₽
           </span>
-          <span className="px-4 py-2 rounded-full border border-border/30 bg-card/30 text-sm sm:text-base font-semibold text-foreground">
+          <span className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-border/30 bg-card/30 text-xs sm:text-base font-semibold text-foreground">
             ⚡ Срочно за 24ч
           </span>
         </div>
