@@ -91,28 +91,32 @@ const FloatingOrderButton = () => {
     setFormData(prev => ({ ...prev, phone: e.target.value }));
   };
 
-  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    const remainingSlots = MAX_PHOTOS - photos.length;
-    const filesToAdd = files.slice(0, remainingSlots);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = Array.from(e.target.files || []);
+    const remainingSlots = MAX_FILES - files.length;
+    const filesToAdd = selected.slice(0, remainingSlots);
 
-    if (files.length > remainingSlots) {
+    if (selected.length > remainingSlots) {
       toast({
         title: 'Ограничение',
-        description: `Можно прикрепить максимум ${MAX_PHOTOS} изображений`,
+        description: `Можно прикрепить максимум ${MAX_FILES} файлов`,
         variant: 'destructive',
       });
     }
 
-    const newPhotos = [...photos, ...filesToAdd];
-    setPhotos(newPhotos);
+    setFiles(prev => [...prev, ...filesToAdd]);
+    setFileNames(prev => [...prev, ...filesToAdd.map(f => f.name)]);
 
     filesToAdd.forEach(file => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPhotoPreviews(prev => [...prev, reader.result as string]);
-      };
-      reader.readAsDataURL(file);
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setFilePreviews(prev => [...prev, reader.result as string]);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        setFilePreviews(prev => [...prev, '']);
+      }
     });
 
     if (fileInputRef.current) {
@@ -120,9 +124,10 @@ const FloatingOrderButton = () => {
     }
   };
 
-  const removePhoto = (index: number) => {
-    setPhotos(prev => prev.filter((_, i) => i !== index));
-    setPhotoPreviews(prev => prev.filter((_, i) => i !== index));
+  const removeFile = (index: number) => {
+    setFiles(prev => prev.filter((_, i) => i !== index));
+    setFilePreviews(prev => prev.filter((_, i) => i !== index));
+    setFileNames(prev => prev.filter((_, i) => i !== index));
   };
 
   const resetForm = () => {
