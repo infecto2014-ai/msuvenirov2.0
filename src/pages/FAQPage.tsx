@@ -60,6 +60,17 @@ const categories: FAQCategory[] = [
     ],
   },
   {
+    id: 'sizes',
+    label: 'Размерная сетка',
+    subtitle: 'Размеры футболок, поло и худи — подберите свой размер',
+    icon: <Ruler className="w-5 h-5 text-primary" />,
+    questions: [
+      { q: 'Футболки унисекс (бесшовные, 100% хлопок, 160 г/м²)', a: '__size_tshirt__' },
+      { q: 'Поло унисекс', a: '__size_polo__' },
+      { q: 'Толстовки с капюшоном и карманом «кенгуру» (Унисекс)', a: '__size_hoodie__' },
+    ],
+  },
+  {
     id: 'order',
     label: 'Заказ и сроки',
     subtitle: 'Как оформить заказ, сроки изготовления и возможность срочной печати',
@@ -185,17 +196,6 @@ const categories: FAQCategory[] = [
         q: 'Где находится ваша мастерская?',
         a: 'Наша мастерская расположена в Калининграде, в ТЦ «Экватор» на 2 этаже, по адресу: ул. Генерала Челнокова 11, стр 1. Удобная транспортная доступность, рядом есть парковка. Работаем ежедневно без выходных с 10:00 до 20:00. Приходите — покажем образцы, поможем выбрать изделие и метод печати.',
       },
-    ],
-  },
-  {
-    id: 'sizes',
-    label: 'Размерная сетка',
-    subtitle: 'Размеры футболок, поло и худи — подберите свой размер',
-    icon: <Ruler className="w-5 h-5 text-primary" />,
-    questions: [
-      { q: 'Футболки унисекс (бесшовные, 100% хлопок, 160 г/м²)', a: '__size_tshirt__' },
-      { q: 'Поло унисекс', a: '__size_polo__' },
-      { q: 'Толстовки с капюшоном и карманом «кенгуру» (Унисекс)', a: '__size_hoodie__' },
     ],
   },
 ];
@@ -426,9 +426,9 @@ const FAQPage = () => {
                   href="https://t.me/Msuvenirov39zakaz"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="gradient-btn-pulse px-6 py-3 rounded-lg text-sm font-semibold text-primary-foreground inline-flex items-center justify-center gap-2"
+                  className="gradient-btn-pulse px-6 py-3 rounded-lg text-sm font-semibold text-foreground inline-flex items-center justify-center gap-2 hover:text-foreground"
                 >
-                  <Send className="w-4 h-4" />
+                  <Send className="w-4 h-4 relative z-10" />
                   <span className="relative z-10">Написать в Telegram</span>
                 </a>
                 <a
