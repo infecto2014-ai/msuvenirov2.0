@@ -343,10 +343,12 @@ const FAQPage = () => {
 
       <Header />
 
-      <main className="min-h-screen bg-background pt-24 pb-16">
+      <main className="min-h-screen bg-background pt-24 pb-16 relative">
+        {/* Full-page gradient behind header area */}
+        <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
+        
         {/* Hero */}
         <section className="relative overflow-hidden py-12 sm:py-16">
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
           <div className="container mx-auto px-4 sm:px-6 relative z-10 text-center">
             <span className="inline-block px-4 py-2 rounded-full neon-border text-xs sm:text-sm font-medium text-primary mb-4">
               FAQ
