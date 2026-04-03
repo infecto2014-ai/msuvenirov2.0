@@ -25,6 +25,8 @@ const ProtectedLogo = ({ className = '', height = 40 }: ProtectedLogoProps) => {
       <img
         src={logo}
         alt="Мастерская сувениров"
+        width={120}
+        height={height}
         className="h-full w-auto select-none pointer-events-none"
         style={{ 
           userSelect: 'none',
