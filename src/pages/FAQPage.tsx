@@ -454,6 +454,9 @@ const FAQPage = () => {
       </main>
 
       <Footer />
+      <Suspense fallback={null}>
+        <FloatingOrderButton />
+      </Suspense>
     </>
   );
 };
