@@ -193,13 +193,6 @@
     animation: float 3s ease-in-out infinite;
   }
 
-  .animate-rotate-slow {
-    animation: rotateSlow 20s linear infinite;
-  }
-
-  .text-shadow-neon {
-    text-shadow: 0 0 10px hsl(var(--neon-cyan) / 0.8), 0 0 20px hsl(var(--neon-cyan) / 0.5);
-  }
 }
 
 @keyframes fadeUp {
