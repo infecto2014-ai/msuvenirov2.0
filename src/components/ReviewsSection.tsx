@@ -134,6 +134,7 @@ const ReviewsSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [nextIndex, setNextIndex] = useState<number | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right');
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [allReviews, setAllReviews] = useState<Review[]>(staticReviews);
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
