@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight, Star, Quote, ArrowRight, ExternalLink, X } f
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 
 
-const YANDEX_MAPS_URL = 'https://yandex.ru/maps/-/CHuaBZFR';
+const YANDEX_MAPS_URL = 'https://yandex.ru/maps/org/masterskaya_suvenirov/105530576058/?ll=20.487454%2C54.737492&z=17';
 
 const staticReviews = [
   { id: 's1', name: 'Н. Смирнова', content: 'Заказывала печать на футболке, выполнено идеально, все пожелания были учтены. Заказом осталась довольна, главное очень понравилась любимому человеку, подарок удался! Спасибо большое!', rating: 5, avatar: 'Н' },
