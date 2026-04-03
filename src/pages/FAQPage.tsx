@@ -282,7 +282,11 @@ const FAQPage = () => {
                             {item.q}
                           </AccordionTrigger>
                           <AccordionContent className="px-4 pb-4 text-sm text-muted-foreground leading-relaxed">
-                            {item.a}
+                            {item.a.startsWith('__size_') ? (
+                              <SizeTable type={item.a} />
+                            ) : (
+                              item.a
+                            )}
                           </AccordionContent>
                         </AccordionItem>
                       ))}
