@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback } from 'react';
+import { useRef, useCallback } from 'react';
 
 import client1 from '@/assets/clients/client-1.webp';
 import client2 from '@/assets/clients/client-2.webp';
@@ -20,62 +20,28 @@ const baseClients = [
   { id: 8, name: 'Котик', logo: client8 },
 ];
 
-// Duplicate 4x to ensure smooth looping on ultra-wide screens
+// Triple set for seamless CSS loop
 const clients = [
   ...baseClients.map((c, i) => ({ ...c, id: i + 1 })),
   ...baseClients.map((c, i) => ({ ...c, id: i + 9 })),
   ...baseClients.map((c, i) => ({ ...c, id: i + 17 })),
-  ...baseClients.map((c, i) => ({ ...c, id: i + 25 })),
 ];
 
 const TrustSection = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const isPausedRef = useRef(false);
-  const animationRef = useRef<number>();
-  const scrollPositionRef = useRef(0);
-  const scrollWidthRef = useRef(0);
 
-  const handlePause = useCallback(() => { isPausedRef.current = true; }, []);
-  const handleResume = useCallback(() => { isPausedRef.current = false; }, []);
-
-  useEffect(() => {
-    const scrollContainer = scrollRef.current;
-    if (!scrollContainer) return;
-
-    // Cache scrollWidth once to avoid forced reflow
-    scrollWidthRef.current = scrollContainer.scrollWidth / 2;
-    const speed = 0.5;
-
-    const animate = () => {
-      if (!isPausedRef.current) {
-        scrollPositionRef.current += speed;
-        
-        if (scrollPositionRef.current >= scrollWidthRef.current) {
-          scrollPositionRef.current = 0;
-        }
-        
-        scrollContainer.style.transform = `translateX(-${scrollPositionRef.current}px)`;
-      }
-      
-      animationRef.current = requestAnimationFrame(animate);
-    };
-
-    animationRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
+  const handlePause = useCallback(() => {
+    scrollRef.current?.style.setProperty('animation-play-state', 'paused');
+  }, []);
+  const handleResume = useCallback(() => {
+    scrollRef.current?.style.setProperty('animation-play-state', 'running');
   }, []);
 
   return (
     <section className="py-10 sm:py-14 relative overflow-hidden" aria-label="Корпоративные клиенты">
-      {/* Background with smooth transition to ContactSection */}
       <div className="absolute inset-0 bg-background" />
       <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-b from-transparent to-[hsl(260,25%,6%)]" />
       
-      {/* Title - centered with container */}
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <header className="text-center mb-8 sm:mb-10">
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">
@@ -85,20 +51,17 @@ const TrustSection = () => {
         </header>
       </div>
       
-      {/* Full-width carousel - Edge to Edge */}
       <div 
         className="relative w-full overflow-hidden"
         onMouseEnter={handlePause}
         onMouseLeave={handleResume}
       >
-        {/* Gradient fade edges */}
         <div className="absolute left-0 top-0 bottom-0 w-24 sm:w-32 md:w-40 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-32 md:w-40 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
         
-        {/* Scrolling container */}
         <div 
           ref={scrollRef}
-          className="flex items-center will-change-transform"
+          className="flex items-center will-change-transform animate-marquee"
           style={{ width: 'fit-content' }}
         >
           {clients.map((client) => (
@@ -107,7 +70,6 @@ const TrustSection = () => {
               className="flex-shrink-0 px-4 sm:px-6"
             >
               <div className="relative flex items-center justify-center py-4">
-                {/* Neon glow background */}
                 <div 
                   className="absolute inset-0 rounded-xl opacity-60"
                   style={{
@@ -115,7 +77,6 @@ const TrustSection = () => {
                   }}
                 />
                 
-                {/* Protected Logo */}
                 <img
                   src={client.logo}
                   alt=""
