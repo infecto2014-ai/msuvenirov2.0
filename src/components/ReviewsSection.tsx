@@ -162,14 +162,15 @@ const ReviewsSection = () => {
     loadReviews();
   }, []);
 
-  const slideTo = (newIndex: number) => {
+  const slideTo = (newIndex: number, direction: 'left' | 'right' = 'right') => {
     if (isTransitioning) return;
-    setNextIndex(newIndex);
+    setSlideDirection(direction);
     setIsTransitioning(true);
     setTimeout(() => {
       setCurrentIndex(newIndex);
-      setNextIndex(null);
+      setNextIndex(newIndex);
       setIsTransitioning(false);
+      setTimeout(() => setNextIndex(null), 350);
     }, 300);
   };
 
