@@ -237,27 +237,6 @@
   }
 }
 
-/* GPU-accelerated rotation - uses transform only */
-@keyframes rotateSlow {
-  from {
-    transform: rotate3d(0, 0, 1, 0deg);
-  }
-  to {
-    transform: rotate3d(0, 0, 1, 360deg);
-  }
-}
-
-/* GPU-accelerated pulse ring - uses opacity and transform */
-@keyframes pulse-ring {
-  0%, 100% {
-    opacity: 0.6;
-    transform: scale3d(1, 1, 1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale3d(1.02, 1.02, 1);
-  }
-}
 
 /* GPU-accelerated marquee - uses translate3d for hardware acceleration */
 @keyframes marquee {
