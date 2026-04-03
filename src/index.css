@@ -152,12 +152,6 @@
     transform: translateY(-2px);
   }
 
-  .neon-ring {
-    @apply absolute rounded-full border-2;
-    border-color: hsl(var(--neon-cyan));
-    box-shadow: 0 0 15px hsl(var(--neon-cyan) / 0.6), inset 0 0 15px hsl(var(--neon-cyan) / 0.2);
-    animation: pulse-ring 2s ease-in-out infinite;
-  }
 
   /* Optimized glass-card for mobile - reduced blur on smaller screens */
   .glass-card {
