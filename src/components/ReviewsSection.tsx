@@ -232,7 +232,7 @@ const ReviewsSection = () => {
               Рейтинг на Яндекс Картах
             </p>
             <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
-              Базируется на 120+ отзывах
+              Базируется на 150+ отзывах
             </p>
           </div>
         </a>

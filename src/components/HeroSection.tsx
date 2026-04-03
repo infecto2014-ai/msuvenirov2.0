@@ -63,11 +63,24 @@ const HeroSection = () => {
 
         {/* Subheading with keywords */}
         <p 
-          className="animate-fade-up text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-2xl mx-auto mb-8 sm:mb-12" 
+          className="animate-fade-up text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground max-w-2xl mx-auto mb-4 sm:mb-6" 
           style={{ animationDelay: '0.3s' }}
         >
           Впечатления для близких, имидж для бизнеса
         </p>
+
+        {/* Price badge */}
+        <div 
+          className="animate-fade-up flex items-center gap-3 sm:gap-4 mb-8 sm:mb-12"
+          style={{ animationDelay: '0.35s' }}
+        >
+          <span className="px-4 py-2 rounded-full border border-primary/30 bg-primary/5 text-sm sm:text-base font-semibold text-primary">
+            DTF-печать от <span className="text-lg sm:text-xl font-black">490 ₽</span>
+          </span>
+          <span className="px-4 py-2 rounded-full border border-border/30 bg-card/30 text-sm sm:text-base font-medium text-muted-foreground">
+            ⚡ Срочно за 24ч
+          </span>
+        </div>
 
         {/* CTA Button */}
         <div className="animate-fade-up mb-10 sm:mb-16" style={{ animationDelay: '0.4s' }}>
