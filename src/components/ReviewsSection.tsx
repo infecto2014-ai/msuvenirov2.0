@@ -185,12 +185,12 @@ const ReviewsSection = () => {
 
   const handlePrev = () => {
     setIsAutoPlaying(false);
-    slideTo(currentIndex <= 1 ? allReviews.length - 2 : currentIndex - 2);
+    slideTo(currentIndex <= 1 ? allReviews.length - 2 : currentIndex - 2, 'left');
   };
 
   const handleNext = () => {
     setIsAutoPlaying(false);
-    slideTo((currentIndex + 2) % allReviews.length);
+    slideTo((currentIndex + 2) % allReviews.length, 'right');
   };
 
   const displayIndex = nextIndex !== null ? nextIndex : currentIndex;
