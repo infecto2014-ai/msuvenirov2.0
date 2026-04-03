@@ -2,7 +2,7 @@ import { Phone, Globe, Mail, ArrowLeft, Copy, Check, FileText } from 'lucide-rea
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ProtectedLogo from '@/components/ProtectedLogo';
-import heroImage from '@/assets/hero-bg.jpg';
+
 import maxLogo from '@/assets/logo_max.svg';
 import sbpLogo from '@/assets/sbp.svg';
 
@@ -106,12 +106,7 @@ const LinkInBio = () => {
     setTimeout(() => setCopied(false), 2000);
   };
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Hero-style background */}
-      <div className="absolute inset-0">
-        <img src={heroImage} alt="" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-background/85 backdrop-blur-sm" />
-      </div>
+    <div className="min-h-screen relative overflow-hidden bg-background">
 
       {/* Background decoration */}
       <div className="absolute inset-0 pointer-events-none">
