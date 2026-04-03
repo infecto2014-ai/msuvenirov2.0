@@ -132,8 +132,9 @@ const FloatingOrderButton = () => {
 
   const resetForm = () => {
     setFormData({ name: '', phone: '', comment: '', promo: '' });
-    setPhotos([]);
-    setPhotoPreviews([]);
+    setFiles([]);
+    setFilePreviews([]);
+    setFileNames([]);
     setPromoStatus('idle');
     setPromoMessage('');
     setPromoVerified(false);
