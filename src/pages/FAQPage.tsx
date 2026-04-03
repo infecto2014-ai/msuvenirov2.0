@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { MessageCircle, Phone, Send, Printer, Package, CreditCard, Palette, Gift, Sparkles, Truck } from 'lucide-react';
+import { MessageCircle, Phone, Send, Printer, Package, CreditCard, Palette, Gift, Sparkles, Truck, Ruler } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import {
@@ -9,6 +9,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 
 type FAQCategory = {
   id: string;
@@ -179,6 +187,17 @@ const categories: FAQCategory[] = [
       },
     ],
   },
+  {
+    id: 'sizes',
+    label: 'Размерная сетка',
+    subtitle: 'Размеры футболок, поло и худи — подберите свой размер',
+    icon: <Ruler className="w-5 h-5 text-primary" />,
+    questions: [
+      { q: 'Футболки унисекс (бесшовные, 100% хлопок, 160 г/м²)', a: '__size_tshirt__' },
+      { q: 'Поло унисекс', a: '__size_polo__' },
+      { q: 'Толстовки с капюшоном и карманом «кенгуру» (Унисекс)', a: '__size_hoodie__' },
+    ],
+  },
 ];
 
 const allQuestions = categories.flatMap((cat) =>
@@ -196,6 +215,114 @@ const faqJsonLd = {
       text: item.a,
     },
   })),
+};
+
+const SizeTable = ({ type }: { type: string }) => {
+  if (type === '__size_tshirt__') {
+    return (
+      <div className="overflow-x-auto -mx-2">
+        <Table>
+          <TableHeader>
+            <TableRow className="border-border/50">
+              <TableHead rowSpan={2} className="text-foreground font-semibold text-xs align-middle">Показатель</TableHead>
+              <TableHead colSpan={5} className="text-center text-foreground font-semibold text-xs border-b-0">Размеры российские / международные</TableHead>
+              <TableHead rowSpan={2} className="text-foreground font-semibold text-xs text-center align-middle">± см</TableHead>
+            </TableRow>
+            <TableRow className="border-border/50">
+              {['44 (S)', '46 (M)', '48 (L)', '50 (XL)', '52 (XXL)'].map(s => (
+                <TableHead key={s} className="text-center text-xs text-muted-foreground whitespace-nowrap">{s}</TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow className="border-border/50">
+              <TableCell className="font-medium text-foreground text-xs">A - Длина изделия</TableCell>
+              {[70, 72, 74, 76, 78].map((v, i) => <TableCell key={i} className="text-center text-xs">{v}</TableCell>)}
+              <TableCell className="text-center text-xs">2</TableCell>
+            </TableRow>
+            <TableRow className="border-border/50">
+              <TableCell className="font-medium text-foreground text-xs">B - Ширина изделия</TableCell>
+              {[50, 52, 74, 56, 58].map((v, i) => <TableCell key={i} className="text-center text-xs">{v}</TableCell>)}
+              <TableCell className="text-center text-xs">2</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+    );
+  }
+
+  if (type === '__size_polo__') {
+    return (
+      <div className="overflow-x-auto -mx-2">
+        <Table>
+          <TableHeader>
+            <TableRow className="border-border/50">
+              <TableHead rowSpan={2} className="text-foreground font-semibold text-xs align-middle">Показатель</TableHead>
+              <TableHead colSpan={5} className="text-center text-foreground font-semibold text-xs border-b-0">Размеры российские / международные</TableHead>
+              <TableHead rowSpan={2} className="text-foreground font-semibold text-xs text-center align-middle">± см</TableHead>
+            </TableRow>
+            <TableRow className="border-border/50">
+              {['44 (S)', '46 (M)', '48 (L)', '50 (XL)', '52 (XXL)'].map(s => (
+                <TableHead key={s} className="text-center text-xs text-muted-foreground whitespace-nowrap">{s}</TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow className="border-border/50">
+              <TableCell className="font-medium text-foreground text-xs">A - Длина изделия</TableCell>
+              {[70, 72, 74, 76, 78].map((v, i) => <TableCell key={i} className="text-center text-xs">{v}</TableCell>)}
+              <TableCell className="text-center text-xs">2</TableCell>
+            </TableRow>
+            <TableRow className="border-border/50">
+              <TableCell className="font-medium text-foreground text-xs">B - Ширина изделия</TableCell>
+              {[50, 52, 54, 56, 58].map((v, i) => <TableCell key={i} className="text-center text-xs">{v}</TableCell>)}
+              <TableCell className="text-center text-xs">2</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+    );
+  }
+
+  if (type === '__size_hoodie__') {
+    return (
+      <div className="overflow-x-auto -mx-2">
+        <Table>
+          <TableHeader>
+            <TableRow className="border-border/50">
+              <TableHead rowSpan={2} className="text-foreground font-semibold text-xs align-middle">Показатель</TableHead>
+              <TableHead colSpan={5} className="text-center text-foreground font-semibold text-xs border-b-0">Размеры российские / международные</TableHead>
+              <TableHead rowSpan={2} className="text-foreground font-semibold text-xs text-center align-middle">± см</TableHead>
+            </TableRow>
+            <TableRow className="border-border/50">
+              {['44-46 (S-M)', '46-48 (M-L)', '48-50 (L-XL)', '50-52 (XL-2XL)', '52-54 (2XL-3XL)'].map(s => (
+                <TableHead key={s} className="text-center text-xs text-muted-foreground whitespace-nowrap">{s}</TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow className="border-border/50">
+              <TableCell className="font-medium text-foreground text-xs">A - Длина изделия</TableCell>
+              {[68, 70, 72, 74, 76].map((v, i) => <TableCell key={i} className="text-center text-xs">{v}</TableCell>)}
+              <TableCell className="text-center text-xs">2</TableCell>
+            </TableRow>
+            <TableRow className="border-border/50">
+              <TableCell className="font-medium text-foreground text-xs">B - Ширина изделия</TableCell>
+              {[52, 54, 56, 58, 61].map((v, i) => <TableCell key={i} className="text-center text-xs">{v}</TableCell>)}
+              <TableCell className="text-center text-xs">2</TableCell>
+            </TableRow>
+            <TableRow className="border-border/50">
+              <TableCell className="font-medium text-foreground text-xs">C - Длина рукава с манжетом</TableCell>
+              {[73, 74, 76, 78, 79].map((v, i) => <TableCell key={i} className="text-center text-xs">{v}</TableCell>)}
+              <TableCell className="text-center text-xs">1,5</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+    );
+  }
+
+  return null;
 };
 
 const FAQPage = () => {
@@ -263,7 +390,11 @@ const FAQPage = () => {
                             {item.q}
                           </AccordionTrigger>
                           <AccordionContent className="px-4 pb-4 text-sm text-muted-foreground leading-relaxed">
-                            {item.a}
+                            {item.a.startsWith('__size_') ? (
+                              <SizeTable type={item.a} />
+                            ) : (
+                              item.a
+                            )}
                           </AccordionContent>
                         </AccordionItem>
                       ))}
