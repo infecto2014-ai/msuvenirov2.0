@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Star, Quote, ChevronUp, ArrowRight, ExternalLink } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+
 
 const YANDEX_MAPS_URL = 'https://yandex.ru/maps/-/CHuaBZFR';
 
@@ -93,6 +93,7 @@ const ReviewsSection = () => {
 
   useEffect(() => {
     const loadReviews = async () => {
+      const supabase = await import('@/integrations/supabase/client').then(m => m.supabase);
       const { data } = await supabase
         .from('reviews')
         .select('id, name, content, rating, created_at')
