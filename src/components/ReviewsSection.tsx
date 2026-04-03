@@ -221,7 +221,7 @@ const ReviewsSection = () => {
           </button>
 
           {/* Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+          <div className={`grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 transition-opacity duration-300 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
             {visibleReviews.map((review) => (
               <ReviewCard key={review.id} review={review} />
             ))}
