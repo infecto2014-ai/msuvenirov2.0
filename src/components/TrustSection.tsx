@@ -118,6 +118,8 @@ const TrustSection = () => {
                   src={client.logo}
                   alt=""
                   aria-hidden="true"
+                  width={130}
+                  height={80}
                   draggable={false}
                   onContextMenu={(e) => e.preventDefault()}
                   loading="lazy"
