@@ -1022,9 +1022,9 @@ const PricePage = () => {
                 const orderButton = document.querySelector('[data-order-button]') as HTMLButtonElement;
                 if (orderButton) orderButton.click();
               }}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm text-background gradient-btn gradient-btn-pulse"
+              className="relative inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm gradient-btn gradient-btn-pulse [&]:text-white hover:text-white [&>*]:relative [&>*]:z-10"
             >
-              Получить расчёт
+              <span>Получить расчёт</span>
             </button>
           </div>
 
