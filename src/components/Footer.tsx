@@ -12,7 +12,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 lg:gap-12">
           {/* Logo and about */}
           <div className="sm:col-span-2">
-            <a href="/" className="flex items-center mb-4 sm:mb-6 group">
+            <a href="/" className="inline-flex items-center mb-4 sm:mb-6 group w-fit">
               <ProtectedLogo height={45} />
             </a>
             <p className="text-muted-foreground text-xs sm:text-sm max-w-md">
