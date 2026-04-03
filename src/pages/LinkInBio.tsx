@@ -64,37 +64,37 @@ const LinkInBio = () => {
         </p>
 
         {/* Primary actions — gradient highlighted */}
-        <div className="w-full flex items-center gap-3 mb-3">
+        <div className="w-full flex items-stretch gap-3 mb-3">
           {/* Позвонить — круглая кнопка */}
           <a
             href="tel:+79521142350"
-            className="flex-shrink-0 w-14 h-14 rounded-full flex items-center justify-center bg-gradient-to-br from-lime-400 to-green-400 text-background shadow-[0_0_20px_rgba(132,204,22,0.4)] hover:shadow-[0_0_30px_rgba(132,204,22,0.6)] hover:scale-110 active:scale-95 transition-all duration-300"
+            className="flex-shrink-0 w-14 rounded-2xl flex items-center justify-center bg-gradient-to-br from-lime-400 to-green-400 text-background shadow-[0_0_20px_rgba(132,204,22,0.4)] hover:shadow-[0_0_30px_rgba(132,204,22,0.6)] hover:scale-105 active:scale-95 transition-all duration-300"
             title="Позвонить"
           >
             <Phone className="w-6 h-6" />
           </a>
 
-          {/* MAX */}
-          <a
-            href="https://max.ru/u/f9LHodD0cOLo7HDSJw672fSH82yru_atZ9KDVODSf_2mghJHg1xe7H2qOC8"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl font-bold text-base transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_hsl(var(--neon-cyan)/0.4)] active:scale-[0.98] bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))] text-background"
-          >
-            <MaxIcon className="w-5 h-5 brightness-0" />
-            <span>Написать в MAX</span>
-          </a>
-
-          {/* Telegram */}
-          <a
-            href="https://t.me/msuvenirov39zakaz"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl font-bold text-base transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_hsl(var(--neon-cyan)/0.4)] active:scale-[0.98] bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))] text-background"
-          >
-            <TelegramIcon className="w-5 h-5" />
-            <span>Написать в Telegram</span>
-          </a>
+          {/* MAX + Telegram */}
+          <div className="flex-1 flex flex-col gap-3">
+            <a
+              href="https://max.ru/u/f9LHodD0cOLo7HDSJw672fSH82yru_atZ9KDVODSf_2mghJHg1xe7H2qOC8"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl font-bold text-base transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_hsl(var(--neon-cyan)/0.4)] active:scale-[0.98] bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))] text-background"
+            >
+              <MaxIcon className="w-5 h-5 brightness-0" />
+              <span>Написать в MAX</span>
+            </a>
+            <a
+              href="https://t.me/msuvenirov39zakaz"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl font-bold text-base transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_hsl(var(--neon-cyan)/0.4)] active:scale-[0.98] bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))] text-background"
+            >
+              <TelegramIcon className="w-5 h-5" />
+              <span>Написать в Telegram</span>
+            </a>
+          </div>
         </div>
 
         {/* Secondary actions */}
