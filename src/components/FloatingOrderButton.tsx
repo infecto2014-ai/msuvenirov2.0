@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { X, Send, Image, Loader2, Check, Tag } from 'lucide-react';
+import { X, Send, Paperclip, Loader2, Check, Tag } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 import { toast } from '@/hooks/use-toast';
@@ -7,7 +7,7 @@ import InputMask from 'react-input-mask';
 import { Link, useLocation } from 'react-router-dom';
 
 const MAX_COMMENT_LENGTH = 300;
-const MAX_PHOTOS = 10;
+const MAX_FILES = 10;
 const FORM_STORAGE_KEY = 'orderFormData';
 
 interface SavedFormData {
@@ -15,7 +15,8 @@ interface SavedFormData {
   phone: string;
   comment: string;
   promo: string;
-  photoPreviews: string[];
+  filePreviews: string[];
+  fileNames: string[];
 }
 
 const FloatingOrderButton = () => {
@@ -28,8 +29,9 @@ const FloatingOrderButton = () => {
     comment: '',
     promo: '',
   });
-  const [photos, setPhotos] = useState<File[]>([]);
-  const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
+  const [filePreviews, setFilePreviews] = useState<string[]>([]);
+  const [fileNames, setFileNames] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Promo verification state
@@ -49,7 +51,8 @@ const FloatingOrderButton = () => {
           comment: parsed.comment || '',
           promo: parsed.promo || '',
         });
-        setPhotoPreviews(parsed.photoPreviews || []);
+        setFilePreviews(parsed.filePreviews || []);
+        setFileNames(parsed.fileNames || []);
         setIsOpen(true);
         sessionStorage.removeItem(FORM_STORAGE_KEY);
       } catch (e) {
@@ -64,7 +67,8 @@ const FloatingOrderButton = () => {
       phone: formData.phone,
       comment: formData.comment,
       promo: formData.promo,
-      photoPreviews: photoPreviews,
+      filePreviews: filePreviews,
+      fileNames: fileNames,
     };
     sessionStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(dataToSave));
   };
@@ -87,28 +91,32 @@ const FloatingOrderButton = () => {
     setFormData(prev => ({ ...prev, phone: e.target.value }));
   };
 
-  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    const remainingSlots = MAX_PHOTOS - photos.length;
-    const filesToAdd = files.slice(0, remainingSlots);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = Array.from(e.target.files || []);
+    const remainingSlots = MAX_FILES - files.length;
+    const filesToAdd = selected.slice(0, remainingSlots);
 
-    if (files.length > remainingSlots) {
+    if (selected.length > remainingSlots) {
       toast({
         title: 'Ограничение',
-        description: `Можно прикрепить максимум ${MAX_PHOTOS} изображений`,
+        description: `Можно прикрепить максимум ${MAX_FILES} файлов`,
         variant: 'destructive',
       });
     }
 
-    const newPhotos = [...photos, ...filesToAdd];
-    setPhotos(newPhotos);
+    setFiles(prev => [...prev, ...filesToAdd]);
+    setFileNames(prev => [...prev, ...filesToAdd.map(f => f.name)]);
 
     filesToAdd.forEach(file => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPhotoPreviews(prev => [...prev, reader.result as string]);
-      };
-      reader.readAsDataURL(file);
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setFilePreviews(prev => [...prev, reader.result as string]);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        setFilePreviews(prev => [...prev, '']);
+      }
     });
 
     if (fileInputRef.current) {
@@ -116,15 +124,17 @@ const FloatingOrderButton = () => {
     }
   };
 
-  const removePhoto = (index: number) => {
-    setPhotos(prev => prev.filter((_, i) => i !== index));
-    setPhotoPreviews(prev => prev.filter((_, i) => i !== index));
+  const removeFile = (index: number) => {
+    setFiles(prev => prev.filter((_, i) => i !== index));
+    setFilePreviews(prev => prev.filter((_, i) => i !== index));
+    setFileNames(prev => prev.filter((_, i) => i !== index));
   };
 
   const resetForm = () => {
     setFormData({ name: '', phone: '', comment: '', promo: '' });
-    setPhotos([]);
-    setPhotoPreviews([]);
+    setFiles([]);
+    setFilePreviews([]);
+    setFileNames([]);
     setPromoStatus('idle');
     setPromoMessage('');
     setPromoVerified(false);
@@ -206,10 +216,10 @@ const FloatingOrderButton = () => {
         submitFormData.append('promo', formData.promo.trim().toUpperCase());
       }
       
-      photos.forEach((photo, index) => {
-        submitFormData.append(`photo_${index}`, photo);
+      files.forEach((file, index) => {
+        submitFormData.append(`file_${index}`, file);
       });
-      submitFormData.append('photoCount', photos.length.toString());
+      submitFormData.append('fileCount', files.length.toString());
 
       const supabase = await import('@/integrations/supabase/client').then(m => m.supabase);
       const { error } = await supabase.functions.invoke('send-telegram', {
@@ -378,29 +388,38 @@ const FloatingOrderButton = () => {
               )}
             </div>
 
-            {/* Photo Upload */}
+            {/* File Upload */}
             <div>
               <div className="flex justify-between items-center mb-1.5">
                 <label className="block text-sm font-medium text-foreground">
-                  Прикрепить фото
+                  Прикрепить файлы
                 </label>
                 <span className="text-xs text-muted-foreground">
-                  {photos.length}/{MAX_PHOTOS}
+                  {files.length}/{MAX_FILES}
                 </span>
               </div>
               <div className="space-y-3">
-                {photoPreviews.length > 0 && (
+                {filePreviews.length > 0 && (
                   <div className="grid grid-cols-5 gap-2">
-                    {photoPreviews.map((preview, index) => (
+                    {filePreviews.map((preview, index) => (
                       <div key={index} className="relative aspect-square">
-                        <img
-                          src={preview}
-                          alt={`Фото ${index + 1}`}
-                          className="w-full h-full rounded-lg object-cover border border-border/50"
-                        />
+                        {preview ? (
+                          <img
+                            src={preview}
+                            alt={fileNames[index] || `Файл ${index + 1}`}
+                            className="w-full h-full rounded-lg object-cover border border-border/50"
+                          />
+                        ) : (
+                          <div className="w-full h-full rounded-lg border border-border/50 bg-muted/30 flex flex-col items-center justify-center p-1">
+                            <Paperclip className="w-4 h-4 text-muted-foreground mb-0.5" />
+                            <span className="text-[10px] text-muted-foreground text-center leading-tight truncate w-full px-0.5">
+                              {fileNames[index]?.split('.').pop()?.toUpperCase() || 'FILE'}
+                            </span>
+                          </div>
+                        )}
                         <button
                           type="button"
-                          onClick={() => removePhoto(index)}
+                          onClick={() => removeFile(index)}
                           className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center"
                         >
                           <X className="w-3 h-3" />
@@ -410,22 +429,21 @@ const FloatingOrderButton = () => {
                   </div>
                 )}
 
-                {photos.length < MAX_PHOTOS && (
+                {files.length < MAX_FILES && (
                   <div className="flex items-center">
                     <input
                       type="file"
                       ref={fileInputRef}
-                      onChange={handlePhotoChange}
-                      accept="image/*"
+                      onChange={handleFileChange}
                       multiple
                       className="hidden"
-                      id="photo-upload"
+                      id="file-upload"
                     />
                     <label
-                      htmlFor="photo-upload"
+                      htmlFor="file-upload"
                       className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-muted/50 border border-border/50 text-muted-foreground hover:text-foreground hover:border-primary cursor-pointer transition-colors"
                     >
-                      <Image className="w-5 h-5" />
+                      <Paperclip className="w-5 h-5" />
                       <span className="text-sm">Выбрать файлы</span>
                     </label>
                   </div>
