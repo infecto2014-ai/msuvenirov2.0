@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
@@ -6,7 +6,6 @@ import { X, ChevronLeft, ChevronRight, MessageSquare } from 'lucide-react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-
 
 interface PortfolioItem {
   id: number;
@@ -49,25 +48,72 @@ const portfolioItems: PortfolioItem[] = [
   { id: 30, src: '/portfolio/portfolio-28.webp', alt: 'Футболка Кант', title: 'Футболка с портретом Иммануила Канта', details: 'Стилизованный портрет на чёрной футболке. DTF-печать, символ Калининграда.' },
 ];
 
+const LazyImage = ({ src, alt, width, height, sizes, className }: {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  sizes: string;
+  className: string;
+}) => {
+  const [loaded, setLoaded] = useState(false);
+  const [inView, setInView] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '200px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} className="relative w-full h-full">
+      {!loaded && (
+        <div className="absolute inset-0 flex items-center justify-center bg-muted/30">
+          <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+        </div>
+      )}
+      {inView && (
+        <img
+          src={src}
+          alt={alt}
+          width={width}
+          height={height}
+          sizes={sizes}
+          className={`${className} ${loaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300`}
+          decoding="async"
+          onLoad={() => setLoaded(true)}
+        />
+      )}
+    </div>
+  );
+};
+
 const PortfolioCard = ({ item, onClick }: { item: PortfolioItem; onClick: () => void }) => (
   <div className="group cursor-pointer" onClick={onClick}>
     <div className="overflow-hidden rounded-xl sm:rounded-2xl border border-border/30 hover:border-primary/30 transition-all duration-300">
-      {/* Image */}
       <div className="relative aspect-[4/3] overflow-hidden">
-        <img
+        <LazyImage
           src={item.src}
           alt={`${item.alt} — печать на заказ в Калининграде`}
-          width={480}
-          height={360}
+          width={378}
+          height={284}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          loading="lazy"
-          decoding="async"
           sizes="(max-width: 640px) 85vw, (max-width: 1024px) 45vw, 380px"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </div>
 
-      {/* Content */}
       <div className="bg-card p-3.5 sm:p-4 space-y-1.5">
         <h3 className="text-sm sm:text-[15px] font-semibold text-foreground leading-snug line-clamp-1 group-hover:text-primary transition-colors duration-300">
           {item.title}
@@ -136,7 +182,6 @@ const PortfolioSection = () => {
   return (
     <section id="работы" className="py-16 sm:py-24 relative overflow-hidden" aria-label="Портфолио работ" role="region">
       <div className="container mx-auto px-4 sm:px-6">
-        {/* Header */}
         <header className="text-center mb-8 sm:mb-12">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-foreground">
             Примеры наших работ
@@ -147,7 +192,6 @@ const PortfolioSection = () => {
           </p>
         </header>
 
-        {/* Carousel */}
         <div className="relative max-w-6xl mx-auto">
           <Swiper
             slidesPerView={1}
@@ -177,7 +221,6 @@ const PortfolioSection = () => {
             ))}
           </Swiper>
 
-          {/* Navigation Arrows */}
           <button
             className="portfolio-prev absolute left-0 sm:-left-5 lg:-left-7 top-[35%] -translate-y-1/2 z-20 w-11 h-11 sm:w-14 sm:h-14 rounded-full border border-border/40 bg-card flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 transition-all duration-300"
             onClick={() => swiperInstance?.slidePrev()}
@@ -194,7 +237,6 @@ const PortfolioSection = () => {
           </button>
         </div>
 
-        {/* Slide Counter + CTA */}
         <div className="flex items-center justify-center gap-6 mt-5 sm:mt-6">
           <span className="text-sm font-semibold text-primary tabular-nums tracking-wide drop-shadow-[0_0_8px_hsl(var(--primary)/0.5)]">
             {activeSlide + 1} <span className="text-muted-foreground/60">/</span> {portfolioItems.length}
@@ -209,7 +251,6 @@ const PortfolioSection = () => {
         </div>
       </div>
 
-      {/* Lightbox Modal */}
       {selectedIndex !== null && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-background/95 backdrop-blur-sm"
@@ -264,7 +305,6 @@ const PortfolioSection = () => {
           </div>
         </div>
       )}
-
     </section>
   );
 };
