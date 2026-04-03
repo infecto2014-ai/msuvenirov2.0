@@ -77,6 +77,7 @@ const Index = () => {
       <Suspense fallback={null}>
         <FloatingOrderButton />
       </Suspense>
+    </div>
   );
 };
 
