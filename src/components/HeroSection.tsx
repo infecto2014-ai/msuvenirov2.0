@@ -54,11 +54,11 @@ const HeroSection = () => {
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center container mx-auto px-4 sm:px-6 text-center pt-20">
         {/* Main Heading - H1 with primary keyword */}
         <h1 
-          className="animate-fade-up text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-none mb-6 sm:mb-6" 
+          className="animate-fade-up text-5xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-none mb-6 sm:mb-6" 
         >
           <span className="neon-text uppercase tracking-tight">МАСТЕРСКАЯ</span>
           <br />
-          <span className="text-foreground uppercase tracking-tight text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">СУВЕНИРОВ</span>
+          <span className="text-foreground uppercase tracking-tight text-4xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">СУВЕНИРОВ</span>
         </h1>
 
         {/* Subheading with keywords */}
