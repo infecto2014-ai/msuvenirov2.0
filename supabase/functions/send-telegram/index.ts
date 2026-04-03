@@ -41,9 +41,6 @@ serve(async (req) => {
       }
     }
 
-    // Helper: determine if file is an image
-    const isImage = (f: File) => f.type.startsWith('image/');
-
     let response;
 
     if (files.length === 0) {
@@ -66,37 +63,23 @@ serve(async (req) => {
         throw new Error(result.description || 'Failed to send message');
       }
     } else if (files.length === 1) {
-      const file = files[0];
-      if (isImage(file)) {
-        // Single image -> sendPhoto with caption
-        const tgForm = new FormData();
-        tgForm.append('chat_id', CHAT_ID);
-        tgForm.append('caption', messageText);
-        tgForm.append('photo', file);
+      // Single file -> sendDocument with caption (no compression)
+      const tgForm = new FormData();
+      tgForm.append('chat_id', CHAT_ID);
+      tgForm.append('caption', messageText);
+      tgForm.append('document', files[0], files[0].name);
 
-        response = await fetch(
-          `https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`,
-          { method: 'POST', body: tgForm }
-        );
-      } else {
-        // Single non-image -> sendDocument with caption
-        const tgForm = new FormData();
-        tgForm.append('chat_id', CHAT_ID);
-        tgForm.append('caption', messageText);
-        tgForm.append('document', file, file.name);
-
-        response = await fetch(
-          `https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`,
-          { method: 'POST', body: tgForm }
-        );
-      }
+      response = await fetch(
+        `https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`,
+        { method: 'POST', body: tgForm }
+      );
       const result = await response.json();
       if (!result.ok) {
         console.error('Telegram API error:', result);
         throw new Error(result.description || 'Failed to send file');
       }
     } else {
-      // Multiple files: send text first, then files
+      // Multiple files: send text first, then each file as document
       response = await fetch(
         `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
         {
@@ -115,42 +98,11 @@ serve(async (req) => {
         throw new Error(result.description || 'Failed to send message');
       }
 
-      // Separate images and documents
-      const images = files.filter(isImage);
-      const documents = files.filter(f => !isImage(f));
-
-      // Send images as media group (batches of 10)
-      const batchSize = 10;
-      for (let i = 0; i < images.length; i += batchSize) {
-        const batch = images.slice(i, i + batchSize);
-        const mediaGroupForm = new FormData();
-        mediaGroupForm.append('chat_id', CHAT_ID);
-
-        const media = batch.map((_, index) => ({
-          type: 'photo',
-          media: `attach://photo_${index}`,
-        }));
-        mediaGroupForm.append('media', JSON.stringify(media));
-        batch.forEach((photo, index) => {
-          mediaGroupForm.append(`photo_${index}`, photo);
-        });
-
-        response = await fetch(
-          `https://api.telegram.org/bot${BOT_TOKEN}/sendMediaGroup`,
-          { method: 'POST', body: mediaGroupForm }
-        );
-        result = await response.json();
-        if (!result.ok) {
-          console.error('Telegram API error for media group:', result);
-          throw new Error(result.description || 'Failed to send photos');
-        }
-      }
-
-      // Send documents one by one
-      for (const doc of documents) {
+      // Send all files as documents (preserves original quality)
+      for (const file of files) {
         const docForm = new FormData();
         docForm.append('chat_id', CHAT_ID);
-        docForm.append('document', doc, doc.name);
+        docForm.append('document', file, file.name);
 
         response = await fetch(
           `https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`,
