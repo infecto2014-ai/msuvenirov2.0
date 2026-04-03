@@ -5,6 +5,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 
 const faqs = [
   {
@@ -28,6 +36,10 @@ const faqs = [
   {
     question: 'В каком формате нужен макет?',
     answer: 'Принимаем макеты в форматах PNG (с прозрачным фоном), PDF, AI (Adobe Illustrator), CDR (CorelDRAW), PSD (Photoshop). Оптимальное разрешение для печати — от 300 dpi. Если у вас нет готового макета, наши дизайнеры помогут его создать за дополнительную плату.',
+  },
+  {
+    question: 'Размерная сетка футболок',
+    answer: 'size-chart',
   },
 ];
 
@@ -61,14 +73,66 @@ const FAQSection = () => {
                   {faq.question}
                 </AccordionTrigger>
                 <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-5">
-                  <p>{faq.answer}</p>
-                  {'link' in faq && faq.link && (
-                    <Link 
-                      to={faq.link} 
-                      className="inline-block mt-3 text-sm font-semibold text-primary hover:text-primary/80 underline underline-offset-4 transition-colors"
-                    >
-                      {faq.linkText} →
-                    </Link>
+                  {faq.answer === 'size-chart' ? (
+                    <div>
+                      <p className="mb-4">Футболки унисекс, бесшовные, 100% хлопок, 160 г/м²</p>
+                      <div className="overflow-x-auto -mx-2">
+                        <Table>
+                          <TableHeader>
+                            <TableRow className="border-border/50">
+                              <TableHead rowSpan={2} className="text-foreground font-semibold text-xs align-middle">Показатель</TableHead>
+                              <TableHead colSpan={7} className="text-center text-foreground font-semibold text-xs">Размеры российские / международные</TableHead>
+                              <TableHead rowSpan={2} className="text-foreground font-semibold text-xs text-center align-middle whitespace-nowrap">± см</TableHead>
+                            </TableRow>
+                            <TableRow className="border-border/50">
+                              <TableHead className="text-center text-xs text-muted-foreground whitespace-nowrap">42 (XS)</TableHead>
+                              <TableHead className="text-center text-xs text-muted-foreground whitespace-nowrap">44 (S)</TableHead>
+                              <TableHead className="text-center text-xs text-muted-foreground whitespace-nowrap">46 (M)</TableHead>
+                              <TableHead className="text-center text-xs text-muted-foreground whitespace-nowrap">48 (L)</TableHead>
+                              <TableHead className="text-center text-xs text-muted-foreground whitespace-nowrap">50 (XL)</TableHead>
+                              <TableHead className="text-center text-xs text-muted-foreground whitespace-nowrap">52 (XXL)</TableHead>
+                              <TableHead className="text-center text-xs text-muted-foreground whitespace-nowrap">54 (XXXL)</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            <TableRow className="border-border/50">
+                              <TableCell className="font-medium text-foreground text-xs">A - Длина изделия</TableCell>
+                              <TableCell className="text-center text-xs">68</TableCell>
+                              <TableCell className="text-center text-xs">70</TableCell>
+                              <TableCell className="text-center text-xs">72</TableCell>
+                              <TableCell className="text-center text-xs">74</TableCell>
+                              <TableCell className="text-center text-xs">76</TableCell>
+                              <TableCell className="text-center text-xs">78</TableCell>
+                              <TableCell className="text-center text-xs">80</TableCell>
+                              <TableCell className="text-center text-xs">2</TableCell>
+                            </TableRow>
+                            <TableRow className="border-border/50">
+                              <TableCell className="font-medium text-foreground text-xs">B - Ширина изделия</TableCell>
+                              <TableCell className="text-center text-xs">46</TableCell>
+                              <TableCell className="text-center text-xs">49</TableCell>
+                              <TableCell className="text-center text-xs">52</TableCell>
+                              <TableCell className="text-center text-xs">55</TableCell>
+                              <TableCell className="text-center text-xs">58</TableCell>
+                              <TableCell className="text-center text-xs">61</TableCell>
+                              <TableCell className="text-center text-xs">64</TableCell>
+                              <TableCell className="text-center text-xs">2</TableCell>
+                            </TableRow>
+                          </TableBody>
+                        </Table>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <p>{faq.answer}</p>
+                      {'link' in faq && faq.link && (
+                        <Link 
+                          to={faq.link} 
+                          className="inline-block mt-3 text-sm font-semibold text-primary hover:text-primary/80 underline underline-offset-4 transition-colors"
+                        >
+                          {faq.linkText} →
+                        </Link>
+                      )}
+                    </>
                   )}
                 </AccordionContent>
               </AccordionItem>
