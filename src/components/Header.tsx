@@ -221,7 +221,7 @@ const Header = () => {
         </div>
 
         {/* === MOBILE: single row === */}
-        <div className="flex lg:hidden items-center justify-between h-14">
+        <div className="flex lg:hidden items-center justify-between h-16">
           <a
             href="/"
             onClick={(e) => { e.preventDefault(); navigate('/'); }}
