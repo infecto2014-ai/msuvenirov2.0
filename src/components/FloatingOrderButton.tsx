@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { X, Send, Image, Loader2, Check, Tag } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { supabase } from '@/integrations/supabase/client';
+
 import { toast } from '@/hooks/use-toast';
 import InputMask from 'react-input-mask';
 import { Link, useLocation } from 'react-router-dom';

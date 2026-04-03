@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Star, Quote, ChevronUp, ArrowRight, ExternalLink } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+
 
 const YANDEX_MAPS_URL = 'https://yandex.ru/maps/-/CHuaBZFR';
 
