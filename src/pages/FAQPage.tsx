@@ -1,8 +1,10 @@
+import { lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { MessageCircle, Phone, Send, Printer, Package, CreditCard, Palette, Gift, Sparkles, Truck, Ruler } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+const FloatingOrderButton = lazy(() => import('@/components/FloatingOrderButton'));
 import {
   Accordion,
   AccordionContent,
@@ -453,6 +455,9 @@ const FAQPage = () => {
       </main>
 
       <Footer />
+      <Suspense fallback={null}>
+        <FloatingOrderButton />
+      </Suspense>
     </>
   );
 };
