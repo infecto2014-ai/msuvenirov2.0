@@ -9,16 +9,16 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-import imgTshirt from '@/assets/showcase/tshirt.jpg';
-import imgHoodie from '@/assets/showcase/hoodie.jpg';
-import imgShopper from '@/assets/showcase/shopper.jpg';
-import imgMug from '@/assets/showcase/mug.jpg';
-import imgStationery from '@/assets/showcase/stationery.jpg';
-import imgBottle from '@/assets/showcase/bottle.jpg';
-import imgKeychains from '@/assets/showcase/keychains.jpg';
-import imgAcrylicStand from '@/assets/showcase/acrylic-stand.jpg';
-import imgCap from '@/assets/showcase/cap.jpg';
-import imgStickers3d from '@/assets/showcase/stickers-3d.jpg';
+import imgTshirt from '@/assets/showcase/tshirt.webp';
+import imgHoodie from '@/assets/showcase/hoodie.webp';
+import imgShopper from '@/assets/showcase/shopper.webp';
+import imgMug from '@/assets/showcase/mug.webp';
+import imgStationery from '@/assets/showcase/stationery.webp';
+import imgBottle from '@/assets/showcase/bottle.webp';
+import imgKeychains from '@/assets/showcase/keychains.webp';
+import imgAcrylicStand from '@/assets/showcase/acrylic-stand.webp';
+import imgCap from '@/assets/showcase/cap.webp';
+import imgStickers3d from '@/assets/showcase/stickers-3d.webp';
 
 const products = [
   {

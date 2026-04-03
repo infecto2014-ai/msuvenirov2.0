@@ -1,13 +1,13 @@
 import { useRef, useEffect, useState } from 'react';
 
-import client1 from '@/assets/clients/client-1.png';
-import client2 from '@/assets/clients/client-2.png';
-import client3 from '@/assets/clients/client-3.png';
-import client4 from '@/assets/clients/client-4.png';
-import client5 from '@/assets/clients/client-5.png';
-import client6 from '@/assets/clients/client-6.png';
-import client7 from '@/assets/clients/client-7.png';
-import client8 from '@/assets/clients/client-8.png';
+import client1 from '@/assets/clients/client-1.webp';
+import client2 from '@/assets/clients/client-2.webp';
+import client3 from '@/assets/clients/client-3.webp';
+import client4 from '@/assets/clients/client-4.webp';
+import client5 from '@/assets/clients/client-5.webp';
+import client6 from '@/assets/clients/client-6.webp';
+import client7 from '@/assets/clients/client-7.webp';
+import client8 from '@/assets/clients/client-8.webp';
 
 const baseClients = [
   { id: 1, name: 'Корпоративный партнёр', logo: client1 },
