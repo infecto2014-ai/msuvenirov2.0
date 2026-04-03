@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight, Star, Quote, ChevronUp, ArrowRight, ExternalLink } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Star, Quote, ArrowRight, ExternalLink, X } from 'lucide-react';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 
 
 const YANDEX_MAPS_URL = 'https://yandex.ru/maps/-/CHuaBZFR';
