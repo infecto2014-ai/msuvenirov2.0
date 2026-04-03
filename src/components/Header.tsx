@@ -114,8 +114,12 @@ const Header = () => {
     }
     const targetId = href.replace('#', '');
     if (location.pathname !== '/') {
-      navigate('/' + href);
+      navigate('/');
       setIsMobileMenuOpen(false);
+      setTimeout(() => {
+        const element = document.getElementById(targetId);
+        if (element) element.scrollIntoView({ behavior: 'smooth' });
+      }, 500);
       return;
     }
     const element = document.getElementById(targetId);
