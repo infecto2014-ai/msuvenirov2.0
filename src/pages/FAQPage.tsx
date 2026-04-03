@@ -325,7 +325,7 @@ const SizeTable = ({ type }: { type: string }) => {
   return null;
 };
 
-
+const FAQPage = () => {
   return (
     <>
       <Helmet>
