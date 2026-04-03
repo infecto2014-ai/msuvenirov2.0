@@ -132,9 +132,10 @@
   .gradient-btn-pulse {
     @apply relative overflow-hidden font-bold uppercase tracking-wider;
     background: var(--gradient-glow);
+    box-shadow: 0 0 20px hsl(var(--neon-cyan) / 0.4), 0 0 40px hsl(var(--neon-magenta) / 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     animation: neon-pulse 2s ease-in-out infinite;
-    will-change: opacity, box-shadow;
+    will-change: opacity, filter;
   }
 
   .gradient-btn-pulse::before {
