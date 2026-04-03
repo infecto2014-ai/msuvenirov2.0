@@ -211,18 +211,20 @@ const ReviewsSection = () => {
               <ChevronLeft className="w-5 h-5" />
             </button>
 
-            <div className="flex gap-2.5">
+            <div className="flex gap-1">
               {Array.from({ length: totalPages }).map((_, index) => (
                 <button
                   key={index}
                   onClick={() => { setIsAutoPlaying(false); setCurrentIndex(index * 2); }}
-                  className={`rounded-full transition-all duration-300 ${
+                  className="relative flex items-center justify-center min-w-[44px] min-h-[44px]"
+                  aria-label={`Страница ${index + 1}`}
+                >
+                  <span className={`block rounded-full transition-all duration-300 ${
                     activePage === index
                       ? 'w-8 h-2.5 bg-primary shadow-[0_0_12px_hsl(var(--primary)/0.5)]'
                       : 'w-2.5 h-2.5 bg-muted-foreground/25 hover:bg-muted-foreground/40'
-                  }`}
-                  aria-label={`Страница ${index + 1}`}
-                />
+                  }`} />
+                </button>
               ))}
             </div>
 
