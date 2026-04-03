@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 
 import client1 from '@/assets/clients/client-1.webp';
 import client2 from '@/assets/clients/client-2.webp';
@@ -30,29 +30,31 @@ const clients = [
 
 const TrustSection = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [isPaused, setIsPaused] = useState(false);
+  const isPausedRef = useRef(false);
   const animationRef = useRef<number>();
   const scrollPositionRef = useRef(0);
+  const scrollWidthRef = useRef(0);
+
+  const handlePause = useCallback(() => { isPausedRef.current = true; }, []);
+  const handleResume = useCallback(() => { isPausedRef.current = false; }, []);
 
   useEffect(() => {
     const scrollContainer = scrollRef.current;
     if (!scrollContainer) return;
 
-    const scrollWidth = scrollContainer.scrollWidth / 2;
-    const speed = 0.5; // pixels per frame
+    // Cache scrollWidth once to avoid forced reflow
+    scrollWidthRef.current = scrollContainer.scrollWidth / 2;
+    const speed = 0.5;
 
     const animate = () => {
-      if (!isPaused) {
+      if (!isPausedRef.current) {
         scrollPositionRef.current += speed;
         
-        // Reset position when we've scrolled half the content (seamless loop)
-        if (scrollPositionRef.current >= scrollWidth) {
+        if (scrollPositionRef.current >= scrollWidthRef.current) {
           scrollPositionRef.current = 0;
         }
         
-        if (scrollContainer) {
-          scrollContainer.style.transform = `translateX(-${scrollPositionRef.current}px)`;
-        }
+        scrollContainer.style.transform = `translateX(-${scrollPositionRef.current}px)`;
       }
       
       animationRef.current = requestAnimationFrame(animate);
@@ -65,7 +67,7 @@ const TrustSection = () => {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [isPaused]);
+  }, []);
 
   return (
     <section className="py-10 sm:py-14 relative overflow-hidden" aria-label="Корпоративные клиенты">
@@ -86,8 +88,8 @@ const TrustSection = () => {
       {/* Full-width carousel - Edge to Edge */}
       <div 
         className="relative w-full overflow-hidden"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
+        onMouseEnter={handlePause}
+        onMouseLeave={handleResume}
       >
         {/* Gradient fade edges */}
         <div className="absolute left-0 top-0 bottom-0 w-24 sm:w-32 md:w-40 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
