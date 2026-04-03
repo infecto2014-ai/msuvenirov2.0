@@ -22,7 +22,10 @@ jobs:
           ssh -p "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" << 'EOF'
             set -e
             cd /var/www/msuvenirov.ru
-            git pull origin main
-            npm install
+
+            git fetch origin main
+            git reset --hard origin/main
+
+            npm ci
             npm run build
           EOF
