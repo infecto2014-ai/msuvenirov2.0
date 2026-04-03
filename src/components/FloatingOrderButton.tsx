@@ -15,7 +15,8 @@ interface SavedFormData {
   phone: string;
   comment: string;
   promo: string;
-  photoPreviews: string[];
+  filePreviews: string[];
+  fileNames: string[];
 }
 
 const FloatingOrderButton = () => {
