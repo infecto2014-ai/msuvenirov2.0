@@ -39,7 +39,7 @@ const ContactSection = () => {
                   <MapPin className="w-5 h-5 text-neon-cyan" />
                 </div>
                 <div className="flex flex-col">
-                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Адрес</h4>
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Адрес</span>
                   <p className="text-foreground text-sm sm:text-base leading-tight">
                     Калининград<br />ТЦ Экватор, 2 этаж, ул. Ген. Челнокова 11, стр. 1
                   </p>
@@ -52,7 +52,7 @@ const ContactSection = () => {
                   <Clock className="w-5 h-5 text-neon-purple" />
                 </div>
                 <div className="flex flex-col">
-                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Режим работы</h4>
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Режим работы</span>
                   <p className="text-foreground text-sm sm:text-base">с 10:00 до 20:00 без выходных</p>
                 </div>
               </div>
@@ -63,7 +63,7 @@ const ContactSection = () => {
                   <Phone className="w-5 h-5 text-neon-magenta" />
                 </div>
                 <div className="flex flex-col">
-                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Телефон</h4>
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Телефон</span>
                   <a href="tel:+79521142350" className="text-foreground text-sm sm:text-base hover:text-primary transition-colors">
                     +7 952 114-23-50
                   </a>
@@ -76,7 +76,7 @@ const ContactSection = () => {
                   <Send className="w-5 h-5 text-neon-cyan" />
                 </div>
                 <div className="flex flex-col">
-                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Telegram</h4>
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Telegram</span>
                   <a href="https://t.me/msuvenirov39zakaz" target="_blank" rel="noopener noreferrer" className="text-foreground text-sm sm:text-base hover:text-primary transition-colors">
                     Написать нам
                   </a>
@@ -89,7 +89,7 @@ const ContactSection = () => {
                   <img src="/assets/logo_max.svg" alt="MAX" className="w-5 h-5" style={{ filter: 'brightness(0) saturate(100%) invert(43%) sepia(96%) saturate(1234%) hue-rotate(238deg) brightness(101%) contrast(101%)' }} />
                 </div>
                 <div className="flex flex-col">
-                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">MAX</h4>
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">MAX</span>
                   <a href="https://max.ru/u/f9LHodD0cOLo7HDSJw672fSH82yru_atZ9KDVODSf_2mghJHg1xe7H2qOC8" target="_blank" rel="noopener noreferrer" className="text-foreground text-sm sm:text-base hover:text-primary transition-colors">
                     Написать в MAX
                   </a>
@@ -102,7 +102,7 @@ const ContactSection = () => {
                   <Mail className="w-5 h-5 text-neon-magenta" />
                 </div>
                 <div className="flex flex-col">
-                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">email</h4>
+                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">email</span>
                   <a href="mailto:msuvenirov39@yandex.ru" className="text-foreground text-sm sm:text-base hover:text-primary transition-colors">
                     msuvenirov39@yandex.ru
                   </a>
@@ -112,9 +112,9 @@ const ContactSection = () => {
 
             {/* Social Networks */}
             <div className="mt-auto pt-5 border-t border-border/30">
-              <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+              <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
                 Мы в соцсетях
-              </h4>
+              </span>
               <div className="flex gap-3">
                 {/* VK Button */}
                 <a
