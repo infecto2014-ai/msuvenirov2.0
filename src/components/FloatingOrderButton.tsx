@@ -51,7 +51,8 @@ const FloatingOrderButton = () => {
           comment: parsed.comment || '',
           promo: parsed.promo || '',
         });
-        setPhotoPreviews(parsed.photoPreviews || []);
+        setFilePreviews(parsed.filePreviews || []);
+        setFileNames(parsed.fileNames || []);
         setIsOpen(true);
         sessionStorage.removeItem(FORM_STORAGE_KEY);
       } catch (e) {
