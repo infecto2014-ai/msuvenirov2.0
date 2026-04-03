@@ -266,7 +266,7 @@ const Header = () => {
               <div className="border-t border-border/30" />
 
               <div className="flex flex-col gap-3 text-sm">
-                <a <a href="https://yandex.ru/maps/org/masterskaya_suvenirov/105530576058/?ll=20.487454%2C54.737492&z=17" target="_blank" rel="noopener noreferrer" target="_blank" rel="noopener noreferrer"
+                <a href={"https://yandex.ru/maps/org/masterskaya_suvenirov/105530576058/?ll=20.487454%2C54.737492&z=17"} target="_blank" rel="noopener noreferrer"
                   className="flex items-start gap-3 text-muted-foreground hover:text-foreground transition-colors">
                   <MapPin className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
                   <span>Калининград, ТЦ Экватор, 2 этаж, ул. Ген. Челнокова 11, стр. 1</span>
