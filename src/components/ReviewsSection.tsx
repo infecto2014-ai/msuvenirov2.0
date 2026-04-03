@@ -257,9 +257,11 @@ const ReviewsSection = () => {
           {/* Cards */}
           <div className={`grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 transition-opacity duration-300 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
             {visibleReviews.map((review) => (
-              <ReviewCard key={review.id} review={review} />
+              <ReviewCard key={review.id} review={review} onReadMore={setSelectedReview} />
             ))}
           </div>
+
+          <ReviewModal review={selectedReview} open={!!selectedReview} onClose={() => setSelectedReview(null)} />
 
           {/* Mobile arrows + Pagination */}
           <div className="flex items-center justify-center gap-4 mt-6 sm:mt-8">
