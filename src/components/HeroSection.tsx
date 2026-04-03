@@ -55,7 +55,6 @@ const HeroSection = () => {
         {/* Main Heading - H1 with primary keyword */}
         <h1 
           className="animate-fade-up text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-none mb-6 sm:mb-6" 
-          style={{ animationDelay: '0.2s' }}
         >
           <span className="neon-text uppercase tracking-tight">МАСТЕРСКАЯ</span>
           <br />
