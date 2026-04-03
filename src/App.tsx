@@ -8,17 +8,29 @@ import Index from "./pages/Index";
 const Toaster = lazy(() => import("@/components/ui/toaster").then(m => ({ default: m.Toaster })));
 const Sonner = lazy(() => import("@/components/ui/sonner").then(m => ({ default: m.Toaster })));
 
-// Lazy load secondary pages
-const NotFound = lazy(() => import("./pages/NotFound"));
-const PublicOffer = lazy(() => import("./pages/PublicOffer"));
-const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
-const LinkInBio = lazy(() => import("./pages/LinkInBio"));
-const PricePage = lazy(() => import("./pages/PricePage"));
-const FAQPage = lazy(() => import("./pages/FAQPage"));
+// Retry wrapper for lazy imports — retries up to 3 times on network failures
+const lazyRetry = (fn: () => Promise<any>, retries = 3): Promise<any> =>
+  fn().catch((err: any) => {
+    if (retries > 0) {
+      return new Promise(resolve => setTimeout(resolve, 500)).then(() => lazyRetry(fn, retries - 1));
+    }
+    // Force reload if all retries fail (stale chunk after deploy)
+    window.location.reload();
+    throw err;
+  });
+
+// Lazy load secondary pages with retry
+const NotFound = lazy(() => lazyRetry(() => import("./pages/NotFound")));
+const PublicOffer = lazy(() => lazyRetry(() => import("./pages/PublicOffer")));
+const PrivacyPolicy = lazy(() => lazyRetry(() => import("./pages/PrivacyPolicy")));
+const LinkInBio = lazy(() => lazyRetry(() => import("./pages/LinkInBio")));
+const PricePage = lazy(() => lazyRetry(() => import("./pages/PricePage")));
+const FAQPage = lazy(() => lazyRetry(() => import("./pages/FAQPage")));
 
 const PageLoader = () => (
-  <div className="min-h-screen bg-background flex items-center justify-center">
-    <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+  <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4">
+    <div className="w-10 h-10 border-3 border-primary border-t-transparent rounded-full animate-spin" />
+    <p className="text-sm text-muted-foreground animate-pulse">Загрузка...</p>
   </div>
 );
 
