@@ -99,6 +99,8 @@ const ReviewCard = ({ review }: { review: Review }) => {
 
 const ReviewsSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [nextIndex, setNextIndex] = useState<number | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [allReviews, setAllReviews] = useState<Review[]>(staticReviews);
 
@@ -125,30 +127,43 @@ const ReviewsSection = () => {
     loadReviews();
   }, []);
 
+  const slideTo = (newIndex: number) => {
+    if (isTransitioning) return;
+    setNextIndex(newIndex);
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentIndex(newIndex);
+      setNextIndex(null);
+      setIsTransitioning(false);
+    }, 300);
+  };
+
   useEffect(() => {
     if (!isAutoPlaying) return;
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 2) % allReviews.length);
+      const next = (currentIndex + 2) % allReviews.length;
+      slideTo(next);
     }, 5000);
     return () => clearInterval(interval);
-  }, [isAutoPlaying, allReviews.length]);
+  }, [isAutoPlaying, allReviews.length, currentIndex, isTransitioning]);
 
   const handlePrev = () => {
     setIsAutoPlaying(false);
-    setCurrentIndex((prev) => (prev <= 1 ? allReviews.length - 2 : prev - 2));
+    slideTo(currentIndex <= 1 ? allReviews.length - 2 : currentIndex - 2);
   };
 
   const handleNext = () => {
     setIsAutoPlaying(false);
-    setCurrentIndex((prev) => (prev + 2) % allReviews.length);
+    slideTo((currentIndex + 2) % allReviews.length);
   };
 
+  const displayIndex = nextIndex !== null ? nextIndex : currentIndex;
   const visibleReviews = [
-    allReviews[currentIndex % allReviews.length],
-    allReviews[(currentIndex + 1) % allReviews.length],
+    allReviews[displayIndex % allReviews.length],
+    allReviews[(displayIndex + 1) % allReviews.length],
   ];
   const totalPages = Math.ceil(allReviews.length / 2);
-  const activePage = Math.floor(currentIndex / 2);
+  const activePage = Math.floor(displayIndex / 2);
 
   return (
     <section id="отзывы" className="py-16 sm:py-24 relative overflow-hidden" aria-label="Отзывы клиентов">
