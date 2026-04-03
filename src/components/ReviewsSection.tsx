@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight, Star, Quote, ChevronUp, ArrowRight, ExternalLink } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Star, Quote, ArrowRight, ExternalLink, X } from 'lucide-react';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 
 
 const YANDEX_MAPS_URL = 'https://yandex.ru/maps/-/CHuaBZFR';
@@ -28,8 +29,46 @@ interface Review {
   avatar: string;
 }
 
-const ReviewCard = ({ review }: { review: Review }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+const ReviewModal = ({ review, open, onClose }: { review: Review | null; open: boolean; onClose: () => void }) => {
+  if (!review) return null;
+  return (
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="bg-card border-border/40 max-w-lg p-6 sm:p-8">
+        <Quote className="w-6 h-6 text-primary/20 mb-4" />
+        <p className="text-sm sm:text-base text-foreground/80 leading-relaxed whitespace-pre-wrap">
+          {review.content}
+        </p>
+        <div className="mt-6 pt-4 border-t border-border/20 space-y-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
+              <span className="text-base font-semibold text-primary">{review.avatar}</span>
+            </div>
+            <div>
+              <span className="text-sm font-semibold text-foreground">{review.name}</span>
+              <div className="flex gap-0.5 mt-0.5">
+                {[...Array(review.rating)].map((_, i) => (
+                  <Star key={i} className="w-3.5 h-3.5 fill-primary text-primary" />
+                ))}
+              </div>
+            </div>
+          </div>
+          <a
+            href={YANDEX_MAPS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 text-xs text-muted-foreground/60 hover:text-primary transition-colors group"
+          >
+            <ExternalLink className="w-3 h-3" />
+            <span>Оригинал на Яндекс Картах</span>
+            <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+          </a>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+const ReviewCard = ({ review, onReadMore }: { review: Review; onReadMore: (review: Review) => void }) => {
   const textRef = useRef<HTMLParagraphElement>(null);
   const [isClamped, setIsClamped] = useState(false);
 
@@ -47,37 +86,31 @@ const ReviewCard = ({ review }: { review: Review }) => {
       <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
         <p
           ref={textRef}
-          className={`text-sm sm:text-[15px] text-foreground/80 leading-relaxed transition-all duration-300 ${!isExpanded ? 'line-clamp-4' : 'overflow-y-auto'}`}
+          className="text-sm sm:text-[15px] text-foreground/80 leading-relaxed line-clamp-4"
         >
           {review.content}
         </p>
         {isClamped && (
           <button
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={() => onReadMore(review)}
             className="text-primary text-xs sm:text-sm hover:text-primary/80 transition-all text-left mt-2 flex-shrink-0 flex items-center gap-1.5 group"
           >
-            {isExpanded ? (
-              <>Свернуть <ChevronUp className="w-3.5 h-3.5 group-hover:-translate-y-0.5 transition-transform" /></>
-            ) : (
-              <>Читать далее <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" /></>
-            )}
+            Читать далее <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
           </button>
         )}
       </div>
 
       <div className="mt-auto pt-4 border-t border-border/20 flex-shrink-0 space-y-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
-              <span className="text-sm font-semibold text-primary">{review.avatar}</span>
-            </div>
-            <div>
-              <span className="text-sm font-semibold text-foreground">{review.name}</span>
-              <div className="flex gap-0.5 mt-0.5">
-                {[...Array(review.rating)].map((_, i) => (
-                  <Star key={i} className="w-3 h-3 fill-primary text-primary" />
-                ))}
-              </div>
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
+            <span className="text-sm font-semibold text-primary">{review.avatar}</span>
+          </div>
+          <div>
+            <span className="text-sm font-semibold text-foreground">{review.name}</span>
+            <div className="flex gap-0.5 mt-0.5">
+              {[...Array(review.rating)].map((_, i) => (
+                <Star key={i} className="w-3 h-3 fill-primary text-primary" />
+              ))}
             </div>
           </div>
         </div>
@@ -103,6 +136,7 @@ const ReviewsSection = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [allReviews, setAllReviews] = useState<Review[]>(staticReviews);
+  const [selectedReview, setSelectedReview] = useState<Review | null>(null);
 
   useEffect(() => {
     const loadReviews = async () => {
@@ -223,9 +257,11 @@ const ReviewsSection = () => {
           {/* Cards */}
           <div className={`grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 transition-opacity duration-300 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
             {visibleReviews.map((review) => (
-              <ReviewCard key={review.id} review={review} />
+              <ReviewCard key={review.id} review={review} onReadMore={setSelectedReview} />
             ))}
           </div>
+
+          <ReviewModal review={selectedReview} open={!!selectedReview} onClose={() => setSelectedReview(null)} />
 
           {/* Mobile arrows + Pagination */}
           <div className="flex items-center justify-center gap-4 mt-6 sm:mt-8">
