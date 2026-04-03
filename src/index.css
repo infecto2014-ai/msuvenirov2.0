@@ -251,10 +251,12 @@
 /* Neon pulse animation for buttons */
 @keyframes neon-pulse {
   0%, 100% {
-    box-shadow: 0 0 20px hsl(var(--neon-cyan) / 0.4), 0 0 40px hsl(var(--neon-magenta) / 0.2);
+    opacity: 1;
+    filter: brightness(1);
   }
   50% {
-    box-shadow: 0 0 30px hsl(var(--neon-cyan) / 0.6), 0 0 60px hsl(var(--neon-magenta) / 0.4);
+    opacity: 0.92;
+    filter: brightness(1.15);
   }
 }
 
