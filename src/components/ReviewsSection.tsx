@@ -37,7 +37,7 @@ const ReviewCard = ({ review }: { review: Review }) => {
       <Quote className="w-5 h-5 text-primary/20 mb-3 flex-shrink-0" />
 
       <div className="flex flex-col flex-1">
-        <p className={`text-sm sm:text-[15px] text-muted-foreground leading-relaxed ${!isExpanded && isLongText ? 'line-clamp-4' : ''}`}>
+        <p className={`text-sm sm:text-[15px] text-foreground/80 leading-relaxed ${!isExpanded && isLongText ? 'line-clamp-4' : ''}`}>
           {review.content}
         </p>
         {isLongText && (
