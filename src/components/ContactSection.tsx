@@ -166,6 +166,7 @@ const ContactSection = () => {
                 height="100%"
                 frameBorder="0"
                 allowFullScreen
+                loading="lazy"
                 className="w-full h-full min-h-[340px] rounded-xl"
                 style={{
                   filter: 'invert(90%) hue-rotate(180deg) contrast(1.1) saturate(0.8)',
