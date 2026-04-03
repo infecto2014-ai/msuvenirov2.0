@@ -3,6 +3,8 @@ import { ChevronLeft, ChevronRight, Star, Quote, ChevronUp, ArrowRight, External
 import { supabase } from '@/integrations/supabase/client';
 
 const YANDEX_MAPS_URL = 'https://yandex.ru/maps/-/CHuaBZFR';
+const YANDEX_REVIEW_URL = 'https://yandex.ru/maps/-/CHuaBZFR';
+const TWOGIS_REVIEW_URL = 'https://2gis.ru/kaliningrad/firm/70000001076498451/tab/reviews';
 
 const staticReviews = [
   { id: 's1', name: 'Н. Смирнова', content: 'Заказывала печать на футболке, выполнено идеально, все пожелания были учтены. Заказом осталась довольна, главное очень понравилась любимому человеку, подарок удался! Спасибо большое!', rating: 5, avatar: 'Н' },
