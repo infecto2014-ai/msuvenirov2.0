@@ -7,36 +7,6 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-import portfolio1 from '@/assets/portfolio-1.webp';
-import portfolio2 from '@/assets/portfolio-2.webp';
-import portfolio3 from '@/assets/portfolio-3.webp';
-import portfolio4 from '@/assets/portfolio-4.webp';
-import portfolio5 from '@/assets/portfolio-5.webp';
-import portfolio6 from '@/assets/portfolio-6.webp';
-import portfolio7 from '@/assets/portfolio-7.webp';
-import portfolio8 from '@/assets/portfolio-8.webp';
-import portfolio9 from '@/assets/portfolio-9.webp';
-import portfolio10 from '@/assets/portfolio-10.webp';
-import portfolio11 from '@/assets/portfolio-11.webp';
-import portfolio12 from '@/assets/portfolio-12.webp';
-import portfolio13 from '@/assets/portfolio-13.webp';
-import portfolio14 from '@/assets/portfolio-14.webp';
-import portfolio15 from '@/assets/portfolio-15.webp';
-import portfolio16 from '@/assets/portfolio-16.webp';
-import portfolio17 from '@/assets/portfolio-17.webp';
-import portfolio18 from '@/assets/portfolio-18.webp';
-import portfolio19 from '@/assets/portfolio-19.webp';
-import portfolio20 from '@/assets/portfolio-20.webp';
-import portfolio21 from '@/assets/portfolio-21.webp';
-import portfolio22 from '@/assets/portfolio-22.webp';
-import portfolio23 from '@/assets/portfolio-23.webp';
-import portfolio24 from '@/assets/portfolio-24.webp';
-import portfolio25 from '@/assets/portfolio-25.webp';
-import portfolio26 from '@/assets/portfolio-26.webp';
-import portfolio27 from '@/assets/portfolio-27.webp';
-import portfolio28 from '@/assets/portfolio-28.webp';
-import portfolio29 from '@/assets/portfolio-29.webp';
-import portfolio30 from '@/assets/portfolio-30.webp';
 
 interface PortfolioItem {
   id: number;
@@ -47,36 +17,36 @@ interface PortfolioItem {
 }
 
 const portfolioItems: PortfolioItem[] = [
-  { id: 9, src: portfolio20, alt: 'Корпоративные футболки', title: 'Корпоративная партия футболок', details: 'Тираж 50+ штук с логотипом компании. DTF-печать, единый стиль для команды.' },
-  { id: 1, src: portfolio10, alt: 'Маски За Родину', title: 'Брендированные маски для компании «За Родину»', details: 'Красные хлопковые маски с белым DTF-принтом. Изготовлено для корпоративного мероприятия.' },
-  { id: 2, src: portfolio29, alt: 'Магниты-календари', title: 'Сувенирные магниты-календари на 2025 год', details: 'Магниты с уникальным пейзажем и календарной сеткой. Сублимационная печать.' },
-  { id: 3, src: portfolio23, alt: 'Футболка Dmitry', title: 'Персонализированная футболка «Dmitry»', details: 'Белая футболка с монохромным портретом и текстом. DTF-печать.' },
-  { id: 4, src: portfolio1, alt: 'Мерч Harry Potter', title: 'Фанатский мерч по вселенной Harry Potter', details: 'Белая футболка с фирменной эмблемой факультета. DTF-печать.' },
-  { id: 5, src: portfolio11, alt: 'Футболки BLACKPINK', title: 'Комплект футболок для фанатов BLACKPINK', details: 'Яркий дизайн с фото участниц группы. DTF-печать, стойкость 60+ стирок.' },
-  { id: 6, src: portfolio18, alt: 'Бокалы с гравировкой', title: 'Подарочные бокалы с гравировкой', details: 'Персонализированная лазерная гравировка на стекле. Подарок на годовщину.' },
-  { id: 7, src: portfolio25, alt: 'Кофейный набор', title: 'Кофейный набор с фотопечатью', details: 'Керамические кружки с индивидуальным дизайном. Сублимационная печать.' },
-  { id: 8, src: portfolio3, alt: 'Футболка Punch-Out', title: 'Ретро-принт в стиле Punch-Out!!', details: 'Стилизованный арт из культовой игры. DTF-печать на белой футболке.' },
-  { id: 10, src: portfolio5, alt: 'Худи с мангой', title: 'Худи с иллюстрацией в стиле манга', details: 'Детализированный аниме-арт на чёрном худи. DTF-печать высокого разрешения.' },
-  { id: 11, src: portfolio24, alt: 'Брелоки акриловые', title: 'Акриловые брелоки с полиграфической вставкой', details: 'Акриловые брелоки с тематическим дизайном и полиграфической вставкой.' },
-  { id: 12, src: portfolio2, alt: 'Кружка Kaliningrad', title: 'Сувенирная кружка «Kaliningrad»', details: 'Кружка с авторской иллюстрацией города. Сублимационная печать 360°.' },
-  { id: 13, src: portfolio12, alt: 'Мерч Stray Kids', title: 'Фанатский мерч Stray Kids', details: 'Футболка с принтом участников группы. DTF-печать, мягкий на ощупь принт.' },
-  { id: 14, src: portfolio7, alt: 'Шоппер Калининград', title: 'Эко-шоппер с видами Калининграда', details: 'Авторский дизайн на хлопковой сумке. Сублимационная печать.' },
-  { id: 15, src: portfolio21, alt: 'Футболка с фотоколлажем', title: 'Футболка с фотоколлажем на заказ', details: 'Персональный коллаж из семейных фотографий. DTF-печать с высокой детализацией.' },
-  { id: 16, src: portfolio4, alt: 'Детская футболка', title: 'Детская футболка с любимым персонажем', details: 'Яркий принт на детском хлопке. DTF-печать.' },
-  { id: 17, src: portfolio17, alt: 'Зонт с принтом', title: 'Зонт с индивидуальным принтом', details: 'Полноцветная DTF-печать на куполе зонта.' },
-  { id: 18, src: portfolio30, alt: 'Кружки с детскими рисунками', title: 'Кружки с детскими рисунками', details: 'Детские рисунки на керамических кружках. Подарок бабушке и дедушке.' },
-  { id: 19, src: portfolio6, alt: 'Новогодний шар', title: 'Новогодний ёлочный шар с фотопечатью', details: 'Персонализированный шар с семейным фото. Сублимационная печать.' },
-  { id: 20, src: portfolio22, alt: 'Футболка с детскими фото', title: 'Футболка с детскими фотографиями', details: 'Коллаж из детских снимков на белой футболке. DTF-печать.' },
-  { id: 21, src: portfolio8, alt: 'Футболка и кепка', title: 'Комплект: футболка + кепка с принтом', details: 'Единый стиль для кепки и футболки. Термотрансферная плёнка золотого цвета.' },
-  { id: 22, src: portfolio13, alt: 'Игрушка с принтом', title: 'Мягкая игрушка с именным принтом', details: 'Персонализированная DTF-печать имени на плюшевом мишке.' },
-  { id: 23, src: portfolio26, alt: 'Вымпел Гортранс', title: 'Корпоративный вымпел «Гортранс»', details: 'Двусторонний вымпел с логотипом. Сублимационная печать на атласе.' },
-  { id: 24, src: portfolio14, alt: 'Кофейный набор', title: 'Кофейный набор с индивидуальным дизайном', details: 'Набор кружек с авторским оформлением. Сублимационная печать.' },
-  { id: 25, src: portfolio27, alt: 'Футболка ITZY', title: 'Футболка с дизайном ITZY', details: 'K-pop мерч на белой футболке. DTF-печать с фотографическим качеством.' },
-  { id: 26, src: portfolio15, alt: 'Футболки с котом', title: 'Парные футболки с авторским артом кота', details: 'Забавный кот в двух стилях для пары. DTF-печать на хлопке.' },
-  { id: 27, src: portfolio19, alt: 'Кружки серебряные', title: 'Кружки с зеркальным серебряным покрытием', details: 'Премиальные кружки с металлизированным эффектом. Сублимация.' },
-  { id: 28, src: portfolio9, alt: 'Футболка с принтом', title: 'Футболка с авторским принтом', details: 'Индивидуальный дизайн по эскизу клиента. DTF-печать.' },
-  { id: 29, src: portfolio16, alt: 'Медаль', title: 'Наградная медаль с гравировкой', details: 'Металлическая медаль с лазерной гравировкой. Для спортивного мероприятия.' },
-  { id: 30, src: portfolio28, alt: 'Футболка Кант', title: 'Футболка с портретом Иммануила Канта', details: 'Стилизованный портрет на чёрной футболке. DTF-печать, символ Калининграда.' },
+  { id: 9, src: '/portfolio/portfolio-20.webp', alt: 'Корпоративные футболки', title: 'Корпоративная партия футболок', details: 'Тираж 50+ штук с логотипом компании. DTF-печать, единый стиль для команды.' },
+  { id: 1, src: '/portfolio/portfolio-10.webp', alt: 'Маски За Родину', title: 'Брендированные маски для компании «За Родину»', details: 'Красные хлопковые маски с белым DTF-принтом. Изготовлено для корпоративного мероприятия.' },
+  { id: 2, src: '/portfolio/portfolio-29.webp', alt: 'Магниты-календари', title: 'Сувенирные магниты-календари на 2025 год', details: 'Магниты с уникальным пейзажем и календарной сеткой. Сублимационная печать.' },
+  { id: 3, src: '/portfolio/portfolio-23.webp', alt: 'Футболка Dmitry', title: 'Персонализированная футболка «Dmitry»', details: 'Белая футболка с монохромным портретом и текстом. DTF-печать.' },
+  { id: 4, src: '/portfolio/portfolio-1.webp', alt: 'Мерч Harry Potter', title: 'Фанатский мерч по вселенной Harry Potter', details: 'Белая футболка с фирменной эмблемой факультета. DTF-печать.' },
+  { id: 5, src: '/portfolio/portfolio-11.webp', alt: 'Футболки BLACKPINK', title: 'Комплект футболок для фанатов BLACKPINK', details: 'Яркий дизайн с фото участниц группы. DTF-печать, стойкость 60+ стирок.' },
+  { id: 6, src: '/portfolio/portfolio-18.webp', alt: 'Бокалы с гравировкой', title: 'Подарочные бокалы с гравировкой', details: 'Персонализированная лазерная гравировка на стекле. Подарок на годовщину.' },
+  { id: 7, src: '/portfolio/portfolio-25.webp', alt: 'Кофейный набор', title: 'Кофейный набор с фотопечатью', details: 'Керамические кружки с индивидуальным дизайном. Сублимационная печать.' },
+  { id: 8, src: '/portfolio/portfolio-3.webp', alt: 'Футболка Punch-Out', title: 'Ретро-принт в стиле Punch-Out!!', details: 'Стилизованный арт из культовой игры. DTF-печать на белой футболке.' },
+  { id: 10, src: '/portfolio/portfolio-5.webp', alt: 'Худи с мангой', title: 'Худи с иллюстрацией в стиле манга', details: 'Детализированный аниме-арт на чёрном худи. DTF-печать высокого разрешения.' },
+  { id: 11, src: '/portfolio/portfolio-24.webp', alt: 'Брелоки акриловые', title: 'Акриловые брелоки с полиграфической вставкой', details: 'Акриловые брелоки с тематическим дизайном и полиграфической вставкой.' },
+  { id: 12, src: '/portfolio/portfolio-2.webp', alt: 'Кружка Kaliningrad', title: 'Сувенирная кружка «Kaliningrad»', details: 'Кружка с авторской иллюстрацией города. Сублимационная печать 360°.' },
+  { id: 13, src: '/portfolio/portfolio-12.webp', alt: 'Мерч Stray Kids', title: 'Фанатский мерч Stray Kids', details: 'Футболка с принтом участников группы. DTF-печать, мягкий на ощупь принт.' },
+  { id: 14, src: '/portfolio/portfolio-7.webp', alt: 'Шоппер Калининград', title: 'Эко-шоппер с видами Калининграда', details: 'Авторский дизайн на хлопковой сумке. Сублимационная печать.' },
+  { id: 15, src: '/portfolio/portfolio-21.webp', alt: 'Футболка с фотоколлажем', title: 'Футболка с фотоколлажем на заказ', details: 'Персональный коллаж из семейных фотографий. DTF-печать с высокой детализацией.' },
+  { id: 16, src: '/portfolio/portfolio-4.webp', alt: 'Детская футболка', title: 'Детская футболка с любимым персонажем', details: 'Яркий принт на детском хлопке. DTF-печать.' },
+  { id: 17, src: '/portfolio/portfolio-17.webp', alt: 'Зонт с принтом', title: 'Зонт с индивидуальным принтом', details: 'Полноцветная DTF-печать на куполе зонта.' },
+  { id: 18, src: '/portfolio/portfolio-30.webp', alt: 'Кружки с детскими рисунками', title: 'Кружки с детскими рисунками', details: 'Детские рисунки на керамических кружках. Подарок бабушке и дедушке.' },
+  { id: 19, src: '/portfolio/portfolio-6.webp', alt: 'Новогодний шар', title: 'Новогодний ёлочный шар с фотопечатью', details: 'Персонализированный шар с семейным фото. Сублимационная печать.' },
+  { id: 20, src: '/portfolio/portfolio-22.webp', alt: 'Футболка с детскими фото', title: 'Футболка с детскими фотографиями', details: 'Коллаж из детских снимков на белой футболке. DTF-печать.' },
+  { id: 21, src: '/portfolio/portfolio-8.webp', alt: 'Футболка и кепка', title: 'Комплект: футболка + кепка с принтом', details: 'Единый стиль для кепки и футболки. Термотрансферная плёнка золотого цвета.' },
+  { id: 22, src: '/portfolio/portfolio-13.webp', alt: 'Игрушка с принтом', title: 'Мягкая игрушка с именным принтом', details: 'Персонализированная DTF-печать имени на плюшевом мишке.' },
+  { id: 23, src: '/portfolio/portfolio-26.webp', alt: 'Вымпел Гортранс', title: 'Корпоративный вымпел «Гортранс»', details: 'Двусторонний вымпел с логотипом. Сублимационная печать на атласе.' },
+  { id: 24, src: '/portfolio/portfolio-14.webp', alt: 'Кофейный набор', title: 'Кофейный набор с индивидуальным дизайном', details: 'Набор кружек с авторским оформлением. Сублимационная печать.' },
+  { id: 25, src: '/portfolio/portfolio-27.webp', alt: 'Футболка ITZY', title: 'Футболка с дизайном ITZY', details: 'K-pop мерч на белой футболке. DTF-печать с фотографическим качеством.' },
+  { id: 26, src: '/portfolio/portfolio-15.webp', alt: 'Футболки с котом', title: 'Парные футболки с авторским артом кота', details: 'Забавный кот в двух стилях для пары. DTF-печать на хлопке.' },
+  { id: 27, src: '/portfolio/portfolio-19.webp', alt: 'Кружки серебряные', title: 'Кружки с зеркальным серебряным покрытием', details: 'Премиальные кружки с металлизированным эффектом. Сублимация.' },
+  { id: 28, src: '/portfolio/portfolio-9.webp', alt: 'Футболка с принтом', title: 'Футболка с авторским принтом', details: 'Индивидуальный дизайн по эскизу клиента. DTF-печать.' },
+  { id: 29, src: '/portfolio/portfolio-16.webp', alt: 'Медаль', title: 'Наградная медаль с гравировкой', details: 'Металлическая медаль с лазерной гравировкой. Для спортивного мероприятия.' },
+  { id: 30, src: '/portfolio/portfolio-28.webp', alt: 'Футболка Кант', title: 'Футболка с портретом Иммануила Канта', details: 'Стилизованный портрет на чёрной футболке. DTF-печать, символ Калининграда.' },
 ];
 
 const PortfolioCard = ({ item, onClick }: { item: PortfolioItem; onClick: () => void }) => (
