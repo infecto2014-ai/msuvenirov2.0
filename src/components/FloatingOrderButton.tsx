@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { X, Send, Image, Loader2, Check, Tag } from 'lucide-react';
+import { X, Send, Paperclip, Loader2, Check, Tag } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 import { toast } from '@/hooks/use-toast';
