@@ -2,8 +2,7 @@ import { lazy, Suspense, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
-import FloatingOrderButton from '@/components/FloatingOrderButton';
-
+const FloatingOrderButton = lazy(() => import('@/components/FloatingOrderButton'));
 
 // Lazy load below-the-fold sections for better LCP
 const AboutSection = lazy(() => import('@/components/AboutSection'));
