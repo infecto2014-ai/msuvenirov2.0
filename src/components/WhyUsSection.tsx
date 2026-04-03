@@ -86,10 +86,12 @@ const WhyUsSection = () => {
       <style>{`
         @keyframes cta-breathe {
           0%, 100% {
-            box-shadow: 0 0 25px hsl(var(--neon-cyan) / 0.25), 0 0 50px hsl(var(--neon-magenta) / 0.15);
+            opacity: 1;
+            filter: brightness(1);
           }
           50% {
-            box-shadow: 0 0 40px hsl(var(--neon-cyan) / 0.4), 0 0 80px hsl(var(--neon-magenta) / 0.3);
+            opacity: 0.92;
+            filter: brightness(1.15);
           }
         }
       `}</style>
