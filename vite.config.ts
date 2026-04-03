@@ -25,6 +25,7 @@ export default defineConfig(({ mode }) => ({
         manualChunks: {
           // Separate vendor chunks for better caching
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'supabase': ['@supabase/supabase-js'],
           'swiper': ['swiper'],
           'radix-ui': [
             '@radix-ui/react-dialog',
