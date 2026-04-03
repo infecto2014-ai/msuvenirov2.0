@@ -426,9 +426,9 @@ const FAQPage = () => {
                   href="https://t.me/Msuvenirov39zakaz"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="gradient-btn-pulse px-6 py-3 rounded-lg text-sm font-semibold text-primary-foreground inline-flex items-center justify-center gap-2"
+                  className="gradient-btn-pulse px-6 py-3 rounded-lg text-sm font-semibold text-foreground inline-flex items-center justify-center gap-2 hover:text-foreground"
                 >
-                  <Send className="w-4 h-4" />
+                  <Send className="w-4 h-4 relative z-10" />
                   <span className="relative z-10">Написать в Telegram</span>
                 </a>
                 <a
