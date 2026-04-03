@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Star, Quote, ChevronUp, ArrowRight, ExternalLink } from 'lucide-react';
 
 
@@ -18,7 +18,7 @@ const staticReviews = [
   { id: 's11', name: 'М. Лебедева', content: 'Спасибо большое! Заказ выполнили на высшем уровне! Очень круто, что на месте помогаете с деталями и не только). Рекомендую всем, кому важно качество!', rating: 5, avatar: 'М' },
 ];
 
-const TEXT_THRESHOLD = 150;
+const TEXT_THRESHOLD = 120;
 
 interface Review {
   id: string;
@@ -30,17 +30,28 @@ interface Review {
 
 const ReviewCard = ({ review }: { review: Review }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const isLongText = review.content.length > TEXT_THRESHOLD;
+  const textRef = useRef<HTMLParagraphElement>(null);
+  const [isClamped, setIsClamped] = useState(false);
+
+  useEffect(() => {
+    const el = textRef.current;
+    if (el) {
+      setIsClamped(el.scrollHeight > el.clientHeight);
+    }
+  }, [review.content]);
 
   return (
-    <div className="bg-card border border-border/40 rounded-2xl p-5 sm:p-6 flex flex-col min-h-[240px] hover:border-primary/20 transition-all duration-300">
+    <div className="bg-card border border-border/40 rounded-2xl p-5 sm:p-6 flex flex-col h-[300px] hover:border-primary/20 transition-all duration-300">
       <Quote className="w-5 h-5 text-primary/20 mb-3 flex-shrink-0" />
 
-      <div className="flex flex-col flex-1">
-        <p className={`text-sm sm:text-[15px] text-foreground/80 leading-relaxed ${!isExpanded && isLongText ? 'line-clamp-4' : ''}`}>
+      <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
+        <p
+          ref={textRef}
+          className={`text-sm sm:text-[15px] text-foreground/80 leading-relaxed transition-all duration-300 ${!isExpanded ? 'line-clamp-4' : 'overflow-y-auto'}`}
+        >
           {review.content}
         </p>
-        {isLongText && (
+        {isClamped && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
             className="text-primary text-xs sm:text-sm hover:text-primary/80 transition-all text-left mt-2 flex-shrink-0 flex items-center gap-1.5 group"
@@ -88,6 +99,8 @@ const ReviewCard = ({ review }: { review: Review }) => {
 
 const ReviewsSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [nextIndex, setNextIndex] = useState<number | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [allReviews, setAllReviews] = useState<Review[]>(staticReviews);
 
@@ -114,30 +127,43 @@ const ReviewsSection = () => {
     loadReviews();
   }, []);
 
+  const slideTo = (newIndex: number) => {
+    if (isTransitioning) return;
+    setNextIndex(newIndex);
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentIndex(newIndex);
+      setNextIndex(null);
+      setIsTransitioning(false);
+    }, 300);
+  };
+
   useEffect(() => {
     if (!isAutoPlaying) return;
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 2) % allReviews.length);
+      const next = (currentIndex + 2) % allReviews.length;
+      slideTo(next);
     }, 5000);
     return () => clearInterval(interval);
-  }, [isAutoPlaying, allReviews.length]);
+  }, [isAutoPlaying, allReviews.length, currentIndex, isTransitioning]);
 
   const handlePrev = () => {
     setIsAutoPlaying(false);
-    setCurrentIndex((prev) => (prev <= 1 ? allReviews.length - 2 : prev - 2));
+    slideTo(currentIndex <= 1 ? allReviews.length - 2 : currentIndex - 2);
   };
 
   const handleNext = () => {
     setIsAutoPlaying(false);
-    setCurrentIndex((prev) => (prev + 2) % allReviews.length);
+    slideTo((currentIndex + 2) % allReviews.length);
   };
 
+  const displayIndex = nextIndex !== null ? nextIndex : currentIndex;
   const visibleReviews = [
-    allReviews[currentIndex % allReviews.length],
-    allReviews[(currentIndex + 1) % allReviews.length],
+    allReviews[displayIndex % allReviews.length],
+    allReviews[(displayIndex + 1) % allReviews.length],
   ];
   const totalPages = Math.ceil(allReviews.length / 2);
-  const activePage = Math.floor(currentIndex / 2);
+  const activePage = Math.floor(displayIndex / 2);
 
   return (
     <section id="отзывы" className="py-16 sm:py-24 relative overflow-hidden" aria-label="Отзывы клиентов">
@@ -195,7 +221,7 @@ const ReviewsSection = () => {
           </button>
 
           {/* Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+          <div className={`grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 transition-opacity duration-300 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
             {visibleReviews.map((review) => (
               <ReviewCard key={review.id} review={review} />
             ))}
@@ -215,7 +241,7 @@ const ReviewsSection = () => {
               {Array.from({ length: totalPages }).map((_, index) => (
                 <button
                   key={index}
-                  onClick={() => { setIsAutoPlaying(false); setCurrentIndex(index * 2); }}
+                  onClick={() => { setIsAutoPlaying(false); slideTo(index * 2); }}
                   className="relative flex items-center justify-center min-w-[44px] min-h-[44px]"
                   aria-label={`Страница ${index + 1}`}
                 >
