@@ -7,36 +7,6 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-import portfolio1 from '@/assets/portfolio-1.webp';
-import portfolio2 from '@/assets/portfolio-2.webp';
-import portfolio3 from '@/assets/portfolio-3.webp';
-import portfolio4 from '@/assets/portfolio-4.webp';
-import portfolio5 from '@/assets/portfolio-5.webp';
-import portfolio6 from '@/assets/portfolio-6.webp';
-import portfolio7 from '@/assets/portfolio-7.webp';
-import portfolio8 from '@/assets/portfolio-8.webp';
-import portfolio9 from '@/assets/portfolio-9.webp';
-import portfolio10 from '@/assets/portfolio-10.webp';
-import portfolio11 from '@/assets/portfolio-11.webp';
-import portfolio12 from '@/assets/portfolio-12.webp';
-import portfolio13 from '@/assets/portfolio-13.webp';
-import portfolio14 from '@/assets/portfolio-14.webp';
-import portfolio15 from '@/assets/portfolio-15.webp';
-import portfolio16 from '@/assets/portfolio-16.webp';
-import portfolio17 from '@/assets/portfolio-17.webp';
-import portfolio18 from '@/assets/portfolio-18.webp';
-import portfolio19 from '@/assets/portfolio-19.webp';
-import portfolio20 from '@/assets/portfolio-20.webp';
-import portfolio21 from '@/assets/portfolio-21.webp';
-import portfolio22 from '@/assets/portfolio-22.webp';
-import portfolio23 from '@/assets/portfolio-23.webp';
-import portfolio24 from '@/assets/portfolio-24.webp';
-import portfolio25 from '@/assets/portfolio-25.webp';
-import portfolio26 from '@/assets/portfolio-26.webp';
-import portfolio27 from '@/assets/portfolio-27.webp';
-import portfolio28 from '@/assets/portfolio-28.webp';
-import portfolio29 from '@/assets/portfolio-29.webp';
-import portfolio30 from '@/assets/portfolio-30.webp';
 
 interface PortfolioItem {
   id: number;
