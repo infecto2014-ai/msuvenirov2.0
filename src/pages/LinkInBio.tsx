@@ -64,14 +64,14 @@ const LinkInBio = () => {
         </p>
 
         {/* Primary actions — gradient highlighted */}
-        <div className="w-full flex flex-col gap-3 mb-3">
-          {/* Позвонить */}
+        <div className="w-full flex items-center gap-3 mb-3">
+          {/* Позвонить — круглая кнопка */}
           <a
             href="tel:+79521142350"
-            className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl font-bold text-base transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(34,197,94,0.4)] active:scale-[0.98] bg-gradient-to-r from-emerald-500 to-green-400 text-background"
+            className="flex-shrink-0 w-14 h-14 rounded-full flex items-center justify-center bg-gradient-to-br from-lime-400 to-green-400 text-background shadow-[0_0_20px_rgba(132,204,22,0.4)] hover:shadow-[0_0_30px_rgba(132,204,22,0.6)] hover:scale-110 active:scale-95 transition-all duration-300"
+            title="Позвонить"
           >
-            <Phone className="w-5 h-5" />
-            <span>Позвонить</span>
+            <Phone className="w-6 h-6" />
           </a>
 
           {/* MAX */}
