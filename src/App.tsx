@@ -37,6 +37,7 @@ const App = () => (
       <Sonner />
     </Suspense>
     <BrowserRouter>
+      <ScrollToTop />
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/" element={<Index />} />
