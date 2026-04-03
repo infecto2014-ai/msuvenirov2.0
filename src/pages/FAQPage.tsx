@@ -343,18 +343,18 @@ const FAQPage = () => {
 
       <Header />
 
-      <main className="min-h-screen bg-background pt-24 pb-16 relative">
+      <main className="min-h-screen bg-background pt-20 pb-16 relative">
         {/* Full-page gradient behind header area */}
         <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
         
         {/* Hero */}
-        <section className="relative overflow-hidden py-12 sm:py-16">
+        <section className="relative overflow-hidden py-6 sm:py-10">
           <div className="container mx-auto px-4 sm:px-6 relative z-10 text-center">
             <span className="inline-block px-4 py-2 rounded-full neon-border text-xs sm:text-sm font-medium text-primary mb-4">
               FAQ
             </span>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4">
-              <span className="neon-text">Часто задаваемые вопросы</span>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 text-foreground">
+              Часто задаваемые вопросы
             </h1>
             <p className="text-muted-foreground text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
               Ответы на популярные вопросы о печати на футболках, кружках и корпоративных заказах
