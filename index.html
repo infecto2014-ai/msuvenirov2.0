@@ -185,26 +185,16 @@
     <script type="module" src="/src/main.tsx"></script>
     
     <!-- Defer third-party scripts until after page load -->
+    <!-- Yandex.Metrika -->
+    <script async defer src="https://mc.yandex.ru/metrika/tag.js"></script>
     <script>
-      window.addEventListener('load', function() {
-        setTimeout(function() {
-          // Yandex.Metrika - deferred
-          (function(m,e,t,r,i,k,a){
-            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-            m[i].l=1*new Date();
-            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-          })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=108361089', 'ym');
-          ym(108361089, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
-
-          // JivoSite - deferred
-          var jivo = document.createElement('script');
-          jivo.src = '//code.jivo.ru/widget/STxub3I6lS';
-          jivo.async = true;
-          document.body.appendChild(jivo);
-        }, 3000);
-      });
+      window.ym = window.ym || function(){(window.ym.a = window.ym.a || []).push(arguments)};
+      window.ym.l = Date.now();
+      ym(108361089, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
     </script>
+
+    <!-- JivoSite - deferred -->
+    <script async defer src="//code.jivo.ru/widget/STxub3I6lS"></script>
     <noscript><div><img src="https://mc.yandex.ru/watch/108361089" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
   </body>
 </html>
