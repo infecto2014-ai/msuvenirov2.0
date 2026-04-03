@@ -1,5 +1,5 @@
 import { ChevronDown } from 'lucide-react';
-import heroImage from '@/assets/hero-bg.jpg';
+import heroImage from '@/assets/hero-bg.webp';
 
 const HeroSection = () => {
   const handleOrderClick = () => {
