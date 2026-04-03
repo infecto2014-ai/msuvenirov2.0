@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 
 import client1 from '@/assets/clients/client-1.webp';
 import client2 from '@/assets/clients/client-2.webp';
