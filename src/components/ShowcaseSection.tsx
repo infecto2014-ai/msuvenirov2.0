@@ -202,8 +202,9 @@ const ShowcaseSection = () => {
                           </div>
                           
                           {isActive && (
-                            <button
+                             <button
                               onClick={handleOrderClick}
+                              aria-label={`Заказать ${product.name}`}
                               className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))] flex items-center justify-center hover:scale-110 transition-transform duration-300 shadow-lg shadow-[hsl(var(--neon-cyan)/0.3)]"
                             >
                               <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 text-background" />
