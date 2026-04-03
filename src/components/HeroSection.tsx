@@ -75,12 +75,11 @@ const HeroSection = () => {
           style={{ animationDelay: '0.35s' }}
         >
           <span className="px-4 py-2 rounded-full border border-primary/30 bg-primary/5 text-sm sm:text-base font-semibold text-primary">
-            <span className="px-4 py-2 rounded-full border border-primary/30 bg-primary/5 text-sm sm:text-base font-semibold text-primary">
-              DTF-печать от 280 ₽
-            </span>
-            <span className="px-4 py-2 rounded-full border border-primary/30 bg-primary/5 text-sm sm:text-base font-semibold text-primary">
-              ⚡ Срочно за 24ч
-            </span>
+            DTF-печать от 280 ₽
+          </span>
+          <span className="px-4 py-2 rounded-full border border-primary/30 bg-primary/5 text-sm sm:text-base font-semibold text-primary">
+            ⚡ Срочно за 24ч
+          </span>
         </div>
 
         {/* CTA Button */}
