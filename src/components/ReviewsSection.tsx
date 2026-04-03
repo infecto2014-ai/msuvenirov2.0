@@ -18,7 +18,7 @@ const staticReviews = [
   { id: 's11', name: 'М. Лебедева', content: 'Спасибо большое! Заказ выполнили на высшем уровне! Очень круто, что на месте помогаете с деталями и не только). Рекомендую всем, кому важно качество!', rating: 5, avatar: 'М' },
 ];
 
-const TEXT_THRESHOLD = 150;
+const TEXT_THRESHOLD = 120;
 
 interface Review {
   id: string;
