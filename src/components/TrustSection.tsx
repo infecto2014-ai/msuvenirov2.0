@@ -30,29 +30,31 @@ const clients = [
 
 const TrustSection = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [isPaused, setIsPaused] = useState(false);
+  const isPausedRef = useRef(false);
   const animationRef = useRef<number>();
   const scrollPositionRef = useRef(0);
+  const scrollWidthRef = useRef(0);
+
+  const handlePause = useCallback(() => { isPausedRef.current = true; }, []);
+  const handleResume = useCallback(() => { isPausedRef.current = false; }, []);
 
   useEffect(() => {
     const scrollContainer = scrollRef.current;
     if (!scrollContainer) return;
 
-    const scrollWidth = scrollContainer.scrollWidth / 2;
-    const speed = 0.5; // pixels per frame
+    // Cache scrollWidth once to avoid forced reflow
+    scrollWidthRef.current = scrollContainer.scrollWidth / 2;
+    const speed = 0.5;
 
     const animate = () => {
-      if (!isPaused) {
+      if (!isPausedRef.current) {
         scrollPositionRef.current += speed;
         
-        // Reset position when we've scrolled half the content (seamless loop)
-        if (scrollPositionRef.current >= scrollWidth) {
+        if (scrollPositionRef.current >= scrollWidthRef.current) {
           scrollPositionRef.current = 0;
         }
         
-        if (scrollContainer) {
-          scrollContainer.style.transform = `translateX(-${scrollPositionRef.current}px)`;
-        }
+        scrollContainer.style.transform = `translateX(-${scrollPositionRef.current}px)`;
       }
       
       animationRef.current = requestAnimationFrame(animate);
@@ -65,7 +67,7 @@ const TrustSection = () => {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [isPaused]);
+  }, []);
 
   return (
     <section className="py-10 sm:py-14 relative overflow-hidden" aria-label="Корпоративные клиенты">
