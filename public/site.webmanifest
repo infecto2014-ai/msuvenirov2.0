@@ -1,6 +1,11 @@
 {
-  "name": "Мастерская сувениров",
+  "name": "Мастерская сувениров — печать на футболках в Калининграде",
   "short_name": "М.Сувениров",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#1a1a2e",
+  "background_color": "#1a1a2e",
   "icons": [
     {
       "src": "/favicon-192.png",
@@ -9,12 +14,15 @@
       "purpose": "any maskable"
     },
     {
+      "src": "/favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
       "src": "/favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml"
     }
-  ],
-  "theme_color": "#1a1a2e",
-  "background_color": "#1a1a2e",
-  "display": "standalone"
+  ]
 }
