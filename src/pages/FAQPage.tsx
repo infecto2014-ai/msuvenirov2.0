@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { MessageCircle, Phone, Send, Printer, Package, CreditCard, Palette, Gift, Sparkles, Truck, Ruler } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+const FloatingOrderButton = lazy(() => import('@/components/FloatingOrderButton'));
 import {
   Accordion,
   AccordionContent,
