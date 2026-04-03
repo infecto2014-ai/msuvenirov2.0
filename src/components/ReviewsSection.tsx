@@ -30,17 +30,28 @@ interface Review {
 
 const ReviewCard = ({ review }: { review: Review }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const isLongText = review.content.length > TEXT_THRESHOLD;
+  const textRef = useRef<HTMLParagraphElement>(null);
+  const [isClamped, setIsClamped] = useState(false);
+
+  useEffect(() => {
+    const el = textRef.current;
+    if (el) {
+      setIsClamped(el.scrollHeight > el.clientHeight);
+    }
+  }, [review.content]);
 
   return (
-    <div className="bg-card border border-border/40 rounded-2xl p-5 sm:p-6 flex flex-col min-h-[240px] hover:border-primary/20 transition-all duration-300">
+    <div className="bg-card border border-border/40 rounded-2xl p-5 sm:p-6 flex flex-col h-[300px] hover:border-primary/20 transition-all duration-300">
       <Quote className="w-5 h-5 text-primary/20 mb-3 flex-shrink-0" />
 
-      <div className="flex flex-col flex-1">
-        <p className={`text-sm sm:text-[15px] text-foreground/80 leading-relaxed ${!isExpanded && isLongText ? 'line-clamp-4' : ''}`}>
+      <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
+        <p
+          ref={textRef}
+          className={`text-sm sm:text-[15px] text-foreground/80 leading-relaxed transition-all duration-300 ${!isExpanded ? 'line-clamp-4' : 'overflow-y-auto'}`}
+        >
           {review.content}
         </p>
-        {isLongText && (
+        {isClamped && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
             className="text-primary text-xs sm:text-sm hover:text-primary/80 transition-all text-left mt-2 flex-shrink-0 flex items-center gap-1.5 group"
