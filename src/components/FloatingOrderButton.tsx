@@ -67,7 +67,8 @@ const FloatingOrderButton = () => {
       phone: formData.phone,
       comment: formData.comment,
       promo: formData.promo,
-      photoPreviews: photoPreviews,
+      filePreviews: filePreviews,
+      fileNames: fileNames,
     };
     sessionStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(dataToSave));
   };
