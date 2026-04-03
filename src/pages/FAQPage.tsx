@@ -187,6 +187,17 @@ const categories: FAQCategory[] = [
       },
     ],
   },
+  {
+    id: 'sizes',
+    label: 'Размерная сетка',
+    subtitle: 'Размеры футболок, поло и худи — подберите свой размер',
+    icon: <Ruler className="w-5 h-5 text-primary" />,
+    questions: [
+      { q: 'Футболки унисекс (бесшовные, 100% хлопок, 160 г/м²)', a: '__size_tshirt__' },
+      { q: 'Поло унисекс', a: '__size_polo__' },
+      { q: 'Толстовки с капюшоном и карманом «кенгуру» (Унисекс)', a: '__size_hoodie__' },
+    ],
+  },
 ];
 
 const allQuestions = categories.flatMap((cat) =>
