@@ -236,6 +236,7 @@ const ShowcaseSection = () => {
           </button>
           <button
             className="swiper-button-next-custom absolute right-0 top-[calc(50%-2rem)] -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full neon-border flex items-center justify-center bg-background/80 backdrop-blur-sm hover:neon-glow transition-all duration-300 hidden sm:flex"
+            aria-label="Следующий слайд"
             onClick={() => swiperInstance?.slideNext()}
           >
             <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
