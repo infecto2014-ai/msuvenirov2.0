@@ -19,6 +19,10 @@ const PWAInstallBanner = () => {
       return;
     }
 
+    // Only show on tablets and phones (screen width <= 1024px)
+    const isDesktop = window.matchMedia('(min-width: 1025px)').matches;
+    if (isDesktop) return;
+
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
