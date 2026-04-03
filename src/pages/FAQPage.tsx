@@ -221,15 +221,16 @@ const SizeTable = ({ type }: { type: string }) => {
   if (type === '__size_tshirt__') {
     return (
       <div className="overflow-x-auto -mx-2">
+        <p className="text-xs text-muted-foreground mb-3 px-2">Бесшовные футболки унисекс из 100% хлопка плотностью 160 г/м². Подходят для DTF и сублимационной печати. Все размеры указаны в сантиметрах.</p>
         <Table>
           <TableHeader>
             <TableRow className="border-border/50">
               <TableHead rowSpan={2} className="text-foreground font-semibold text-xs align-middle">Показатель</TableHead>
-              <TableHead colSpan={5} className="text-center text-foreground font-semibold text-xs border-b-0">Размеры российские / международные</TableHead>
+              <TableHead colSpan={7} className="text-center text-foreground font-semibold text-xs border-b-0">Размеры российские / международные</TableHead>
               <TableHead rowSpan={2} className="text-foreground font-semibold text-xs text-center align-middle">± см</TableHead>
             </TableRow>
             <TableRow className="border-border/50">
-              {['44 (S)', '46 (M)', '48 (L)', '50 (XL)', '52 (XXL)'].map(s => (
+              {['42 (XS)', '44 (S)', '46 (M)', '48 (L)', '50 (XL)', '52 (XXL)', '54 (XXXL)'].map(s => (
                 <TableHead key={s} className="text-center text-xs text-muted-foreground whitespace-nowrap">{s}</TableHead>
               ))}
             </TableRow>
@@ -237,12 +238,12 @@ const SizeTable = ({ type }: { type: string }) => {
           <TableBody>
             <TableRow className="border-border/50">
               <TableCell className="font-medium text-foreground text-xs">A - Длина изделия</TableCell>
-              {[70, 72, 74, 76, 78].map((v, i) => <TableCell key={i} className="text-center text-xs">{v}</TableCell>)}
+              {[68, 70, 72, 74, 76, 78, 80].map((v, i) => <TableCell key={i} className="text-center text-xs">{v}</TableCell>)}
               <TableCell className="text-center text-xs">2</TableCell>
             </TableRow>
             <TableRow className="border-border/50">
               <TableCell className="font-medium text-foreground text-xs">B - Ширина изделия</TableCell>
-              {[50, 52, 74, 56, 58].map((v, i) => <TableCell key={i} className="text-center text-xs">{v}</TableCell>)}
+              {[46, 49, 52, 55, 58, 61, 64].map((v, i) => <TableCell key={i} className="text-center text-xs">{v}</TableCell>)}
               <TableCell className="text-center text-xs">2</TableCell>
             </TableRow>
           </TableBody>
@@ -254,6 +255,7 @@ const SizeTable = ({ type }: { type: string }) => {
   if (type === '__size_polo__') {
     return (
       <div className="overflow-x-auto -mx-2">
+        <p className="text-xs text-muted-foreground mb-3 px-2">Рубашки поло унисекс с воротником и планкой на пуговицах. Идеальны для корпоративной одежды с нанесением логотипа. Размеры в сантиметрах.</p>
         <Table>
           <TableHeader>
             <TableRow className="border-border/50">
@@ -287,6 +289,7 @@ const SizeTable = ({ type }: { type: string }) => {
   if (type === '__size_hoodie__') {
     return (
       <div className="overflow-x-auto -mx-2">
+        <p className="text-xs text-muted-foreground mb-3 px-2">Толстовки с капюшоном и карманом «кенгуру», унисекс. Подходят для печати крупных принтов на спине и груди. Размеры в сантиметрах.</p>
         <Table>
           <TableHeader>
             <TableRow className="border-border/50">
