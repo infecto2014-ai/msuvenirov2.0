@@ -289,7 +289,7 @@ const ReviewsSection = () => {
               {Array.from({ length: totalPages }).map((_, index) => (
                 <button
                   key={index}
-                  onClick={() => { setIsAutoPlaying(false); slideTo(index * 2); }}
+                  onClick={() => { setIsAutoPlaying(false); slideTo(index * 2, index * 2 > currentIndex ? 'right' : 'left'); }}
                   className="relative flex items-center justify-center min-w-[44px] min-h-[44px]"
                   aria-label={`Страница ${index + 1}`}
                 >
