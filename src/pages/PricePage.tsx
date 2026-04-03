@@ -45,9 +45,11 @@ const fabricProducts = [
   { name: 'Футболка унисекс 160–180 гр', price: 'от 400 ₽' },
   { name: 'Футболка детская 160–180 гр', price: 'от 300 ₽' },
   { name: 'Футболка оверсайз от 180 гр', price: 'от 700 ₽' },
+  { name: 'Поло', price: 'от 700 ₽' },
   { name: 'Худи', price: 'от 1 300 ₽' },
   { name: 'Бейсболка', price: 'от 250 ₽' },
   { name: 'Шоппер', price: 'от 200 ₽' },
+  { name: 'Фартук', price: 'от 600 ₽' },
 ];
 
 const printingPrices = [
@@ -357,6 +359,9 @@ const FabricPrintingSection = () => {
                   ))}
                 </TableBody>
               </Table>
+              <p className="text-xs text-muted-foreground px-4 py-3 leading-relaxed">
+                * Итоговая стоимость зависит от модели, цвета и количества изделий. Для точного расчёта свяжитесь с менеджером.
+              </p>
             </AccordionContent>
           </AccordionItem>
         </Accordion>
