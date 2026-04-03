@@ -1,60 +1,9 @@
-import { Phone, Globe, Mail, ArrowLeft, Copy, Check, FileText } from 'lucide-react';
+import { Phone, Globe, Mail, ArrowLeft, Copy, Check, FileText, Send, ExternalLink } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ProtectedLogo from '@/components/ProtectedLogo';
-
 import maxLogo from '@/assets/logo_max.svg';
 import sbpLogo from '@/assets/sbp.svg';
-
-const BUTTON_COLOR = '#E0FFFF';
-
-const links = [
-  {
-    label: 'Позвонить',
-    href: 'tel:+79521142350',
-    icon: Phone,
-    external: false,
-  },
-  {
-    label: 'Telegram',
-    href: 'https://t.me/msuvenirov39zakaz',
-    icon: null,
-    iconType: 'telegram',
-    external: true,
-  },
-  {
-    label: 'MAX',
-    href: 'https://max.ru/u/f9LHodD0cOLo7HDSJw672fSH82yru_atZ9KDVODSf_2mghJHg1xe7H2qOC8',
-    icon: null,
-    iconType: 'max',
-    external: true,
-  },
-  {
-    label: 'Написать на почту',
-    href: 'mailto:msuvenirov39@yandex.ru',
-    icon: Mail,
-    external: false,
-  },
-  {
-    label: 'Посетить сайт',
-    href: '/',
-    icon: Globe,
-    external: false,
-  },
-  {
-    label: 'Прайс-лист',
-    href: '/price',
-    icon: FileText,
-    external: false,
-  },
-  {
-    label: 'ВКонтакте',
-    href: 'https://vk.com/msuvenirov39',
-    icon: null,
-    iconType: 'vk',
-    external: true,
-  },
-];
 
 const TelegramIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -68,49 +17,28 @@ const VKIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const InstagramIcon = ({ className }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-  </svg>
-);
-
 const MaxIcon = ({ className }: { className?: string }) => (
-  <img src={maxLogo} alt="MAX" className={className} style={{ filter: 'brightness(0)' }} />
+  <img src={maxLogo} alt="MAX" className={className} />
 );
-
-const getIcon = (link: typeof links[0]) => {
-  if (link.icon) {
-    const Icon = link.icon;
-    return <Icon className="w-6 h-6 flex-shrink-0 text-black" />;
-  }
-  const cls = "w-6 h-6 flex-shrink-0 text-black";
-  switch ((link as any).iconType) {
-    case 'telegram': return <TelegramIcon className={cls} />;
-    case 'vk': return <VKIcon className={cls} />;
-    case 'instagram': return <InstagramIcon className={cls} />;
-    case 'max': return <MaxIcon className={cls} />;
-    default: return null;
-  }
-};
 
 const LinkInBio = () => {
   const [copied, setCopied] = useState(false);
+  const [tooltip, setTooltip] = useState(false);
 
   const handleCopyEmail = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     navigator.clipboard.writeText('msuvenirov39@yandex.ru');
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setTooltip(true);
+    setTimeout(() => { setCopied(false); setTooltip(false); }, 2000);
   };
+
   return (
     <div className="min-h-screen relative overflow-hidden bg-background">
-
       {/* Background decoration */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-0 right-0 h-64 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-80 bg-gradient-to-b from-primary/8 via-primary/3 to-transparent" />
         <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-primary/5 blur-3xl" />
         <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-secondary/5 blur-3xl" />
       </div>
@@ -124,56 +52,123 @@ const LinkInBio = () => {
         <span className="text-sm font-medium">На главную</span>
       </Link>
 
-      <div className="relative z-10 flex flex-col items-center px-6 py-10 max-w-md mx-auto min-h-screen">
+      <div className="relative z-10 flex flex-col items-center px-5 py-10 max-w-md mx-auto min-h-screen">
         {/* Logo */}
-        <div className="mb-10">
+        <div className="mb-8">
           <ProtectedLogo height={48} />
         </div>
 
-        {/* Links */}
-        <div className="w-full flex flex-col gap-3">
-          {links.map((link) => {
-            const isExternal = link.external;
-            const isEmail = link.href.startsWith('mailto:');
-            return (
-              <a
-                key={link.label}
-                href={link.href}
-                {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                style={{ background: BUTTON_COLOR }}
-                className="group w-full relative flex items-center justify-center px-5 py-4 rounded-xl text-black font-semibold text-base transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.98] active:translate-y-0"
-              >
-                <span className="flex items-center justify-center gap-3">
-                  {getIcon(link)}
-                  <span>{link.label}</span>
-                </span>
-                {isEmail && (
-                  <button
-                    onClick={handleCopyEmail}
-                    className="absolute right-4 p-1 rounded-md hover:bg-black/10 transition-colors"
-                    title="Скопировать почту"
-                  >
-                    {copied ? <Check className="w-5 h-5 text-green-600" /> : <Copy className="w-5 h-5 text-black/60" />}
-                  </button>
-                )}
-              </a>
-            );
-          })}
+        {/* Subtitle */}
+        <p className="text-muted-foreground text-sm text-center mb-8">
+          Печать на футболках, кружках и сувенирах в Калининграде
+        </p>
+
+        {/* Primary actions — gradient highlighted */}
+        <div className="w-full flex flex-col gap-3 mb-3">
+          {/* Позвонить */}
+          <a
+            href="tel:+79521142350"
+            className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl font-bold text-base transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_hsl(var(--neon-cyan)/0.4)] active:scale-[0.98] bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))] text-background"
+          >
+            <Phone className="w-5 h-5" />
+            <span>Позвонить</span>
+          </a>
+
+          {/* MAX */}
+          <a
+            href="https://max.ru/u/f9LHodD0cOLo7HDSJw672fSH82yru_atZ9KDVODSf_2mghJHg1xe7H2qOC8"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl font-bold text-base transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_hsl(var(--neon-cyan)/0.4)] active:scale-[0.98] bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))] text-background"
+          >
+            <MaxIcon className="w-5 h-5 brightness-0" />
+            <span>Написать в MAX</span>
+          </a>
+
+          {/* Telegram */}
+          <a
+            href="https://t.me/msuvenirov39zakaz"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl font-bold text-base transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_hsl(var(--neon-cyan)/0.4)] active:scale-[0.98] bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))] text-background"
+          >
+            <TelegramIcon className="w-5 h-5" />
+            <span>Написать в Telegram</span>
+          </a>
         </div>
 
-        {/* SBP Payment */}
-        <div className="w-full mt-6">
+        {/* Website — highlighted with border glow */}
+        <div className="w-full mb-3">
+          <Link
+            to="/"
+            className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl font-bold text-base transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] border-2 border-primary bg-primary/10 text-primary hover:bg-primary/20 hover:shadow-[0_0_20px_hsl(var(--neon-cyan)/0.3)]"
+          >
+            <Globe className="w-5 h-5" />
+            <span>Перейти на сайт</span>
+            <ExternalLink className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
+          </Link>
+        </div>
+
+        {/* Secondary actions */}
+        <div className="w-full flex flex-col gap-3 mb-3">
+          {/* Email */}
+          <div className="relative">
+            <a
+              href="mailto:msuvenirov39@yandex.ru"
+              className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl font-semibold text-base transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] border border-border/50 bg-card/80 text-foreground hover:border-primary/40"
+            >
+              <Mail className="w-5 h-5 text-primary" />
+              <span>Написать на почту</span>
+            </a>
+            <button
+              onClick={handleCopyEmail}
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-muted/50 hover:bg-primary/20 transition-all duration-200 group"
+              title="Скопировать почту"
+            >
+              {copied ? (
+                <Check className="w-4 h-4 text-green-400" />
+              ) : (
+                <Copy className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+              )}
+            </button>
+            {tooltip && (
+              <span className="absolute right-0 -top-8 bg-card border border-border/50 text-xs text-green-400 px-3 py-1 rounded-lg shadow-lg animate-fade-in">
+                Скопировано!
+              </span>
+            )}
+          </div>
+
+          {/* Прайс-лист */}
+          <Link
+            to="/price"
+            className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl font-semibold text-base transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] border border-border/50 bg-card/80 text-foreground hover:border-primary/40"
+          >
+            <FileText className="w-5 h-5 text-primary" />
+            <span>Смотреть прайс-лист</span>
+          </Link>
+
+          {/* VK */}
+          <a
+            href="https://vk.com/msuvenirov39"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl font-semibold text-base transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] border border-border/50 bg-card/80 text-foreground hover:border-primary/40"
+          >
+            <VKIcon className="w-5 h-5 text-primary" />
+            <span>ВКонтакте</span>
+          </a>
+        </div>
+
+        {/* SBP Payment — special style */}
+        <div className="w-full mt-3">
           <a
             href="https://qr.nspk.ru/AS1A003NULJA73RU8FEOGDGV7SRN5B2B?type=01&bank=100000000008&crc=148F"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ background: BUTTON_COLOR }}
-            className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl text-black font-semibold text-base transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.98] active:translate-y-0"
+            className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl font-semibold text-base transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] border border-border/50 bg-card/80 text-foreground hover:border-primary/40"
           >
-            <span className="relative z-10 flex items-center justify-center gap-3">
-              <img src={sbpLogo} alt="СБП" className="w-6 h-6 flex-shrink-0" />
-              <span>Оплатить по СБП</span>
-            </span>
+            <img src={sbpLogo} alt="СБП" className="w-5 h-5 flex-shrink-0" />
+            <span>Оплатить по СБП</span>
           </a>
         </div>
 
