@@ -32,7 +32,7 @@ const WhyUsSection = () => {
   };
 
   return (
-    <section className="py-16 sm:py-24 relative overflow-hidden" aria-label="Преимущества компании">
+    <section className="py-16 sm:py-24 relative overflow-hidden bg-muted/20 dark:bg-transparent" aria-label="Преимущества компании">
       {/* Subtle ambient glow */}
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[150px] pointer-events-none" />
       <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-[hsl(var(--neon-magenta)/0.05)] rounded-full blur-[120px] pointer-events-none" />

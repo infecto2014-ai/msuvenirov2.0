@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const TechnologySection = () => {
   return (
-    <section id="технология" className="py-16 sm:py-24 relative overflow-hidden" aria-label="Технология DTF-печати">
+    <section id="технология" className="py-16 sm:py-24 relative overflow-hidden bg-muted/20 dark:bg-transparent" aria-label="Технология DTF-печати">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/10 to-background" />
       <div className="absolute top-1/4 right-0 w-64 h-64 bg-neon-cyan/10 rounded-full blur-3xl" />
