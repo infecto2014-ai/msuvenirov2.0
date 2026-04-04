@@ -277,10 +277,7 @@ const Header = () => {
                 </a>
                 <div className="flex items-center gap-3 text-muted-foreground">
                   <Clock className="w-4 h-4 text-primary flex-shrink-0" />
-                  <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${workingStatus.isOpen ? 'bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.6)]' : 'bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.6)]'}`} />
-                    <span>10:00–20:00 {workingStatus.isOpen ? '(открыто)' : '(закрыто)'}</span>
-                  </div>
+                  <span>10:00–20:00, без выходных</span>
                 </div>
                 <a href="tel:+79521142350" className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors">
                   <Phone className="w-4 h-4 text-primary flex-shrink-0" />
