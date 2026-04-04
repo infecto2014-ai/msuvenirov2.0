@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import deferCss from "./vite-plugin-defer-css";
+import sitemapLastmod from "./vite-plugin-sitemap-lastmod";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
