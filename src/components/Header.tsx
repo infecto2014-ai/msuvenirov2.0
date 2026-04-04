@@ -309,7 +309,7 @@ const Header = () => {
                 </a>
                 <a href="https://max.ru/u/f9LHodD0cOLo7HDSJw672fSH82yru_atZ9KDVODSf_2mghJHg1xe7H2qOC8" target="_blank" rel="noopener noreferrer" aria-label="MAX"
                   className="w-10 h-10 rounded-full neon-border flex items-center justify-center bg-background hover:opacity-80 transition-opacity">
-                  <img src="/assets/logo_max.svg" alt="MAX" className="w-5 h-5 brightness-0 invert" />
+                  <img src="/assets/logo_max.svg" alt="MAX" className="w-5 h-5 dark:brightness-0 dark:invert" />
                 </a>
                 <a href="https://vk.com/msuvenirov39" target="_blank" rel="noopener noreferrer" aria-label="ВКонтакте"
                   className="w-10 h-10 rounded-full neon-border flex items-center justify-center bg-background text-foreground hover:opacity-80 transition-opacity">

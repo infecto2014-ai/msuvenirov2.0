@@ -58,7 +58,7 @@ const Footer = () => {
           </a>
           <a href="https://max.ru/u/f9LHodD0cOLo7HDSJw672fSH82yru_atZ9KDVODSf_2mghJHg1xe7H2qOC8" target="_blank" rel="noopener noreferrer" aria-label="MAX"
             className="w-9 h-9 rounded-full border border-border/50 flex items-center justify-center hover:border-primary/50 transition-all duration-300 group">
-            <img src="/assets/logo_max.svg" alt="MAX" className="w-4 h-4 brightness-0 invert opacity-60 group-hover:opacity-100 transition-opacity" />
+            <img src="/assets/logo_max.svg" alt="MAX" className="w-4 h-4 dark:brightness-0 dark:invert opacity-60 group-hover:opacity-100 transition-opacity" />
           </a>
           <a href="https://vk.com/msuvenirov39" target="_blank" rel="noopener noreferrer" aria-label="ВКонтакте"
             className="w-9 h-9 rounded-full border border-border/50 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/50 transition-all duration-300">
