@@ -243,7 +243,7 @@ const Header = () => {
 
       {/* === MOBILE MENU === */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden animate-fade-in bg-background/98 backdrop-blur-xl border-t border-border/30 max-h-[calc(100vh-3.5rem)] overflow-y-auto">
+        <div className="lg:hidden animate-fade-in bg-background border-t border-border/30 max-h-[calc(100vh-3.5rem)] overflow-y-auto">
           <div className="container mx-auto px-4 sm:px-6 py-5">
             <div className="flex flex-col gap-4">
               <nav aria-label="Мобильная навигация">
