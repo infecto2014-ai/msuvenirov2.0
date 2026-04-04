@@ -186,7 +186,7 @@ const Header = () => {
             </a>
             <a href="https://max.ru/u/f9LHodD0cOLo7HDSJw672fSH82yru_atZ9KDVODSf_2mghJHg1xe7H2qOC8" target="_blank" rel="noopener noreferrer" aria-label="MAX"
               className="h-5 w-5 flex items-center justify-center hover:opacity-80 transition-opacity">
-              <img src="/assets/logo_max.svg" alt="MAX" className="w-5 h-5 brightness-0 invert" />
+              <img src="/assets/logo_max.svg" alt="MAX" className="w-5 h-5 dark:brightness-0 dark:invert" />
             </a>
             <a href="https://vk.com/msuvenirov39" target="_blank" rel="noopener noreferrer" aria-label="ВКонтакте"
               className="h-5 w-5 flex items-center justify-center text-foreground hover:opacity-80 transition-opacity">
