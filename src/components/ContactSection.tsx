@@ -160,14 +160,26 @@ const ContactSection = () => {
               }}
             />
             <div className="relative glass-card p-2 rounded-2xl overflow-hidden w-full min-h-[350px] lg:min-h-0">
+              {/* Overlay to block touch scroll on mobile */}
+              <div
+                className="absolute inset-0 z-10 lg:hidden"
+                onClick={() => {
+                  const iframe = document.querySelector<HTMLIFrameElement>('#map-iframe');
+                  if (iframe) {
+                    iframe.style.pointerEvents = 'auto';
+                    setTimeout(() => { iframe.style.pointerEvents = 'none'; }, 3000);
+                  }
+                }}
+              />
               <iframe
+                id="map-iframe"
                 src="https://yandex.ru/map-widget/v1/?um=constructor%3A8c8d9e8d5c8e8d5c8e8d5c8e8d5c8e8d&amp;source=constructor&ll=20.487384%2C54.737514&z=16&pt=20.487384,54.737514,pm2rdm"
                 width="100%"
                 height="100%"
                 frameBorder="0"
                 allowFullScreen
                 loading="lazy"
-                className="w-full h-full min-h-[340px] rounded-xl"
+                className="w-full h-full min-h-[340px] rounded-xl pointer-events-none lg:pointer-events-auto"
                 style={{ filter: 'invert(90%) hue-rotate(180deg) contrast(1.1) saturate(0.8)' }}
                 title="Карта проезда к Мастерской сувениров"
               />
