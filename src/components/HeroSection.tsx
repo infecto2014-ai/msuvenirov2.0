@@ -22,7 +22,7 @@ const HeroSection = () => {
       {/* Background - responsive hero image */}
       <div className="absolute inset-0 z-0">
         <picture>
-          <source media="(max-width: 768px)" srcSet="/images/hero-bg-mobile.webp" />
+          <source media="(max-width: 768px)" srcSet="/images/hero-bg-mobile.webp" width={768} height={432} />
           <img 
             src="/images/hero-bg.webp" 
             alt="DTF-печать на футболках и текстиле в Калининграде — Мастерская сувениров" 
@@ -32,6 +32,7 @@ const HeroSection = () => {
             fetchPriority="high"
             width={1920}
             height={1080}
+            sizes="100vw"
           />
         </picture>
         <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/70 to-transparent" />
@@ -95,10 +96,9 @@ const HeroSection = () => {
           className="cursor-pointer hover:scale-110 transition-transform duration-300" 
           aria-label="Прокрутить к каталогу продукции"
         >
-          <div className="animate-bounce">
+          <div className="animate-bounce" style={{ willChange: 'transform' }}>
             <ChevronDown 
               className="w-8 h-8 sm:w-10 sm:h-10 text-primary" 
-              style={{ filter: 'drop-shadow(0 0 12px hsl(var(--primary))) drop-shadow(0 0 24px hsl(var(--primary)))' }} 
               aria-hidden="true" 
             />
           </div>
