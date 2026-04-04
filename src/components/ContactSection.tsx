@@ -4,7 +4,7 @@ const ContactSection = () => {
   return (
     <section id="контакты" className="relative py-16 sm:py-24 overflow-hidden" aria-label="Контактная информация">
       {/* Background with smooth transition from TrustSection */}
-      <div className="absolute inset-0 bg-muted/30 dark:bg-[hsl(260,25%,6%)]" />
+      <div className="absolute inset-0 bg-[hsl(260,25%,6%)]" />
       <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-background to-transparent" />
       
       {/* Background glow effects */}
@@ -167,7 +167,8 @@ const ContactSection = () => {
                 frameBorder="0"
                 allowFullScreen
                 loading="lazy"
-                className="w-full h-full min-h-[340px] rounded-xl dark:[filter:invert(90%)_hue-rotate(180deg)_contrast(1.1)_saturate(0.8)]"
+                className="w-full h-full min-h-[340px] rounded-xl"
+                style={{ filter: 'invert(90%) hue-rotate(180deg) contrast(1.1) saturate(0.8)' }}
                 title="Карта проезда к Мастерской сувениров"
               />
             </div>

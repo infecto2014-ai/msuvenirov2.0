@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Menu, X, Phone, MapPin, Clock, Mail, Send } from 'lucide-react';
 import ProtectedLogo from './ProtectedLogo';
-import { ThemeToggle } from './ThemeToggle';
+
 
 const getWorkingStatus = () => {
   const now = new Date();
@@ -213,7 +213,6 @@ const Header = () => {
               </svg>
             </a>
 
-            <ThemeToggle />
             <div className="w-px h-5 bg-border/50" />
 
             <a
@@ -244,7 +243,7 @@ const Header = () => {
             <ProtectedLogo height={38} />
           </a>
           <div className="flex items-center gap-2">
-            <ThemeToggle />
+            
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="lg:hidden w-11 h-11 rounded-lg neon-border flex items-center justify-center flex-shrink-0"
