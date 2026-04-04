@@ -213,7 +213,6 @@ const Header = () => {
               </svg>
             </a>
 
-            <ThemeToggle />
             <div className="w-px h-5 bg-border/50" />
 
             <a
