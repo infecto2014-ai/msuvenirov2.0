@@ -2,6 +2,8 @@ import { lazy, Suspense, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
+import { useLazySection } from '@/hooks/useLazySection';
+
 const FloatingOrderButton = lazy(() => import('@/components/FloatingOrderButton'));
 const PWAInstallBanner = lazy(() => import('@/components/PWAInstallBanner'));
 
@@ -12,8 +14,6 @@ const TechnologySection = lazy(() => import('@/components/TechnologySection'));
 const PortfolioSection = lazy(() => import('@/components/PortfolioSection'));
 const WhyUsSection = lazy(() => import('@/components/WhyUsSection'));
 const ReviewsSection = lazy(() => import('@/components/ReviewsSection'));
-
-
 const TrustSection = lazy(() => import('@/components/TrustSection'));
 const ContactSection = lazy(() => import('@/components/ContactSection'));
 const Footer = lazy(() => import('@/components/Footer'));
@@ -25,13 +25,26 @@ const SectionLoader = () => (
   </div>
 );
 
+/** Renders children only when the placeholder enters viewport */
+const LazySection = ({ children, minHeight = '200px' }: { children: React.ReactNode; minHeight?: string }) => {
+  const [ref, isVisible] = useLazySection('300px');
+  return (
+    <div ref={ref} style={{ minHeight: isVisible ? undefined : minHeight }}>
+      {isVisible ? (
+        <Suspense fallback={<SectionLoader />}>{children}</Suspense>
+      ) : (
+        <SectionLoader />
+      )}
+    </div>
+  );
+};
+
 const Index = () => {
   const location = useLocation();
 
   useEffect(() => {
     if (location.hash) {
       const id = location.hash.replace('#', '');
-      // Delay to allow lazy sections to render
       const timer = setTimeout(() => {
         const el = document.getElementById(id);
         if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -47,31 +60,33 @@ const Index = () => {
         {/* Hero loads immediately - critical for LCP */}
         <HeroSection />
         
-        {/* Below-fold sections lazy loaded */}
+        {/* About is usually just below fold — load eagerly */}
         <Suspense fallback={<SectionLoader />}>
           <AboutSection />
         </Suspense>
-        <Suspense fallback={<SectionLoader />}>
+
+        {/* Heavy Swiper sections — only load near viewport */}
+        <LazySection minHeight="500px">
           <ShowcaseSection />
-        </Suspense>
-        <Suspense fallback={<SectionLoader />}>
+        </LazySection>
+        <LazySection>
           <TechnologySection />
-        </Suspense>
-        <Suspense fallback={<SectionLoader />}>
+        </LazySection>
+        <LazySection minHeight="500px">
           <PortfolioSection />
-        </Suspense>
-        <Suspense fallback={<SectionLoader />}>
+        </LazySection>
+        <LazySection>
           <WhyUsSection />
-        </Suspense>
-        <Suspense fallback={<SectionLoader />}>
+        </LazySection>
+        <LazySection>
           <ReviewsSection />
-        </Suspense>
-        <Suspense fallback={<SectionLoader />}>
+        </LazySection>
+        <LazySection>
           <TrustSection />
-        </Suspense>
-        <Suspense fallback={<SectionLoader />}>
+        </LazySection>
+        <LazySection>
           <ContactSection />
-        </Suspense>
+        </LazySection>
       </main>
       <Suspense fallback={null}>
         <Footer />
