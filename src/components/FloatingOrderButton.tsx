@@ -259,7 +259,7 @@ const FloatingOrderButton = () => {
       />
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="sm:max-w-md bg-card border-border/50 backdrop-blur-xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-sm:!inset-0 max-sm:!translate-x-0 max-sm:!translate-y-0 max-sm:!left-0 max-sm:!top-0 max-sm:!w-full max-sm:!h-full max-sm:!max-w-none max-sm:!max-h-none max-sm:!rounded-none sm:max-w-md bg-card border-border/50 backdrop-blur-xl overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-xl sm:text-2xl font-bold neon-text text-center">
               Оставить заявку
