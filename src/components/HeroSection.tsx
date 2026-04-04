@@ -40,7 +40,7 @@ const HeroSection = () => {
       </div>
       
       {/* Smooth transition to next section */}
-      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-b from-transparent via-[hsl(260,30%,8%)/50] to-[hsl(260,30%,8%)] z-0" />
+      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-b from-transparent to-background z-0" />
 
       {/* Neon decorative elements - hidden on mobile for performance */}
       <div 
