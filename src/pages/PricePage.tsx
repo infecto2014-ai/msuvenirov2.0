@@ -1032,6 +1032,12 @@ const PricePage = () => {
             >
               <span>Получить расчёт</span>
             </button>
+            <Link
+              to="/faq"
+              className="inline-block mt-4 text-sm text-primary hover:text-primary/80 underline underline-offset-4 transition-colors"
+            >
+              Частые вопросы о печати →
+            </Link>
           </div>
 
           <p className="text-center text-xs text-muted-foreground mt-8 max-w-xl mx-auto">
