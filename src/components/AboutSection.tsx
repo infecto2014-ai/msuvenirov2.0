@@ -8,6 +8,9 @@ const AboutSection = () => {
           <span className="inline-block px-4 py-2 rounded-full neon-border text-xs sm:text-sm font-medium text-primary mb-3">
             О КОМПАНИИ
           </span>
+          <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
+            Печать на футболках и сувенирах в Калининграде
+          </h2>
         </div>
         <p className="text-foreground text-base sm:text-lg max-w-4xl mx-auto leading-relaxed text-center">
           Мы — команда профессионалов, специализирующаяся на <strong>печати на текстиле</strong> и
