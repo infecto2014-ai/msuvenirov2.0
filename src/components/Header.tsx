@@ -243,7 +243,7 @@ const Header = () => {
             <ProtectedLogo height={38} />
           </a>
           <div className="flex items-center gap-2">
-            <ThemeToggle />
+            
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="lg:hidden w-11 h-11 rounded-lg neon-border flex items-center justify-center flex-shrink-0"
