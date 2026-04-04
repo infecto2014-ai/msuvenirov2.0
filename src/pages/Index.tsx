@@ -60,10 +60,9 @@ const Index = () => {
         {/* Hero loads immediately - critical for LCP */}
         <HeroSection />
         
-        {/* About is usually just below fold — load eagerly */}
-        <Suspense fallback={<SectionLoader />}>
+        <LazySection>
           <AboutSection />
-        </Suspense>
+        </LazySection>
 
         {/* Heavy Swiper sections — only load near viewport */}
         <LazySection minHeight="500px">
