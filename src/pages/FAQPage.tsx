@@ -400,7 +400,14 @@ const FAQPage = () => {
                             {item.a.startsWith('__size_') ? (
                               <SizeTable type={item.a} />
                             ) : (
-                              item.a
+                              <>
+                                {item.a}
+                                {cat.id === 'price' && item.q.includes('стоит') && (
+                                  <Link to="/price" className="inline-block ml-1 text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
+                                    Смотреть прайс-лист →
+                                  </Link>
+                                )}
+                              </>
                             )}
                           </AccordionContent>
                         </AccordionItem>
