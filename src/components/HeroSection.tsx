@@ -96,10 +96,9 @@ const HeroSection = () => {
           className="cursor-pointer hover:scale-110 transition-transform duration-300" 
           aria-label="Прокрутить к каталогу продукции"
         >
-          <div className="animate-bounce">
+          <div className="animate-bounce" style={{ willChange: 'transform' }}>
             <ChevronDown 
               className="w-8 h-8 sm:w-10 sm:h-10 text-primary" 
-              style={{ filter: 'drop-shadow(0 0 12px hsl(var(--primary))) drop-shadow(0 0 24px hsl(var(--primary)))' }} 
               aria-hidden="true" 
             />
           </div>
