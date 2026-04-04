@@ -243,7 +243,7 @@ const Header = () => {
 
       {/* === MOBILE MENU === */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden animate-fade-in bg-background/98 backdrop-blur-xl border-t border-border/30 max-h-[calc(100vh-3.5rem)] overflow-y-auto">
+        <div className="lg:hidden animate-fade-in bg-background border-t border-border/30 max-h-[calc(100vh-3.5rem)] overflow-y-auto">
           <div className="container mx-auto px-4 sm:px-6 py-5">
             <div className="flex flex-col gap-4">
               <nav aria-label="Мобильная навигация">
@@ -277,10 +277,7 @@ const Header = () => {
                 </a>
                 <div className="flex items-center gap-3 text-muted-foreground">
                   <Clock className="w-4 h-4 text-primary flex-shrink-0" />
-                  <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${workingStatus.isOpen ? 'bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.6)]' : 'bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.6)]'}`} />
-                    <span>10:00–20:00 {workingStatus.isOpen ? '(открыто)' : '(закрыто)'}</span>
-                  </div>
+                  <span>10:00–20:00, без выходных</span>
                 </div>
                 <a href="tel:+79521142350" className="flex items-center gap-3 text-muted-foreground hover:text-foreground transition-colors">
                   <Phone className="w-4 h-4 text-primary flex-shrink-0" />
