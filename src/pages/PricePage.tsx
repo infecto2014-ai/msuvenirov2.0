@@ -1004,6 +1004,7 @@ const PricePage = () => {
             </h1>
              <p className="text-muted-foreground mt-3 sm:mt-4 max-w-3xl mx-auto text-sm sm:text-base">
                Актуальные цены на DTF-печать, широкоформатную печать, визитки, календари и сувенирную продукцию. Собственное производство — точную стоимость уточняйте у менеджера.
+               {' '}Подробнее о технологиях — в <Link to="/faq" className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">разделе FAQ</Link>.
              </p>
            </header>
 
