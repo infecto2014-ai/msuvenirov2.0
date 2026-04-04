@@ -123,10 +123,21 @@ const Header = () => {
       }, 500);
       return;
     }
-    const element = document.getElementById(targetId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setIsMobileMenuOpen(false);
+    setIsMobileMenuOpen(false);
+    const scrollToEl = () => {
+      const element = document.getElementById(targetId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+        return true;
+      }
+      return false;
+    };
+    if (!scrollToEl()) {
+      let attempts = 0;
+      const interval = setInterval(() => {
+        attempts++;
+        if (scrollToEl() || attempts >= 10) clearInterval(interval);
+      }, 200);
     }
   };
 
