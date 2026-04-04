@@ -4,7 +4,7 @@ const ContactSection = () => {
   return (
     <section id="контакты" className="relative py-16 sm:py-24 overflow-hidden" aria-label="Контактная информация">
       {/* Background with smooth transition from TrustSection */}
-      <div className="absolute inset-0 bg-muted/30 dark:bg-[hsl(260,25%,6%)]" />
+      <div className="absolute inset-0 bg-[hsl(260,25%,6%)]" />
       <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-background to-transparent" />
       
       {/* Background glow effects */}
