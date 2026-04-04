@@ -167,10 +167,7 @@ const ContactSection = () => {
                 frameBorder="0"
                 allowFullScreen
                 loading="lazy"
-                className="w-full h-full min-h-[340px] rounded-xl"
-                style={{
-                  filter: 'invert(90%) hue-rotate(180deg) contrast(1.1) saturate(0.8)',
-                }}
+                className="w-full h-full min-h-[340px] rounded-xl dark:[filter:invert(90%)_hue-rotate(180deg)_contrast(1.1)_saturate(0.8)]"
                 title="Карта проезда к Мастерской сувениров"
               />
             </div>
