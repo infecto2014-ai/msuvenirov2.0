@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -1003,6 +1004,7 @@ const PricePage = () => {
             </h1>
              <p className="text-muted-foreground mt-3 sm:mt-4 max-w-3xl mx-auto text-sm sm:text-base">
                Актуальные цены на DTF-печать, широкоформатную печать, визитки, календари и сувенирную продукцию. Собственное производство — точную стоимость уточняйте у менеджера.
+               {' '}Подробнее о технологиях — в <Link to="/faq" className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">разделе FAQ</Link>.
              </p>
            </header>
 
@@ -1031,6 +1033,12 @@ const PricePage = () => {
             >
               <span>Получить расчёт</span>
             </button>
+            <Link
+              to="/faq"
+              className="inline-block mt-4 text-sm text-primary hover:text-primary/80 underline underline-offset-4 transition-colors"
+            >
+              Частые вопросы о печати →
+            </Link>
           </div>
 
           <p className="text-center text-xs text-muted-foreground mt-8 max-w-xl mx-auto">
