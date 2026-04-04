@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import deferCss from "./vite-plugin-defer-css";
+import sitemapLastmod from "./vite-plugin-sitemap-lastmod";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -13,7 +14,7 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
   },
-  plugins: [react(), mode === "development" && componentTagger(), deferCss()].filter(Boolean),
+  plugins: [react(), mode === "development" && componentTagger(), deferCss(), sitemapLastmod()].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
