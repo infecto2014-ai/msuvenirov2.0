@@ -6,6 +6,53 @@
 
 @layer base {
   :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 10%;
+
+    --card: 0 0% 98%;
+    --card-foreground: 240 10% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 10%;
+
+    --primary: 180 80% 35%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 290 60% 45%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 220 14% 92%;
+    --muted-foreground: 220 8% 46%;
+
+    --accent: 260 50% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 87%;
+    --input: 220 13% 87%;
+    --ring: 180 80% 35%;
+
+    --radius: 0.75rem;
+
+    /* Custom neon colors — muted for light mode */
+    --neon-cyan: 180 80% 35%;
+    --neon-magenta: 300 70% 45%;
+    --neon-purple: 270 60% 50%;
+    --neon-pink: 320 70% 50%;
+
+    /* Gradients */
+    --gradient-neon: linear-gradient(135deg, hsl(var(--neon-cyan)) 0%, hsl(var(--neon-magenta)) 50%, hsl(var(--neon-purple)) 100%);
+    --gradient-glow: linear-gradient(90deg, hsl(var(--neon-cyan)) 0%, hsl(var(--neon-magenta)) 100%);
+    
+    /* Shadows */
+    --shadow-neon-cyan: 0 0 12px hsl(var(--neon-cyan) / 0.25), 0 0 24px hsl(var(--neon-cyan) / 0.15);
+    --shadow-neon-magenta: 0 0 12px hsl(var(--neon-magenta) / 0.25), 0 0 24px hsl(var(--neon-magenta) / 0.15);
+    --shadow-neon-combined: 0 0 12px hsl(var(--neon-cyan) / 0.2), 0 0 24px hsl(var(--neon-magenta) / 0.15);
+  }
+
+  .dark {
     --background: 240 20% 4%;
     --foreground: 0 0% 98%;
 
@@ -34,27 +81,16 @@
     --input: 240 10% 20%;
     --ring: 180 100% 50%;
 
-    --radius: 0.75rem;
-
     /* Custom neon colors */
     --neon-cyan: 180 100% 50%;
     --neon-magenta: 300 100% 50%;
     --neon-purple: 270 100% 60%;
     --neon-pink: 320 100% 60%;
 
-    /* Gradients */
-    --gradient-neon: linear-gradient(135deg, hsl(var(--neon-cyan)) 0%, hsl(var(--neon-magenta)) 50%, hsl(var(--neon-purple)) 100%);
-    --gradient-glow: linear-gradient(90deg, hsl(var(--neon-cyan)) 0%, hsl(var(--neon-magenta)) 100%);
-    
     /* Shadows */
     --shadow-neon-cyan: 0 0 20px hsl(var(--neon-cyan) / 0.5), 0 0 40px hsl(var(--neon-cyan) / 0.3);
     --shadow-neon-magenta: 0 0 20px hsl(var(--neon-magenta) / 0.5), 0 0 40px hsl(var(--neon-magenta) / 0.3);
     --shadow-neon-combined: 0 0 20px hsl(var(--neon-cyan) / 0.4), 0 0 40px hsl(var(--neon-magenta) / 0.3);
-  }
-
-  .dark {
-    --background: 240 20% 4%;
-    --foreground: 0 0% 98%;
   }
 }
 
@@ -66,6 +102,7 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Montserrat', sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   html {

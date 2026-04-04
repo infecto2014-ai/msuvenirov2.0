@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Menu, X, Phone, MapPin, Clock, Mail, Send } from 'lucide-react';
 import ProtectedLogo from './ProtectedLogo';
+import { ThemeToggle } from './ThemeToggle';
 
 const getWorkingStatus = () => {
   const now = new Date();
@@ -185,7 +186,7 @@ const Header = () => {
             </a>
             <a href="https://max.ru/u/f9LHodD0cOLo7HDSJw672fSH82yru_atZ9KDVODSf_2mghJHg1xe7H2qOC8" target="_blank" rel="noopener noreferrer" aria-label="MAX"
               className="h-5 w-5 flex items-center justify-center hover:opacity-80 transition-opacity">
-              <img src="/assets/logo_max.svg" alt="MAX" className="w-5 h-5 brightness-0 invert" />
+              <img src="/assets/logo_max.svg" alt="MAX" className="w-5 h-5 dark:brightness-0 dark:invert" />
             </a>
             <a href="https://vk.com/msuvenirov39" target="_blank" rel="noopener noreferrer" aria-label="ВКонтакте"
               className="h-5 w-5 flex items-center justify-center text-foreground hover:opacity-80 transition-opacity">
@@ -201,6 +202,7 @@ const Header = () => {
               </svg>
             </a>
 
+            <ThemeToggle />
             <div className="w-px h-5 bg-border/50" />
 
             <a
@@ -230,14 +232,17 @@ const Header = () => {
           >
             <ProtectedLogo height={38} />
           </a>
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden w-11 h-11 rounded-lg neon-border flex items-center justify-center flex-shrink-0"
-            aria-label={isMobileMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
-            aria-expanded={isMobileMenuOpen}
-          >
-            {isMobileMenuOpen ? <X className="w-5 h-5 text-primary" /> : <Menu className="w-5 h-5 text-primary" />}
-          </button>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="lg:hidden w-11 h-11 rounded-lg neon-border flex items-center justify-center flex-shrink-0"
+              aria-label={isMobileMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
+              aria-expanded={isMobileMenuOpen}
+            >
+              {isMobileMenuOpen ? <X className="w-5 h-5 text-primary" /> : <Menu className="w-5 h-5 text-primary" />}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -304,7 +309,7 @@ const Header = () => {
                 </a>
                 <a href="https://max.ru/u/f9LHodD0cOLo7HDSJw672fSH82yru_atZ9KDVODSf_2mghJHg1xe7H2qOC8" target="_blank" rel="noopener noreferrer" aria-label="MAX"
                   className="w-10 h-10 rounded-full neon-border flex items-center justify-center bg-background hover:opacity-80 transition-opacity">
-                  <img src="/assets/logo_max.svg" alt="MAX" className="w-5 h-5 brightness-0 invert" />
+                  <img src="/assets/logo_max.svg" alt="MAX" className="w-5 h-5 dark:brightness-0 dark:invert" />
                 </a>
                 <a href="https://vk.com/msuvenirov39" target="_blank" rel="noopener noreferrer" aria-label="ВКонтакте"
                   className="w-10 h-10 rounded-full neon-border flex items-center justify-center bg-background text-foreground hover:opacity-80 transition-opacity">
