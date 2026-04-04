@@ -33,8 +33,6 @@ if ("serviceWorker" in navigator && !isInIframe && !isPreviewHost) {
 
 createRoot(document.getElementById("root")!).render(
   <HelmetProvider>
-    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem storageKey="ms-theme">
-      <App />
-    </ThemeProvider>
+    <App />
   </HelmetProvider>
 );
