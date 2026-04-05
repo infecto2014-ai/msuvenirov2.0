@@ -26,6 +26,7 @@ const PrivacyPolicy = lazy(() => lazyRetry(() => import("./pages/PrivacyPolicy")
 const LinkInBio = lazy(() => lazyRetry(() => import("./pages/LinkInBio")));
 const PricePage = lazy(() => lazyRetry(() => import("./pages/PricePage")));
 const FAQPage = lazy(() => lazyRetry(() => import("./pages/FAQPage")));
+const DtfPrintPage = lazy(() => lazyRetry(() => import("./pages/DtfPrintPage")));
 
 const PageLoader = () => (
   <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4">
@@ -59,6 +60,7 @@ const App = () => (
           <Route path="/card" element={<LinkInBio />} />
           <Route path="/price" element={<PricePage />} />
           <Route path="/faq" element={<FAQPage />} />
+          <Route path="/dtf-print" element={<DtfPrintPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
