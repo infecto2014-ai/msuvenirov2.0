@@ -141,9 +141,6 @@ const FAQBlock = () => {
 /* ═══════════════════════ PAGE ═══════════════════════ */
 
 const FabricPrintPage = () => {
-  const scrollToForm = () => {
-    document.getElementById('fabric-form')?.scrollIntoView({ behavior: 'smooth' });
-  };
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -194,9 +191,9 @@ const FabricPrintPage = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <button onClick={scrollToForm} className="gradient-btn-pulse px-8 py-3.5 rounded-xl text-base font-bold text-background">
-              <span className="relative z-10">Рассчитать стоимость</span>
-            </button>
+            <a href="https://t.me/msuvenirov" target="_blank" rel="noopener noreferrer" className="gradient-btn-pulse px-8 py-3.5 rounded-xl text-base font-bold text-background inline-flex items-center justify-center">
+              <span className="relative z-10 flex items-center gap-2"><Send className="w-4 h-4" /> Написать в Telegram</span>
+            </a>
             <Link to="/price" className="px-8 py-3.5 rounded-xl border-2 border-primary/40 text-primary font-bold text-base hover:bg-primary/10 transition-colors text-center">
               Полный прайс-лист
             </Link>
