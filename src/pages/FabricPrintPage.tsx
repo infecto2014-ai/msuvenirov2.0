@@ -1,0 +1,487 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import {
+  Shirt, Factory, ShieldCheck, Zap, Droplets, Flame,
+  CheckCircle2, ArrowRight, ChevronDown, Send,
+} from 'lucide-react';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Input } from '@/components/ui/input';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+
+/* ═══════════════════════ DATA ═══════════════════════ */
+
+const fabricProducts = [
+  { name: 'Футболка унисекс 160–180 г/м²', price: 'от 400 ₽' },
+  { name: 'Футболка детская 160–180 г/м²', price: 'от 300 ₽' },
+  { name: 'Футболка оверсайз от 180 г/м²', price: 'от 700 ₽' },
+  { name: 'Поло', price: 'от 700 ₽' },
+  { name: 'Худи', price: 'от 1 300 ₽' },
+  { name: 'Бейсболка', price: 'от 250 ₽' },
+  { name: 'Шоппер', price: 'от 200 ₽' },
+  { name: 'Фартук', price: 'от 600 ₽' },
+];
+
+const dtfPrices = [
+  { format: 'А6', qty1: '600 ₽', qty5: '350 ₽', qty20: '280 ₽' },
+  { format: 'А5', qty1: '600 ₽', qty5: '450 ₽', qty20: '330 ₽' },
+  { format: 'А4', qty1: '900 ₽', qty5: '650 ₽', qty20: '450 ₽' },
+  { format: 'А3', qty1: '1 300 ₽', qty5: '900 ₽', qty20: '680 ₽' },
+];
+
+const methodComparison = [
+  {
+    method: 'DTF-печать',
+    icon: Flame,
+    color: 'primary',
+    pros: ['Любой цвет ткани', 'Фотореалистичная печать', 'От 1 штуки', '60+ стирок', 'Быстрое изготовление'],
+    cons: ['Ощущается на ощупь'],
+    best: 'Мелкие тиражи, сложные полноцветные дизайны, срочные заказы',
+  },
+  {
+    method: 'Сублимация',
+    icon: Droplets,
+    color: 'secondary',
+    pros: ['Принт «впечатан» в ткань', 'Не ощущается на ощупь', 'Безграничная палитра', 'Не трескается'],
+    cons: ['Только белая/светлая синтетика', 'Не подходит для хлопка'],
+    best: 'Спортивная форма, сувенирная продукция, кружки, полный запечат',
+  },
+];
+
+const steps = [
+  { num: '01', title: 'Заявка', text: 'Опишите задачу — тираж, изделие, макет' },
+  { num: '02', title: 'Расчёт', text: 'Подберём метод печати и рассчитаем стоимость' },
+  { num: '03', title: 'Макет', text: 'Согласуем дизайн или поможем создать с нуля' },
+  { num: '04', title: 'Печать', text: 'Изготовим заказ на собственном оборудовании' },
+  { num: '05', title: 'Готово', text: 'Заберите самовывозом или получите доставку' },
+];
+
+const faqItems = [
+  {
+    q: 'Какой минимальный тираж?',
+    a: 'Печатаем от 1 штуки. Нет ограничений на минимальный заказ — можно заказать даже одну футболку с уникальным дизайном.',
+  },
+  {
+    q: 'Сколько стирок выдерживает DTF-печать?',
+    a: 'При правильном уходе (стирка до 40°C наизнанку) — более 60 стирок без потери яркости и трещин.',
+  },
+  {
+    q: 'Чем DTF отличается от сублимации?',
+    a: 'DTF переносит принт плёнкой на любую ткань. Сублимация «впечатывает» краску в синтетические волокна — принт не ощущается тактильно, но работает только на белой синтетике.',
+  },
+  {
+    q: 'Можно печатать на своих изделиях?',
+    a: 'Да, вы можете привезти свои футболки, худи или шопперы. Мы нанесём принт на ваше изделие.',
+  },
+  {
+    q: 'Какой формат макета нужен?',
+    a: 'Принимаем PNG, PDF, AI, PSD, CDR. Разрешение от 300 dpi. Если макета нет — поможем с дизайном.',
+  },
+  {
+    q: 'Есть ли доставка?',
+    a: 'Да, доставляем по Калининграду и области. Также возможна отправка по России транспортными компаниями.',
+  },
+];
+
+/* ═══════════════════════ FORM ═══════════════════════ */
+
+const QuickForm = () => {
+  const { toast } = useToast();
+  const [form, setForm] = useState({ name: '', phone: '', details: '' });
+  const [sending, setSending] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.name.trim() || !form.phone.trim()) {
+      toast({ title: 'Заполните имя и телефон', variant: 'destructive' });
+      return;
+    }
+    setSending(true);
+    try {
+      const fd = new FormData();
+      fd.append('name', form.name);
+      fd.append('phone', form.phone);
+      fd.append('comment', `[Печать на ткани] ${form.details}`);
+      await supabase.functions.invoke('send-telegram', { body: fd });
+      toast({ title: 'Заявка отправлена! Свяжемся в течение часа.' });
+      setForm({ name: '', phone: '', details: '' });
+    } catch {
+      toast({ title: 'Ошибка, попробуйте позже', variant: 'destructive' });
+    } finally {
+      setSending(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <Input name="name" placeholder="Имя" value={form.name} onChange={handleChange} className="bg-background border-border" />
+        <Input name="phone" placeholder="Телефон" type="tel" value={form.phone} onChange={handleChange} className="bg-background border-border" />
+      </div>
+      <textarea
+        name="details"
+        placeholder="Тираж, изделие, пожелания..."
+        value={form.details}
+        onChange={handleChange}
+        rows={3}
+        className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary resize-none"
+      />
+      <button
+        type="submit"
+        disabled={sending}
+        className="w-full sm:w-auto px-10 py-3 rounded-xl bg-accent text-accent-foreground font-bold hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2 mx-auto sm:mx-0"
+      >
+        <Send className="w-4 h-4" />
+        {sending ? 'Отправка...' : 'Получить расчёт'}
+      </button>
+    </form>
+  );
+};
+
+/* ═══════════════════════ FAQ ═══════════════════════ */
+
+const FAQBlock = () => {
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
+
+  return (
+    <div className="space-y-3">
+      {faqItems.map((item, i) => (
+        <div key={i} className="rounded-xl border border-border bg-card overflow-hidden">
+          <button
+            onClick={() => setOpenIdx(openIdx === i ? null : i)}
+            className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-muted/30 transition-colors"
+            aria-expanded={openIdx === i}
+          >
+            <span className="font-semibold text-foreground text-sm sm:text-base pr-4">{item.q}</span>
+            <ChevronDown className={`w-5 h-5 text-muted-foreground shrink-0 transition-transform duration-300 ${openIdx === i ? 'rotate-180' : ''}`} />
+          </button>
+          <div className={`overflow-hidden transition-all duration-300 ${openIdx === i ? 'max-h-60' : 'max-h-0'}`}>
+            <p className="px-5 pb-4 text-sm text-muted-foreground leading-relaxed">{item.a}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+/* ═══════════════════════ PAGE ═══════════════════════ */
+
+const FabricPrintPage = () => {
+  const scrollToForm = () => {
+    document.getElementById('fabric-form')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Печать на ткани в Калининграде — DTF и сублимация',
+    description: 'DTF-печать и сублимация на футболках, худи, шопперах от 1 штуки. Собственное производство в Калининграде. Стойкость 60+ стирок.',
+    provider: {
+      '@type': 'LocalBusiness',
+      name: 'Мастерская сувениров',
+      address: { '@type': 'PostalAddress', addressLocality: 'Калининград', addressCountry: 'RU' },
+    },
+    areaServed: { '@type': 'City', name: 'Калининград' },
+    offers: {
+      '@type': 'AggregateOffer',
+      priceCurrency: 'RUB',
+      lowPrice: '280',
+      offerCount: fabricProducts.length,
+    },
+  };
+
+  return (
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      <Helmet>
+        <title>Печать на ткани в Калининграде — DTF и сублимация от 280 ₽ | Мастерская сувениров</title>
+        <meta name="description" content="DTF-печать и сублимация на футболках, худи, шопперах от 1 штуки. Собственное производство, стойкость 60+ стирок. Срочные заказы за 24 часа в Калининграде." />
+        <link rel="canonical" href="https://msuvenirov.ru/fabric-print" />
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      </Helmet>
+
+      <Header />
+
+      {/* ═══ HERO ═══ */}
+      <section className="relative pt-28 pb-14 sm:pt-36 sm:pb-20 overflow-hidden">
+        <div className="absolute top-1/4 left-0 w-[600px] h-[400px] bg-[hsl(var(--neon-cyan)/0.08)] rounded-full blur-[160px] pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-[500px] h-[400px] bg-[hsl(var(--neon-purple)/0.06)] rounded-full blur-[140px] pointer-events-none" />
+
+        <div className="container mx-auto px-4 sm:px-6 relative z-10 max-w-4xl text-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-xs font-semibold text-primary mb-6">
+            <Shirt className="w-3.5 h-3.5" /> Своё производство с 2019 года
+          </div>
+
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-5">
+            Печать на ткани
+            <br />
+            <span className="neon-text">в Калининграде</span>
+          </h1>
+
+          <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
+            DTF-печать и сублимация на футболках, худи, шопперах и другом текстиле. 
+            От&nbsp;1&nbsp;штуки, срочные заказы за&nbsp;24&nbsp;часа. Стойкость принта — 60+&nbsp;стирок.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <button onClick={scrollToForm} className="gradient-btn-pulse px-8 py-3.5 rounded-xl text-base font-bold text-background">
+              <span className="relative z-10">Рассчитать стоимость</span>
+            </button>
+            <Link to="/price" className="px-8 py-3.5 rounded-xl border-2 border-primary/40 text-primary font-bold text-base hover:bg-primary/10 transition-colors text-center">
+              Полный прайс-лист
+            </Link>
+          </div>
+
+          {/* Trust badges */}
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-10 text-xs sm:text-sm text-muted-foreground">
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> От 1 штуки</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> 60+ стирок</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> Срочно за 24ч</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> Своё оборудование</span>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ METHODS COMPARISON ═══ */}
+      <section className="py-14 sm:py-20">
+        <div className="container mx-auto px-4 sm:px-6 max-w-5xl">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-3">DTF vs Сублимация — какой метод выбрать?</h2>
+          <p className="text-muted-foreground text-center mb-10 max-w-2xl mx-auto text-sm sm:text-base">
+            Мы используем оба метода и подбираем оптимальный под вашу задачу
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {methodComparison.map((m) => (
+              <div key={m.method} className="rounded-2xl border border-border bg-card p-6 sm:p-7 relative overflow-hidden group hover:border-primary/30 transition-colors duration-300">
+                {/* Subtle glow on hover */}
+                <div className="absolute -top-20 -right-20 w-40 h-40 bg-[hsl(var(--neon-cyan)/0.06)] rounded-full blur-[60px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center">
+                    <m.icon className="w-5 h-5 text-primary" />
+                  </div>
+                  <h3 className="text-lg font-bold text-foreground">{m.method}</h3>
+                </div>
+
+                <div className="space-y-2 mb-4">
+                  {m.pros.map((p) => (
+                    <div key={p} className="flex items-start gap-2 text-sm">
+                      <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                      <span className="text-foreground/90">{p}</span>
+                    </div>
+                  ))}
+                  {m.cons.map((c) => (
+                    <div key={c} className="flex items-start gap-2 text-sm">
+                      <span className="w-4 h-4 flex items-center justify-center text-muted-foreground shrink-0 mt-0.5">—</span>
+                      <span className="text-muted-foreground">{c}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-auto pt-4 border-t border-border/50">
+                  <p className="text-xs text-muted-foreground">
+                    <span className="font-semibold text-foreground">Лучше всего для:</span> {m.best}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ BENEFITS ═══ */}
+      <section className="py-14 sm:py-20 relative">
+        <div className="absolute inset-0 bg-[hsl(var(--neon-cyan)/0.02)]" />
+        <div className="container mx-auto px-4 sm:px-6 max-w-5xl relative z-10">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-10">Почему печатают у нас</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {[
+              { icon: Factory, title: 'Своё производство', text: 'Печатаем в собственной мастерской — без посредников и наценок' },
+              { icon: Zap, title: 'Срочно за 24 часа', text: 'Экспресс-заказы на следующий день после утверждения макета' },
+              { icon: ShieldCheck, title: '60+ стирок', text: 'DTF-принт сохраняет яркость и эластичность десятки стирок' },
+              { icon: Shirt, title: 'От 1 штуки', text: 'Нет минимального тиража — печатаем даже единичные экземпляры' },
+            ].map((b) => (
+              <div key={b.title} className="rounded-2xl border border-border bg-card p-5 text-center hover:border-primary/30 transition-colors">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                  <b.icon className="w-6 h-6 text-primary" />
+                </div>
+                <h3 className="font-bold text-foreground text-sm mb-1.5">{b.title}</h3>
+                <p className="text-muted-foreground text-xs leading-relaxed">{b.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ FULL PRICE ═══ */}
+      <section className="py-14 sm:py-20" id="prices">
+        <div className="container mx-auto px-4 sm:px-6 max-w-5xl">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-3">Прайс-лист на печать</h2>
+          <p className="text-muted-foreground text-center mb-10 max-w-xl mx-auto text-sm">
+            Цены указаны за изделие без нанесения. Стоимость нанесения зависит от формата принта и тиража.
+          </p>
+
+          {/* Products table */}
+          <div className="rounded-2xl border border-border overflow-hidden mb-8">
+            <div className="px-5 py-3 bg-muted/30 border-b border-border">
+              <h3 className="font-bold text-foreground text-sm flex items-center gap-2">
+                <Shirt className="w-4 h-4 text-primary" /> Изделия (без нанесения)
+              </h3>
+            </div>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/20">
+                    <TableHead className="font-bold text-foreground">Наименование</TableHead>
+                    <TableHead className="font-bold text-foreground text-right">Цена</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {fabricProducts.map((item) => (
+                    <TableRow key={item.name} className="hover:bg-primary/5 transition-colors">
+                      <TableCell className="font-medium text-foreground text-sm">{item.name}</TableCell>
+                      <TableCell className="text-right whitespace-nowrap neon-text font-semibold text-sm">{item.price}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+
+          {/* DTF prices table */}
+          <div className="rounded-2xl border border-border overflow-hidden mb-8">
+            <div className="px-5 py-3 bg-muted/30 border-b border-border">
+              <h3 className="font-bold text-foreground text-sm flex items-center gap-2">
+                <Flame className="w-4 h-4 text-primary" /> Нанесение DTF-печатью
+              </h3>
+            </div>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/20">
+                    <TableHead className="font-bold text-foreground">Формат</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">1–4 шт</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">5–10 шт</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">20–50 шт</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {dtfPrices.map((row) => (
+                    <TableRow key={row.format} className="hover:bg-primary/5 transition-colors">
+                      <TableCell className="font-medium text-foreground text-sm">{row.format}</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold text-sm">{row.qty1}</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold text-sm">{row.qty5}</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold text-sm">{row.qty20}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+            <div className="px-5 py-3 bg-muted/20 border-t border-border">
+              <p className="text-xs text-muted-foreground">
+                Тираж 50+ шт — <button onClick={() => document.getElementById('fabric-form')?.scrollIntoView({ behavior: 'smooth' })} className="text-primary hover:underline font-semibold">запросите индивидуальный расчёт</button>
+              </p>
+            </div>
+          </div>
+
+          {/* Sublimation note */}
+          <div className="rounded-2xl border border-border bg-card p-5 sm:p-6">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center shrink-0 mt-0.5">
+                <Droplets className="w-5 h-5 text-secondary" />
+              </div>
+              <div>
+                <h3 className="font-bold text-foreground text-sm mb-1">Сублимация — по запросу</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Стоимость сублимационной печати зависит от площади нанесения и типа изделия. 
+                  Подходит для полного запечата, спортивной формы и синтетических тканей. 
+                  Оставьте заявку — рассчитаем за 15 минут.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ HOW IT WORKS ═══ */}
+      <section className="py-14 sm:py-20 relative">
+        <div className="absolute inset-0 bg-[hsl(var(--neon-purple)/0.02)]" />
+        <div className="container mx-auto px-4 sm:px-6 max-w-4xl relative z-10">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-10">Как мы работаем</h2>
+          <div className="space-y-0">
+            {steps.map((s, i) => (
+              <div key={s.num} className="flex gap-4 sm:gap-6">
+                {/* Timeline */}
+                <div className="flex flex-col items-center">
+                  <div className="w-10 h-10 rounded-full bg-primary/15 border-2 border-primary/40 flex items-center justify-center text-xs font-bold text-primary shrink-0">
+                    {s.num}
+                  </div>
+                  {i < steps.length - 1 && (
+                    <div className="w-px flex-1 bg-border my-1" />
+                  )}
+                </div>
+                {/* Content */}
+                <div className={`pb-8 ${i === steps.length - 1 ? 'pb-0' : ''}`}>
+                  <h3 className="font-bold text-foreground text-sm mb-1">{s.title}</h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{s.text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ FORM ═══ */}
+      <section id="fabric-form" className="py-14 sm:py-20 relative">
+        <div className="absolute inset-0 bg-[hsl(var(--neon-cyan)/0.03)]" />
+        <div className="container mx-auto px-4 sm:px-6 max-w-2xl relative z-10">
+          <div className="rounded-2xl border border-border bg-card p-6 sm:p-8">
+            <h2 className="text-xl sm:text-2xl font-bold text-center mb-2">Получить расчёт</h2>
+            <p className="text-muted-foreground text-center text-sm mb-6">
+              Опишите задачу — свяжемся и рассчитаем стоимость за 15 минут
+            </p>
+            <QuickForm />
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ FAQ ═══ */}
+      <section className="py-14 sm:py-20">
+        <div className="container mx-auto px-4 sm:px-6 max-w-3xl">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-3">Частые вопросы</h2>
+          <p className="text-muted-foreground text-center text-sm mb-8">
+            О печати на ткани, тиражах и сроках
+          </p>
+          <FAQBlock />
+        </div>
+      </section>
+
+      {/* ═══ BOTTOM CTA ═══ */}
+      <section className="py-12 sm:py-16">
+        <div className="container mx-auto px-4 sm:px-6 max-w-3xl text-center">
+          <h2 className="text-xl sm:text-2xl font-bold mb-4">Готовы заказать печать на ткани?</h2>
+          <p className="text-muted-foreground text-sm mb-6">
+            Свяжитесь с нами — подберём метод печати, рассчитаем стоимость и изготовим заказ в кратчайшие сроки
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <button onClick={scrollToForm} className="gradient-btn-pulse px-8 py-3 rounded-xl text-base font-bold text-background">
+              <span className="relative z-10">Оставить заявку</span>
+            </button>
+            <a href="https://t.me/msuvenirov" target="_blank" rel="noopener noreferrer" className="px-8 py-3 rounded-xl border-2 border-primary/40 text-primary font-bold hover:bg-primary/10 transition-colors inline-flex items-center justify-center gap-2">
+              <Send className="w-4 h-4" /> Написать в Telegram
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </div>
+  );
+};
+
+export default FabricPrintPage;
