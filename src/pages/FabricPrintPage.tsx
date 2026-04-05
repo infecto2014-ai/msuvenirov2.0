@@ -364,19 +364,6 @@ const FabricPrintPage = () => {
         </div>
       </section>
 
-      {/* ═══ FORM ═══ */}
-      <section id="fabric-form" className="py-14 sm:py-20 relative">
-        <div className="absolute inset-0 bg-[hsl(var(--neon-cyan)/0.03)]" />
-        <div className="container mx-auto px-4 sm:px-6 max-w-2xl relative z-10">
-          <div className="rounded-2xl border border-border bg-card p-6 sm:p-8">
-            <h2 className="text-xl sm:text-2xl font-bold text-center mb-2">Получить расчёт</h2>
-            <p className="text-muted-foreground text-center text-sm mb-6">
-              Опишите задачу — свяжемся и рассчитаем стоимость за 15 минут
-            </p>
-            <QuickForm />
-          </div>
-        </div>
-      </section>
 
       {/* ═══ FAQ ═══ */}
       <section className="py-14 sm:py-20">
