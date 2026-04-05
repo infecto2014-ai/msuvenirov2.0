@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
+import FabricPrintCalculator from '@/components/FabricPrintCalculator';
 import heroImg from '@/assets/fabric-print/hero.jpg';
 import dtfImg from '@/assets/fabric-print/dtf-method.jpg';
 import sublimationImg from '@/assets/fabric-print/sublimation-method.jpg';
@@ -364,6 +365,13 @@ const FabricPrintPage = () => {
         </div>
       </section>
 
+
+      {/* ═══ CALCULATOR ═══ */}
+      <section className="py-14 sm:py-20">
+        <div className="container mx-auto px-4 sm:px-6 max-w-3xl">
+          <FabricPrintCalculator />
+        </div>
+      </section>
 
       {/* ═══ FAQ ═══ */}
       <section className="py-14 sm:py-20">
