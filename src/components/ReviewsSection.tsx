@@ -148,6 +148,23 @@ const ReviewsSection = () => {
     return () => window.removeEventListener('resize', check);
   }, []);
 
+  // Attach touchmove with passive:false so we can preventDefault on horizontal swipes
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const onTouchMove = (e: TouchEvent) => {
+      touchEndX.current = e.touches[0].clientX;
+      const dx = Math.abs(touchEndX.current - touchStartX.current);
+      const dy = Math.abs(e.touches[0].clientY - touchStartY.current);
+      if (dx > 10 && dx > dy) {
+        isHorizontalSwipe.current = true;
+        e.preventDefault();
+      }
+    };
+    el.addEventListener('touchmove', onTouchMove, { passive: false });
+    return () => el.removeEventListener('touchmove', onTouchMove);
+  }, []);
+
   useEffect(() => {
     const loadReviews = async () => {
       const supabase = await import('@/integrations/supabase/client').then(m => m.supabase);
@@ -203,17 +220,29 @@ const ReviewsSection = () => {
     slideTo((currentIndex + perPage) % allReviews.length, 'right');
   }, [currentIndex, perPage, allReviews.length, slideTo]);
 
-  // Touch handlers for swipe
+  // Touch handlers for swipe — prevent vertical scroll during horizontal swipe
+  const touchStartY = useRef(0);
+  const isHorizontalSwipe = useRef(false);
+
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
     touchEndX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+    isHorizontalSwipe.current = false;
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
     touchEndX.current = e.touches[0].clientX;
+    const dx = Math.abs(touchEndX.current - touchStartX.current);
+    const dy = Math.abs(e.touches[0].clientY - touchStartY.current);
+    if (dx > 10 && dx > dy) {
+      isHorizontalSwipe.current = true;
+      e.preventDefault();
+    }
   };
 
   const handleTouchEnd = () => {
+    if (!isHorizontalSwipe.current) return;
     const diff = touchStartX.current - touchEndX.current;
     const threshold = 50;
     if (Math.abs(diff) > threshold) {
@@ -288,7 +317,6 @@ const ReviewsSection = () => {
           <div
             ref={containerRef}
             onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
             className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-2'} gap-4 sm:gap-5 transition-all duration-250 ease-out will-change-transform`}
             style={{
@@ -305,36 +333,21 @@ const ReviewsSection = () => {
 
           <ReviewModal review={selectedReview} open={!!selectedReview} onClose={() => setSelectedReview(null)} />
 
-          {/* Pagination */}
-          <div className="flex items-center justify-center gap-4 mt-6 sm:mt-8">
+          {/* Mobile arrows */}
+          <div className="flex items-center justify-center gap-4 mt-6 sm:hidden">
             <button
               onClick={handlePrev}
-              className="sm:hidden w-10 h-10 rounded-full border border-border/40 bg-card/50 flex items-center justify-center text-muted-foreground hover:text-primary transition-colors"
+              className="w-10 h-10 rounded-full border border-border/40 bg-card/50 flex items-center justify-center text-muted-foreground hover:text-primary transition-colors"
               aria-label="Предыдущий"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
-
-            <div className="flex gap-1">
-              {Array.from({ length: totalPages }).map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => { setIsAutoPlaying(false); slideTo(index * perPage, index * perPage > currentIndex ? 'right' : 'left'); }}
-                  className="relative flex items-center justify-center min-w-[44px] min-h-[44px]"
-                  aria-label={`Страница ${index + 1}`}
-                >
-                  <span className={`block rounded-full transition-all duration-300 ${
-                    activePage === index
-                      ? 'w-8 h-2.5 bg-primary shadow-[0_0_12px_hsl(var(--primary)/0.5)]'
-                      : 'w-2.5 h-2.5 bg-muted-foreground/25 hover:bg-muted-foreground/40'
-                  }`} />
-                </button>
-              ))}
-            </div>
-
+            <span className="text-sm text-muted-foreground tabular-nums">
+              {currentIndex + 1} / {allReviews.length}
+            </span>
             <button
               onClick={handleNext}
-              className="sm:hidden w-10 h-10 rounded-full border border-border/40 bg-card/50 flex items-center justify-center text-muted-foreground hover:text-primary transition-colors"
+              className="w-10 h-10 rounded-full border border-border/40 bg-card/50 flex items-center justify-center text-muted-foreground hover:text-primary transition-colors"
               aria-label="Следующий"
             >
               <ChevronRight className="w-5 h-5" />
