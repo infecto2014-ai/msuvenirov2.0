@@ -156,7 +156,7 @@ const FabricPrintPage = () => {
       address: { '@type': 'PostalAddress', addressLocality: 'Калининград', addressCountry: 'RU' },
     },
     areaServed: { '@type': 'City', name: 'Калининград' },
-    offers: { '@type': 'AggregateOffer', priceCurrency: 'RUB', lowPrice: '280', offerCount: fabricProducts.length },
+    offers: { '@type': 'AggregateOffer', priceCurrency: 'RUB', lowPrice: '280', offerCount: 9 },
   };
 
   return (
