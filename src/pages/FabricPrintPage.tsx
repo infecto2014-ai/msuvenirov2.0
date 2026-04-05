@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import {
-  Shirt, Factory, ShieldCheck, Zap, Droplets, Flame,
-  CheckCircle2, ArrowRight, ChevronDown, Send,
+  Shirt, Flame, Droplets,
+  CheckCircle2, ChevronDown, Send,
 } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -11,6 +11,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Input } from '@/components/ui/input';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+
+import heroImg from '@/assets/fabric-print/hero.jpg';
+import dtfImg from '@/assets/fabric-print/dtf-method.jpg';
+import sublimationImg from '@/assets/fabric-print/sublimation-method.jpg';
 
 /* ═══════════════════════ DATA ═══════════════════════ */
 
@@ -36,7 +40,7 @@ const methodComparison = [
   {
     method: 'DTF-печать',
     icon: Flame,
-    color: 'primary',
+    image: dtfImg,
     pros: ['Любой цвет ткани', 'Фотореалистичная печать', 'От 1 штуки', '60+ стирок', 'Быстрое изготовление'],
     cons: ['Ощущается на ощупь'],
     best: 'Мелкие тиражи, сложные полноцветные дизайны, срочные заказы',
@@ -44,46 +48,20 @@ const methodComparison = [
   {
     method: 'Сублимация',
     icon: Droplets,
-    color: 'secondary',
+    image: sublimationImg,
     pros: ['Принт «впечатан» в ткань', 'Не ощущается на ощупь', 'Безграничная палитра', 'Не трескается'],
     cons: ['Только белая/светлая синтетика', 'Не подходит для хлопка'],
     best: 'Спортивная форма, сувенирная продукция, кружки, полный запечат',
   },
 ];
 
-const steps = [
-  { num: '01', title: 'Заявка', text: 'Опишите задачу — тираж, изделие, макет' },
-  { num: '02', title: 'Расчёт', text: 'Подберём метод печати и рассчитаем стоимость' },
-  { num: '03', title: 'Макет', text: 'Согласуем дизайн или поможем создать с нуля' },
-  { num: '04', title: 'Печать', text: 'Изготовим заказ на собственном оборудовании' },
-  { num: '05', title: 'Готово', text: 'Заберите самовывозом или получите доставку' },
-];
-
 const faqItems = [
-  {
-    q: 'Какой минимальный тираж?',
-    a: 'Печатаем от 1 штуки. Нет ограничений на минимальный заказ — можно заказать даже одну футболку с уникальным дизайном.',
-  },
-  {
-    q: 'Сколько стирок выдерживает DTF-печать?',
-    a: 'При правильном уходе (стирка до 40°C наизнанку) — более 60 стирок без потери яркости и трещин.',
-  },
-  {
-    q: 'Чем DTF отличается от сублимации?',
-    a: 'DTF переносит принт плёнкой на любую ткань. Сублимация «впечатывает» краску в синтетические волокна — принт не ощущается тактильно, но работает только на белой синтетике.',
-  },
-  {
-    q: 'Можно печатать на своих изделиях?',
-    a: 'Да, вы можете привезти свои футболки, худи или шопперы. Мы нанесём принт на ваше изделие.',
-  },
-  {
-    q: 'Какой формат макета нужен?',
-    a: 'Принимаем PNG, PDF, AI, PSD, CDR. Разрешение от 300 dpi. Если макета нет — поможем с дизайном.',
-  },
-  {
-    q: 'Есть ли доставка?',
-    a: 'Да, доставляем по Калининграду и области. Также возможна отправка по России транспортными компаниями.',
-  },
+  { q: 'Какой минимальный тираж?', a: 'Печатаем от 1 штуки. Нет ограничений на минимальный заказ — можно заказать даже одну футболку с уникальным дизайном.' },
+  { q: 'Сколько стирок выдерживает DTF-печать?', a: 'При правильном уходе (стирка до 40°C наизнанку) — более 60 стирок без потери яркости и трещин.' },
+  { q: 'Чем DTF отличается от сублимации?', a: 'DTF переносит принт плёнкой на любую ткань. Сублимация «впечатывает» краску в синтетические волокна — принт не ощущается тактильно, но работает только на белой синтетике.' },
+  { q: 'Можно печатать на своих изделиях?', a: 'Да, вы можете привезти свои футболки, худи или шопперы. Мы нанесём принт на ваше изделие.' },
+  { q: 'Какой формат макета нужен?', a: 'Принимаем PNG, PDF, AI, PSD, CDR. Разрешение от 300 dpi. Если макета нет — поможем с дизайном.' },
+  { q: 'Есть ли доставка?', a: 'Да, доставляем по Калининграду и области. Также возможна отправка по России транспортными компаниями.' },
 ];
 
 /* ═══════════════════════ FORM ═══════════════════════ */
@@ -148,7 +126,6 @@ const QuickForm = () => {
 
 const FAQBlock = () => {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
-
   return (
     <div className="space-y-3">
       {faqItems.map((item, i) => (
@@ -188,12 +165,7 @@ const FabricPrintPage = () => {
       address: { '@type': 'PostalAddress', addressLocality: 'Калининград', addressCountry: 'RU' },
     },
     areaServed: { '@type': 'City', name: 'Калининград' },
-    offers: {
-      '@type': 'AggregateOffer',
-      priceCurrency: 'RUB',
-      lowPrice: '280',
-      offerCount: fabricProducts.length,
-    },
+    offers: { '@type': 'AggregateOffer', priceCurrency: 'RUB', lowPrice: '280', offerCount: fabricProducts.length },
   };
 
   return (
@@ -208,9 +180,11 @@ const FabricPrintPage = () => {
       <Header />
 
       {/* ═══ HERO ═══ */}
-      <section className="relative pt-28 pb-14 sm:pt-36 sm:pb-20 overflow-hidden">
-        <div className="absolute top-1/4 left-0 w-[600px] h-[400px] bg-[hsl(var(--neon-cyan)/0.08)] rounded-full blur-[160px] pointer-events-none" />
-        <div className="absolute bottom-0 right-0 w-[500px] h-[400px] bg-[hsl(var(--neon-purple)/0.06)] rounded-full blur-[140px] pointer-events-none" />
+      <section className="relative pt-24 pb-12 sm:pt-32 sm:pb-16 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img src={heroImg} alt="DTF-печать на футболке" className="w-full h-full object-cover opacity-20" loading="eager" fetchPriority="high" width={1280} height={720} />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
+        </div>
 
         <div className="container mx-auto px-4 sm:px-6 relative z-10 max-w-4xl text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-xs font-semibold text-primary mb-6">
@@ -224,7 +198,7 @@ const FabricPrintPage = () => {
           </h1>
 
           <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
-            DTF-печать и сублимация на футболках, худи, шопперах и другом текстиле. 
+            DTF-печать и сублимация на футболках, худи, шопперах и другом текстиле.
             От&nbsp;1&nbsp;штуки, срочные заказы за&nbsp;24&nbsp;часа. Стойкость принта — 60+&nbsp;стирок.
           </p>
 
@@ -237,7 +211,6 @@ const FabricPrintPage = () => {
             </Link>
           </div>
 
-          {/* Trust badges */}
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-10 text-xs sm:text-sm text-muted-foreground">
             <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> От 1 штуки</span>
             <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> 60+ стирок</span>
@@ -257,61 +230,47 @@ const FabricPrintPage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {methodComparison.map((m) => (
-              <div key={m.method} className="rounded-2xl border border-border bg-card p-6 sm:p-7 relative overflow-hidden group hover:border-primary/30 transition-colors duration-300">
-                {/* Subtle glow on hover */}
-                <div className="absolute -top-20 -right-20 w-40 h-40 bg-[hsl(var(--neon-cyan)/0.06)] rounded-full blur-[60px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
-                <div className="flex items-center gap-3 mb-5">
-                  <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center">
-                    <m.icon className="w-5 h-5 text-primary" />
+              <div key={m.method} className="rounded-2xl border border-border bg-card overflow-hidden group hover:border-primary/30 transition-colors duration-300">
+                {/* Method image */}
+                <div className="aspect-[16/10] overflow-hidden relative">
+                  <img
+                    src={m.image}
+                    alt={`${m.method} — процесс печати`}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                    width={640}
+                    height={640}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
+                  <div className="absolute bottom-3 left-4 flex items-center gap-2">
+                    <div className="w-9 h-9 rounded-lg bg-background/80 backdrop-blur-sm flex items-center justify-center">
+                      <m.icon className="w-4 h-4 text-primary" />
+                    </div>
+                    <h3 className="text-lg font-bold text-foreground drop-shadow-lg">{m.method}</h3>
                   </div>
-                  <h3 className="text-lg font-bold text-foreground">{m.method}</h3>
                 </div>
 
-                <div className="space-y-2 mb-4">
-                  {m.pros.map((p) => (
-                    <div key={p} className="flex items-start gap-2 text-sm">
-                      <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 shrink-0" />
-                      <span className="text-foreground/90">{p}</span>
-                    </div>
-                  ))}
-                  {m.cons.map((c) => (
-                    <div key={c} className="flex items-start gap-2 text-sm">
-                      <span className="w-4 h-4 flex items-center justify-center text-muted-foreground shrink-0 mt-0.5">—</span>
-                      <span className="text-muted-foreground">{c}</span>
-                    </div>
-                  ))}
+                <div className="p-5 sm:p-6">
+                  <div className="space-y-2 mb-4">
+                    {m.pros.map((p) => (
+                      <div key={p} className="flex items-start gap-2 text-sm">
+                        <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                        <span className="text-foreground/90">{p}</span>
+                      </div>
+                    ))}
+                    {m.cons.map((c) => (
+                      <div key={c} className="flex items-start gap-2 text-sm">
+                        <span className="w-4 h-4 flex items-center justify-center text-muted-foreground shrink-0 mt-0.5">—</span>
+                        <span className="text-muted-foreground">{c}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="pt-4 border-t border-border/50">
+                    <p className="text-xs text-muted-foreground">
+                      <span className="font-semibold text-foreground">Лучше всего для:</span> {m.best}
+                    </p>
+                  </div>
                 </div>
-
-                <div className="mt-auto pt-4 border-t border-border/50">
-                  <p className="text-xs text-muted-foreground">
-                    <span className="font-semibold text-foreground">Лучше всего для:</span> {m.best}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ BENEFITS ═══ */}
-      <section className="py-14 sm:py-20 relative">
-        <div className="absolute inset-0 bg-[hsl(var(--neon-cyan)/0.02)]" />
-        <div className="container mx-auto px-4 sm:px-6 max-w-5xl relative z-10">
-          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-10">Почему печатают у нас</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {[
-              { icon: Factory, title: 'Своё производство', text: 'Печатаем в собственной мастерской — без посредников и наценок' },
-              { icon: Zap, title: 'Срочно за 24 часа', text: 'Экспресс-заказы на следующий день после утверждения макета' },
-              { icon: ShieldCheck, title: '60+ стирок', text: 'DTF-принт сохраняет яркость и эластичность десятки стирок' },
-              { icon: Shirt, title: 'От 1 штуки', text: 'Нет минимального тиража — печатаем даже единичные экземпляры' },
-            ].map((b) => (
-              <div key={b.title} className="rounded-2xl border border-border bg-card p-5 text-center hover:border-primary/30 transition-colors">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                  <b.icon className="w-6 h-6 text-primary" />
-                </div>
-                <h3 className="font-bold text-foreground text-sm mb-1.5">{b.title}</h3>
-                <p className="text-muted-foreground text-xs leading-relaxed">{b.text}</p>
               </div>
             ))}
           </div>
@@ -326,7 +285,6 @@ const FabricPrintPage = () => {
             Цены указаны за изделие без нанесения. Стоимость нанесения зависит от формата принта и тиража.
           </p>
 
-          {/* Products table */}
           <div className="rounded-2xl border border-border overflow-hidden mb-8">
             <div className="px-5 py-3 bg-muted/30 border-b border-border">
               <h3 className="font-bold text-foreground text-sm flex items-center gap-2">
@@ -353,7 +311,6 @@ const FabricPrintPage = () => {
             </div>
           </div>
 
-          {/* DTF prices table */}
           <div className="rounded-2xl border border-border overflow-hidden mb-8">
             <div className="px-5 py-3 bg-muted/30 border-b border-border">
               <h3 className="font-bold text-foreground text-sm flex items-center gap-2">
@@ -384,12 +341,11 @@ const FabricPrintPage = () => {
             </div>
             <div className="px-5 py-3 bg-muted/20 border-t border-border">
               <p className="text-xs text-muted-foreground">
-                Тираж 50+ шт — <button onClick={() => document.getElementById('fabric-form')?.scrollIntoView({ behavior: 'smooth' })} className="text-primary hover:underline font-semibold">запросите индивидуальный расчёт</button>
+                Тираж 50+ шт — <button onClick={scrollToForm} className="text-primary hover:underline font-semibold">запросите индивидуальный расчёт</button>
               </p>
             </div>
           </div>
 
-          {/* Sublimation note */}
           <div className="rounded-2xl border border-border bg-card p-5 sm:p-6">
             <div className="flex items-start gap-3">
               <div className="w-10 h-10 rounded-xl bg-secondary/10 flex items-center justify-center shrink-0 mt-0.5">
@@ -398,40 +354,12 @@ const FabricPrintPage = () => {
               <div>
                 <h3 className="font-bold text-foreground text-sm mb-1">Сублимация — по запросу</h3>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Стоимость сублимационной печати зависит от площади нанесения и типа изделия. 
-                  Подходит для полного запечата, спортивной формы и синтетических тканей. 
+                  Стоимость сублимационной печати зависит от площади нанесения и типа изделия.
+                  Подходит для полного запечата, спортивной формы и синтетических тканей.
                   Оставьте заявку — рассчитаем за 15 минут.
                 </p>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══ HOW IT WORKS ═══ */}
-      <section className="py-14 sm:py-20 relative">
-        <div className="absolute inset-0 bg-[hsl(var(--neon-purple)/0.02)]" />
-        <div className="container mx-auto px-4 sm:px-6 max-w-4xl relative z-10">
-          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-10">Как мы работаем</h2>
-          <div className="space-y-0">
-            {steps.map((s, i) => (
-              <div key={s.num} className="flex gap-4 sm:gap-6">
-                {/* Timeline */}
-                <div className="flex flex-col items-center">
-                  <div className="w-10 h-10 rounded-full bg-primary/15 border-2 border-primary/40 flex items-center justify-center text-xs font-bold text-primary shrink-0">
-                    {s.num}
-                  </div>
-                  {i < steps.length - 1 && (
-                    <div className="w-px flex-1 bg-border my-1" />
-                  )}
-                </div>
-                {/* Content */}
-                <div className={`pb-8 ${i === steps.length - 1 ? 'pb-0' : ''}`}>
-                  <h3 className="font-bold text-foreground text-sm mb-1">{s.title}</h3>
-                  <p className="text-xs text-muted-foreground leading-relaxed">{s.text}</p>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
@@ -454,9 +382,7 @@ const FabricPrintPage = () => {
       <section className="py-14 sm:py-20">
         <div className="container mx-auto px-4 sm:px-6 max-w-3xl">
           <h2 className="text-2xl sm:text-3xl font-bold text-center mb-3">Частые вопросы</h2>
-          <p className="text-muted-foreground text-center text-sm mb-8">
-            О печати на ткани, тиражах и сроках
-          </p>
+          <p className="text-muted-foreground text-center text-sm mb-8">О печати на ткани, тиражах и сроках</p>
           <FAQBlock />
         </div>
       </section>
