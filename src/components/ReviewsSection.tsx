@@ -342,9 +342,6 @@ const ReviewsSection = () => {
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
-            <span className="text-sm text-muted-foreground tabular-nums">
-              {currentIndex + 1} / {allReviews.length}
-            </span>
             <button
               onClick={handleNext}
               className="w-10 h-10 rounded-full border border-border/40 bg-card/50 flex items-center justify-center text-muted-foreground hover:text-primary transition-colors"
