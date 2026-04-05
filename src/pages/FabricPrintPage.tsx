@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
+import FabricPrintCalculator from '@/components/FabricPrintCalculator';
 import heroImg from '@/assets/fabric-print/hero.jpg';
 import dtfImg from '@/assets/fabric-print/dtf-method.jpg';
 import sublimationImg from '@/assets/fabric-print/sublimation-method.jpg';
@@ -365,6 +366,13 @@ const FabricPrintPage = () => {
       </section>
 
 
+      {/* ═══ CALCULATOR ═══ */}
+      <section className="py-14 sm:py-20">
+        <div className="container mx-auto px-4 sm:px-6 max-w-3xl">
+          <FabricPrintCalculator />
+        </div>
+      </section>
+
       {/* ═══ FAQ ═══ */}
       <section className="py-14 sm:py-20">
         <div className="container mx-auto px-4 sm:px-6 max-w-3xl">
@@ -382,11 +390,8 @@ const FabricPrintPage = () => {
             Свяжитесь с нами — подберём метод печати, рассчитаем стоимость и изготовим заказ в кратчайшие сроки
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <button onClick={scrollToForm} className="gradient-btn-pulse px-8 py-3 rounded-xl text-base font-bold text-background">
-              <span className="relative z-10">Оставить заявку</span>
-            </button>
-            <a href="https://t.me/msuvenirov" target="_blank" rel="noopener noreferrer" className="px-8 py-3 rounded-xl border-2 border-primary/40 text-primary font-bold hover:bg-primary/10 transition-colors inline-flex items-center justify-center gap-2">
-              <Send className="w-4 h-4" /> Написать в Telegram
+            <a href="https://t.me/msuvenirov" target="_blank" rel="noopener noreferrer" className="gradient-btn-pulse px-8 py-3 rounded-xl text-base font-bold text-background inline-flex items-center justify-center gap-2">
+              <span className="relative z-10 flex items-center gap-2"><Send className="w-4 h-4" /> Написать в Telegram</span>
             </a>
           </div>
         </div>
