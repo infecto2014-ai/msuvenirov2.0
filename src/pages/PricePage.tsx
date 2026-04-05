@@ -1035,7 +1035,7 @@ const PricePage = () => {
             </button>
             <Link
               to="/faq"
-              className="inline-block mt-4 text-sm text-primary hover:text-primary/80 underline underline-offset-4 transition-colors"
+              className="inline-block mt-6 text-sm text-primary hover:text-primary/80 underline underline-offset-4 transition-colors"
             >
               Частые вопросы о печати →
             </Link>
