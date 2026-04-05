@@ -1,6 +1,31 @@
+import { useEffect, useRef, useState } from 'react';
 import { MapPin, Phone, Mail, Send, Clock } from 'lucide-react';
 
 const ContactSection = () => {
+  const [isMapInteractive, setIsMapInteractive] = useState(false);
+  const mapInteractionTimeoutRef = useRef<number | null>(null);
+
+  const handleMapActivation = () => {
+    setIsMapInteractive(true);
+
+    if (mapInteractionTimeoutRef.current !== null) {
+      window.clearTimeout(mapInteractionTimeoutRef.current);
+    }
+
+    mapInteractionTimeoutRef.current = window.setTimeout(() => {
+      setIsMapInteractive(false);
+      mapInteractionTimeoutRef.current = null;
+    }, 3000);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (mapInteractionTimeoutRef.current !== null) {
+        window.clearTimeout(mapInteractionTimeoutRef.current);
+      }
+    };
+  }, []);
+
   return (
     <section id="контакты" className="relative py-16 sm:py-24 overflow-hidden" aria-label="Контактная информация">
       {/* Background with smooth transition from TrustSection */}
@@ -160,17 +185,20 @@ const ContactSection = () => {
               }}
             />
             <div className="relative glass-card p-2 rounded-2xl overflow-hidden w-full min-h-[350px] lg:min-h-0">
-              {/* Overlay to block touch scroll on mobile */}
-              <div
-                className="absolute inset-0 z-10 lg:hidden"
-                onClick={() => {
-                  const iframe = document.querySelector<HTMLIFrameElement>('#map-iframe');
-                  if (iframe) {
-                    iframe.style.pointerEvents = 'auto';
-                    setTimeout(() => { iframe.style.pointerEvents = 'none'; }, 3000);
-                  }
-                }}
-              />
+              <button
+                type="button"
+                className={`absolute inset-0 z-10 flex items-end justify-center rounded-2xl bg-gradient-to-t from-background/50 via-background/10 to-transparent p-4 transition-opacity duration-300 lg:hidden ${
+                  isMapInteractive ? 'pointer-events-none opacity-0' : 'pointer-events-auto opacity-100'
+                }`}
+                style={{ touchAction: 'pan-y' }}
+                onClick={handleMapActivation}
+                aria-label="Активировать карту на 3 секунды"
+              >
+                <span className="rounded-full border border-border/50 bg-background/80 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-foreground shadow-lg backdrop-blur-sm">
+                  Нажмите, чтобы двигать карту
+                </span>
+              </button>
+
               <iframe
                 id="map-iframe"
                 src="https://yandex.ru/map-widget/v1/?um=constructor%3A8c8d9e8d5c8e8d5c8e8d5c8e8d5c8e8d&amp;source=constructor&ll=20.487384%2C54.737514&z=16&pt=20.487384,54.737514,pm2rdm"
@@ -179,7 +207,9 @@ const ContactSection = () => {
                 frameBorder="0"
                 allowFullScreen
                 loading="lazy"
-                className="w-full h-full min-h-[340px] rounded-xl pointer-events-none lg:pointer-events-auto"
+                className={`w-full h-full min-h-[340px] rounded-xl ${
+                  isMapInteractive ? 'pointer-events-auto' : 'pointer-events-none'
+                } lg:pointer-events-auto`}
                 style={{ filter: 'invert(90%) hue-rotate(180deg) contrast(1.1) saturate(0.8)' }}
                 title="Карта проезда к Мастерской сувениров"
               />
