@@ -125,6 +125,8 @@ const Header = () => {
       return;
     }
     setIsMobileMenuOpen(false);
+    // Force all lazy sections to render immediately
+    forceLoadAllSections();
     const scrollToEl = () => {
       const element = document.getElementById(targetId);
       if (element) {
@@ -134,24 +136,11 @@ const Header = () => {
       return false;
     };
     if (!scrollToEl()) {
-      // Element not in DOM yet (lazy-loaded). Scroll down progressively
-      // to trigger IntersectionObserver and force lazy sections to render.
       let attempts = 0;
-      const docHeight = document.documentElement.scrollHeight;
       const interval = setInterval(() => {
         attempts++;
-        if (scrollToEl()) {
-          clearInterval(interval);
-          return;
-        }
-        if (attempts >= 20) {
-          clearInterval(interval);
-          return;
-        }
-        // Scroll further down each attempt to trigger lazy loading
-        const progress = attempts / 20;
-        window.scrollTo({ top: docHeight * progress, behavior: 'auto' });
-      }, 150);
+        if (scrollToEl() || attempts >= 15) clearInterval(interval);
+      }, 100);
     }
   };
 
