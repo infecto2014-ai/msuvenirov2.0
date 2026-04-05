@@ -1,21 +1,38 @@
 import { useState, useRef, useEffect } from 'react';
 
+/** Force all lazy sections to render immediately */
+let forceAllVisible = false;
+const listeners = new Set<() => void>();
+
+export function forceLoadAllSections() {
+  forceAllVisible = true;
+  listeners.forEach((cb) => cb());
+}
+
 /**
  * Returns [ref, isVisible] — the section renders only when
- * it enters (or is about to enter) the viewport.
+ * it enters (or is about to enter) the viewport,
+ * or when forceLoadAllSections() is called.
  */
 export function useLazySection(rootMargin = '200px') {
   const ref = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(forceAllVisible);
 
   useEffect(() => {
+    if (isVisible) return;
+
+    const show = () => setIsVisible(true);
+
+    // Listen for force-load event
+    listeners.add(show);
+
     const el = ref.current;
-    if (!el) return;
+    if (!el) return () => { listeners.delete(show); };
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true);
+          show();
           observer.disconnect();
         }
       },
@@ -23,8 +40,11 @@ export function useLazySection(rootMargin = '200px') {
     );
 
     observer.observe(el);
-    return () => observer.disconnect();
-  }, [rootMargin]);
+    return () => {
+      observer.disconnect();
+      listeners.delete(show);
+    };
+  }, [rootMargin, isVisible]);
 
   return [ref, isVisible] as const;
 }
