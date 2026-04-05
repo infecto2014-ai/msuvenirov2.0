@@ -1,7 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight, Star, Quote, ArrowRight, ExternalLink, X } from 'lucide-react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { ChevronLeft, ChevronRight, Star, Quote, ArrowRight, ExternalLink } from 'lucide-react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
-
 
 const YANDEX_MAPS_URL = 'https://yandex.ru/maps/org/masterskaya_suvenirov/105530576058/?ll=20.487454%2C54.737492&z=17';
 
@@ -18,8 +17,6 @@ const staticReviews = [
   { id: 's10', name: 'В. Кириллов', content: 'Договорились о встрече. На месте подробно рассказали о разных методах печати с их плюсами и минусами. Доработали мою картинку под задание. Напечатали за 15 минут! Очень рад что обратился в это место! Компетентная общительная девушка! Я очень доволен результатом!', rating: 5, avatar: 'В' },
   { id: 's11', name: 'М. Лебедева', content: 'Спасибо большое! Заказ выполнили на высшем уровне! Очень круто, что на месте помогаете с деталями и не только). Рекомендую всем, кому важно качество!', rating: 5, avatar: 'М' },
 ];
-
-const TEXT_THRESHOLD = 120;
 
 interface Review {
   id: string;
@@ -80,7 +77,7 @@ const ReviewCard = ({ review, onReadMore }: { review: Review; onReadMore: (revie
   }, [review.content]);
 
   return (
-    <div className="bg-card border border-border/40 rounded-2xl p-5 sm:p-6 flex flex-col h-[300px] hover:border-primary/20 transition-all duration-300">
+    <div className="bg-card border border-border/40 rounded-2xl p-5 sm:p-6 flex flex-col h-[300px] hover:border-primary/20 transition-all duration-300 select-none">
       <Quote className="w-5 h-5 text-primary/20 mb-3 flex-shrink-0" />
 
       <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
@@ -132,12 +129,24 @@ const ReviewCard = ({ review, onReadMore }: { review: Review; onReadMore: (revie
 
 const ReviewsSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [nextIndex, setNextIndex] = useState<number | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right');
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [allReviews, setAllReviews] = useState<Review[]>(staticReviews);
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Touch swipe state
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640);
+    check();
+    window.addEventListener('resize', check, { passive: true });
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   useEffect(() => {
     const loadReviews = async () => {
@@ -162,52 +171,71 @@ const ReviewsSection = () => {
     loadReviews();
   }, []);
 
-  const slideTo = (newIndex: number, direction: 'left' | 'right' = 'right') => {
+  const perPage = isMobile ? 1 : 2;
+
+  const slideTo = useCallback((newIndex: number, direction: 'left' | 'right' = 'right') => {
     if (isTransitioning) return;
     setSlideDirection(direction);
     setIsTransitioning(true);
     setTimeout(() => {
       setCurrentIndex(newIndex);
-      setNextIndex(newIndex);
       setIsTransitioning(false);
-      setTimeout(() => setNextIndex(null), 350);
-    }, 300);
-  };
+    }, 250);
+  }, [isTransitioning]);
 
   useEffect(() => {
     if (!isAutoPlaying) return;
     const interval = setInterval(() => {
-      const next = (currentIndex + 2) % allReviews.length;
+      const next = (currentIndex + perPage) % allReviews.length;
       slideTo(next);
     }, 5000);
     return () => clearInterval(interval);
-  }, [isAutoPlaying, allReviews.length, currentIndex, isTransitioning]);
+  }, [isAutoPlaying, allReviews.length, currentIndex, isTransitioning, perPage, slideTo]);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     setIsAutoPlaying(false);
-    slideTo(currentIndex <= 1 ? allReviews.length - 2 : currentIndex - 2, 'left');
+    const prev = currentIndex - perPage < 0 ? allReviews.length - perPage : currentIndex - perPage;
+    slideTo(prev, 'left');
+  }, [currentIndex, perPage, allReviews.length, slideTo]);
+
+  const handleNext = useCallback(() => {
+    setIsAutoPlaying(false);
+    slideTo((currentIndex + perPage) % allReviews.length, 'right');
+  }, [currentIndex, perPage, allReviews.length, slideTo]);
+
+  // Touch handlers for swipe
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchEndX.current = e.touches[0].clientX;
   };
 
-  const handleNext = () => {
-    setIsAutoPlaying(false);
-    slideTo((currentIndex + 2) % allReviews.length, 'right');
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
   };
 
-  const displayIndex = nextIndex !== null ? nextIndex : currentIndex;
-  const visibleReviews = [
-    allReviews[displayIndex % allReviews.length],
-    allReviews[(displayIndex + 1) % allReviews.length],
-  ];
-  const totalPages = Math.ceil(allReviews.length / 2);
-  const activePage = Math.floor(displayIndex / 2);
+  const handleTouchEnd = () => {
+    const diff = touchStartX.current - touchEndX.current;
+    const threshold = 50;
+    if (Math.abs(diff) > threshold) {
+      if (diff > 0) {
+        handleNext();
+      } else {
+        handlePrev();
+      }
+    }
+  };
+
+  const visibleReviews = Array.from({ length: perPage }, (_, i) =>
+    allReviews[(currentIndex + i) % allReviews.length]
+  );
+  const totalPages = Math.ceil(allReviews.length / perPage);
+  const activePage = Math.floor(currentIndex / perPage) % totalPages;
 
   return (
     <section id="отзывы" className="py-16 sm:py-24 relative overflow-hidden" aria-label="Отзывы клиентов">
-      {/* Background */}
       <div className="absolute inset-0" />
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
-        {/* Header */}
         <h2 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-foreground mb-8 sm:mb-10">
           Отзывы наших клиентов
         </h2>
@@ -239,7 +267,7 @@ const ReviewsSection = () => {
 
         {/* Carousel */}
         <div className="max-w-4xl mx-auto relative">
-          {/* Side Arrows */}
+          {/* Desktop side arrows */}
           <button
             onClick={handlePrev}
             className="hidden sm:flex absolute -left-14 lg:-left-16 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-border/40 bg-card/50 backdrop-blur-sm items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 transition-all duration-300 z-10"
@@ -256,16 +284,18 @@ const ReviewsSection = () => {
             <ChevronRight className="w-6 h-6" />
           </button>
 
-          {/* Cards */}
+          {/* Cards with swipe support */}
           <div
-            className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 transition-all duration-300 ease-out will-change-transform"
+            ref={containerRef}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-2'} gap-4 sm:gap-5 transition-all duration-250 ease-out will-change-transform`}
             style={{
               opacity: isTransitioning ? 0 : 1,
               transform: isTransitioning
-                ? `translate3d(${slideDirection === 'right' ? '-40px' : '40px'}, 0, 0)`
-                : nextIndex !== null
-                  ? 'translate3d(0, 0, 0)'
-                  : 'translate3d(0, 0, 0)',
+                ? `translate3d(${slideDirection === 'right' ? '-30px' : '30px'}, 0, 0)`
+                : 'translate3d(0, 0, 0)',
             }}
           >
             {visibleReviews.map((review) => (
@@ -275,7 +305,7 @@ const ReviewsSection = () => {
 
           <ReviewModal review={selectedReview} open={!!selectedReview} onClose={() => setSelectedReview(null)} />
 
-          {/* Mobile arrows + Pagination */}
+          {/* Pagination */}
           <div className="flex items-center justify-center gap-4 mt-6 sm:mt-8">
             <button
               onClick={handlePrev}
@@ -289,7 +319,7 @@ const ReviewsSection = () => {
               {Array.from({ length: totalPages }).map((_, index) => (
                 <button
                   key={index}
-                  onClick={() => { setIsAutoPlaying(false); slideTo(index * 2, index * 2 > currentIndex ? 'right' : 'left'); }}
+                  onClick={() => { setIsAutoPlaying(false); slideTo(index * perPage, index * perPage > currentIndex ? 'right' : 'left'); }}
                   className="relative flex items-center justify-center min-w-[44px] min-h-[44px]"
                   aria-label={`Страница ${index + 1}`}
                 >
