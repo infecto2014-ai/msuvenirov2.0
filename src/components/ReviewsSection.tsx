@@ -300,7 +300,6 @@ const ReviewsSection = () => {
           <div
             ref={containerRef}
             onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
             className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-2'} gap-4 sm:gap-5 transition-all duration-250 ease-out will-change-transform`}
             style={{
