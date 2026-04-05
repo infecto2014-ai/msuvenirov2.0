@@ -189,7 +189,7 @@ const FabricPrintPage = () => {
 
         <div className="container mx-auto px-4 sm:px-6 relative z-10 max-w-4xl text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-xs font-semibold text-primary mb-6">
-            <Shirt className="w-3.5 h-3.5" /> Своё производство с 2019 года
+            <Shirt className="w-3.5 h-3.5" /> Опыт более 10 лет. Собственное производство
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-5">
@@ -286,29 +286,28 @@ const FabricPrintPage = () => {
             Цены указаны за изделие без нанесения. Стоимость нанесения зависит от формата принта и тиража.
           </p>
 
-          <div className="rounded-2xl border border-border overflow-hidden mb-8">
-            <div className="px-5 py-3 bg-muted/30 border-b border-border">
-              <h3 className="font-bold text-foreground text-sm flex items-center gap-2">
-                <Shirt className="w-4 h-4 text-primary" /> Изделия (без нанесения)
-              </h3>
+          {/* ═══ SEO-текст: ассортимент изделий ═══ */}
+          <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 mb-8">
+            <h3 className="text-lg sm:text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+              <Shirt className="w-5 h-5 text-primary" /> На чём печатаем
+            </h3>
+            <div className="space-y-4 text-sm sm:text-base text-muted-foreground leading-relaxed">
+              <p>
+                Наносим принты на <strong className="text-foreground">футболки</strong> любых фасонов — классические, оверсайз, детские, — плотностью от&nbsp;140 до&nbsp;220&nbsp;г/м² из&nbsp;хлопка, полиэстера и&nbsp;смесовых тканей. Работаем с&nbsp;<strong className="text-foreground">поло</strong>, <strong className="text-foreground">лонгсливами</strong>, <strong className="text-foreground">свитшотами</strong> и&nbsp;<strong className="text-foreground">худи</strong> — идеально для корпоративного мерча и&nbsp;командной формы.
+              </p>
+              <p>
+                Печатаем на&nbsp;<strong className="text-foreground">шопперах</strong> и&nbsp;<strong className="text-foreground">фартуках</strong> для брендированных подарков и&nbsp;промо-акций, а&nbsp;также на&nbsp;<strong className="text-foreground">бейсболках</strong> любого цвета и&nbsp;кроя. Каждое изделие доступно в&nbsp;широкой палитре оттенков — от&nbsp;классического белого до&nbsp;нестандартных ярких цветов.
+              </p>
+              <p>
+                <strong className="text-foreground">Принесите своё изделие</strong> — нанесём принт на&nbsp;вашу ткань из&nbsp;любого материала: хлопок, синтетика, смесовые ткани, спецодежда. Главное — ровная поверхность для качественного переноса. Подберём оптимальную технологию печати под ваш текстиль.
+              </p>
             </div>
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-muted/20">
-                    <TableHead className="font-bold text-foreground">Наименование</TableHead>
-                    <TableHead className="font-bold text-foreground text-right">Цена</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {fabricProducts.map((item) => (
-                    <TableRow key={item.name} className="hover:bg-primary/5 transition-colors">
-                      <TableCell className="font-medium text-foreground text-sm">{item.name}</TableCell>
-                      <TableCell className="text-right whitespace-nowrap neon-text font-semibold text-sm">{item.price}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+            <div className="flex flex-wrap gap-2 mt-5">
+              {['Футболки', 'Поло', 'Лонгсливы', 'Худи', 'Свитшоты', 'Шопперы', 'Фартуки', 'Бейсболки', 'Своё изделие'].map(tag => (
+                <span key={tag} className="px-3 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-xs font-semibold text-primary">
+                  {tag}
+                </span>
+              ))}
             </div>
           </div>
 
