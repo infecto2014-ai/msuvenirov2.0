@@ -256,7 +256,7 @@
           m.src = 'https://mc.yandex.ru/metrika/tag.js';
           m.async = true;
           m.onload = function () {
-            ym(108361089, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
+            ym(108361089, 'init', {webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true, triggerEvent:true});
           };
           document.head.appendChild(m);
         }, 2000);
