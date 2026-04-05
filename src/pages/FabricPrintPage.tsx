@@ -19,16 +19,6 @@ import sublimationImg from '@/assets/fabric-print/sublimation-method.jpg';
 
 /* ═══════════════════════ DATA ═══════════════════════ */
 
-const fabricProducts = [
-  { name: 'Футболка унисекс 160–180 г/м²', price: 'от 400 ₽' },
-  { name: 'Футболка детская 160–180 г/м²', price: 'от 300 ₽' },
-  { name: 'Футболка оверсайз от 180 г/м²', price: 'от 700 ₽' },
-  { name: 'Поло', price: 'от 700 ₽' },
-  { name: 'Худи', price: 'от 1 300 ₽' },
-  { name: 'Бейсболка', price: 'от 250 ₽' },
-  { name: 'Шоппер', price: 'от 200 ₽' },
-  { name: 'Фартук', price: 'от 600 ₽' },
-];
 
 const dtfPrices = [
   { format: 'А6', qty1: '600 ₽', qty5: '350 ₽', qty20: '280 ₽' },
