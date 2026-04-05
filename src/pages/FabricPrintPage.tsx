@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import {
-  Shirt, Flame, Droplets,
+  Shirt, Flame, Droplets, Zap,
   CheckCircle2, ChevronDown, Send,
 } from 'lucide-react';
 import Header from '@/components/Header';
@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
-import FabricPrintCalculator from '@/components/FabricPrintCalculator';
+
 import heroImg from '@/assets/fabric-print/hero.jpg';
 import dtfImg from '@/assets/fabric-print/dtf-method.jpg';
 import sublimationImg from '@/assets/fabric-print/sublimation-method.jpg';
@@ -179,7 +179,7 @@ const FabricPrintPage = () => {
 
         <div className="container mx-auto px-4 sm:px-6 relative z-10 max-w-4xl text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-xs font-semibold text-primary mb-6">
-            <Shirt className="w-3.5 h-3.5" /> Опыт более 10 лет. Собственное производство
+            <Zap className="w-3.5 h-3.5" /> Опыт более 10 лет. Собственное производство
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-5">
@@ -208,11 +208,22 @@ const FabricPrintPage = () => {
             <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> Срочно за 24ч</span>
             <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> Своё оборудование</span>
           </div>
+
+          {/* Scroll-down arrow */}
+          <button
+            onClick={() => document.getElementById('methods')?.scrollIntoView({ behavior: 'smooth' })}
+            className="mt-8 mx-auto block cursor-pointer hover:scale-110 transition-transform duration-300"
+            aria-label="Прокрутить вниз"
+          >
+            <div className="animate-bounce" style={{ willChange: 'transform' }}>
+              <ChevronDown className="w-8 h-8 sm:w-10 sm:h-10 text-primary" aria-hidden="true" />
+            </div>
+          </button>
         </div>
       </section>
 
       {/* ═══ METHODS COMPARISON ═══ */}
-      <section className="py-14 sm:py-20">
+      <section className="py-14 sm:py-20" id="methods">
         <div className="container mx-auto px-4 sm:px-6 max-w-5xl">
           <h2 className="text-2xl sm:text-3xl font-bold text-center mb-3">DTF vs Сублимация — какой метод выбрать?</h2>
           <p className="text-muted-foreground text-center mb-10 max-w-2xl mx-auto text-sm sm:text-base">
@@ -329,9 +340,15 @@ const FabricPrintPage = () => {
                 </TableBody>
               </Table>
             </div>
-            <div className="px-5 py-3 bg-muted/20 border-t border-border">
+            <div className="px-5 py-4 bg-muted/20 border-t border-border space-y-1.5">
               <p className="text-xs text-muted-foreground">
-                Тираж 50+ шт — <button onClick={scrollToForm} className="text-primary hover:underline font-semibold">запросите индивидуальный расчёт</button>
+                Тираж 50+ шт — <a href="https://t.me/msuvenirov" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-semibold">запросите индивидуальный расчёт</a>
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Дополнительный принт на том же изделии — <span className="text-foreground font-semibold">70% от стоимости</span>
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Третий и последующие принты — <span className="text-foreground font-semibold">50% от стоимости</span>
               </p>
             </div>
           </div>
@@ -354,13 +371,6 @@ const FabricPrintPage = () => {
         </div>
       </section>
 
-
-      {/* ═══ CALCULATOR ═══ */}
-      <section className="py-14 sm:py-20">
-        <div className="container mx-auto px-4 sm:px-6 max-w-3xl">
-          <FabricPrintCalculator />
-        </div>
-      </section>
 
       {/* ═══ FAQ ═══ */}
       <section className="py-14 sm:py-20">
