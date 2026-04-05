@@ -148,6 +148,23 @@ const ReviewsSection = () => {
     return () => window.removeEventListener('resize', check);
   }, []);
 
+  // Attach touchmove with passive:false so we can preventDefault on horizontal swipes
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const onTouchMove = (e: TouchEvent) => {
+      touchEndX.current = e.touches[0].clientX;
+      const dx = Math.abs(touchEndX.current - touchStartX.current);
+      const dy = Math.abs(e.touches[0].clientY - touchStartY.current);
+      if (dx > 10 && dx > dy) {
+        isHorizontalSwipe.current = true;
+        e.preventDefault();
+      }
+    };
+    el.addEventListener('touchmove', onTouchMove, { passive: false });
+    return () => el.removeEventListener('touchmove', onTouchMove);
+  }, []);
+
   useEffect(() => {
     const loadReviews = async () => {
       const supabase = await import('@/integrations/supabase/client').then(m => m.supabase);
