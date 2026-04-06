@@ -11,6 +11,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import heroImg from '@/assets/fabric-print/hero.jpg';
 import dtfImg from '@/assets/fabric-print/dtf-method.jpg';
 import sublimationImg from '@/assets/fabric-print/sublimation-method.jpg';
+import galleryDtf1 from '@/assets/fabric-print/gallery-dtf-1.jpg';
+import galleryDtf2 from '@/assets/fabric-print/gallery-dtf-2.jpg';
+import galleryDtf3 from '@/assets/fabric-print/gallery-dtf-3.jpg';
+import gallerySub1 from '@/assets/fabric-print/gallery-sub-1.jpg';
+import gallerySub2 from '@/assets/fabric-print/gallery-sub-2.jpg';
+import gallerySub3 from '@/assets/fabric-print/gallery-sub-3.jpg';
 
 const FloatingOrderButton = lazy(() => import('@/components/FloatingOrderButton'));
 
