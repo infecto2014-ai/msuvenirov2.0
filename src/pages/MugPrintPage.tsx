@@ -337,7 +337,7 @@ const MugPrintPage = () => {
               <Printer className="w-4 h-4 text-primary" /> УФ-печать на кружках
             </h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              УФ-печать на кружках доступна <strong className="text-foreground">от 20 штук</strong>. Стоимость рассчитывается менеджером индивидуально — в зависимости от макета, типа изделия и тиража. Для расчёта — <button onClick={handleOrderClick} className="text-primary hover:underline font-semibold">оставьте заявку</button>, и мы подберём оптимальный вариант.
+              УФ-печать на кружках доступна <strong className="text-foreground">от 30 штук</strong>. Стоимость рассчитывается менеджером индивидуально — в зависимости от макета, типа изделия и тиража. Для расчёта — <button onClick={handleOrderClick} className="text-primary hover:underline font-semibold">оставьте заявку</button>, и мы подберём оптимальный вариант.
             </p>
           </div>
         </div>
