@@ -2,7 +2,7 @@ import { useState, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import {
-  Shirt, Flame, Droplets, Zap,
+  Flame, Droplets, Zap,
   CheckCircle2, ChevronDown, Send,
 } from 'lucide-react';
 import Header from '@/components/Header';
