@@ -8,7 +8,7 @@ import {
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import heroImg from '@/assets/fabric-print/hero.jpg';
+
 import dtfImg from '@/assets/fabric-print/dtf-method.jpg';
 import sublimationImg from '@/assets/fabric-print/sublimation-method.jpg';
 import galleryDtf1 from '@/assets/fabric-print/gallery-dtf-1.jpg';
@@ -121,7 +121,20 @@ const FabricPrintPage = () => {
       {/* ═══ HERO — fullscreen ═══ */}
       <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img src={heroImg} alt="DTF-печать на футболке" className="w-full h-full object-cover opacity-20" loading="eager" fetchPriority="high" width={1280} height={720} />
+          <picture>
+            <source media="(max-width: 768px)" srcSet="/images/fabric-hero-bg-mobile.webp" width={768} height={574} />
+            <img
+              src="/images/fabric-hero-bg.webp"
+              alt="DTF-печать на футболках и текстиле — Мастерская сувениров"
+              className="w-full h-full object-cover opacity-20"
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+              width={1024}
+              height={765}
+              sizes="100vw"
+            />
+          </picture>
           <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
         </div>
 
