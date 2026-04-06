@@ -44,7 +44,7 @@ const methodComparison = [
     icon: Printer,
     image: uvImg,
     pros: ['Любой цвет кружки', 'Высокая детализация', 'Белый цвет в печати', 'Рельефный эффект'],
-    cons: ['Менее стойкая при частом мытье в посудомойке', 'Минимальный тираж — от 20 шт'],
+    cons: ['Менее стойкая при частом мытье в посудомойке', 'Минимальный тираж — от 30 шт'],
     best: 'Цветные кружки, логотипы с белым цветом, сувенирная продукция',
   },
 ];
@@ -201,8 +201,8 @@ const MugPrintPage = () => {
                   </div>
                 </div>
 
-                <div className="p-5 sm:p-6">
-                  <div className="space-y-2 mb-4">
+                <div className="p-5 sm:p-6 flex flex-col">
+                  <div className="space-y-2 flex-1">
                     {m.pros.map((p) => (
                       <div key={p} className="flex items-start gap-2 text-sm">
                         <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 shrink-0" />
@@ -216,7 +216,7 @@ const MugPrintPage = () => {
                       </div>
                     ))}
                   </div>
-                  <div className="pt-4 border-t border-border/50">
+                  <div className="pt-4 mt-4 border-t border-border/50">
                     <p className="text-xs text-muted-foreground">
                       <span className="font-semibold text-foreground">Лучше всего для:</span> {m.best}
                     </p>
