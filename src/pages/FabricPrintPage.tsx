@@ -232,8 +232,8 @@ const FabricPrintPage = () => {
 
           {/* ═══ SEO-текст: ассортимент изделий — без блока ═══ */}
           <div className="mb-12">
-            <h3 className="text-lg sm:text-xl font-bold text-foreground mb-5">
-              На чём печатаем
+            <h3 className="text-lg sm:text-xl font-bold text-foreground mb-5 indent-8">
+              На чём печатаем?
             </h3>
             <div className="space-y-4 text-sm sm:text-base text-muted-foreground leading-relaxed [&>p]:indent-8">
               <p>
@@ -246,7 +246,7 @@ const FabricPrintPage = () => {
                 <strong className="text-foreground">Принесите своё изделие</strong> — нанесём принт на&nbsp;вашу ткань из&nbsp;любого материала: хлопок, синтетика, смесовые ткани, спецодежда. Главное — ровная поверхность для качественного переноса. Подберём оптимальную технологию печати под ваш текстиль.
               </p>
             </div>
-            <div className="flex flex-wrap gap-2 mt-6">
+            <div className="flex flex-wrap justify-center gap-2 mt-6">
               {['Футболки', 'Поло', 'Лонгсливы', 'Худи', 'Свитшоты', 'Шопперы', 'Фартуки', 'Бейсболки', 'Своё изделие'].map(tag => (
                 <span key={tag} className="px-3 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-xs font-semibold text-primary">
                   {tag}
@@ -284,6 +284,9 @@ const FabricPrintPage = () => {
               </Table>
             </div>
             <div className="px-5 py-4 bg-muted/20 border-t border-border space-y-1.5">
+              <p className="text-xs text-primary/80 font-medium">
+                * Цены не являются окончательными — подберём оптимальный вариант под ваш бюджет
+              </p>
               <p className="text-xs text-muted-foreground">
                 Тираж 50+ шт — <button onClick={handleOrderClick} className="text-primary hover:underline font-semibold">запросите индивидуальный расчёт</button>
               </p>
