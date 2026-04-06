@@ -27,6 +27,7 @@ const LinkInBio = lazy(() => lazyRetry(() => import("./pages/LinkInBio")));
 const PricePage = lazy(() => lazyRetry(() => import("./pages/PricePage")));
 const FAQPage = lazy(() => lazyRetry(() => import("./pages/FAQPage")));
 const FabricPrintPage = lazy(() => lazyRetry(() => import("./pages/FabricPrintPage")));
+const MugPrintPage = lazy(() => lazyRetry(() => import("./pages/MugPrintPage")));
 
 const PageLoader = () => (
   <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4">
@@ -61,6 +62,7 @@ const App = () => (
           <Route path="/price" element={<PricePage />} />
           <Route path="/faq" element={<FAQPage />} />
           <Route path="/fabric-print" element={<FabricPrintPage />} />
+          <Route path="/mug-print" element={<MugPrintPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
