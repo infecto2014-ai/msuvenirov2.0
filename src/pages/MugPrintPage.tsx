@@ -105,7 +105,7 @@ const MugPrintPage = () => {
       address: { '@type': 'PostalAddress', addressLocality: 'Калининград', addressCountry: 'RU' },
     },
     areaServed: { '@type': 'City', name: 'Калининград' },
-    offers: { '@type': 'AggregateOffer', priceCurrency: 'RUB', lowPrice: '320', offerCount: 8 },
+    offers: { '@type': 'AggregateOffer', priceCurrency: 'RUB', lowPrice: '250', offerCount: 6 },
   };
 
   return (
