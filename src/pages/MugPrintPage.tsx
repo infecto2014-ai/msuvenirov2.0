@@ -325,10 +325,7 @@ const MugPrintPage = () => {
             </div>
             <div className="px-5 py-4 bg-muted/20 border-t border-border space-y-1.5">
               <p className="text-xs text-muted-foreground">
-                Тираж 50+ шт — <button onClick={handleOrderClick} className="text-primary hover:underline font-semibold">запросите индивидуальный расчёт</button>
-              </p>
-              <p className="text-xs text-muted-foreground">
-                Печать на своей кружке — <span className="text-foreground font-semibold">от 200 ₽</span>
+                Тираж 200+ шт — <button onClick={handleOrderClick} className="text-primary hover:underline font-semibold">запросите индивидуальный расчёт</button>
               </p>
               <p className="text-xs text-primary/80 font-medium">
                 * Цены не являются окончательными — подберём оптимальный вариант под ваш бюджет
