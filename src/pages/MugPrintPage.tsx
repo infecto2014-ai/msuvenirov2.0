@@ -304,19 +304,23 @@ const MugPrintPage = () => {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-muted/20">
-                    <TableHead className="font-bold text-foreground">Тип кружки</TableHead>
-                    <TableHead className="font-bold text-foreground text-center">1–4 шт</TableHead>
-                    <TableHead className="font-bold text-foreground text-center">5–10 шт</TableHead>
-                    <TableHead className="font-bold text-foreground text-center">20–50 шт</TableHead>
+                    <TableHead className="font-bold text-foreground">Наименование</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">1 шт</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">10 шт</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">30 шт</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">100 шт</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">200 шт</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {mugPrices.map((row) => (
-                    <TableRow key={row.type} className="hover:bg-primary/5 transition-colors">
-                      <TableCell className="font-medium text-foreground text-sm">{row.type}</TableCell>
-                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold text-sm">{row.qty1}</TableCell>
-                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold text-sm">{row.qty5}</TableCell>
-                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold text-sm">{row.qty20}</TableCell>
+                    <TableRow key={row.name} className="hover:bg-primary/5 transition-colors">
+                      <TableCell className="font-medium text-foreground text-sm">{row.name}</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold text-sm">{row.qty1} ₽</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold text-sm">{row.qty10} ₽</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold text-sm">{row.qty30} ₽</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold text-sm">{row.qty100} ₽</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold text-sm">{row.qty200} ₽</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
