@@ -111,8 +111,8 @@ const MugPrintPage = () => {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Helmet>
-        <title>Печать на кружках в Калининграде — сублимация и УФ-печать от 320 ₽ | Мастерская сувениров</title>
-        <meta name="description" content="Печать на кружках от 1 штуки в Калининграде. Сублимация и УФ-печать: фотографии, логотипы, дизайны. Кружки-хамелеоны, эмалированные, цветные. Собственное производство." />
+        <title>Печать на кружках в Калининграде — сублимация от 250 ₽ | Мастерская сувениров</title>
+        <meta name="description" content="Печать на кружках от 1 штуки в Калининграде. Сублимация: белые, хамелеоны, глиттер, мрамор, золото, серебро, стекло. Собственное производство, от 250 ₽." />
         <link rel="canonical" href="https://msuvenirov.ru/mug-print" />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
