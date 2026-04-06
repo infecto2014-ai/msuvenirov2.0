@@ -28,7 +28,6 @@ const mugPrices = [
   { name: 'Кружка ХАМЕЛЕОН', qty1: '1 100', qty10: '980', qty30: '890', qty100: '815', qty200: '650' },
   { name: 'Кружка глиттер градиент', qty1: '1 630', qty10: '980', qty30: '890', qty100: '815', qty200: '650' },
   { name: 'Кружка мрамор/зеркальное золото или серебро', qty1: '1 945', qty10: '1 170', qty30: '1 070', qty100: '970', qty200: '780' },
-  { name: 'Кружка золото/серебро/стекло', qty1: '1 320', qty10: '790', qty30: '730', qty100: '660', qty200: '530' },
 ];
 
 const methodComparison = [
@@ -36,7 +35,7 @@ const methodComparison = [
     method: 'Сублимация',
     icon: Droplets,
     image: sublimationImg,
-    pros: ['Фотореалистичная печать', 'Стойкость 500+ моек', 'Безграничная палитра', 'Принт не ощущается на ощупь'],
+    pros: ['Фотореалистичная печать', 'Высокая стойкость нанесения', 'Безграничная палитра', 'Принт не ощущается на ощупь'],
     cons: ['Только белые/светлые кружки с полимерным покрытием'],
     best: 'Фотографии, полноцветные дизайны, подарки, корпоративный мерч',
   },
@@ -45,14 +44,14 @@ const methodComparison = [
     icon: Printer,
     image: uvImg,
     pros: ['Любой цвет кружки', 'Высокая детализация', 'Белый цвет в печати', 'Рельефный эффект'],
-    cons: ['Менее стойкая при частом мытье в посудомойке'],
-    best: 'Тёмные кружки, логотипы с белым цветом, сувенирная продукция',
+    cons: ['Менее стойкая при частом мытье в посудомойке', 'Минимальный тираж — от 20 шт'],
+    best: 'Цветные кружки, логотипы с белым цветом, сувенирная продукция',
   },
 ];
 
 const faqItems = [
   { q: 'Какой минимальный тираж?', a: 'Печатаем от 1 кружки. Идеально для персонального подарка или пробного заказа перед крупным тиражом.' },
-  { q: 'Сколько моек выдерживает принт?', a: 'Сублимационная печать выдерживает 500+ моек. Рекомендуем ручную мойку для максимальной стойкости.' },
+  { q: 'Сколько моек выдерживает принт?', a: 'Сублимационная печать обладает высокой стойкостью нанесения. Рекомендуем ручную мойку для максимальной долговечности.' },
   { q: 'Чем сублимация отличается от УФ-печати?', a: 'Сублимация «впечатывает» краску в полимерное покрытие кружки — принт не ощущается тактильно. УФ-печать наносит краску поверх поверхности и позволяет печатать на тёмных кружках.' },
   { q: 'Можно напечатать фотографию?', a: 'Да, фотопечать — одна из самых популярных услуг. Принимаем файлы от 300 dpi для наилучшего качества.' },
   { q: 'Какой формат макета нужен?', a: 'Принимаем PNG, PDF, AI, PSD, CDR. Разрешение от 300 dpi. Если макета нет — поможем с дизайном.' },
@@ -105,7 +104,7 @@ const MugPrintPage = () => {
       address: { '@type': 'PostalAddress', addressLocality: 'Калининград', addressCountry: 'RU' },
     },
     areaServed: { '@type': 'City', name: 'Калининград' },
-    offers: { '@type': 'AggregateOffer', priceCurrency: 'RUB', lowPrice: '250', offerCount: 6 },
+    offers: { '@type': 'AggregateOffer', priceCurrency: 'RUB', lowPrice: '250', offerCount: 5 },
   };
 
   return (
@@ -139,7 +138,7 @@ const MugPrintPage = () => {
 
           <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
             Сублимация и УФ-печать на кружках любых типов.
-            От&nbsp;1&nbsp;штуки, фотографии, логотипы, авторские дизайны. Стойкость принта — 500+&nbsp;моек.
+            От&nbsp;1&nbsp;штуки, фотографии, логотипы, авторские дизайны. Высокая стойкость нанесения.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -156,7 +155,7 @@ const MugPrintPage = () => {
 
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-10 text-xs sm:text-sm text-muted-foreground">
             <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> От 1 штуки</span>
-            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> 500+ моек</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> Высокая стойкость</span>
             <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> Срочно за 24ч</span>
             <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> Своё оборудование</span>
           </div>
@@ -279,11 +278,11 @@ const MugPrintPage = () => {
                 Печатаем на <strong className="text-foreground">классических белых кружках</strong> — универсальный вариант для фотографий, поздравлений и корпоративных подарков. Сублимационная печать обеспечивает фотореалистичное качество и стойкость более 500 моек. Доступны <strong className="text-foreground">кружки с цветной ручкой и внутренней частью</strong> — жёлтые, красные, зелёные, синие, розовые и оранжевые.
               </p>
               <p>
-                <strong className="text-foreground">Кружки-хамелеоны</strong> — эффектный подарок: при наливании горячей воды чёрное покрытие становится прозрачным и проявляется скрытый дизайн. Также в ассортименте — <strong className="text-foreground">кружки глиттер градиент</strong>, <strong className="text-foreground">мраморные</strong>, с <strong className="text-foreground">зеркальным золотом или серебром</strong>, а также кружки из <strong className="text-foreground">золота, серебра и стекла</strong>.
+                <strong className="text-foreground">Кружки-хамелеоны</strong> — эффектный подарок: при наливании горячей воды чёрное покрытие становится прозрачным и проявляется скрытый дизайн. Также в ассортименте — <strong className="text-foreground">кружки глиттер градиент</strong>, <strong className="text-foreground">мраморные</strong>, с <strong className="text-foreground">зеркальным золотом или серебром</strong>.
               </p>
             </div>
             <div className="flex flex-wrap justify-center gap-2 mt-6">
-              {['Белые', 'Цветные внутри', 'Хамелеоны', 'Глиттер градиент', 'Мрамор', 'Золото/серебро', 'Стекло'].map(tag => (
+              {['Белые', 'Цветные внутри', 'Хамелеоны', 'Глиттер градиент', 'Мрамор', 'Зеркальное золото/серебро'].map(tag => (
                 <span key={tag} className="px-3 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-xs font-semibold text-primary">
                   {tag}
                 </span>
@@ -294,7 +293,7 @@ const MugPrintPage = () => {
           <div className="rounded-2xl border border-border overflow-hidden mb-8">
             <div className="px-5 py-3 bg-muted/30 border-b border-border">
               <h3 className="font-bold text-foreground text-sm flex items-center gap-2">
-                <Droplets className="w-4 h-4 text-primary" /> Стоимость кружки с печатью
+                <Droplets className="w-4 h-4 text-primary" /> Стоимость кружки с сублимацией
               </h3>
             </div>
             <div className="overflow-x-auto">
@@ -331,6 +330,15 @@ const MugPrintPage = () => {
                 * Цены не являются окончательными — подберём оптимальный вариант под ваш бюджет
               </p>
             </div>
+          </div>
+
+          <div className="rounded-xl border border-border bg-card p-5 sm:p-6">
+            <h3 className="font-bold text-foreground text-sm flex items-center gap-2 mb-3">
+              <Printer className="w-4 h-4 text-primary" /> УФ-печать на кружках
+            </h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              УФ-печать на кружках доступна <strong className="text-foreground">от 20 штук</strong>. Стоимость рассчитывается менеджером индивидуально — в зависимости от макета, типа изделия и тиража. Для расчёта — <button onClick={handleOrderClick} className="text-primary hover:underline font-semibold">оставьте заявку</button>, и мы подберём оптимальный вариант.
+            </p>
           </div>
         </div>
       </section>
