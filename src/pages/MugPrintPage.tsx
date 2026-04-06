@@ -23,10 +23,12 @@ const FloatingOrderButton = lazy(() => import('@/components/FloatingOrderButton'
 /* ═══════════════════════ DATA ═══════════════════════ */
 
 const mugPrices = [
-  { type: 'Белая кружка 330 мл', qty1: '450 ₽', qty5: '380 ₽', qty20: '320 ₽' },
-  { type: 'Кружка-хамелеон', qty1: '650 ₽', qty5: '550 ₽', qty20: '480 ₽' },
-  { type: 'Цветная внутри / ручка', qty1: '500 ₽', qty5: '420 ₽', qty20: '360 ₽' },
-  { type: 'Эмалированная кружка', qty1: '700 ₽', qty5: '600 ₽', qty20: '520 ₽' },
+  { name: 'Кружка белая', qty1: '650', qty10: '450', qty30: '350', qty100: '315', qty200: '250' },
+  { name: 'Кружка белая, цветная внутри или ручка', qty1: '750', qty10: '550', qty30: '470', qty100: '425', qty200: '340' },
+  { name: 'Кружка ХАМЕЛЕОН', qty1: '1 100', qty10: '980', qty30: '890', qty100: '815', qty200: '650' },
+  { name: 'Кружка глиттер градиент', qty1: '1 630', qty10: '980', qty30: '890', qty100: '815', qty200: '650' },
+  { name: 'Кружка мрамор/зеркальное золото или серебро', qty1: '1 945', qty10: '1 170', qty30: '1 070', qty100: '970', qty200: '780' },
+  { name: 'Кружка золото/серебро/стекло', qty1: '1 320', qty10: '790', qty30: '730', qty100: '660', qty200: '530' },
 ];
 
 const methodComparison = [
@@ -103,14 +105,14 @@ const MugPrintPage = () => {
       address: { '@type': 'PostalAddress', addressLocality: 'Калининград', addressCountry: 'RU' },
     },
     areaServed: { '@type': 'City', name: 'Калининград' },
-    offers: { '@type': 'AggregateOffer', priceCurrency: 'RUB', lowPrice: '320', offerCount: 8 },
+    offers: { '@type': 'AggregateOffer', priceCurrency: 'RUB', lowPrice: '250', offerCount: 6 },
   };
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Helmet>
-        <title>Печать на кружках в Калининграде — сублимация и УФ-печать от 320 ₽ | Мастерская сувениров</title>
-        <meta name="description" content="Печать на кружках от 1 штуки в Калининграде. Сублимация и УФ-печать: фотографии, логотипы, дизайны. Кружки-хамелеоны, эмалированные, цветные. Собственное производство." />
+        <title>Печать на кружках в Калининграде — сублимация от 250 ₽ | Мастерская сувениров</title>
+        <meta name="description" content="Печать на кружках от 1 штуки в Калининграде. Сублимация: белые, хамелеоны, глиттер, мрамор, золото, серебро, стекло. Собственное производство, от 250 ₽." />
         <link rel="canonical" href="https://msuvenirov.ru/mug-print" />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
@@ -274,17 +276,14 @@ const MugPrintPage = () => {
           <div className="mb-12">
             <div className="space-y-4 text-sm sm:text-base text-muted-foreground leading-relaxed [&>p]:indent-8">
               <p>
-                Печатаем на <strong className="text-foreground">классических белых кружках</strong> объёмом 330 мл — универсальный вариант для фотографий, поздравлений и корпоративных подарков. Сублимационная печать обеспечивает фотореалистичное качество и стойкость более 500 моек.
+                Печатаем на <strong className="text-foreground">классических белых кружках</strong> — универсальный вариант для фотографий, поздравлений и корпоративных подарков. Сублимационная печать обеспечивает фотореалистичное качество и стойкость более 500 моек. Доступны <strong className="text-foreground">кружки с цветной ручкой и внутренней частью</strong> — жёлтые, красные, зелёные, синие, розовые и оранжевые.
               </p>
               <p>
-                <strong className="text-foreground">Кружки-хамелеоны</strong> — эффектный подарок, который удивляет: при наливании горячей воды чёрное покрытие становится прозрачным и проявляется скрытый дизайн. Также доступны <strong className="text-foreground">кружки с цветной ручкой и внутренней частью</strong> — жёлтые, красные, зелёные, синие, розовые и оранжевые.
-              </p>
-              <p>
-                Для любителей путешествий и outdoor-стиля предлагаем <strong className="text-foreground">эмалированные кружки</strong> с УФ-печатью — прочные, стильные и идеально подходящие для нанесения логотипов и графики. Привезите <strong className="text-foreground">свою кружку</strong> — напечатаем на ней ваш дизайн.
+                <strong className="text-foreground">Кружки-хамелеоны</strong> — эффектный подарок: при наливании горячей воды чёрное покрытие становится прозрачным и проявляется скрытый дизайн. Также в ассортименте — <strong className="text-foreground">кружки глиттер градиент</strong>, <strong className="text-foreground">мраморные</strong>, с <strong className="text-foreground">зеркальным золотом или серебром</strong>, а также кружки из <strong className="text-foreground">золота, серебра и стекла</strong>.
               </p>
             </div>
             <div className="flex flex-wrap justify-center gap-2 mt-6">
-              {['Белые 330 мл', 'Хамелеоны', 'Цветные внутри', 'Эмалированные', 'С цветной ручкой', 'Своя кружка'].map(tag => (
+              {['Белые', 'Цветные внутри', 'Хамелеоны', 'Глиттер градиент', 'Мрамор', 'Золото/серебро', 'Стекло'].map(tag => (
                 <span key={tag} className="px-3 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-xs font-semibold text-primary">
                   {tag}
                 </span>
@@ -302,19 +301,23 @@ const MugPrintPage = () => {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-muted/20">
-                    <TableHead className="font-bold text-foreground">Тип кружки</TableHead>
-                    <TableHead className="font-bold text-foreground text-center">1–4 шт</TableHead>
-                    <TableHead className="font-bold text-foreground text-center">5–10 шт</TableHead>
-                    <TableHead className="font-bold text-foreground text-center">20–50 шт</TableHead>
+                    <TableHead className="font-bold text-foreground">Наименование</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">1 шт</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">10 шт</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">30 шт</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">100 шт</TableHead>
+                    <TableHead className="font-bold text-foreground text-center">200 шт</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {mugPrices.map((row) => (
-                    <TableRow key={row.type} className="hover:bg-primary/5 transition-colors">
-                      <TableCell className="font-medium text-foreground text-sm">{row.type}</TableCell>
-                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold text-sm">{row.qty1}</TableCell>
-                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold text-sm">{row.qty5}</TableCell>
-                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold text-sm">{row.qty20}</TableCell>
+                    <TableRow key={row.name} className="hover:bg-primary/5 transition-colors">
+                      <TableCell className="font-medium text-foreground text-sm">{row.name}</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold text-sm">{row.qty1} ₽</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold text-sm">{row.qty10} ₽</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold text-sm">{row.qty30} ₽</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold text-sm">{row.qty100} ₽</TableCell>
+                      <TableCell className="text-center whitespace-nowrap neon-text font-semibold text-sm">{row.qty200} ₽</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -322,10 +325,7 @@ const MugPrintPage = () => {
             </div>
             <div className="px-5 py-4 bg-muted/20 border-t border-border space-y-1.5">
               <p className="text-xs text-muted-foreground">
-                Тираж 50+ шт — <button onClick={handleOrderClick} className="text-primary hover:underline font-semibold">запросите индивидуальный расчёт</button>
-              </p>
-              <p className="text-xs text-muted-foreground">
-                Печать на своей кружке — <span className="text-foreground font-semibold">от 200 ₽</span>
+                Тираж 200+ шт — <button onClick={handleOrderClick} className="text-primary hover:underline font-semibold">запросите индивидуальный расчёт</button>
               </p>
               <p className="text-xs text-primary/80 font-medium">
                 * Цены не являются окончательными — подберём оптимальный вариант под ваш бюджет
