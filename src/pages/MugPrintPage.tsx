@@ -276,17 +276,14 @@ const MugPrintPage = () => {
           <div className="mb-12">
             <div className="space-y-4 text-sm sm:text-base text-muted-foreground leading-relaxed [&>p]:indent-8">
               <p>
-                Печатаем на <strong className="text-foreground">классических белых кружках</strong> объёмом 330 мл — универсальный вариант для фотографий, поздравлений и корпоративных подарков. Сублимационная печать обеспечивает фотореалистичное качество и стойкость более 500 моек.
+                Печатаем на <strong className="text-foreground">классических белых кружках</strong> — универсальный вариант для фотографий, поздравлений и корпоративных подарков. Сублимационная печать обеспечивает фотореалистичное качество и стойкость более 500 моек. Доступны <strong className="text-foreground">кружки с цветной ручкой и внутренней частью</strong> — жёлтые, красные, зелёные, синие, розовые и оранжевые.
               </p>
               <p>
-                <strong className="text-foreground">Кружки-хамелеоны</strong> — эффектный подарок, который удивляет: при наливании горячей воды чёрное покрытие становится прозрачным и проявляется скрытый дизайн. Также доступны <strong className="text-foreground">кружки с цветной ручкой и внутренней частью</strong> — жёлтые, красные, зелёные, синие, розовые и оранжевые.
-              </p>
-              <p>
-                Для любителей путешествий и outdoor-стиля предлагаем <strong className="text-foreground">эмалированные кружки</strong> с УФ-печатью — прочные, стильные и идеально подходящие для нанесения логотипов и графики. Привезите <strong className="text-foreground">свою кружку</strong> — напечатаем на ней ваш дизайн.
+                <strong className="text-foreground">Кружки-хамелеоны</strong> — эффектный подарок: при наливании горячей воды чёрное покрытие становится прозрачным и проявляется скрытый дизайн. Также в ассортименте — <strong className="text-foreground">кружки глиттер градиент</strong>, <strong className="text-foreground">мраморные</strong>, с <strong className="text-foreground">зеркальным золотом или серебром</strong>, а также кружки из <strong className="text-foreground">золота, серебра и стекла</strong>.
               </p>
             </div>
             <div className="flex flex-wrap justify-center gap-2 mt-6">
-              {['Белые 330 мл', 'Хамелеоны', 'Цветные внутри', 'Эмалированные', 'С цветной ручкой', 'Своя кружка'].map(tag => (
+              {['Белые', 'Цветные внутри', 'Хамелеоны', 'Глиттер градиент', 'Мрамор', 'Золото/серебро', 'Стекло'].map(tag => (
                 <span key={tag} className="px-3 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-xs font-semibold text-primary">
                   {tag}
                 </span>
