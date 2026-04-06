@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import {
@@ -8,17 +8,13 @@ import {
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Input } from '@/components/ui/input';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-
-
 import heroImg from '@/assets/fabric-print/hero.jpg';
 import dtfImg from '@/assets/fabric-print/dtf-method.jpg';
 import sublimationImg from '@/assets/fabric-print/sublimation-method.jpg';
 
-/* ═══════════════════════ DATA ═══════════════════════ */
+const FloatingOrderButton = lazy(() => import('@/components/FloatingOrderButton'));
 
+/* ═══════════════════════ DATA ═══════════════════════ */
 
 const dtfPrices = [
   { format: 'А6', qty1: '600 ₽', qty5: '350 ₽', qty20: '280 ₽' },
@@ -55,64 +51,6 @@ const faqItems = [
   { q: 'Есть ли доставка?', a: 'Да, доставляем по Калининграду и области. Также возможна отправка по России транспортными компаниями.' },
 ];
 
-/* ═══════════════════════ FORM ═══════════════════════ */
-
-const QuickForm = () => {
-  const { toast } = useToast();
-  const [form, setForm] = useState({ name: '', phone: '', details: '' });
-  const [sending, setSending] = useState(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!form.name.trim() || !form.phone.trim()) {
-      toast({ title: 'Заполните имя и телефон', variant: 'destructive' });
-      return;
-    }
-    setSending(true);
-    try {
-      const fd = new FormData();
-      fd.append('name', form.name);
-      fd.append('phone', form.phone);
-      fd.append('comment', `[Печать на ткани] ${form.details}`);
-      await supabase.functions.invoke('send-telegram', { body: fd });
-      toast({ title: 'Заявка отправлена! Свяжемся в течение часа.' });
-      setForm({ name: '', phone: '', details: '' });
-    } catch {
-      toast({ title: 'Ошибка, попробуйте позже', variant: 'destructive' });
-    } finally {
-      setSending(false);
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Input name="name" placeholder="Имя" value={form.name} onChange={handleChange} className="bg-background border-border" />
-        <Input name="phone" placeholder="Телефон" type="tel" value={form.phone} onChange={handleChange} className="bg-background border-border" />
-      </div>
-      <textarea
-        name="details"
-        placeholder="Тираж, изделие, пожелания..."
-        value={form.details}
-        onChange={handleChange}
-        rows={3}
-        className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary resize-none"
-      />
-      <button
-        type="submit"
-        disabled={sending}
-        className="w-full sm:w-auto px-10 py-3 rounded-xl bg-accent text-accent-foreground font-bold hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2 mx-auto sm:mx-0"
-      >
-        <Send className="w-4 h-4" />
-        {sending ? 'Отправка...' : 'Получить расчёт'}
-      </button>
-    </form>
-  );
-};
-
 /* ═══════════════════════ FAQ ═══════════════════════ */
 
 const FAQBlock = () => {
@@ -138,10 +76,16 @@ const FAQBlock = () => {
   );
 };
 
+/* ═══════════════════════ HELPERS ═══════════════════════ */
+
+const handleOrderClick = () => {
+  const btn = document.querySelector('[data-order-button]') as HTMLButtonElement | null;
+  btn?.click();
+};
+
 /* ═══════════════════════ PAGE ═══════════════════════ */
 
 const FabricPrintPage = () => {
-
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Service',
@@ -167,8 +111,8 @@ const FabricPrintPage = () => {
 
       <Header />
 
-      {/* ═══ HERO ═══ */}
-      <section className="relative pt-24 pb-12 sm:pt-32 sm:pb-16 overflow-hidden">
+      {/* ═══ HERO — fullscreen ═══ */}
+      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img src={heroImg} alt="DTF-печать на футболке" className="w-full h-full object-cover opacity-20" loading="eager" fetchPriority="high" width={1280} height={720} />
           <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
@@ -191,9 +135,12 @@ const FabricPrintPage = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="https://t.me/msuvenirov" target="_blank" rel="noopener noreferrer" className="gradient-btn-pulse px-8 py-3.5 rounded-xl text-base font-bold text-background inline-flex items-center justify-center">
-              <span className="relative z-10 flex items-center gap-2"><Send className="w-4 h-4" /> Написать в Telegram</span>
-            </a>
+            <button
+              onClick={handleOrderClick}
+              className="gradient-btn-pulse px-8 py-3.5 rounded-xl text-base font-bold text-background inline-flex items-center justify-center"
+            >
+              <span className="relative z-10 flex items-center gap-2"><Send className="w-4 h-4" /> Сделать заказ</span>
+            </button>
             <Link to="/price" className="px-8 py-3.5 rounded-xl border-2 border-primary/40 text-primary font-bold text-base hover:bg-primary/10 transition-colors text-center">
               Полный прайс-лист
             </Link>
@@ -205,18 +152,18 @@ const FabricPrintPage = () => {
             <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> Срочно за 24ч</span>
             <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> Своё оборудование</span>
           </div>
-
-          {/* Scroll-down arrow */}
-          <button
-            onClick={() => document.getElementById('methods')?.scrollIntoView({ behavior: 'smooth' })}
-            className="mt-8 mx-auto block cursor-pointer hover:scale-110 transition-transform duration-300"
-            aria-label="Прокрутить вниз"
-          >
-            <div className="animate-bounce" style={{ willChange: 'transform' }}>
-              <ChevronDown className="w-8 h-8 sm:w-10 sm:h-10 text-primary" aria-hidden="true" />
-            </div>
-          </button>
         </div>
+
+        {/* Scroll-down arrow — pinned to bottom */}
+        <button
+          onClick={() => document.getElementById('methods')?.scrollIntoView({ behavior: 'smooth' })}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 cursor-pointer hover:scale-110 transition-transform duration-300 z-10"
+          aria-label="Прокрутить вниз"
+        >
+          <div className="animate-bounce" style={{ willChange: 'transform' }}>
+            <ChevronDown className="w-8 h-8 sm:w-10 sm:h-10 text-primary" aria-hidden="true" />
+          </div>
+        </button>
       </section>
 
       {/* ═══ METHODS COMPARISON ═══ */}
@@ -230,7 +177,6 @@ const FabricPrintPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {methodComparison.map((m) => (
               <div key={m.method} className="rounded-2xl border border-border bg-card overflow-hidden group hover:border-primary/30 transition-colors duration-300">
-                {/* Method image */}
                 <div className="aspect-[16/10] overflow-hidden relative">
                   <img
                     src={m.image}
@@ -284,9 +230,9 @@ const FabricPrintPage = () => {
             Цены указаны за изделие без нанесения. Стоимость нанесения зависит от формата принта и тиража.
           </p>
 
-          {/* ═══ SEO-текст: ассортимент изделий ═══ */}
-          <div className="rounded-2xl border border-border bg-card p-6 sm:p-8 mb-8">
-            <h3 className="text-lg sm:text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+          {/* ═══ SEO-текст: ассортимент изделий — без блока ═══ */}
+          <div className="max-w-3xl mx-auto mb-12">
+            <h3 className="text-lg sm:text-xl font-bold text-foreground mb-5 flex items-center gap-2">
               <Shirt className="w-5 h-5 text-primary" /> На чём печатаем
             </h3>
             <div className="space-y-4 text-sm sm:text-base text-muted-foreground leading-relaxed">
@@ -300,7 +246,7 @@ const FabricPrintPage = () => {
                 <strong className="text-foreground">Принесите своё изделие</strong> — нанесём принт на&nbsp;вашу ткань из&nbsp;любого материала: хлопок, синтетика, смесовые ткани, спецодежда. Главное — ровная поверхность для качественного переноса. Подберём оптимальную технологию печати под ваш текстиль.
               </p>
             </div>
-            <div className="flex flex-wrap gap-2 mt-5">
+            <div className="flex flex-wrap gap-2 mt-6">
               {['Футболки', 'Поло', 'Лонгсливы', 'Худи', 'Свитшоты', 'Шопперы', 'Фартуки', 'Бейсболки', 'Своё изделие'].map(tag => (
                 <span key={tag} className="px-3 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-xs font-semibold text-primary">
                   {tag}
@@ -339,7 +285,7 @@ const FabricPrintPage = () => {
             </div>
             <div className="px-5 py-4 bg-muted/20 border-t border-border space-y-1.5">
               <p className="text-xs text-muted-foreground">
-                Тираж 50+ шт — <a href="https://t.me/msuvenirov" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-semibold">запросите индивидуальный расчёт</a>
+                Тираж 50+ шт — <button onClick={handleOrderClick} className="text-primary hover:underline font-semibold">запросите индивидуальный расчёт</button>
               </p>
               <p className="text-xs text-muted-foreground">
                 Дополнительный принт на том же изделии — <span className="text-foreground font-semibold">70% от стоимости</span>
@@ -368,7 +314,6 @@ const FabricPrintPage = () => {
         </div>
       </section>
 
-
       {/* ═══ FAQ ═══ */}
       <section className="py-14 sm:py-20">
         <div className="container mx-auto px-4 sm:px-6 max-w-3xl">
@@ -385,15 +330,20 @@ const FabricPrintPage = () => {
           <p className="text-muted-foreground text-sm mb-6">
             Свяжитесь с нами — подберём метод печати, рассчитаем стоимость и изготовим заказ в кратчайшие сроки
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="https://t.me/msuvenirov" target="_blank" rel="noopener noreferrer" className="gradient-btn-pulse px-8 py-3 rounded-xl text-base font-bold text-background inline-flex items-center justify-center gap-2">
-              <span className="relative z-10 flex items-center gap-2"><Send className="w-4 h-4" /> Написать в Telegram</span>
-            </a>
-          </div>
+          <button
+            onClick={handleOrderClick}
+            className="gradient-btn-pulse px-8 py-3 rounded-xl text-base font-bold text-background inline-flex items-center justify-center gap-2 mx-auto"
+          >
+            <span className="relative z-10 flex items-center gap-2"><Send className="w-4 h-4" /> Сделать заказ</span>
+          </button>
         </div>
       </section>
 
       <Footer />
+
+      <Suspense fallback={null}>
+        <FloatingOrderButton />
+      </Suspense>
     </div>
   );
 };
