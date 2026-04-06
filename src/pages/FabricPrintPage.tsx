@@ -29,8 +29,9 @@ const methodComparison = [
     icon: Flame,
     image: dtfImg,
     pros: ['Любой цвет ткани', 'Фотореалистичная печать', 'От 1 штуки', '60+ стирок', 'Быстрое изготовление'],
+
     cons: ['Ощущается на ощупь'],
-    best: 'Мелкие тиражи, сложные полноцветные дизайны, срочные заказы',
+    best: 'Сложные полноцветные дизайны, срочные заказы, крупные тиражи',
   },
   {
     method: 'Сублимация',
@@ -38,7 +39,7 @@ const methodComparison = [
     image: sublimationImg,
     pros: ['Принт «впечатан» в ткань', 'Не ощущается на ощупь', 'Безграничная палитра', 'Не трескается'],
     cons: ['Только белая/светлая синтетика', 'Не подходит для хлопка'],
-    best: 'Спортивная форма, сувенирная продукция, кружки, полный запечат',
+    best: 'Спортивная форма, сувенирная продукция, кружки',
   },
 ];
 
@@ -232,9 +233,7 @@ const FabricPrintPage = () => {
 
           {/* ═══ SEO-текст: ассортимент изделий — без блока ═══ */}
           <div className="mb-12">
-            <h3 className="text-lg sm:text-xl font-bold text-foreground mb-5 indent-8">
-              На чём печатаем?
-            </h3>
+            
             <div className="space-y-4 text-sm sm:text-base text-muted-foreground leading-relaxed [&>p]:indent-8">
               <p>
                 Наносим принты на <strong className="text-foreground">футболки</strong> любых фасонов — классические, оверсайз, детские, — плотностью от&nbsp;140 до&nbsp;220&nbsp;г/м² из&nbsp;хлопка, полиэстера и&nbsp;смесовых тканей. Работаем с&nbsp;<strong className="text-foreground">поло</strong>, <strong className="text-foreground">лонгсливами</strong>, <strong className="text-foreground">свитшотами</strong> и&nbsp;<strong className="text-foreground">худи</strong> — идеально для корпоративного мерча и&nbsp;командной формы.
@@ -284,9 +283,6 @@ const FabricPrintPage = () => {
               </Table>
             </div>
             <div className="px-5 py-4 bg-muted/20 border-t border-border space-y-1.5">
-              <p className="text-xs text-primary/80 font-medium">
-                * Цены не являются окончательными — подберём оптимальный вариант под ваш бюджет
-              </p>
               <p className="text-xs text-muted-foreground">
                 Тираж 50+ шт — <button onClick={handleOrderClick} className="text-primary hover:underline font-semibold">запросите индивидуальный расчёт</button>
               </p>
@@ -295,6 +291,9 @@ const FabricPrintPage = () => {
               </p>
               <p className="text-xs text-muted-foreground">
                 Третий и последующие принты — <span className="text-foreground font-semibold">50% от стоимости</span>
+              </p>
+              <p className="text-xs text-primary/80 font-medium">
+                * Цены не являются окончательными — подберём оптимальный вариант под ваш бюджет
               </p>
             </div>
           </div>
