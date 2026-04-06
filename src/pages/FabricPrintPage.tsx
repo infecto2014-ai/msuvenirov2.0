@@ -231,11 +231,11 @@ const FabricPrintPage = () => {
           </p>
 
           {/* ═══ SEO-текст: ассортимент изделий — без блока ═══ */}
-          <div className="max-w-3xl mx-auto mb-12">
-            <h3 className="text-lg sm:text-xl font-bold text-foreground mb-5 flex items-center gap-2">
-              <Shirt className="w-5 h-5 text-primary" /> На чём печатаем
+          <div className="mb-12">
+            <h3 className="text-lg sm:text-xl font-bold text-foreground mb-5">
+              На чём печатаем
             </h3>
-            <div className="space-y-4 text-sm sm:text-base text-muted-foreground leading-relaxed">
+            <div className="space-y-4 text-sm sm:text-base text-muted-foreground leading-relaxed [&>p]:indent-8">
               <p>
                 Наносим принты на <strong className="text-foreground">футболки</strong> любых фасонов — классические, оверсайз, детские, — плотностью от&nbsp;140 до&nbsp;220&nbsp;г/м² из&nbsp;хлопка, полиэстера и&nbsp;смесовых тканей. Работаем с&nbsp;<strong className="text-foreground">поло</strong>, <strong className="text-foreground">лонгсливами</strong>, <strong className="text-foreground">свитшотами</strong> и&nbsp;<strong className="text-foreground">худи</strong> — идеально для корпоративного мерча и&nbsp;командной формы.
               </p>
