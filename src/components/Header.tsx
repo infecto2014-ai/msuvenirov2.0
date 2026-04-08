@@ -4,8 +4,6 @@ import { Menu, X, Phone, MapPin, Clock, Mail, Send } from 'lucide-react';
 import ProtectedLogo from './ProtectedLogo';
 import { forceLoadAllSections } from '@/hooks/useLazySection';
 import { reachGoal } from '@/lib/metrika';
-import ProtectedLogo from './ProtectedLogo';
-import { forceLoadAllSections } from '@/hooks/useLazySection';
 
 
 const getWorkingStatus = () => {
