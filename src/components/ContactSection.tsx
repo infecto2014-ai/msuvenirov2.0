@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { MapPin, Phone, Mail, Send, Clock } from 'lucide-react';
+import { reachGoal } from '@/lib/metrika';
 
 const ContactSection = () => {
   const [isMapInteractive, setIsMapInteractive] = useState(false);
@@ -19,7 +20,14 @@ const ContactSection = () => {
   };
 
   useEffect(() => {
+    const section = document.getElementById('контакты');
+    if (!section) return;
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { reachGoal('scroll_contacts'); obs.disconnect(); }
+    }, { threshold: 0.3 });
+    obs.observe(section);
     return () => {
+      obs.disconnect();
       if (mapInteractionTimeoutRef.current !== null) {
         window.clearTimeout(mapInteractionTimeoutRef.current);
       }
@@ -89,7 +97,7 @@ const ContactSection = () => {
                 </div>
                 <div className="flex flex-col">
                   <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Телефон</span>
-                  <a href="tel:+79521142350" className="text-foreground text-sm sm:text-base hover:text-primary transition-colors">
+                  <a href="tel:+79521142350" onClick={() => reachGoal('phone_click')} className="text-foreground text-sm sm:text-base hover:text-primary transition-colors">
                     +7 952 114-23-50
                   </a>
                 </div>
@@ -102,7 +110,7 @@ const ContactSection = () => {
                 </div>
                 <div className="flex flex-col">
                   <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Telegram</span>
-                  <a href="https://t.me/msuvenirov39zakaz" target="_blank" rel="noopener noreferrer" className="text-foreground text-sm sm:text-base hover:text-primary transition-colors">
+                  <a href="https://t.me/msuvenirov39zakaz" target="_blank" rel="noopener noreferrer" onClick={() => reachGoal('telegram_click')} className="text-foreground text-sm sm:text-base hover:text-primary transition-colors">
                     Написать нам
                   </a>
                 </div>
@@ -115,7 +123,7 @@ const ContactSection = () => {
                 </div>
                 <div className="flex flex-col">
                   <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">MAX</span>
-                  <a href="https://max.ru/u/f9LHodD0cOLo7HDSJw672fSH82yru_atZ9KDVODSf_2mghJHg1xe7H2qOC8" target="_blank" rel="noopener noreferrer" className="text-foreground text-sm sm:text-base hover:text-primary transition-colors">
+                  <a href="https://max.ru/u/f9LHodD0cOLo7HDSJw672fSH82yru_atZ9KDVODSf_2mghJHg1xe7H2qOC8" target="_blank" rel="noopener noreferrer" onClick={() => reachGoal('max_click')} className="text-foreground text-sm sm:text-base hover:text-primary transition-colors">
                     Написать в MAX
                   </a>
                 </div>
@@ -128,7 +136,7 @@ const ContactSection = () => {
                 </div>
                 <div className="flex flex-col">
                   <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">email</span>
-                  <a href="mailto:msuvenirov39@yandex.ru" className="text-foreground text-sm sm:text-base hover:text-primary transition-colors">
+                  <a href="mailto:msuvenirov39@yandex.ru" onClick={() => reachGoal('email_click')} className="text-foreground text-sm sm:text-base hover:text-primary transition-colors">
                     msuvenirov39@yandex.ru
                   </a>
                 </div>
@@ -146,6 +154,7 @@ const ContactSection = () => {
                   href="https://vk.com/msuvenirov39"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => reachGoal('social_click')}
                   className="w-14 h-14 rounded-xl bg-muted/30 border border-border/50 flex items-center justify-center hover:border-neon-cyan hover:bg-neon-cyan/10 hover:shadow-[0_0_20px_hsl(var(--neon-cyan)/0.3)] transition-all duration-300 group"
                   aria-label="ВКонтакте"
                 >
@@ -163,6 +172,7 @@ const ContactSection = () => {
                   href="https://www.instagram.com/msuvenirov39"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => reachGoal('social_click')}
                   className="w-14 h-14 rounded-xl bg-muted/30 border border-border/50 flex items-center justify-center hover:border-neon-magenta hover:bg-neon-magenta/10 hover:shadow-[0_0_20px_hsl(var(--neon-magenta)/0.3)] transition-all duration-300 group"
                   aria-label="Instagram"
                 >
