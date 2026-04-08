@@ -107,6 +107,7 @@ className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded
           <div className="relative">
             <a
               href="mailto:msuvenirov39@yandex.ru"
+              onClick={() => reachGoal('email_click')}
               className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl font-semibold text-base transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] border border-border/50 bg-card/80 text-foreground hover:border-primary/40"
             >
               <Mail className="w-5 h-5 text-primary" />
