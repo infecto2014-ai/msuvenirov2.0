@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ProtectedLogo from '@/components/ProtectedLogo';
 import maxLogo from '@/assets/logo_max.svg';
+import { reachGoal } from '@/lib/metrika';
 import sbpLogo from '@/assets/sbp.svg';
 
 const TelegramIcon = ({ className }: { className?: string }) => (
@@ -70,6 +71,7 @@ const LinkInBio = () => {
             href="tel:+79521142350"
             className="flex-shrink-0 w-14 rounded-2xl flex items-center justify-center bg-gradient-to-br from-lime-400 to-green-400 text-background shadow-[0_0_20px_rgba(132,204,22,0.4)] hover:shadow-[0_0_30px_rgba(132,204,22,0.6)] hover:scale-105 active:scale-95 transition-all duration-300"
             title="Позвонить"
+            onClick={() => reachGoal('phone_click')}
           >
             <Phone className="w-6 h-6" />
           </a>
