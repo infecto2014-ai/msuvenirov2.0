@@ -40,7 +40,7 @@ const FloatingOrderButton = () => {
   const [promoMessage, setPromoMessage] = useState('');
   const [promoVerified, setPromoVerified] = useState(false);
 
-  // Restore form data from sessionStorage on mount
+  // Restore form data from sessionStorage OR apply promo from URL on mount
   useEffect(() => {
     const savedData = sessionStorage.getItem(FORM_STORAGE_KEY);
     if (savedData) {
@@ -56,9 +56,22 @@ const FloatingOrderButton = () => {
         setFileNames(parsed.fileNames || []);
         setIsOpen(true);
         sessionStorage.removeItem(FORM_STORAGE_KEY);
+        return;
       } catch (e) {
         sessionStorage.removeItem(FORM_STORAGE_KEY);
       }
+    }
+
+    // Check URL for promo parameter
+    const params = new URLSearchParams(window.location.search);
+    const promoFromUrl = params.get('promo');
+    if (promoFromUrl) {
+      setFormData(prev => ({ ...prev, promo: promoFromUrl.toUpperCase() }));
+      setIsOpen(true);
+      // Clean up URL without reload
+      const url = new URL(window.location.href);
+      url.searchParams.delete('promo');
+      window.history.replaceState({}, '', url.pathname + url.search + url.hash);
     }
   }, []);
 
