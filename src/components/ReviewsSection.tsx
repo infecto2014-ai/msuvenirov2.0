@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, Star, Quote, ArrowRight, ExternalLink } from 'lucide-react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { reachGoal } from '@/lib/metrika';
 
 const YANDEX_MAPS_URL = 'https://yandex.ru/maps/org/masterskaya_suvenirov/105530576058/?ll=20.487454%2C54.737492&z=17';
 
@@ -274,6 +275,7 @@ const ReviewsSection = () => {
           href={YANDEX_MAPS_URL}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={() => reachGoal('yandex_maps_click')}
           className="flex flex-col items-center gap-3 mb-10 sm:mb-14 group"
         >
           <div className="flex items-center gap-3 sm:gap-4">

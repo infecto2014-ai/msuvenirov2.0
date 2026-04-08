@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ProtectedLogo from '@/components/ProtectedLogo';
 import maxLogo from '@/assets/logo_max.svg';
+import { reachGoal } from '@/lib/metrika';
 import sbpLogo from '@/assets/sbp.svg';
 
 const TelegramIcon = ({ className }: { className?: string }) => (
@@ -70,6 +71,7 @@ const LinkInBio = () => {
             href="tel:+79521142350"
             className="flex-shrink-0 w-14 rounded-2xl flex items-center justify-center bg-gradient-to-br from-lime-400 to-green-400 text-background shadow-[0_0_20px_rgba(132,204,22,0.4)] hover:shadow-[0_0_30px_rgba(132,204,22,0.6)] hover:scale-105 active:scale-95 transition-all duration-300"
             title="Позвонить"
+            onClick={() => reachGoal('phone_click')}
           >
             <Phone className="w-6 h-6" />
           </a>
@@ -80,6 +82,7 @@ const LinkInBio = () => {
               href="https://max.ru/u/f9LHodD0cOLo7HDSJw672fSH82yru_atZ9KDVODSf_2mghJHg1xe7H2qOC8"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => reachGoal('max_click')}
 className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl font-bold text-base transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_hsl(var(--neon-cyan)/0.4)] active:scale-[0.98] bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))] text-background"
             >
               <MaxIcon className="w-5 h-5 brightness-0" />
@@ -89,6 +92,7 @@ className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded
               href="https://t.me/msuvenirov39zakaz"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => reachGoal('telegram_click')}
               className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl font-bold text-base transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_hsl(var(--neon-cyan)/0.4)] active:scale-[0.98] bg-gradient-to-r from-[hsl(var(--neon-cyan))] to-[hsl(var(--neon-magenta))] text-background"
             >
               <TelegramIcon className="w-5 h-5" />
@@ -103,6 +107,7 @@ className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded
           <div className="relative">
             <a
               href="mailto:msuvenirov39@yandex.ru"
+              onClick={() => reachGoal('email_click')}
               className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl font-semibold text-base transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] border border-border/50 bg-card/80 text-foreground hover:border-primary/40"
             >
               <Mail className="w-5 h-5 text-primary" />
@@ -150,6 +155,7 @@ className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded
             href="https://vk.com/msuvenirov39"
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => reachGoal('social_click')}
             className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl font-semibold text-base transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] border border-border/50 bg-card/80 text-foreground hover:border-primary/40"
           >
             <VKIcon className="w-5 h-5 text-primary" />

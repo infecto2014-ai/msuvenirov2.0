@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { toast } from '@/hooks/use-toast';
 import InputMask from 'react-input-mask';
 import { Link, useLocation } from 'react-router-dom';
+import { reachGoal } from '@/lib/metrika';
 
 const MAX_COMMENT_LENGTH = 300;
 const MAX_FILES = 10;
@@ -104,6 +105,7 @@ const FloatingOrderButton = () => {
       });
     }
 
+    if (filesToAdd.length > 0) reachGoal('file_attached');
     setFiles(prev => [...prev, ...filesToAdd]);
     setFileNames(prev => [...prev, ...filesToAdd.map(f => f.name)]);
 
@@ -165,6 +167,7 @@ const FloatingOrderButton = () => {
         setPromoStatus('valid');
         setPromoMessage(data.description || data.message);
         setPromoVerified(true);
+        reachGoal('promo_applied');
         toast({ title: '✅ ' + data.message });
       } else {
         setPromoStatus('invalid');
@@ -228,6 +231,7 @@ const FloatingOrderButton = () => {
 
       if (error) throw error;
 
+      reachGoal('order_submit');
       toast({
         title: 'Успешно!',
         description: 'Ваша заявка отправлена. Мы свяжемся с вами в ближайшее время!',
@@ -253,7 +257,7 @@ const FloatingOrderButton = () => {
     <>
       <button
         data-order-button
-        onClick={() => setIsOpen(true)}
+        onClick={() => { setIsOpen(true); reachGoal('order_open'); }}
         className="hidden"
         aria-label="Открыть форму заказа"
       />
