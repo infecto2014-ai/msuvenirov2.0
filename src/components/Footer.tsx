@@ -1,6 +1,7 @@
 import { MapPin, Phone, Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ProtectedLogo from './ProtectedLogo';
+import { reachGoal } from '@/lib/metrika';
 
 const Footer = () => {
   return (
@@ -32,7 +33,7 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="tel:+79521142350" className="flex items-center gap-2 sm:gap-3 text-muted-foreground hover:text-primary transition-colors group text-xs sm:text-sm">
+                <a href="tel:+79521142350" onClick={() => reachGoal('phone_click')} className="flex items-center gap-2 sm:gap-3 text-muted-foreground hover:text-primary transition-colors group text-xs sm:text-sm">
                   <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0" />
                   <span>+7 952 114-23-50</span>
                 </a>
