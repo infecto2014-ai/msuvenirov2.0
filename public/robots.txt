@@ -1,6 +1,6 @@
 User-agent: Yandex
 Allow: /
-Clean-param: __lovable_token
+Clean-param: __lovable_token&fbclid&yclid&utm_source&utm_medium&utm_campaign&utm_content&utm_term
 Disallow: /card
 
 User-agent: Googlebot
