@@ -31,11 +31,14 @@ const Header = () => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  const isServicePage = ['/pechat_na_tkani', '/mug-print'].includes(location.pathname);
+
   useEffect(() => {
     if (location.pathname === '/price') setActiveSection('прайс');
     else if (location.pathname === '/card') setActiveSection('визитка');
     else if (location.pathname === '/faq') setActiveSection('faq');
-  }, [location.pathname]);
+    else if (isServicePage) setActiveSection('услуги');
+  }, [location.pathname, isServicePage]);
 
   useEffect(() => {
     const interval = setInterval(() => setWorkingStatus(getWorkingStatus()), 60000);
