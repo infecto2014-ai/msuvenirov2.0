@@ -9,8 +9,6 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-import dtfImg from '@/assets/fabric-print/dtf-method.jpg';
-import sublimationImg from '@/assets/fabric-print/sublimation-method.jpg';
 
 const FloatingOrderButton = lazy(() => import('@/components/FloatingOrderButton'));
 
