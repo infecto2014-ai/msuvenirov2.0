@@ -45,7 +45,7 @@ const Header = () => {
   // Scrollspy — tracks which section is currently in view
   useEffect(() => {
     if (location.pathname !== '/') return;
-    const sectionIds = ['главная', 'о-нас', 'работы', 'отзывы', 'контакты'];
+    const sectionIds = ['главная', 'о-нас', 'отзывы', 'контакты'];
     const visibleSections = new Map<string, IntersectionObserverEntry>();
 
     const pickActive = () => {
