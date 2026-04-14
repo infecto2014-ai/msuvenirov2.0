@@ -213,7 +213,7 @@ const Header = () => {
               <li ref={servicesRef} className="relative">
                 <button
                   onClick={() => setIsServicesOpen(!isServicesOpen)}
-                  className="relative px-2 xl:px-3 py-2 text-[13px] xl:text-sm font-medium transition-all duration-300 rounded-md whitespace-nowrap text-muted-foreground hover:text-foreground hover:bg-muted/30 flex items-center gap-1"
+                  className={`relative px-2 xl:px-3 py-2 text-[13px] xl:text-sm font-medium transition-all duration-300 rounded-md whitespace-nowrap flex items-center gap-1 ${activeSection === 'услуги' ? 'text-primary' : 'text-muted-foreground hover:text-foreground hover:bg-muted/30'}`}
                 >
                   Услуги
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isServicesOpen ? 'rotate-180' : ''}`} />
