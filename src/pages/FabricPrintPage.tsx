@@ -107,7 +107,7 @@ const FabricPrintPage = () => {
         <title>Печать на футболках в Калининграде | DTF-печать на одежде и спецодежде — Мастерская сувениров</title>
         <meta name="description" content="Печать на футболках, худи, спецодежде и текстиле в Калининграде. DTF-печать и сублимация от 280 ₽. Брендирование корпоративной одежды, печать на худи, шопперах, фартуках. От 1 шт, за 24 часа." />
         <meta name="keywords" content="печать на футболках Калининград, DTF печать, печать на спецодежде, брендирование одежды, печать на худи, печать на шопперах, сублимация на ткани, печать на текстиле Калининград" />
-        <link rel="canonical" href="https://msuvenirov.ru/fabric-print" />
+        <link rel="canonical" href="https://msuvenirov.ru/pechat_na_tkani" />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
 
