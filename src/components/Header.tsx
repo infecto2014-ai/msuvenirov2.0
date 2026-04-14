@@ -357,7 +357,7 @@ const Header = () => {
                   <li>
                     <button
                       onClick={() => setIsMobileServicesOpen(!isMobileServicesOpen)}
-                      className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/20 transition-all duration-200"
+                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${activeSection === 'услуги' ? 'text-primary bg-primary/5 border-l-2 border-primary' : 'text-muted-foreground hover:text-foreground hover:bg-muted/20'}`}
                     >
                       Услуги
                       <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isMobileServicesOpen ? 'rotate-180' : ''}`} />
