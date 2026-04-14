@@ -25,7 +25,7 @@ const methodComparison = [
   {
     method: 'DTF-печать',
     icon: Flame,
-    image: dtfImg,
+    image: '/portfolio/dtf-bestdad.webp',
     pros: ['Любой цвет ткани', 'Фотореалистичная печать', 'От 1 штуки', '50+ стирок', 'Быстрое изготовление'],
 
     cons: ['Ощущается на ощупь'],
@@ -34,7 +34,7 @@ const methodComparison = [
   {
     method: 'Сублимация',
     icon: Droplets,
-    image: sublimationImg,
+    image: '/portfolio/sublimation-anime.webp',
     pros: ['Принт «впечатан» в ткань', 'Не ощущается на ощупь', 'Безграничная палитра', 'Не трескается'],
     cons: ['Только белая/светлая синтетика', 'Не подходит для хлопка'],
     best: 'Спортивная форма, сувенирная продукция, кружки',
