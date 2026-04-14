@@ -97,7 +97,7 @@ const FabricPrintPage = () => {
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: 'Печать на ткани в Калининграде — DTF и сублимация',
-    description: 'DTF-печать и сублимация на футболках, худи, шопперах от 1 штуки. Собственное производство в Калининграде. Стойкость 60+ стирок.',
+    description: 'DTF-печать и сублимация на футболках, худи, шопперах, фартуках, спецодежде от 1 штуки. Собственное производство в Калининграде. Стойкость 60+ стирок.',
     provider: {
       '@type': 'LocalBusiness',
       name: 'Мастерская сувениров',
@@ -111,7 +111,7 @@ const FabricPrintPage = () => {
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Helmet>
         <title>Печать на ткани в Калининграде — DTF и сублимация от 280 ₽ | Мастерская сувениров</title>
-        <meta name="description" content="DTF-печать и сублимация на футболках, худи, шопперах от 1 штуки. Собственное производство, стойкость 60+ стирок. Срочные заказы за 24 часа в Калининграде." />
+        <meta name="description" content="DTF-печать и сублимация на футболках, худи, шопперах, фартуках, спецодежде от 1 штуки. Собственное производство, стойкость 60+ стирок. Срочные заказы за 24 часа в Калининграде." />
         <link rel="canonical" href="https://msuvenirov.ru/fabric-print" />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
@@ -150,7 +150,7 @@ const FabricPrintPage = () => {
           </h1>
 
           <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
-            DTF-печать и сублимация на футболках, худи, шопперах и другом текстиле.
+            DTF-печать и сублимация на футболках, худи, шопперах, фартуках, спецодежде и другом текстиле.
             От&nbsp;1&nbsp;штуки, срочные заказы за&nbsp;24&nbsp;часа. Стойкость принта — 60+&nbsp;стирок.
           </p>
 
@@ -300,7 +300,7 @@ const FabricPrintPage = () => {
               </p>
             </div>
             <div className="flex flex-wrap justify-center gap-2 mt-6">
-              {['Футболки', 'Поло', 'Лонгсливы', 'Худи', 'Свитшоты', 'Шопперы', 'Фартуки', 'Бейсболки', 'Своё изделие'].map(tag => (
+              {['Футболки', 'Поло', 'Лонгсливы', 'Худи', 'Свитшоты', 'Шопперы', 'Фартуки', 'Спецодежда', 'Бейсболки', 'Своё изделие'].map(tag => (
                 <span key={tag} className="px-3 py-1.5 rounded-full border border-primary/20 bg-primary/5 text-xs font-semibold text-primary">
                   {tag}
                 </span>
