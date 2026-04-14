@@ -187,7 +187,7 @@ const Header = () => {
           {/* Nav — centered */}
           <nav aria-label="Основная навигация" className="flex-1 flex justify-center min-w-0">
             <ul className="flex items-center gap-0.5 xl:gap-1">
-              {navLinks.slice(0, 5).map((link) => (
+              {navLinks.slice(0, 4).map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
@@ -232,7 +232,7 @@ const Header = () => {
                 )}
               </li>
 
-              {navLinks.slice(5).map((link) => (
+              {navLinks.slice(4).map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
@@ -331,7 +331,7 @@ const Header = () => {
             <div className="flex flex-col gap-4">
               <nav aria-label="Мобильная навигация">
                 <ul className="flex flex-col gap-1">
-                  {navLinks.slice(0, 5).map((link) => (
+                  {navLinks.slice(0, 4).map((link) => (
                     <li key={link.href}>
                       <a
                         href={link.href}
@@ -374,7 +374,7 @@ const Header = () => {
                     )}
                   </li>
 
-                  {navLinks.slice(5).map((link) => (
+                  {navLinks.slice(4).map((link) => (
                     <li key={link.href}>
                       <a
                         href={link.href}
