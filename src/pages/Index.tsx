@@ -12,7 +12,6 @@ const AboutSection = lazy(() => import('@/components/AboutSection'));
 const ShowcaseSection = lazy(() => import('@/components/ShowcaseSection'));
 const TechnologySection = lazy(() => import('@/components/TechnologySection'));
 const PortfolioSection = lazy(() => import('@/components/PortfolioSection'));
-const VideoShowcaseSection = lazy(() => import('@/components/VideoShowcaseSection'));
 const WhyUsSection = lazy(() => import('@/components/WhyUsSection'));
 const ReviewsSection = lazy(() => import('@/components/ReviewsSection'));
 const TrustSection = lazy(() => import('@/components/TrustSection'));
@@ -74,9 +73,6 @@ const Index = () => {
         </LazySection>
         <LazySection minHeight="500px">
           <PortfolioSection />
-        </LazySection>
-        <LazySection minHeight="600px">
-          <VideoShowcaseSection />
         </LazySection>
         <LazySection>
           <WhyUsSection />

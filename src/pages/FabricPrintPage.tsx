@@ -370,6 +370,67 @@ const FabricPrintPage = () => {
         </div>
       </section>
 
+      {/* ═══ VIDEO SHOWCASE ═══ */}
+      <section className="py-14 sm:py-20 bg-muted/10" id="video-cases" aria-labelledby="video-heading">
+        <div className="container mx-auto px-4 sm:px-6 max-w-5xl">
+          <h2 id="video-heading" className="text-2xl sm:text-3xl font-bold text-center mb-3 neon-text">
+            Брендирование формы для матчей «Динамо»&nbsp;— «Зенит» и «Балтика»&nbsp;— «Локомотив»
+          </h2>
+          <p className="text-muted-foreground text-center text-sm sm:text-base max-w-2xl mx-auto mb-10 leading-relaxed">
+            Качественная печать на спортивной одежде на заказ. Подготовили партию футболок
+            с&nbsp;эксклюзивным дизайном. Работаем с&nbsp;любыми тиражами: от&nbsp;одного изделия
+            до&nbsp;полного обеспечения спортивных команд.
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
+            {[
+              { id: '5aca36d827a345d86d32ac97df583899', token: '01-_Kfte5y6flR2-aDfrIA', title: 'Брендирование формы Динамо — Зенит' },
+              { id: '04e2c79246a3978989ff0a58b900efb1', token: 'OUdk3KMcTlDHlFoAOq5fTA', title: 'Брендирование формы Балтика — Локомотив' },
+            ].map((v) => (
+              <div key={v.id} className="rounded-2xl border border-border bg-card overflow-hidden">
+                <div className="relative w-full" style={{ paddingTop: '177.78%' }}>
+                  <iframe
+                    src={`https://rutube.ru/play/embed/${v.id}/?p=${v.token}`}
+                    title={v.title}
+                    allow="autoplay; encrypted-media; fullscreen"
+                    allowFullScreen
+                    loading="lazy"
+                    className="absolute inset-0 w-full h-full border-0"
+                  />
+                </div>
+                <p className="p-3 text-center text-xs md:text-sm text-muted-foreground">{v.title}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([
+              {
+                '@context': 'https://schema.org',
+                '@type': 'VideoObject',
+                name: 'Брендирование формы Динамо — Зенит | DTF печать Калининград',
+                description: 'Печать на спортивной форме для матча Динамо — Зенит. Профессиональная DTF-печать на одежде в Калининграде.',
+                uploadDate: '2025-01-01',
+                contentUrl: 'https://rutube.ru/video/5aca36d827a345d86d32ac97df583899/',
+                embedUrl: 'https://rutube.ru/play/embed/5aca36d827a345d86d32ac97df583899/',
+              },
+              {
+                '@context': 'https://schema.org',
+                '@type': 'VideoObject',
+                name: 'Брендирование формы Балтика — Локомотив | DTF печать Калининград',
+                description: 'Печать на спортивной форме для матча Балтика — Локомотив. Профессиональная DTF-печать на одежде в Калининграде.',
+                uploadDate: '2025-01-01',
+                contentUrl: 'https://rutube.ru/video/04e2c79246a3978989ff0a58b900efb1/',
+                embedUrl: 'https://rutube.ru/play/embed/04e2c79246a3978989ff0a58b900efb1/',
+              },
+            ]),
+          }}
+        />
+      </section>
+
       {/* ═══ FAQ ═══ */}
       <section className="py-14 sm:py-20">
         <div className="container mx-auto px-4 sm:px-6 max-w-3xl">
