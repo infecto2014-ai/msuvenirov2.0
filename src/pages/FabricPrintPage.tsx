@@ -9,8 +9,6 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-import dtfImg from '@/assets/fabric-print/dtf-method.jpg';
-import sublimationImg from '@/assets/fabric-print/sublimation-method.jpg';
 
 const FloatingOrderButton = lazy(() => import('@/components/FloatingOrderButton'));
 
@@ -27,7 +25,7 @@ const methodComparison = [
   {
     method: 'DTF-печать',
     icon: Flame,
-    image: dtfImg,
+    image: '/portfolio/dtf-bestdad.webp',
     pros: ['Любой цвет ткани', 'Фотореалистичная печать', 'От 1 штуки', '50+ стирок', 'Быстрое изготовление'],
 
     cons: ['Ощущается на ощупь'],
@@ -36,7 +34,7 @@ const methodComparison = [
   {
     method: 'Сублимация',
     icon: Droplets,
-    image: sublimationImg,
+    image: '/portfolio/sublimation-anime.webp',
     pros: ['Принт «впечатан» в ткань', 'Не ощущается на ощупь', 'Безграничная палитра', 'Не трескается'],
     cons: ['Только белая/светлая синтетика', 'Не подходит для хлопка'],
     best: 'Спортивная форма, сувенирная продукция, кружки',

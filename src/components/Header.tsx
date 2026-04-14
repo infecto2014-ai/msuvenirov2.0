@@ -45,7 +45,7 @@ const Header = () => {
   // Scrollspy — tracks which section is currently in view
   useEffect(() => {
     if (location.pathname !== '/') return;
-    const sectionIds = ['главная', 'о-нас', 'работы', 'отзывы', 'контакты'];
+    const sectionIds = ['главная', 'о-нас', 'отзывы', 'контакты'];
     const visibleSections = new Map<string, IntersectionObserverEntry>();
 
     const pickActive = () => {
@@ -100,7 +100,6 @@ const Header = () => {
   const navLinks = [
     { href: '#главная', label: 'Главная', id: 'главная' },
     { href: '#о-нас', label: 'О нас', id: 'о-нас' },
-    { href: '#работы', label: 'Наши работы', id: 'работы' },
     { href: '#отзывы', label: 'Отзывы', id: 'отзывы' },
     { href: '#контакты', label: 'Контакты', id: 'контакты' },
     { href: '/price', label: 'Прайс-лист', id: 'прайс' },
@@ -188,7 +187,7 @@ const Header = () => {
           {/* Nav — centered */}
           <nav aria-label="Основная навигация" className="flex-1 flex justify-center min-w-0">
             <ul className="flex items-center gap-0.5 xl:gap-1">
-              {navLinks.slice(0, 5).map((link) => (
+              {navLinks.slice(0, 4).map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
@@ -233,7 +232,7 @@ const Header = () => {
                 )}
               </li>
 
-              {navLinks.slice(5).map((link) => (
+              {navLinks.slice(4).map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
@@ -332,7 +331,7 @@ const Header = () => {
             <div className="flex flex-col gap-4">
               <nav aria-label="Мобильная навигация">
                 <ul className="flex flex-col gap-1">
-                  {navLinks.slice(0, 5).map((link) => (
+                  {navLinks.slice(0, 4).map((link) => (
                     <li key={link.href}>
                       <a
                         href={link.href}
@@ -375,7 +374,7 @@ const Header = () => {
                     )}
                   </li>
 
-                  {navLinks.slice(5).map((link) => (
+                  {navLinks.slice(4).map((link) => (
                     <li key={link.href}>
                       <a
                         href={link.href}
