@@ -31,11 +31,14 @@ const Header = () => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  const isServicePage = ['/pechat_na_tkani', '/mug-print'].includes(location.pathname);
+
   useEffect(() => {
     if (location.pathname === '/price') setActiveSection('прайс');
     else if (location.pathname === '/card') setActiveSection('визитка');
     else if (location.pathname === '/faq') setActiveSection('faq');
-  }, [location.pathname]);
+    else if (isServicePage) setActiveSection('услуги');
+  }, [location.pathname, isServicePage]);
 
   useEffect(() => {
     const interval = setInterval(() => setWorkingStatus(getWorkingStatus()), 60000);
@@ -210,10 +213,13 @@ const Header = () => {
               <li ref={servicesRef} className="relative">
                 <button
                   onClick={() => setIsServicesOpen(!isServicesOpen)}
-                  className="relative px-2 xl:px-3 py-2 text-[13px] xl:text-sm font-medium transition-all duration-300 rounded-md whitespace-nowrap text-muted-foreground hover:text-foreground hover:bg-muted/30 flex items-center gap-1"
+                  className={`relative px-2 xl:px-3 py-2 text-[13px] xl:text-sm font-medium transition-all duration-300 rounded-md whitespace-nowrap flex items-center gap-1 ${activeSection === 'услуги' ? 'text-primary' : 'text-muted-foreground hover:text-foreground hover:bg-muted/30'}`}
                 >
                   Услуги
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isServicesOpen ? 'rotate-180' : ''}`} />
+                  {activeSection === 'услуги' && (
+                    <span className="absolute bottom-0 left-2 right-2 xl:left-3 xl:right-3 h-0.5 bg-primary rounded-full" />
+                  )}
                 </button>
                 {isServicesOpen && (
                   <div className="absolute top-full left-0 mt-1 w-72 rounded-xl border border-border bg-background/95 backdrop-blur-md shadow-xl py-2 z-50 animate-fade-in">
@@ -351,7 +357,7 @@ const Header = () => {
                   <li>
                     <button
                       onClick={() => setIsMobileServicesOpen(!isMobileServicesOpen)}
-                      className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/20 transition-all duration-200"
+                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${activeSection === 'услуги' ? 'text-primary bg-primary/5 border-l-2 border-primary' : 'text-muted-foreground hover:text-foreground hover:bg-muted/20'}`}
                     >
                       Услуги
                       <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isMobileServicesOpen ? 'rotate-180' : ''}`} />
