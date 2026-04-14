@@ -188,7 +188,52 @@ const Header = () => {
           {/* Nav — centered */}
           <nav aria-label="Основная навигация" className="flex-1 flex justify-center min-w-0">
             <ul className="flex items-center gap-0.5 xl:gap-1">
-              {navLinks.map((link) => (
+              {navLinks.slice(0, 5).map((link) => (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    onClick={(e) => handleNavClick(e, link.href)}
+                    className={`relative px-2 xl:px-3 py-2 text-[13px] xl:text-sm font-medium transition-all duration-300 rounded-md whitespace-nowrap
+                      ${activeSection === link.id
+                        ? 'text-primary'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted/30'
+                      }
+                    `}
+                  >
+                    {link.label}
+                    {activeSection === link.id && (
+                      <span className="absolute bottom-0 left-2 right-2 xl:left-3 xl:right-3 h-0.5 bg-primary rounded-full" />
+                    )}
+                  </a>
+                </li>
+              ))}
+
+              {/* Услуги dropdown */}
+              <li ref={servicesRef} className="relative">
+                <button
+                  onClick={() => setIsServicesOpen(!isServicesOpen)}
+                  className="relative px-2 xl:px-3 py-2 text-[13px] xl:text-sm font-medium transition-all duration-300 rounded-md whitespace-nowrap text-muted-foreground hover:text-foreground hover:bg-muted/30 flex items-center gap-1"
+                >
+                  Услуги
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isServicesOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {isServicesOpen && (
+                  <div className="absolute top-full left-0 mt-1 w-72 rounded-xl border border-border bg-background/95 backdrop-blur-md shadow-xl py-2 z-50 animate-fade-in">
+                    {serviceLinks.map((s) => (
+                      <a
+                        key={s.href}
+                        href={s.href}
+                        onClick={(e) => { handleNavClick(e, s.href); setIsServicesOpen(false); }}
+                        className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/30 transition-colors"
+                      >
+                        {s.label}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </li>
+
+              {navLinks.slice(5).map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
