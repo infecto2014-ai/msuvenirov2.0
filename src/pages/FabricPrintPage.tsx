@@ -34,7 +34,7 @@ const methodComparison = [
     method: 'DTF-печать',
     icon: Flame,
     image: dtfImg,
-    pros: ['Любой цвет ткани', 'Фотореалистичная печать', 'От 1 штуки', '60+ стирок', 'Быстрое изготовление'],
+    pros: ['Любой цвет ткани', 'Фотореалистичная печать', 'От 1 штуки', '50+ стирок', 'Быстрое изготовление'],
 
     cons: ['Ощущается на ощупь'],
     best: 'Сложные полноцветные дизайны, срочные заказы, крупные тиражи',
@@ -97,7 +97,7 @@ const FabricPrintPage = () => {
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: 'Печать на ткани в Калининграде — DTF и сублимация',
-    description: 'DTF-печать и сублимация на футболках, худи, шопперах, фартуках, спецодежде от 1 штуки. Собственное производство в Калининграде. Стойкость 60+ стирок.',
+    description: 'DTF-печать и сублимация на футболках, худи, шопперах, фартуках, спецодежде от 1 штуки. Собственное производство в Калининграде. Стойкость 50+ стирок.',
     provider: {
       '@type': 'LocalBusiness',
       name: 'Мастерская сувениров',
@@ -111,7 +111,7 @@ const FabricPrintPage = () => {
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Helmet>
         <title>Печать на ткани в Калининграде — DTF и сублимация от 280 ₽ | Мастерская сувениров</title>
-        <meta name="description" content="DTF-печать и сублимация на футболках, худи, шопперах, фартуках, спецодежде от 1 штуки. Собственное производство, стойкость 60+ стирок. Срочные заказы за 24 часа в Калининграде." />
+        <meta name="description" content="DTF-печать и сублимация на футболках, худи, шопперах, фартуках, спецодежде от 1 штуки. Собственное производство, стойкость 50+ стирок. Срочные заказы за 24 часа в Калининграде." />
         <link rel="canonical" href="https://msuvenirov.ru/fabric-print" />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
@@ -151,7 +151,7 @@ const FabricPrintPage = () => {
 
           <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
             DTF-печать и сублимация на футболках, худи, шопперах, фартуках, спецодежде и другом текстиле.
-            От&nbsp;1&nbsp;штуки, срочные заказы за&nbsp;24&nbsp;часа. Стойкость принта — 60+&nbsp;стирок.
+            От&nbsp;1&nbsp;штуки, срочные заказы за&nbsp;24&nbsp;часа. Стойкость принта — 50+&nbsp;стирок.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -168,7 +168,7 @@ const FabricPrintPage = () => {
 
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-10 text-xs sm:text-sm text-muted-foreground">
             <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> От 1 штуки</span>
-            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> 60+ стирок</span>
+            <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> 50+ стирок</span>
             <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> Срочно за 24ч</span>
             <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-primary" /> Своё оборудование</span>
           </div>
