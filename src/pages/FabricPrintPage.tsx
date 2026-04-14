@@ -247,8 +247,8 @@ const FabricPrintPage = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
             {[
               { src: '/portfolio/kpop-tshirt.webp', alt: 'DTF-печать на чёрной футболке — K-pop дизайн с цветным принтом в Калининграде', label: 'DTF на футболке' },
-              { src: '/portfolio/sport-jersey.webp', alt: 'Брендирование спортивной формы — печать номера и эмблемы на спецодежде', label: 'Спецодежда' },
-              { src: '/portfolio/corporate-polo.webp', alt: 'Печать логотипа на корпоративном поло — брендирование одежды для бизнеса', label: 'Брендирование' },
+              { src: '/portfolio/sport-jersey.webp', alt: 'Печать на спортивной форме — нанесение номера и эмблемы на майку', label: 'Спортивная форма' },
+              { src: '/portfolio/corporate-polo.webp', alt: 'Печать логотипа на корпоративном поло — брендирование одежды для бизнеса', label: 'Бренд' },
               { src: '/portfolio/wedding-tshirts.webp', alt: 'Печать на парных футболках — DTF-печать именного дизайна на заказ', label: 'DTF на футболке' },
               { src: '/portfolio/branded-caps.webp', alt: 'Печать на бейсболках — DTF-брендирование кепок с логотипом компании', label: 'Печать на кепках' },
               { src: '/portfolio/shopper-bags.webp', alt: 'Печать на шопперах — DTF-печать авторского дизайна на хлопковых сумках', label: 'Печать на шопперах' },
