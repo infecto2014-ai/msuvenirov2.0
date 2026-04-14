@@ -109,7 +109,6 @@ const Header = () => {
 
   const serviceLinks = [
     { href: '/pechat_na_tkani', label: 'Печать на ткани (футболки, худи, спецодежда)' },
-    { href: '/mug-print', label: 'Печать на кружках' },
   ];
 
   const [isServicesOpen, setIsServicesOpen] = useState(false);
