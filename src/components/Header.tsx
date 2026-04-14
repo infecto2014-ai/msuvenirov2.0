@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Menu, X, Phone, MapPin, Clock, Mail, Send } from 'lucide-react';
+import { Menu, X, Phone, MapPin, Clock, Mail, Send, ChevronDown } from 'lucide-react';
 import ProtectedLogo from './ProtectedLogo';
 import { forceLoadAllSections } from '@/hooks/useLazySection';
 import { reachGoal } from '@/lib/metrika';
@@ -107,6 +107,25 @@ const Header = () => {
     { href: '/faq', label: 'FAQ', id: 'faq' },
     { href: '/card', label: 'Визитка', id: 'визитка' },
   ];
+
+  const serviceLinks = [
+    { href: '/pechat_na_tkani', label: 'Печать на ткани (футболки, худи, спецодежда)' },
+    { href: '/mug-print', label: 'Печать на кружках' },
+  ];
+
+  const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
+  const servicesRef = useRef<HTMLLIElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (servicesRef.current && !servicesRef.current.contains(e.target as Node)) {
+        setIsServicesOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
