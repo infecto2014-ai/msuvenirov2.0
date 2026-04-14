@@ -257,6 +257,12 @@ const FabricPrintPage = () => {
               { src: gallerySub2, alt: 'Сублимация на шоппере — ботанический принт', label: 'Сублимация' },
               { src: galleryDtf3, alt: 'DTF-печать на холщовой сумке — минималистичный логотип', label: 'DTF' },
               { src: gallerySub3, alt: 'Сублимация на кружке — яркий абстрактный дизайн', label: 'Сублимация' },
+              { src: '/portfolio/kpop-tshirt.webp', alt: 'K-pop футболка с цветным DTF-принтом на чёрной ткани', label: 'DTF' },
+              { src: '/portfolio/sport-jersey.webp', alt: 'Брендирование спортивной формы — номер и эмблема на майке', label: 'DTF' },
+              { src: '/portfolio/corporate-polo.webp', alt: 'Корпоративное поло с логотипом пиццерии', label: 'DTF' },
+              { src: '/portfolio/wedding-tshirts.webp', alt: 'Парные свадебные футболки с датой — DTF-печать', label: 'DTF' },
+              { src: '/portfolio/branded-caps.webp', alt: 'Брендированные кепки с логотипом — DTF-печать', label: 'DTF' },
+              { src: '/portfolio/shopper-bags.webp', alt: 'Дизайнерские шопперы с авторским принтом', label: 'DTF' },
             ].map((item, i) => (
               <div key={i} className="group relative rounded-xl overflow-hidden border border-border bg-card aspect-square">
                 <img
