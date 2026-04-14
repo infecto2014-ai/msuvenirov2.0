@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Menu, X, Phone, MapPin, Clock, Mail, Send } from 'lucide-react';
+import { Menu, X, Phone, MapPin, Clock, Mail, Send, ChevronDown } from 'lucide-react';
 import ProtectedLogo from './ProtectedLogo';
 import { forceLoadAllSections } from '@/hooks/useLazySection';
 import { reachGoal } from '@/lib/metrika';
@@ -108,6 +108,25 @@ const Header = () => {
     { href: '/card', label: 'Визитка', id: 'визитка' },
   ];
 
+  const serviceLinks = [
+    { href: '/pechat_na_tkani', label: 'Печать на ткани (футболки, худи, спецодежда)' },
+    { href: '/mug-print', label: 'Печать на кружках' },
+  ];
+
+  const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
+  const servicesRef = useRef<HTMLLIElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (servicesRef.current && !servicesRef.current.contains(e.target as Node)) {
+        setIsServicesOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     if (href.startsWith('/')) {
@@ -169,7 +188,52 @@ const Header = () => {
           {/* Nav — centered */}
           <nav aria-label="Основная навигация" className="flex-1 flex justify-center min-w-0">
             <ul className="flex items-center gap-0.5 xl:gap-1">
-              {navLinks.map((link) => (
+              {navLinks.slice(0, 5).map((link) => (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    onClick={(e) => handleNavClick(e, link.href)}
+                    className={`relative px-2 xl:px-3 py-2 text-[13px] xl:text-sm font-medium transition-all duration-300 rounded-md whitespace-nowrap
+                      ${activeSection === link.id
+                        ? 'text-primary'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted/30'
+                      }
+                    `}
+                  >
+                    {link.label}
+                    {activeSection === link.id && (
+                      <span className="absolute bottom-0 left-2 right-2 xl:left-3 xl:right-3 h-0.5 bg-primary rounded-full" />
+                    )}
+                  </a>
+                </li>
+              ))}
+
+              {/* Услуги dropdown */}
+              <li ref={servicesRef} className="relative">
+                <button
+                  onClick={() => setIsServicesOpen(!isServicesOpen)}
+                  className="relative px-2 xl:px-3 py-2 text-[13px] xl:text-sm font-medium transition-all duration-300 rounded-md whitespace-nowrap text-muted-foreground hover:text-foreground hover:bg-muted/30 flex items-center gap-1"
+                >
+                  Услуги
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isServicesOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {isServicesOpen && (
+                  <div className="absolute top-full left-0 mt-1 w-72 rounded-xl border border-border bg-background/95 backdrop-blur-md shadow-xl py-2 z-50 animate-fade-in">
+                    {serviceLinks.map((s) => (
+                      <a
+                        key={s.href}
+                        href={s.href}
+                        onClick={(e) => { handleNavClick(e, s.href); setIsServicesOpen(false); }}
+                        className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/30 transition-colors"
+                      >
+                        {s.label}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </li>
+
+              {navLinks.slice(5).map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
@@ -268,7 +332,50 @@ const Header = () => {
             <div className="flex flex-col gap-4">
               <nav aria-label="Мобильная навигация">
                 <ul className="flex flex-col gap-1">
-                  {navLinks.map((link) => (
+                  {navLinks.slice(0, 5).map((link) => (
+                    <li key={link.href}>
+                      <a
+                        href={link.href}
+                        onClick={(e) => handleNavClick(e, link.href)}
+                        className={`block px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200
+                          ${activeSection === link.id
+                            ? 'text-primary bg-primary/5 border-l-2 border-primary'
+                            : 'text-muted-foreground hover:text-foreground hover:bg-muted/20'
+                          }
+                        `}
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+
+                  {/* Услуги — mobile accordion */}
+                  <li>
+                    <button
+                      onClick={() => setIsMobileServicesOpen(!isMobileServicesOpen)}
+                      className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/20 transition-all duration-200"
+                    >
+                      Услуги
+                      <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isMobileServicesOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    {isMobileServicesOpen && (
+                      <ul className="ml-4 mt-1 flex flex-col gap-1">
+                        {serviceLinks.map((s) => (
+                          <li key={s.href}>
+                            <a
+                              href={s.href}
+                              onClick={(e) => { handleNavClick(e, s.href); setIsMobileServicesOpen(false); }}
+                              className="block px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/20 transition-colors"
+                            >
+                              {s.label}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
+
+                  {navLinks.slice(5).map((link) => (
                     <li key={link.href}>
                       <a
                         href={link.href}
