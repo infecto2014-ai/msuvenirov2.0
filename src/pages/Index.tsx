@@ -75,6 +75,9 @@ const Index = () => {
         <LazySection minHeight="500px">
           <PortfolioSection />
         </LazySection>
+        <LazySection minHeight="600px">
+          <VideoShowcaseSection />
+        </LazySection>
         <LazySection>
           <WhyUsSection />
         </LazySection>
