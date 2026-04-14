@@ -11,12 +11,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 
 import dtfImg from '@/assets/fabric-print/dtf-method.jpg';
 import sublimationImg from '@/assets/fabric-print/sublimation-method.jpg';
-import galleryDtf1 from '@/assets/fabric-print/gallery-dtf-1.jpg';
-import galleryDtf2 from '@/assets/fabric-print/gallery-dtf-2.jpg';
-import galleryDtf3 from '@/assets/fabric-print/gallery-dtf-3.jpg';
-import gallerySub1 from '@/assets/fabric-print/gallery-sub-1.jpg';
-import gallerySub2 from '@/assets/fabric-print/gallery-sub-2.jpg';
-import gallerySub3 from '@/assets/fabric-print/gallery-sub-3.jpg';
 
 const FloatingOrderButton = lazy(() => import('@/components/FloatingOrderButton'));
 
@@ -51,7 +45,7 @@ const methodComparison = [
 
 const faqItems = [
   { q: 'Какой минимальный тираж?', a: 'Печатаем от 1 штуки. Нет ограничений на минимальный заказ — можно заказать даже одну футболку с уникальным дизайном.' },
-  { q: 'Сколько стирок выдерживает DTF-печать?', a: 'При правильном уходе (стирка до 40°C наизнанку) — более 60 стирок без потери яркости и трещин.' },
+  { q: 'Сколько стирок выдерживает DTF-печать?', a: 'При правильном уходе (стирка до 40°C наизнанку) — более 50 стирок без потери яркости и трещин.' },
   { q: 'Чем DTF отличается от сублимации?', a: 'DTF переносит принт плёнкой на любую ткань. Сублимация «впечатывает» краску в синтетические волокна — принт не ощущается тактильно, но работает только на белой синтетике.' },
   { q: 'Можно печатать на своих изделиях?', a: 'Да, вы можете привезти свои футболки, худи или шопперы. Мы нанесём принт на ваше изделие.' },
   { q: 'Какой формат макета нужен?', a: 'Принимаем PNG, PDF, AI, PSD, CDR. Разрешение от 300 dpi. Если макета нет — поможем с дизайном.' },
@@ -96,8 +90,8 @@ const FabricPrintPage = () => {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: 'Печать на ткани в Калининграде — DTF и сублимация',
-    description: 'DTF-печать и сублимация на футболках, худи, шопперах, фартуках, спецодежде от 1 штуки. Собственное производство в Калининграде. Стойкость 50+ стирок.',
+    name: 'Печать на футболках и спецодежде в Калининграде — DTF-печать, сублимация, брендирование',
+    description: 'DTF-печать и сублимация на футболках, худи, шопперах, фартуках, спецодежде. Брендирование корпоративной одежды от 1 штуки. Собственное производство в Калининграде. Стойкость 50+ стирок.',
     provider: {
       '@type': 'LocalBusiness',
       name: 'Мастерская сувениров',
@@ -110,8 +104,9 @@ const FabricPrintPage = () => {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Helmet>
-        <title>Печать на ткани в Калининграде — DTF и сублимация от 280 ₽ | Мастерская сувениров</title>
-        <meta name="description" content="DTF-печать и сублимация на футболках, худи, шопперах, фартуках, спецодежде от 1 штуки. Собственное производство, стойкость 50+ стирок. Срочные заказы за 24 часа в Калининграде." />
+        <title>Печать на футболках в Калининграде | DTF-печать на одежде и спецодежде — Мастерская сувениров</title>
+        <meta name="description" content="Печать на футболках, худи, спецодежде и текстиле в Калининграде. DTF-печать и сублимация от 280 ₽. Брендирование корпоративной одежды, печать на худи, шопперах, фартуках. От 1 шт, за 24 часа." />
+        <meta name="keywords" content="печать на футболках Калининград, DTF печать, печать на спецодежде, брендирование одежды, печать на худи, печать на шопперах, сублимация на ткани, печать на текстиле Калининград" />
         <link rel="canonical" href="https://msuvenirov.ru/fabric-print" />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
@@ -144,14 +139,14 @@ const FabricPrintPage = () => {
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-5">
-            Печать на ткани
+            Печать на футболках
             <br />
-            <span className="neon-text">в Калининграде</span>
+            <span className="neon-text">и спецодежде в Калининграде</span>
           </h1>
 
           <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
-            DTF-печать и сублимация на футболках, худи, шопперах, фартуках, спецодежде и другом текстиле.
-            От&nbsp;1&nbsp;штуки, срочные заказы за&nbsp;24&nbsp;часа. Стойкость принта — 50+&nbsp;стирок.
+            DTF-печать и сублимация на&nbsp;футболках, худи, шопперах, фартуках и&nbsp;спецодежде.
+            Брендирование корпоративной одежды от&nbsp;1&nbsp;штуки, срочные заказы за&nbsp;24&nbsp;часа. Стойкость принта — 50+&nbsp;стирок.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -245,24 +240,18 @@ const FabricPrintPage = () => {
       {/* ═══ GALLERY ═══ */}
       <section className="py-14 sm:py-20 bg-muted/10">
         <div className="container mx-auto px-4 sm:px-6 max-w-5xl">
-          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-3">Примеры наших работ</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-3">Примеры печати на футболках и одежде</h2>
           <p className="text-muted-foreground text-center text-sm mb-10 max-w-xl mx-auto">
-            Реальные примеры печати — от ярких футболок до брендированных шопперов и кружек
+            Реальные работы — DTF-печать на футболках, брендирование спецодежды, печать на худи и шопперах
           </p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
             {[
-              { src: galleryDtf1, alt: 'DTF-печать на чёрной футболке — градиентный принт', label: 'DTF' },
-              { src: gallerySub1, alt: 'Сублимация на спортивной футболке — полный запечат', label: 'Сублимация' },
-              { src: galleryDtf2, alt: 'DTF-печать на белом худи — яркий графический дизайн', label: 'DTF' },
-              { src: gallerySub2, alt: 'Сублимация на шоппере — ботанический принт', label: 'Сублимация' },
-              { src: galleryDtf3, alt: 'DTF-печать на холщовой сумке — минималистичный логотип', label: 'DTF' },
-              { src: gallerySub3, alt: 'Сублимация на кружке — яркий абстрактный дизайн', label: 'Сублимация' },
-              { src: '/portfolio/kpop-tshirt.webp', alt: 'K-pop футболка с цветным DTF-принтом на чёрной ткани', label: 'DTF' },
-              { src: '/portfolio/sport-jersey.webp', alt: 'Брендирование спортивной формы — номер и эмблема на майке', label: 'DTF' },
-              { src: '/portfolio/corporate-polo.webp', alt: 'Корпоративное поло с логотипом пиццерии', label: 'DTF' },
-              { src: '/portfolio/wedding-tshirts.webp', alt: 'Парные свадебные футболки с датой — DTF-печать', label: 'DTF' },
-              { src: '/portfolio/branded-caps.webp', alt: 'Брендированные кепки с логотипом — DTF-печать', label: 'DTF' },
-              { src: '/portfolio/shopper-bags.webp', alt: 'Дизайнерские шопперы с авторским принтом', label: 'DTF' },
+              { src: '/portfolio/kpop-tshirt.webp', alt: 'DTF-печать на чёрной футболке — K-pop дизайн с цветным принтом в Калининграде', label: 'DTF на футболке' },
+              { src: '/portfolio/sport-jersey.webp', alt: 'Брендирование спортивной формы — печать номера и эмблемы на спецодежде', label: 'Спецодежда' },
+              { src: '/portfolio/corporate-polo.webp', alt: 'Печать логотипа на корпоративном поло — брендирование одежды для бизнеса', label: 'Брендирование' },
+              { src: '/portfolio/wedding-tshirts.webp', alt: 'Печать на парных футболках — DTF-печать именного дизайна на заказ', label: 'DTF на футболке' },
+              { src: '/portfolio/branded-caps.webp', alt: 'Печать на бейсболках — DTF-брендирование кепок с логотипом компании', label: 'Печать на кепках' },
+              { src: '/portfolio/shopper-bags.webp', alt: 'Печать на шопперах — DTF-печать авторского дизайна на хлопковых сумках', label: 'Печать на шопперах' },
             ].map((item, i) => (
               <div key={i} className="group relative rounded-xl overflow-hidden border border-border bg-card aspect-square">
                 <img
