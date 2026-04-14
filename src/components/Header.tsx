@@ -217,6 +217,9 @@ const Header = () => {
                 >
                   Услуги
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isServicesOpen ? 'rotate-180' : ''}`} />
+                  {activeSection === 'услуги' && (
+                    <span className="absolute bottom-0 left-2 right-2 xl:left-3 xl:right-3 h-0.5 bg-primary rounded-full" />
+                  )}
                 </button>
                 {isServicesOpen && (
                   <div className="absolute top-full left-0 mt-1 w-72 rounded-xl border border-border bg-background/95 backdrop-blur-md shadow-xl py-2 z-50 animate-fade-in">
