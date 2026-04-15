@@ -96,8 +96,10 @@ const Header = () => {
     { href: '/card', label: 'Визитка', id: 'визитка' },
   ];
 
-  const serviceLinks = [
+  const serviceLinks: { href: string; label: string; soon?: boolean }[] = [
     { href: '/pechat_na_tkani', label: 'Печать на ткани (футболки, худи, спецодежда)' },
+    { href: '#', label: 'Печать на кружках', soon: true },
+    { href: '#', label: 'Ещё больше услуг — скоро', soon: true },
   ];
 
   const [isServicesOpen, setIsServicesOpen] = useState(false);
