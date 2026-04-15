@@ -6,22 +6,12 @@ import { forceLoadAllSections } from '@/hooks/useLazySection';
 import { reachGoal } from '@/lib/metrika';
 
 
-const getWorkingStatus = () => {
-  const now = new Date();
-  const kaliningradOffset = 2 * 60;
-  const utc = now.getTime() + now.getTimezoneOffset() * 60000;
-  const kaliningradTime = new Date(utc + kaliningradOffset * 60000);
-  const hours = kaliningradTime.getHours();
-  const isOpen = hours >= 10 && hours < 20;
-  return { isOpen, hours };
-};
 
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('главная');
-  const [workingStatus, setWorkingStatus] = useState(getWorkingStatus);
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -40,10 +30,6 @@ const Header = () => {
     else if (isServicePage) setActiveSection('услуги');
   }, [location.pathname, isServicePage]);
 
-  useEffect(() => {
-    const interval = setInterval(() => setWorkingStatus(getWorkingStatus()), 60000);
-    return () => clearInterval(interval);
-  }, []);
 
   // Scrollspy — tracks which section is currently in view
   useEffect(() => {
