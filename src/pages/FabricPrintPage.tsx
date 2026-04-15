@@ -280,9 +280,6 @@ const FabricPrintPage = () => {
             >
               <span className="relative z-10 flex items-center gap-2"><Send className="w-4 h-4" /> Сделать заказ</span>
             </button>
-            <Link to="/price" className="px-8 py-3.5 rounded-xl border-2 border-primary/40 text-primary font-bold text-base hover:bg-primary/10 transition-colors text-center">
-              Полный прайс-лист
-            </Link>
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-10 text-xs sm:text-sm text-muted-foreground">
