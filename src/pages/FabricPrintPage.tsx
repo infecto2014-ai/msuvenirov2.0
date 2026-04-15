@@ -526,6 +526,11 @@ const FabricPrintPage = () => {
           <h2 className="text-2xl sm:text-3xl font-bold text-center mb-3">Частые вопросы</h2>
           <p className="text-muted-foreground text-center text-sm mb-8">О печати на ткани, тиражах и сроках</p>
           <FAQBlock />
+          <div className="mt-8 text-center">
+            <Link to="/faq" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl border-2 border-primary/40 text-primary font-bold text-base hover:bg-primary/10 transition-colors">
+              Все вопросы и ответы
+            </Link>
+          </div>
         </div>
       </section>
 
