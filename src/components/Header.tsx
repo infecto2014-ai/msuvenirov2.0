@@ -87,10 +87,10 @@ const Header = () => {
   }, [location.pathname]);
 
   const navLinks = [
-    { href: '#главная', label: 'Главная', id: 'главная' },
-    { href: '#о-нас', label: 'О нас', id: 'о-нас' },
-    { href: '#отзывы', label: 'Отзывы', id: 'отзывы' },
-    { href: '#контакты', label: 'Контакты', id: 'контакты' },
+    { href: '/#главная', label: 'Главная', id: 'главная' },
+    { href: '/#о-нас', label: 'О нас', id: 'о-нас' },
+    { href: '/#отзывы', label: 'Отзывы', id: 'отзывы' },
+    { href: '/#контакты', label: 'Контакты', id: 'контакты' },
     { href: '/price', label: 'Прайс-лист', id: 'прайс' },
     { href: '/faq', label: 'FAQ', id: 'faq' },
     { href: '/card', label: 'Визитка', id: 'визитка' },
