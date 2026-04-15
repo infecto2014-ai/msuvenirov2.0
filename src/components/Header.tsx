@@ -212,14 +212,24 @@ const Header = () => {
                 {isServicesOpen && (
                   <div className="absolute top-full left-0 mt-1 w-72 rounded-xl border border-border bg-background/95 backdrop-blur-md shadow-xl py-2 z-50 animate-fade-in">
                     {serviceLinks.map((s) => (
-                      <a
-                        key={s.href}
-                        href={s.href}
-                        onClick={(e) => { handleNavClick(e, s.href); setIsServicesOpen(false); }}
-                        className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/30 transition-colors"
-                      >
-                        {s.label}
-                      </a>
+                      s.soon ? (
+                        <span
+                          key={s.label}
+                          className="flex items-center justify-between px-4 py-2.5 text-sm text-muted-foreground/50 cursor-default"
+                        >
+                          {s.label}
+                          <span className="text-[10px] uppercase tracking-wider text-primary/70 bg-primary/10 px-1.5 py-0.5 rounded">скоро</span>
+                        </span>
+                      ) : (
+                        <a
+                          key={s.href}
+                          href={s.href}
+                          onClick={(e) => { handleNavClick(e, s.href); setIsServicesOpen(false); }}
+                          className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/30 transition-colors"
+                        >
+                          {s.label}
+                        </a>
+                      )
                     ))}
                   </div>
                 )}
