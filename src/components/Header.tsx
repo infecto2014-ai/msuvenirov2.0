@@ -363,14 +363,21 @@ const Header = () => {
                     {isMobileServicesOpen && (
                       <ul className="ml-4 mt-1 flex flex-col gap-1">
                         {serviceLinks.map((s) => (
-                          <li key={s.href}>
-                            <a
-                              href={s.href}
-                              onClick={(e) => { handleNavClick(e, s.href); setIsMobileServicesOpen(false); }}
-                              className="block px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/20 transition-colors"
-                            >
-                              {s.label}
-                            </a>
+                          <li key={s.label}>
+                            {s.soon ? (
+                              <span className="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-muted-foreground/50 cursor-default">
+                                {s.label}
+                                <span className="text-[10px] uppercase tracking-wider text-primary/70 bg-primary/10 px-1.5 py-0.5 rounded">скоро</span>
+                              </span>
+                            ) : (
+                              <a
+                                href={s.href}
+                                onClick={(e) => { handleNavClick(e, s.href); setIsMobileServicesOpen(false); }}
+                                className="block px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/20 transition-colors"
+                              >
+                                {s.label}
+                              </a>
+                            )}
                           </li>
                         ))}
                       </ul>
