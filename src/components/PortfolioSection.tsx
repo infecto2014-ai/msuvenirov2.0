@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper/modules';
+import { Navigation } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
 import { X, ChevronLeft, ChevronRight, MessageSquare } from 'lucide-react';
 import 'swiper/css';
@@ -215,7 +215,7 @@ const PortfolioSection = () => {
               768: { slidesPerView: 2.5, spaceBetween: 24 },
               1024: { slidesPerView: 3, spaceBetween: 28 },
             }}
-            modules={[Navigation, Pagination]}
+            modules={[Navigation]}
             onSwiper={setSwiperInstance}
             onSlideChange={(swiper) => setActiveSlide(swiper.realIndex)}
             className="!pb-4"

@@ -232,15 +232,6 @@ const ReviewsSection = () => {
     isHorizontalSwipe.current = false;
   };
 
-  const handleTouchMove = (e: React.TouchEvent) => {
-    touchEndX.current = e.touches[0].clientX;
-    const dx = Math.abs(touchEndX.current - touchStartX.current);
-    const dy = Math.abs(e.touches[0].clientY - touchStartY.current);
-    if (dx > 10 && dx > dy) {
-      isHorizontalSwipe.current = true;
-      e.preventDefault();
-    }
-  };
 
   const handleTouchEnd = () => {
     if (!isHorizontalSwipe.current) return;

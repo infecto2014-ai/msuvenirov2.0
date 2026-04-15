@@ -94,7 +94,6 @@ const products = [
 ];
 
 const ShowcaseSection = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
   const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
 
   const handleOrderClick = () => {
@@ -154,7 +153,7 @@ const ShowcaseSection = () => {
             }}
             modules={[EffectCoverflow, Navigation, Pagination]}
             onSwiper={setSwiperInstance}
-            onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+            onSlideChange={() => {}}
             className="!pb-12 sm:!pb-16"
           >
             {products.map((product, index) => (
