@@ -62,7 +62,7 @@ const App = () => (
           <Route path="/price" element={<PricePage />} />
           <Route path="/faq" element={<FAQPage />} />
           <Route path="/pechat_na_tkani" element={<FabricPrintPage />} />
-          <Route path="/fabric-print" element={<FabricPrintPage />} /> {/* redirect compat */}
+          
           <Route path="/mug-print" element={<MugPrintPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
