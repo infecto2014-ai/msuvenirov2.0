@@ -450,7 +450,13 @@ const FabricPrintPage = () => {
               </div>
             </div>
           </div>
-        </div>
+          </div>
+
+          <div className="mt-8 text-center">
+            <Link to="/price" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl border-2 border-primary/40 text-primary font-bold text-base hover:bg-primary/10 transition-colors">
+              Полный прайс-лист
+            </Link>
+          </div>
       </section>
 
       {/* ═══ VIDEO SHOWCASE ═══ */}
