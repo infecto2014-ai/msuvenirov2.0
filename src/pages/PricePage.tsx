@@ -338,6 +338,12 @@ const FabricPrintingSection = () => {
         </div>
       </AccordionTrigger>
       <AccordionContent className="px-0 pb-0">
+        <div className="px-4 sm:px-6 pt-3">
+          <Link to="/pechat_na_tkani" className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors">
+            <Shirt className="w-4 h-4" />
+            Подробнее об услуге «Печать на ткани» →
+          </Link>
+        </div>
         {/* Изделия */}
         <Accordion type="multiple" className="px-4 sm:px-6 py-3">
           <AccordionItem value="products" className="border border-border/30 rounded-lg overflow-hidden">
@@ -793,6 +799,12 @@ const GiftsSection = () => (
       </div>
     </AccordionTrigger>
     <AccordionContent className="px-0 pb-0">
+      <div className="px-4 sm:px-6 pt-3">
+        <Link to="/pechat_na_tkani" className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors">
+          <Shirt className="w-4 h-4" />
+          Подробнее об услуге «Печать на ткани» →
+        </Link>
+      </div>
       <Accordion type="multiple" className="px-4 sm:px-6 py-3 space-y-3">
         <AccordionItem value="clothes" className="border border-border/30 rounded-lg overflow-hidden">
           <AccordionTrigger className="px-4 py-3 hover:no-underline hover:bg-muted/20 text-sm font-bold text-foreground">
