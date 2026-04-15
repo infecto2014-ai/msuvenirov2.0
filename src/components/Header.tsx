@@ -116,12 +116,12 @@ const Header = () => {
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
-    if (href.startsWith('/')) {
+    if (href.startsWith('/') && !href.startsWith('/#')) {
       navigate(href);
       setIsMobileMenuOpen(false);
       return;
     }
-    const targetId = href.replace('#', '');
+    const targetId = href.replace('/#', '').replace('#', '');
     if (location.pathname !== '/') {
       navigate('/');
       setIsMobileMenuOpen(false);
