@@ -1,8 +1,9 @@
+import { lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import FloatingOrderButton from '@/components/FloatingOrderButton';
+const FloatingOrderButton = lazy(() => import('@/components/FloatingOrderButton'));
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Shirt, Gift, FileText, Maximize, Coffee, CircleDot, CalendarDays } from 'lucide-react';
@@ -318,7 +319,7 @@ const BadgeSection = () => (
   </AccordionItem>
 );
 const FabricPrintingSection = () => {
-  const handleCalculate = (format: string) => {
+  const handleCalculate = () => {
     const orderBtn = document.querySelector('[data-order-button]') as HTMLElement;
     if (orderBtn) orderBtn.click();
   };
@@ -390,7 +391,7 @@ const FabricPrintingSection = () => {
                     <TableCell className="text-center whitespace-nowrap neon-text font-semibold">{row.qty20_50}</TableCell>
                     <TableCell className="text-center">
                       <button
-                        onClick={() => handleCalculate(row.format)}
+                        onClick={handleCalculate}
                         className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold gradient-btn gradient-btn-pulse"
                       >
                         Рассчитать
@@ -1048,7 +1049,9 @@ const PricePage = () => {
         </div>
       </main>
       <Footer />
-      <FloatingOrderButton />
+      <Suspense fallback={null}>
+        <FloatingOrderButton />
+      </Suspense>
     </div>
   );
 };
