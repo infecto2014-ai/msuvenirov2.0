@@ -96,8 +96,10 @@ const Header = () => {
     { href: '/card', label: 'Визитка', id: 'визитка' },
   ];
 
-  const serviceLinks = [
+  const serviceLinks: { href: string; label: string; soon?: boolean }[] = [
     { href: '/pechat_na_tkani', label: 'Печать на ткани (футболки, худи, спецодежда)' },
+    { href: '#', label: 'Печать на кружках', soon: true },
+    { href: '#', label: 'Ещё больше услуг — скоро', soon: true },
   ];
 
   const [isServicesOpen, setIsServicesOpen] = useState(false);
@@ -210,14 +212,24 @@ const Header = () => {
                 {isServicesOpen && (
                   <div className="absolute top-full left-0 mt-1 w-72 rounded-xl border border-border bg-background/95 backdrop-blur-md shadow-xl py-2 z-50 animate-fade-in">
                     {serviceLinks.map((s) => (
-                      <a
-                        key={s.href}
-                        href={s.href}
-                        onClick={(e) => { handleNavClick(e, s.href); setIsServicesOpen(false); }}
-                        className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/30 transition-colors"
-                      >
-                        {s.label}
-                      </a>
+                      s.soon ? (
+                        <span
+                          key={s.label}
+                          className="flex items-center justify-between px-4 py-2.5 text-sm text-muted-foreground/50 cursor-default"
+                        >
+                          {s.label}
+                          <span className="text-[10px] uppercase tracking-wider text-primary/70 bg-primary/10 px-1.5 py-0.5 rounded">скоро</span>
+                        </span>
+                      ) : (
+                        <a
+                          key={s.href}
+                          href={s.href}
+                          onClick={(e) => { handleNavClick(e, s.href); setIsServicesOpen(false); }}
+                          className="block px-4 py-2.5 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/30 transition-colors"
+                        >
+                          {s.label}
+                        </a>
+                      )
                     ))}
                   </div>
                 )}
@@ -351,14 +363,21 @@ const Header = () => {
                     {isMobileServicesOpen && (
                       <ul className="ml-4 mt-1 flex flex-col gap-1">
                         {serviceLinks.map((s) => (
-                          <li key={s.href}>
-                            <a
-                              href={s.href}
-                              onClick={(e) => { handleNavClick(e, s.href); setIsMobileServicesOpen(false); }}
-                              className="block px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/20 transition-colors"
-                            >
-                              {s.label}
-                            </a>
+                          <li key={s.label}>
+                            {s.soon ? (
+                              <span className="flex items-center justify-between px-3 py-2 rounded-lg text-sm text-muted-foreground/50 cursor-default">
+                                {s.label}
+                                <span className="text-[10px] uppercase tracking-wider text-primary/70 bg-primary/10 px-1.5 py-0.5 rounded">скоро</span>
+                              </span>
+                            ) : (
+                              <a
+                                href={s.href}
+                                onClick={(e) => { handleNavClick(e, s.href); setIsMobileServicesOpen(false); }}
+                                className="block px-3 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-muted/20 transition-colors"
+                              >
+                                {s.label}
+                              </a>
+                            )}
                           </li>
                         ))}
                       </ul>
