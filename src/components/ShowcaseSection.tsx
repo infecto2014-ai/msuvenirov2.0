@@ -153,7 +153,7 @@ const ShowcaseSection = () => {
             }}
             modules={[EffectCoverflow, Navigation, Pagination]}
             onSwiper={setSwiperInstance}
-            onSlideChange={() => {}}
+            
             className="!pb-12 sm:!pb-16"
           >
             {products.map((product, index) => (
