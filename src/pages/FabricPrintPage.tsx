@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import {
   Flame, Droplets, Zap,
-  CheckCircle2, ChevronDown, Send,
+  CheckCircle2, ChevronDown, Send, X, ChevronLeft, ChevronRight,
 } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
