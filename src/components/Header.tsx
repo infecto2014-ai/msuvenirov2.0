@@ -87,10 +87,10 @@ const Header = () => {
   }, [location.pathname]);
 
   const navLinks = [
-    { href: '#главная', label: 'Главная', id: 'главная' },
-    { href: '#о-нас', label: 'О нас', id: 'о-нас' },
-    { href: '#отзывы', label: 'Отзывы', id: 'отзывы' },
-    { href: '#контакты', label: 'Контакты', id: 'контакты' },
+    { href: '/#главная', label: 'Главная', id: 'главная' },
+    { href: '/#о-нас', label: 'О нас', id: 'о-нас' },
+    { href: '/#отзывы', label: 'Отзывы', id: 'отзывы' },
+    { href: '/#контакты', label: 'Контакты', id: 'контакты' },
     { href: '/price', label: 'Прайс-лист', id: 'прайс' },
     { href: '/faq', label: 'FAQ', id: 'faq' },
     { href: '/card', label: 'Визитка', id: 'визитка' },
@@ -116,12 +116,12 @@ const Header = () => {
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
-    if (href.startsWith('/')) {
+    if (href.startsWith('/') && !href.startsWith('/#')) {
       navigate(href);
       setIsMobileMenuOpen(false);
       return;
     }
-    const targetId = href.replace('#', '');
+    const targetId = href.replace('/#', '').replace('#', '');
     if (location.pathname !== '/') {
       navigate('/');
       setIsMobileMenuOpen(false);
