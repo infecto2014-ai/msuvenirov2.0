@@ -235,40 +235,7 @@ const FabricPrintPage = () => {
         </div>
       </section>
 
-      {/* ═══ GALLERY ═══ */}
-      <section className="py-14 sm:py-20 bg-muted/10">
-        <div className="container mx-auto px-4 sm:px-6 max-w-5xl">
-          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-3">Примеры печати на футболках и одежде</h2>
-          <p className="text-muted-foreground text-center text-sm mb-10 max-w-xl mx-auto">
-            Реальные работы — DTF-печать на футболках, брендирование спецодежды, печать на худи и шопперах
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
-            {[
-              { src: '/portfolio/kpop-tshirt.webp', alt: 'DTF-печать на чёрной футболке — K-pop дизайн с цветным принтом в Калининграде', label: 'DTF на футболке' },
-              { src: '/portfolio/sport-jersey.webp', alt: 'Печать на спортивной форме — нанесение номера и эмблемы на майку', label: 'Спортивная форма' },
-              { src: '/portfolio/corporate-polo.webp', alt: 'Печать логотипа на корпоративном поло — брендирование одежды для бизнеса', label: 'Брендирование для компаний' },
-              { src: '/portfolio/wedding-tshirts.webp', alt: 'Печать на парных футболках — DTF-печать именного дизайна на заказ', label: 'DTF на футболке' },
-              { src: '/portfolio/branded-caps.webp', alt: 'Печать на бейсболках — DTF-брендирование кепок с логотипом компании', label: 'Печать на кепках' },
-              { src: '/portfolio/shopper-bags.webp', alt: 'Печать на шопперах — DTF-печать авторского дизайна на хлопковых сумках', label: 'Печать на шопперах' },
-            ].map((item, i) => (
-              <div key={i} className="group relative rounded-xl overflow-hidden border border-border bg-card aspect-square">
-                <img
-                  src={item.src}
-                  alt={item.alt}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
-                  width={640}
-                  height={640}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <span className="absolute bottom-2 left-2 px-2.5 py-1 rounded-full text-[10px] font-bold bg-primary/90 text-background opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  {item.label}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <GalleryWithLightbox />
 
       {/* ═══ FULL PRICE ═══ */}
       <section className="py-14 sm:py-20" id="prices">
