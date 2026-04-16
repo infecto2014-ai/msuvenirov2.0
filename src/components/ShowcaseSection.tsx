@@ -95,6 +95,34 @@ const products = [
     price: 'от 500 ₽',
     image: imgStickers3d,
   },
+  {
+    id: 11,
+    name: 'Подушка',
+    methods: 'Сублимация',
+    price: 'от 900 ₽',
+    image: imgPillow,
+  },
+  {
+    id: 12,
+    name: 'Кружка-хамелеон',
+    methods: 'Сублимация',
+    price: 'от 600 ₽',
+    image: imgChameleonMug,
+  },
+  {
+    id: 13,
+    name: 'Визитки',
+    methods: 'Цифровая печать',
+    price: 'от 3 ₽/шт',
+    image: imgBusinessCards,
+  },
+  {
+    id: 14,
+    name: 'Кружки цветные внутри',
+    methods: 'Сублимация',
+    price: 'от 500 ₽',
+    image: imgColoredMugs,
+  },
 ];
 
 const ShowcaseSection = () => {
