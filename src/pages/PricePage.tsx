@@ -57,8 +57,8 @@ const fabricProducts = [
 const printingPrices = [
   { format: 'А6', qty1_4: '600 ₽', qty5_10: '350 ₽', qty20_50: '280 ₽' },
   { format: 'А5', qty1_4: '600 ₽', qty5_10: '450 ₽', qty20_50: '330 ₽' },
-  { format: 'А4', qty1_4: '900 ₽', qty5_10: '650 ₽', qty20_50: '450 ₽' },
-  { format: 'А3', qty1_4: '1 300 ₽', qty5_10: '900 ₽', qty20_50: '680 ₽' },
+  { format: 'А4', qty1_4: '800 ₽', qty5_10: '650 ₽', qty20_50: '450 ₽' },
+  { format: 'А3', qty1_4: '1 100 ₽', qty5_10: '900 ₽', qty20_50: '680 ₽' },
 ];
 
 
@@ -837,8 +837,8 @@ const GiftsSection = () => (
               <p className="text-xs sm:text-sm font-semibold text-foreground mb-2">Цена печати на вашем изделии:</p>
               <div className="space-y-1 text-xs sm:text-sm text-muted-foreground">
                 <p>формата А5 — <span className="neon-text font-semibold">600 ₽</span></p>
-                <p>формата А4 — <span className="neon-text font-semibold">900 ₽</span></p>
-                <p>формата А3 — <span className="neon-text font-semibold">1 300 ₽</span></p>
+                <p>формата А4 — <span className="neon-text font-semibold">800 ₽</span></p>
+                <p>формата А3 — <span className="neon-text font-semibold">1 100 ₽</span></p>
               </div>
             </div>
           </AccordionContent>
