@@ -31,8 +31,8 @@ export interface GalleryItem {
 export const dtfPrices: DtfPrice[] = [
   { format: 'А6', qty1: '600 ₽', qty5: '350 ₽', qty20: '280 ₽' },
   { format: 'А5', qty1: '600 ₽', qty5: '450 ₽', qty20: '330 ₽' },
-  { format: 'А4', qty1: '900 ₽', qty5: '650 ₽', qty20: '450 ₽' },
-  { format: 'А3', qty1: '1 300 ₽', qty5: '900 ₽', qty20: '680 ₽' },
+  { format: 'А4', qty1: '800 ₽', qty5: '650 ₽', qty20: '450 ₽' },
+  { format: 'А3', qty1: '1 100 ₽', qty5: '900 ₽', qty20: '680 ₽' },
 ];
 
 export const methodComparison: MethodInfo[] = [
