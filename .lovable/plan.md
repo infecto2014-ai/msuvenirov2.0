@@ -1,17 +1,17 @@
 
 
-## Удаление кнопки «Оставить отзыв» и связанного функционала
+# Смена title главной страницы
 
-### Что будет сделано
+Текущий title: `Срочная печать на футболках в Калининграде | Мастерская сувениров`
 
-**`src/components/ReviewsSection.tsx`**
-- Удалить импорт `ReviewForm` (lazy), `Dialog`, `DialogContent`, `DialogHeader`, `DialogTitle`, `MessageSquarePlus`, `Suspense`
-- Удалить состояние `showForm`
-- Удалить блок CTA-кнопки «Оставить отзыв»
-- Удалить блок `<Dialog>` с формой отзыва
+Новый title: `Мастерская сувениров — печать на одежде и подарках в Калининграде`
 
-**`src/components/ReviewForm.tsx`**
-- Удалить файл полностью — больше нигде не используется
+## Что будет изменено
 
-**Edge functions остаются** — `notify-review` и `telegram-review-webhook` не трогаем, они могут пригодиться если форма вернётся или отзывы будут приниматься другим способом.
+**index.html** — обновить в 4 местах:
+1. `<title>` — основной заголовок страницы
+2. `og:title` — Open Graph для соцсетей
+3. `twitter:title` — Twitter Card
+
+Описание (`description`, `og:description`, `twitter:description`) остается без изменений — оно уже хорошо сформулировано.
 
