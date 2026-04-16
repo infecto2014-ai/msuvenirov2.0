@@ -19,6 +19,10 @@ import imgKeychains from '@/assets/showcase/keychains.webp';
 import imgAcrylicStand from '@/assets/showcase/acrylic-stand.webp';
 import imgCap from '@/assets/showcase/cap.webp';
 import imgStickers3d from '@/assets/showcase/stickers-3d.webp';
+import imgPillow from '@/assets/showcase/pillow.webp';
+import imgChameleonMug from '@/assets/showcase/chameleon-mug.webp';
+import imgBusinessCards from '@/assets/showcase/business-cards.webp';
+import imgColoredMugs from '@/assets/showcase/colored-mugs.webp';
 
 const products = [
   {
@@ -90,6 +94,34 @@ const products = [
     methods: 'Эпоксидная смола',
     price: 'от 500 ₽',
     image: imgStickers3d,
+  },
+  {
+    id: 11,
+    name: 'Подушка',
+    methods: 'Сублимация',
+    price: 'от 900 ₽',
+    image: imgPillow,
+  },
+  {
+    id: 12,
+    name: 'Кружка-хамелеон',
+    methods: 'Сублимация',
+    price: 'от 600 ₽',
+    image: imgChameleonMug,
+  },
+  {
+    id: 13,
+    name: 'Визитки',
+    methods: 'Цифровая печать',
+    price: 'от 3 ₽/шт',
+    image: imgBusinessCards,
+  },
+  {
+    id: 14,
+    name: 'Кружки цветные внутри',
+    methods: 'Сублимация',
+    price: 'от 500 ₽',
+    image: imgColoredMugs,
   },
 ];
 
