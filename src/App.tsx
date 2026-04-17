@@ -2,7 +2,6 @@ import { lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
-import Index from "./pages/Index";
 
 // Lazy load UI overlays - not needed for first paint
 const Toaster = lazy(() => import("@/components/ui/toaster").then(m => ({ default: m.Toaster })));
@@ -19,7 +18,8 @@ const lazyRetry = (fn: () => Promise<any>, retries = 3): Promise<any> =>
     throw err;
   });
 
-// Lazy load secondary pages with retry
+// Lazy load all pages with retry — keeps initial bundle minimal for any entry route
+const Index = lazy(() => lazyRetry(() => import("./pages/Index")));
 const NotFound = lazy(() => lazyRetry(() => import("./pages/NotFound")));
 const PublicOffer = lazy(() => lazyRetry(() => import("./pages/PublicOffer")));
 const PrivacyPolicy = lazy(() => lazyRetry(() => import("./pages/PrivacyPolicy")));
