@@ -18,7 +18,8 @@ const lazyRetry = (fn: () => Promise<any>, retries = 3): Promise<any> =>
     throw err;
   });
 
-// Lazy load secondary pages with retry
+// Lazy load all pages with retry — keeps initial bundle minimal for any entry route
+const Index = lazy(() => lazyRetry(() => import("./pages/Index")));
 const NotFound = lazy(() => lazyRetry(() => import("./pages/NotFound")));
 const PublicOffer = lazy(() => lazyRetry(() => import("./pages/PublicOffer")));
 const PrivacyPolicy = lazy(() => lazyRetry(() => import("./pages/PrivacyPolicy")));
