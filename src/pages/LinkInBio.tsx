@@ -56,7 +56,7 @@ const LinkInBio = () => {
       <div className="relative z-10 flex flex-col items-center px-5 py-10 max-w-md mx-auto min-h-screen">
         {/* Logo */}
         <div className="mb-8">
-          <ProtectedLogo height={48} />
+          <img src={logo} alt="Мастерская сувениров" width={120} height={48} fetchPriority="high" decoding="async" className="h-12 w-auto select-none" draggable={false} />
         </div>
 
         {/* Subtitle */}
