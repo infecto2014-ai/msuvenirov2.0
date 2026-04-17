@@ -1,7 +1,7 @@
-import { Phone, Globe, Mail, ArrowLeft, Copy, Check, FileText, Send, ExternalLink } from 'lucide-react';
+import { Phone, Globe, Mail, ArrowLeft, Copy, Check, FileText, ExternalLink } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import ProtectedLogo from '@/components/ProtectedLogo';
+import logo from '@/assets/logo.svg';
 import maxLogo from '@/assets/logo_max.svg';
 import { reachGoal } from '@/lib/metrika';
 import sbpLogo from '@/assets/sbp.svg';
