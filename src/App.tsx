@@ -30,9 +30,8 @@ const FabricPrintPage = lazy(() => lazyRetry(() => import("./pages/FabricPrintPa
 const MugPrintPage = lazy(() => lazyRetry(() => import("./pages/MugPrintPage")));
 
 const PageLoader = () => (
-  <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4">
-    <div className="w-10 h-10 border-3 border-primary border-t-transparent rounded-full animate-spin" />
-    <p className="text-sm text-muted-foreground animate-pulse">Загрузка...</p>
+  <div className="min-h-screen bg-background flex items-center justify-center">
+    <div className="drop-loader" aria-label="Загрузка" role="status" />
   </div>
 );
 
