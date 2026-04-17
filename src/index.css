@@ -285,3 +285,26 @@
   scrollbar-width: thin;
   scrollbar-color: hsl(var(--neon-cyan) / 0.3) transparent;
 }
+
+/* Neon water-drop loader */
+.drop-loader {
+  width: 28px;
+  height: 36px;
+  position: relative;
+  filter: drop-shadow(0 0 10px hsl(var(--neon-cyan) / 0.7));
+}
+.drop-loader::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, hsl(var(--neon-cyan)) 0%, hsl(var(--neon-magenta)) 100%);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  clip-path: path('M14 0 C14 0 28 18 28 26 A14 14 0 1 1 0 26 C0 18 14 0 14 0 Z');
+  animation: drop-pulse 1.4s ease-in-out infinite;
+  transform-origin: 50% 60%;
+}
+
+@keyframes drop-pulse {
+  0%, 100% { transform: scale(1) translateY(0); opacity: 1; }
+  50%      { transform: scale(0.85) translateY(2px); opacity: 0.75; }
+}
