@@ -339,8 +339,16 @@ const FAQPage = () => {
           name="description"
           content="Ответы на популярные вопросы о печати на футболках, кружках, DTF-печати и корпоративных заказах в Калининграде. Мастерская сувениров — опыт более 10 лет."
         />
-        <link rel="canonical" href="https://msuvenirov39.ru/faq" />
+        <link rel="canonical" href="https://msuvenirov.ru/faq" />
         <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Главная", "item": "https://msuvenirov.ru/" },
+            { "@type": "ListItem", "position": 2, "name": "Частые вопросы", "item": "https://msuvenirov.ru/faq" }
+          ]
+        })}</script>
       </Helmet>
 
       <Header />

@@ -62,6 +62,15 @@ const FabricPrintPage = () => (
       <meta name="keywords" content="печать на футболках Калининград, DTF печать, печать на спецодежде, брендирование одежды, печать на худи, печать на шопперах, сублимация на ткани, печать на текстиле Калининград" />
       <link rel="canonical" href="https://msuvenirov.ru/pechat_na_tkani" />
       <script type="application/ld+json">{JSON.stringify(JSON_LD)}</script>
+      <script type="application/ld+json">{JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Главная", "item": "https://msuvenirov.ru/" },
+          { "@type": "ListItem", "position": 2, "name": "Услуги", "item": "https://msuvenirov.ru/price" },
+          { "@type": "ListItem", "position": 3, "name": "Печать на ткани", "item": "https://msuvenirov.ru/pechat_na_tkani" }
+        ]
+      })}</script>
     </Helmet>
 
     <Header />
