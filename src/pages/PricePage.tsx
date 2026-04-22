@@ -947,6 +947,14 @@ const PricePage = () => {
         <meta name="description" content="Прайс-лист: печать на футболках, кружках, визитки, баннеры, календари, значки в Калининграде. Цены от производителя. Закажите расчёт!" />
         <meta name="keywords" content="прайс печать калининград, цены полиграфия калининград, печать на футболках цена, визитки калининград, широкоформатная печать, сувениры на заказ, календари печать, значки брелоки" />
         <link rel="canonical" href="https://msuvenirov.ru/price" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Главная", "item": "https://msuvenirov.ru/" },
+            { "@type": "ListItem", "position": 2, "name": "Прайс-лист", "item": "https://msuvenirov.ru/price" }
+          ]
+        })}</script>
         <meta property="og:title" content="Прайс на полиграфию и печать сувениров в Калининграде | Мастерская сувениров" />
         <meta property="og:description" content="Актуальные цены на печать, полиграфию и сувенирную продукцию. Собственное производство в Калининграде." />
         <meta property="og:url" content="https://msuvenirov.ru/price" />
