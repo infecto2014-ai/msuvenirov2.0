@@ -55,6 +55,7 @@ const FloatingOrderButton = () => {
         setFilePreviews(parsed.filePreviews || []);
         setFileNames(parsed.fileNames || []);
         setIsOpen(true);
+        reachGoal('form_open_restored');
         sessionStorage.removeItem(FORM_STORAGE_KEY);
         return;
       } catch (e) {
@@ -68,6 +69,7 @@ const FloatingOrderButton = () => {
     if (promoFromUrl) {
       setFormData(prev => ({ ...prev, promo: promoFromUrl.toUpperCase() }));
       setIsOpen(true);
+      reachGoal('form_open_promo_url');
       // Clean up URL without reload
       const url = new URL(window.location.href);
       url.searchParams.delete('promo');
@@ -202,6 +204,7 @@ const FloatingOrderButton = () => {
     
     const phoneDigits = formData.phone.replace(/\D/g, '');
     if (!formData.name.trim() || phoneDigits.length < 11) {
+      reachGoal('form_validation_error');
       toast({
         title: 'Ошибка',
         description: 'Пожалуйста, заполните имя и телефон полностью',
@@ -212,6 +215,7 @@ const FloatingOrderButton = () => {
 
     // If promo is entered but not verified, block submission
     if (formData.promo.trim() && !promoVerified) {
+      reachGoal('form_promo_unverified');
       toast({
         title: 'Проверьте промокод',
         description: 'Нажмите «Применить», чтобы проверить промокод, или очистите поле',
@@ -221,6 +225,7 @@ const FloatingOrderButton = () => {
     }
 
     setIsLoading(true);
+    reachGoal('form_submit_attempt');
 
     try {
       const submitFormData = new FormData();
@@ -245,6 +250,9 @@ const FloatingOrderButton = () => {
       if (error) throw error;
 
       reachGoal('order_submit');
+      reachGoal('form_submit_success');
+      if (files.length > 0) reachGoal('form_submit_with_files');
+      if (promoVerified) reachGoal('form_submit_with_promo');
       toast({
         title: 'Успешно!',
         description: 'Ваша заявка отправлена. Мы свяжемся с вами в ближайшее время!',
@@ -254,6 +262,7 @@ const FloatingOrderButton = () => {
       setIsOpen(false);
     } catch (error) {
       console.error('Error sending message:', error);
+      reachGoal('form_submit_error');
       toast({
         title: 'Ошибка',
         description: 'Не удалось отправить заявку. Попробуйте позже.',
