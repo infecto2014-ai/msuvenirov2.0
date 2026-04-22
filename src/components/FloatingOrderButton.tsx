@@ -40,6 +40,49 @@ const FloatingOrderButton = () => {
   const [promoMessage, setPromoMessage] = useState('');
   const [promoVerified, setPromoVerified] = useState(false);
 
+  // Helper: extract promo from URL, set into form, auto-verify
+  const applyPromoFromUrl = async () => {
+    const params = new URLSearchParams(window.location.search);
+    const promoFromUrl = params.get('promo');
+    if (!promoFromUrl) return false;
+
+    const code = promoFromUrl.toUpperCase();
+    setFormData(prev => ({ ...prev, promo: code }));
+
+    // Clean up URL without reload
+    const url = new URL(window.location.href);
+    url.searchParams.delete('promo');
+    window.history.replaceState({}, '', url.pathname + url.search + url.hash);
+
+    // Auto-verify the promo code
+    setPromoStatus('checking');
+    setPromoMessage('');
+    try {
+      const supabase = await import('@/integrations/supabase/client').then(m => m.supabase);
+      const { data, error } = await supabase.functions.invoke('verify-promo', {
+        body: { code },
+      });
+      if (error) throw error;
+      if (data.valid) {
+        setPromoStatus('valid');
+        setPromoMessage(data.description || data.message);
+        setPromoVerified(true);
+        reachGoal('promo_applied');
+        toast({ title: '✅ ' + data.message });
+      } else {
+        setPromoStatus('invalid');
+        setPromoMessage(data.message);
+        setPromoVerified(false);
+      }
+    } catch (err) {
+      console.error('Auto promo verify error:', err);
+      setPromoStatus('invalid');
+      setPromoMessage('Ошибка при проверке промокода');
+      setPromoVerified(false);
+    }
+    return true;
+  };
+
   // Restore form data from sessionStorage OR apply promo from URL on mount
   useEffect(() => {
     const savedData = sessionStorage.getItem(FORM_STORAGE_KEY);
@@ -63,19 +106,21 @@ const FloatingOrderButton = () => {
       }
     }
 
-    // Check URL for promo parameter
-    const params = new URLSearchParams(window.location.search);
-    const promoFromUrl = params.get('promo');
-    if (promoFromUrl) {
-      setFormData(prev => ({ ...prev, promo: promoFromUrl.toUpperCase() }));
+    // Check URL for promo parameter on initial mount
+    if (window.location.search.includes('promo=')) {
       setIsOpen(true);
       reachGoal('form_open_promo_url');
-      // Clean up URL without reload
-      const url = new URL(window.location.href);
-      url.searchParams.delete('promo');
-      window.history.replaceState({}, '', url.pathname + url.search + url.hash);
+      applyPromoFromUrl();
     }
   }, []);
+
+  // When dialog opens (e.g. via PromoBanner programmatic click), check URL again
+  useEffect(() => {
+    if (isOpen && window.location.search.includes('promo=')) {
+      reachGoal('form_open_promo_url');
+      applyPromoFromUrl();
+    }
+  }, [isOpen]);
 
   const saveFormData = () => {
     const dataToSave: SavedFormData = {
