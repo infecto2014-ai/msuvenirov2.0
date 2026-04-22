@@ -1,11 +1,13 @@
 import { lazy, Suspense, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import { useLazySection } from '@/hooks/useLazySection';
 
 const FloatingOrderButton = lazy(() => import('@/components/FloatingOrderButton'));
 const PWAInstallBanner = lazy(() => import('@/components/PWAInstallBanner'));
+const PromoBanner = lazy(() => import('@/components/PromoBanner'));
 
 // Lazy load below-the-fold sections for better LCP
 const AboutSection = lazy(() => import('@/components/AboutSection'));
@@ -55,6 +57,18 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      <Helmet>
+        <title>Печать на футболках в Калининграде от 280 ₽ | Мастерская сувениров</title>
+        <meta name="description" content="DTF-печать на футболках, худи, кружках и сувенирах в Калининграде. От 1 шт, за 24 часа, гарантия 50+ стирок. Собственное производство, опыт 10+ лет. Заказывайте онлайн!" />
+        <link rel="canonical" href="https://msuvenirov.ru/" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Главная", "item": "https://msuvenirov.ru/" }
+          ]
+        })}</script>
+      </Helmet>
       <Header />
       <main>
         {/* Hero loads immediately - critical for LCP */}
@@ -95,6 +109,9 @@ const Index = () => {
       </Suspense>
       <Suspense fallback={null}>
         <PWAInstallBanner />
+      </Suspense>
+      <Suspense fallback={null}>
+        <PromoBanner />
       </Suspense>
     </div>
   );
