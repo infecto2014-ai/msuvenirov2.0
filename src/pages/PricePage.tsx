@@ -7,125 +7,24 @@ const FloatingOrderButton = lazy(() => import('@/components/FloatingOrderButton'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Shirt, Gift, FileText, Maximize, Coffee, CircleDot, CalendarDays } from 'lucide-react';
-
-const mugPrices = [
-  { name: 'Кружка белая', qty1: '650', qty10: '450', qty30: '350', qty100: '315', qty200: '250' },
-  { name: 'Кружка белая, цветная внутри или ручка', qty1: '750', qty10: '550', qty30: '470', qty100: '425', qty200: '340' },
-  { name: 'Кружка ХАМЕЛЕОН', qty1: '1 100', qty10: '980', qty30: '890', qty100: '815', qty200: '650' },
-  { name: 'Кружка глиттер градиент', qty1: '1 630', qty10: '980', qty30: '890', qty100: '815', qty200: '650' },
-  { name: 'Кружка мрамор/зеркальное золото или серебро', qty1: '1 945', qty10: '1 170', qty30: '1 070', qty100: '970', qty200: '780' },
-  { name: 'Кружка золото/серебро/стекло', qty1: '1 320', qty10: '790', qty30: '730', qty100: '660', qty200: '530' },
-];
-
-const badgePricesZnachki = [
-  { name: 'Значок закатный 38 мм', qty25: '85', qty100: '45', qty200: '38', qty300: '35', qty400: '32', qty500: '30' },
-  { name: 'Значок закатный 56 мм', qty25: '100', qty100: '49', qty200: '45', qty300: '41', qty400: '38', qty500: '33' },
-  { name: 'Значок на цанге, круг 15 мм', qty25: '120', qty100: '110', qty200: '100', qty300: '92', qty400: '85', qty500: '75' },
-  { name: 'Значок на цанге, круг 25 мм', qty25: '200', qty100: '185', qty200: '170', qty300: '155', qty400: '140', qty500: '125' },
-  { name: 'Значок на цанге, круг 30 мм', qty25: '250', qty100: '230', qty200: '210', qty300: '190', qty400: '170', qty500: '150' },
-  { name: 'Значок на цанге, круг 35 мм', qty25: '310', qty100: '285', qty200: '260', qty300: '240', qty400: '210', qty500: '190' },
-];
-
-const badgePricesBreloki = [
-  { name: 'Брелок акриловый 40x56 мм', qty25: '130', qty100: '65', qty200: '60', qty300: '54', qty400: '49', qty500: '43' },
-  { name: 'Брелок металлический', qty25: '500', qty100: '420', qty200: '400', qty300: '380', qty400: '350', qty500: '330' },
-];
-
-const magnetVinylPrices = [
-  { name: 'Прямоугольник 40×60 мм', qty100: '35', qty200: '30', qty300: '28', qty400: '28', qty500: '26' },
-  { name: 'Квадрат 60×60 мм', qty100: '36', qty200: '31', qty300: '30', qty400: '29', qty500: '28' },
-  { name: 'Прямоугольник 60×80 мм', qty100: '39', qty200: '35', qty300: '33', qty400: '30', qty500: '29' },
-  { name: 'Круг 68×68 мм', qty100: '36', qty200: '31', qty300: '30', qty400: '29', qty500: '28' },
-  { name: 'Круг 50×50 мм', qty100: '35', qty200: '30', qty300: '28', qty400: '28', qty500: '26' },
-];
-const magnetAcrylPrices = [
-  { name: 'Магнит акрил 105×105 мм', qty100: '160', qty200: '140', qty300: '120', qty400: '110', qty500: '90' },
-  { name: 'Магнит акрил 105×70 мм', qty100: '160', qty200: '140', qty300: '120', qty400: '110', qty500: '90' },
-  { name: 'Магнит акрил 80×55 мм', qty100: '130', qty200: '100', qty300: '90', qty400: '80', qty500: '75' },
-];
-const fabricProducts = [
-  { name: 'Футболка унисекс 160–180 гр', price: 'от 400 ₽' },
-  { name: 'Футболка детская 160–180 гр', price: 'от 300 ₽' },
-  { name: 'Футболка оверсайз от 180 гр', price: 'от 700 ₽' },
-  { name: 'Поло', price: 'от 700 ₽' },
-  { name: 'Худи', price: 'от 1 300 ₽' },
-  { name: 'Бейсболка', price: 'от 250 ₽' },
-  { name: 'Шоппер', price: 'от 200 ₽' },
-  { name: 'Фартук', price: 'от 600 ₽' },
-];
-
-const printingPrices = [
-  { format: 'А6', qty1_4: '600 ₽', qty5_10: '350 ₽', qty20_50: '280 ₽' },
-  { format: 'А5', qty1_4: '600 ₽', qty5_10: '450 ₽', qty20_50: '330 ₽' },
-  { format: 'А4', qty1_4: '800 ₽', qty5_10: '650 ₽', qty20_50: '450 ₽' },
-  { format: 'А3', qty1_4: '1 100 ₽', qty5_10: '900 ₽', qty20_50: '680 ₽' },
-];
-
-
-const notebookPrices = [
-  { name: 'Блокнот А5', qty20: '150', qty50: '110', qty100: '100', qty200: '95', qty300: '80' },
-  { name: 'Блокнот А6', qty20: '85', qty50: '75', qty100: '70', qty200: '65', qty300: '60' },
-];
-
-const operativePrices = [
-  { format: 'А3', paper: 'Тонкая (80 гр)', s50: '65', s100: '56', s200: '45', d50: '110', d100: '97', d200: '86' },
-  { format: '', paper: 'Плотная (115–300 гр)', s50: '120', s100: '108', s200: '96', d50: '195', d100: '175', d200: '155' },
-  { format: 'А4', paper: 'Тонкая (80 гр)', s50: '40', s100: '34', s200: '30', d50: '60', d100: '54', d200: '48' },
-  { format: '', paper: 'Плотная (115–300 гр)', s50: '80', s100: '70', s200: '62', d50: '125', d100: '113', d200: '100' },
-  { format: 'А5', paper: 'Тонкая (80 гр)', s50: '25', s100: '20', s200: '18', d50: '35', d100: '30', d200: '27' },
-  { format: '', paper: 'Плотная (115–300 гр)', s50: '40', s100: '35', s200: '31', d50: '65', d100: '56', d200: '50' },
-  { format: '1/3 А4 (Еврофлаер)', paper: 'Тонкая (80 гр)', s50: '15', s100: '14', s200: '13', d50: '25', d100: '20', d200: '18' },
-  { format: '', paper: 'Плотная (115–300 гр)', s50: '25', s100: '23', s200: '21', d50: '45', d100: '38', d200: '34' },
-  { format: 'А6', paper: 'Тонкая (80 гр)', s50: '25', s100: '20', s200: '18', d50: '25', d100: '20', d200: '18' },
-  { format: '', paper: 'Плотная (115–300 гр)', s50: '20', s100: '18', s200: '16', d50: '30', d100: '29', d200: '25' },
-];
-
-const businessCardPrices = [
-  { name: 'Односторонняя', qty100: '7,5', qty300: '6,5', qty500: '5,5' },
-  { name: 'Двусторонняя', qty100: '12,5', qty300: '10,5', qty500: '9,5' },
-];
-
-const wideFormatPrices = [
-  { name: 'Плёнка самоклеящаяся с печатью (белая глянцевая, матовая)', price: '1 050' },
-  { name: 'Плёнка самоклеящаяся с печатью (белая глянцевая, матовая) с контурным резом', price: '1 350' },
-  { name: 'Плёнка самоклеящаяся (белая и цветная / глянцевая, матовая) с контурным резом, на монтажке', price: '2 300' },
-  { name: 'Баннерная ткань (склейка, пробивание люверсов)', price: '1 300' },
-  { name: 'Печать на плёнке OneVision (сетка на самоклеющейся основе)', price: '1 450' },
-  { name: 'Накатка виниловой плёнки на ПВХ-пластик 3–10 мм', price: 'от 4 800' },
-];
-
-const quarterlyCalendars = [
-  { name: '«Стандарт+» (4 поля)', midi50: '610', mini50: '400', midi100: '580', mini100: '370' },
-  { name: '«Стандарт» (2 поля)', midi50: '395', mini50: '270', midi100: '390', mini100: '345' },
-  { name: '«Классик» (1 поле)', midi50: '340', mini50: '255', midi100: '335', mini100: '250' },
-  { name: '«Одноблочный» (2 поля)', midi50: '335', mini50: '270', midi100: '300', mini100: '260' },
-];
-
-const wallCalendars = [
-  { name: 'Плакат (1 лист А3)', qty1_20: '180', qty21_50: '175', qty51_100: '170', qty100plus: '165' },
-  { name: 'Перекидной А4 (13 листов)', qty1_20: '695', qty21_50: '540', qty51_100: '480', qty100plus: '420' },
-  { name: 'Перекидной А3 (13 листов)', qty1_20: '1 390', qty21_50: '1 080', qty51_100: '960', qty100plus: '840' },
-];
-
-const desktopCalendars = [
-  { name: 'Обычный домик', qty20: '60', qty50: '55', qty100: '45' },
-  { name: 'Домик с отрывными месяцами', qty20: '270', qty50: '265', qty100: '240' },
-];
-
-const pocketCalendars = [
-  { qty: 'до 100 шт.', price: '625' },
-  { qty: '200 шт.', price: '1 170' },
-  { qty: '300 шт.', price: '1 795' },
-  { qty: '500 шт.', price: '2 185' },
-  { qty: '1 000 шт.', price: '4 055' },
-  { qty: '10 000 шт.', price: '17 160' },
-];
-
-const calendarOptions = [
-  { name: 'Металлические планки', price: '85' },
-  { name: 'Магнитный курсор с подложкой', price: '100' },
-  { name: 'Матовая ламинация', price: '35' },
-];
+import {
+  mugPrices,
+  badgePricesZnachki,
+  badgePricesBreloki,
+  magnetVinylPrices,
+  magnetAcrylPrices,
+  fabricProducts,
+  printingPrices,
+  notebookPrices,
+  operativePrices,
+  businessCardPrices,
+  wideFormatPrices,
+  quarterlyCalendars,
+  wallCalendars,
+  desktopCalendars,
+  pocketCalendars,
+  calendarOptions,
+} from '@/data/prices';
 
 
 
