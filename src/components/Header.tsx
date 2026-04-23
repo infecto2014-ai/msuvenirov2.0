@@ -167,7 +167,11 @@ const Header = () => {
           {/* Logo */}
           <a
             href="/"
-            onClick={(e) => { e.preventDefault(); navigate('/'); }}
+            onClick={(e) => { 
+              e.preventDefault(); 
+              navigate('/'); 
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
             className="flex items-center flex-shrink-0 cursor-pointer"
             aria-label="На главную"
           >
@@ -307,7 +311,11 @@ const Header = () => {
         <div className="flex lg:hidden items-center justify-between h-16">
           <a
             href="/"
-            onClick={(e) => { e.preventDefault(); navigate('/'); }}
+            onClick={(e) => { 
+              e.preventDefault(); 
+              navigate('/'); 
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
             className="flex items-center flex-shrink-0 cursor-pointer"
             aria-label="На главную"
           >
