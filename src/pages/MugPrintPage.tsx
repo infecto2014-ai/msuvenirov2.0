@@ -182,7 +182,7 @@ const MugPrintPage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {methodComparison.map((m) => (
-              <div key={m.method} className="rounded-2xl border border-border bg-card overflow-hidden group hover:border-primary/30 transition-colors duration-300">
+              <div key={m.method} className="rounded-2xl border border-border bg-card overflow-hidden group hover:border-primary/30 transition-colors duration-300 flex flex-col h-full">
                 <div className="aspect-[16/10] overflow-hidden relative">
                   <img
                     src={m.image}
@@ -201,8 +201,8 @@ const MugPrintPage = () => {
                   </div>
                 </div>
 
-                <div className="p-5 sm:p-6 flex flex-col">
-                  <div className="space-y-2 flex-1">
+                <div className="p-5 sm:p-6 flex flex-col flex-1">
+                  <div className="space-y-2">
                     {m.pros.map((p) => (
                       <div key={p} className="flex items-start gap-2 text-sm">
                         <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 shrink-0" />
@@ -216,7 +216,7 @@ const MugPrintPage = () => {
                       </div>
                     ))}
                   </div>
-                  <div className="pt-4 mt-4 border-t border-border/50">
+                  <div className="pt-4 mt-auto border-t border-border/50">
                     <p className="text-xs text-muted-foreground">
                       <span className="font-semibold text-foreground">Лучше всего для:</span> {m.best}
                     </p>
