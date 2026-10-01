@@ -7,7 +7,6 @@ import { useLazySection } from '@/hooks/useLazySection';
 
 const FloatingOrderButton = lazy(() => import('@/components/FloatingOrderButton'));
 const PWAInstallBanner = lazy(() => import('@/components/PWAInstallBanner'));
-const PromoBanner = lazy(() => import('@/components/PromoBanner'));
 
 // Lazy load below-the-fold sections for better LCP
 const AboutSection = lazy(() => import('@/components/AboutSection'));
@@ -109,9 +108,6 @@ const Index = () => {
       </Suspense>
       <Suspense fallback={null}>
         <PWAInstallBanner />
-      </Suspense>
-      <Suspense fallback={null}>
-        <PromoBanner />
       </Suspense>
     </div>
   );
