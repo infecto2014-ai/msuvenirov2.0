@@ -1,11 +1,6 @@
 ---
 name: Promo Banner
-description: Floating promo code banner on homepage with NEW15 code, 7-day cookie dismissal, Yandex Metrika goals
-type: feature
+description: Promo banner removed from homepage (Oct 2026) — do not re-add without request
+type: constraint
 ---
-PromoBanner (src/components/PromoBanner.tsx) shows after 3s on homepage only (mounted in Index.tsx, lazy).
-Cookie `promo_banner_dismissed` (7 days, SameSite=Lax) prevents re-showing.
-On "Применить" — sets ?promo=NEW15 in URL and clicks [data-order-button] (FloatingOrderButton picks up promo from URL).
-Promo code: NEW15 (15% on first order).
-Metrika goals: promo_banner_shown, promo_banner_dismissed, promo_banner_applied.
-Position: fixed bottom-center, z-9997 (under FloatingOrderButton 9998/9999).
+PromoBanner (src/components/PromoBanner.tsx) was deleted and unmounted from Index.tsx at user request. All promo codes (NEW15, SALE15, INST15) deactivated in DB. Do not re-add the banner or reactivate codes unless the user asks. The order form still supports manual promo entry and ?promo= URL param.
