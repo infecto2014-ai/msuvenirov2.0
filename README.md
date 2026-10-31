@@ -1,73 +1,33 @@
-# Welcome to your Lovable project
+# Мастерская сувениров 2.0 — msuvenirov.ru
 
-## Project info
+Сайт мастерской печати в Калининграде: печать на одежде, кружках и сувенирах, полиграфия.
+Статический сайт на [Astro](https://astro.build) с интерактивными блоками на Preact (калькулятор, смета, форма заявки).
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Запуск
 
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```bash
+npm install
+npm run dev        # http://localhost:4321
+npm run build      # проверка типов + сборка в dist/
+npm test           # тесты расчёта цен
 ```
 
-**Edit a file directly in GitHub**
+## Где что лежит
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+| Что | Файл |
+|---|---|
+| Все цены и правила расчёта | `src/data/pricing.ts` |
+| Контакты, адрес, меню | `src/data/site.ts` |
+| Тексты страниц услуг | `src/data/services.ts` |
+| Вопросы и ответы | `src/data/faq.ts` |
+| Отзывы, портфолио | `src/data/reviews.ts`, `src/data/portfolio.ts` |
+| Калькулятор и форма заявки | `src/components/islands/` |
+| Дизайн-система (цвета, шрифты, кнопки) | `src/styles/global.css` |
+| Серверные функции (заявки в Telegram) | `supabase/functions/` |
+| Конфиг nginx | `deploy/nginx/` |
 
-**Use GitHub Codespaces**
+Чтобы поменять цену, достаточно исправить число в `src/data/pricing.ts` — калькуляторы, прайс-таблицы, цены «от» и микроразметка обновятся сами.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Публикация
 
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Пошаговая инструкция — в [`docs/DEPLOY.md`](docs/DEPLOY.md).
