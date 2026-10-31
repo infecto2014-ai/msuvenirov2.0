@@ -49,6 +49,11 @@ export default defineConfig(({ mode, isSsrBuild }) => ({
     cssCodeSplit: true,
     sourcemap: mode === 'development',
   },
+  ssr: {
+    // CJS-only package: Node 18 (production server) can't resolve its named ESM exports,
+    // so bundle it into the SSR build instead of importing it at runtime
+    noExternal: ['react-helmet-async'],
+  },
   // Optimize dependencies
   optimizeDeps: {
     include: ['react', 'react-dom', 'swiper'],
