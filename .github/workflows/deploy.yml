@@ -14,6 +14,9 @@ concurrency:
 
 jobs:
   deploy:
+    # Runs only in the production repo, or where the repository variable DEPLOY_ENABLED=true is set
+    # (Settings → Secrets and variables → Actions → Variables), so copies of the repo never touch the server.
+    if: github.repository == 'infecto2014-ai/neon-souvenir-studio' || vars.DEPLOY_ENABLED == 'true'
     runs-on: ubuntu-latest
 
     steps:
