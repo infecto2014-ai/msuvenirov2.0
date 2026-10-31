@@ -149,6 +149,8 @@ function tiered(args: {
   variants: { id: string; label: string; hint?: string; tiers: Tier[] }[];
   extras?: { id: string; label: string; price: number }[];
   extrasLabel?: string;
+  /** Extra choices that do not change the price (e.g. paper finish). */
+  choices?: OptionGroup[];
   notes?: string[];
 }): Product {
   const groups: OptionGroup[] = [];
@@ -161,6 +163,7 @@ function tiered(args: {
       default: args.variants[0].id,
     });
   }
+  if (args.choices?.length) groups.push(...args.choices);
   if (args.extras?.length) {
     groups.push({
       id: 'extras',
@@ -657,14 +660,28 @@ const cards: Category = {
     tiered({
       id: 'business-cards',
       name: 'Визитки 90×50 мм',
-      short: 'цифровая печать, плотная бумага',
+      short: 'цифровая печать, бумага 300 г, глянец или мат',
       image: '/img/showcase/business-cards.webp',
-      qty: { min: 100, max: 2000, default: 100 },
+      qty: { min: 48, max: 2000, default: 96 },
       variantLabel: 'Печать',
+      // Owner's base price list +20%, rounded to tenths (31.10.2026)
       variants: [
-        { id: 's1', label: 'Односторонняя', hint: '4+0', tiers: tiers([100, 300, 500], [7.5, 6.5, 5.5]) },
-        { id: 's2', label: 'Двусторонняя', hint: '4+4', tiers: tiers([100, 300, 500], [12.5, 10.5, 9.5]) },
+        { id: 's1', label: 'Односторонняя', hint: '4+0', tiers: tiers([48, 96, 200, 300, 500], [6.2, 4.9, 4, 3.7, 3.5]) },
+        { id: 's2', label: 'Двусторонняя', hint: '4+4', tiers: tiers([48, 96, 200, 300, 500], [8.6, 7.1, 5.9, 5.4, 5]) },
       ],
+      choices: [
+        {
+          id: 'paper',
+          label: 'Бумага 300 г',
+          type: 'one',
+          choices: [
+            { id: 'gloss', label: 'Глянцевая' },
+            { id: 'matte', label: 'Матовая' },
+          ],
+          default: 'gloss',
+        },
+      ],
+      notes: ['Срок печати — от 1 дня. Глянцевая и матовая бумага — по одной цене.'],
     }),
   ],
 };
