@@ -113,7 +113,9 @@ export default function Calculator({ category, product, only, hideCategories, ti
 
   const quote = useMemo(() => prod.quote(sel), [prod, sel]);
   const ladder = useMemo(() => prod.ladder?.(sel) ?? [], [prod, sel]);
-  const ladderLabels = rangeLabels(ladder.map((t) => t.from));
+  const ladderLabels = prod.qty.presets
+    ? ladder.map((t) => `${t.from.toLocaleString('ru-RU')} шт`)
+    : rangeLabels(ladder.map((t) => t.from));
 
   const { min, max, presets } = prod.qty;
   const sliderMax = presets ? presets.length - 1 : SLIDER_STEPS;
@@ -292,7 +294,7 @@ export default function Calculator({ category, product, only, hideCategories, ti
                 <span>{max.toLocaleString('ru-RU')}</span>
               </div>
             </div>
-            {presets && (
+            {presets && ladder.length <= 1 && (
               <div class="calc-chips calc-presets">
                 {presets.map((q) => (
                   <button type="button" class="chip" aria-pressed={q === sel.qty} onClick={() => setQty(q)}>
@@ -363,7 +365,7 @@ export default function Calculator({ category, product, only, hideCategories, ti
 
             {quote.next && !quote.error && (
               <button type="button" class="calc-nudge" onClick={() => setQty(quote.next!.qty)}>
-                От {quote.next.qty.toLocaleString('ru-RU')} шт — <b>{rub(quote.next.unit)}</b> за штуку. Показать
+                {prod.qty.presets ? 'Тираж' : 'От'} {quote.next.qty.toLocaleString('ru-RU')} шт — <b>{rub(quote.next.unit)}</b> за штуку. Показать
               </button>
             )}
 

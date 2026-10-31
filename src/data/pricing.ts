@@ -183,7 +183,9 @@ function tiered(args: {
     options: groups,
     fromPrice: Math.min(...args.variants.map((v) => minPrice(v.tiers))),
     table: {
-      columns: rangeLabels(args.variants[0].tiers.map((t) => t.from)),
+      columns: args.qty.presets
+        ? args.qty.presets.map((q) => `${q} шт`)
+        : rangeLabels(args.variants[0].tiers.map((t) => t.from)),
       rows: [
         ...args.variants.map((v) => ({ label: args.variants.length > 1 ? v.label : args.name, cells: v.tiers.map((t) => rub(t.price)) })),
         ...(args.extras ?? []).map((e) => ({ label: `+ ${e.label}`, cells: args.variants[0].tiers.map(() => `+${rub(e.price)}`) })),
@@ -662,12 +664,12 @@ const cards: Category = {
       name: 'Визитки 90×50 мм',
       short: 'цифровая печать, бумага 300 г, глянец или мат',
       image: '/img/showcase/business-cards.webp',
-      qty: { min: 48, max: 2000, default: 96 },
+      // Only fixed print runs (owner, 31.10.2026): 96 / 200 / 300 / 500
+      qty: { min: 96, max: 500, default: 96, presets: [96, 200, 300, 500] },
       variantLabel: 'Печать',
-      // Owner's base price list +20%, rounded to tenths (31.10.2026)
       variants: [
-        { id: 's1', label: 'Односторонняя', hint: '4+0', tiers: tiers([48, 96, 200, 300, 500], [6.2, 4.9, 4, 3.7, 3.5]) },
-        { id: 's2', label: 'Двусторонняя', hint: '4+4', tiers: tiers([48, 96, 200, 300, 500], [8.6, 7.1, 5.9, 5.4, 5]) },
+        { id: 's1', label: 'Односторонняя', hint: '4+0', tiers: tiers([96, 200, 300, 500], [6.2, 4.9, 4, 3.5]) },
+        { id: 's2', label: 'Двусторонняя', hint: '4+4', tiers: tiers([96, 200, 300, 500], [9.6, 7.1, 5.9, 5]) },
       ],
       choices: [
         {
@@ -681,7 +683,7 @@ const cards: Category = {
           default: 'gloss',
         },
       ],
-      notes: ['Срок печати — от 1 дня. Глянцевая и матовая бумага — по одной цене.'],
+      notes: ['Визитки печатаются тиражами 96, 200, 300 или 500 шт. Срок — от 1 дня. Глянцевая и матовая бумага — по одной цене.'],
     }),
   ],
 };
