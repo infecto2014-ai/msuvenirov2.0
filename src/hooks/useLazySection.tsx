@@ -10,6 +10,23 @@ export function forceLoadAllSections() {
 }
 
 /**
+ * Set by main.tsx before hydrating a prerendered page: lazy sections then keep
+ * their server HTML as-is and become interactive only when they near the viewport.
+ */
+let prerenderHydration = false;
+
+export function markPrerenderHydration() {
+  prerenderHydration = true;
+}
+
+/** True only for the first render after hydrating prerendered markup. */
+export const isPrerenderHydration = () => prerenderHydration;
+
+export function endPrerenderHydration() {
+  prerenderHydration = false;
+}
+
+/**
  * Returns [ref, isVisible] — the section renders only when
  * it enters (or is about to enter) the viewport,
  * or when forceLoadAllSections() is called.

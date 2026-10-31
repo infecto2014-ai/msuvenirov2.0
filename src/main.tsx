@@ -2,7 +2,7 @@ import { createRoot, hydrateRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 
 import App from "./App.tsx";
-import { forceLoadAllSections } from "./hooks/useLazySection";
+import { markPrerenderHydration } from "./hooks/useLazySection";
 import { normalizePath, preloadRoute } from "./routes";
 import "./index.css";
 
@@ -48,8 +48,8 @@ async function start() {
     // Markup was prerendered for exactly this route: load its chunk first so
     // Suspense does not swap the server HTML for the PageLoader, then hydrate.
     try {
-      // Lazy sections were rendered on the server: show them from the first render too
-      forceLoadAllSections();
+      // Lazy sections keep their server HTML and wake up near the viewport
+      markPrerenderHydration();
       await preloadRoute(current);
       hydrateRoot(container, tree);
       return;

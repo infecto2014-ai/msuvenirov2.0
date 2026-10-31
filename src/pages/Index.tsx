@@ -1,30 +1,39 @@
-import { lazy, Suspense, useEffect } from 'react';
+import { lazy, Suspense, useEffect, useState, type ComponentType } from 'react';
 import { useLocation } from 'react-router-dom';
 import Seo from '@/components/Seo';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
-import { useLazySection } from '@/hooks/useLazySection';
+import { endPrerenderHydration, isPrerenderHydration, useLazySection } from '@/hooks/useLazySection';
 
 const FloatingOrderButton = lazy(() => import('@/components/FloatingOrderButton'));
 const PWAInstallBanner = lazy(() => import('@/components/PWAInstallBanner'));
 
-// Lazy load below-the-fold sections for better LCP
-const sectionLoaders = [
-  () => import('@/components/AboutSection'),
-  () => import('@/components/ShowcaseSection'),
-  () => import('@/components/TechnologySection'),
-  () => import('@/components/PortfolioSection'),
-  () => import('@/components/WhyUsSection'),
-  () => import('@/components/ReviewsSection'),
-  () => import('@/components/TrustSection'),
-  () => import('@/components/ContactSection'),
-  () => import('@/components/Footer'),
-];
-const [AboutSection, ShowcaseSection, TechnologySection, PortfolioSection, WhyUsSection, ReviewsSection, TrustSection, ContactSection, Footer] =
-  sectionLoaders.map((load) => lazy(load as () => Promise<{ default: React.ComponentType }>));
+type SectionModule = { default: ComponentType };
 
-/** Used by main.tsx before hydrating prerendered "/" so no section chunk is still pending. */
-export const preload = () => Promise.all(sectionLoaders.map((load) => load())).then(() => undefined);
+/** Lazy section chunk that also remembers the loaded component, so it can render without suspending */
+const section = (load: () => Promise<SectionModule>) => {
+  let loaded: ComponentType | undefined;
+  const ensure = () => load().then((m) => { loaded = m.default; return m; });
+  return { ensure, Lazy: lazy(ensure), get: () => loaded };
+};
+type Section = ReturnType<typeof section>;
+
+// Lazy load below-the-fold sections for better LCP
+const About = section(() => import('@/components/AboutSection'));
+const Showcase = section(() => import('@/components/ShowcaseSection'));
+const Technology = section(() => import('@/components/TechnologySection'));
+const Portfolio = section(() => import('@/components/PortfolioSection'));
+const WhyUs = section(() => import('@/components/WhyUsSection'));
+const Reviews = section(() => import('@/components/ReviewsSection'));
+const Trust = section(() => import('@/components/TrustSection'));
+const Contact = section(() => import('@/components/ContactSection'));
+const FooterSection = section(() => import('@/components/Footer'));
+const Footer = FooterSection.Lazy;
+
+const sections = [About, Showcase, Technology, Portfolio, WhyUs, Reviews, Trust, Contact, FooterSection];
+
+/** Started (not awaited) by main.tsx when hydrating prerendered "/" so chunks are ready before the user scrolls. */
+export const preload = () => Promise.all(sections.map((s) => s.ensure())).then(() => undefined);
 
 // Minimal loading placeholder for sections
 const SectionLoader = () => (
@@ -33,15 +42,34 @@ const SectionLoader = () => (
   </div>
 );
 
-/** Renders children only when the placeholder enters viewport */
-const LazySection = ({ children, minHeight = '200px' }: { children: React.ReactNode; minHeight?: string }) => {
+/** Renders the section only when the placeholder enters viewport */
+const LazySection = ({ section: s, minHeight = '200px' }: { section: Section; minHeight?: string }) => {
   const [ref, isVisible] = useLazySection('300px');
+  // After hydrating prerendered HTML, keep the server markup untouched (no JS work, no layout reads)
+  // until the section nears the viewport and its chunk has loaded — then swap in the live component.
+  const [dormant, setDormant] = useState(isPrerenderHydration);
+
+  useEffect(() => {
+    if (!dormant || !isVisible) return;
+    let cancelled = false;
+    const wake = () => { if (!cancelled) setDormant(false); };
+    s.ensure().then(wake, wake);
+    return () => { cancelled = true; };
+  }, [dormant, isVisible, s]);
+
+  if (dormant) {
+    return <div key="static" ref={ref} suppressHydrationWarning dangerouslySetInnerHTML={{ __html: '' }} />;
+  }
+
+  const Loaded = s.get();
   return (
-    <div ref={ref} style={{ minHeight: isVisible ? undefined : minHeight }}>
-      {isVisible ? (
-        <Suspense fallback={<SectionLoader />}>{children}</Suspense>
-      ) : (
+    <div key="live" ref={ref} style={{ minHeight: isVisible ? undefined : minHeight }}>
+      {!isVisible ? (
         <SectionLoader />
+      ) : Loaded ? (
+        <Loaded />
+      ) : (
+        <Suspense fallback={<SectionLoader />}><s.Lazy /></Suspense>
       )}
     </div>
   );
@@ -49,6 +77,11 @@ const LazySection = ({ children, minHeight = '200px' }: { children: React.ReactN
 
 const Index = () => {
   const location = useLocation();
+
+  // Sections read the prerender flag in their initial state; later visits to "/" are plain client renders
+  useEffect(() => {
+    endPrerenderHydration();
+  }, []);
 
   useEffect(() => {
     if (location.hash) {
@@ -81,32 +114,16 @@ const Index = () => {
         {/* Hero loads immediately - critical for LCP */}
         <HeroSection />
         
-        <LazySection>
-          <AboutSection />
-        </LazySection>
+        <LazySection section={About} />
 
         {/* Heavy Swiper sections — only load near viewport */}
-        <LazySection minHeight="500px">
-          <ShowcaseSection />
-        </LazySection>
-        <LazySection>
-          <TechnologySection />
-        </LazySection>
-        <LazySection minHeight="500px">
-          <PortfolioSection />
-        </LazySection>
-        <LazySection>
-          <WhyUsSection />
-        </LazySection>
-        <LazySection>
-          <ReviewsSection />
-        </LazySection>
-        <LazySection>
-          <TrustSection />
-        </LazySection>
-        <LazySection>
-          <ContactSection />
-        </LazySection>
+        <LazySection section={Showcase} minHeight="500px" />
+        <LazySection section={Technology} />
+        <LazySection section={Portfolio} minHeight="500px" />
+        <LazySection section={WhyUs} />
+        <LazySection section={Reviews} />
+        <LazySection section={Trust} />
+        <LazySection section={Contact} />
       </main>
       <Suspense fallback={null}>
         <Footer />
