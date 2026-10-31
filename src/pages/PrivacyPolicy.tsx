@@ -1,9 +1,15 @@
 import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Seo from '@/components/Seo';
 
 const PrivacyPolicy = () => {
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        path="/privacy-policy"
+        title="Политика конфиденциальности | Мастерская сувениров"
+        description="Политика обработки персональных данных Мастерской сувениров (Калининград): какие данные мы собираем, как их используем и защищаем."
+      />
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
         <div className="container mx-auto px-4 sm:px-6 py-4">
           <Link 

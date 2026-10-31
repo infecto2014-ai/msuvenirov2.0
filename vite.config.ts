@@ -6,7 +6,7 @@ import deferCss from "./vite-plugin-defer-css";
 import sitemapLastmod from "./vite-plugin-sitemap-lastmod";
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
+export default defineConfig(({ mode, isSsrBuild }) => ({
   server: {
     host: "::",
     port: 8080,
@@ -21,10 +21,12 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
+    // SSR bundle (used only by scripts/prerender.mjs) must not copy public/ again
+    copyPublicDir: !isSsrBuild,
     modulePreload: { polyfill: false },
     rollupOptions: {
       output: {
-        manualChunks(id) {
+        manualChunks: isSsrBuild ? undefined : (id: string) => {
           // React core — small, cached long-term
           if (id.includes('react-dom') || id.includes('react-router-dom')) {
             return 'react-vendor';

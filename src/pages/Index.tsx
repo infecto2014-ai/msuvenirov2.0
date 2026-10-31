@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import { useLazySection } from '@/hooks/useLazySection';
@@ -9,15 +9,22 @@ const FloatingOrderButton = lazy(() => import('@/components/FloatingOrderButton'
 const PWAInstallBanner = lazy(() => import('@/components/PWAInstallBanner'));
 
 // Lazy load below-the-fold sections for better LCP
-const AboutSection = lazy(() => import('@/components/AboutSection'));
-const ShowcaseSection = lazy(() => import('@/components/ShowcaseSection'));
-const TechnologySection = lazy(() => import('@/components/TechnologySection'));
-const PortfolioSection = lazy(() => import('@/components/PortfolioSection'));
-const WhyUsSection = lazy(() => import('@/components/WhyUsSection'));
-const ReviewsSection = lazy(() => import('@/components/ReviewsSection'));
-const TrustSection = lazy(() => import('@/components/TrustSection'));
-const ContactSection = lazy(() => import('@/components/ContactSection'));
-const Footer = lazy(() => import('@/components/Footer'));
+const sectionLoaders = [
+  () => import('@/components/AboutSection'),
+  () => import('@/components/ShowcaseSection'),
+  () => import('@/components/TechnologySection'),
+  () => import('@/components/PortfolioSection'),
+  () => import('@/components/WhyUsSection'),
+  () => import('@/components/ReviewsSection'),
+  () => import('@/components/TrustSection'),
+  () => import('@/components/ContactSection'),
+  () => import('@/components/Footer'),
+];
+const [AboutSection, ShowcaseSection, TechnologySection, PortfolioSection, WhyUsSection, ReviewsSection, TrustSection, ContactSection, Footer] =
+  sectionLoaders.map((load) => lazy(load as () => Promise<{ default: React.ComponentType }>));
+
+/** Used by main.tsx before hydrating prerendered "/" so no section chunk is still pending. */
+export const preload = () => Promise.all(sectionLoaders.map((load) => load())).then(() => undefined);
 
 // Minimal loading placeholder for sections
 const SectionLoader = () => (
@@ -56,10 +63,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      <Helmet>
-        <title>Печать на футболках в Калининграде от 280 ₽ | Мастерская сувениров</title>
-        <meta name="description" content="DTF-печать на футболках, худи, кружках и сувенирах в Калининграде. От 1 шт, за 24 часа, гарантия 50+ стирок. Собственное производство, опыт 10+ лет. Заказывайте онлайн!" />
-        <link rel="canonical" href="https://msuvenirov.ru/" />
+      <Seo
+        path="/"
+        title="Печать на футболках Калининград от 300 ₽ | Мастерская сувениров"
+        description="DTF-печать на футболках, худи, кружках и сувенирах в Калининграде. От 1 шт, за 24 часа, гарантия 50+ стирок. Своё производство, опыт 10+ лет."
+      >
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "BreadcrumbList",
@@ -67,7 +75,7 @@ const Index = () => {
             { "@type": "ListItem", "position": 1, "name": "Главная", "item": "https://msuvenirov.ru/" }
           ]
         })}</script>
-      </Helmet>
+      </Seo>
       <Header />
       <main>
         {/* Hero loads immediately - critical for LCP */}

@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import {
   Flame, Droplets, Zap,
   CheckCircle2, ChevronDown, Send,
@@ -30,7 +30,7 @@ const JSON_LD = {
     address: { '@type': 'PostalAddress', addressLocality: 'Калининград', addressCountry: 'RU' },
   },
   areaServed: { '@type': 'City', name: 'Калининград' },
-  offers: { '@type': 'AggregateOffer', priceCurrency: 'RUB', lowPrice: '280', offerCount: 9 },
+  offers: { '@type': 'AggregateOffer', priceCurrency: 'RUB', lowPrice: '300', offerCount: 9 },
 };
 
 const VIDEO_JSON_LD = [
@@ -56,11 +56,12 @@ const VIDEO_JSON_LD = [
 
 const FabricPrintPage = () => (
   <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-    <Helmet>
-      <title>Печать на футболках в Калининграде | DTF-печать на одежде и спецодежде — Мастерская сувениров</title>
-      <meta name="description" content="Печать на футболках, худи, спецодежде и текстиле в Калининграде. DTF-печать и сублимация от 280 ₽. Брендирование корпоративной одежды, печать на худи, шопперах, фартуках. От 1 шт, за 24 часа." />
+    <Seo
+      path="/pechat_na_tkani"
+      title="Печать на футболках в Калининграде — DTF, худи, спецодежда"
+      description="Печать на футболках, худи, спецодежде и текстиле в Калининграде. DTF-печать и сублимация от 300 ₽. Брендирование корпоративной одежды. От 1 шт, за 24 часа."
+    >
       <meta name="keywords" content="печать на футболках Калининград, DTF печать, печать на спецодежде, брендирование одежды, печать на худи, печать на шопперах, сублимация на ткани, печать на текстиле Калининград" />
-      <link rel="canonical" href="https://msuvenirov.ru/pechat_na_tkani" />
       <script type="application/ld+json">{JSON.stringify(JSON_LD)}</script>
       <script type="application/ld+json">{JSON.stringify({
         "@context": "https://schema.org",
@@ -71,7 +72,7 @@ const FabricPrintPage = () => (
           { "@type": "ListItem", "position": 3, "name": "Печать на ткани", "item": "https://msuvenirov.ru/pechat_na_tkani" }
         ]
       })}</script>
-    </Helmet>
+    </Seo>
 
     <Header />
 

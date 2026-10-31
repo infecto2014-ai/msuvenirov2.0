@@ -1,9 +1,15 @@
 import { ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Seo from '@/components/Seo';
 
 const PublicOffer = () => {
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        path="/public-offer"
+        title="Публичная оферта | Мастерская сувениров Калининград"
+        description="Публичная оферта Мастерской сувениров: условия заказа, оплаты, изготовления и доставки печати на футболках, кружках и сувенирах."
+      />
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
         <div className="container mx-auto px-4 sm:px-6 py-4">
           <Link 

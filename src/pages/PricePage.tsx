@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 const FloatingOrderButton = lazy(() => import('@/components/FloatingOrderButton'));
@@ -841,11 +841,12 @@ const GiftsSection = () => (
 const PricePage = () => {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      <Helmet>
-        <title>Прайс на полиграфию и печать сувениров в Калининграде | Мастерская сувениров</title>
-        <meta name="description" content="Прайс-лист: печать на футболках, кружках, визитки, баннеры, календари, значки в Калининграде. Цены от производителя. Закажите расчёт!" />
+      <Seo
+        path="/price"
+        title="Прайс на полиграфию и печать в Калининграде | Мастерская сувениров"
+        description="Прайс-лист: печать на футболках и кружках, визитки, баннеры, календари, значки в Калининграде. Цены от производителя. Закажите расчёт!"
+      >
         <meta name="keywords" content="прайс печать калининград, цены полиграфия калининград, печать на футболках цена, визитки калининград, широкоформатная печать, сувениры на заказ, календари печать, значки брелоки" />
-        <link rel="canonical" href="https://msuvenirov.ru/price" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "BreadcrumbList",
@@ -854,12 +855,6 @@ const PricePage = () => {
             { "@type": "ListItem", "position": 2, "name": "Прайс-лист", "item": "https://msuvenirov.ru/price" }
           ]
         })}</script>
-        <meta property="og:title" content="Прайс на полиграфию и печать сувениров в Калининграде | Мастерская сувениров" />
-        <meta property="og:description" content="Актуальные цены на печать, полиграфию и сувенирную продукцию. Собственное производство в Калининграде." />
-        <meta property="og:url" content="https://msuvenirov.ru/price" />
-        <meta property="og:type" content="website" />
-        <meta property="og:locale" content="ru_RU" />
-        <meta property="og:site_name" content="Мастерская сувениров" />
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebPage",
@@ -914,7 +909,7 @@ const PricePage = () => {
             "url": "https://msuvenirov.ru"
           }
         })}</script>
-      </Helmet>
+      </Seo>
       <Header />
       <main className="pt-24 sm:pt-28 pb-12 sm:pb-16">
         <div className="container mx-auto px-4 sm:px-6">

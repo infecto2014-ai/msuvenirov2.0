@@ -1,6 +1,7 @@
 import { useLocation, Link } from "react-router-dom";
 import { useEffect } from "react";
-import { ArrowLeft, Home } from "lucide-react";
+import { Home } from "lucide-react";
+import Seo from "@/components/Seo";
 
 const NotFound = () => {
   const location = useLocation();
@@ -11,6 +12,12 @@ const NotFound = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background relative overflow-hidden">
+      <Seo
+        path={location.pathname}
+        title="Страница не найдена — 404 | Мастерская сувениров"
+        description="Запрашиваемая страница не существует или была перемещена. Вернитесь на главную страницу Мастерской сувениров в Калининграде."
+        noindex
+      />
       {/* Neon glow background effects */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
       <div className="absolute top-1/3 left-1/3 w-[200px] h-[200px] rounded-full bg-accent/10 blur-[80px] pointer-events-none" />

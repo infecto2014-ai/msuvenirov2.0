@@ -72,7 +72,7 @@ const HeroSection = () => {
         {/* Price badge */}
         <div className="flex items-center gap-3 sm:gap-4 mb-8 sm:mb-12">
           <span className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-primary/30 bg-primary/5 text-xs sm:text-base font-semibold text-primary">
-            DTF-печать от 280 ₽
+            DTF-печать от 300 ₽
           </span>
           <span className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border border-border/30 bg-card/30 text-xs sm:text-base font-semibold text-foreground">
             ⚡ Срочно за 24ч

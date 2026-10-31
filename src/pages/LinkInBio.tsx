@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import logo from '@/assets/logo.svg';
 import maxLogo from '@/assets/logo_max.svg';
 import { reachGoal } from '@/lib/metrika';
-import sbpLogo from '@/assets/sbp.svg';
+import Seo from '@/components/Seo';
 
 const TelegramIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -37,6 +37,12 @@ const LinkInBio = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-background">
+      <Seo
+        path="/card"
+        title="Контакты и соцсети | Мастерская сувениров Калининград"
+        description="Телефон, Telegram, VK, MAX и адрес Мастерской сувениров в Калининграде: печать на футболках, кружках и сувенирах."
+        noindex
+      />
       {/* Background decoration */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-0 right-0 h-80 bg-gradient-to-b from-primary/8 via-primary/3 to-transparent" />
@@ -160,19 +166,6 @@ className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded
           >
             <VKIcon className="w-5 h-5 text-primary" />
             <span>ВКонтакте</span>
-          </a>
-        </div>
-
-        {/* SBP Payment — special style */}
-        <div className="w-full mt-3">
-          <a
-            href="https://qr.nspk.ru/AS1A003NULJA73RU8FEOGDGV7SRN5B2B?type=01&bank=100000000008&crc=148F"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group w-full flex items-center justify-center gap-3 px-5 py-4 rounded-xl font-semibold text-base transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98] border border-border/50 bg-card/80 text-foreground hover:border-primary/40"
-          >
-            <img src={sbpLogo} alt="СБП" className="w-5 h-5 flex-shrink-0" />
-            <span>Оплатить по СБП</span>
           </a>
         </div>
 

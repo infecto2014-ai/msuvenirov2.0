@@ -1,6 +1,6 @@
 import { useState, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import {
   Droplets, Zap, Printer,
   CheckCircle2, ChevronDown, Send,
@@ -109,12 +109,13 @@ const MugPrintPage = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      <Helmet>
-        <title>Печать на кружках в Калининграде — сублимация от 250 ₽ | Мастерская сувениров</title>
-        <meta name="description" content="Печать на кружках от 1 штуки в Калининграде. Сублимация: белые, хамелеоны, глиттер, мрамор, зеркальное золото/серебро. Собственное производство, от 250 ₽." />
-        <link rel="canonical" href="https://msuvenirov.ru/mug-print" />
+      <Seo
+        path="/mug-print"
+        title="Печать на кружках в Калининграде от 250 ₽ | Мастерская сувениров"
+        description="Печать на кружках от 1 штуки в Калининграде. Сублимация: белые, хамелеоны, глиттер, мрамор, зеркальное золото/серебро. Собственное производство, от 250 ₽."
+      >
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
-      </Helmet>
+      </Seo>
 
       <Header />
 

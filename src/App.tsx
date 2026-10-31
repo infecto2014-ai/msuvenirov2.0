@@ -1,33 +1,12 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, type ReactNode } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
+import { routeDefs, notFoundDef } from "./routes";
 
 // Lazy load UI overlays - not needed for first paint
 const Toaster = lazy(() => import("@/components/ui/toaster").then(m => ({ default: m.Toaster })));
 const Sonner = lazy(() => import("@/components/ui/sonner").then(m => ({ default: m.Toaster })));
-
-// Retry wrapper for lazy imports — retries up to 3 times on network failures
-const lazyRetry = (fn: () => Promise<any>, retries = 3): Promise<any> =>
-  fn().catch((err: any) => {
-    if (retries > 0) {
-      return new Promise(resolve => setTimeout(resolve, 500)).then(() => lazyRetry(fn, retries - 1));
-    }
-    // Force reload if all retries fail (stale chunk after deploy)
-    window.location.reload();
-    throw err;
-  });
-
-// Lazy load all pages with retry — keeps initial bundle minimal for any entry route
-const Index = lazy(() => lazyRetry(() => import("./pages/Index")));
-const NotFound = lazy(() => lazyRetry(() => import("./pages/NotFound")));
-const PublicOffer = lazy(() => lazyRetry(() => import("./pages/PublicOffer")));
-const PrivacyPolicy = lazy(() => lazyRetry(() => import("./pages/PrivacyPolicy")));
-const LinkInBio = lazy(() => lazyRetry(() => import("./pages/LinkInBio")));
-const PricePage = lazy(() => lazyRetry(() => import("./pages/PricePage")));
-const FAQPage = lazy(() => lazyRetry(() => import("./pages/FAQPage")));
-const FabricPrintPage = lazy(() => lazyRetry(() => import("./pages/FabricPrintPage")));
-const MugPrintPage = lazy(() => lazyRetry(() => import("./pages/MugPrintPage")));
 
 const PageLoader = () => (
   <div className="min-h-screen bg-background flex items-center justify-center">
@@ -35,39 +14,49 @@ const PageLoader = () => (
   </div>
 );
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000,
-      gcTime: 10 * 60 * 1000,
+export const createQueryClient = () =>
+  new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 5 * 60 * 1000,
+        gcTime: 10 * 60 * 1000,
+      },
     },
-  },
-});
+  });
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
+const queryClient = createQueryClient();
+
+/** Router-agnostic app body, shared by the browser entry and the prerender entry. */
+export const AppRoutes = () => (
+  <>
+    <ScrollToTop />
+    <Suspense fallback={<PageLoader />}>
+      <Routes>
+        {routeDefs.map(({ path, Component }) => (
+          <Route key={path} path={path} element={<Component />} />
+        ))}
+        <Route path="*" element={<notFoundDef.Component />} />
+      </Routes>
+    </Suspense>
+  </>
+);
+
+export const AppProviders = ({ client, children }: { client: QueryClient; children: ReactNode }) => (
+  <QueryClientProvider client={client}>
     <Suspense fallback={null}>
       <Toaster />
       <Sonner />
     </Suspense>
-    <BrowserRouter>
-      <ScrollToTop />
-      <Suspense fallback={<PageLoader />}>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/public-offer" element={<PublicOffer />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/card" element={<LinkInBio />} />
-          <Route path="/price" element={<PricePage />} />
-          <Route path="/faq" element={<FAQPage />} />
-          <Route path="/pechat_na_tkani" element={<FabricPrintPage />} />
-          
-          <Route path="/mug-print" element={<MugPrintPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
+    {children}
   </QueryClientProvider>
+);
+
+const App = () => (
+  <AppProviders client={queryClient}>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
+  </AppProviders>
 );
 
 export default App;

@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import Seo from '@/components/Seo';
 import { MessageCircle, Phone, Send, Printer, Package, CreditCard, Palette, Gift, Sparkles, Truck, Ruler } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -116,7 +116,7 @@ const categories: FAQCategory[] = [
       },
       {
         q: 'Какие способы оплаты вы принимаете?',
-        a: 'Мы принимаем оплату наличными в мастерской, банковскими картами, переводом по номеру телефона (СБП). Для юридических лиц доступна безналичная оплата по счёту. Предоплата составляет 100% для индивидуальных заказов. Для корпоративных клиентов возможна постоплата по договору.',
+        a: 'Мы принимаем оплату наличными и банковскими картами в мастерской. Для организаций доступна безналичная оплата по счёту. Предоплата составляет 100% для индивидуальных заказов. Для корпоративных клиентов возможна постоплата по договору.',
       },
     ],
   },
@@ -333,13 +333,11 @@ const SizeTable = ({ type }: { type: string }) => {
 const FAQPage = () => {
   return (
     <>
-      <Helmet>
-        <title>Частые вопросы — Мастерская сувениров | Печать на футболках в Калининграде</title>
-        <meta
-          name="description"
-          content="Ответы на популярные вопросы о печати на футболках, кружках, DTF-печати и корпоративных заказах в Калининграде. Мастерская сувениров — опыт более 10 лет."
-        />
-        <link rel="canonical" href="https://msuvenirov.ru/faq" />
+      <Seo
+        path="/faq"
+        title="Частые вопросы о печати в Калининграде | Мастерская сувениров"
+        description="Ответы на вопросы о печати на футболках, кружках, DTF-печати и корпоративных заказах в Калининграде. Мастерская сувениров — опыт более 10 лет."
+      >
         <script type="application/ld+json">{JSON.stringify(faqJsonLd)}</script>
         <script type="application/ld+json">{JSON.stringify({
           "@context": "https://schema.org",
@@ -349,7 +347,7 @@ const FAQPage = () => {
             { "@type": "ListItem", "position": 2, "name": "Частые вопросы", "item": "https://msuvenirov.ru/faq" }
           ]
         })}</script>
-      </Helmet>
+      </Seo>
 
       <Header />
 
