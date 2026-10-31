@@ -1,0 +1,64 @@
+---
+import ContentPageView from '@/components/ContentPageView.astro';
+import { requirementsPage } from '@/data/pages';
+const checklist = [
+  'Формат: PDF, AI, CDR, EPS, PSD или PNG',
+  'Разрешение — 300 dpi в натуральную величину',
+  'Шрифты переведены в кривые',
+  'Для DTF — прозрачный фон в PNG',
+  'Для полиграфии — вылеты 2 мм с каждой стороны',
+];
+---
+
+<ContentPageView page={requirementsPage} path="/trebovaniya-k-maketam" crumb="Требования к макетам">
+  <div slot="hero" class="check">
+    <p class="check-title mono">Чек-лист перед отправкой</p>
+    <ul>
+      {checklist.map((c) => <li>{c}</li>)}
+    </ul>
+    <button type="button" class="btn btn-magenta" data-order>Отправить макет на проверку</button>
+  </div>
+</ContentPageView>
+
+<style>
+  .check {
+    position: relative;
+    margin-top: 12px;
+    padding: 28px;
+    border-radius: 28px;
+    background: var(--y-soft);
+    border: 1.5px dashed var(--ink);
+    max-width: 720px;
+    width: 100%;
+  }
+  .check-title {
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+  }
+  .check ul {
+    list-style: none;
+    margin: 0 0 20px;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .check li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-weight: 600;
+  }
+  .check li::before {
+    content: '';
+    flex: none;
+    width: 20px;
+    height: 20px;
+    margin-top: 3px;
+    border-radius: 6px;
+    border: 2px solid var(--ink);
+    background: linear-gradient(135deg, transparent 45%, var(--m) 45%, var(--m) 60%, transparent 60%);
+  }
+</style>

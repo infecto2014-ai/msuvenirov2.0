@@ -1,0 +1,100 @@
+---
+const steps = [
+  { t: 'Посчитайте цену', d: 'Калькулятор покажет цену за штуку и за весь тираж. Можно собрать смету из нескольких изделий.' },
+  { t: 'Пришлите макет', d: 'Прикрепите файл к заявке или опишите идею. Нет макета — подготовим, в большинстве случаев бесплатно.' },
+  { t: 'Согласуем и оплатите', d: 'Покажем, как будет выглядеть изделие. Частным лицам — предоплата 50%, компаниям — счёт без НДС.' },
+  { t: 'Заберите заказ', d: 'В ТЦ «Экватор» на Челнокова. Срочные заказы — часто в тот же день, без наценки.' },
+];
+---
+
+<section class="section how" aria-labelledby="how-h">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Как это работает</p>
+        <h2 id="how-h">Четыре шага от идеи до готового изделия</h2>
+      </div>
+    </div>
+    <ol class="how-list">
+      {
+        steps.map((s, i) => (
+          <li class="how-step">
+            <span class="how-num mono">0{i + 1}</span>
+            <h3>{s.t}</h3>
+            <p>{s.d}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .how-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    counter-reset: s;
+  }
+  .how-step {
+    position: relative;
+    padding: 28px 24px 26px;
+    border-radius: var(--radius-l);
+    background: var(--card);
+    border: 1.5px solid var(--line);
+  }
+  .how-step:nth-child(1) { --tone: var(--c); }
+  .how-step:nth-child(2) { --tone: var(--m); }
+  .how-step:nth-child(3) { --tone: var(--y); }
+  .how-step:nth-child(4) { --tone: var(--k); }
+  .how-step::after {
+    content: '';
+    position: absolute;
+    right: 18px;
+    top: 18px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--tone);
+    mix-blend-mode: multiply;
+  }
+  .how-num {
+    display: block;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 26px;
+  }
+  .how-step h3 {
+    margin-bottom: 8px;
+  }
+  .how-step p {
+    color: var(--ink-2);
+    font-size: 0.96rem;
+  }
+  /* dashed connectors between steps */
+  .how-step:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    top: 33px;
+    right: -17px;
+    width: 18px;
+    border-top: 2px dashed var(--line-strong);
+  }
+  @media (max-width: 980px) {
+    .how-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .how-step::before {
+      display: none;
+    }
+  }
+  @media (max-width: 560px) {
+    .how-list {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,50 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import ServiceBlocks from '@/components/ServiceBlocks.astro';
+import FaqSection from '@/components/FaqSection.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import type { ContentPage } from '@/data/pages';
+import { breadcrumbs, faqPage } from '@/lib/schema';
+
+interface Props {
+  page: ContentPage;
+  path: string;
+  crumb: string;
+}
+const { page, path, crumb } = Astro.props;
+const crumbs = [
+  { name: 'Главная', href: '/' },
+  { name: crumb, href: path },
+];
+---
+
+<BaseLayout title={page.title} description={page.description} path={path} schema={[breadcrumbs(crumbs), ...(page.faq.length ? [faqPage(page.faq)] : [])]}>
+  <section class="chero">
+    <div class="wrap chero-inner">
+      <Breadcrumbs items={crumbs} />
+      <h1>{page.h1}</h1>
+      <p class="lead">{page.lead}</p>
+      <slot name="hero" />
+    </div>
+  </section>
+  <slot />
+  <ServiceBlocks blocks={page.blocks} />
+  <slot name="after" />
+  {page.faq.length > 0 && <FaqSection items={page.faq} />}
+  <CtaBand />
+</BaseLayout>
+
+<style>
+  .chero {
+    padding-block: clamp(28px, 4vw, 56px) 8px;
+  }
+  .chero-inner {
+    display: grid;
+    gap: 18px;
+    justify-items: start;
+  }
+  .chero-inner h1 {
+    max-width: 900px;
+  }
+</style>

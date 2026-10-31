@@ -1,18 +1,8 @@
-User-agent: Yandex
-Allow: /
-Clean-param: __lovable_token&fbclid&yclid&utm_source&utm_medium&utm_campaign&utm_content&utm_term
-Disallow: /card
-
-User-agent: Googlebot
-Allow: /
-Disallow: /card
-
-User-agent: Bingbot
-Allow: /
-Disallow: /card
-
 User-agent: *
 Allow: /
-Disallow: /card
+
+User-agent: Yandex
+Allow: /
+Clean-param: utm_source&utm_medium&utm_campaign&utm_content&utm_term&yclid&ysclid&gclid&fbclid&_openstat&calc
 
 Sitemap: https://msuvenirov.ru/sitemap.xml

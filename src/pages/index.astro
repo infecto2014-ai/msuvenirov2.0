@@ -1,0 +1,672 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Calculator from '@/components/islands/Calculator';
+import HowItWorks from '@/components/HowItWorks.astro';
+import PortfolioGrid from '@/components/PortfolioGrid.astro';
+import Reviews from '@/components/Reviews.astro';
+import FaqSection from '@/components/FaqSection.astro';
+import ContactBlock from '@/components/ContactBlock.astro';
+import Icon from '@/components/Icon.astro';
+import { categoryFrom, findProduct, rub } from '@/data/pricing';
+import { generalFaq } from '@/data/faq';
+import { site } from '@/data/site';
+import { faqPage } from '@/lib/schema';
+
+const tiles = [
+  { href: '/pechat-na-futbolkah', title: 'Футболки и худи', text: 'футболка с печатью, от 1 шт', img: '/img/showcase/tshirt.webp', cat: 'textile', tone: 'c', size: 'xl', from: findProduct('textile', 'tshirt-unisex')!.fromPrice },
+  { href: '/pechat-na-kruzhkah', title: 'Кружки', text: 'белые, хамелеон, золото', img: '/img/showcase/colored-mugs.webp', cat: 'mugs', tone: 'm', size: 'tall' },
+  { href: '/znachki', title: 'Значки', text: 'закатные и на цанге', img: '/img/showcase/keychains.webp', cat: 'badges', tone: 'y' },
+  { href: '/vizitki', title: 'Визитки', text: 'одно- и двусторонние', img: '/img/showcase/business-cards.webp', cat: 'cards', tone: 'c' },
+  { href: '/pechat-na-kepkah', title: 'Бейсболки и шопперы', text: 'печать логотипа', img: '/img/showcase/cap.webp', cat: 'textile', tone: 'y', from: findProduct('textile', 'shopper')!.fromPrice },
+  { href: '/kalendari', title: 'Календари', text: 'квартальные, настенные, домики', img: '/img/showcase/stationery.webp', cat: 'calendars', tone: 'm' },
+  { href: '/nakleyki', title: '3D-стикеры', text: 'объёмные, с эпоксидной смолой', img: '/img/showcase/stickers-3d.webp', cat: 'stickers', tone: 'c' },
+  { href: '/fotopodarki', title: 'Фотоподарки', text: 'подушки, пазлы, магниты', img: '/img/showcase/pillow.webp', cat: 'gifts', tone: 'y' },
+];
+
+const techs = [
+  { name: 'DTF', text: 'Яркая плёночная печать на любой ткани и любом цвете. Стойкость 50+ стирок.', tone: 'c' },
+  { name: 'Сублимация', text: 'Краска уходит в волокна: кружки, светлая синтетика, фотоподарки.', tone: 'm' },
+  { name: 'УФ-печать', text: 'Печать на твёрдых поверхностях: стекло, металл, пластик, дерево.', tone: 'y' },
+  { name: 'Шелкография', text: 'Выгодно для больших тиражей одноцветных логотипов и надписей.', tone: 'k' },
+];
+
+const clients = [
+  { src: '/img/clients/client-2.webp', alt: 'Арле Парк' },
+  { src: '/img/clients/client-4.webp', alt: 'Папаша Беппе' },
+  { src: '/img/clients/client-5.webp', alt: 'Неудержимые' },
+  { src: '/img/clients/client-3.webp', alt: 'Fonbet' },
+  { src: '/img/clients/client-1.webp', alt: 'Логотип клиента' },
+  { src: '/img/clients/client-6.webp', alt: 'Логотип клиента' },
+  { src: '/img/clients/client-7.webp', alt: 'Логотип клиента' },
+  { src: '/img/clients/client-8.webp', alt: 'Логотип клиента' },
+];
+
+const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
+---
+
+<BaseLayout
+  title="Печать на футболках, кружках и сувенирах в Калининграде — Мастерская сувениров"
+  description="Печать на одежде, кружках, значках, визитках и календарях в Калининграде от 1 шт. Онлайн-калькулятор цен, срочно без наценки. ТЦ «Экватор», с 2019 года."
+  path="/"
+  schema={[faqPage(homeFaq)]}
+>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-text">
+        <p class="eyebrow">Калининград · ТЦ «Экватор» · с {site.founded} года</p>
+        <h1>
+          Печать на одежде, кружках и&nbsp;сувенирах <span class="mark">от&nbsp;1&nbsp;штуки</span>
+        </h1>
+        <p class="lead">
+          Футболки, худи, кружки, значки, визитки и календари с вашим дизайном. Своё производство, опыт в печати больше 10 лет. Цену видно сразу — в калькуляторе.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-magenta" href="#calc"><Icon name="calc" size={20} /> Рассчитать стоимость</a>
+          <button type="button" class="btn btn-ghost" data-order><Icon name="upload" size={20} /> Отправить макет</button>
+        </div>
+        <ul class="hero-facts">
+          <li><b>от 1 шт</b><span>без минимального тиража</span></li>
+          <li><b>0 ₽</b><span>наценка за срочность</span></li>
+          <li><b>50+</b><span>стирок выдерживает DTF</span></li>
+        </ul>
+      </div>
+
+      <div class="hero-collage" aria-hidden="true">
+        <div class="hc hc-1"><img src="/img/showcase/tshirt.webp" alt="" width="360" height="360" fetchpriority="high" /></div>
+        <div class="hc hc-2"><img src="/img/showcase/mug.webp" alt="" width="260" height="260" /></div>
+        <div class="hc hc-3"><img src="/img/showcase/keychains.webp" alt="" width="220" height="220" /></div>
+        <div class="hc hc-4"><img src="/img/showcase/cap.webp" alt="" width="200" height="200" /></div>
+        <span class="sticker hc-sticker">Срочно — часто в тот же день</span>
+        <span class="reg hc-reg-1"></span>
+        <span class="reg hc-reg-2"></span>
+        <div class="hc-dots halftone"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section class="section cats" aria-labelledby="cats-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Что печатаем</p>
+          <h2 id="cats-h">Изделия и цены</h2>
+        </div>
+        <a class="btn btn-ghost btn-sm" href="/uslugi">Все услуги →</a>
+      </div>
+      <div class="bento">
+        {
+          tiles.map((t) => {
+            const f = t.from ?? categoryFrom(t.cat).price;
+            return (
+              <a class={`tile tile-${t.tone} ${t.size ? `tile-${t.size}` : ''}`} href={t.href}>
+                <span class="tile-img">
+                  <img src={t.img} alt="" width="320" height="320" loading="lazy" decoding="async" />
+                </span>
+                <span class="tile-body">
+                  <span class="tile-title">{t.title}</span>
+                  <span class="tile-text">{t.text}</span>
+                  <span class="tile-price mono">от {rub(f)}</span>
+                </span>
+                <span class="tile-arrow"><Icon name="arrow" /></span>
+              </a>
+            );
+          })
+        }
+      </div>
+      <p class="cats-more">
+        А ещё: <a href="/breloki">брелоки</a>, <a href="/magnity">магниты</a>, <a href="/poligrafiya">листовки и блокноты</a>,
+        <a href="/shirokoformatnaya-pechat">широкоформатная печать</a>, <a href="/pechat-na-hudi">худи</a>, <a href="/pechat-na-shopperah">шопперы</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- CALCULATOR -->
+  <section id="calc" class="section calc-home" aria-labelledby="calc-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Онлайн-калькулятор</p>
+          <h2 id="calc-h">Смета за минуту</h2>
+        </div>
+        <p>Выберите изделие, параметры и количество — ползунком или цифрами. Добавляйте позиции в смету и отправьте всё одной заявкой.</p>
+      </div>
+      <Calculator client:visible />
+    </div>
+  </section>
+
+  <HowItWorks />
+
+  <!-- B2B -->
+  <section class="section" aria-labelledby="b2b-h">
+    <div class="wrap">
+      <div class="b2b">
+        <div class="b2b-cmyk" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="b2b-text">
+          <p class="eyebrow b2b-eyebrow">Компаниям</p>
+          <h2 id="b2b-h">Мерч, форма и подарки с логотипом</h2>
+          <p>
+            Футболки для команды, подарки партнёрам, календари к Новому году, значки и брелоки для мероприятий. Работаем по счёту без НДС, с закрывающими документами. Соберём смету
+            на весь набор и подготовим макеты.
+          </p>
+          <div class="b2b-actions">
+            <a class="btn btn-yellow" href="/korporativnym-klientam">Условия для компаний</a>
+            <button type="button" class="btn b2b-ghost" data-order>Запросить расчёт</button>
+          </div>
+        </div>
+        <ul class="b2b-list">
+          <li><span class="mono">01</span> Счёт без НДС и закрывающие документы</li>
+          <li><span class="mono">02</span> Одна смета на футболки, кружки, значки и полиграфию</li>
+          <li><span class="mono">03</span> Макет по вашему брендбуку — согласуем до печати</li>
+          <li><span class="mono">04</span> Образец перед тиражом</li>
+        </ul>
+      </div>
+      <div class="clients" aria-label="Нам доверяют">
+        {clients.map((c) => <img src={c.src} alt={c.alt} width="140" height="70" loading="lazy" />)}
+      </div>
+    </div>
+  </section>
+
+  <PortfolioGrid />
+
+  <!-- TECHNOLOGIES -->
+  <section class="section techs" aria-labelledby="tech-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Технологии</p>
+          <h2 id="tech-h">Подберём печать под материал</h2>
+        </div>
+        <p>Мы не навязываем одну технологию: для каждой вещи — свой способ, чтобы принт выглядел ярко и держался долго.</p>
+      </div>
+      <div class="tech-grid">
+        {
+          techs.map((t, i) => (
+            <article class={`tech tech-${t.tone}`}>
+              <span class="tech-plate mono">{['C', 'M', 'Y', 'K'][i]}</span>
+              <h3>{t.name}</h3>
+              <p>{t.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <Reviews />
+
+  <FaqSection items={homeFaq} />
+
+  <ContactBlock />
+</BaseLayout>
+
+<style>
+  /* ---------------- hero */
+  .hero {
+    padding-block: clamp(32px, 6vw, 80px) clamp(24px, 4vw, 48px);
+    overflow: clip;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: clamp(32px, 5vw, 64px);
+    align-items: center;
+  }
+  .hero-text {
+    display: grid;
+    gap: 24px;
+    justify-items: start;
+  }
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .hero-facts {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .hero-facts li {
+    display: grid;
+    gap: 2px;
+    padding: 14px 18px;
+    border-radius: 20px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    min-width: 150px;
+  }
+  .hero-facts b {
+    font-family: var(--mono);
+    font-size: 1.4rem;
+    letter-spacing: -0.03em;
+  }
+  .hero-facts span {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .hero-collage {
+    position: relative;
+    aspect-ratio: 1 / 1.02;
+    max-width: 560px;
+    width: 100%;
+    justify-self: end;
+  }
+  .hc {
+    position: absolute;
+    overflow: clip;
+    box-shadow: 0 24px 40px -24px rgba(22, 20, 27, 0.45);
+  }
+  .hc img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    mix-blend-mode: multiply;
+  }
+  .hc-1 {
+    left: 0;
+    top: 6%;
+    width: 60%;
+    aspect-ratio: 1;
+    background: var(--c-soft);
+    border-radius: 48% 52% 46% 54% / 55% 45% 55% 45%;
+  }
+  .hc-2 {
+    right: 2%;
+    top: 0;
+    width: 40%;
+    aspect-ratio: 1;
+    background: var(--m-soft);
+    border-radius: 50%;
+  }
+  .hc-3 {
+    right: 0;
+    bottom: 6%;
+    width: 46%;
+    aspect-ratio: 1;
+    background: var(--y-soft);
+    border-radius: 36px 36px 120px 36px;
+  }
+  .hc-4 {
+    left: 14%;
+    bottom: 0;
+    width: 34%;
+    aspect-ratio: 1;
+    background: var(--paper-2);
+    border-radius: 120px 36px 36px 36px;
+  }
+  .hc-sticker {
+    position: absolute;
+    left: 38%;
+    top: 46%;
+    z-index: 3;
+    transform: rotate(-6deg);
+    font-size: 0.95rem;
+    max-width: 200px;
+    text-align: center;
+    line-height: 1.2;
+  }
+  .hc-reg-1 {
+    position: absolute;
+    left: -4px;
+    bottom: 38%;
+    color: var(--ink);
+    opacity: 0.6;
+  }
+  .hc-reg-2 {
+    position: absolute;
+    right: 44%;
+    top: -2px;
+    color: var(--ink);
+    opacity: 0.6;
+  }
+  .hc-dots {
+    position: absolute;
+    inset: 20% 10% 10% 20%;
+    z-index: -1;
+    border-radius: 50%;
+  }
+
+  /* ---------------- categories (bento) */
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-rows: minmax(200px, auto);
+    gap: 16px;
+  }
+  .tile {
+    --bg: var(--c-soft);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 20px;
+    border-radius: var(--radius-l);
+    background: var(--bg);
+    text-decoration: none;
+    color: var(--ink);
+    overflow: clip;
+    isolation: isolate;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .tile:hover {
+    color: var(--ink);
+    transform: translateY(-3px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+  .tile-c { --bg: var(--c-soft); }
+  .tile-m { --bg: var(--m-soft); }
+  .tile-y { --bg: var(--y-soft); }
+  .tile-xl {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+  .tile-tall {
+    grid-row: span 2;
+  }
+  .tile-img {
+    position: absolute;
+    right: -8%;
+    top: -6%;
+    width: 62%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    overflow: clip;
+    z-index: -1;
+    background: rgba(255, 255, 255, 0.6);
+  }
+  .tile-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    mix-blend-mode: multiply;
+    transition: transform 0.35s ease;
+  }
+  .tile:hover .tile-img img {
+    transform: scale(1.06) rotate(-2deg);
+  }
+  .tile-xl .tile-img,
+  .tile-tall .tile-img {
+    width: 78%;
+    right: -4%;
+    top: 4%;
+  }
+  .tile-body {
+    margin-top: auto;
+    display: grid;
+    gap: 4px;
+    padding-right: 40px;
+  }
+  .tile-title {
+    font-weight: 900;
+    font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .tile-xl .tile-title {
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+  }
+  .tile-text {
+    font-size: 0.9rem;
+    color: var(--ink-2);
+  }
+  .tile-price {
+    justify-self: start;
+    margin-top: 8px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--card);
+    font-weight: 700;
+    font-size: 0.88rem;
+  }
+  .tile-arrow {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+    transition: transform 0.2s ease;
+  }
+  .tile:hover .tile-arrow {
+    transform: rotate(-45deg);
+  }
+  .cats-more {
+    margin-top: 22px;
+    color: var(--muted);
+  }
+  .cats-more a {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* ---------------- calculator band */
+  .calc-home {
+    background: var(--paper-2);
+    border-radius: 48px;
+    margin-inline: clamp(0px, 1.5vw, 20px);
+    position: relative;
+  }
+  .calc-home::before {
+    content: '';
+    position: absolute;
+    left: 24px;
+    top: 24px;
+    width: 120px;
+    height: 120px;
+    --dot: rgba(22, 20, 27, 0.12);
+    background-image: radial-gradient(circle, var(--dot) 1.4px, transparent 1.6px);
+    background-size: 12px 12px;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  /* ---------------- b2b */
+  .b2b {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 32px 48px;
+    align-items: center;
+    padding: clamp(28px, 5vw, 64px);
+    border-radius: 48px 48px 48px 140px;
+    background: var(--ink);
+    color: var(--paper);
+    overflow: clip;
+    isolation: isolate;
+  }
+  .b2b-cmyk {
+    position: absolute;
+    right: -60px;
+    top: -60px;
+    width: 280px;
+    height: 280px;
+    z-index: -1;
+    opacity: 0.55;
+  }
+  .b2b-cmyk span {
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    mix-blend-mode: screen;
+  }
+  .b2b-cmyk span:nth-child(1) { background: var(--c); left: 0; top: 20px; }
+  .b2b-cmyk span:nth-child(2) { background: var(--m); right: 0; top: 20px; }
+  .b2b-cmyk span:nth-child(3) { background: var(--y); left: 60px; bottom: 0; }
+  .b2b-eyebrow {
+    color: #cfc8ba;
+  }
+  .b2b-text {
+    display: grid;
+    gap: 18px;
+    justify-items: start;
+  }
+  .b2b-text p {
+    color: #d8d2c5;
+    font-size: 1.05rem;
+  }
+  .b2b-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .b2b-ghost {
+    --btn-bg: transparent;
+    --btn-fg: var(--paper);
+    border-color: #5a5462;
+  }
+  .b2b-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+  .b2b-list li {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    padding: 16px 18px;
+    border-radius: 20px;
+    background: rgba(255, 252, 245, 0.06);
+    border: 1px solid rgba(255, 252, 245, 0.12);
+    font-weight: 600;
+  }
+  .b2b-list .mono {
+    color: var(--y);
+    font-size: 0.85rem;
+  }
+  .clients {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 18px 36px;
+    margin-top: 32px;
+  }
+  .clients img {
+    height: 52px;
+    width: auto;
+    max-width: 140px;
+    object-fit: contain;
+    filter: grayscale(1) contrast(1.1);
+    opacity: 0.7;
+    transition: filter 0.2s ease, opacity 0.2s ease;
+  }
+  .clients img:hover {
+    filter: none;
+    opacity: 1;
+  }
+
+  /* ---------------- technologies */
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .tech {
+    position: relative;
+    padding: 26px 24px;
+    border-radius: var(--radius-l);
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    overflow: clip;
+  }
+  .tech-plate {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+  }
+  .tech-c .tech-plate { background: var(--c); color: #fff; }
+  .tech-m .tech-plate { background: var(--m); color: #fff; }
+  .tech-y .tech-plate { background: var(--y); color: var(--ink); }
+  .tech-k .tech-plate { background: var(--ink); color: var(--paper); }
+  .tech h3 {
+    margin-bottom: 8px;
+  }
+  .tech p {
+    color: var(--ink-2);
+    font-size: 0.96rem;
+  }
+  .tech::after {
+    content: '';
+    position: absolute;
+    right: -30px;
+    top: -30px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-image: radial-gradient(circle, rgba(22, 20, 27, 0.14) 1.3px, transparent 1.5px);
+    background-size: 10px 10px;
+  }
+
+  @media (max-width: 1020px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero-collage {
+      justify-self: center;
+      max-width: 460px;
+    }
+    .bento {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .tech-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .b2b {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 560px) {
+    .bento {
+      grid-template-columns: 1fr;
+      grid-auto-rows: minmax(170px, auto);
+    }
+    .tile-xl,
+    .tile-tall {
+      grid-column: auto;
+      grid-row: auto;
+      min-height: 280px;
+    }
+    .tile-img,
+    .tile-xl .tile-img,
+    .tile-tall .tile-img {
+      width: 150px;
+      right: 14px;
+      top: 14px;
+    }
+    .tile-xl .tile-img,
+    .tile-tall .tile-img {
+      width: 180px;
+    }
+    .tile-xl .tile-title {
+      font-size: 1.6rem;
+    }
+    .tech-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero-facts li {
+      min-width: 0;
+      flex: 1 1 140px;
+    }
+    .b2b {
+      border-radius: 32px 32px 32px 80px;
+    }
+  }
+</style>

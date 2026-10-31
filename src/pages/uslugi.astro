@@ -1,0 +1,159 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import Icon from '@/components/Icon.astro';
+import { services } from '@/data/services';
+import { serviceNav } from '@/data/site';
+import { categoryFrom, findProduct, rub } from '@/data/pricing';
+import { breadcrumbs } from '@/lib/schema';
+
+const crumbs = [
+  { name: 'Главная', href: '/' },
+  { name: 'Услуги', href: '/uslugi' },
+];
+const bySlug = new Map(services.map((s) => [s.slug, s]));
+const fromOf = (slug: string) => {
+  const s = bySlug.get(slug);
+  if (!s) return '';
+  const p = s.calcProduct ? findProduct(s.calcCategory, s.calcProduct) : undefined;
+  const f = p && !p.fromUnit ? { price: p.fromPrice, unit: 'шт' } : categoryFrom(s.calcCategory);
+  return `от ${rub(f.price)}${f.unit !== 'шт' ? `/${f.unit}` : ''}`;
+};
+---
+
+<BaseLayout
+  title="Услуги печати в Калининграде — одежда, сувениры, полиграфия | Мастерская сувениров"
+  description="Все услуги мастерской: печать на футболках, худи, кружках, значки, брелоки, магниты, визитки, календари, широкоформатная печать. Калининград, от 1 шт."
+  path="/uslugi"
+  schema={[breadcrumbs(crumbs)]}
+>
+  <section class="section-top wrap">
+    <Breadcrumbs items={crumbs} />
+    <h1>Услуги мастерской</h1>
+    <p class="lead">Печатаем на одежде, посуде, сувенирах и бумаге. Выберите изделие — внутри цены, калькулятор, примеры работ и ответы на вопросы.</p>
+  </section>
+
+  {
+    serviceNav.map((g, gi) => (
+      <section class="section svc-group" aria-labelledby={`g-${gi}`}>
+        <div class="wrap">
+          <h2 id={`g-${gi}`}>{g.group}</h2>
+          <div class="svc-grid">
+            {g.links.map((l) => {
+              const s = bySlug.get(l.href);
+              return (
+                <a class="svc" href={l.href}>
+                  {s && <img src={s.image} alt="" width="320" height="220" loading="lazy" />}
+                  <span class="svc-body">
+                    <span class="svc-name">{l.label}</span>
+                    <span class="svc-from mono">{fromOf(l.href)}</span>
+                  </span>
+                  <span class="svc-arrow">
+                    <Icon name="arrow" />
+                  </span>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="wrap">
+    <a class="b2b-link" href="/korporativnym-klientam">
+      <span class="sticker">Компаниям</span>
+      <span class="b2b-link-text">Мерч и подарки с логотипом: счёт без НДС, одна смета на весь набор</span>
+      <Icon name="arrow" />
+    </a>
+  </section>
+
+  <CtaBand />
+</BaseLayout>
+
+<style>
+  .section-top {
+    display: grid;
+    gap: 16px;
+    padding-top: clamp(28px, 4vw, 56px);
+  }
+  .svc-group {
+    padding-block: 36px;
+  }
+  .svc-group h2 {
+    margin-bottom: 20px;
+  }
+  .svc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+  }
+  .svc {
+    position: relative;
+    display: grid;
+    border-radius: var(--radius-l);
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    overflow: clip;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .svc:hover {
+    color: var(--ink);
+    transform: translateY(-3px);
+    box-shadow: 5px 5px 0 var(--c);
+  }
+  .svc img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    background: var(--paper-2);
+  }
+  .svc-body {
+    display: grid;
+    gap: 4px;
+    padding: 16px 64px 18px 18px;
+  }
+  .svc-name {
+    font-weight: 800;
+    font-size: 1.1rem;
+  }
+  .svc-from {
+    color: var(--m-ink);
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+  .svc-arrow {
+    position: absolute;
+    right: 14px;
+    bottom: 16px;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .b2b-link {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 18px;
+    margin-top: 32px;
+    padding: 28px 32px;
+    border-radius: 32px 32px 32px 90px;
+    background: var(--ink);
+    color: var(--paper);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.15rem;
+  }
+  .b2b-link:hover {
+    color: var(--y);
+  }
+  .b2b-link-text {
+    flex: 1 1 300px;
+  }
+</style>

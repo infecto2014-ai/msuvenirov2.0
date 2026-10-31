@@ -1,0 +1,79 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { generalFaq } from '@/data/faq';
+import { breadcrumbs, faqPage } from '@/lib/schema';
+const crumbs = [
+  { name: 'Главная', href: '/' },
+  { name: 'Вопросы и ответы', href: '/faq' },
+];
+const all = generalFaq.flatMap((g) => g.items);
+---
+
+<BaseLayout
+  title="Вопросы и ответы о печати — сроки, макеты, оплата | Мастерская сувениров"
+  description="Ответы на частые вопросы: сроки печати, требования к макетам, технологии DTF и сублимации, оплата и заказы для компаний. Мастерская сувениров, Калининград."
+  path="/faq"
+  schema={[breadcrumbs(crumbs), faqPage(all)]}
+>
+  <section class="wrap ftop">
+    <Breadcrumbs items={crumbs} />
+    <h1>Вопросы и ответы</h1>
+    <nav class="ftoc" aria-label="Темы">
+      {generalFaq.map((g, i) => <a href={`#g${i}`}>{g.group}</a>)}
+    </nav>
+  </section>
+
+  <div class="wrap fgroups">
+    {
+      generalFaq.map((g, i) => (
+        <section id={`g${i}`} class="fgroup" aria-labelledby={`g${i}-h`}>
+          <h2 id={`g${i}-h`}>{g.group}</h2>
+          <div class="faq-list">
+            {g.items.map((f) => (
+              <details class="faq-item">
+                <summary>{f.q}</summary>
+                <div class="faq-answer">
+                  <p>{f.a}</p>
+                </div>
+              </details>
+            ))}
+          </div>
+        </section>
+      ))
+    }
+  </div>
+
+  <CtaBand title="Остался вопрос?" text="Напишите нам в Telegram или оставьте заявку — ответим и посчитаем ваш заказ." />
+</BaseLayout>
+
+<style>
+  .ftop {
+    display: grid;
+    gap: 16px;
+    padding-top: clamp(28px, 4vw, 56px);
+  }
+  .ftoc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .ftoc a {
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1.5px solid var(--line);
+    background: var(--card);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .fgroups {
+    display: grid;
+    gap: 48px;
+    padding-top: 40px;
+  }
+  .fgroup h2 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin-bottom: 18px;
+  }
+</style>

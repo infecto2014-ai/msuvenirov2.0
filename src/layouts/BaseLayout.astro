@@ -1,0 +1,108 @@
+---
+import '@/styles/global.css';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import MobileBar from '@/components/MobileBar.astro';
+import OrderDialog from '@/components/islands/OrderDialog';
+import { localBusiness, website } from '@/lib/schema';
+import { site } from '@/data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  /** path for canonical; defaults to the current URL */
+  path?: string;
+  image?: string;
+  noindex?: boolean;
+  /** extra JSON-LD objects */
+  schema?: object[];
+  /** hide header/footer chrome (link-in-bio page) */
+  bare?: boolean;
+}
+
+const { title, description, path, image = '/og-image.jpg', noindex = false, schema = [], bare = false } = Astro.props;
+const pathname = (path ?? Astro.url.pathname).replace(/\.html$/, '').replace(/\/$/, '') || '/';
+const canonical = `${site.url}${pathname === '/' ? '/' : pathname}`;
+const ogImage = image.startsWith('http') ? image : `${site.url}${image}`;
+const ld = [localBusiness(), website(), ...schema];
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    <meta name="theme-color" content="#fffcf5" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/favicon-192.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    {ld.map((obj) => <script type="application/ld+json" set:html={JSON.stringify(obj)} />)}
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Перейти к содержимому</a>
+    {!bare && <Header />}
+    <main id="main">
+      <slot />
+    </main>
+    {
+      !bare && (
+        <>
+          <Footer />
+          <MobileBar />
+        </>
+      )
+    }
+    <OrderDialog client:idle />
+
+    <script is:inline define:vars={{ metrikaId: site.metrikaId, jivoSrc: site.jivoSrc }}>
+      // Analytics and chat load after the page is interactive and idle, so they never slow down the first paint.
+      (function () {
+        var started = false;
+        function start() {
+          if (started) return;
+          started = true;
+          (function (m, e, t, r, i, k, a) {
+            m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments); };
+            m[i].l = 1 * new Date();
+            k = e.createElement(t); a = e.getElementsByTagName(t)[0];
+            k.async = 1; k.src = r; a.parentNode.insertBefore(k, a);
+          })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
+          window.ym(metrikaId, 'init', { webvisor: true, clickmap: true, accurateTrackBounce: true, trackLinks: true });
+          // On phones the chat button would cover the bottom action bar (call / Telegram / order) — skip it there.
+          if (window.matchMedia('(max-width: 760px)').matches) return;
+          setTimeout(function () {
+            var s = document.createElement('script');
+            s.src = jivoSrc;
+            s.async = true;
+            document.body.appendChild(s);
+          }, 4000);
+        }
+        ['scroll', 'pointerdown', 'keydown', 'touchstart'].forEach(function (ev) {
+          window.addEventListener(ev, start, { once: true, passive: true });
+        });
+        setTimeout(start, 3500);
+      })();
+      // The old site registered a service worker; remove it so visitors always get fresh pages.
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function (rs) { rs.forEach(function (r) { r.unregister(); }); });
+      }
+    </script>
+  </body>
+</html>

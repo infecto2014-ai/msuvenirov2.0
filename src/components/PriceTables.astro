@@ -1,0 +1,90 @@
+---
+// Static, always-visible price tables generated from src/data/pricing.ts (indexable by search engines).
+import { findCategory, type PriceTable } from '@/data/pricing';
+
+interface Props {
+  categoryId: string;
+  /** heading level for product names */
+  level?: 'h3' | 'h4';
+}
+const { categoryId, level = 'h3' } = Astro.props;
+const cat = findCategory(categoryId);
+const Heading = level;
+
+// Fixed-price products (single "Цена" column) are merged into one table.
+type Block = { title?: string; table: PriceTable };
+const blocks: Block[] = [];
+let merged: PriceTable | null = null;
+for (const p of cat?.products ?? []) {
+  if (!p.table) continue;
+  if (p.table.columns.length === 1 && p.table.columns[0] === 'Цена') {
+    if (!merged) {
+      merged = { columns: ['Цена'], rows: [] };
+      blocks.push({ title: cat!.products.length > 1 && blocks.length ? 'Другие изделия' : undefined, table: merged });
+    }
+    merged.rows.push(...p.table.rows);
+  } else {
+    blocks.push({ title: p.name, table: p.table });
+  }
+}
+---
+
+{
+  cat && (
+    <div class="ptables">
+      {blocks.map((b) => (
+        <div class="ptable">
+          {b.title && <Heading class="ptable-title">{b.title}</Heading>}
+          <div class="table-wrap">
+            <table class="price-table">
+              <thead>
+                <tr>
+                  <th scope="col">{b.title && b.table.rows.length > 1 ? 'Вариант' : 'Изделие'}</th>
+                  {b.table.columns.map((c) => (
+                    <th scope="col">{c}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {b.table.rows.map((r) => (
+                  <tr>
+                    <th scope="row">{r.label}</th>
+                    {r.cells.map((c) => (
+                      <td>{c}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+<style>
+  .ptables {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+  .ptable-title {
+    font-size: 1.15rem;
+    margin-bottom: 12px;
+  }
+  .price-table tbody th {
+    text-align: left;
+    font-weight: 600;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+    white-space: normal;
+    min-width: 200px;
+  }
+  .price-table tbody tr:last-child th {
+    border-bottom: 0;
+  }
+  .price-table tbody tr:hover th {
+    background: var(--y-soft);
+  }
+</style>

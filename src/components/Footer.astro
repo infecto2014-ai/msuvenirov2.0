@@ -1,0 +1,175 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { infoNav, mainNav, serviceNav, site } from '@/data/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="ftr">
+  <div class="ftr-band" aria-hidden="true">
+    <span></span><span></span><span></span><span></span>
+  </div>
+  <div class="wrap ftr-grid">
+    <div class="ftr-brand">
+      <Logo inverse />
+      <p>Печать на одежде, кружках, сувенирах и полиграфия в Калининграде. Мастерская с {site.founded} года, от 1 штуки.</p>
+      <div class="ftr-social">
+        <a href={site.social.telegram} target="_blank" rel="noopener" aria-label="Telegram"><Icon name="telegram" /></a>
+        <a href={site.social.max} target="_blank" rel="noopener" aria-label="MAX"><Icon name="max" /></a>
+        <a href={site.social.vk} target="_blank" rel="noopener" aria-label="ВКонтакте"><Icon name="vk" /></a>
+      </div>
+    </div>
+
+    {
+      serviceNav.map((g) => (
+        <nav class="ftr-col" aria-label={g.group}>
+          <p class="ftr-title">{g.group}</p>
+          {g.links.map((l) => (
+            <a href={l.href}>{l.label}</a>
+          ))}
+        </nav>
+      ))
+    }
+
+    <nav class="ftr-col" aria-label="Информация">
+      <p class="ftr-title">Мастерская</p>
+      {mainNav.map((l) => <a href={l.href}>{l.label}</a>)}
+      {infoNav.slice(0, 3).map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+
+    <div class="ftr-col ftr-contacts">
+      <p class="ftr-title">Контакты</p>
+      <a class="ftr-phone" href={site.phoneHref}>{site.phone}</a>
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+      <p>
+        <Icon name="pin" size={16} />
+        г. {site.address.city}, {site.address.street}, {site.address.place}
+      </p>
+      <p><Icon name="clock" size={16} /> {site.hours}</p>
+    </div>
+  </div>
+
+  <div class="wrap ftr-bottom">
+    <p>© {site.founded}–{year} {site.legal.name} · ОГРНИП {site.legal.ogrnip} · ИНН {site.legal.inn}</p>
+    <p>
+      {infoNav.slice(3).map((l) => <a href={l.href}>{l.label}</a>)}
+    </p>
+    <p class="ftr-note">Цены на сайте носят информационный характер и не являются публичной офертой. Точную стоимость подтверждает менеджер.</p>
+  </div>
+</footer>
+
+<style>
+  .ftr {
+    background: var(--ink);
+    color: #e9e4d8;
+    margin-top: var(--section);
+    padding-bottom: 90px;
+  }
+  .ftr a {
+    color: #e9e4d8;
+    text-decoration: none;
+  }
+  .ftr a:hover {
+    color: var(--y);
+  }
+  .ftr-band {
+    display: flex;
+    height: 10px;
+  }
+  .ftr-band span {
+    flex: 1;
+  }
+  .ftr-band span:nth-child(1) { background: var(--c); }
+  .ftr-band span:nth-child(2) { background: var(--m); }
+  .ftr-band span:nth-child(3) { background: var(--y); }
+  .ftr-band span:nth-child(4) { background: #3a3542; }
+  .ftr-grid {
+    display: grid;
+    grid-template-columns: 1.4fr repeat(5, minmax(0, 1fr));
+    gap: 32px;
+    padding-block: 56px 40px;
+  }
+  .ftr-brand p {
+    margin-top: 16px;
+    color: #bdb6a8;
+    font-size: 0.95rem;
+  }
+  .ftr-social {
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
+  }
+  .ftr-social a {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1.5px solid #4b4554;
+  }
+  .ftr-social a:hover {
+    border-color: var(--y);
+  }
+  .ftr-col {
+    display: grid;
+    align-content: start;
+    gap: 8px;
+    font-size: 0.95rem;
+  }
+  .ftr-title {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #9a9384;
+    margin-bottom: 6px;
+  }
+  .ftr-contacts p {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    color: #bdb6a8;
+  }
+  .ftr-contacts :global(svg) {
+    flex: none;
+    margin-top: 4px;
+  }
+  .ftr-phone {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--y) !important;
+  }
+  .ftr-bottom {
+    border-top: 1px solid #3a3542;
+    padding-block: 24px;
+    display: grid;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: #9a9384;
+  }
+  .ftr-bottom p a {
+    color: #bdb6a8;
+    margin-right: 18px;
+  }
+  .ftr-note {
+    font-size: 0.78rem;
+  }
+  @media (max-width: 1100px) {
+    .ftr-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .ftr-brand {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 640px) {
+    .ftr-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .ftr-contacts {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

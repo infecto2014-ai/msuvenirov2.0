@@ -1,0 +1,34 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Reviews from '@/components/Reviews.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { reviews } from '@/data/reviews';
+import { breadcrumbs } from '@/lib/schema';
+const crumbs = [
+  { name: 'Главная', href: '/' },
+  { name: 'Отзывы', href: '/otzyvy' },
+];
+---
+
+<BaseLayout
+  title="Отзывы клиентов — Мастерская сувениров, Калининград"
+  description="Отзывы о печати на футболках, кружках и сувенирах в Мастерской сувениров. Отзывы собраны на Авито, Яндекс Картах, 2ГИС и других площадках."
+  path="/otzyvy"
+  schema={[breadcrumbs(crumbs)]}
+>
+  <section class="wrap rtop">
+    <Breadcrumbs items={crumbs} />
+    <h1>Отзывы клиентов</h1>
+  </section>
+  <Reviews limit={reviews.length} more={false} />
+  <CtaBand title="Заказывали у нас?" text="Будем благодарны за отзыв на Яндекс Картах, 2ГИС или Авито — это помогает другим найти мастерскую." />
+</BaseLayout>
+
+<style>
+  .rtop {
+    display: grid;
+    gap: 16px;
+    padding-top: clamp(28px, 4vw, 56px);
+  }
+</style>

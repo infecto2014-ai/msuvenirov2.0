@@ -1,0 +1,62 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import ContactBlock from '@/components/ContactBlock.astro';
+import { site } from '@/data/site';
+import { breadcrumbs } from '@/lib/schema';
+const crumbs = [
+  { name: 'Главная', href: '/' },
+  { name: 'Контакты', href: '/kontakty' },
+];
+---
+
+<BaseLayout
+  title="Контакты — Мастерская сувениров, ТЦ «Экватор», Калининград"
+  description={`Адрес: г. Калининград, ${site.address.street}, ${site.address.place}. ${site.hours}. Телефон ${site.phone}, Telegram, MAX, ВКонтакте.`}
+  path="/kontakty"
+  schema={[breadcrumbs(crumbs)]}
+>
+  <section class="wrap ktop">
+    <Breadcrumbs items={crumbs} />
+    <h1>Контакты</h1>
+  </section>
+  <ContactBlock />
+  <section class="wrap kinfo">
+    <div class="card kcard">
+      <h2>Как нас найти</h2>
+      <p>ТЦ «Экватор» на улице Генерала Челнокова, 2 этаж. Перед визитом лучше написать или позвонить — подготовим образцы и сразу обсудим макет.</p>
+    </div>
+    <div class="card kcard">
+      <h2>Оплата</h2>
+      <p>Частным лицам — предоплата 50%, остаток при получении. Организациям — оплата по счёту без НДС, с закрывающими документами.</p>
+    </div>
+    <div class="card kcard">
+      <h2>Реквизиты</h2>
+      <p>{site.legal.name}<br />ОГРНИП {site.legal.ogrnip}<br />ИНН {site.legal.inn}</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .ktop {
+    display: grid;
+    gap: 16px;
+    padding-top: clamp(28px, 4vw, 56px);
+  }
+  .kinfo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .kcard {
+    padding: 26px;
+    border-radius: var(--radius-l);
+  }
+  .kcard h2 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+  }
+  .kcard p {
+    color: var(--ink-2);
+  }
+</style>

@@ -1,0 +1,60 @@
+// Content contracts shared by data files and page templates.
+
+/** One FAQ entry; always rendered visibly on the page (FAQPage JSON-LD mirrors it). */
+export interface Faq {
+  q: string;
+  a: string;
+}
+
+/** A content block on a service landing page. */
+export type ServiceBlock =
+  | { kind: 'text'; title: string; paragraphs: string[] }
+  | { kind: 'features'; title: string; items: { title: string; text: string }[] }
+  | { kind: 'compare'; title: string; columns: string[]; rows: { label: string; values: string[] }[] }
+  | { kind: 'steps'; title: string; items: { title: string; text: string }[] };
+
+export interface ServicePage {
+  /** URL path without trailing slash, e.g. "/pechat-na-futbolkah" */
+  slug: string;
+  /** Short name for menus and breadcrumbs, e.g. "Печать на футболках" */
+  name: string;
+  /** <title>, up to ~65 chars */
+  title: string;
+  /** meta description, up to ~160 chars */
+  description: string;
+  /** visible H1 */
+  h1: string;
+  /** 1–2 sentence lead under H1 */
+  lead: string;
+  /** Short selling points shown as chips under the lead (3–4 items) */
+  highlights: string[];
+  /** id of a calculator category from src/data/pricing.ts, opened preselected on this page */
+  calcCategory: string;
+  /** optional product id inside that category to preselect */
+  calcProduct?: string;
+  /** hero image path under /public, e.g. "/img/showcase/tshirt.webp" */
+  image: string;
+  imageAlt: string;
+  blocks: ServiceBlock[];
+  faq: Faq[];
+  /** slugs of related service pages for internal linking (2–4) */
+  related: string[];
+  /** portfolio tags to show on the page (see src/data/portfolio.ts) */
+  portfolioTags: string[];
+}
+
+export interface PortfolioItem {
+  /** path under /public */
+  src: string;
+  title: string;
+  /** e.g. "DTF-печать", "Сублимация" */
+  tech: string;
+  tags: string[];
+}
+
+export interface Review {
+  name: string;
+  text: string;
+  /** where the review comes from, e.g. "Яндекс Карты", "Авито", "2ГИС"; omit if unknown */
+  source?: string;
+}

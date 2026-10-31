@@ -1,0 +1,321 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { mainNav, serviceNav, site } from '@/data/site';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isServices = serviceNav.some((g) => g.links.some((l) => l.href === path));
+---
+
+<header class="hdr">
+  <div class="wrap hdr-row">
+    <Logo />
+
+    <nav class="hdr-nav" aria-label="Основное меню">
+      <div class="hdr-services">
+        <button type="button" class:list={['hdr-link', 'hdr-services-btn', { 'is-active': isServices }]} aria-haspopup="true">
+          Услуги <span class="hdr-caret" aria-hidden="true"></span>
+        </button>
+        <div class="hdr-mega">
+          {
+            serviceNav.map((g) => (
+              <div class="hdr-mega-col">
+                <p class="hdr-mega-title">{g.group}</p>
+                <ul>
+                  {g.links.map((l) => (
+                    <li>
+                      <a href={l.href} aria-current={l.href === path ? 'page' : undefined}>
+                        {l.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+          <a class="hdr-mega-cta" href="/price">
+            <span class="sticker">Посчитать цену онлайн →</span>
+          </a>
+        </div>
+      </div>
+      {
+        mainNav.map((l) => (
+          <a class:list={['hdr-link', { 'is-active': l.href === path }]} href={l.href} aria-current={l.href === path ? 'page' : undefined}>
+            {l.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="hdr-actions">
+      <a class="hdr-phone" href={site.phoneHref}>
+        <Icon name="phone" size={18} />
+        <span>{site.phone}</span>
+      </a>
+      <a class="hdr-icon" href={site.social.telegram} target="_blank" rel="noopener" aria-label="Написать в Telegram">
+        <Icon name="telegram" size={20} />
+      </a>
+      <button type="button" class="btn btn-sm hdr-cta" data-order>Заявка</button>
+
+      <details class="hdr-burger">
+        <summary aria-label="Открыть меню"><Icon name="menu" size={24} /></summary>
+        <div class="hdr-drawer">
+          {
+            serviceNav.map((g) => (
+              <div class="hdr-drawer-group">
+                <p class="hdr-mega-title">{g.group}</p>
+                {g.links.map((l) => (
+                  <a href={l.href}>{l.label}</a>
+                ))}
+              </div>
+            ))
+          }
+          <div class="hdr-drawer-group">
+            <p class="hdr-mega-title">Мастерская</p>
+            {mainNav.map((l) => <a href={l.href}>{l.label}</a>)}
+            <a href="/trebovaniya-k-maketam">Требования к макетам</a>
+            <a href="/faq">Вопросы и ответы</a>
+          </div>
+          <div class="hdr-drawer-contacts">
+            <a class="btn btn-block" href={site.phoneHref}>{site.phone}</a>
+            <p class="muted">{site.address.place} · {site.hours}</p>
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+</header>
+
+<style>
+  .hdr {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    backdrop-filter: saturate(1.4) blur(10px);
+    border-bottom: 1.5px solid var(--line);
+  }
+  .hdr-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-height: 74px;
+  }
+  .hdr-nav {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-left: 12px;
+    flex: 1 1 auto;
+  }
+  .hdr-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 42px;
+    padding: 0 12px;
+    border-radius: 999px;
+    border: 0;
+    background: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    color: var(--ink);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .hdr-link:hover,
+  .hdr-link.is-active {
+    background: var(--paper-2);
+    color: var(--ink);
+  }
+  .hdr-link.is-active {
+    box-shadow: inset 0 -3px 0 var(--y);
+  }
+  .hdr-caret {
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg) translateY(-2px);
+  }
+  .hdr-services {
+    position: relative;
+  }
+  .hdr-mega {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: -12px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(190px, 1fr));
+    gap: 24px 32px;
+    padding: 28px;
+    width: max-content;
+    max-width: min(820px, 90vw);
+    background: var(--card);
+    border: 1.5px solid var(--ink);
+    border-radius: var(--radius-l);
+    box-shadow: 6px 6px 0 var(--c), 0 30px 60px -30px rgba(22, 20, 27, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+  }
+  .hdr-mega::before {
+    content: '';
+    position: absolute;
+    top: -12px;
+    left: 0;
+    right: 0;
+    height: 12px;
+  }
+  .hdr-services:hover .hdr-mega,
+  .hdr-services:focus-within .hdr-mega {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+  .hdr-mega-title {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .hdr-mega ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 4px;
+  }
+  .hdr-mega a {
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .hdr-mega li a {
+    display: block;
+    padding: 5px 0;
+  }
+  .hdr-mega li a:hover {
+    color: var(--m-ink);
+  }
+  .hdr-mega-cta {
+    grid-column: 1 / -1;
+    justify-self: start;
+    margin-top: 4px;
+  }
+  .hdr-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+  }
+  .hdr-phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    white-space: nowrap;
+    padding: 0 8px;
+  }
+  .hdr-icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1.5px solid var(--line-strong);
+    color: var(--ink);
+  }
+  .hdr-icon:hover {
+    border-color: var(--ink);
+    background: var(--c-soft);
+  }
+  .hdr-burger {
+    display: none;
+  }
+  .hdr-burger summary {
+    list-style: none;
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1.5px solid var(--ink);
+    cursor: pointer;
+  }
+  .hdr-burger summary::-webkit-details-marker {
+    display: none;
+  }
+  .hdr-burger[open] summary {
+    background: var(--y);
+  }
+  /* absolute to the sticky header: backdrop-filter makes it the containing block anyway */
+  .hdr-drawer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: calc(100dvh - 100%);
+    max-height: calc(100dvh - 66px);
+    overflow-y: auto;
+    border-top: 1.5px solid var(--line);
+    padding: 24px var(--gutter) 120px;
+    background: var(--paper);
+    display: grid;
+    align-content: start;
+    gap: 24px;
+  }
+  .hdr-drawer-group {
+    display: grid;
+    gap: 2px;
+  }
+  .hdr-drawer-group a {
+    padding: 8px 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+  }
+  .hdr-drawer-contacts {
+    display: grid;
+    gap: 10px;
+  }
+
+  @media (max-width: 1180px) {
+    .hdr-phone span {
+      display: none;
+    }
+    .hdr-phone {
+      width: 44px;
+      height: 44px;
+      justify-content: center;
+      border-radius: 50%;
+      border: 1.5px solid var(--line-strong);
+      padding: 0;
+    }
+  }
+  @media (max-width: 1020px) {
+    .hdr-nav {
+      display: none;
+    }
+    .hdr-burger {
+      display: block;
+    }
+  }
+  @media (max-width: 520px) {
+    .hdr-icon,
+    .hdr-cta {
+      display: none;
+    }
+    .hdr-row {
+      min-height: 66px;
+    }
+  }
+</style>

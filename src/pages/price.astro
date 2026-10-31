@@ -1,0 +1,187 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Calculator from '@/components/islands/Calculator';
+import PriceTables from '@/components/PriceTables.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { categories } from '@/data/pricing';
+import { breadcrumbs } from '@/lib/schema';
+import { site } from '@/data/site';
+
+const crumbs = [
+  { name: 'Главная', href: '/' },
+  { name: 'Цены и калькулятор', href: '/price' },
+];
+
+const catalogLd = {
+  '@context': 'https://schema.org',
+  '@type': 'OfferCatalog',
+  name: 'Прайс-лист Мастерской сувениров',
+  url: `${site.url}/price`,
+  itemListElement: categories.map((c) => ({
+    '@type': 'OfferCatalog',
+    name: c.name,
+    itemListElement: c.products.map((p) => ({
+      '@type': 'Offer',
+      name: p.name,
+      priceCurrency: 'RUB',
+      priceSpecification: { '@type': 'UnitPriceSpecification', minPrice: p.fromPrice, priceCurrency: 'RUB', unitText: p.fromUnit ?? 'шт' },
+      seller: { '@id': `${site.url}/#business` },
+    })),
+  })),
+};
+---
+
+<BaseLayout
+  title="Цены и калькулятор печати в Калининграде | Мастерская сувениров"
+  description="Прайс-лист и онлайн-калькулятор: печать на футболках, кружки, значки, визитки, календари, наклейки. Цена за штуку и за тираж сразу. Калининград, от 1 шт."
+  path="/price"
+  schema={[breadcrumbs(crumbs), catalogLd]}
+>
+  <section class="phero">
+    <div class="wrap">
+      <Breadcrumbs items={crumbs} />
+      <div class="phero-row">
+        <div>
+          <h1>Цены и <span class="mark">калькулятор</span></h1>
+          <p class="lead">
+            Посчитайте стоимость любого изделия: выберите параметры и количество — цена за штуку и за тираж пересчитается сразу. Чем больше тираж, тем дешевле штука.
+          </p>
+        </div>
+        <ul class="phero-notes">
+          <li><b>0 ₽</b> наценка за срочность</li>
+          <li><b>0 ₽</b> макет в большинстве случаев</li>
+          <li><b>50%</b> предоплата для частных лиц</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="calc" class="section calc-wrap" aria-label="Калькулятор">
+    <div class="wrap">
+      <Calculator client:load />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="pl-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Прайс-лист</p>
+          <h2 id="pl-h">Все цены</h2>
+        </div>
+        <p>Цены указаны в рублях за штуку, если не сказано иное. Точную стоимость подтверждает менеджер после просмотра макета.</p>
+      </div>
+
+      <nav class="pl-toc" aria-label="Разделы прайса">
+        {categories.map((c) => <a href={`#cat-${c.id}`}>{c.name}</a>)}
+      </nav>
+
+      <div class="pl-list">
+        {
+          categories.map((c) => (
+            <section id={`cat-${c.id}`} class="pl-cat" aria-labelledby={`cat-${c.id}-h`}>
+              <div class="pl-cat-head">
+                <h2 id={`cat-${c.id}-h`}>{c.name}</h2>
+                <div class="pl-cat-links">
+                  <a class="btn btn-sm btn-yellow" href={`/price?calc=${c.id}#calc`}>Посчитать</a>
+                  {c.page && (
+                    <a class="btn btn-sm btn-ghost" href={c.page}>
+                      Подробнее
+                    </a>
+                  )}
+                </div>
+              </div>
+              <PriceTables categoryId={c.id} />
+            </section>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="Нужен расчёт под вашу задачу?" text="Пришлите макет или опишите, что нужно, — посчитаем тираж, подскажем материалы и сроки." />
+</BaseLayout>
+
+
+
+<style>
+  .phero {
+    padding-block: clamp(28px, 4vw, 48px) 8px;
+  }
+  .phero-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 24px 48px;
+    margin-top: 18px;
+  }
+  .phero-row > div {
+    display: grid;
+    gap: 16px;
+    flex: 1 1 520px;
+  }
+  .phero-notes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .phero-notes li {
+    padding: 10px 16px;
+    border-radius: 16px;
+    background: var(--card);
+    border: 1.5px dashed var(--line-strong);
+    font-size: 0.95rem;
+  }
+  .phero-notes b {
+    font-family: var(--mono);
+    margin-right: 6px;
+  }
+  .calc-wrap {
+    padding-top: 32px;
+  }
+  .pl-toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 36px;
+  }
+  .pl-toc a {
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    font-weight: 600;
+    font-size: 0.92rem;
+    text-decoration: none;
+  }
+  .pl-toc a:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+    background: var(--y-soft);
+  }
+  .pl-list {
+    display: grid;
+    gap: 56px;
+  }
+  .pl-cat-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .pl-cat-head h2 {
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+  }
+  .pl-cat-links {
+    display: flex;
+    gap: 8px;
+  }
+</style>

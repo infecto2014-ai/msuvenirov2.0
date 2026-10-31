@@ -1,0 +1,52 @@
+---
+// Link-in-bio page for social profiles. Not indexed.
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Logo from '@/components/Logo.astro';
+import Icon from '@/components/Icon.astro';
+import { site } from '@/data/site';
+const links = [
+  { href: '/price', label: 'Посчитать цену онлайн', primary: true },
+  { href: site.social.telegram, label: 'Написать в Telegram', ext: true },
+  { href: site.social.max, label: 'Написать в MAX', ext: true },
+  { href: site.social.vk, label: 'Мы ВКонтакте', ext: true },
+  { href: '/portfolio', label: 'Наши работы' },
+  { href: '/korporativnym-klientam', label: 'Компаниям' },
+  { href: site.yandexMapsOrg, label: 'Мы на Яндекс Картах', ext: true },
+];
+---
+
+<BaseLayout title="Мастерская сувениров — ссылки" description="Быстрые ссылки: калькулятор, Telegram, MAX, ВКонтакте." noindex bare path="/card">
+  <section class="bio">
+    <Logo />
+    <p class="muted">Печать на одежде, кружках и сувенирах в Калининграде · {site.hours}</p>
+    <a class="btn btn-block" href={site.phoneHref}><Icon name="phone" size={18} /> {site.phone}</a>
+    {
+      links.map((l) => (
+        <a class:list={['btn', 'btn-block', l.primary ? 'btn-magenta' : 'btn-ghost']} href={l.href} target={l.ext ? '_blank' : undefined} rel={l.ext ? 'noopener' : undefined}>
+          {l.label}
+        </a>
+      ))
+    }
+    <button type="button" class="btn btn-yellow btn-block" data-order>Оставить заявку</button>
+    <p class="muted bio-addr">{site.address.street}, {site.address.place}</p>
+  </section>
+</BaseLayout>
+
+<style>
+  .bio {
+    max-width: 440px;
+    margin: 0 auto;
+    padding: 48px 20px;
+    display: grid;
+    gap: 12px;
+    justify-items: center;
+    text-align: center;
+  }
+  .bio .btn {
+    white-space: normal;
+  }
+  .bio-addr {
+    font-size: 0.88rem;
+    margin-top: 8px;
+  }
+</style>

@@ -1,1 +1,6 @@
 project_id = "iqcolrciqeokfsnweoej"
+
+# Вебхук Telegram не присылает JWT; подлинность проверяется секретом
+# X-Telegram-Bot-Api-Secret-Token (env TELEGRAM_WEBHOOK_SECRET) внутри функции.
+[functions.telegram-review-webhook]
+verify_jwt = false

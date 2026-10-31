@@ -1,0 +1,145 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { portfolio } from '@/data/portfolio';
+import { breadcrumbs } from '@/lib/schema';
+
+const crumbs = [
+  { name: 'Главная', href: '/' },
+  { name: 'Работы', href: '/portfolio' },
+];
+const tagNames: Record<string, string> = {
+  futbolki: 'Футболки',
+  hudi: 'Худи',
+  shoppery: 'Шопперы',
+  kepki: 'Бейсболки',
+  kruzhki: 'Кружки',
+  znachki: 'Значки',
+  breloki: 'Брелоки',
+  magnity: 'Магниты',
+  nakleyki: 'Наклейки',
+  poligrafiya: 'Полиграфия',
+  kalendari: 'Календари',
+  korporativ: 'Для компаний',
+  podarki: 'Подарки',
+  sport: 'Спорт',
+  svadba: 'Свадьба',
+  fandom: 'Фандомы',
+};
+const used = Object.keys(tagNames).filter((t) => portfolio.some((p) => p.tags.includes(t)));
+const rot = [-1.5, 1, -1, 1.5, -2, 1];
+---
+
+<BaseLayout
+  title="Портфолио: примеры печати на футболках и сувенирах | Мастерская сувениров"
+  description="Примеры наших работ: футболки, худи, кружки, значки, магниты и подарки с печатью. Корпоративные заказы и подарки от 1 шт. Калининград."
+  path="/portfolio"
+  schema={[breadcrumbs(crumbs)]}
+>
+  <section class="wrap ptop">
+    <Breadcrumbs items={crumbs} />
+    <h1>Наши <span class="mark">работы</span></h1>
+    <p class="lead">{portfolio.length} примеров печати — от одной футболки в подарок до партий мерча для компаний.</p>
+    <div class="filters" role="group" aria-label="Фильтр работ">
+      <button type="button" class="chip" aria-pressed="true" data-filter="all">Все</button>
+      {
+        used.map((t) => (
+          <button type="button" class="chip" aria-pressed="false" data-filter={t}>
+            {tagNames[t]}
+          </button>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="wrap pgrid-wrap">
+    <ul class="pgrid">
+      {
+        portfolio.map((w, i) => (
+          <li class="pw" data-tags={w.tags.join(' ')} style={`--r:${rot[i % rot.length]}deg`}>
+            <figure>
+              <img src={w.src} alt={w.title} width="480" height="480" loading={i < 8 ? 'eager' : 'lazy'} decoding="async" />
+              <figcaption>
+                <b>{w.title}</b>
+                <span class="mono">{w.tech}</span>
+              </figcaption>
+            </figure>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <CtaBand title="Хотите так же?" text="Пришлите идею или пример, который понравился, — сделаем похожее с вашим дизайном." />
+</BaseLayout>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const items = document.querySelectorAll<HTMLElement>('.pw');
+  buttons.forEach((b) =>
+    b.addEventListener('click', () => {
+      const f = b.dataset.filter!;
+      buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      items.forEach((it) => {
+        it.hidden = f !== 'all' && !(it.dataset.tags ?? '').split(' ').includes(f);
+      });
+    }),
+  );
+</script>
+
+<style>
+  .ptop {
+    display: grid;
+    gap: 16px;
+    padding-top: clamp(28px, 4vw, 56px);
+  }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .pgrid-wrap {
+    padding-block: 40px 0;
+  }
+  .pgrid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    columns: 4 240px;
+    column-gap: 20px;
+  }
+  .pw {
+    break-inside: avoid;
+    margin-bottom: 22px;
+  }
+  .pw figure {
+    margin: 0;
+    padding: 10px 10px 14px;
+    border-radius: 20px;
+    background: var(--card);
+    box-shadow: var(--shadow);
+    transform: rotate(var(--r));
+    transition: transform 0.25s ease;
+  }
+  .pw:hover figure {
+    transform: rotate(0);
+  }
+  .pw img {
+    width: 100%;
+    height: auto;
+    border-radius: 14px;
+    background: var(--paper-2);
+  }
+  .pw figcaption {
+    display: grid;
+    gap: 2px;
+    padding: 10px 4px 0;
+    font-size: 0.92rem;
+  }
+  .pw figcaption span {
+    color: var(--muted);
+    font-size: 0.76rem;
+  }
+</style>

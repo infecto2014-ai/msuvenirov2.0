@@ -1,0 +1,270 @@
+---
+// Service landing pages, generated from src/data/services.ts
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Calculator from '@/components/islands/Calculator';
+import PriceTables from '@/components/PriceTables.astro';
+import ServiceBlocks from '@/components/ServiceBlocks.astro';
+import PortfolioGrid from '@/components/PortfolioGrid.astro';
+import FaqSection from '@/components/FaqSection.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import Icon from '@/components/Icon.astro';
+import { services } from '@/data/services';
+import { categoryFrom, findCategory, findProduct, rub } from '@/data/pricing';
+import { breadcrumbs, faqPage, service as serviceLd } from '@/lib/schema';
+import type { ServicePage } from '@/data/types';
+
+export function getStaticPaths() {
+  return services.map((s) => ({ params: { slug: s.slug.replace(/^\//, '') }, props: { page: s } }));
+}
+
+interface Props {
+  page: ServicePage;
+}
+const { page } = Astro.props;
+const isCorporate = page.slug === '/korporativnym-klientam';
+const cat = findCategory(page.calcCategory)!;
+const product = findProduct(page.calcCategory, page.calcProduct);
+const from = page.calcProduct && product && !product.fromUnit ? { price: product.fromPrice, unit: 'шт' } : categoryFrom(page.calcCategory);
+const crumbs = [
+  { name: 'Главная', href: '/' },
+  { name: 'Услуги', href: '/uslugi' },
+  { name: page.name, href: page.slug },
+];
+const allPrices = cat.products.flatMap((p) => [p.fromPrice]);
+const related = page.related.map((r) => services.find((s) => s.slug === r)).filter(Boolean) as ServicePage[];
+---
+
+<BaseLayout
+  title={page.title}
+  description={page.description}
+  path={page.slug}
+  image={page.image}
+  schema={[
+    breadcrumbs(crumbs),
+    serviceLd({ name: page.h1, description: page.description, url: page.slug, lowPrice: Math.min(...allPrices), offerCount: cat.products.length }),
+    faqPage(page.faq),
+  ]}
+>
+  <section class="shero">
+    <div class="wrap shero-grid">
+      <div class="shero-text">
+        <Breadcrumbs items={crumbs} />
+        <h1>{page.h1}</h1>
+        <p class="lead">{page.lead}</p>
+        <ul class="shero-chips">
+          {page.highlights.map((h) => <li><Icon name="check" size={18} /> {h}</li>)}
+        </ul>
+        <div class="shero-actions">
+          <a class="btn btn-magenta" href="#calc"><Icon name="calc" size={20} /> Рассчитать стоимость</a>
+          <button type="button" class="btn btn-ghost" data-order>Отправить макет</button>
+        </div>
+      </div>
+      <div class="shero-media">
+        <div class="shero-frame crop">
+          <img src={page.image} alt={page.imageAlt} width="640" height="640" fetchpriority="high" decoding="async" />
+        </div>
+        <span class="sticker shero-price">
+          от <span class="mono">{rub(from.price)}</span>{from.unit !== 'шт' ? `/${from.unit}` : ''}
+        </span>
+        <span class="shero-dot shero-dot-c" aria-hidden="true"></span>
+        <span class="shero-dot shero-dot-m" aria-hidden="true"></span>
+      </div>
+    </div>
+  </section>
+
+  <section id="calc" class="section calc-sec" aria-labelledby="calc-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Калькулятор</p>
+          <h2 id="calc-h">Сколько стоит — посчитайте сами</h2>
+        </div>
+        <p>Цена меняется сразу. Добавьте позицию в смету или отправьте заявку — менеджер подтвердит стоимость и сроки.</p>
+      </div>
+      <Calculator client:visible category={page.calcCategory} product={page.calcProduct} hideCategories={!isCorporate} />
+    </div>
+  </section>
+
+  <section class="section prices-sec" aria-labelledby="prices-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Прайс</p>
+          <h2 id="prices-h">Цены: {cat.name.toLowerCase()}</h2>
+        </div>
+        <a class="btn btn-ghost btn-sm" href="/price">Весь прайс-лист →</a>
+      </div>
+      <PriceTables categoryId={page.calcCategory} />
+    </div>
+  </section>
+
+  <ServiceBlocks blocks={page.blocks} />
+
+  <PortfolioGrid tags={page.portfolioTags} title={`Примеры: ${page.name.toLowerCase()}`} />
+
+  <FaqSection items={page.faq} title={`Вопросы: ${page.name.toLowerCase()}`} />
+
+  {
+    related.length > 0 && (
+      <section class="section related" aria-labelledby="rel-h">
+        <div class="wrap">
+          <h2 id="rel-h" class="related-h">Ещё печатаем</h2>
+          <div class="related-grid">
+            {related.map((r) => (
+              <a class="related-card" href={r.slug}>
+                <img src={r.image} alt="" width="120" height="120" loading="lazy" />
+                <span>{r.name}</span>
+                <Icon name="arrow" />
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <CtaBand />
+</BaseLayout>
+
+<style>
+  .shero {
+    padding-block: clamp(28px, 4vw, 48px) clamp(24px, 4vw, 40px);
+    overflow: clip;
+  }
+  .shero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: clamp(28px, 5vw, 72px);
+    align-items: center;
+  }
+  .shero-text {
+    display: grid;
+    gap: 20px;
+    justify-items: start;
+  }
+  .shero-text h1 {
+    font-size: clamp(2.2rem, 5vw, 4rem);
+  }
+  .shero-chips {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .shero-chips li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+  .shero-chips :global(svg) {
+    color: var(--m-ink);
+  }
+  .shero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .shero-media {
+    position: relative;
+    padding: 24px;
+  }
+  .shero-frame {
+    border-radius: 40px 40px 40px 120px;
+    overflow: visible;
+  }
+  .shero-frame img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 40px 40px 40px 120px;
+    background: var(--paper-2);
+    position: relative;
+    z-index: 1;
+  }
+  .shero-price {
+    position: absolute;
+    right: 0;
+    bottom: 40px;
+    z-index: 2;
+    font-size: 1.25rem;
+  }
+  .shero-dot {
+    position: absolute;
+    border-radius: 50%;
+    mix-blend-mode: multiply;
+    z-index: 0;
+  }
+  .shero-dot-c {
+    width: 120px;
+    height: 120px;
+    background: var(--c);
+    top: -6px;
+    right: -10px;
+  }
+  .shero-dot-m {
+    width: 80px;
+    height: 80px;
+    background: var(--m);
+    top: 40px;
+    right: 60px;
+    opacity: 0.8;
+  }
+  .calc-sec {
+    background: var(--paper-2);
+    border-radius: 48px;
+    margin-inline: clamp(0px, 1.5vw, 20px);
+  }
+  .related-h {
+    margin-bottom: 24px;
+  }
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+  }
+  .related-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 18px 10px 10px;
+    border-radius: 24px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    font-weight: 700;
+    text-decoration: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .related-card img {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    object-fit: cover;
+  }
+  .related-card span {
+    flex: 1;
+  }
+  .related-card:hover {
+    border-color: var(--ink);
+    box-shadow: 4px 4px 0 var(--y);
+    color: var(--ink);
+  }
+  @media (max-width: 860px) {
+    .shero-grid {
+      grid-template-columns: 1fr;
+    }
+    .shero-media {
+      max-width: 340px;
+      justify-self: center;
+      padding: 12px;
+    }
+  }
+</style>

@@ -1,0 +1,67 @@
+---
+import ContentPageView from '@/components/ContentPageView.astro';
+import PortfolioGrid from '@/components/PortfolioGrid.astro';
+import Reviews from '@/components/Reviews.astro';
+import { aboutPage } from '@/data/pages';
+import { site } from '@/data/site';
+const facts = [
+  { n: String(site.founded), t: 'год открытия мастерской' },
+  { n: '10+', t: 'лет опыта в печати' },
+  { n: '1 шт', t: 'минимальный заказ на большинство изделий' },
+  { n: '7 дней', t: 'в неделю, 10:00–20:00' },
+];
+---
+
+<ContentPageView page={aboutPage} path="/o-nas" crumb="О нас">
+  <ul slot="hero" class="facts">
+    {
+      facts.map((f) => (
+        <li>
+          <b class="mono">{f.n}</b>
+          <span>{f.t}</span>
+        </li>
+      ))
+    }
+  </ul>
+  <Fragment slot="after">
+    <PortfolioGrid />
+    <Reviews limit={3} />
+  </Fragment>
+</ContentPageView>
+
+<style>
+  .facts {
+    list-style: none;
+    margin: 12px 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    width: 100%;
+  }
+  .facts li {
+    display: grid;
+    gap: 4px;
+    padding: 20px;
+    border-radius: 24px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+  }
+  .facts li:nth-child(1) { box-shadow: inset 0 6px 0 var(--c); }
+  .facts li:nth-child(2) { box-shadow: inset 0 6px 0 var(--m); }
+  .facts li:nth-child(3) { box-shadow: inset 0 6px 0 var(--y); }
+  .facts li:nth-child(4) { box-shadow: inset 0 6px 0 var(--k); }
+  .facts b {
+    font-size: 1.8rem;
+    letter-spacing: -0.03em;
+  }
+  .facts span {
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+  @media (max-width: 760px) {
+    .facts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

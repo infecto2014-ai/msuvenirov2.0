@@ -1,0 +1,108 @@
+---
+import { reviews } from '@/data/reviews';
+import { site } from '@/data/site';
+interface Props {
+  limit?: number;
+  more?: boolean;
+}
+const { limit = 6, more = true } = Astro.props;
+const list = reviews.slice(0, limit);
+const tones = ['var(--c-soft)', 'var(--m-soft)', 'var(--y-soft)'];
+---
+
+<section class="section reviews" aria-labelledby="rev-h">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Отзывы</p>
+        <h2 id="rev-h">Что говорят клиенты</h2>
+      </div>
+      <p>Отзывы о мастерской собраны на Авито, Яндекс Картах, 2ГИС и других площадках.</p>
+    </div>
+    <div class="rev-grid">
+      {
+        list.map((r, i) => (
+          <figure class="rev" style={`--tone:${tones[i % 3]}`}>
+            <span class="rev-quote" aria-hidden="true">“</span>
+            <blockquote>
+              <p>{r.text}</p>
+            </blockquote>
+            <figcaption>
+              <span class="rev-avatar" aria-hidden="true">{r.name.charAt(0)}</span>
+              <span>
+                <b>{r.name}</b>
+                {r.source && <small>{r.source}</small>}
+              </span>
+            </figcaption>
+          </figure>
+        ))
+      }
+    </div>
+    <div class="rev-links">
+      {more && <a class="btn btn-ghost btn-sm" href="/otzyvy">Все отзывы</a>}
+      <a class="btn btn-ghost btn-sm" href={site.yandexMapsOrg} target="_blank" rel="noopener">Мы на Яндекс Картах</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .rev-grid {
+    columns: 3 300px;
+    column-gap: 18px;
+  }
+  .rev {
+    position: relative;
+    break-inside: avoid;
+    margin: 0 0 18px;
+    padding: 28px 26px 22px;
+    border-radius: var(--radius-l);
+    background: var(--card);
+    border: 1.5px solid var(--line);
+  }
+  .rev::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 8px;
+    border-radius: var(--radius-l) var(--radius-l) 0 0;
+    background: var(--tone);
+  }
+  .rev-quote {
+    position: absolute;
+    top: 6px;
+    right: 22px;
+    font-size: 4.5rem;
+    line-height: 1;
+    font-weight: 900;
+    color: var(--line-strong);
+  }
+  .rev blockquote {
+    margin: 0;
+    color: var(--ink-2);
+  }
+  .rev figcaption {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 18px;
+  }
+  .rev figcaption small {
+    display: block;
+    color: var(--muted);
+  }
+  .rev-avatar {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--tone);
+    font-weight: 800;
+  }
+  .rev-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+  }
+</style>

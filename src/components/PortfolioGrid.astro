@@ -1,0 +1,100 @@
+---
+import { portfolio } from '@/data/portfolio';
+import type { PortfolioItem } from '@/data/types';
+interface Props {
+  tags?: string[];
+  limit?: number;
+  title?: string;
+  /** show "all works" link */
+  more?: boolean;
+}
+const { tags, limit = 8, title = 'Наши работы', more = true } = Astro.props;
+let items: PortfolioItem[] = tags?.length ? portfolio.filter((p) => p.tags.some((t) => tags.includes(t))) : portfolio;
+// fill up with other works so the grid never looks empty
+if (items.length < Math.min(4, limit)) items = [...items, ...portfolio.filter((p) => !items.includes(p))];
+items = items.slice(0, limit);
+const rot = [-2, 1.5, -1, 2, -1.5, 1, -2.5, 1.5];
+---
+
+<section class="section works" aria-labelledby="works-h">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Портфолио</p>
+        <h2 id="works-h">{title}</h2>
+      </div>
+      {more && <a class="btn btn-ghost btn-sm" href="/portfolio">Все работы →</a>}
+    </div>
+    <ul class="works-grid">
+      {
+        items.map((w, i) => (
+          <li class="work" style={`--r:${rot[i % rot.length]}deg`}>
+            <figure>
+              <img src={w.src} alt={w.title} width="480" height="480" loading="lazy" decoding="async" />
+              <figcaption>
+                <span class="work-title">{w.title}</span>
+                <span class="work-tech mono">{w.tech}</span>
+              </figcaption>
+            </figure>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .works-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 22px;
+  }
+  .work figure {
+    margin: 0;
+    padding: 10px 10px 14px;
+    background: var(--card);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    transform: rotate(var(--r));
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .work:hover figure {
+    transform: rotate(0deg) translateY(-4px);
+    box-shadow: 6px 6px 0 var(--m), var(--shadow);
+  }
+  .work img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 14px;
+    background: var(--paper-2);
+  }
+  .work figcaption {
+    display: grid;
+    gap: 2px;
+    padding: 10px 4px 0;
+  }
+  .work-title {
+    font-weight: 700;
+    font-size: 0.92rem;
+    line-height: 1.3;
+  }
+  .work-tech {
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  @media (max-width: 980px) {
+    .works-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 640px) {
+    .works-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+  }
+</style>

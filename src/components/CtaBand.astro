@@ -1,0 +1,70 @@
+---
+import { site } from '@/data/site';
+interface Props {
+  title?: string;
+  text?: string;
+}
+const {
+  title = 'Не знаете, с чего начать?',
+  text = 'Пришлите идею или фото — подберём изделие и технологию, посчитаем и покажем макет.',
+} = Astro.props;
+---
+
+<section class="wrap cta-wrap">
+  <div class="cta crop">
+    <div class="cta-dots halftone" aria-hidden="true"></div>
+    <div class="cta-text">
+      <h2>{title}</h2>
+      <p>{text}</p>
+    </div>
+    <div class="cta-actions">
+      <button type="button" class="btn btn-magenta" data-order>Оставить заявку</button>
+      <a class="btn btn-ghost" href={site.social.telegram} target="_blank" rel="noopener">Написать в Telegram</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-wrap {
+    padding-block: var(--section) 0;
+  }
+  .cta {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px 40px;
+    padding: clamp(28px, 5vw, 56px);
+    border-radius: var(--radius-l);
+    background: var(--y);
+    overflow: visible;
+    isolation: isolate;
+  }
+  .cta-dots {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    --dot: rgba(22, 20, 27, 0.12);
+    z-index: -1;
+    -webkit-mask: linear-gradient(110deg, transparent 45%, #000);
+    mask: linear-gradient(110deg, transparent 45%, #000);
+  }
+  .cta-text {
+    flex: 1 1 420px;
+    display: grid;
+    gap: 10px;
+  }
+  .cta-text p {
+    font-size: 1.1rem;
+    max-width: 560px;
+  }
+  .cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .cta .btn-ghost {
+    background: rgba(255, 255, 255, 0.5);
+  }
+</style>

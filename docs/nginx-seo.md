@@ -1,8 +1,10 @@
 # Настройка nginx для пререндеренного сайта
 
 После `npm run build` в `dist/` лежат плоские HTML-файлы для каждой страницы:
-`index.html`, `price.html`, `faq.html`, `pechat_na_tkani.html`, `mug-print.html`,
-`public-offer.html`, `privacy-policy.html`, `card.html` (noindex) и `404.html`.
+`index.html`, `price.html`, `faq.html`, `pechat-na-futbolkah.html`, `pechat-na-kruzhkah.html`,
+`public-offer.html`, `privacy-policy.html`, `card.html` (noindex) и `404.html`;
+хэшированные ресурсы лежат в `_astro/`. Старые адреса `/pechat_na_tkani` и `/mug-print`
+отдают 301 на `/pechat-na-futbolkah` и `/pechat-na-kruzhkah`.
 Чтобы поисковики получали готовый HTML нужной страницы, nginx должен отдавать именно эти файлы.
 
 Готовый конфиг сервера: [`deploy/nginx/msuvenirov.ru.conf`](../deploy/nginx/msuvenirov.ru.conf).
@@ -14,7 +16,11 @@
 - 301-переадресации на канонические адреса: `/index.html` → `/`, `/price.html` → `/price`,
   `/price/` → `/price`. Проверяется `$request_uri`, поэтому петель нет; `/` не переадресуется;
 - HTML-страницы отдаются с `Cache-Control: no-cache`, чтобы после выкладки сразу была новая версия;
-- включено gzip-сжатие для css/js/svg/json.
+- включено gzip-сжатие для css/js/svg/json;
+- заголовки безопасности вынесены в `deploy/nginx/snippets/msuvenirov-security-headers.conf`
+  (HSTS, nosniff, CSP в режиме Report-Only и др.); сниппет подключён в server и в каждый location с
+  собственным `add_header`. Кэш: `immutable` на год только для `/_astro/` и `/fonts/`, 7 дней для
+  `/img/`, `/portfolio/`, `/images/`, favicon и og-image. Подробнее — `docs/DEPLOY.md`.
 
 ## Установка (на сервере, под root)
 
@@ -22,6 +28,8 @@
 
 ```bash
 cp /etc/nginx/sites-enabled/msuvenirov.ru /root/msuvenirov.ru.backup
+mkdir -p /etc/nginx/snippets
+cp /var/www/msuvenirov.ru/deploy/nginx/snippets/msuvenirov-security-headers.conf /etc/nginx/snippets/
 cp /var/www/msuvenirov.ru/deploy/nginx/msuvenirov.ru.conf /etc/nginx/sites-enabled/msuvenirov.ru
 nginx -t && systemctl reload nginx
 ```
@@ -49,6 +57,6 @@ curl -s  https://msuvenirov.ru/price | grep -o '<title>[^<]*'   # «Прайс �
 
 ## Важно
 
-Выкладка (`git reset --hard origin/main && npm ci && npm run build`) пересоздаёт `dist/`
+Выкладка (`git reset --hard origin/main && npm ci --no-audit --no-fund && npm run build`, нужен Node ≥ 18.20.8) пересоздаёт `dist/`
 целиком; конфиг nginx она не трогает, повторно копировать его нужно только если он изменится.
 Если certbot при продлении сертификата перепишет конфиг, проверьте, что блоки выше сохранились.

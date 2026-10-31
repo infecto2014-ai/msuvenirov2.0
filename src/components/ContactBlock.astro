@@ -1,0 +1,139 @@
+---
+import Icon from './Icon.astro';
+import { site } from '@/data/site';
+interface Props {
+  headingLevel?: 'h1' | 'h2';
+}
+const { headingLevel = 'h2' } = Astro.props;
+const H = headingLevel;
+const mapSrc = `https://yandex.ru/map-widget/v1/?ll=${site.address.lng}%2C${site.address.lat}&z=16&pt=${site.address.lng},${site.address.lat},pm2rdm`;
+---
+
+<section class="section contact" aria-labelledby="contact-h">
+  <div class="wrap contact-grid">
+    <div class="contact-card">
+      <p class="eyebrow">Контакты</p>
+      <H id="contact-h">Приходите в мастерскую</H>
+      <ul class="contact-list">
+        <li><Icon name="pin" /> <span>г. {site.address.city}, {site.address.street}<br />{site.address.place}</span></li>
+        <li><Icon name="clock" /> <span>{site.hours}</span></li>
+        <li><Icon name="phone" /> <a class="mono" href={site.phoneHref}>{site.phone}</a></li>
+        <li><Icon name="mail" /> <a href={`mailto:${site.email}`}>{site.email}</a></li>
+      </ul>
+      <div class="contact-actions">
+        <a class="btn btn-magenta" href={site.social.telegram} target="_blank" rel="noopener"><Icon name="telegram" size={18} /> Telegram</a>
+        <a class="btn btn-ghost" href={site.social.max} target="_blank" rel="noopener"><Icon name="max" size={18} /> MAX</a>
+        <a class="btn btn-ghost" href={site.social.vk} target="_blank" rel="noopener"><Icon name="vk" size={18} /> ВКонтакте</a>
+      </div>
+    </div>
+    <div class="contact-map" data-map={mapSrc}>
+      <button type="button" class="contact-map-btn">
+        <span class="sticker">Показать на карте</span>
+        <span class="contact-map-hint">Карта загрузится по нажатию</span>
+      </button>
+      <a class="contact-map-link" href={site.yandexMapsOrg} target="_blank" rel="noopener">Открыть в Яндекс Картах →</a>
+    </div>
+  </div>
+</section>
+
+<script>
+  // The map iframe is heavy: load it only when asked.
+  document.querySelectorAll<HTMLElement>('[data-map]').forEach((box) => {
+    box.querySelector('button')?.addEventListener('click', () => {
+      const f = document.createElement('iframe');
+      f.src = box.dataset.map!;
+      f.title = 'Мастерская сувениров на карте';
+      f.loading = 'lazy';
+      f.allowFullscreen = true;
+      box.querySelector('button')?.replaceWith(f);
+    });
+  });
+</script>
+
+<style>
+  .contact-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    gap: 20px;
+  }
+  .contact-card {
+    padding: clamp(26px, 4vw, 44px);
+    border-radius: var(--radius-l);
+    background: var(--card);
+    border: 1.5px solid var(--line);
+  }
+  .contact-list {
+    list-style: none;
+    margin: 24px 0;
+    padding: 0;
+    display: grid;
+    gap: 14px;
+    font-size: 1.05rem;
+  }
+  .contact-list li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .contact-list :global(svg) {
+    flex: none;
+    margin-top: 3px;
+    color: var(--m-ink);
+  }
+  .contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .contact-map {
+    position: relative;
+    min-height: 380px;
+    border-radius: var(--radius-l);
+    overflow: clip;
+    border: 1.5px solid var(--line);
+    background:
+      radial-gradient(circle, rgba(22, 20, 27, 0.12) 1.4px, transparent 1.6px) 0 0 / 14px 14px,
+      linear-gradient(135deg, var(--c-soft), var(--y-soft));
+  }
+  .contact-map :global(iframe) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .contact-map-btn {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 14px;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+  .contact-map-btn .sticker {
+    font-size: 1.1rem;
+  }
+  .contact-map-hint {
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+  .contact-map-link {
+    position: absolute;
+    left: 16px;
+    bottom: 14px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: var(--card);
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  @media (max-width: 860px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
