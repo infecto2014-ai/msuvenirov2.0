@@ -1,0 +1,23 @@
+---
+// Fallback for old URLs in case the nginx 301 rules are not installed yet.
+// nginx answers these paths with a real 301 (deploy/nginx/msuvenirov.ru.conf); this page is only a safety net.
+interface Props {
+  to: string;
+}
+const { to } = Astro.props;
+const url = `https://msuvenirov.ru${to}`;
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Страница переехала</title>
+    <meta http-equiv="refresh" content={`0; url=${to}`} />
+    <link rel="canonical" href={url} />
+    <meta name="robots" content="noindex, follow" />
+  </head>
+  <body>
+    <p>Страница переехала: <a href={to}>{url}</a></p>
+  </body>
+</html>
