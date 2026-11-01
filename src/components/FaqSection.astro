@@ -28,6 +28,9 @@ const { items, title = 'Частые вопросы', openFirst = true } = Astro
           </details>
         ))
       }
+      <p class="faq-more">
+        Не нашли ответ? <button type="button" data-order>Задайте вопрос</button>
+      </p>
     </div>
   </div>
 </section>
@@ -52,6 +55,38 @@ const { items, title = 'Частые вопросы', openFirst = true } = Astro
     }
     .faq-side {
       position: static;
+    }
+  }
+  .faq-more {
+    display: none;
+  }
+  /* phones: heading only on top, the "ask us" line moves under the list */
+  @media (max-width: 560px) {
+    .faq-grid {
+      gap: 16px;
+    }
+    .faq-side {
+      gap: 0;
+    }
+    .faq-side > p.muted,
+    .faq-side > .btn {
+      display: none;
+    }
+    .faq-more {
+      display: block;
+      margin-top: 4px;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+    .faq-more button {
+      padding: 0;
+      border: 0;
+      background: none;
+      color: var(--m-ink);
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
     }
   }
 </style>

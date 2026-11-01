@@ -67,4 +67,32 @@ const {
   .cta .btn-ghost {
     background: rgba(255, 255, 255, 0.5);
   }
+  /* phones: tighter band, buttons share one column */
+  @media (max-width: 560px) {
+    .cta {
+      gap: 16px;
+      padding: 24px 20px;
+      border-radius: 28px;
+    }
+    .cta-text {
+      flex-basis: 100%;
+      gap: 8px;
+    }
+    .cta-text h2 {
+      font-size: 1.55rem;
+    }
+    .cta-text p {
+      font-size: 0.98rem;
+      line-height: 1.5;
+    }
+    .cta-actions {
+      width: 100%;
+      display: grid;
+      gap: 8px;
+    }
+    .cta-actions .btn {
+      min-height: 46px;
+      width: 100%;
+    }
+  }
 </style>

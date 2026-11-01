@@ -172,4 +172,75 @@ const year = new Date().getFullYear();
       grid-column: 1 / -1;
     }
   }
+  /* phones: smaller type and spacing; contacts go right after the logo */
+  @media (max-width: 560px) {
+    .ftr {
+      padding-bottom: calc(92px + env(safe-area-inset-bottom));
+    }
+    .ftr-band {
+      height: 6px;
+    }
+    .ftr-grid {
+      gap: 22px 14px;
+      padding-block: 28px 22px;
+    }
+    .ftr-brand {
+      order: -2;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .ftr-brand p {
+      order: 3;
+      flex-basis: 100%;
+      margin-top: 0;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+    .ftr-social {
+      margin-top: 0;
+      gap: 6px;
+    }
+    .ftr-social a {
+      width: 40px;
+      height: 40px;
+    }
+    .ftr-contacts {
+      order: -1;
+      gap: 4px;
+      padding: 14px 16px;
+      border-radius: 20px;
+      background: #221f28;
+      font-size: 0.88rem;
+    }
+    .ftr-contacts .ftr-title {
+      display: none;
+    }
+    .ftr-col {
+      gap: 0;
+      font-size: 0.86rem;
+      line-height: 1.35;
+    }
+    .ftr-col a {
+      padding-block: 5px;
+    }
+    .ftr-title {
+      margin-bottom: 4px;
+      font-size: 0.68rem;
+    }
+    .ftr-bottom {
+      padding-block: 16px;
+      gap: 6px;
+      font-size: 0.75rem;
+      line-height: 1.45;
+    }
+    .ftr-bottom p a {
+      margin-right: 12px;
+    }
+    .ftr-note {
+      font-size: 0.7rem;
+    }
+  }
 </style>

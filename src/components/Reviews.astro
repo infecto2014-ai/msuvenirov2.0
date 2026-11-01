@@ -226,6 +226,88 @@ const fmt = (n: number) => n.toLocaleString('ru-RU', { minimumFractionDigits: 1,
       margin: 0;
     }
   }
+  /* phones: ratings in one compact row, shorter review cards */
+  @media (max-width: 560px) {
+    .reviews .section-head > p {
+      display: none;
+    }
+    .rev-ratings {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .rev-ratings a {
+      grid-template-columns: 1fr;
+      grid-template-areas: 'num' 'stars' 'name';
+      justify-items: center;
+      text-align: center;
+      gap: 2px;
+      padding: 10px 4px;
+      border-radius: 18px;
+    }
+    .rev-rating {
+      font-size: 1.35rem;
+      line-height: 1.1;
+    }
+    .rev-stars {
+      justify-self: center;
+      font-size: 0.72rem;
+      letter-spacing: 1px;
+    }
+    .rev-platform {
+      display: grid;
+      justify-items: center;
+      line-height: 1.2;
+    }
+    .rev-platform b {
+      font-size: 0.8rem;
+    }
+    .rev-platform small {
+      font-size: 0.68rem;
+    }
+    .rev {
+      padding: 22px 18px 16px;
+      border-radius: 24px;
+    }
+    .rev::before {
+      height: 6px;
+      border-radius: 24px 24px 0 0;
+    }
+    .rev-quote {
+      top: 4px;
+      right: 14px;
+      font-size: 3rem;
+    }
+    .rev blockquote {
+      padding-right: 18px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    /* full reviews page (no carousel) keeps whole texts */
+    .rev-scroll .rev blockquote p {
+      display: -webkit-box;
+      -webkit-line-clamp: 6;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .rev figcaption {
+      margin-top: 12px;
+      gap: 10px;
+      font-size: 0.92rem;
+      line-height: 1.3;
+    }
+    .rev figcaption small {
+      font-size: 0.78rem;
+    }
+    .rev-avatar {
+      width: 34px;
+      height: 34px;
+      flex: none;
+    }
+    .rev-links {
+      margin-top: 4px;
+    }
+  }
   .rev-links {
     display: flex;
     flex-wrap: wrap;

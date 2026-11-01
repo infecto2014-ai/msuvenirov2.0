@@ -315,7 +315,16 @@ const isServices = serviceNav.some((g) => g.links.some((l) => l.href === path));
       display: none;
     }
     .hdr-row {
-      min-height: 66px;
+      min-height: 60px;
+      gap: 12px;
+    }
+    .hdr-drawer {
+      max-height: calc(100dvh - 60px);
+    }
+    .hdr-phone,
+    .hdr-burger summary {
+      width: 42px;
+      height: 42px;
     }
   }
 </style>
