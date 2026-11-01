@@ -1,0 +1,1580 @@
+---
+// B2B page «Компаниям»: informative and SEO-oriented, no prices and no calculator (owner, 02.11.2026).
+// Content — src/data/corporate.ts (shape: corporate.types.ts). The services.ts entry with the same slug is kept for menus/sitemap only.
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Reviews from '@/components/Reviews.astro';
+import FaqSection from '@/components/FaqSection.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import ContactBlock from '@/components/ContactBlock.astro';
+import Icon from '@/components/Icon.astro';
+import { corporate as page } from '@/data/corporate';
+import { reviews } from '@/data/reviews';
+import { site } from '@/data/site';
+import { BUSINESS_ID, breadcrumbs, faqPage } from '@/lib/schema';
+
+const slug = '/korporativnym-klientam';
+const crumbs = [
+  { name: 'Главная', href: '/' },
+  { name: 'Компаниям', href: slug },
+];
+
+// real client logos; most are white, so they always sit on a dark band (client-3 is not used on purpose)
+const clients = [
+  { src: '/img/clients/client-1.webp', alt: 'Россети', w: 260, h: 76 },
+  { src: '/img/clients/client-6.webp', alt: 'БФУ имени И. Канта', w: 260, h: 143 },
+  { src: '/img/clients/client-2.webp', alt: 'Арле Парк', w: 175, h: 70 },
+  { src: '/img/clients/client-4.webp', alt: 'Папаша Беппе', w: 84, h: 84 },
+  { src: '/img/clients/client-5.webp', alt: 'Бойцовский клуб «Неудержимые»', w: 97, h: 84 },
+  { src: '/img/clients/client-7.webp', alt: 'Systech', w: 260, h: 82 },
+  { src: '/img/clients/client-8.webp', alt: 'Музей мороженого', w: 80, h: 84 },
+];
+
+// process colours rotate C → M → Y; directions also cycle through layouts (plain / soft panel / dark panel / soft)
+// with a period of 4, so colour and layout never repeat together on neighbouring sections
+const tones = [
+  { ac: 'var(--c)', soft: 'var(--c-soft)', ink: 'var(--c-ink)' },
+  { ac: 'var(--m)', soft: 'var(--m-soft)', ink: 'var(--m-ink)' },
+  { ac: 'var(--y)', soft: 'var(--y-soft)', ink: 'var(--ink)' },
+];
+const two = (n: number) => String(n + 1).padStart(2, '0');
+
+// reviews about companies are rare; filter only when there are enough of them
+const reviewKeys = ['компан', 'команд', 'логотип', 'корпорат', 'сотрудник'];
+const companyReviews = reviews.filter((r) => reviewKeys.some((k) => r.text.toLowerCase().includes(k))).length;
+
+const serviceLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: page.h1,
+  description: page.description,
+  serviceType: 'Брендирование продукции для компаний',
+  url: `${site.url}${slug}`,
+  areaServed: { '@type': 'City', name: site.address.city },
+  provider: { '@id': BUSINESS_ID },
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Направления брендирования',
+    itemListElement: page.directions.map((d) => ({ '@type': 'OfferCatalog', name: d.title, description: d.lead })),
+  },
+};
+---
+
+<BaseLayout title={page.title} description={page.description} path={slug} image={page.heroImage} schema={[breadcrumbs(crumbs), serviceLd, faqPage(page.faq)]}>
+  <!-- ============ first screen ============ -->
+  <section class="chero">
+    <div class="wrap chero-grid">
+      <div class="chero-text">
+        <Breadcrumbs items={crumbs} />
+        <p class="eyebrow chero-eyebrow">Компаниям и организациям</p>
+        <h1>{page.h1}</h1>
+        <p class="lead">{page.lead}</p>
+        <ul class="chero-chips">
+          {page.highlights.map((h) => <li><Icon name="check" size={18} /> {h}</li>)}
+        </ul>
+        <div class="chero-actions">
+          <button type="button" class="btn btn-magenta" data-order="Запрос КП для компании">
+            <span>Запросить<span class="long"> коммерческое предложение</span><span class="short"> КП</span></span>
+          </button>
+          <a class="btn btn-ghost" href={site.social.telegram} target="_blank" rel="noopener"><Icon name="telegram" size={20} /> <span><span class="long">Написать в </span>Telegram</span></a>
+        </div>
+      </div>
+      <div class="chero-media">
+        <span class="chero-dot chero-dot-c" aria-hidden="true"></span>
+        <span class="chero-dot chero-dot-y" aria-hidden="true"></span>
+        <div class="chero-frame crop">
+          <img src={page.heroImage} alt={page.heroImageAlt} width="720" height="720" fetchpriority="high" decoding="async" />
+        </div>
+        <span class="sticker chero-sticker">ваш логотип<br />здесь</span>
+        <span class="reg chero-reg" aria-hidden="true"></span>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <div class="clients-band">
+        <p class="clients-title mono">Нам доверяют</p>
+        <ul class="clients-row">
+          {
+            clients.map((c) => (
+              <li>
+                <img src={c.src} alt={c.alt} title={c.alt} width={c.w} height={c.h} loading="lazy" decoding="async" />
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ table of contents ============ -->
+  <nav class="wrap toc" aria-label="Направления">
+    <p class="toc-label mono">Что брендируем</p>
+    <ul class="toc-list">
+      {
+        page.directions.map((d, i) => (
+          <li>
+            <a href={`#${d.id}`} style={`--ac:${tones[i % 3].ac}`}>
+              <span class="toc-num mono">{two(i)}</span>
+              {d.title}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <!-- ============ directions ============ -->
+  <div class="dirs">
+    {
+      page.directions.map((d, i) => {
+        const t = tones[i % 3];
+        const variant = ['plain', 'soft', 'dark', 'soft'][i % 4];
+        return (
+          <section
+            id={d.id}
+            class:list={['dir', `dir-${variant}`, { 'dir-flip': i % 2 === 1 }]}
+            style={`--ac:${t.ac};--ac-soft:${t.soft};--ac-ink:${t.ink}`}
+            aria-labelledby={`${d.id}-h`}
+          >
+            <div class="wrap">
+              <div class="dir-box">
+                <div class="dir-media">
+                  <span class="dir-blob" aria-hidden="true" />
+                  <img src={d.image} alt={d.imageAlt} width="560" height="600" loading="lazy" decoding="async" />
+                  <span class="dir-num mono" aria-hidden="true">
+                    {two(i)}
+                  </span>
+                </div>
+                <div class="dir-text">
+                  <p class="eyebrow dir-eyebrow">Направление {two(i)}</p>
+                  <h2 id={`${d.id}-h`}>{d.title}</h2>
+                  <p class="dir-lead">{d.lead}</p>
+                  <div class="dir-cols">
+                    <div>
+                      <h3 class="dir-h3 mono">Что брендируем</h3>
+                      <ul class="dir-items">
+                        {d.items.map((it) => (
+                          <li>{it}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    {d.useCases && d.useCases.length > 0 && (
+                      <div>
+                        <h3 class="dir-h3 mono">Для чего</h3>
+                        <ul class="dir-uses">
+                          {d.useCases.map((u) => (
+                            <li>{u}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                  {d.links && d.links.length > 0 && (
+                    <ul class="dir-links">
+                      {d.links.map((l) => (
+                        <li>
+                          <a href={l.href}>
+                            {l.label} <Icon name="arrow" size={18} />
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
+            </div>
+          </section>
+        );
+      })
+    }
+  </div>
+
+  <!-- ============ audiences ============ -->
+  <section class="section aud-sec" aria-labelledby="aud-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">С кем работаем</p>
+          <h2 id="aud-h">Делаем мерч для разных отраслей</h2>
+        </div>
+        <p>От небольших кафе до университетов и энергетических компаний — подбираем изделия под задачу и бюджет.</p>
+      </div>
+      <ul class="aud-grid" style={`--cols:${page.audiences.length % 4 === 0 ? 4 : 3}`}>
+        {
+          page.audiences.map((a, i) => (
+            <li style={`--ac:${tones[i % 3].ac};--ac-soft:${tones[i % 3].soft}`}>
+              <span class="aud-dot" aria-hidden="true" />
+              <h3>{a.title}</h3>
+              <p>{a.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ process ============ -->
+  <section class="section proc-sec" aria-labelledby="proc-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Как мы работаем</p>
+          <h2 id="proc-h">От заявки до готового тиража</h2>
+        </div>
+        <button type="button" class="btn btn-ghost btn-sm proc-cta" data-order="Запрос КП для компании">Начать с заявки →</button>
+      </div>
+      <ol class="proc" style={`--n:${page.process.length}`}>
+        {
+          page.process.map((p, i) => (
+            <li style={`--ac:${tones[i % 3].ac}`}>
+              <span class="proc-num mono">{two(i)}</span>
+              <h3>{p.title}</h3>
+              <p>{p.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ terms ============ -->
+  <section class="section terms-sec" aria-labelledby="terms-h">
+    <div class="wrap">
+      <div class="terms-box">
+        <div class="terms-dots halftone" aria-hidden="true"></div>
+        <div class="terms-head">
+          <p class="eyebrow">Условия</p>
+          <h2 id="terms-h">Условия для компаний</h2>
+          <p class="terms-lead">Документы, оплата и гарантии — всё, что нужно бухгалтерии и закупкам.</p>
+        </div>
+        <ul class="terms-list">
+          {
+            page.terms.map((t) => (
+              <li>
+                <span class="terms-ico">
+                  <Icon name="check" size={20} />
+                </span>
+                <div>
+                  <h3>{t.title}</h3>
+                  <p>{t.text}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ cases ============ -->
+  {
+    page.cases.length > 0 && (
+      <section class="section cases-sec" aria-labelledby="cases-h">
+        <div class="wrap">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Кейсы</p>
+              <h2 id="cases-h">Что мы уже сделали для компаний</h2>
+            </div>
+            <a class="btn btn-ghost btn-sm" href="/portfolio">Все работы →</a>
+          </div>
+          <ul class:list={['cases', { 'cases-feat': page.cases.length % 2 === 1 && page.cases.length > 1 }]}>
+            {page.cases.map((c, i) => (
+              <li class="case" style={`--ac:${tones[i % 3].ac};--ac-soft:${tones[i % 3].soft}`}>
+                <div class="case-img">
+                  <img src={c.image} alt={c.title} width="480" height="420" loading="lazy" decoding="async" />
+                </div>
+                <div class="case-body">
+                  <h3>{c.title}</h3>
+                  <p>{c.text}</p>
+                  <ul class="case-tags">
+                    {c.tags.map((t) => (
+                      <li>{t}</li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  {companyReviews >= 3 ? <Reviews keywords={reviewKeys} title="Отзывы клиентов" /> : <Reviews />}
+
+  <!-- ============ SEO text ============ -->
+  <section class="section seo-text" aria-labelledby="seo-h">
+    <div class="wrap">
+      <h2 id="seo-h">{page.seo.title}</h2>
+      <input type="checkbox" id="seo-more" class="seo-toggle" />
+      <div class="seo-cols">
+        {
+          page.seo.sections.map((s) => (
+            <div>
+              <h3>{s.title}</h3>
+              {s.paragraphs.map((p) => (
+                <p>{p}</p>
+              ))}
+            </div>
+          ))
+        }
+      </div>
+      <label for="seo-more" class="seo-more-btn">Читать полностью</label>
+    </div>
+  </section>
+
+  <FaqSection items={page.faq} title="Вопросы от компаний" />
+
+  <CtaBand title="Нужен мерч или подарки к сроку?" text="Опишите задачу — подберём изделия, подготовим макеты с вашим логотипом и пришлём коммерческое предложение." />
+
+  <ContactBlock />
+</BaseLayout>
+
+<style>
+  /* ================= first screen ================= */
+  .chero {
+    padding-block: clamp(24px, 4vw, 48px) 0;
+    overflow: clip;
+  }
+  .chero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: clamp(28px, 5vw, 72px);
+    align-items: center;
+  }
+  .chero-text {
+    display: grid;
+    gap: 18px;
+    justify-items: start;
+  }
+  .chero-eyebrow {
+    margin: 4px 0 -6px;
+  }
+  .chero-text h1 {
+    font-size: clamp(2.2rem, 4.2vw, 3.5rem);
+  }
+  .chero-chips {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chero-chips li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+  .chero-chips :global(svg) {
+    color: var(--m-ink);
+  }
+  .chero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .short {
+    display: none;
+  }
+  .chero-media {
+    position: relative;
+    padding: 28px;
+  }
+  .chero-frame img {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 140px 40px 40px 40px;
+    background: var(--paper-2);
+  }
+  .chero-dot {
+    position: absolute;
+    border-radius: 50%;
+    mix-blend-mode: multiply;
+  }
+  .chero-dot-c {
+    width: 150px;
+    height: 150px;
+    background: var(--c);
+    right: -14px;
+    bottom: -6px;
+  }
+  .chero-dot-y {
+    width: 110px;
+    height: 110px;
+    background: var(--y);
+    left: -8px;
+    top: 0;
+  }
+  .chero-sticker {
+    position: absolute;
+    z-index: 2;
+    left: -6px;
+    bottom: 54px;
+    font-size: 1.05rem;
+    line-height: 1.15;
+    text-align: center;
+    transform: rotate(-6deg);
+  }
+  .chero-reg {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    color: var(--ink-2);
+  }
+
+  /* real client logos on an ink band: white logos stay visible */
+  .clients-band {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 20px 40px;
+    margin-top: clamp(28px, 4vw, 48px);
+    padding: 22px clamp(22px, 3vw, 40px);
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .clients-title {
+    flex: none;
+    margin: 0;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #cfc8ba;
+  }
+  .clients-row {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px 28px;
+  }
+  .clients-row img {
+    height: 46px;
+    width: auto;
+    max-width: 140px;
+    object-fit: contain;
+    opacity: 0.88;
+    transition: opacity 0.2s ease;
+  }
+  .clients-row img:hover {
+    opacity: 1;
+  }
+
+  /* ================= table of contents ================= */
+  .toc {
+    padding-block: clamp(28px, 4vw, 48px) 8px;
+  }
+  .toc-label {
+    margin: 0 0 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .toc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 8px;
+  }
+  .toc-list li {
+    display: flex;
+  }
+  .toc-list a {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px 8px 8px;
+    border-radius: 999px;
+    border: 1.5px solid var(--line-strong);
+    background: var(--card);
+    font-weight: 600;
+    font-size: 0.9rem;
+    line-height: 1.25;
+    text-decoration: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+  }
+  .toc-num {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--ac);
+    color: var(--ink);
+    font-size: 0.72rem;
+    font-weight: 800;
+  }
+  .toc-list a:hover {
+    color: var(--ink);
+    border-color: var(--ink);
+    box-shadow: 3px 3px 0 var(--ac);
+    transform: translate(-1px, -1px);
+  }
+
+  /* ================= directions ================= */
+  .dir {
+    padding-block: clamp(20px, 3vw, 40px);
+  }
+  .dir-box {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(28px, 5vw, 72px);
+    align-items: center;
+  }
+  .dir-flip .dir-box {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  }
+  .dir-flip .dir-media {
+    order: 2;
+  }
+  .dir-soft .dir-box,
+  .dir-dark .dir-box {
+    padding: clamp(24px, 4.5vw, 60px);
+    border-radius: 48px 48px 140px 48px;
+    overflow: clip;
+  }
+  .dir-soft .dir-box {
+    background: var(--ac-soft);
+  }
+  .dir-dark .dir-box {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 140px 48px 48px 48px;
+  }
+  .dir-media {
+    position: relative;
+    padding: 18px;
+  }
+  .dir-blob {
+    position: absolute;
+    inset: 0 18% 22% 0;
+    border-radius: 50%;
+    background: var(--ac);
+    opacity: 0.9;
+    mix-blend-mode: multiply;
+  }
+  .dir-flip .dir-blob {
+    inset: 18% 0 0 22%;
+  }
+  .dir-dark .dir-blob {
+    mix-blend-mode: normal;
+    opacity: 1;
+  }
+  .dir-media img {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 14 / 15;
+    max-height: 520px;
+    object-fit: cover;
+    border-radius: 36px 36px 36px 110px;
+    background: var(--paper-2);
+  }
+  .dir-flip .dir-media img {
+    border-radius: 36px 110px 36px 36px;
+  }
+  .dir-num {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: grid;
+    place-items: center;
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: var(--card);
+    color: var(--ink);
+    font-size: 1.6rem;
+    font-weight: 800;
+    border: 2px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--ac);
+    transform: rotate(-8deg);
+  }
+  .dir-flip .dir-num {
+    left: 0;
+    right: auto;
+  }
+  .dir-text {
+    display: grid;
+    gap: 16px;
+    align-content: center;
+  }
+  .dir-eyebrow {
+    margin-bottom: -4px;
+  }
+  .dir-dark .dir-eyebrow {
+    color: #cfc8ba;
+  }
+  .dir-dark .dir-eyebrow::before {
+    mix-blend-mode: normal;
+  }
+  .dir-text h2 {
+    font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+  }
+  .dir-lead {
+    font-size: 1.08rem;
+    color: var(--ink-2);
+    max-width: 620px;
+  }
+  .dir-dark .dir-lead {
+    color: #d8d2c5;
+  }
+  .dir-cols {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: 20px 32px;
+    margin-top: 4px;
+  }
+  .dir-h3 {
+    margin-bottom: 10px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .dir-dark .dir-h3 {
+    color: #a9a29a;
+  }
+  /* «what we brand»: a little label sheet with ring markers in the accent colour */
+  .dir-items {
+    list-style: none;
+    margin: 0;
+    padding: 4px 18px;
+    border-radius: 22px 22px 22px 8px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+  }
+  .dir-soft .dir-items {
+    border-color: transparent;
+  }
+  .dir-dark .dir-items {
+    background: rgba(255, 252, 245, 0.06);
+    border-color: rgba(255, 252, 245, 0.14);
+  }
+  .dir-items li {
+    position: relative;
+    padding: 9px 0 9px 26px;
+    font-weight: 600;
+    font-size: 0.93rem;
+    line-height: 1.35;
+  }
+  .dir-items li + li {
+    border-top: 1px dashed var(--line-strong);
+  }
+  .dir-dark .dir-items li + li {
+    border-color: rgba(255, 252, 245, 0.16);
+  }
+  .dir-items li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: calc(9px + 0.2em);
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    border: 3.5px solid var(--ac);
+  }
+  .dir-uses {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+  }
+  .dir-uses li {
+    position: relative;
+    padding-left: 22px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+  .dir-uses li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.42em;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--ac);
+    box-shadow: 3px 2px 0 rgba(22, 20, 27, 0.18);
+  }
+  .dir-links {
+    list-style: none;
+    margin: 6px 0 0;
+    padding: 14px 0 0;
+    border-top: 1.5px dashed var(--line-strong);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 22px;
+  }
+  .dir-soft .dir-links {
+    border-color: rgba(22, 20, 27, 0.15);
+  }
+  .dir-dark .dir-links {
+    border-color: rgba(255, 252, 245, 0.2);
+  }
+  .dir-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: var(--ac);
+    text-decoration-thickness: 3px;
+    text-underline-offset: 5px;
+  }
+  .dir-links a :global(svg) {
+    transition: transform 0.15s ease;
+  }
+  .dir-links a:hover :global(svg) {
+    transform: translateX(3px);
+  }
+  .dir-dark .dir-links a:hover {
+    color: var(--y);
+  }
+
+  /* ================= audiences ================= */
+  .aud-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    gap: 14px;
+  }
+  .aud-grid li {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: 8px;
+    padding: 22px 22px 24px;
+    border-radius: 28px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    overflow: clip;
+  }
+  .aud-grid li:nth-child(4n + 2),
+  .aud-grid li:nth-child(4n + 3) {
+    border-radius: 28px 28px 28px 70px;
+  }
+  .aud-dot {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 70% 30%, var(--ac) 0 9px, transparent 9.5px),
+      var(--ac-soft);
+    margin-bottom: 4px;
+  }
+  .aud-grid h3 {
+    font-size: 1.12rem;
+  }
+  .aud-grid p {
+    color: var(--muted);
+    font-size: 0.94rem;
+    line-height: 1.5;
+  }
+
+  /* ================= process ================= */
+  .proc-sec {
+    background: var(--paper-2);
+    border-radius: 48px;
+    margin-inline: clamp(0px, 1.5vw, 20px);
+  }
+  .proc {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+    gap: 18px;
+    position: relative;
+  }
+  .proc::before {
+    content: '';
+    position: absolute;
+    left: 28px;
+    right: 28px;
+    top: 27px;
+    border-top: 2px dashed var(--line-strong);
+  }
+  .proc li {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: 8px;
+  }
+  .proc-num {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    margin-bottom: 8px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 2px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--ac);
+    font-weight: 800;
+    font-size: 1.05rem;
+  }
+  .proc h3 {
+    font-size: 1.12rem;
+  }
+  .proc p {
+    color: var(--ink-2);
+    font-size: 0.94rem;
+    line-height: 1.5;
+  }
+
+  /* ================= terms ================= */
+  .terms-box {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+    padding: clamp(28px, 5vw, 60px);
+    border-radius: 48px 140px 48px 48px;
+    background: var(--y);
+    overflow: clip;
+    isolation: isolate;
+  }
+  .terms-dots {
+    position: absolute;
+    inset: auto -40px -40px auto;
+    width: 300px;
+    height: 220px;
+    z-index: -1;
+    border-radius: 50%;
+    --dot: rgba(22, 20, 27, 0.18);
+  }
+  .terms-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px 40px;
+  }
+  .terms-head .eyebrow {
+    flex-basis: 100%;
+    margin-bottom: -4px;
+  }
+  .terms-lead {
+    max-width: 440px;
+  }
+  .terms-head .eyebrow {
+    color: var(--ink);
+  }
+  .terms-lead {
+    color: var(--ink-2);
+    font-size: 1.05rem;
+  }
+  .terms-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .terms-list li {
+    flex: 1 1 240px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 18px;
+    border-radius: 24px;
+    background: var(--paper);
+  }
+  .terms-ico {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--y);
+  }
+  .terms-list h3 {
+    font-size: 1.05rem;
+    margin-bottom: 4px;
+  }
+  .terms-list p {
+    color: var(--ink-2);
+    font-size: 0.92rem;
+    line-height: 1.45;
+  }
+
+  /* ================= cases ================= */
+  .cases {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 18px;
+  }
+  .case {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    border-radius: 32px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    overflow: clip;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .case:nth-child(even) {
+    border-radius: 32px 32px 32px 80px;
+  }
+  .case:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ac);
+  }
+  .case-img {
+    position: relative;
+    background: var(--ac-soft);
+    padding: 10px 10px 0;
+  }
+  .case-img img {
+    width: 100%;
+    aspect-ratio: 8 / 7;
+    object-fit: cover;
+    border-radius: 24px;
+  }
+  /* odd number of cases: the first one is big and spans two rows */
+  .cases-feat {
+    grid-template-columns: minmax(0, 1.25fr) repeat(2, minmax(0, 1fr));
+  }
+  .cases-feat .case:first-child {
+    grid-row: span 2;
+    grid-template-rows: 1fr auto;
+  }
+  .cases-feat .case:first-child .case-img img {
+    height: 100%;
+    aspect-ratio: auto;
+    min-height: 320px;
+  }
+  .cases-feat .case:first-child h3 {
+    font-size: 1.4rem;
+  }
+  .case-body {
+    display: grid;
+    align-content: start;
+    gap: 8px;
+    padding: 18px 20px 22px;
+  }
+  .case-body h3 {
+    font-size: 1.12rem;
+  }
+  .case-body p {
+    color: var(--muted);
+    font-size: 0.93rem;
+    line-height: 1.5;
+  }
+  .case-tags {
+    list-style: none;
+    margin: 4px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .case-tags li {
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--ac-soft);
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    font-weight: 700;
+  }
+
+  /* ================= SEO text ================= */
+  .seo-text h2 {
+    margin-bottom: 24px;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+  }
+  .seo-cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 48px;
+  }
+  .seo-cols h3 {
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+  }
+  .seo-cols p {
+    margin: 0 0 8px;
+    color: var(--ink-2);
+    font-size: 0.96rem;
+    line-height: 1.6;
+  }
+  .seo-toggle,
+  .seo-more-btn {
+    display: none;
+  }
+
+  /* ================= tablets ================= */
+  @media (max-width: 1100px) {
+    .aud-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .proc {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+    .proc::before {
+      display: none;
+    }
+    .clients-band {
+      flex-direction: column;
+      align-items: flex-start;
+      border-radius: 36px;
+    }
+    .clients-row {
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+  }
+  @media (max-width: 900px) {
+    .chero-grid,
+    .dir-box,
+    .dir-flip .dir-box,
+    .terms-box {
+      grid-template-columns: 1fr;
+    }
+    .chero-media {
+      max-width: 400px;
+      justify-self: center;
+    }
+    .dir-flip .dir-media {
+      order: 0;
+    }
+    .dir-media {
+      max-width: 460px;
+    }
+  }
+
+  /* ================= phones: compact, desktop untouched ================= */
+  @media (max-width: 760px) {
+    .chero {
+      padding-top: 14px;
+    }
+    .chero-grid {
+      grid-template-columns: minmax(0, 1fr) 112px;
+      gap: 12px 14px;
+      align-items: start;
+    }
+    .chero-text {
+      display: contents;
+    }
+    .chero-text > :global(.crumbs),
+    .chero-eyebrow,
+    .chero-text h1,
+    .chero-chips,
+    .chero-actions {
+      grid-column: 1 / -1;
+    }
+    .chero-text > :global(.crumbs) {
+      order: 1;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .chero-text > :global(.crumbs) :global(ol) {
+      flex-wrap: nowrap;
+      white-space: nowrap;
+      font-size: 0.78rem;
+    }
+    .chero-eyebrow {
+      display: none;
+    }
+    .chero-text h1 {
+      order: 2;
+      font-size: clamp(1.7rem, 7.6vw, 2.1rem);
+    }
+    .lead {
+      order: 3;
+      grid-column: 1;
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+    .chero-media {
+      order: 4;
+      grid-column: 2;
+      grid-row: 3;
+      max-width: none;
+      justify-self: stretch;
+      padding: 0;
+    }
+    .chero-frame img {
+      border-radius: 48px 20px 20px 20px;
+    }
+    .chero-dot,
+    .chero-reg,
+    .chero-sticker {
+      display: none;
+    }
+    .chero-frame {
+      --crop-gap: 5px;
+      --crop-len: 10px;
+    }
+    .chero-chips {
+      order: 5;
+      flex-wrap: nowrap;
+      gap: 6px;
+      overflow-x: auto;
+      margin-inline: calc(var(--gutter) * -1);
+      padding-inline: var(--gutter);
+      scrollbar-width: none;
+    }
+    .chero-chips::-webkit-scrollbar,
+    .chero-text > :global(.crumbs)::-webkit-scrollbar,
+    .clients-row::-webkit-scrollbar,
+    .toc-list::-webkit-scrollbar,
+    .cases::-webkit-scrollbar {
+      display: none;
+    }
+    .chero-chips li {
+      flex: none;
+      gap: 4px;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+    .chero-chips :global(svg) {
+      width: 14px;
+      height: 14px;
+    }
+    .chero-actions {
+      order: 6;
+      flex-wrap: nowrap;
+      gap: 8px;
+      margin: 0;
+    }
+    .chero-actions .btn {
+      flex: 1 1 0;
+      min-height: 46px;
+      padding: 0 12px;
+      gap: 6px;
+      font-size: 0.92rem;
+      white-space: nowrap;
+    }
+    .chero-actions .btn :global(svg) {
+      width: 18px;
+      height: 18px;
+    }
+    .long {
+      display: none;
+    }
+    .short {
+      display: inline;
+    }
+    /* logos: one sideways-scrolling line on the ink band */
+    .clients-band {
+      margin-top: 20px;
+      gap: 10px;
+      padding: 14px 0 16px;
+      border-radius: 24px;
+    }
+    .clients-title {
+      padding-inline: 18px;
+      font-size: 0.7rem;
+    }
+    .clients-row {
+      flex-wrap: nowrap;
+      width: 100%;
+      gap: 22px;
+      overflow-x: auto;
+      padding-inline: 18px;
+      scrollbar-width: none;
+    }
+    .clients-row li {
+      flex: none;
+    }
+    .clients-row img {
+      height: 32px;
+      max-width: 100px;
+    }
+    /* contents: one scrolling row of pills */
+    .toc {
+      display: block;
+      padding-block: 22px 0;
+    }
+    .toc-label {
+      margin-bottom: 8px;
+      font-size: 0.7rem;
+    }
+    .toc-list {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      margin-inline: calc(var(--gutter) * -1);
+      padding: 2px var(--gutter) 6px;
+      scrollbar-width: none;
+    }
+    .toc-list li {
+      flex: none;
+    }
+    .toc-list a {
+      gap: 8px;
+      padding: 4px 12px 4px 4px;
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+    .toc-num {
+      width: 24px;
+      height: 24px;
+      font-size: 0.66rem;
+    }
+    /* directions: title with a small photo on the right (text block becomes «contents»), compact list below */
+    .dir {
+      padding-block: 12px;
+    }
+    .dir-box,
+    .dir-flip .dir-box {
+      grid-template-columns: minmax(0, 1fr) 96px;
+      gap: 10px 14px;
+      align-items: center;
+    }
+    .dir-text {
+      display: contents;
+    }
+    .dir-text > * {
+      grid-column: 1 / -1;
+    }
+    .dir-text > h2 {
+      grid-column: 1;
+      grid-row: 1;
+    }
+    .dir-media,
+    .dir-flip .dir-media {
+      order: 0;
+      grid-column: 2;
+      grid-row: 1;
+      max-width: none;
+      padding: 0;
+    }
+    .dir-soft .dir-box,
+    .dir-dark .dir-box {
+      padding: 16px 14px 18px 16px;
+      border-radius: 28px 28px 64px 28px;
+    }
+    .dir-dark .dir-box {
+      border-radius: 28px 28px 28px 64px;
+    }
+    .dir-blob {
+      display: none;
+    }
+    .dir-media img,
+    .dir-flip .dir-media img {
+      aspect-ratio: 1;
+      max-height: none;
+      border-radius: 18px 18px 18px 40px;
+    }
+    .dir-num,
+    .dir-flip .dir-num {
+      left: -8px;
+      right: auto;
+      top: -8px;
+      width: 34px;
+      height: 34px;
+      border-width: 1.5px;
+      font-size: 0.78rem;
+      box-shadow: 2px 2px 0 var(--ac);
+    }
+    .dir-eyebrow {
+      display: none;
+    }
+    .dir-text h2 {
+      font-size: 1.32rem;
+    }
+    .dir-lead {
+      font-size: 0.93rem;
+      line-height: 1.45;
+    }
+    .dir-cols {
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin: 0;
+    }
+    .dir-h3 {
+      margin-bottom: 6px;
+      font-size: 0.68rem;
+    }
+    .dir-items {
+      padding: 2px 12px;
+      border-radius: 16px 16px 16px 6px;
+    }
+    .dir-items li {
+      padding: 6px 0 6px 20px;
+      font-size: 0.84rem;
+      line-height: 1.3;
+    }
+    .dir-items li::before {
+      top: calc(6px + 0.18em);
+      width: 11px;
+      height: 11px;
+      border-width: 3px;
+    }
+    /* «what for» is secondary — hidden on phones to keep each direction short */
+    .dir-cols > div:nth-child(2) {
+      display: none;
+    }
+    .dir-uses {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 14px;
+    }
+    .dir-uses li {
+      padding-left: 15px;
+      font-size: 0.84rem;
+    }
+    .dir-uses li::before {
+      width: 8px;
+      height: 8px;
+    }
+    .dir-links {
+      margin: 0;
+      padding-top: 10px;
+      gap: 6px 16px;
+    }
+    .dir-links a {
+      font-size: 0.88rem;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 4px;
+    }
+    .dir-links a :global(svg) {
+      width: 15px;
+      height: 15px;
+    }
+    /* audiences: 2 columns, short */
+    .aud-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .aud-grid li:last-child:nth-child(odd),
+    .terms-list li:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+    }
+    .aud-grid li {
+      gap: 4px;
+      padding: 12px 12px 14px;
+      border-radius: 18px;
+    }
+    .aud-grid li:nth-child(4n + 2),
+    .aud-grid li:nth-child(4n + 3) {
+      border-radius: 18px 18px 18px 40px;
+    }
+    .aud-dot {
+      width: 26px;
+      height: 26px;
+      background:
+        radial-gradient(circle at 70% 30%, var(--ac) 0 6px, transparent 6.5px),
+        var(--ac-soft);
+      margin-bottom: 2px;
+    }
+    .aud-grid h3 {
+      font-size: 0.95rem;
+    }
+    .aud-grid p {
+      font-size: 0.8rem;
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    /* process: vertical list with a dashed spine */
+    .proc-sec {
+      border-radius: 28px;
+      padding-block: 28px 32px;
+    }
+    .proc-cta {
+      display: none;
+    }
+    .proc {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .proc::before {
+      display: block;
+      left: 19px;
+      right: auto;
+      top: 20px;
+      bottom: 20px;
+      border-top: 0;
+      border-left: 2px dashed var(--line-strong);
+    }
+    .proc li {
+      grid-template-columns: 40px minmax(0, 1fr);
+      gap: 2px 12px;
+    }
+    .proc-num {
+      grid-row: span 2;
+      width: 40px;
+      height: 40px;
+      margin: 0;
+      font-size: 0.85rem;
+      box-shadow: 3px 3px 0 var(--ac);
+    }
+    .proc h3 {
+      font-size: 1rem;
+      align-self: end;
+    }
+    .proc p {
+      font-size: 0.86rem;
+      line-height: 1.4;
+    }
+    /* terms: compact 2×2 */
+    .terms-box {
+      gap: 16px;
+      padding: 22px 16px;
+      border-radius: 28px 64px 28px 28px;
+    }
+    .terms-head .eyebrow {
+      display: none;
+    }
+    .terms-head h2 {
+      margin-bottom: 6px;
+    }
+    .terms-lead {
+      font-size: 0.9rem;
+    }
+    .terms-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .terms-list li {
+      position: relative;
+      display: block;
+      padding: 12px 12px 12px 12px;
+      border-radius: 16px;
+    }
+    .terms-list h3 {
+      padding-left: 30px;
+      min-height: 22px;
+    }
+    .terms-ico {
+      position: absolute;
+      left: 10px;
+      top: 11px;
+      width: 24px;
+      height: 24px;
+    }
+    .terms-ico :global(svg) {
+      width: 14px;
+      height: 14px;
+    }
+    .terms-list h3 {
+      font-size: 0.92rem;
+    }
+    .terms-list p {
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+    /* cases: sideways carousel */
+    .cases {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: var(--gutter);
+      margin-inline: calc(var(--gutter) * -1);
+      padding: 0 var(--gutter) 8px;
+      scrollbar-width: none;
+    }
+    .case {
+      flex: 0 0 76%;
+      scroll-snap-align: start;
+      border-radius: 24px;
+    }
+    .case:nth-child(even) {
+      border-radius: 24px 24px 24px 56px;
+    }
+    .case-img {
+      padding: 8px 8px 0;
+    }
+    .case-img img,
+    .cases-feat .case:first-child .case-img img {
+      height: auto;
+      min-height: 0;
+      aspect-ratio: 4 / 3;
+      border-radius: 18px;
+    }
+    .cases-feat .case:first-child {
+      grid-template-rows: auto 1fr;
+    }
+    .cases-feat .case:first-child h3 {
+      font-size: 1rem;
+    }
+    .case-body {
+      gap: 6px;
+      padding: 12px 14px 16px;
+    }
+    .case-body h3 {
+      font-size: 1rem;
+    }
+    .case-body p {
+      font-size: 0.84rem;
+      line-height: 1.4;
+    }
+    .case-tags li {
+      font-size: 0.68rem;
+    }
+    /* seo text: first lines + «Читать полностью» */
+    .seo-text h2 {
+      margin-bottom: 14px;
+    }
+    .seo-cols {
+      grid-template-columns: 1fr;
+      gap: 14px;
+      max-height: 230px;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(#000 60%, transparent);
+      mask-image: linear-gradient(#000 60%, transparent);
+    }
+    .seo-toggle:checked + .seo-cols {
+      max-height: none;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+    .seo-more-btn {
+      display: inline-block;
+      margin-top: 8px;
+      font-weight: 700;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .seo-toggle:checked ~ .seo-more-btn {
+      display: none;
+    }
+  }
+  @media (max-width: 380px) {
+    .aud-grid p {
+      display: none;
+    }
+  }
+</style>

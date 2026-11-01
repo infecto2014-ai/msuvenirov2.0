@@ -39,8 +39,8 @@ export const corporate: CorporatePage = {
         'Мерч бренда для подписчиков и покупателей',
         'Форма волонтёров и промоутеров',
       ],
-      image: '/portfolio/portfolio-20.webp',
-      imageAlt: 'Партия корпоративных футболок с логотипом компании — DTF-печать в Калининграде',
+      image: '/img/showcase/tshirt.webp',
+      imageAlt: 'Футболки с логотипом компании — корпоративный мерч в Калининграде',,
       links: [
         { href: '/pechat-na-odezhde', label: 'Печать на одежде' },
         { href: '/pechat-na-futbolkah', label: 'Футболки с логотипом' },
