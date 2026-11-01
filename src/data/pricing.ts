@@ -22,6 +22,8 @@ export interface OptionGroup {
   choices: Choice[];
   /** default choice id(s) */
   default?: string | string[];
+  /** hide this group while another group has this value, e.g. colour is hidden for the customer's own t-shirt */
+  hideWhen?: { group: string; value: string };
   /** optional extra group (e.g. 2nd–4th print): hidden while 'none', the customer adds it with a button */
   addable?: boolean;
 }
@@ -294,11 +296,28 @@ function garment(args: {
   /** max number of print places */
   places: number;
   colors?: boolean;
+  /** offer «своя вещь»: e.g. 'футболка' → choice «Своя футболка», only the print is charged */
+  own?: string;
 }): Product {
   const placeLabels = ['Основной принт', 'Второй принт', 'Третий принт', 'Четвёртый принт'];
   const options: OptionGroup[] = [];
+  const cap = (w: string) => w.charAt(0).toUpperCase() + w.slice(1);
+  if (args.own) {
+    options.push({
+      id: 'blank',
+      label: cap(args.own),
+      type: 'one',
+      choices: [
+        { id: 'ours', label: `Наша ${args.own}`, hint: 'с печатью' },
+        { id: 'own', label: `Своя ${args.own}`, hint: 'только печать' },
+      ],
+      default: 'ours',
+    });
+  }
+  const isOwn = (sel: Selection) => !!args.own && one(sel, 'blank', 'ours') === 'own';
   if (args.colors) {
     options.push({
+      ...(args.own ? { hideWhen: { group: 'blank', value: 'own' } } : {}),
       id: 'color',
       label: 'Цвет изделия',
       type: 'one',
@@ -335,7 +354,7 @@ function garment(args: {
       .sort((a, b) => b.base - a.base)
       .map((p, i) => ({ ...p, k: extraPrintFactor[Math.min(i, 2)] }));
   const unitAt = (sel: Selection, qty: number) => {
-    let u = args.blank ? tierPrice(args.blank, qty) : 0;
+    let u = args.blank && !isOwn(sel) ? tierPrice(args.blank, qty) : 0;
     for (const p of ranked(sel, qty)) u += p.base * p.k;
     return round(u);
   };
@@ -369,7 +388,7 @@ function garment(args: {
       const qty = sel.qty;
       const breakdown: Quote['breakdown'] = [];
       const notes: string[] = [];
-      if (args.blank) {
+      if (args.blank && !isOwn(sel)) {
         breakdown.push({ label: args.blankFrom ? `${args.name} (от)` : args.name, amount: tierPrice(args.blank, qty), per: 'шт' });
       }
       const rp = ranked(sel, qty);
@@ -384,16 +403,17 @@ function garment(args: {
       const unit = unitAt(sel, qty);
       const nb = breakpoints(sel).find((t) => t.from > qty && t.price < unit);
       let error: string | undefined;
-      if (args.colors && one(sel, 'color', 'white') === 'other' && qty < 10) {
+      if (args.colors && !isOwn(sel) && one(sel, 'color', 'white') === 'other' && qty < 10) {
         error = 'Футболки других цветов (кроме белого и чёрного) — под заказ от 10 шт.';
       }
-      if (args.blankFrom) notes.push('Наличие и точную цену изделия уточнит менеджер.');
+      if (args.blankFrom && !isOwn(sel)) notes.push('Наличие и точную цену изделия уточнит менеджер.');
+      if (isOwn(sel)) notes.push(`Печать на вашей ${args.own}: принесите её в мастерскую. Подойдут хлопок, смесовые ткани, синтетика.`);
       if (!args.blank) notes.push('Печать на вашем изделии. Подойдут хлопок, смесовые ткани, синтетика.');
       if (qty >= GARMENT_MAX) notes.push(`Нужно больше ${GARMENT_MAX} шт? Цену рассчитаем индивидуально — отправьте заявку.`);
       return {
         unit,
         total: Math.round(unit * qty),
-        from: args.blankFrom,
+        from: args.blankFrom && !isOwn(sel),
         breakdown,
         next: nb ? { qty: nb.from, unit: nb.price } : undefined,
         notes,
@@ -417,6 +437,7 @@ const textile: Category = {
       formats: ['a6', 'a5', 'a4', 'a3'],
       places: 4,
       colors: true,
+      own: 'футболка',
     }),
     garment({
       id: 'tshirt-kids',

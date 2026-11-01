@@ -78,6 +78,7 @@ const stepQty = (n: number, dir: 1 | -1, q: QtyConfig) => {
 const describe = (p: Product, s: Selection): string => {
   const parts: string[] = [];
   for (const g of p.options ?? []) {
+    if (g.hideWhen && s.options[g.hideWhen.group] === g.hideWhen.value) continue;
     const v = s.options[g.id];
     if (g.type === 'one') {
       const c = g.choices.find((x) => x.id === v);
@@ -227,9 +228,10 @@ export default function Calculator({ category, product, only, hideCategories, lo
           {(() => {
             // Extra prints (addable groups) are hidden until the customer adds them; numbering follows the visible groups.
             const groups = prod.options ?? [];
-            const isOn = (g: OptionGroup) => !g.addable || (sel.options[g.id] ?? 'none') !== 'none';
+            const hidden = (g: OptionGroup) => !!g.hideWhen && sel.options[g.hideWhen.group] === g.hideWhen.value;
+            const isOn = (g: OptionGroup) => !hidden(g) && (!g.addable || (sel.options[g.id] ?? 'none') !== 'none');
             const visible = groups.filter(isOn);
-            const nextAdd = groups.find((g) => g.addable && !isOn(g));
+            const nextAdd = groups.find((g) => g.addable && !hidden(g) && !isOn(g));
             const addGroup = (g: OptionGroup) => setOption(g.id, g.choices.find((c) => c.id !== 'none')!.id, false);
             const removeGroup = (g: OptionGroup) =>
               setSel((s) => {
@@ -375,16 +377,32 @@ export default function Calculator({ category, product, only, hideCategories, lo
               </div>
             )}
             {ladder.length > 1 && (
-              <div class="calc-ladder" aria-label="Цена за штуку по тиражам">
-                {ladder.map((t, i) => {
-                  const active = sel.qty >= t.from && (i === ladder.length - 1 || sel.qty < ladder[i + 1].from);
-                  return (
-                    <button type="button" class={`calc-rung${active ? ' is-active' : ''}`} onClick={() => setQty(Math.max(t.from, min))}>
-                      <span class="calc-rung-qty">{ladderLabels[i]}</span>
-                      <span class="calc-rung-price">{rub(t.price)}</span>
-                    </button>
-                  );
-                })}
+              // «лесенка»: the lower the price per piece, the lower the step; tap a step to pick that quantity
+              <div class="calc-ladder" role="group" aria-label="Цена за штуку по тиражам">
+                <span class="calc-ladder-title">Чем больше — тем дешевле</span>
+                <div class="calc-steps">
+                  {ladder.map((t, i) => {
+                    const active = sel.qty >= t.from && (i === ladder.length - 1 || sel.qty < ladder[i + 1].from);
+                    const top = ladder[0].price;
+                    const save = i > 0 && top > 0 ? Math.round((1 - t.price / top) * 100) : 0;
+                    const h = top > 0 ? Math.round(10 + 38 * (t.price / top)) : 48; // px: 48 for the dearest step, lower for cheaper ones
+                    return (
+                      <button
+                        type="button"
+                        class={`calc-stair${active ? ' is-active' : ''}`}
+                        aria-pressed={active}
+                        aria-label={`${ladderLabels[i]}: ${rub(t.price)} за штуку`}
+                        onClick={() => setQty(Math.max(t.from, min))}
+                      >
+                        <span class="calc-stair-price">{rub(t.price)}</span>
+                        <span class="calc-stair-bar" style={{ height: `${h}px` }}>
+                          {save > 0 && <span class="calc-stair-save">−{save}%</span>}
+                        </span>
+                        <span class="calc-stair-qty">{ladderLabels[i]}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             )}
           </fieldset>

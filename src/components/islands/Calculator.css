@@ -310,45 +310,93 @@
 }
 
 .calc-ladder {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
-  gap: 6px;
   margin-top: 16px;
+  padding: 12px 14px 10px;
+  border-radius: 18px;
+  background: var(--paper-2);
 }
 
-.calc-rung {
+.calc-ladder-title {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.calc-steps {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  max-width: 560px;
+}
+
+.calc-stair {
+  flex: 1 1 0;
   min-width: 0;
   display: grid;
-  gap: 2px;
-  padding: 10px 12px;
-  border-radius: 14px;
-  border: 1.5px dashed var(--line-strong);
-  background: transparent;
-  text-align: left;
+  justify-items: center;
+  gap: 3px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--ink);
   cursor: pointer;
 }
 
-.calc-rung:hover {
-  border-color: var(--ink);
-}
-
-.calc-rung.is-active {
-  border-style: solid;
-  border-color: var(--ink);
-  background: var(--y-soft);
-}
-
-.calc-rung-qty {
-  white-space: nowrap;
-  font-size: 0.76rem;
-  color: var(--muted);
-  font-weight: 600;
-}
-
-.calc-rung-price {
+.calc-stair-price {
   font-family: var(--mono);
+  font-size: 0.86rem;
   font-weight: 700;
   white-space: nowrap;
+  color: var(--ink-2);
+}
+
+/* the step: its height follows the price, so the row reads as a staircase going down */
+.calc-stair-bar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  border-radius: 12px 12px 3px 3px;
+  background: var(--card);
+  border: 1.5px solid var(--line-strong);
+  border-bottom-width: 3px;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.calc-stair:hover .calc-stair-bar {
+  border-color: var(--ink);
+}
+
+.calc-stair.is-active .calc-stair-bar {
+  background: var(--y);
+  border-color: var(--ink);
+}
+
+.calc-stair.is-active .calc-stair-price {
+  color: var(--ink);
+}
+
+.calc-stair-save {
+  font-size: 0.66rem;
+  font-weight: 800;
+  color: var(--m);
+}
+
+.calc-stair.is-active .calc-stair-save {
+  color: var(--ink);
+}
+
+.calc-stair-qty {
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  color: var(--muted);
 }
 
 /* ------------------------------------------------------------ result */

@@ -7,7 +7,7 @@ interface Props {
   info: GarmentInfo;
   productName: string;
 }
-const { info, productName } = Astro.props;
+const { info } = Astro.props;
 const product = findProduct('textile', info.productId)!;
 const items = info.packages.map((pk) => {
   const base = defaultSelection(product);
@@ -24,7 +24,7 @@ const items = info.packages.map((pk) => {
         <p class="eyebrow">Популярное</p>
         <h2 id="gpk-h">Готовые варианты с ценой</h2>
       </div>
-      <p>Цена — за {productName.toLowerCase()} вместе с печатью. Свой вариант — в калькуляторе выше.</p>
+      <p>Цена указана за готовое изделие вместе с печатью. Свой вариант — в калькуляторе выше.</p>
     </div>
     <ul class="gpk-grid">
       {
@@ -79,9 +79,9 @@ const items = info.packages.map((pk) => {
     background: var(--paper-2);
   }
   .gpk-body {
-    display: grid;
-    align-content: start;
-    justify-items: start;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 4px;
     padding: 14px 16px 18px;
   }
@@ -93,8 +93,10 @@ const items = info.packages.map((pk) => {
     font-size: 0.85rem;
     color: var(--muted);
   }
+  /* price + button sit at the bottom, so all cards line up whatever the title length */
   .gpk-price {
-    margin: 6px 0 10px;
+    margin: auto 0 10px;
+    padding-top: 12px;
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;

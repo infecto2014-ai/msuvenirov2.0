@@ -58,6 +58,14 @@ describe('pricing', () => {
     expect(p.quote(s).notes.some((n) => n.includes('индивидуально'))).toBe(true);
   });
 
+  it('own t-shirt: only the print is charged, colour does not matter', () => {
+    const { p, s } = sel('textile', 'tshirt-unisex', { qty: 1, options: { blank: 'own', color: 'other', print1: 'a4' } });
+    const q = p.quote(s);
+    expect(q.total).toBe(800);
+    expect(q.error).toBeUndefined();
+    expect(q.breakdown.map((b) => b.label)).toEqual(['Печать DTF А4']);
+  });
+
   it('coloured t-shirts need at least 10 pcs', () => {
     const { p, s } = sel('textile', 'tshirt-unisex', { options: { color: 'other' }, qty: 5 });
     expect(p.quote(s).error).toBeTruthy();
