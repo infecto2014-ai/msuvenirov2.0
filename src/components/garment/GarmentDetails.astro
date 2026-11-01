@@ -8,8 +8,8 @@ interface Props {
   productName: string;
 }
 const { info, productName } = Astro.props;
-const stock = info.colors.filter((c) => !c.order);
-const order = info.colors.filter((c) => c.order);
+// a long list without notes is shown as a compact palette; short lists with notes — as rows
+const plain = info.colors.length > 4 && info.colors.every((c) => !c.note);
 ---
 
 <section class="section gdet" aria-labelledby="gdet-h">
@@ -23,34 +23,28 @@ const order = info.colors.filter((c) => c.order);
     <div class="gdet-grid">
       <div class="gdet-card">
         <h3>Цвет</h3>
-        <ul class="gdet-colors">
-          {
-            stock.map((c) => (
-              <li>
-                <span class="gdet-swatch" style={`--sw:${c.hex}`} aria-hidden="true" />
-                <span>
-                  {c.name}
-                  {c.note && <small>{c.note}</small>}
-                </span>
-              </li>
-            ))
-          }
-        </ul>
         {
-          order.length > 0 && (
-            <div class="gdet-order">
-              <p>
-                Другие цвета <small>под заказ от 10 шт</small>
-              </p>
-              <ul class="gdet-palette">
-                {order.map((c) => (
-                  <li title={c.name}>
-                    <span class="gdet-swatch gdet-swatch-sm" style={`--sw:${c.hex}`} aria-hidden="true" />
-                    <small>{c.name}</small>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          plain ? (
+            <ul class="gdet-palette">
+              {info.colors.map((c) => (
+                <li>
+                  <span class="gdet-swatch" style={`--sw:${c.hex}`} aria-hidden="true" />
+                  <small>{c.name}</small>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <ul class="gdet-colors">
+              {info.colors.map((c) => (
+                <li>
+                  <span class="gdet-swatch" style={`--sw:${c.hex}`} aria-hidden="true" />
+                  <span>
+                    {c.name}
+                    {c.note && <small>{c.note}</small>}
+                  </span>
+                </li>
+              ))}
+            </ul>
           )
         }
       </div>
@@ -150,27 +144,13 @@ const order = info.colors.filter((c) => c.order);
     background: var(--sw);
     border: 1.5px solid var(--line-strong);
   }
-  .gdet-order {
-    margin-top: 18px;
-    padding-top: 14px;
-    border-top: 1.5px dashed var(--line);
-  }
-  .gdet-order p {
-    margin: 0 0 10px;
-    font-weight: 600;
-  }
-  .gdet-order p small {
-    margin-left: 6px;
-    font-weight: 500;
-    color: var(--muted);
-  }
   .gdet-palette {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 10px 6px;
+    grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+    gap: 14px 6px;
   }
   .gdet-palette li {
     display: grid;
@@ -179,13 +159,9 @@ const order = info.colors.filter((c) => c.order);
     text-align: center;
   }
   .gdet-palette small {
-    font-size: 0.68rem;
+    font-size: 0.78rem;
     line-height: 1.15;
     color: var(--ink-2);
-  }
-  .gdet-swatch-sm {
-    width: 28px;
-    height: 28px;
   }
   .gdet-specs {
     margin: 0;

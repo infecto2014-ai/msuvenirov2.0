@@ -85,8 +85,8 @@ export interface GarmentInfo {
     img: string;
   }[];
   /** colours of the blank in stock */
-  /** colours of the blank; order=true → «другие цвета, под заказ» */
-  colors: { name: string; hex: string; note?: string; order?: boolean }[];
+  /** colours of the blank (a long list without notes is shown as a palette) */
+  colors: { name: string; hex: string; note?: string }[];
   /** slugs of service pages for the «С этим заказывают» strip under the calculator */
   alsoOrder?: string[];
   /** facts about the blank: fabric, density, sizes… todo=true → owner must confirm, shown as «уточняйте» */
