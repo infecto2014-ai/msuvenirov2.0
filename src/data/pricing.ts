@@ -255,7 +255,11 @@ export const dtfPrint: Record<'a6' | 'a5' | 'a4' | 'a3', { label: string; size: 
 };
 type Format = keyof typeof dtfPrint;
 
-/** Each additional print on the same item is cheaper: 2nd — 70%, 3rd and further — 50%. */
+/**
+ * Several prints on one item: the most expensive print is charged in full, the next one at 70%,
+ * the rest at 50% (owner, 01.11.2026). Prints are ranked by price, not by the order they were picked:
+ * A6 + A3 + A4 = A3 + A4 −30% + A6 −50%.
+ */
 export const extraPrintFactor = [1, 0.7, 0.5];
 
 const formatChoices = (formats: Format[], withNone: boolean): Choice[] => [
@@ -295,7 +299,7 @@ function garment(args: {
   for (let i = 0; i < args.places; i++) {
     options.push({
       id: `print${i + 1}`,
-      label: i === 0 ? `${placeLabels[i]} (DTF)` : `${placeLabels[i]} · ${i === 1 ? '−30%' : '−50%'}`,
+      label: i === 0 ? `${placeLabels[i]} (DTF)` : placeLabels[i],
       type: 'one',
       choices: formatChoices(args.formats, i > 0),
       default: i === 0 ? (args.formats.includes('a4') ? 'a4' : args.formats[0]) : 'none',
@@ -309,11 +313,15 @@ function garment(args: {
     }
     return out;
   };
+  /** prints ranked from the most expensive to the cheapest, each with its discount factor */
+  const ranked = (sel: Selection, qty: number) =>
+    prints(sel)
+      .map((f) => ({ f, base: dtfPrint[f].tiers.length ? tierPrice(dtfPrint[f].tiers, qty) : 0 }))
+      .sort((a, b) => b.base - a.base)
+      .map((p, i) => ({ ...p, k: extraPrintFactor[Math.min(i, 2)] }));
   const unitAt = (sel: Selection, qty: number) => {
     let u = args.blank ? tierPrice(args.blank, qty) : 0;
-    prints(sel).forEach((f, i) => {
-      u += dtfPrint[f].tiers.length ? tierPrice(dtfPrint[f].tiers, qty) * extraPrintFactor[Math.min(i, 2)] : 0;
-    });
+    for (const p of ranked(sel, qty)) u += p.base * p.k;
     return round(u);
   };
   const breakpoints = (sel: Selection) => {
@@ -347,15 +355,15 @@ function garment(args: {
       if (args.blank) {
         breakdown.push({ label: args.blankFrom ? `${args.name} (от)` : args.name, amount: tierPrice(args.blank, qty), per: 'шт' });
       }
-      prints(sel).forEach((f, i) => {
-        const base = tierPrice(dtfPrint[f].tiers, qty);
-        const k = extraPrintFactor[Math.min(i, 2)];
+      const rp = ranked(sel, qty);
+      for (const p of rp) {
         breakdown.push({
-          label: `Печать DTF ${dtfPrint[f].label}${i ? ` (${placeLabels[i].toLowerCase()}, ${k * 100}%)` : ''}`,
-          amount: round(base * k),
+          label: `Печать DTF ${dtfPrint[p.f].label}${p.k < 1 ? ` (−${Math.round((1 - p.k) * 100)}%)` : ''}`,
+          amount: round(p.base * p.k),
           per: 'шт',
         });
-      });
+      }
+      if (rp.length > 1) notes.push('Несколько принтов: самый дорогой — по полной цене, следующий −30%, остальные −50%.');
       const unit = unitAt(sel, qty);
       const nb = breakpoints(sel).find((t) => t.from > qty && t.price < unit);
       let error: string | undefined;

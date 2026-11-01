@@ -34,6 +34,15 @@ describe('pricing', () => {
     expect(q20.total).toBe(20 * 1000);
   });
 
+  it('several prints are ranked by price: the dearest full, next −30%, rest −50%', () => {
+    const { p, s } = sel('textile', 'own-item', { qty: 1, options: { print1: 'a6', print2: 'a3', print3: 'a4' } });
+    const { p: p2, s: s2 } = sel('textile', 'own-item', { qty: 1, options: { print1: 'a3', print2: 'a4', print3: 'a6' } });
+    // owner's example: 1100 + 800 −30% + 600 −50%
+    expect(p.quote(s).total).toBe(1100 + 560 + 300);
+    expect(p.quote(s).total).toBe(p2.quote(s2).total);
+    expect(p.quote(s).breakdown.map((b) => b.label)).toEqual(['Печать DTF А3', 'Печать DTF А4 (−30%)', 'Печать DTF А6 (−50%)']);
+  });
+
   it('coloured t-shirts need at least 10 pcs', () => {
     const { p, s } = sel('textile', 'tshirt-unisex', { options: { color: 'other' }, qty: 5 });
     expect(p.quote(s).error).toBeTruthy();
