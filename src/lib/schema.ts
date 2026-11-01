@@ -15,6 +15,8 @@ export const localBusiness = () => ({
   telephone: '+79521142350',
   email: site.email,
   priceRange: '₽₽',
+  paymentAccepted: 'Наличные, банковская карта, оплата по QR-коду, безналичный расчёт',
+  currenciesAccepted: 'RUB',
   foundingDate: String(site.founded),
   address: {
     '@type': 'PostalAddress',

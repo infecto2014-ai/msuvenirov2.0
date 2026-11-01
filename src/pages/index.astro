@@ -49,7 +49,7 @@ const occasions = [
 
 const terms = [
   { icon: 'clock', title: 'Сроки', text: 'Обычно 1–3 рабочих дня. Срочные заказы — без наценки, успеем к нужной дате.' },
-  { icon: 'calc', title: 'Оплата', text: 'Частным лицам — предоплата 50%, остаток при получении. Организациям — счёт без НДС и закрывающие документы.' },
+  { icon: 'calc', title: 'Оплата', text: 'Наличными, картой или по QR-коду. Частным лицам — предоплата 50%, остаток при получении. Организациям — счёт без НДС.' },
   { icon: 'upload', title: 'Макет', text: 'Перед печатью присылаем макет на согласование. Простой макет соберём бесплатно.' },
   { icon: 'check', title: 'Гарантия', text: 'Если брак по нашей вине — переделаем бесплатно.' },
 ] as const;
@@ -58,14 +58,12 @@ const clients = [
   { src: '/img/clients/client-1.webp', alt: 'Россети' },
   { src: '/img/clients/client-6.webp', alt: 'БФУ имени И. Канта' },
   { src: '/img/clients/client-2.webp', alt: 'Арле Парк' },
-  { src: '/img/clients/client-3.webp', alt: 'Fonbet Кубок России' },
   { src: '/img/clients/client-4.webp', alt: 'Папаша Беппе' },
   { src: '/img/clients/client-5.webp', alt: 'Бойцовский клуб «Неудержимые»' },
   { src: '/img/clients/client-7.webp', alt: 'Systech' },
   { src: '/img/clients/client-8.webp', alt: 'Музей мороженого' },
 ];
 
-const fmt1 = (n: number) => n.toLocaleString('ru-RU', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
 ---
 
@@ -107,27 +105,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
         <span class="reg hc-reg-2"></span>
         <div class="hc-dots halftone"></div>
       </div>
-    </div>
-  </section>
-
-  <!-- TRUST STRIP -->
-  <section class="trust" aria-label="Рейтинг и факты">
-    <div class="wrap trust-row">
-      {
-        site.ratings.map((r) => (
-          <a class="trust-item" href={r.href} target="_blank" rel="noopener">
-            <span class="trust-star" aria-hidden="true">★</span>
-            <b class="mono">{fmt1(r.rating)}</b>
-            <span>
-              {r.platform} · {r.count} {r.unit}
-            </span>
-          </a>
-        ))
-      }
-      <span class="trust-item">
-        <b class="mono">{new Date().getFullYear() - site.founded}+</b>
-        <span>лет работаем в ТЦ «Экватор»</span>
-      </span>
     </div>
   </section>
 
@@ -722,42 +699,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     opacity: 1;
   }
 
-  /* ---------------- trust strip */
-  .trust {
-    padding-block: 4px 8px;
-  }
-  .trust-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .trust-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    border-radius: 999px;
-    background: var(--card);
-    border: 1.5px solid var(--line);
-    color: var(--ink);
-    text-decoration: none;
-    font-size: 0.9rem;
-  }
-  a.trust-item:hover {
-    border-color: var(--ink);
-    color: var(--ink);
-  }
-  .trust-item b {
-    font-size: 1.05rem;
-  }
-  .trust-item span:last-child {
-    color: var(--muted);
-  }
-  .trust-star {
-    color: #f5b700;
-    font-size: 1.1rem;
-  }
-
   /* ---------------- popular */
   .pop-grid {
     list-style: none;
@@ -1068,10 +1009,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     }
     .terms-icon {
       grid-row: span 2;
-    }
-    .trust-item {
-      padding: 8px 12px;
-      font-size: 0.82rem;
     }
     .clients-row {
       gap: 14px 22px;
