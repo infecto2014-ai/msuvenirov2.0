@@ -51,19 +51,21 @@ const { info, productName } = Astro.props;
           }
         </dl>
       </div>
-      <div class="gdet-card">
-        <h3>Как ухаживать</h3>
+      <details class="gdet-card gdet-fold" open data-fold>
+        <summary><h3>Как ухаживать</h3></summary>
         <ul class="gdet-care">
           {info.care.map((c) => <li>{c}</li>)}
         </ul>
-      </div>
+      </details>
     </div>
     {
       info.sizes && (
-        <div class="gdet-sizes">
-          <h3>
-            Таблица размеров{info.sizes.todo && <small class="gdet-todo">уточняйте у менеджера</small>}
-          </h3>
+        <details class="gdet-sizes gdet-fold" open data-fold>
+          <summary>
+            <h3>
+              Таблица размеров{info.sizes.todo && <small class="gdet-todo">уточняйте у менеджера</small>}
+            </h3>
+          </summary>
           <div class="table-wrap">
             <table class="price-table">
               <thead>
@@ -82,11 +84,28 @@ const { info, productName } = Astro.props;
               </tbody>
             </table>
           </div>
-        </div>
+        </details>
       )
     }
   </div>
 </section>
+
+<script is:inline>
+  // «Как ухаживать» and the size chart are always open on a computer; on a phone they start folded (tap to open).
+  // Runs right after the markup, before the first paint, so nothing jumps.
+  (function () {
+    var m = matchMedia('(max-width: 760px)');
+    document.querySelectorAll('[data-fold]').forEach(function (d) {
+      if (m.matches) d.open = false;
+      d.querySelector('summary').addEventListener('click', function (e) {
+        if (!m.matches) e.preventDefault();
+      });
+      m.addEventListener('change', function (e) {
+        d.open = !e.matches;
+      });
+    });
+  })();
+</script>
 
 <style>
   .gdet-grid {
@@ -180,12 +199,144 @@ const { info, productName } = Astro.props;
   .gdet-sizes {
     margin-top: 28px;
   }
+  /* on a computer the summary looks like a plain heading */
+  .gdet-fold > summary {
+    display: block;
+    list-style: none;
+    cursor: default;
+  }
+  .gdet-fold > summary::-webkit-details-marker {
+    display: none;
+  }
   @media (max-width: 900px) {
     .gdet-grid {
       grid-template-columns: 1fr;
     }
     .gdet-colors {
       grid-template-columns: 1fr 1fr;
+    }
+  }
+  /* phone: tighter cards, colours in two columns, specs as «name — value» rows, care tips and size chart folded */
+  @media (max-width: 760px) {
+    .gdet {
+      padding-block: 32px;
+    }
+    .gdet .section-head {
+      margin-bottom: 14px;
+    }
+    .gdet .section-head .eyebrow {
+      margin-bottom: 6px;
+    }
+    .gdet-grid {
+      gap: 10px;
+    }
+    .gdet-card {
+      padding: 14px 16px;
+      border-radius: 22px;
+    }
+    .gdet-card h3,
+    .gdet-sizes h3 {
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+    .gdet-colors {
+      gap: 6px 10px;
+    }
+    .gdet-colors li {
+      gap: 8px;
+      font-size: 0.9rem;
+    }
+    .gdet-swatch {
+      width: 22px;
+      height: 22px;
+      border-radius: 7px;
+    }
+    .gdet-specs {
+      gap: 0;
+    }
+    .gdet-specs div {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: 10px;
+      align-items: baseline;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .gdet-specs div:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+    .gdet-specs dt {
+      font-size: 0.78rem;
+    }
+    .gdet-specs dd {
+      font-size: 0.86rem;
+      line-height: 1.35;
+    }
+    .gdet-todo {
+      margin-left: 6px;
+      font-size: 0.68rem;
+    }
+    .gdet-care {
+      gap: 6px;
+    }
+    .gdet-care li {
+      font-size: 0.86rem;
+      padding-left: 18px;
+    }
+    .gdet-fold > summary {
+      position: relative;
+      padding-right: 32px;
+      cursor: pointer;
+    }
+    .gdet-fold > summary::after {
+      content: '+';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      width: 26px;
+      height: 26px;
+      margin-top: -13px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      border: 1.5px solid var(--ink);
+      font-weight: 700;
+      line-height: 1;
+    }
+    .gdet-fold[open] > summary::after {
+      content: '−';
+    }
+    .gdet-fold:not([open]) > summary h3 {
+      margin-bottom: 0;
+    }
+    .gdet-sizes {
+      margin-top: 10px;
+      padding: 14px 16px;
+      border-radius: 22px;
+      background: var(--card);
+      border: 1.5px solid var(--line);
+    }
+    .gdet-sizes h3 {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px 0;
+    }
+    .gdet-sizes .table-wrap {
+      border-radius: 14px;
+    }
+    .gdet-sizes .price-table {
+      min-width: 0;
+      font-size: 0.86rem;
+    }
+    .gdet-sizes .price-table th,
+    .gdet-sizes .price-table td {
+      padding: 7px 10px;
+    }
+    .gdet-sizes .price-table thead th {
+      white-space: normal;
+      font-size: 0.72rem;
+      vertical-align: bottom;
     }
   }
 </style>

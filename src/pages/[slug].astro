@@ -69,7 +69,7 @@ const related = page.related.map((r) => services.find((s) => s.slug === r)).filt
           {page.highlights.map((h) => <li><Icon name="check" size={18} /> {h}</li>)}
         </ul>
         <div class="shero-actions">
-          <a class="btn btn-magenta" href="#calc"><Icon name="calc" size={20} /> Рассчитать стоимость</a>
+          <a class="btn btn-magenta" href="#calc"><Icon name="calc" size={20} /> <span>Рассчитать<span class="shero-long"> стоимость</span></span></a>
           <button type="button" class="btn btn-ghost" data-order>Отправить макет</button>
         </div>
       </div>
@@ -96,7 +96,7 @@ const related = page.related.map((r) => services.find((s) => s.slug === r)).filt
                 <p class="eyebrow">Калькулятор</p>
                 <h2 id="calc-h">Посчитайте свой вариант</h2>
               </div>
-              <p>Выберите цвет, размеры принтов и количество — цена пересчитается сразу. Несколько принтов: самый дорогой по полной цене, следующий −30%, остальные −50%.</p>
+              <p class="calc-sub">Выберите цвет, размеры принтов и количество — цена пересчитается сразу. Несколько принтов: самый дорогой по полной цене, следующий −30%, остальные −50%.</p>
             </div>
             <Calculator client:visible category="textile" product={garment.productId} hideCategories lockProduct />
           </div>
@@ -300,6 +300,130 @@ const related = page.related.map((r) => services.find((s) => s.slug === r)).filt
       max-width: 340px;
       justify-self: center;
       padding: 12px;
+    }
+  }
+  /* ---- phone: compact first screen. Text and photo share one grid (shero-text becomes «contents»):
+     breadcrumbs, title, then the lead with a small photo on the right, chips in one scrolling line, two buttons in a row */
+  @media (max-width: 760px) {
+    .shero {
+      padding-block: 14px 22px;
+    }
+    .shero-grid {
+      grid-template-columns: minmax(0, 1fr) 112px;
+      gap: 12px 14px;
+      align-items: start;
+    }
+    .shero-text {
+      display: contents;
+    }
+    .shero-text > :global(.crumbs),
+    .shero-text h1,
+    .shero-chips,
+    .shero-actions {
+      grid-column: 1 / -1;
+    }
+    .shero-text > :global(.crumbs) {
+      order: 1;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .shero-text > :global(.crumbs) :global(ol) {
+      flex-wrap: nowrap;
+      white-space: nowrap;
+      font-size: 0.78rem;
+    }
+    .shero-text h1 {
+      order: 2;
+      font-size: clamp(1.7rem, 7.6vw, 2.1rem);
+    }
+    .lead {
+      order: 3;
+      grid-column: 1;
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+    .shero-media {
+      order: 4;
+      grid-column: 2;
+      grid-row: 3;
+      max-width: none;
+      justify-self: stretch;
+      padding: 0 0 12px;
+    }
+    .shero-frame,
+    .shero-frame img {
+      border-radius: 20px 20px 20px 48px;
+    }
+    .shero-dot {
+      display: none;
+    }
+    .shero-price {
+      right: -4px;
+      bottom: 0;
+      padding: 5px 9px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+    }
+    .shero-price::before {
+      display: none;
+    }
+    .shero-chips {
+      order: 5;
+      flex-wrap: nowrap;
+      gap: 6px;
+      overflow-x: auto;
+      margin-inline: calc(var(--gutter) * -1);
+      padding-inline: var(--gutter);
+      scrollbar-width: none;
+    }
+    .shero-chips::-webkit-scrollbar,
+    .shero-text > :global(.crumbs)::-webkit-scrollbar {
+      display: none;
+    }
+    .shero-chips li {
+      flex: none;
+      gap: 4px;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+    .shero-chips :global(svg) {
+      width: 14px;
+      height: 14px;
+    }
+    .shero-actions {
+      order: 6;
+      flex-wrap: nowrap;
+      gap: 8px;
+    }
+    .shero-actions .btn {
+      flex: 1 1 0;
+      min-height: 46px;
+      padding: 0 12px;
+      gap: 6px;
+      font-size: 0.92rem;
+      white-space: nowrap;
+    }
+    .shero-actions .btn :global(svg) {
+      width: 18px;
+      height: 18px;
+    }
+    .shero-long {
+      display: none;
+    }
+    .calc-sec {
+      border-radius: 28px;
+      padding-block: 28px 32px;
+    }
+    .calc-sec .section-head {
+      margin-bottom: 16px;
+    }
+    .calc-sec .section-head .eyebrow {
+      margin-bottom: 6px;
+    }
+    .calc-sub {
+      display: none;
     }
   }
 </style>

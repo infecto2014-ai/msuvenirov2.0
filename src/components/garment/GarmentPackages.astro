@@ -24,7 +24,7 @@ const items = info.packages.map((pk) => {
         <p class="eyebrow">Популярное</p>
         <h2 id="gpk-h">Готовые варианты с ценой</h2>
       </div>
-      <p>Цена указана за готовое изделие вместе с печатью. Свой вариант — в калькуляторе выше.</p>
+      <p class="gpk-sub">Цена указана за готовое изделие вместе с печатью. Свой вариант — в калькуляторе выше.</p>
     </div>
     <ul class="gpk-grid">
       {
@@ -111,18 +111,66 @@ const items = info.packages.map((pk) => {
     color: var(--muted);
     letter-spacing: 0;
   }
-  @media (max-width: 560px) {
+  /* phone: a carousel of compact cards (short photo, small price), the section is tighter */
+  @media (max-width: 760px) {
+    .gpk {
+      padding-block: 32px;
+    }
+    .gpk .section-head {
+      margin-bottom: 14px;
+      gap: 6px;
+    }
+    .gpk .section-head .eyebrow {
+      margin-bottom: 6px;
+    }
+    .gpk-sub {
+      display: none;
+    }
     .gpk-grid {
       display: flex;
+      gap: 10px;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
+      scroll-padding-inline: var(--gutter);
       margin-inline: calc(var(--gutter) * -1);
       padding: 0 var(--gutter) 8px;
       scrollbar-width: none;
     }
+    .gpk-grid::-webkit-scrollbar {
+      display: none;
+    }
     .gpk-card {
-      flex: 0 0 72%;
-      scroll-snap-align: center;
+      flex: 0 0 min(220px, 62%);
+      scroll-snap-align: start;
+      border-radius: 22px;
+    }
+    .gpk-card img {
+      aspect-ratio: 16 / 10;
+    }
+    .gpk-body {
+      gap: 2px;
+      padding: 10px 12px 12px;
+    }
+    .gpk-body h3 {
+      font-size: 0.95rem;
+    }
+    .gpk-note {
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+    .gpk-price {
+      margin-bottom: 8px;
+      padding-top: 8px;
+      gap: 4px;
+      font-size: 1.1rem;
+    }
+    .gpk-price small {
+      font-size: 0.72rem;
+    }
+    .gpk-body .btn {
+      min-height: 38px;
+      padding: 0 16px;
+      font-size: 0.85rem;
     }
   }
 </style>
