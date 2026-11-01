@@ -3,6 +3,12 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import Calculator from '@/components/islands/Calculator';
+import PrintZones from '@/components/islands/PrintZones';
+import GarmentPackages from '@/components/garment/GarmentPackages.astro';
+import GarmentDetails from '@/components/garment/GarmentDetails.astro';
+import Reviews from '@/components/Reviews.astro';
+import { garmentBySlug } from '@/data/garments';
+import { reviews as allReviews } from '@/data/reviews';
 import PriceTables from '@/components/PriceTables.astro';
 import ServiceBlocks from '@/components/ServiceBlocks.astro';
 import PortfolioGrid from '@/components/PortfolioGrid.astro';
@@ -32,6 +38,13 @@ const crumbs = [
   { name: page.name, href: page.slug },
 ];
 const allPrices = cat.products.flatMap((p) => [p.fromPrice]);
+// Garment pages (футболки, худи, шопперы, кепки) get their own layout: ready options, print-zone scheme,
+// prices of this product only, details of the blank, reviews about it.
+const garment = garmentBySlug(page.slug);
+const garmentProduct = garment ? findProduct('textile', garment.productId) : undefined;
+const garmentReviews = garment?.reviewKeywords.length
+  ? allReviews.filter((r) => garment.reviewKeywords.some((k) => r.text.toLowerCase().includes(k))).length
+  : 0;
 const related = page.related.map((r) => services.find((s) => s.slug === r)).filter(Boolean) as ServicePage[];
 ---
 
@@ -73,36 +86,69 @@ const related = page.related.map((r) => services.find((s) => s.slug === r)).filt
     </div>
   </section>
 
+  {
+    garment && garmentProduct ? (
+      <>
+        <GarmentPackages info={garment} productName={garmentProduct.name} />
+        <section id="calc" class="section calc-sec" aria-labelledby="zones-h">
+          <div class="wrap">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Конструктор</p>
+                <h2 id="zones-h">Где и какого размера напечатаем</h2>
+              </div>
+              <p>Нажмите на место на изделии и выберите размер принта — цена посчитается сразу. Несколько принтов: самый дорогой по полной цене, следующий −30%, остальные −50%.</p>
+            </div>
+            <PrintZones client:visible productId={garment.productId} silhouette={garment.silhouette} />
+          </div>
+        </section>
+        <section class="section prices-sec" aria-labelledby="prices-h">
+          <div class="wrap">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">Прайс</p>
+                <h2 id="prices-h">Цены: {garmentProduct.name.toLowerCase()} с печатью</h2>
+              </div>
+              <a class="btn btn-ghost btn-sm" href="/pechat-na-odezhde">Другая одежда →</a>
+            </div>
+            <PriceTables categoryId="textile" productIds={[garment.productId]} />
+          </div>
+        </section>
+      </>
+    ) : (
   <section id="calc" class="section calc-sec" aria-labelledby="calc-h">
-    <div class="wrap">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Калькулятор</p>
-          <h2 id="calc-h">Сколько стоит — посчитайте сами</h2>
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Калькулятор</p>
+            <h2 id="calc-h">Сколько стоит — посчитайте сами</h2>
+          </div>
+          <p>Цена меняется сразу. Добавьте позицию в смету или отправьте заявку — менеджер подтвердит стоимость и сроки.</p>
         </div>
-        <p>Цена меняется сразу. Добавьте позицию в смету или отправьте заявку — менеджер подтвердит стоимость и сроки.</p>
+        <Calculator client:visible category={page.calcCategory} product={page.calcProduct} hideCategories={!isCorporate} />
       </div>
-      <Calculator client:visible category={page.calcCategory} product={page.calcProduct} hideCategories={!isCorporate} />
-    </div>
-  </section>
-
-  <section class="section prices-sec" aria-labelledby="prices-h">
-    <div class="wrap">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Прайс</p>
-          <h2 id="prices-h">Цены: {cat.name.toLowerCase()}</h2>
+    </section>
+  
+    <section class="section prices-sec" aria-labelledby="prices-h">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Прайс</p>
+            <h2 id="prices-h">Цены: {cat.name.toLowerCase()}</h2>
+          </div>
+          <a class="btn btn-ghost btn-sm" href="/price">Весь прайс-лист →</a>
         </div>
-        <a class="btn btn-ghost btn-sm" href="/price">Весь прайс-лист →</a>
+        <PriceTables categoryId={page.calcCategory} />
       </div>
-      <PriceTables categoryId={page.calcCategory} />
-    </div>
-  </section>
-
+    </section>
+    )
+  }
   <ServiceBlocks blocks={page.blocks} />
 
+  {garment && garmentProduct && <GarmentDetails info={garment} productName={garmentProduct.name} />}
   <PortfolioGrid tags={page.portfolioTags} title={`Примеры: ${page.name.toLowerCase()}`} />
 
+  {garment && garmentReviews > 0 && <Reviews keywords={garment.reviewKeywords} title={`Отзывы: ${page.name.toLowerCase()}`} />}
   <FaqSection items={page.faq} title={`Вопросы: ${page.name.toLowerCase()}`} />
 
   {
