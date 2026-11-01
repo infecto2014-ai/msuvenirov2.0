@@ -428,6 +428,18 @@ export default function Calculator({ category, product, only, hideCategories, lo
                 ))}
               </div>
             )}
+            {!quote.next && !quote.error && prod.qty.individualAbove && ladder.length > 1 && sel.qty >= ladder[ladder.length - 1].from && (
+              // the best price is reached: tell about larger runs (clothing: more than 50 pcs is priced individually)
+              <button type="button" class="calc-boost calc-boost-ink" data-order={`Индивидуальный расчёт: ${prod.name}, больше ${max} шт`}>
+                <span class="calc-boost-pct mono">{max}+</span>
+                <span class="calc-boost-text">
+                  <span>
+                    Это лучшая цена. Нужно <b>больше {max} шт</b>? Цену рассчитаем индивидуально
+                  </span>
+                  <small>Нажмите, чтобы отправить заявку — менеджер посчитает ваш тираж</small>
+                </span>
+              </button>
+            )}
             {quote.next &&
               !quote.error &&
               (() => {

@@ -384,6 +384,13 @@
   transform: translate(-2px, -2px);
   box-shadow: 6px 6px 0 var(--ink);
 }
+.calc-boost-ink {
+  background: var(--ink);
+  box-shadow: 4px 4px 0 var(--m);
+}
+.calc-boost-ink:hover {
+  box-shadow: 6px 6px 0 var(--m);
+}
 .calc-boost-pct {
   flex: none;
   display: grid;
