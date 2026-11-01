@@ -32,15 +32,27 @@ const items = slugs
 
 {
   items.length > 0 && (
-    <nav class="also wrap" aria-label="С этим заказывают">
-      <span class="also-title mono">С этим заказывают</span>
+    <nav class="also wrap" aria-label="С этим заказывают" data-also>
+      <div class="also-head">
+        <span class="also-title">С этим заказывают</span>
+        <span class="also-arrows">
+          <button type="button" class="also-arrow" data-dir="-1" aria-label="Назад">
+            ←
+          </button>
+          <button type="button" class="also-arrow" data-dir="1" aria-label="Вперёд">
+            →
+          </button>
+        </span>
+      </div>
       <ul class="also-list">
-        {items.map((it) => (
+        {items.map((it, i) => (
           <li>
-            <a href={it.href}>
-              <img src={it.img} alt="" width="40" height="40" loading="lazy" decoding="async" />
-              <span>{it.name}</span>
-              <small class="mono">от {rub(it.from)}</small>
+            <a href={it.href} class={`also-card also-${['c', 'm', 'y'][i % 3]}`}>
+              <span class="also-img">
+                <img src={it.img} alt="" width="160" height="160" loading="lazy" decoding="async" />
+              </span>
+              <span class="also-name">{it.name}</span>
+              <span class="also-price mono">от {rub(it.from)}</span>
             </a>
           </li>
         ))}
@@ -49,72 +61,147 @@ const items = slugs
   )
 }
 
+<script>
+  // arrows scroll the carousel by about one card; they hide when the row fits or at the ends
+  for (const nav of document.querySelectorAll<HTMLElement>('[data-also]')) {
+    const list = nav.querySelector<HTMLElement>('.also-list')!;
+    const [prev, next] = nav.querySelectorAll<HTMLButtonElement>('.also-arrow');
+    const update = () => {
+      prev.disabled = list.scrollLeft < 4;
+      next.disabled = list.scrollLeft + list.clientWidth > list.scrollWidth - 4;
+      nav.classList.toggle('fits', list.scrollWidth <= list.clientWidth + 4);
+    };
+    for (const b of [prev, next]) {
+      b.addEventListener('click', () => {
+        const card = list.querySelector('li');
+        list.scrollBy({ left: Number(b.dataset.dir) * ((card?.clientWidth ?? 200) + 14) * 2, behavior: 'smooth' });
+      });
+    }
+    list.addEventListener('scroll', update, { passive: true });
+    addEventListener('resize', update);
+    update();
+  }
+</script>
+
 <style>
   .also {
+    margin-top: 28px;
+  }
+  .also-head {
     display: flex;
     align-items: center;
-    gap: 14px;
-    margin-top: 18px;
+    justify-content: space-between;
+    margin-bottom: 14px;
   }
   .also-title {
-    flex: none;
-    font-size: 0.72rem;
+    font-weight: 900;
+    font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+    letter-spacing: -0.02em;
+  }
+  .also-arrows {
+    display: flex;
+    gap: 8px;
+  }
+  .also.fits .also-arrows {
+    visibility: hidden;
+  }
+  .also-arrow {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1.5px solid var(--ink);
+    background: var(--card);
+    font: inherit;
+    font-size: 1.1rem;
     font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--muted);
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  .also-arrow:hover:not(:disabled) {
+    background: var(--y);
+  }
+  .also-arrow:disabled {
+    opacity: 0.3;
+    cursor: default;
   }
   .also-list {
     list-style: none;
     margin: 0;
-    padding: 2px 2px 6px;
+    padding: 4px 4px 10px;
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+    gap: 14px;
     overflow-x: auto;
+    scroll-snap-type: x mandatory;
     scrollbar-width: none;
   }
-  .also-list a {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 4px 14px 4px 4px;
-    border-radius: 999px;
+  .also-list::-webkit-scrollbar {
+    display: none;
+  }
+  .also-list li {
+    flex: 0 0 200px;
+    scroll-snap-align: start;
+  }
+  .also-card {
+    display: grid;
+    gap: 4px;
+    padding: 12px 12px 16px;
+    border-radius: 24px 24px 24px 8px;
     background: var(--card);
     border: 1.5px solid var(--line);
     color: var(--ink);
     text-decoration: none;
-    white-space: nowrap;
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: border-color 0.2s ease, transform 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
-  .also-list a:hover {
-    border-color: var(--ink);
-    transform: translateY(-2px);
+  .also-card:hover {
+    color: var(--ink);
+    transform: translateY(-3px);
+    box-shadow: 5px 5px 0 var(--tone);
   }
-  .also-list img {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
+  .also-c { --tone: var(--c); --soft: var(--c-soft); }
+  .also-m { --tone: var(--m); --soft: var(--m-soft); }
+  .also-y { --tone: var(--y); --soft: var(--y-soft); }
+  .also-img {
+    display: block;
+    aspect-ratio: 1;
+    margin-bottom: 8px;
+    border-radius: 18px;
+    overflow: clip;
+    background: var(--soft);
+  }
+  .also-img img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    background: var(--paper-2);
+    mix-blend-mode: multiply;
+    transition: transform 0.3s ease;
   }
-  .also-list small {
-    font-size: 0.74rem;
-    color: var(--m);
+  .also-card:hover .also-img img {
+    transform: scale(1.06);
+  }
+  .also-name {
+    font-weight: 800;
+    font-size: 1.1rem;
+  }
+  .also-price {
+    justify-self: start;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--soft);
+    font-size: 0.85rem;
     font-weight: 700;
   }
   @media (max-width: 760px) {
-    .also {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 8px;
-    }
     .also-list {
-      flex-wrap: nowrap;
       margin-inline: calc(var(--gutter) * -1);
       padding-inline: var(--gutter);
+      scroll-padding-inline: var(--gutter);
+    }
+    .also-list li {
+      flex-basis: 150px;
+    }
+    .also-arrows {
+      display: none;
     }
   }
 </style>
