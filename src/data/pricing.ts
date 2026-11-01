@@ -404,7 +404,7 @@ const textile: Category = {
     garment({
       id: 'tshirt-kids',
       name: 'Футболка детская',
-      short: '160–180 г/м²',
+      short: '100% хлопок, размеры 98–164',
       image: '/img/showcase/tshirt.webp',
       blank: tiers([1, 5, 20], [750, 550, 500]),
       formats: ['a6', 'a5', 'a4'],
