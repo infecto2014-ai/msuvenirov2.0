@@ -411,7 +411,7 @@
   border-top: 1.5px dashed rgba(255, 252, 245, 0.25);
 }
 
-.calc-sum div {
+.calc-sum > div {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
@@ -422,14 +422,24 @@
   color: #c9c3b6;
 }
 
+.calc-sum dt {
+  flex: none;
+}
+
 .calc-sum dd {
   margin: 0;
+  white-space: nowrap;
   font-weight: 700;
   font-size: 1.25rem;
 }
 
+.calc-total {
+  flex-wrap: wrap;
+}
+
 .calc-total dd {
-  font-size: clamp(1.9rem, 3.4vw, 2.5rem);
+  margin-left: auto;
+  font-size: clamp(1.7rem, 3vw, 2.5rem);
   color: var(--y);
   letter-spacing: -0.03em;
 }
@@ -557,4 +567,9 @@
   .calc-result {
     position: static;
   }
+}
+
+.calc-from {
+  font-size: 0.55em;
+  font-weight: 600;
 }

@@ -23,6 +23,8 @@ interface Props {
   only?: string[];
   /** hide the category switcher (landing pages) */
   hideCategories?: boolean;
+  /** only the preselected product: no product switcher (garment pages) */
+  lockProduct?: boolean;
   /** heading level text shown above the calculator */
   title?: string;
 }
@@ -87,12 +89,13 @@ const describe = (p: Product, s: Selection): string => {
   return parts.join(' · ');
 };
 
-export default function Calculator({ category, product, only, hideCategories, title }: Props) {
+export default function Calculator({ category, product, only, hideCategories, lockProduct, title }: Props) {
   const cats: Category[] = useMemo(() => (only ? categories.filter((c) => only.includes(c.id)) : categories), [only]);
   const [catId, setCatId] = useState(() => findCategory(category ?? '')?.id ?? cats[0].id);
   const cat = findCategory(catId) ?? cats[0];
   const [prodId, setProdId] = useState(() => cat.products.find((p) => p.id === product)?.id ?? cat.products[0].id);
   const prod = cat.products.find((p) => p.id === prodId) ?? cat.products[0];
+  const showProducts = cat.products.length > 1 && !lockProduct;
   const [sel, setSel] = useState<Selection>(() => defaultSelection(prod));
   const [qtyText, setQtyText] = useState(String(sel.qty));
   const [toast, setToast] = useState('');
@@ -192,7 +195,7 @@ export default function Calculator({ category, product, only, hideCategories, ti
 
       <div class="calc-grid">
         <div class="calc-config">
-          {cat.products.length > 1 && (
+          {showProducts && (
             <fieldset class="calc-group">
               <legend class="calc-legend">
                 <span class="calc-step">1</span> Изделие
@@ -223,7 +226,7 @@ export default function Calculator({ category, product, only, hideCategories, ti
           {(prod.options ?? []).map((g, gi) => (
             <fieldset class="calc-group" key={`${prod.id}-${g.id}`}>
               <legend class="calc-legend">
-                <span class="calc-step">{gi + (cat.products.length > 1 ? 2 : 1)}</span> {g.label}
+                <span class="calc-step">{gi + (showProducts ? 2 : 1)}</span> {g.label}
               </legend>
               <div class="calc-chips">
                 {g.choices.map((c) => {
@@ -372,7 +375,7 @@ export default function Calculator({ category, product, only, hideCategories, ti
               <div class="calc-total">
                 <dt>Итого за {sel.qty.toLocaleString('ru-RU')} шт</dt>
                 <dd class="mono">
-                  {quote.from ? 'от ' : ''}
+                  {quote.from && <small class="calc-from">от </small>}
                   {rub(quote.total)}
                 </dd>
               </div>

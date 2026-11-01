@@ -69,8 +69,8 @@ export interface GarmentInfo {
   slug: string;
   /** product id inside the 'textile' calculator category (src/data/pricing.ts) */
   productId: string;
-  /** which silhouette the print-zone configurator draws (src/data/printZones.ts) */
-  silhouette: 'tshirt' | 'hoodie' | 'shopper' | 'cap';
+  /** silhouette type for the future print constructor (owner builds it separately) */
+  silhouette?: 'tshirt' | 'hoodie' | 'shopper' | 'cap';
   /** ready-made orders with a turnkey price computed from pricing.ts */
   packages: {
     title: string;

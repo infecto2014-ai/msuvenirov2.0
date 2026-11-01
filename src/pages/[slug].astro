@@ -3,7 +3,6 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import Calculator from '@/components/islands/Calculator';
-import PrintZones from '@/components/islands/PrintZones';
 import GarmentPackages from '@/components/garment/GarmentPackages.astro';
 import GarmentDetails from '@/components/garment/GarmentDetails.astro';
 import Reviews from '@/components/Reviews.astro';
@@ -90,16 +89,16 @@ const related = page.related.map((r) => services.find((s) => s.slug === r)).filt
     garment && garmentProduct ? (
       <>
         <GarmentPackages info={garment} productName={garmentProduct.name} />
-        <section id="calc" class="section calc-sec" aria-labelledby="zones-h">
+        <section id="calc" class="section calc-sec" aria-labelledby="calc-h">
           <div class="wrap">
             <div class="section-head">
               <div>
-                <p class="eyebrow">Конструктор</p>
-                <h2 id="zones-h">Где и какого размера напечатаем</h2>
+                <p class="eyebrow">Калькулятор</p>
+                <h2 id="calc-h">Посчитайте свой вариант</h2>
               </div>
-              <p>Нажмите на место на изделии и выберите размер принта — цена посчитается сразу. Несколько принтов: самый дорогой по полной цене, следующий −30%, остальные −50%.</p>
+              <p>Выберите цвет, размеры принтов и количество — цена пересчитается сразу. Несколько принтов: самый дорогой по полной цене, следующий −30%, остальные −50%.</p>
             </div>
-            <PrintZones client:visible productId={garment.productId} silhouette={garment.silhouette} />
+            <Calculator client:visible category="textile" product={garment.productId} hideCategories lockProduct />
           </div>
         </section>
         <section class="section prices-sec" aria-labelledby="prices-h">
