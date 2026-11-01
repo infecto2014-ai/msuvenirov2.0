@@ -62,3 +62,34 @@ export interface Review {
   /** stars on the platform, 1–5 */
   rating?: number;
 }
+
+/** Extra content for a garment landing page (футболки, худи, шопперы, бейсболки) — src/data/garments.ts */
+export interface GarmentInfo {
+  /** service page slug this belongs to, e.g. "/pechat-na-futbolkah" */
+  slug: string;
+  /** product id inside the 'textile' calculator category (src/data/pricing.ts) */
+  productId: string;
+  /** which silhouette the print-zone configurator draws (src/data/printZones.ts) */
+  silhouette: 'tshirt' | 'hoodie' | 'shopper' | 'cap';
+  /** ready-made orders with a turnkey price computed from pricing.ts */
+  packages: {
+    title: string;
+    /** short description, e.g. "белая или чёрная, принт А4 на груди" */
+    note: string;
+    qty: number;
+    /** calculator options for this product, e.g. { color: 'white', print1: 'a4', print2: 'a3' } */
+    options: Record<string, string>;
+    /** image path under /public */
+    img: string;
+  }[];
+  /** colours of the blank in stock */
+  colors: { name: string; hex: string; note?: string }[];
+  /** facts about the blank: fabric, density, sizes… todo=true → owner must confirm, shown as «уточняйте» */
+  specs: { label: string; value: string; todo?: boolean }[];
+  /** size chart, optional */
+  sizes?: { columns: string[]; rows: string[][]; todo?: boolean };
+  /** care tips for the printed item (3–5 short lines) */
+  care: string[];
+  /** lowercase word stems to pick matching reviews, e.g. ['футболк'] */
+  reviewKeywords: string[];
+}

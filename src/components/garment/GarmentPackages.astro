@@ -1,0 +1,126 @@
+---
+// «Готовые варианты» on a garment page: ready orders with a turnkey price computed from pricing.ts.
+import { defaultSelection, findProduct, rub, type Selection } from '@/data/pricing';
+import type { GarmentInfo } from '@/data/types';
+
+interface Props {
+  info: GarmentInfo;
+  productName: string;
+}
+const { info, productName } = Astro.props;
+const product = findProduct('textile', info.productId)!;
+const items = info.packages.map((pk) => {
+  const base = defaultSelection(product);
+  const sel: Selection = { ...base, qty: pk.qty, options: { ...base.options, print2: 'none', print3: 'none', ...pk.options } };
+  const q = product.quote(sel);
+  return { ...pk, unit: q.unit, total: q.total, from: q.from };
+});
+---
+
+<section class="section gpk" aria-labelledby="gpk-h">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Готовые варианты</p>
+        <h2 id="gpk-h">Что чаще всего заказывают</h2>
+      </div>
+      <p>Цена — за {productName.toLowerCase()} вместе с печатью. Другие места и размеры принта — в схеме ниже.</p>
+    </div>
+    <ul class="gpk-grid">
+      {
+        items.map((it) => {
+          const label = `${it.title} (${it.note}), ${it.qty} шт — ${it.from ? 'от ' : ''}${rub(it.total)}`;
+          return (
+            <li class="gpk-card">
+              <img src={it.img} alt={it.title} width="320" height="240" loading="lazy" decoding="async" />
+              <div class="gpk-body">
+                <h3>{it.title}</h3>
+                <p class="gpk-note">
+                  {it.note} · {it.qty} шт
+                </p>
+                <p class="gpk-price mono">
+                  {it.from && <small>от</small>}
+                  {rub(it.total)}
+                  {it.qty > 1 && <small>{rub(it.unit)} / шт</small>}
+                </p>
+                <button type="button" class="btn btn-sm btn-magenta" data-order={label}>
+                  Заказать
+                </button>
+              </div>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .gpk-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 16px;
+  }
+  .gpk-card {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    border-radius: var(--radius-l);
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    overflow: clip;
+  }
+  .gpk-card img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    background: var(--paper-2);
+  }
+  .gpk-body {
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: 4px;
+    padding: 14px 16px 18px;
+  }
+  .gpk-body h3 {
+    font-size: 1.08rem;
+  }
+  .gpk-note {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .gpk-price {
+    margin: 6px 0 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+  .gpk-price small {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0;
+  }
+  @media (max-width: 560px) {
+    .gpk-grid {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      margin-inline: calc(var(--gutter) * -1);
+      padding: 0 var(--gutter) 8px;
+      scrollbar-width: none;
+    }
+    .gpk-card {
+      flex: 0 0 72%;
+      scroll-snap-align: center;
+    }
+  }
+</style>

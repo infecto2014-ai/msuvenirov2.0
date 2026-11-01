@@ -6,9 +6,13 @@ interface Props {
   more?: boolean;
   /** on phones show reviews as a sideways carousel (off on the full reviews page) */
   scroll?: boolean;
+  /** only reviews that mention one of these lowercase word stems, e.g. ['футболк'] */
+  keywords?: string[];
+  title?: string;
 }
-const { limit = 6, more = true, scroll = true } = Astro.props;
-const list = reviews.slice(0, limit);
+const { limit = 6, more = true, scroll = true, keywords, title = 'Что говорят клиенты' } = Astro.props;
+const matching = keywords?.length ? reviews.filter((r) => keywords.some((k) => r.text.toLowerCase().includes(k))) : reviews;
+const list = matching.slice(0, limit);
 const tones = ['var(--c-soft)', 'var(--m-soft)', 'var(--y-soft)'];
 const fmt = (n: number) => n.toLocaleString('ru-RU', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 ---
@@ -18,7 +22,7 @@ const fmt = (n: number) => n.toLocaleString('ru-RU', { minimumFractionDigits: 1,
     <div class="section-head">
       <div>
         <p class="eyebrow">Отзывы</p>
-        <h2 id="rev-h">Что говорят клиенты</h2>
+        <h2 id="rev-h">{title}</h2>
       </div>
       <p>Оценки на площадках, где клиенты оставляют отзывы после заказа. Нажмите, чтобы прочитать все отзывы.</p>
     </div>

@@ -4,10 +4,12 @@ import { findCategory, type PriceTable } from '@/data/pricing';
 
 interface Props {
   categoryId: string;
+  /** show only these products (ids); omit for the whole category */
+  productIds?: string[];
   /** heading level for product names */
   level?: 'h3' | 'h4';
 }
-const { categoryId, level = 'h3' } = Astro.props;
+const { categoryId, productIds, level = 'h3' } = Astro.props;
 const cat = findCategory(categoryId);
 const Heading = level;
 
@@ -15,7 +17,7 @@ const Heading = level;
 type Block = { title?: string; table: PriceTable };
 const blocks: Block[] = [];
 let merged: PriceTable | null = null;
-for (const p of cat?.products ?? []) {
+for (const p of (cat?.products ?? []).filter((x) => !productIds || productIds.includes(x.id))) {
   if (!p.table) continue;
   if (p.table.columns.length === 1 && p.table.columns[0] === 'Цена') {
     if (!merged) {

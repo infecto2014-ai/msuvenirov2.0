@@ -1,0 +1,184 @@
+---
+// «Изделие»: colours in stock, facts about the blank, size chart, care tips.
+// Facts marked todo are not confirmed by the owner yet — shown with «уточняйте».
+import type { GarmentInfo } from '@/data/types';
+
+interface Props {
+  info: GarmentInfo;
+  productName: string;
+}
+const { info, productName } = Astro.props;
+---
+
+<section class="section gdet" aria-labelledby="gdet-h">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Изделие</p>
+        <h2 id="gdet-h">{productName}: цвета, ткань, размеры</h2>
+      </div>
+    </div>
+    <div class="gdet-grid">
+      <div class="gdet-card">
+        <h3>Цвета в наличии</h3>
+        <ul class="gdet-colors">
+          {
+            info.colors.map((c) => (
+              <li>
+                <span class="gdet-swatch" style={`--sw:${c.hex}`} aria-hidden="true" />
+                <span>
+                  {c.name}
+                  {c.note && <small>{c.note}</small>}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="gdet-card">
+        <h3>Характеристики</h3>
+        <dl class="gdet-specs">
+          {
+            info.specs.map((s) => (
+              <div>
+                <dt>{s.label}</dt>
+                <dd>
+                  {s.value}
+                  {s.todo && <small class="gdet-todo">уточняйте</small>}
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+      <div class="gdet-card">
+        <h3>Как ухаживать</h3>
+        <ul class="gdet-care">
+          {info.care.map((c) => <li>{c}</li>)}
+        </ul>
+      </div>
+    </div>
+    {
+      info.sizes && (
+        <div class="gdet-sizes">
+          <h3>
+            Таблица размеров{info.sizes.todo && <small class="gdet-todo">уточняйте у менеджера</small>}
+          </h3>
+          <div class="table-wrap">
+            <table class="price-table">
+              <thead>
+                <tr>
+                  {info.sizes.columns.map((c) => (
+                    <th scope="col">{c}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {info.sizes.rows.map((r) => (
+                  <tr>
+                    {r.map((cell, i) => (i === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .gdet-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .gdet-card {
+    padding: 22px;
+    border-radius: var(--radius-l);
+    background: var(--card);
+    border: 1.5px solid var(--line);
+  }
+  .gdet-card h3,
+  .gdet-sizes h3 {
+    margin-bottom: 14px;
+    font-size: 1.1rem;
+  }
+  .gdet-colors,
+  .gdet-care {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+  .gdet-colors li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .gdet-colors small {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .gdet-swatch {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--sw);
+    border: 1.5px solid var(--line-strong);
+  }
+  .gdet-specs {
+    margin: 0;
+    display: grid;
+    gap: 10px;
+  }
+  .gdet-specs div {
+    display: grid;
+    gap: 2px;
+  }
+  .gdet-specs dt {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .gdet-specs dd {
+    margin: 0;
+    font-weight: 600;
+  }
+  .gdet-todo {
+    margin-left: 8px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--y-soft);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+  .gdet-care li {
+    position: relative;
+    padding-left: 22px;
+    font-size: 0.94rem;
+    color: var(--ink-2);
+  }
+  .gdet-care li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 0.5em;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--m);
+  }
+  .gdet-sizes {
+    margin-top: 28px;
+  }
+  @media (max-width: 900px) {
+    .gdet-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
