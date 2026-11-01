@@ -6,40 +6,66 @@ import Reviews from '@/components/Reviews.astro';
 import FaqSection from '@/components/FaqSection.astro';
 import ContactBlock from '@/components/ContactBlock.astro';
 import Icon from '@/components/Icon.astro';
-import { categoryFrom, findProduct, rub } from '@/data/pricing';
+import { categoryFrom, defaultSelection, findProduct, rub, type Selection } from '@/data/pricing';
 import { generalFaq } from '@/data/faq';
 import { site } from '@/data/site';
 import { faqPage } from '@/lib/schema';
 
 const tiles = [
-  { href: '/pechat-na-futbolkah', title: 'Футболки и худи', text: 'футболка с печатью, от 1 шт', img: '/img/showcase/tshirt.webp', cat: 'textile', tone: 'c', size: 'xl', from: findProduct('textile', 'tshirt-unisex')!.fromPrice },
-  { href: '/pechat-na-kruzhkah', title: 'Кружки', text: 'белые, хамелеон, золото', img: '/img/showcase/colored-mugs.webp', cat: 'mugs', tone: 'm', size: 'tall' },
-  { href: '/znachki', title: 'Значки', text: 'закатные и на цанге', img: '/img/showcase/keychains.webp', cat: 'badges', tone: 'y' },
-  { href: '/vizitki', title: 'Визитки', text: 'одно- и двусторонние', img: '/img/showcase/business-cards.webp', cat: 'cards', tone: 'c' },
-  { href: '/pechat-na-kepkah', title: 'Бейсболки и шопперы', text: 'печать логотипа', img: '/img/showcase/cap.webp', cat: 'textile', tone: 'y', from: findProduct('textile', 'shopper')!.fromPrice },
-  { href: '/kalendari', title: 'Календари', text: 'квартальные, настенные, домики', img: '/img/showcase/stationery.webp', cat: 'calendars', tone: 'm' },
-  { href: '/nakleyki', title: '3D-стикеры', text: 'объёмные, с эпоксидной смолой', img: '/img/showcase/stickers-3d.webp', cat: 'stickers', tone: 'c' },
-  { href: '/fotopodarki', title: 'Фотоподарки', text: 'подушки, пазлы, магниты', img: '/img/showcase/pillow.webp', cat: 'gifts', tone: 'y' },
+  { href: '/pechat-na-futbolkah', title: 'Печать на футболках и худи', text: 'от 1 шт, на нашей футболке или на вашей', img: '/img/showcase/tshirt.webp', alt: 'Футболки с печатью логотипа', cat: 'textile', tone: 'c', size: 'xl', from: findProduct('textile', 'tshirt-unisex')!.fromPrice },
+  { href: '/pechat-na-kruzhkah', title: 'Печать на кружках', text: 'белые, хамелеон, золото', img: '/img/showcase/colored-mugs.webp', alt: 'Цветные кружки с печатью', cat: 'mugs', tone: 'm', size: 'tall' },
+  { href: '/znachki', title: 'Значки', text: 'закатные и на цанге', img: '/img/showcase/keychains.webp', alt: 'Значки и брелоки с логотипом', cat: 'badges', tone: 'y' },
+  { href: '/vizitki', title: 'Визитки', text: 'одно- и двусторонние', img: '/img/showcase/business-cards.webp', alt: 'Визитки', cat: 'cards', tone: 'c' },
+  { href: '/pechat-na-kepkah', title: 'Бейсболки и шопперы', text: 'печать логотипа', img: '/img/showcase/cap.webp', alt: 'Бейсболка с логотипом', cat: 'textile', tone: 'y', from: findProduct('textile', 'shopper')!.fromPrice },
+  { href: '/kalendari', title: 'Календари', text: 'квартальные, настенные, домики', img: '/img/showcase/stationery.webp', alt: 'Календари и полиграфия', cat: 'calendars', tone: 'm' },
+  { href: '/nakleyki', title: '3D-стикеры', text: 'объёмные, с эпоксидной смолой', img: '/img/showcase/stickers-3d.webp', alt: 'Объёмные 3D-стикеры', cat: 'stickers', tone: 'c' },
+  { href: '/fotopodarki', title: 'Фотоподарки', text: 'подушки, пазлы, магниты', img: '/img/showcase/pillow.webp', alt: 'Подушка с фото', cat: 'gifts', tone: 'y' },
 ];
 
-const techs = [
-  { name: 'DTF', text: 'Яркая плёночная печать на любой ткани и любом цвете. Стойкость 50+ стирок.', tone: 'c' },
-  { name: 'Сублимация', text: 'Краска уходит в волокна: кружки, светлая синтетика, фотоподарки.', tone: 'm' },
-  { name: 'УФ-печать', text: 'Печать на твёрдых поверхностях: стекло, металл, пластик, дерево.', tone: 'y' },
-  { name: 'Шелкография', text: 'Выгодно для больших тиражей одноцветных логотипов и надписей.', tone: 'k' },
+/** Popular orders with a ready "turnkey" price — always computed from pricing.ts, never typed by hand. */
+const quoteOf = (cat: string, id: string, qty?: number, options: Selection['options'] = {}) => {
+  const p = findProduct(cat, id)!;
+  const base = defaultSelection(p);
+  const sel: Selection = { ...base, qty: qty ?? base.qty, options: { ...base.options, ...options } };
+  return { qty: sel.qty, ...p.quote(sel) };
+};
+const popular = [
+  { title: 'Футболка с вашим принтом', note: 'белая или чёрная, принт А4', img: '/portfolio/portfolio-21.webp', calc: 'textile:tshirt-unisex', q: quoteOf('textile', 'tshirt-unisex', 1) },
+  { title: 'Кружка с фото', note: 'белая, 330 мл', img: '/portfolio/portfolio-2.webp', calc: 'mugs:mug', q: quoteOf('mugs', 'mug', 1) },
+  { title: 'Ёлочный шар с фото', note: 'к Новому году, 70 мм', img: '/portfolio/portfolio-6.webp', calc: 'gifts:ball', q: quoteOf('gifts', 'ball', 1) },
+  { title: 'Визитки', note: '90×50 мм, бумага 300 г', img: '/img/showcase/business-cards.webp', calc: 'cards:business-cards', q: quoteOf('cards', 'business-cards', 96) },
+  { title: 'Значки с логотипом', note: 'закатные, 38 мм', img: '/img/showcase/keychains.webp', calc: 'badges:badge-roll', q: quoteOf('badges', 'badge-roll', 25) },
+  { title: 'Футболки для команды', note: 'с логотипом А4', img: '/portfolio/portfolio-20.webp', calc: 'textile:tshirt-unisex', q: quoteOf('textile', 'tshirt-unisex', 20) },
 ];
+
+const occasions = [
+  { when: '31 декабря', title: 'Новый год', text: 'Ёлочные шары с фото, календари, подарки коллегам и клиентам', href: '/fotopodarki', tone: 'c' },
+  { when: '23 февраля', title: 'День защитника', text: 'Футболки и худи с надписью, кружки, значки', href: '/pechat-na-futbolkah', tone: 'y' },
+  { when: '8 марта', title: 'Женский день', text: 'Кружки с фото, подушки, пазлы, шопперы', href: '/pechat-na-kruzhkah', tone: 'm' },
+  { when: 'в любой день', title: 'День рождения', text: 'Футболка или худи с фото именинника, фотоподарки', href: '/pechat-na-hudi', tone: 'c' },
+  { when: 'май–июнь', title: 'Выпускной', text: 'Футболки для класса, значки, медали и вымпелы', href: '/znachki', tone: 'y' },
+  { when: 'круглый год', title: 'Для компании', text: 'Мерч для сотрудников, форма, подарки партнёрам', href: '/korporativnym-klientam', tone: 'm' },
+];
+
+const terms = [
+  { icon: 'clock', title: 'Сроки', text: 'Обычно 1–3 рабочих дня. Срочные заказы — без наценки, успеем к нужной дате.' },
+  { icon: 'calc', title: 'Оплата', text: 'Частным лицам — предоплата 50%, остаток при получении. Организациям — счёт без НДС и закрывающие документы.' },
+  { icon: 'upload', title: 'Макет', text: 'Перед печатью присылаем макет на согласование. Простой макет соберём бесплатно.' },
+  { icon: 'check', title: 'Гарантия', text: 'Если брак по нашей вине — переделаем бесплатно.' },
+] as const;
 
 const clients = [
+  { src: '/img/clients/client-1.webp', alt: 'Россети' },
+  { src: '/img/clients/client-6.webp', alt: 'БФУ имени И. Канта' },
   { src: '/img/clients/client-2.webp', alt: 'Арле Парк' },
+  { src: '/img/clients/client-3.webp', alt: 'Fonbet Кубок России' },
   { src: '/img/clients/client-4.webp', alt: 'Папаша Беппе' },
-  { src: '/img/clients/client-5.webp', alt: 'Неудержимые' },
-  { src: '/img/clients/client-3.webp', alt: 'Fonbet' },
-  { src: '/img/clients/client-1.webp', alt: 'Логотип клиента' },
-  { src: '/img/clients/client-6.webp', alt: 'Логотип клиента' },
-  { src: '/img/clients/client-7.webp', alt: 'Логотип клиента' },
-  { src: '/img/clients/client-8.webp', alt: 'Логотип клиента' },
+  { src: '/img/clients/client-5.webp', alt: 'Бойцовский клуб «Неудержимые»' },
+  { src: '/img/clients/client-7.webp', alt: 'Systech' },
+  { src: '/img/clients/client-8.webp', alt: 'Музей мороженого' },
 ];
 
+const fmt1 = (n: number) => n.toLocaleString('ru-RU', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
 ---
 
@@ -84,6 +110,70 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     </div>
   </section>
 
+  <!-- TRUST STRIP -->
+  <section class="trust" aria-label="Рейтинг и факты">
+    <div class="wrap trust-row">
+      {
+        site.ratings.map((r) => (
+          <a class="trust-item" href={r.href} target="_blank" rel="noopener">
+            <span class="trust-star" aria-hidden="true">★</span>
+            <b class="mono">{fmt1(r.rating)}</b>
+            <span>
+              {r.platform} · {r.count} {r.unit}
+            </span>
+          </a>
+        ))
+      }
+      <span class="trust-item">
+        <b class="mono">{new Date().getFullYear() - site.founded}+</b>
+        <span>лет работаем в ТЦ «Экватор»</span>
+      </span>
+    </div>
+  </section>
+
+  <!-- POPULAR -->
+  <section class="section popular" aria-labelledby="pop-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Популярное</p>
+          <h2 id="pop-h">Что чаще всего заказывают</h2>
+        </div>
+        <p>Цена указана за готовое изделие с печатью. Другой тираж или размер — в калькуляторе.</p>
+      </div>
+      <ul class="pop-grid">
+        {
+          popular.map((it) => {
+            const label = `${it.title}, ${it.q.qty} шт — ${rub(it.q.total)}`;
+            return (
+              <li class="pop">
+                <img src={it.img} alt={it.title} width="320" height="320" loading="lazy" decoding="async" />
+                <div class="pop-body">
+                  <h3>{it.title}</h3>
+                  <p class="pop-note">
+                    {it.note} · {it.q.qty} шт
+                  </p>
+                  <p class="pop-price mono">
+                    {rub(it.q.total)}
+                    {it.q.qty > 1 && <small>{rub(it.q.unit)} / шт</small>}
+                  </p>
+                  <div class="pop-actions">
+                    <button type="button" class="btn btn-sm btn-magenta" data-order={label}>
+                      Заказать
+                    </button>
+                    <a class="pop-edit" href={`/price?calc=${it.calc}#calc`}>
+                      Другой тираж →
+                    </a>
+                  </div>
+                </div>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+  </section>
+
   <!-- CATEGORIES -->
   <section class="section cats" aria-labelledby="cats-h">
     <div class="wrap">
@@ -101,10 +191,10 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
             return (
               <a class={`tile tile-${t.tone} ${t.size ? `tile-${t.size}` : ''}`} href={t.href}>
                 <span class="tile-img">
-                  <img src={t.img} alt="" width="320" height="320" loading="lazy" decoding="async" />
+                  <img src={t.img} alt={t.alt} width="320" height="320" loading="lazy" decoding="async" />
                 </span>
                 <span class="tile-body">
-                  <span class="tile-title">{t.title}</span>
+                  <h3 class="tile-title">{t.title}</h3>
                   <span class="tile-text">{t.text}</span>
                   <span class="tile-price mono">от {rub(f)}</span>
                 </span>
@@ -121,7 +211,36 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     </div>
   </section>
 
-  <HowItWorks />
+  <PortfolioGrid />
+
+  <!-- OCCASIONS -->
+  <section class="section occasions" aria-labelledby="occ-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Идеи подарков</p>
+          <h2 id="occ-h">Подарки к празднику</h2>
+        </div>
+        <p>Подскажем, что подарить, и сделаем к нужной дате. Перед праздниками лучше написать заранее.</p>
+      </div>
+      <ul class="occ-grid">
+        {
+          occasions.map((o) => (
+            <li>
+              <a class={`occ occ-${o.tone}`} href={o.href}>
+                <span class="occ-when mono">{o.when}</span>
+                <h3>{o.title}</h3>
+                <p>{o.text}</p>
+                <span class="occ-arrow" aria-hidden="true">→</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <Reviews />
 
   <!-- B2B -->
   <section class="section" aria-labelledby="b2b-h">
@@ -130,14 +249,14 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
         <div class="b2b-cmyk" aria-hidden="true"><span></span><span></span><span></span></div>
         <div class="b2b-text">
           <p class="eyebrow b2b-eyebrow">Компаниям</p>
-          <h2 id="b2b-h">Мерч, форма и подарки с логотипом</h2>
+          <h2 id="b2b-h">Мерч и подарки с логотипом для компаний</h2>
           <p>
             Футболки для команды, подарки партнёрам, календари к Новому году, значки и брелоки для мероприятий. Работаем по счёту без НДС, с закрывающими документами. Соберём смету
             на весь набор и подготовим макеты.
           </p>
           <div class="b2b-actions">
             <a class="btn btn-yellow" href="/korporativnym-klientam">Условия для компаний</a>
-            <button type="button" class="btn b2b-ghost" data-order>Запросить расчёт</button>
+            <button type="button" class="btn b2b-ghost" data-order="Запрос расчёта для компании">Запросить расчёт</button>
           </div>
         </div>
         <ul class="b2b-list">
@@ -146,40 +265,80 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
           <li><span class="mono">03</span> Макет по вашему брендбуку — согласуем до печати</li>
           <li><span class="mono">04</span> Образец перед тиражом</li>
         </ul>
-      </div>
-      <div class="clients" aria-label="Нам доверяют">
-        {clients.map((c) => <img src={c.src} alt={c.alt} width="140" height="70" loading="lazy" />)}
+        <div class="clients">
+          <p class="clients-title mono">Нам доверяют</p>
+          <ul class="clients-row">
+            {
+              clients.map((c) => (
+                <li>
+                  <img src={c.src} alt={c.alt} title={c.alt} width="140" height="70" loading="lazy" decoding="async" />
+                </li>
+              ))
+            }
+          </ul>
+        </div>
       </div>
     </div>
   </section>
 
-  <PortfolioGrid />
+  <HowItWorks />
 
-  <!-- TECHNOLOGIES -->
-  <section class="section techs" aria-labelledby="tech-h">
+  <!-- TERMS -->
+  <section class="terms-band" aria-labelledby="terms-h">
     <div class="wrap">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Технологии</p>
-          <h2 id="tech-h">Подберём печать под материал</h2>
-        </div>
-        <p>Мы не навязываем одну технологию: для каждой вещи — свой способ, чтобы принт выглядел ярко и держался долго.</p>
-      </div>
-      <div class="tech-grid">
+      <h2 id="terms-h" class="sr-only">Сроки, оплата и гарантия</h2>
+      <ul class="terms">
         {
-          techs.map((t, i) => (
-            <article class={`tech tech-${t.tone}`}>
-              <span class="tech-plate mono">{['C', 'M', 'Y', 'K'][i]}</span>
-              <h3>{t.name}</h3>
+          terms.map((t) => (
+            <li>
+              <span class="terms-icon"><Icon name={t.icon} size={22} /></span>
+              <h3>{t.title}</h3>
               <p>{t.text}</p>
-            </article>
+            </li>
           ))
         }
-      </div>
+      </ul>
     </div>
   </section>
 
-  <Reviews />
+  <!-- SEO TEXT -->
+  <section class="section seo-text" aria-labelledby="seo-h">
+    <div class="wrap">
+      <h2 id="seo-h">Печать на заказ в Калининграде</h2>
+      <div class="seo-cols">
+        <div>
+          <h3>Печать на футболках и худи</h3>
+          <p>
+            Печатаем на <a href="/pechat-na-futbolkah">футболках</a>, <a href="/pechat-na-hudi">худи</a>, свитшотах, поло и
+            <a href="/pechat-na-shopperah">шопперах</a> от одной штуки. Основная технология — DTF: яркий принт на ткани любого цвета, который выдерживает больше 50 стирок. Можно
+            принести свою вещь или выбрать нашу — белые и чёрные футболки всегда в наличии.
+          </p>
+        </div>
+        <div>
+          <h3>Печать на кружках и фотоподарки</h3>
+          <p>
+            Делаем <a href="/pechat-na-kruzhkah">кружки с фото</a> и надписью: белые, цветные, хамелеон. Из фотографий получаются
+            <a href="/fotopodarki">подушки, пазлы, ёлочные шары</a> и <a href="/magnity">магниты</a> — подарок, который можно забрать в тот же день или к нужной дате.
+          </p>
+        </div>
+        <div>
+          <h3>Мерч и сувениры с логотипом для компаний</h3>
+          <p>
+            Для компаний Калининграда делаем корпоративный мерч: футболки и поло с логотипом, <a href="/pechat-na-kepkah">бейсболки</a>,
+            <a href="/znachki">значки</a>, <a href="/breloki">брелоки</a>, подарки сотрудникам и партнёрам. Работаем по счёту без НДС, перед тиражом согласуем макет и
+            показываем образец. Подробнее — в разделе <a href="/korporativnym-klientam">для компаний</a>.
+          </p>
+        </div>
+        <div>
+          <h3>Полиграфия и широкоформатная печать</h3>
+          <p>
+            Печатаем <a href="/vizitki">визитки</a>, <a href="/poligrafiya">листовки и блокноты</a>, <a href="/kalendari">календари</a> — квартальные, настенные и
+            карманные. Для вывесок и витрин — <a href="/shirokoformatnaya-pechat">широкоформатная печать</a> на плёнке и баннере. Нет макета — поможем его сделать.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <FaqSection items={homeFaq} />
 
@@ -468,8 +627,8 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   }
   .b2b-cmyk {
     position: absolute;
-    right: -60px;
-    top: -60px;
+    right: -150px;
+    top: -190px;
     width: 280px;
     height: 280px;
     z-index: -1;
@@ -528,73 +687,259 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     color: var(--y);
     font-size: 0.85rem;
   }
+  /* clients — inside the dark b2b block, so white logos are visible too */
   .clients {
+    grid-column: 1 / -1;
+    padding-top: 28px;
+    border-top: 1px solid rgba(255, 252, 245, 0.14);
+  }
+  .clients-title {
+    margin: 0 0 16px;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #cfc8ba;
+  }
+  .clients-row {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     align-items: center;
-    gap: 18px 36px;
-    margin-top: 32px;
+    gap: 18px 34px;
   }
-  .clients img {
-    height: 52px;
+  .clients-row img {
+    display: block;
+    height: 48px;
     width: auto;
     max-width: 140px;
     object-fit: contain;
-    filter: grayscale(1) contrast(1.1);
-    opacity: 0.7;
-    transition: filter 0.2s ease, opacity 0.2s ease;
+    opacity: 0.85;
+    transition: opacity 0.2s ease;
   }
-  .clients img:hover {
-    filter: none;
+  .clients-row img:hover {
     opacity: 1;
   }
 
-  /* ---------------- technologies */
-  .tech-grid {
+  /* ---------------- trust strip */
+  .trust {
+    padding-block: 4px 8px;
+  }
+  .trust-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .trust-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  a.trust-item:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+  .trust-item b {
+    font-size: 1.05rem;
+  }
+  .trust-item span:last-child {
+    color: var(--muted);
+  }
+  .trust-star {
+    color: #f5b700;
+    font-size: 1.1rem;
+  }
+
+  /* ---------------- popular */
+  .pop-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
   }
-  .tech {
-    position: relative;
-    padding: 26px 24px;
+  .pop {
+    display: grid;
+    grid-template-columns: 132px minmax(0, 1fr);
+    gap: 16px;
+    align-items: center;
+    padding: 14px;
     border-radius: var(--radius-l);
     background: var(--card);
     border: 1.5px solid var(--line);
-    overflow: clip;
   }
-  .tech-plate {
+  .pop img {
+    width: 132px;
+    height: 132px;
+    object-fit: cover;
+    border-radius: 20px 20px 20px 56px;
+    background: var(--paper-2);
+  }
+  .pop-body {
+    display: grid;
+    gap: 4px;
+    justify-items: start;
+  }
+  .pop h3 {
+    font-size: 1.08rem;
+  }
+  .pop-note {
+    margin: 0;
+    font-size: 0.84rem;
+    color: var(--muted);
+  }
+  .pop-price {
+    margin: 4px 0 6px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .pop-price small {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0;
+  }
+  .pop-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 14px;
+  }
+  .pop-edit {
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* ---------------- occasions */
+  .occ-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .occ {
+    --bg: var(--c-soft);
+    position: relative;
+    display: grid;
+    gap: 6px;
+    height: 100%;
+    padding: 22px 56px 22px 22px;
+    border-radius: 28px 28px 28px 8px;
+    background: var(--bg);
+    color: var(--ink);
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .occ:hover {
+    color: var(--ink);
+    transform: translateY(-3px);
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+  .occ-m { --bg: var(--m-soft); }
+  .occ-y { --bg: var(--y-soft); }
+  .occ-when {
+    justify-self: start;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--card);
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+  .occ h3 {
+    font-size: 1.25rem;
+  }
+  .occ p {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--ink-2);
+  }
+  .occ-arrow {
+    position: absolute;
+    right: 18px;
+    bottom: 18px;
     display: grid;
     place-items: center;
-    width: 52px;
-    height: 52px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
     font-weight: 700;
-    font-size: 1.3rem;
-    margin-bottom: 20px;
   }
-  .tech-c .tech-plate { background: var(--c); color: #fff; }
-  .tech-m .tech-plate { background: var(--m); color: #fff; }
-  .tech-y .tech-plate { background: var(--y); color: var(--ink); }
-  .tech-k .tech-plate { background: var(--ink); color: var(--paper); }
-  .tech h3 {
+
+  /* ---------------- terms */
+  .terms-band {
+    padding-bottom: var(--section);
+  }
+  .terms {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .terms li {
+    display: grid;
+    align-content: start;
+    gap: 8px;
+    padding: 20px;
+    border-radius: var(--radius-l);
+    border: 1.5px dashed var(--line-strong);
+  }
+  .terms-icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--y);
+  }
+  .terms h3 {
+    font-size: 1.1rem;
+  }
+  .terms p {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--ink-2);
+  }
+
+  /* ---------------- seo text */
+  .seo-text h2 {
+    margin-bottom: 24px;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+  }
+  .seo-cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 48px;
+  }
+  .seo-cols h3 {
     margin-bottom: 8px;
+    font-size: 1.1rem;
   }
-  .tech p {
+  .seo-cols p {
+    margin: 0;
     color: var(--ink-2);
     font-size: 0.96rem;
-  }
-  .tech::after {
-    content: '';
-    position: absolute;
-    right: -30px;
-    top: -30px;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background-image: radial-gradient(circle, rgba(22, 20, 27, 0.14) 1.3px, transparent 1.5px);
-    background-size: 10px 10px;
+    line-height: 1.6;
   }
 
   @media (max-width: 1020px) {
@@ -608,40 +953,132 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     .bento {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-    .tech-grid {
+    .b2b {
+      grid-template-columns: 1fr;
+    }
+    .pop-grid,
+    .occ-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-    .b2b {
+    .terms {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 700px) {
+    .seo-cols {
       grid-template-columns: 1fr;
     }
   }
   @media (max-width: 560px) {
+    /* phones: two small tiles per row, the big one full width */
     .bento {
-      grid-template-columns: 1fr;
-      grid-auto-rows: minmax(170px, auto);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-rows: auto;
+      gap: 10px;
     }
-    .tile-xl,
-    .tile-tall {
-      grid-column: auto;
+    .tile {
+      min-height: 168px;
+      padding: 14px;
+      gap: 8px;
+    }
+    .tile-xl {
+      grid-column: 1 / -1;
       grid-row: auto;
-      min-height: 280px;
+      min-height: 220px;
+    }
+    .tile-tall {
+      grid-row: auto;
     }
     .tile-img,
-    .tile-xl .tile-img,
     .tile-tall .tile-img {
-      width: 150px;
-      right: 14px;
-      top: 14px;
+      width: 96px;
+      right: -10px;
+      top: -10px;
     }
-    .tile-xl .tile-img,
-    .tile-tall .tile-img {
-      width: 180px;
+    .tile-xl .tile-img {
+      width: 170px;
+      right: 8px;
+      top: 8px;
+    }
+    .tile-body {
+      padding-right: 0;
+    }
+    .tile-title,
+    .tile-xl .tile-title {
+      font-size: 1.05rem;
     }
     .tile-xl .tile-title {
-      font-size: 1.6rem;
+      font-size: 1.45rem;
+      max-width: 60%;
     }
-    .tech-grid {
+    .tile-text {
+      font-size: 0.8rem;
+    }
+    .tile-price {
+      font-size: 0.8rem;
+      padding: 4px 10px;
+    }
+    .tile-arrow {
+      display: none;
+    }
+    /* phones: popular items scroll sideways, picture on top */
+    .pop-grid {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      margin-inline: calc(var(--gutter) * -1);
+      padding: 0 var(--gutter) 8px;
+      scrollbar-width: none;
+    }
+    .pop {
+      flex: 0 0 72%;
+      scroll-snap-align: center;
       grid-template-columns: 1fr;
+      align-content: start;
+      gap: 10px;
+      padding: 12px;
+    }
+    .pop img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 4 / 3;
+    }
+    .tile {
+      min-height: 184px;
+    }
+    .bento > .tile:last-child:nth-child(even) {
+      grid-column: 1 / -1;
+    }
+    .occ-grid {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .occ {
+      padding: 16px 52px 16px 16px;
+    }
+    .terms {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .terms li {
+      grid-template-columns: 42px 1fr;
+      column-gap: 14px;
+      padding: 14px;
+    }
+    .terms-icon {
+      grid-row: span 2;
+    }
+    .trust-item {
+      padding: 8px 12px;
+      font-size: 0.82rem;
+    }
+    .clients-row {
+      gap: 14px 22px;
+    }
+    .clients-row img {
+      height: 38px;
+      max-width: 110px;
     }
     .hero-facts {
       display: grid;

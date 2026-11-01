@@ -66,9 +66,12 @@ export default function OrderDialog() {
       reachGoal('order_open');
     };
     const onClick = (e: MouseEvent) => {
-      const el = (e.target as HTMLElement).closest('[data-order]');
+      const el = (e.target as HTMLElement).closest<HTMLElement>('[data-order]');
       if (el) {
         e.preventDefault();
+        // buttons like «Заказать» on a popular item pass what is ordered: data-order="Футболка с принтом А4, 1 шт"
+        const what = el.dataset.order?.trim();
+        if (what) setComment((c) => (c.includes(what) ? c : c ? `${c}\n${what}` : what));
         onOpen();
       }
     };

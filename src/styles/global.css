@@ -36,7 +36,7 @@
 
   --wrap: 1240px;
   --gutter: clamp(16px, 4vw, 40px);
-  --section: clamp(56px, 8vw, 112px);
+  --section: clamp(44px, 6.5vw, 96px);
 
   color-scheme: light;
 }

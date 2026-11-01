@@ -33,7 +33,7 @@ export const localBusiness = () => ({
     },
   ],
   hasMap: site.yandexMapsOrg,
-  sameAs: [site.social.vk, site.social.telegram, site.yandexMapsOrg],
+  sameAs: [site.social.vk, site.social.telegram, site.yandexMapsOrg, site.twoGis, site.avito],
 });
 
 export const website = () => ({

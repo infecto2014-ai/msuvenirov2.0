@@ -57,4 +57,8 @@ export interface Review {
   text: string;
   /** where the review comes from, e.g. "Яндекс Карты", "Авито", "2ГИС"; omit if unknown */
   source?: string;
+  /** when it was written, as shown on the platform, e.g. "июль 2026" */
+  date?: string;
+  /** stars on the platform, 1–5 */
+  rating?: number;
 }

@@ -28,6 +28,17 @@ export const site = {
     vk: 'https://vk.com/msuvenirov39',
   },
   yandexMapsOrg: 'https://yandex.ru/maps/org/105530576058',
+  twoGis: 'https://2gis.ru/kaliningrad/firm/70000001042531447/tab/reviews',
+  avito: 'https://www.avito.ru/brands/i75765968/all/predlozheniya_uslug',
+  /**
+   * Ratings on review platforms — update by hand (checked by the owner 01.11.2026).
+   * Shown as text with links; NOT put into AggregateRating markup (self-published ratings are not allowed there).
+   */
+  ratings: [
+    { platform: 'Авито', rating: 5.0, count: 84, unit: 'отзыва', href: 'https://www.avito.ru/brands/i75765968/all/predlozheniya_uslug' },
+    { platform: 'Яндекс Карты', rating: 4.9, count: 22, unit: 'оценки', href: 'https://yandex.ru/maps/org/105530576058/reviews/' },
+    { platform: '2ГИС', rating: 4.6, count: 31, unit: 'оценка', href: 'https://2gis.ru/kaliningrad/firm/70000001042531447/tab/reviews' },
+  ],
   metrikaId: 108361089,
   jivoSrc: 'https://code.jivo.ru/widget/STxub3I6lS',
 } as const;
