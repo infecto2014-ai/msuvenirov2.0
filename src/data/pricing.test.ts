@@ -50,6 +50,14 @@ describe('pricing', () => {
     expect(findProduct('textile', 'cap')!.options!.filter((g) => g.id.startsWith('print'))).toHaveLength(2);
   });
 
+  it('clothing is priced up to 50 pcs, more — individually', () => {
+    const p = findProduct('textile', 'tshirt-unisex')!;
+    expect(p.qty.max).toBe(50);
+    expect(p.table?.columns).toEqual(['1–4 шт', '5–19 шт', '20–50 шт']);
+    const { s } = sel('textile', 'tshirt-unisex', { qty: 50 });
+    expect(p.quote(s).notes.some((n) => n.includes('индивидуально'))).toBe(true);
+  });
+
   it('coloured t-shirts need at least 10 pcs', () => {
     const { p, s } = sel('textile', 'tshirt-unisex', { options: { color: 'other' }, qty: 5 });
     expect(p.quote(s).error).toBeTruthy();

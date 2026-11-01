@@ -59,6 +59,7 @@ for (const p of (cat?.products ?? []).filter((x) => !productIds || productIds.in
               </tbody>
             </table>
           </div>
+          {b.table.note && <p class="ptable-note">{b.table.note}</p>}
         </div>
       ))}
     </div>
@@ -66,6 +67,11 @@ for (const p of (cat?.products ?? []).filter((x) => !productIds || productIds.in
 }
 
 <style>
+  .ptable-note {
+    margin: 8px 4px 0;
+    font-size: 0.86rem;
+    color: var(--muted);
+  }
   .ptables {
     display: grid;
     grid-template-columns: minmax(0, 1fr);

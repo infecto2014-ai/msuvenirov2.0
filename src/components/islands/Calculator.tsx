@@ -359,7 +359,10 @@ export default function Calculator({ category, product, only, hideCategories, lo
               />
               <div class="calc-slider-scale" aria-hidden="true">
                 <span>{min.toLocaleString('ru-RU')}</span>
-                <span>{max.toLocaleString('ru-RU')}</span>
+                <span>
+                  {max.toLocaleString('ru-RU')}
+                  {prod.qty.individualAbove && ' · больше — цена индивидуально'}
+                </span>
               </div>
             </div>
             {presets && ladder.length <= 1 && (

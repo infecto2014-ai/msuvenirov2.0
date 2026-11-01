@@ -43,6 +43,8 @@ export interface QtyConfig {
   presets?: number[];
   /** with presets: from this quantity on, any amount can be ordered (presets below it) */
   freeFrom?: number;
+  /** above `max` the price is set individually (clothing: more than 50 pcs) — the last tier reads «20–50 шт» */
+  individualAbove?: boolean;
 }
 
 export interface Selection {
@@ -89,6 +91,8 @@ export interface Product {
 export interface PriceTable {
   columns: string[];
   rows: { label: string; cells: string[] }[];
+  /** small print under the table */
+  note?: string;
 }
 
 export interface Category {
@@ -130,6 +134,11 @@ export const rub = (n: number): string =>
 
 /** Labels for price tiers: exact print runs for presets, ranges for free quantities. */
 export const qtyLabels = (from: number[], qty: QtyConfig): string[] => {
+  if (qty.individualAbove) {
+    const labels = rangeLabels(from);
+    labels[labels.length - 1] = `${from[from.length - 1]}–${qty.max} шт`;
+    return labels;
+  }
   if (!qty.presets) return rangeLabels(from);
   const free = qty.freeFrom ?? Infinity;
   const ranges = rangeLabels(from);
@@ -269,6 +278,9 @@ const formatChoices = (formats: Format[], withNone: boolean): Choice[] => [
   ...formats.map((f) => ({ id: f, label: dtfPrint[f].label, hint: dtfPrint[f].size })),
 ];
 
+/** Clothing is priced up to this quantity; larger runs are quoted individually. */
+export const GARMENT_MAX = 50;
+
 function garment(args: {
   id: string;
   name: string;
@@ -338,17 +350,19 @@ function garment(args: {
     name: args.name,
     short: args.short,
     image: args.image,
-    qty: { min: 1, max: 300, default: 1 },
+    // owner, 02.11.2026: prices up to 50 pcs; more than 50 — individual price
+    qty: { min: 1, max: GARMENT_MAX, default: 1, individualAbove: true },
     options,
     fromPrice: blankMin + minPrice(dtfPrint[args.formats[0]].tiers),
     table: {
-      columns: rangeLabels([1, 5, 20]),
+      columns: qtyLabels([1, 5, 20], { min: 1, max: GARMENT_MAX, default: 1, individualAbove: true }),
       rows: [
         ...(args.blank
           ? [{ label: args.name, cells: [1, 5, 20].map((q) => `${args.blankFrom ? 'от ' : ''}${rub(tierPrice(args.blank!, q))}`) }]
           : []),
         ...args.formats.map((f) => ({ label: `+ печать DTF ${dtfPrint[f].label}`, cells: dtfPrint[f].tiers.map((t) => `+${rub(t.price)}`) })),
       ],
+      note: `Больше ${GARMENT_MAX} шт — цена рассчитывается индивидуально.`,
     },
     ladder: breakpoints,
     quote: (sel) => {
@@ -375,7 +389,7 @@ function garment(args: {
       }
       if (args.blankFrom) notes.push('Наличие и точную цену изделия уточнит менеджер.');
       if (!args.blank) notes.push('Печать на вашем изделии. Подойдут хлопок, смесовые ткани, синтетика.');
-      if (qty >= 50) notes.push('Для тиражей от 50 шт сделаем индивидуальный расчёт — отправьте заявку.');
+      if (qty >= GARMENT_MAX) notes.push(`Нужно больше ${GARMENT_MAX} шт? Цену рассчитаем индивидуально — отправьте заявку.`);
       return {
         unit,
         total: Math.round(unit * qty),
