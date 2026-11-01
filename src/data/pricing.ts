@@ -261,8 +261,8 @@ function fixed(id: string, name: string, price: number, opts: { short?: string; 
 export const dtfPrint: Record<'a6' | 'a5' | 'a4' | 'a3', { label: string; size: string; tiers: Tier[] }> = {
   a6: { label: 'А6', size: '10×15 см', tiers: tiers([1, 5, 20], [600, 350, 280]) },
   a5: { label: 'А5', size: '15×21 см', tiers: tiers([1, 5, 20], [600, 450, 330]) },
-  a4: { label: 'А4', size: '21×30 см', tiers: tiers([1, 5, 20], [800, 650, 450]) },
-  a3: { label: 'А3', size: '30×42 см', tiers: tiers([1, 5, 20], [1100, 900, 680]) },
+  a4: { label: 'А4', size: '21×28 см', tiers: tiers([1, 5, 20], [800, 650, 450]) },
+  a3: { label: 'А3', size: '28×38 см', tiers: tiers([1, 5, 20], [1100, 900, 680]) },
 };
 type Format = keyof typeof dtfPrint;
 
