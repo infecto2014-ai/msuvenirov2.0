@@ -53,6 +53,7 @@ export const serviceNav: { group: string; links: NavLink[] }[] = [
   {
     group: 'Одежда',
     links: [
+      { href: '/pechat-na-odezhde', label: 'Печать на одежде' },
       { href: '/pechat-na-futbolkah', label: 'Печать на футболках' },
       { href: '/pechat-na-hudi', label: 'Печать на худи' },
       { href: '/pechat-na-shopperah', label: 'Печать на шопперах' },
