@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'preact/hooks';
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import {
   categories,
   defaultSelection,
@@ -104,6 +104,16 @@ export default function Calculator({ category, product, only, hideCategories, lo
   const [sel, setSel] = useState<Selection>(() => defaultSelection(prod));
   const [qtyText, setQtyText] = useState(String(sel.qty));
   const [toast, setToast] = useState('');
+  // phone: the compact total bar hides while the full result panel is on screen
+  const resultRef = useRef<HTMLDivElement>(null);
+  const [resultSeen, setResultSeen] = useState(false);
+  useEffect(() => {
+    const el = resultRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+    const io = new IntersectionObserver(([e]) => setResultSeen(e.isIntersecting), { rootMargin: '0px 0px -96px 0px' });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   // read ?calc=category:product from the URL (links from cards and landing pages)
   useEffect(() => {
@@ -282,7 +292,9 @@ export default function Calculator({ category, product, only, hideCategories, lo
                         </button>
                       )}
                     </legend>
-                    <div class="calc-chips">
+                    <div
+                      class={`calc-chips${g.choices.every((c) => c.id === 'none' || c.label.length <= 3) ? ' calc-chips-short' : ''}`}
+                    >
                       {g.choices
                         .filter((c) => !(g.addable && c.id === 'none'))
                         .map((c) => {
@@ -471,10 +483,26 @@ export default function Calculator({ category, product, only, hideCategories, lo
                 );
               })()}
           </fieldset>
+
+          {/* phone only (hidden on desktop by CSS): compact total stuck above the site's bottom bar */}
+          <div class={`calc-dock${resultSeen ? ' is-off' : ''}`} aria-hidden="true">
+            <div class="calc-dock-bar">
+              <button type="button" class="calc-dock-sum" tabIndex={-1} onClick={() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })}>
+                <small>Итого за {sel.qty.toLocaleString('ru-RU')} шт</small>
+                <b class="mono">
+                  {quote.from ? 'от ' : ''}
+                  {quote.error ? '—' : rub(quote.total)}
+                </b>
+              </button>
+              <button type="button" class="btn btn-magenta" tabIndex={-1} disabled={!!quote.error} onClick={() => add(true)}>
+                Заказать
+              </button>
+            </div>
+          </div>
         </div>
 
         <aside class="calc-result" aria-live="polite">
-          <div class="calc-result-inner">
+          <div class="calc-result-inner" ref={resultRef}>
             <div class="calc-result-head">
               <span class="calc-result-name">{prod.name}</span>
               <span class="colorbar" aria-hidden="true">
