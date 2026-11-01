@@ -54,12 +54,12 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   <section class="hero">
     <div class="wrap hero-grid">
       <div class="hero-text">
-        <p class="eyebrow">Калининград · ТЦ «Экватор» · с {site.founded} года</p>
-        <h1>
-          Печать на одежде, кружках и&nbsp;сувенирах <span class="mark">от&nbsp;1&nbsp;штуки</span>
+        <p class="eyebrow">ТЦ «Экватор» · с {site.founded} года</p>
+        <h1 class="hero-title">
+          Печать на&nbsp;одежде и&nbsp;сувенирах <span class="mark">в&nbsp;Калининграде</span>
         </h1>
         <p class="lead">
-          Футболки, худи, кружки, значки, визитки и календари с вашим дизайном. Своё производство, опыт в печати больше 10 лет. Цену видно сразу — в калькуляторе.
+          Футболки, худи, кружки, значки, визитки и календари с вашим дизайном — от 1 штуки. Своё производство и больше 10 лет опыта в печати.
         </p>
         <div class="hero-actions">
           <a class="btn btn-magenta" href="#calc"><Icon name="calc" size={20} /> Рассчитать стоимость</a>
@@ -75,12 +75,11 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
       <div class="hero-collage" aria-hidden="true">
         <div class="hc hc-1"><img src="/img/showcase/tshirt.webp" alt="" width="360" height="360" fetchpriority="high" /></div>
         <div class="hc hc-2"><img src="/img/showcase/mug.webp" alt="" width="260" height="260" /></div>
-        <div class="hc hc-3"><img src="/img/showcase/keychains.webp" alt="" width="220" height="220" /></div>
-        <div class="hc hc-4"><img src="/img/showcase/cap.webp" alt="" width="200" height="200" /></div>
-        <span class="sticker hc-sticker">Срочно — часто в тот же день</span>
+        <div class="hc hc-3"><img src="/img/showcase/cap.webp" alt="" width="260" height="260" /></div>
+        <div class="hc hc-4"><img src="/img/showcase/keychains.webp" alt="" width="260" height="260" /></div>
+        <span class="sticker hc-sticker">Готово от&nbsp;1&nbsp;дня</span>
         <span class="reg hc-reg-1"></span>
         <span class="reg hc-reg-2"></span>
-        <div class="hc-dots halftone"></div>
       </div>
     </div>
   </section>
@@ -204,19 +203,28 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
 <style>
   /* ---------------- hero */
   .hero {
-    padding-block: clamp(32px, 6vw, 80px) clamp(24px, 4vw, 48px);
+    padding-block: clamp(20px, 3vw, 40px) clamp(24px, 4vw, 48px);
     overflow: clip;
   }
   .hero-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-    gap: clamp(32px, 5vw, 64px);
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: clamp(28px, 4vw, 56px);
     align-items: center;
   }
   .hero-text {
     display: grid;
-    gap: 24px;
+    gap: 20px;
     justify-items: start;
+  }
+  .hero-title {
+    font-size: clamp(2rem, 3.6vw, 3.3rem);
+    line-height: 1.06;
+    font-weight: 800;
+    max-width: 15ch;
+  }
+  .hero-text .lead {
+    max-width: 52ch;
   }
   .hero-actions {
     display: flex;
@@ -225,110 +233,85 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   }
   .hero-facts {
     list-style: none;
-    margin: 8px 0 0;
+    margin: 4px 0 0;
     padding: 0;
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 10px;
   }
   .hero-facts li {
     display: grid;
     gap: 2px;
-    padding: 14px 18px;
-    border-radius: 20px;
+    padding: 12px 16px;
+    border-radius: 18px;
     background: var(--card);
     border: 1.5px solid var(--line);
     min-width: 150px;
   }
   .hero-facts b {
     font-family: var(--mono);
-    font-size: 1.4rem;
+    font-size: 1.25rem;
     letter-spacing: -0.03em;
   }
   .hero-facts span {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     color: var(--muted);
   }
+
+  /* Collage: a neat 2×2 grid, outer corners rounded more — together they read as one rounded shape.
+     Its size is capped by the screen height so the whole first block fits on open. */
   .hero-collage {
+    --gap: 12px;
     position: relative;
-    aspect-ratio: 1 / 1.02;
-    max-width: 560px;
-    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: var(--gap);
+    width: min(100%, 500px, calc(100svh - 200px));
+    aspect-ratio: 1;
     justify-self: end;
   }
   .hc {
-    position: absolute;
+    position: relative;
+    min-height: 0;
     overflow: clip;
-    box-shadow: 0 24px 40px -24px rgba(22, 20, 27, 0.45);
+    border-radius: 26px;
+    background: var(--paper-2);
+    box-shadow: 0 20px 36px -26px rgba(22, 20, 27, 0.5);
   }
   .hc img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    mix-blend-mode: multiply;
   }
-  .hc-1 {
-    left: 0;
-    top: 6%;
-    width: 60%;
-    aspect-ratio: 1;
-    background: var(--c-soft);
-    border-radius: 48% 52% 46% 54% / 55% 45% 55% 45%;
-  }
-  .hc-2 {
-    right: 2%;
-    top: 0;
-    width: 40%;
-    aspect-ratio: 1;
-    background: var(--m-soft);
-    border-radius: 50%;
-  }
-  .hc-3 {
-    right: 0;
-    bottom: 6%;
-    width: 46%;
-    aspect-ratio: 1;
-    background: var(--y-soft);
-    border-radius: 36px 36px 120px 36px;
-  }
-  .hc-4 {
-    left: 14%;
-    bottom: 0;
-    width: 34%;
-    aspect-ratio: 1;
-    background: var(--paper-2);
-    border-radius: 120px 36px 36px 36px;
-  }
+  .hc-1 { border-top-left-radius: 96px; }
+  .hc-2 { border-top-right-radius: 96px; }
+  .hc-3 { border-bottom-left-radius: 96px; }
+  .hc-4 { border-bottom-right-radius: 96px; }
   .hc-sticker {
     position: absolute;
-    left: 38%;
-    top: 46%;
+    left: 50%;
+    top: 50%;
     z-index: 3;
-    transform: rotate(-6deg);
+    transform: translate(-50%, -50%) rotate(-4deg);
+    white-space: nowrap;
     font-size: 0.95rem;
-    max-width: 200px;
-    text-align: center;
-    line-height: 1.2;
   }
-  .hc-reg-1 {
-    position: absolute;
-    left: -4px;
-    bottom: 38%;
-    color: var(--ink);
-    opacity: 0.6;
-  }
+  .hc-reg-1,
   .hc-reg-2 {
     position: absolute;
-    right: 44%;
-    top: -2px;
     color: var(--ink);
-    opacity: 0.6;
+    opacity: 0.45;
   }
-  .hc-dots {
-    position: absolute;
-    inset: 20% 10% 10% 20%;
-    z-index: -1;
-    border-radius: 50%;
+  .hc-reg-1 {
+    left: -14px;
+    top: -14px;
+  }
+  .hc-reg-2 {
+    right: -14px;
+    bottom: -14px;
   }
 
   /* ---------------- categories (bento) */
@@ -621,7 +604,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     }
     .hero-collage {
       justify-self: center;
-      max-width: 460px;
+      width: min(100%, 440px);
     }
     .bento {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -661,10 +644,35 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     .tech-grid {
       grid-template-columns: 1fr;
     }
+    .hero-facts {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      width: 100%;
+      gap: 8px;
+    }
     .hero-facts li {
       min-width: 0;
-      flex: 1 1 140px;
+      padding: 10px 12px;
+      border-radius: 16px;
     }
+    .hero-facts b {
+      font-size: 1.05rem;
+    }
+    .hero-facts span {
+      font-size: 0.74rem;
+      line-height: 1.3;
+    }
+    .hc-reg-1,
+    .hc-reg-2 {
+      display: none;
+    }
+    .hero-collage {
+      --gap: 8px;
+    }
+    .hc-1 { border-top-left-radius: 64px; }
+    .hc-2 { border-top-right-radius: 64px; }
+    .hc-3 { border-bottom-left-radius: 64px; }
+    .hc-4 { border-bottom-right-radius: 64px; }
     .b2b {
       border-radius: 32px 32px 32px 80px;
     }
