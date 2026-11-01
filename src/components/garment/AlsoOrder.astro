@@ -1,0 +1,120 @@
+---
+// «С этим заказывают» — a slim strip of links to other products, under the calculator on garment pages.
+import { services } from '@/data/services';
+import { categoryFrom, findProduct, rub } from '@/data/pricing';
+
+interface Props {
+  slugs: string[];
+}
+const { slugs } = Astro.props;
+/** short names for the strip (the service names are «Печать на кружках» etc.) */
+const short: Record<string, string> = {
+  '/pechat-na-futbolkah': 'Футболки',
+  '/pechat-na-hudi': 'Худи',
+  '/pechat-na-kruzhkah': 'Кружки',
+  '/pechat-na-kepkah': 'Кепки',
+  '/pechat-na-shopperah': 'Шопперы',
+  '/znachki': 'Значки',
+  '/breloki': 'Брелоки',
+  '/magnity': 'Магниты',
+  '/nakleyki': '3D-стикеры',
+  '/fotopodarki': 'Фотоподарки',
+};
+const items = slugs
+  .map((slug) => services.find((s) => s.slug === slug))
+  .filter((s) => !!s)
+  .map((s) => {
+    const p = s!.calcProduct ? findProduct(s!.calcCategory, s!.calcProduct) : undefined;
+    const from = p && !p.fromUnit ? p.fromPrice : categoryFrom(s!.calcCategory).price;
+    return { href: s!.slug, name: short[s!.slug] ?? s!.name, img: s!.image, from };
+  });
+---
+
+{
+  items.length > 0 && (
+    <nav class="also wrap" aria-label="С этим заказывают">
+      <span class="also-title mono">С этим заказывают</span>
+      <ul class="also-list">
+        {items.map((it) => (
+          <li>
+            <a href={it.href}>
+              <img src={it.img} alt="" width="40" height="40" loading="lazy" decoding="async" />
+              <span>{it.name}</span>
+              <small class="mono">от {rub(it.from)}</small>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+<style>
+  .also {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 18px;
+  }
+  .also-title {
+    flex: none;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .also-list {
+    list-style: none;
+    margin: 0;
+    padding: 2px 2px 6px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .also-list a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 14px 4px 4px;
+    border-radius: 999px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    color: var(--ink);
+    text-decoration: none;
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  .also-list a:hover {
+    border-color: var(--ink);
+    transform: translateY(-2px);
+  }
+  .also-list img {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--paper-2);
+  }
+  .also-list small {
+    font-size: 0.74rem;
+    color: var(--m);
+    font-weight: 700;
+  }
+  @media (max-width: 760px) {
+    .also {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+    }
+    .also-list {
+      flex-wrap: nowrap;
+      margin-inline: calc(var(--gutter) * -1);
+      padding-inline: var(--gutter);
+    }
+  }
+</style>

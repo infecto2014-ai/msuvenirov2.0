@@ -11,7 +11,9 @@ export type ServiceBlock =
   | { kind: 'text'; title: string; paragraphs: string[] }
   | { kind: 'features'; title: string; items: { title: string; text: string }[] }
   | { kind: 'compare'; title: string; columns: string[]; rows: { label: string; values: string[] }[] }
-  | { kind: 'steps'; title: string; items: { title: string; text: string }[] };
+  | { kind: 'steps'; title: string; items: { title: string; text: string }[] }
+  /** editorial cards with a photo and a short tag, e.g. «Что чаще всего заказывают» */
+  | { kind: 'ideas'; title: string; lead?: string; items: { title: string; text: string; tag?: string; img?: string }[] };
 
 export interface ServicePage {
   /** URL path without trailing slash, e.g. "/pechat-na-futbolkah" */
@@ -83,7 +85,10 @@ export interface GarmentInfo {
     img: string;
   }[];
   /** colours of the blank in stock */
-  colors: { name: string; hex: string; note?: string }[];
+  /** colours of the blank; order=true → «другие цвета, под заказ» */
+  colors: { name: string; hex: string; note?: string; order?: boolean }[];
+  /** slugs of service pages for the «С этим заказывают» strip under the calculator */
+  alsoOrder?: string[];
   /** facts about the blank: fabric, density, sizes… todo=true → owner must confirm, shown as «уточняйте» */
   specs: { label: string; value: string; todo?: boolean }[];
   /** size chart, optional */

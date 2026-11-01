@@ -434,7 +434,7 @@ export default function Calculator({ category, product, only, hideCategories, lo
                 <span class="calc-boost-pct mono">{max}+</span>
                 <span class="calc-boost-text">
                   <span>
-                    Это лучшая цена. Нужно <b>больше {max} шт</b>? Цену рассчитаем индивидуально
+                    Нужно <b>больше {max} шт</b>? Цену рассчитаем индивидуально
                   </span>
                   <small>Нажмите, чтобы отправить заявку — менеджер посчитает ваш тираж</small>
                 </span>

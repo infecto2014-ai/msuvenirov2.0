@@ -12,6 +12,26 @@ const tones = ['var(--c-soft)', 'var(--m-soft)', 'var(--y-soft)'];
     <section class="section sblock" aria-label={b.title}>
       <div class="wrap">
         <h2 class="sblock-title">{b.title}</h2>
+        {b.kind === 'ideas' && b.lead && <p class="ideas-lead">{b.lead}</p>}
+
+        {b.kind === 'ideas' && (
+          <div class="ideas">
+            {b.items.map((it, i) => (
+              <article class={`idea${i === 0 ? ' idea-hero' : ''}`} style={`--tone:${['var(--c)', 'var(--m)', 'var(--y)'][i % 3]};--soft:${tones[i % 3]}`}>
+                {it.img && (
+                  <span class="idea-img">
+                    <img src={it.img} alt={it.title} width="320" height="320" loading="lazy" decoding="async" />
+                  </span>
+                )}
+                <div class="idea-body">
+                  {it.tag && <span class="idea-tag mono">{it.tag}</span>}
+                  <h3>{it.title}</h3>
+                  <p>{it.text}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
 
         {b.kind === 'text' && (
           <div class="sblock-text prose">
@@ -91,6 +111,128 @@ const tones = ['var(--c-soft)', 'var(--m-soft)', 'var(--y-soft)'];
     font-size: 1.08rem;
     color: var(--ink-2);
   }
+  /* ---- ideas: one big photo card + story cards with a round photo and a tag ---- */
+  .ideas-lead {
+    margin: -12px 0 24px;
+    max-width: 560px;
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+  .ideas {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr 1fr;
+    gap: 16px;
+  }
+  .idea {
+    position: relative;
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    gap: 16px;
+    align-items: start;
+    padding: 18px;
+    border-radius: 26px 26px 26px 8px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .idea:hover {
+    transform: translateY(-3px);
+    box-shadow: 5px 5px 0 var(--tone);
+  }
+  .idea-img {
+    display: block;
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    overflow: clip;
+    outline: 3px solid var(--tone);
+    outline-offset: 3px;
+  }
+  .idea-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .idea-body {
+    display: grid;
+    gap: 6px;
+    justify-items: start;
+  }
+  .idea-tag {
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--soft);
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+  .idea h3 {
+    font-size: 1.2rem;
+  }
+  .idea p {
+    margin: 0;
+    font-size: 0.93rem;
+    color: var(--ink-2);
+  }
+  /* the first story: big photo on top, spans two rows */
+  .idea-hero {
+    grid-row: span 2;
+    grid-template-columns: 1fr;
+    padding: 0;
+    overflow: clip;
+    background: var(--soft);
+    border: 0;
+  }
+  .idea-hero .idea-img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    border-radius: 0;
+    outline: 0;
+  }
+  .idea-hero .idea-body {
+    padding: 4px 22px 22px;
+  }
+  .idea-hero h3 {
+    font-size: 1.6rem;
+  }
+  .idea-hero .idea-tag {
+    background: var(--card);
+  }
+  @media (max-width: 1020px) {
+    .ideas {
+      grid-template-columns: 1fr 1fr;
+    }
+    .idea-hero {
+      grid-row: auto;
+      grid-column: 1 / -1;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: center;
+    }
+    .idea-hero .idea-img {
+      aspect-ratio: 1;
+    }
+  }
+  @media (max-width: 640px) {
+    .ideas {
+      grid-template-columns: 1fr;
+    }
+    .idea {
+      grid-template-columns: 72px 1fr;
+      padding: 14px;
+    }
+    .idea-img {
+      width: 72px;
+      height: 72px;
+    }
+    .idea-hero {
+      grid-template-columns: 1fr;
+      padding: 0;
+    }
+    .idea-hero .idea-img {
+      aspect-ratio: 4 / 3;
+    }
+  }
+
   .sblock-features {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));

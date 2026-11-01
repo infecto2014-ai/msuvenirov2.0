@@ -5,6 +5,7 @@ import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import Calculator from '@/components/islands/Calculator';
 import GarmentPackages from '@/components/garment/GarmentPackages.astro';
 import GarmentDetails from '@/components/garment/GarmentDetails.astro';
+import AlsoOrder from '@/components/garment/AlsoOrder.astro';
 import Reviews from '@/components/Reviews.astro';
 import { garmentBySlug } from '@/data/garments';
 import { reviews as allReviews } from '@/data/reviews';
@@ -99,21 +100,10 @@ const related = page.related.map((r) => services.find((s) => s.slug === r)).filt
             </div>
             <Calculator client:visible category="textile" product={garment.productId} hideCategories lockProduct />
           </div>
+          {garment.alsoOrder && <AlsoOrder slugs={garment.alsoOrder} />}
         </section>
         <GarmentPackages info={garment} productName={garmentProduct.name} />
         <GarmentDetails info={garment} productName={garmentProduct.name} />
-        <section class="section prices-sec" aria-labelledby="prices-h">
-          <div class="wrap">
-            <div class="section-head">
-              <div>
-                <p class="eyebrow">Прайс</p>
-                <h2 id="prices-h">Цены: {garmentProduct.name.toLowerCase()} с печатью</h2>
-              </div>
-              <a class="btn btn-ghost btn-sm" href="/pechat-na-odezhde">Другая одежда →</a>
-            </div>
-            <PriceTables categoryId="textile" productIds={[garment.productId]} />
-          </div>
-        </section>
       </>
     ) : (
   <section id="calc" class="section calc-sec" aria-labelledby="calc-h">

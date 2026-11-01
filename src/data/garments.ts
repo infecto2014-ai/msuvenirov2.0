@@ -46,8 +46,18 @@ export const garments: GarmentInfo[] = [
     colors: [
       { name: 'Белый', hex: '#ffffff', note: 'в наличии' },
       { name: 'Чёрный', hex: '#1b1b1d', note: 'в наличии' },
-      { name: 'Другие цвета', hex: '#d63a4a', note: 'под заказ от 10 шт' },
+      { name: 'Серый меланж', hex: '#b7b8bc', order: true },
+      { name: 'Тёмно-синий', hex: '#1f2a4d', order: true },
+      { name: 'Красный', hex: '#d0262f', order: true },
+      { name: 'Бордовый', hex: '#6d1a2a', order: true },
+      { name: 'Бутылочный', hex: '#1f4d36', order: true },
+      { name: 'Хаки', hex: '#6b6b47', order: true },
+      { name: 'Голубой', hex: '#8ec5e6', order: true },
+      { name: 'Жёлтый', hex: '#f3cf2c', order: true },
+      { name: 'Розовый', hex: '#f2a7c3', order: true },
+      { name: 'Песочный', hex: '#d8c3a0', order: true },
     ],
+    alsoOrder: ['/pechat-na-kruzhkah', '/pechat-na-hudi', '/znachki', '/pechat-na-kepkah', '/pechat-na-shopperah', '/fotopodarki'],
     specs: [
       { label: 'Модель', value: 'Унисекс' },
       { label: 'Состав', value: '100% хлопок' },
@@ -117,6 +127,7 @@ export const garments: GarmentInfo[] = [
         img: '/img/showcase/hoodie.webp',
       },
     ],
+    alsoOrder: ['/pechat-na-futbolkah', '/pechat-na-kepkah', '/znachki', '/pechat-na-kruzhkah', '/pechat-na-shopperah'],
     colors: [
       { name: 'Чёрный', hex: '#1b1b1d', note: 'уточняйте наличие' },
       { name: 'Белый', hex: '#ffffff', note: 'уточняйте наличие' },
@@ -181,6 +192,7 @@ export const garments: GarmentInfo[] = [
         img: '/portfolio/portfolio-7.webp',
       },
     ],
+    alsoOrder: ['/pechat-na-futbolkah', '/znachki', '/breloki', '/pechat-na-kruzhkah', '/nakleyki'],
     colors: [
       { name: 'Натуральный', hex: '#e9dfc9', note: 'уточняйте наличие' },
       { name: 'Белый', hex: '#ffffff', note: 'уточняйте наличие' },
@@ -233,6 +245,7 @@ export const garments: GarmentInfo[] = [
         img: '/portfolio/branded-caps.webp',
       },
     ],
+    alsoOrder: ['/pechat-na-futbolkah', '/pechat-na-hudi', '/znachki', '/pechat-na-shopperah', '/breloki'],
     colors: [
       { name: 'Чёрный', hex: '#1b1b1d', note: 'уточняйте наличие' },
       { name: 'Белый', hex: '#ffffff', note: 'уточняйте наличие' },
