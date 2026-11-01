@@ -1,0 +1,58 @@
+---
+// Demo for the owner: three ideas for the «Количество» block. Not in the menu, hidden from search.
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { VariantScale, VariantPiggy, VariantStack } from '@/components/islands/QtyVariants';
+---
+
+<BaseLayout title="Варианты блока «Количество» — черновик" description="Черновик для согласования" path="/demo-kolichestvo" noindex>
+  <section class="section">
+    <div class="wrap demo">
+      <p class="eyebrow">Черновик для согласования</p>
+      <h1 class="demo-h1">Блок «Количество»: 3 варианта</h1>
+      <p class="demo-lead">Цены настоящие — футболка унисекс с принтом А4. Подвигайте, понажимайте и выберите, какой вариант ставим во все калькуляторы.</p>
+
+      <div class="demo-item">
+        <h2>A. «Шкала с зонами»</h2>
+        <p>Один ползунок вместо трёх элементов. Шкала раскрашена по тиражам, над ползунком «ценник» с ценой за штуку — видно, где цена падает.</p>
+        <VariantScale client:visible />
+      </div>
+
+      <div class="demo-item">
+        <h2>B. «Быстрые тиражи + копилка»</h2>
+        <p>Готовые кнопки 1 / 5 / 10 / 20 / 30 / 50 с ценой за штуку под каждой, поле для своего числа. Ниже — сколько клиент экономит и сколько штук осталось до следующей цены.</p>
+        <VariantPiggy client:visible />
+      </div>
+
+      <div class="demo-item">
+        <h2>C. «Стопка»</h2>
+        <p>С каждой штукой в стопку падает маленькая футболка, ценник качается, когда цена становится ниже. Точки показывают тиражи. Самый игровой вариант.</p>
+        <VariantStack client:visible />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .demo {
+    max-width: 820px;
+  }
+  .demo-h1 {
+    font-size: clamp(1.9rem, 4vw, 2.8rem);
+    margin: 8px 0 10px;
+  }
+  .demo-lead {
+    color: var(--muted);
+    margin-bottom: 36px;
+  }
+  .demo-item {
+    margin-bottom: 44px;
+  }
+  .demo-item h2 {
+    font-size: 1.4rem;
+    margin-bottom: 6px;
+  }
+  .demo-item > p {
+    color: var(--ink-2);
+    margin: 0 0 16px;
+  }
+</style>
