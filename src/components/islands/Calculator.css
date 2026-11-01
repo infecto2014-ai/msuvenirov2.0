@@ -296,6 +296,59 @@
   border: 2.5px solid var(--ink);
 }
 
+/* stickers on the bar: «−16%» where the price per piece drops; tap to jump there */
+.calc-slider-wrap {
+  position: relative;
+}
+.calc-slider-wrap.has-stickers {
+  padding-top: 34px;
+}
+.calc-slider-wrap.two-rows {
+  padding-top: 60px;
+}
+.calc-sticker {
+  position: absolute;
+  bottom: 40px;
+  transform: translateX(-50%) rotate(-6deg);
+  padding: 3px 8px;
+  border: 1.5px solid var(--ink);
+  border-radius: 8px;
+  background: var(--card);
+  font: inherit;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--m);
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 var(--ink);
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+/* the little tail pointing to the place on the bar */
+.calc-sticker::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 1.5px;
+  height: 9px;
+  background: var(--ink);
+}
+.calc-sticker.up {
+  bottom: 66px;
+}
+.calc-sticker.up::after {
+  height: 35px;
+}
+.calc-sticker:hover {
+  transform: translateX(-50%) rotate(0deg) scale(1.08);
+}
+.calc-sticker.on {
+  background: var(--m);
+  color: #fff;
+}
+
 .calc-slider-scale {
   display: flex;
   justify-content: space-between;
