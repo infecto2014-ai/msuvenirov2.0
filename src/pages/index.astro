@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Calculator from '@/components/islands/Calculator';
 import HowItWorks from '@/components/HowItWorks.astro';
 import PortfolioGrid from '@/components/PortfolioGrid.astro';
 import Reviews from '@/components/Reviews.astro';
@@ -62,7 +61,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
           Футболки, худи, кружки, значки, визитки и календари с вашим дизайном — от 1 штуки. Своё производство и больше 10 лет опыта в печати.
         </p>
         <div class="hero-actions">
-          <a class="btn btn-magenta" href="#calc"><Icon name="calc" size={20} /> Рассчитать стоимость</a>
+          <a class="btn btn-magenta" href="/price"><Icon name="calc" size={20} /> Рассчитать стоимость</a>
           <button type="button" class="btn btn-ghost" data-order><Icon name="upload" size={20} /> Отправить макет</button>
         </div>
         <ul class="hero-facts">
@@ -119,20 +118,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
         А ещё: <a href="/breloki">брелоки</a>, <a href="/magnity">магниты</a>, <a href="/poligrafiya">листовки и блокноты</a>,
         <a href="/shirokoformatnaya-pechat">широкоформатная печать</a>, <a href="/pechat-na-hudi">худи</a>, <a href="/pechat-na-shopperah">шопперы</a>.
       </p>
-    </div>
-  </section>
-
-  <!-- CALCULATOR -->
-  <section id="calc" class="section calc-home" aria-labelledby="calc-h">
-    <div class="wrap">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Онлайн-калькулятор</p>
-          <h2 id="calc-h">Смета за минуту</h2>
-        </div>
-        <p>Выберите изделие, параметры и количество — ползунком или цифрами. Добавляйте позиции в смету и отправьте всё одной заявкой.</p>
-      </div>
-      <Calculator client:visible />
     </div>
   </section>
 
@@ -465,27 +450,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   .cats-more a {
     color: var(--ink);
     font-weight: 600;
-  }
-
-  /* ---------------- calculator band */
-  .calc-home {
-    background: var(--paper-2);
-    border-radius: 48px;
-    margin-inline: clamp(0px, 1.5vw, 20px);
-    position: relative;
-  }
-  .calc-home::before {
-    content: '';
-    position: absolute;
-    left: 24px;
-    top: 24px;
-    width: 120px;
-    height: 120px;
-    --dot: rgba(22, 20, 27, 0.12);
-    background-image: radial-gradient(circle, var(--dot) 1.4px, transparent 1.6px);
-    background-size: 12px 12px;
-    border-radius: 50%;
-    pointer-events: none;
   }
 
   /* ---------------- b2b */
