@@ -309,94 +309,54 @@
   margin-top: 12px;
 }
 
-.calc-ladder {
-  margin-top: 16px;
-  padding: 12px 14px 10px;
-  border-radius: 18px;
-  background: var(--paper-2);
-}
-
-.calc-ladder-title {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 0.74rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.calc-steps {
+/* «Ещё 2 шт — и цена на 30% дешевле»: bright hint under the slider */
+.calc-boost {
   display: flex;
-  align-items: flex-end;
-  gap: 3px;
-  max-width: 560px;
-}
-
-.calc-stair {
-  flex: 1 1 0;
-  min-width: 0;
-  display: grid;
-  justify-items: center;
-  gap: 3px;
-  padding: 0;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px 16px 12px 12px;
   border: 0;
-  background: none;
+  border-radius: 20px 20px 20px 6px;
+  background: var(--m);
+  color: #fff;
   font: inherit;
-  color: var(--ink);
+  text-align: left;
   cursor: pointer;
+  box-shadow: 4px 4px 0 var(--ink);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-
-.calc-stair-price {
-  font-family: var(--mono);
-  font-size: 0.86rem;
-  font-weight: 700;
-  white-space: nowrap;
-  color: var(--ink-2);
+.calc-boost:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--ink);
 }
-
-/* the step: its height follows the price, so the row reads as a staircase going down */
-.calc-stair-bar {
-  position: relative;
+.calc-boost-pct {
+  flex: none;
   display: grid;
   place-items: center;
-  width: 100%;
-  border-radius: 12px 12px 3px 3px;
-  background: var(--card);
-  border: 1.5px solid var(--line-strong);
-  border-bottom-width: 3px;
-  transition: background 0.2s ease, border-color 0.2s ease;
-}
-
-.calc-stair:hover .calc-stair-bar {
-  border-color: var(--ink);
-}
-
-.calc-stair.is-active .calc-stair-bar {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
   background: var(--y);
-  border-color: var(--ink);
-}
-
-.calc-stair.is-active .calc-stair-price {
   color: var(--ink);
-}
-
-.calc-stair-save {
-  font-size: 0.66rem;
   font-weight: 800;
-  color: var(--m);
+  font-size: 1.05rem;
+  transform: rotate(-8deg);
 }
-
-.calc-stair.is-active .calc-stair-save {
-  color: var(--ink);
-}
-
-.calc-stair-qty {
-  font-size: 0.7rem;
+.calc-boost-text {
+  display: grid;
+  gap: 2px;
   font-weight: 600;
-  line-height: 1.2;
-  text-align: center;
-  color: var(--muted);
+  line-height: 1.3;
+}
+.calc-boost-text b {
+  color: var(--y);
+}
+.calc-boost-text small {
+  font-weight: 500;
+  font-size: 0.8rem;
+  opacity: 0.9;
 }
 
 /* ------------------------------------------------------------ result */
@@ -507,29 +467,6 @@
   display: flex;
   justify-content: space-between;
   gap: 12px;
-}
-
-.calc-nudge {
-  display: block;
-  width: 100%;
-  margin-top: 16px;
-  padding: 12px 14px;
-  border-radius: 14px;
-  border: 1.5px solid rgba(255, 210, 31, 0.6);
-  background: rgba(255, 210, 31, 0.1);
-  color: var(--paper);
-  text-align: left;
-  font-size: 0.92rem;
-  cursor: pointer;
-}
-
-.calc-nudge b {
-  color: var(--y);
-  font-family: var(--mono);
-}
-
-.calc-nudge:hover {
-  background: rgba(255, 210, 31, 0.2);
 }
 
 .calc-error {
