@@ -55,6 +55,7 @@ html {
 
 body {
   margin: 0;
+  overflow-x: clip; /* decorative shapes must never cause sideways scrolling */
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font);

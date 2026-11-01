@@ -9,7 +9,7 @@ const isServices = serviceNav.some((g) => g.links.some((l) => l.href === path));
 
 <header class="hdr">
   <div class="wrap hdr-row">
-    <Logo />
+    <Logo size={48} />
 
     <nav class="hdr-nav" aria-label="Основное меню">
       <div class="hdr-services">
@@ -288,7 +288,7 @@ const isServices = serviceNav.some((g) => g.links.some((l) => l.href === path));
     gap: 10px;
   }
 
-  @media (max-width: 1180px) {
+  @media (max-width: 1360px) {
     .hdr-phone span {
       display: none;
     }
@@ -301,7 +301,7 @@ const isServices = serviceNav.some((g) => g.links.some((l) => l.href === path));
       padding: 0;
     }
   }
-  @media (max-width: 1020px) {
+  @media (max-width: 1120px) {
     .hdr-nav {
       display: none;
     }

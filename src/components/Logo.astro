@@ -1,91 +1,46 @@
 ---
+// The owner's logo (CorelDRAW original, text converted to paths so it renders the same in every browser).
+// Colour follows `currentColor`: black (ink) on light backgrounds, white with `inverse`.
+import logoSvg from '@/assets/logo.svg?raw';
+
 interface Props {
   inverse?: boolean;
+  /** logo height in px on desktop (phones get 85% of it) */
+  size?: number;
 }
-const { inverse = false } = Astro.props;
+const { inverse = false, size = 54 } = Astro.props;
+const svg = logoSvg.replace('<svg ', '<svg aria-hidden="true" focusable="false" ');
 ---
 
-<a href="/" class:list={['logo', { inverse }]} aria-label="Мастерская сувениров — на главную">
-  <span class="logo-mark" aria-hidden="true">
-    <span></span><span></span><span></span>
-  </span>
-  <span class="logo-text">
-    <span class="logo-1">Мастерская</span>
-    <span class="logo-2">сувениров</span>
-  </span>
+<a href="/" class:list={['logo', { inverse }]} style={`--logo-h: ${size}px`} aria-label="Мастерская сувениров — на главную">
+  <Fragment set:html={svg} />
 </a>
 
 <style>
   .logo {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    text-decoration: none;
-    color: var(--ink);
     flex: none;
+    color: var(--ink);
+    text-decoration: none;
+    transition: opacity 0.2s ease;
   }
   .logo:hover {
     color: var(--ink);
+    opacity: 0.8;
   }
   .logo.inverse,
   .logo.inverse:hover {
-    color: var(--paper);
+    color: #fff;
   }
-  .logo-mark {
-    position: relative;
-    width: 40px;
-    height: 40px;
-    flex: none;
+  .logo :global(svg) {
+    display: block;
+    height: var(--logo-h);
+    width: auto;
   }
-  .logo-mark span {
-    position: absolute;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    mix-blend-mode: multiply;
-    transition: transform 0.3s ease;
-  }
-  .inverse .logo-mark span {
-    mix-blend-mode: screen;
-  }
-  .logo-mark span:nth-child(1) {
-    left: 0;
-    top: 2px;
-    background: var(--c);
-  }
-  .logo-mark span:nth-child(2) {
-    right: 0;
-    top: 2px;
-    background: var(--m);
-  }
-  .logo-mark span:nth-child(3) {
-    left: 8px;
-    bottom: 0;
-    background: var(--y);
-  }
-  .logo:hover .logo-mark span:nth-child(1) {
-    transform: translate(-2px, -1px);
-  }
-  .logo:hover .logo-mark span:nth-child(2) {
-    transform: translate(2px, -1px);
-  }
-  .logo:hover .logo-mark span:nth-child(3) {
-    transform: translateY(2px);
-  }
-  .logo-text {
-    display: grid;
-    line-height: 0.95;
-    font-weight: 900;
-    letter-spacing: -0.03em;
-    text-transform: lowercase;
-  }
-  .logo-1 {
-    font-size: 1.08rem;
-  }
-  .logo-2 {
-    font-size: 1.08rem;
-    font-family: var(--mono);
-    font-weight: 700;
-    letter-spacing: -0.02em;
+  @media (max-width: 560px) {
+    .logo :global(svg) {
+      height: calc(var(--logo-h) * 0.85);
+    }
   }
 </style>

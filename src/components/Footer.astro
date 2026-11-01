@@ -11,7 +11,7 @@ const year = new Date().getFullYear();
   </div>
   <div class="wrap ftr-grid">
     <div class="ftr-brand">
-      <Logo inverse />
+      <Logo inverse size={60} />
       <p>Печать на одежде, кружках, сувенирах и полиграфия в Калининграде. Мастерская с {site.founded} года, от 1 штуки.</p>
       <div class="ftr-social">
         <a href={site.social.telegram} target="_blank" rel="noopener" aria-label="Telegram"><Icon name="telegram" /></a>
@@ -156,7 +156,7 @@ const year = new Date().getFullYear();
   .ftr-note {
     font-size: 0.78rem;
   }
-  @media (max-width: 1100px) {
+  @media (max-width: 1200px) {
     .ftr-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
