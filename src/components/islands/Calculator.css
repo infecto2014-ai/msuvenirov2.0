@@ -573,3 +573,53 @@
   font-size: 0.55em;
   font-weight: 600;
 }
+
+/* extra prints: «Убрать» next to the group title, «+ Добавить принт» below */
+.calc-remove {
+  margin-left: auto;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1.5px solid var(--line-strong);
+  background: var(--card);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.calc-remove:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.calc-legend {
+  width: 100%;
+}
+.calc-add {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  width: 100%;
+  margin: 4px 0 18px;
+  padding: 14px 18px;
+  border-radius: var(--radius-l, 24px);
+  border: 1.5px dashed var(--line-strong);
+  background: transparent;
+  font: inherit;
+  font-weight: 700;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+.calc-add span {
+  font-size: 1.2rem;
+  color: var(--m);
+}
+.calc-add small {
+  font-weight: 500;
+  color: var(--muted);
+}
+.calc-add:hover {
+  border-color: var(--ink);
+  background: var(--card);
+}

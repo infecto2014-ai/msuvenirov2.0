@@ -22,6 +22,8 @@ export interface OptionGroup {
   choices: Choice[];
   /** default choice id(s) */
   default?: string | string[];
+  /** optional extra group (e.g. 2nd–4th print): hidden while 'none', the customer adds it with a button */
+  addable?: boolean;
 }
 
 export interface DimInput {
@@ -281,7 +283,7 @@ function garment(args: {
   places: number;
   colors?: boolean;
 }): Product {
-  const placeLabels = ['Основной принт', 'Второй принт', 'Третий принт'];
+  const placeLabels = ['Основной принт', 'Второй принт', 'Третий принт', 'Четвёртый принт'];
   const options: OptionGroup[] = [];
   if (args.colors) {
     options.push({
@@ -303,6 +305,7 @@ function garment(args: {
       type: 'one',
       choices: formatChoices(args.formats, i > 0),
       default: i === 0 ? (args.formats.includes('a4') ? 'a4' : args.formats[0]) : 'none',
+      addable: i > 0,
     });
   }
   const prints = (sel: Selection): Format[] => {
@@ -398,7 +401,7 @@ const textile: Category = {
       image: '/img/showcase/tshirt.webp',
       blank: tiers([1, 5, 20], [750, 650, 550]),
       formats: ['a6', 'a5', 'a4', 'a3'],
-      places: 3,
+      places: 4,
       colors: true,
     }),
     garment({
@@ -419,7 +422,7 @@ const textile: Category = {
       blank: tiers([1], [2000]),
       blankFrom: true,
       formats: ['a6', 'a5', 'a4', 'a3'],
-      places: 3,
+      places: 4,
     }),
     garment({
       id: 'oversize',

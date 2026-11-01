@@ -43,6 +43,13 @@ describe('pricing', () => {
     expect(p.quote(s).breakdown.map((b) => b.label)).toEqual(['Печать DTF А3', 'Печать DTF А4 (−30%)', 'Печать DTF А6 (−50%)']);
   });
 
+  it('t-shirt and hoodie take up to 4 prints, the 4th also at −50%', () => {
+    const { p, s } = sel('textile', 'tshirt-unisex', { qty: 1, options: { print1: 'a6', print2: 'a3', print3: 'a6', print4: 'a4' } });
+    expect(p.quote(s).total).toBe(750 + 1100 + 800 * 0.7 + 600 * 0.5 + 600 * 0.5);
+    expect(findProduct('textile', 'hoodie')!.options!.filter((g) => g.id.startsWith('print'))).toHaveLength(4);
+    expect(findProduct('textile', 'cap')!.options!.filter((g) => g.id.startsWith('print'))).toHaveLength(2);
+  });
+
   it('coloured t-shirts need at least 10 pcs', () => {
     const { p, s } = sel('textile', 'tshirt-unisex', { options: { color: 'other' }, qty: 5 });
     expect(p.quote(s).error).toBeTruthy();

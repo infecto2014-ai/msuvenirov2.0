@@ -6,6 +6,7 @@ import {
   rub,
   qtyLabels,
   type Category,
+  type OptionGroup,
   type Product,
   type QtyConfig,
   type Selection,
@@ -223,26 +224,61 @@ export default function Calculator({ category, product, only, hideCategories, lo
             </fieldset>
           )}
 
-          {(prod.options ?? []).map((g, gi) => (
-            <fieldset class="calc-group" key={`${prod.id}-${g.id}`}>
-              <legend class="calc-legend">
-                <span class="calc-step">{gi + (showProducts ? 2 : 1)}</span> {g.label}
-              </legend>
-              <div class="calc-chips">
-                {g.choices.map((c) => {
-                  const v = sel.options[g.id];
-                  const on = g.type === 'many' ? Array.isArray(v) && v.includes(c.id) : v === c.id;
-                  return (
-                    <button type="button" class="chip" aria-pressed={on} onClick={() => setOption(g.id, c.id, g.type === 'many')}>
-                      {g.type === 'many' && <span class={`calc-check${on ? ' on' : ''}`} aria-hidden="true" />}
-                      <span>{c.label}</span>
-                      {c.hint && <small>{c.hint}</small>}
-                    </button>
-                  );
-                })}
-              </div>
-            </fieldset>
-          ))}
+          {(() => {
+            // Extra prints (addable groups) are hidden until the customer adds them; numbering follows the visible groups.
+            const groups = prod.options ?? [];
+            const isOn = (g: OptionGroup) => !g.addable || (sel.options[g.id] ?? 'none') !== 'none';
+            const visible = groups.filter(isOn);
+            const nextAdd = groups.find((g) => g.addable && !isOn(g));
+            const addGroup = (g: OptionGroup) => setOption(g.id, g.choices.find((c) => c.id !== 'none')!.id, false);
+            const removeGroup = (g: OptionGroup) =>
+              setSel((s) => {
+                // shift the following extra prints up so the filled ones stay first
+                const add = groups.filter((x) => x.addable);
+                const vals = add.map((x) => s.options[x.id] ?? 'none').filter((v, i) => add[i].id !== g.id && v !== 'none');
+                const next = { ...s.options };
+                add.forEach((x, i) => (next[x.id] = vals[i] ?? 'none'));
+                return { ...s, options: next };
+              });
+            const first = showProducts ? 2 : 1;
+            return (
+              <>
+                {visible.map((g, vi) => (
+                  <fieldset class="calc-group" key={`${prod.id}-${g.id}`}>
+                    <legend class="calc-legend">
+                      <span class="calc-step">{vi + first}</span> {g.label}
+                      {g.addable && (
+                        <button type="button" class="calc-remove" onClick={() => removeGroup(g)}>
+                          Убрать
+                        </button>
+                      )}
+                    </legend>
+                    <div class="calc-chips">
+                      {g.choices
+                        .filter((c) => !(g.addable && c.id === 'none'))
+                        .map((c) => {
+                          const v = sel.options[g.id];
+                          const on = g.type === 'many' ? Array.isArray(v) && v.includes(c.id) : v === c.id;
+                          return (
+                            <button type="button" class="chip" aria-pressed={on} onClick={() => setOption(g.id, c.id, g.type === 'many')}>
+                              {g.type === 'many' && <span class={`calc-check${on ? ' on' : ''}`} aria-hidden="true" />}
+                              <span>{c.label}</span>
+                              {c.hint && <small>{c.hint}</small>}
+                            </button>
+                          );
+                        })}
+                    </div>
+                  </fieldset>
+                ))}
+                {nextAdd && (
+                  <button type="button" class="calc-add" onClick={() => addGroup(nextAdd)}>
+                    <span aria-hidden="true">+</span> Добавить принт
+                    <small>{nextAdd.label.toLowerCase()} — дешевле: −30% / −50%</small>
+                  </button>
+                )}
+              </>
+            );
+          })()}
 
           {prod.dims && (
             <fieldset class="calc-group">
