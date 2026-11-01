@@ -85,8 +85,8 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
           Футболки, худи, кружки, значки, визитки и календари с вашим дизайном — от 1 штуки. Своё производство и больше 10 лет опыта в печати.
         </p>
         <div class="hero-actions">
-          <a class="btn btn-magenta" href="/price"><Icon name="calc" size={20} /> Рассчитать стоимость</a>
-          <button type="button" class="btn btn-ghost" data-order><Icon name="upload" size={20} /> Отправить макет</button>
+          <a class="btn btn-magenta" href="/price"><Icon name="calc" size={20} /> <span>Рассчитать<span class="hide-sm"> стоимость</span></span></a>
+          <button type="button" class="btn btn-ghost" data-order><Icon name="upload" size={20} /> <span class="hide-sm">Отправить макет</span><span class="show-sm">Макет</span></button>
         </div>
         <ul class="hero-facts">
           <li><b>от 1 шт</b><span>без минимального тиража</span></li>
@@ -282,6 +282,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   <section class="section seo-text" aria-labelledby="seo-h">
     <div class="wrap">
       <h2 id="seo-h">Печать на заказ в Калининграде</h2>
+      <input type="checkbox" id="seo-more" class="seo-toggle" />
       <div class="seo-cols">
         <div>
           <h3>Печать на футболках и худи</h3>
@@ -314,6 +315,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
           </p>
         </div>
       </div>
+      <label for="seo-more" class="seo-more-btn">Читать полностью</label>
     </div>
   </section>
 
@@ -1040,6 +1042,226 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     }
     .b2b {
       border-radius: 32px 32px 32px 80px;
+    }
+  }
+
+  /* ================= phones (≤ 560px): compact home, desktop untouched ================= */
+  .seo-toggle,
+  .seo-more-btn,
+  .show-sm {
+    display: none;
+  }
+  @media (max-width: 560px) {
+    .hide-sm {
+      display: none;
+    }
+    .show-sm {
+      display: inline;
+    }
+    /* hero */
+    .hero {
+      padding-block: 14px 8px;
+    }
+    .hero-grid {
+      gap: 18px;
+    }
+    .hero-text {
+      gap: 14px;
+    }
+    .hero-title {
+      font-size: 1.85rem;
+    }
+    .hero-text .lead {
+      font-size: 0.98rem;
+    }
+    .hero-actions {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      width: 100%;
+      gap: 8px;
+    }
+    .hero-actions .btn {
+      justify-content: center;
+      padding-inline: 10px;
+    }
+    .hero-collage {
+      max-width: 300px;
+      width: 78%;
+    }
+    .hc-sticker {
+      font-size: 0.78rem;
+      padding: 6px 10px;
+    }
+    .hc-reg-1,
+    .hc-reg-2 {
+      display: none;
+    }
+    /* popular: narrower cards */
+    .pop {
+      flex-basis: 62%;
+    }
+    .pop img {
+      aspect-ratio: 16 / 11;
+    }
+    .pop h3 {
+      font-size: 0.98rem;
+    }
+    .pop-price {
+      font-size: 1.15rem;
+      margin: 2px 0 4px;
+    }
+    /* product tiles */
+    .tile {
+      min-height: 132px;
+      padding: 12px;
+    }
+    .tile-xl {
+      min-height: 168px;
+    }
+    .tile-img,
+    .tile-tall .tile-img {
+      width: 78px;
+    }
+    .tile-xl .tile-img {
+      width: 140px;
+    }
+    .tile-text {
+      display: none;
+    }
+    .tile-xl .tile-text {
+      display: block;
+      max-width: 55%;
+    }
+    .tile-xl .tile-title {
+      font-size: 1.3rem;
+    }
+    .cats-more {
+      margin-top: 14px;
+      font-size: 0.9rem;
+    }
+    /* occasions: 2 columns, short cards */
+    .occ-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .occ {
+      padding: 12px 12px 14px;
+      gap: 4px;
+      border-radius: 20px 20px 20px 6px;
+    }
+    .occ h3 {
+      font-size: 1rem;
+    }
+    .occ p {
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+    .occ-when {
+      font-size: 0.68rem;
+    }
+    .occ-arrow {
+      display: none;
+    }
+    .occasions .section-head p {
+      display: none;
+    }
+    /* companies */
+    .b2b {
+      gap: 16px;
+      padding: 22px 18px;
+      border-radius: 28px 28px 28px 60px;
+    }
+    .b2b-text {
+      gap: 12px;
+    }
+    .b2b-text p {
+      font-size: 0.92rem;
+    }
+    .b2b-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      width: 100%;
+      gap: 8px;
+    }
+    .b2b-actions .btn {
+      justify-content: center;
+      padding-inline: 8px;
+      font-size: 0.85rem;
+    }
+    .b2b-list {
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .b2b-list li {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-size: 0.8rem;
+      line-height: 1.3;
+    }
+    .clients {
+      padding-top: 16px;
+    }
+    .clients-row {
+      gap: 12px 18px;
+    }
+    .clients-row img {
+      height: 30px;
+      max-width: 92px;
+    }
+    .b2b-cmyk {
+      display: none;
+    }
+    /* terms: 2×2, short */
+    .terms {
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .terms li {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 6px;
+      padding: 12px;
+    }
+    .terms-icon {
+      width: 32px;
+      height: 32px;
+      grid-row: auto;
+    }
+    .terms h3 {
+      font-size: 0.98rem;
+    }
+    .terms p {
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+    /* seo text: first lines + «Читать полностью» */
+    .seo-text h2 {
+      margin-bottom: 14px;
+    }
+    .seo-cols {
+      gap: 14px;
+      max-height: 230px;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(#000 60%, transparent);
+      mask-image: linear-gradient(#000 60%, transparent);
+    }
+    .seo-toggle:checked + .seo-cols {
+      max-height: none;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+    .seo-more-btn {
+      display: inline-block;
+      margin-top: 8px;
+      font-weight: 700;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .seo-toggle:checked ~ .seo-more-btn {
+      display: none;
     }
   }
 </style>

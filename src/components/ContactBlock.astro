@@ -136,4 +136,26 @@ const mapSrc = `https://yandex.ru/map-widget/v1/?ll=${site.address.lng}%2C${site
       grid-template-columns: 1fr;
     }
   }
+  /* phones: compact card, buttons in one row, smaller map */
+  @media (max-width: 560px) {
+    .contact-card {
+      padding: 20px 18px;
+    }
+    .contact-actions {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+    }
+    .contact-actions .btn {
+      justify-content: center;
+      padding-inline: 6px;
+      font-size: 0.82rem;
+    }
+    .contact-actions .btn :global(svg) {
+      display: none;
+    }
+    .contact-map {
+      min-height: 190px;
+    }
+  }
 </style>

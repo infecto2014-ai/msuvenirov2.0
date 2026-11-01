@@ -97,4 +97,36 @@ const steps = [
       grid-template-columns: 1fr;
     }
   }
+  /* phones: steps as a compact numbered list */
+  @media (max-width: 560px) {
+    .how-list {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .how-step {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      column-gap: 12px;
+      padding: 12px 14px;
+      border-radius: 18px;
+    }
+    .how-step::after {
+      display: none;
+    }
+    .how-num {
+      grid-row: span 2;
+      align-self: start;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--tone);
+    }
+    .how-step h3 {
+      margin: 0 0 2px;
+      font-size: 1rem;
+    }
+    .how-step p {
+      margin: 0;
+      font-size: 0.85rem;
+    }
+  }
 </style>
