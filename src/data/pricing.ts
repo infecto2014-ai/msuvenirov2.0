@@ -39,6 +39,8 @@ export interface QtyConfig {
   default: number;
   /** discrete packages only (e.g. pocket calendars) */
   presets?: number[];
+  /** with presets: from this quantity on, any amount can be ordered (presets below it) */
+  freeFrom?: number;
 }
 
 export interface Selection {
@@ -124,6 +126,14 @@ const round = (n: number) => Math.round(n * 100) / 100;
 export const rub = (n: number): string =>
   `${n.toLocaleString('ru-RU', { maximumFractionDigits: n % 1 ? 2 : 0, minimumFractionDigits: n % 1 ? 1 : 0 })} ₽`;
 
+/** Labels for price tiers: exact print runs for presets, ranges for free quantities. */
+export const qtyLabels = (from: number[], qty: QtyConfig): string[] => {
+  if (!qty.presets) return rangeLabels(from);
+  const free = qty.freeFrom ?? Infinity;
+  const ranges = rangeLabels(from);
+  return from.map((f, i) => (f < free ? `${f.toLocaleString('ru-RU')} шт` : ranges[i]));
+};
+
 /** [1, 5, 20] -> ["1–4 шт", "5–19 шт", "от 20 шт"] */
 export const rangeLabels = (from: number[]): string[] =>
   from.map((f, i) => {
@@ -183,9 +193,7 @@ function tiered(args: {
     options: groups,
     fromPrice: Math.min(...args.variants.map((v) => minPrice(v.tiers))),
     table: {
-      columns: args.qty.presets
-        ? args.qty.presets.map((q) => `${q} шт`)
-        : rangeLabels(args.variants[0].tiers.map((t) => t.from)),
+      columns: qtyLabels(args.variants[0].tiers.map((t) => t.from), args.qty),
       rows: [
         ...args.variants.map((v) => ({ label: args.variants.length > 1 ? v.label : args.name, cells: v.tiers.map((t) => rub(t.price)) })),
         ...(args.extras ?? []).map((e) => ({ label: `+ ${e.label}`, cells: args.variants[0].tiers.map(() => `+${rub(e.price)}`) })),
@@ -664,12 +672,12 @@ const cards: Category = {
       name: 'Визитки 90×50 мм',
       short: 'цифровая печать, бумага 300 г, глянец или мат',
       image: '/img/showcase/business-cards.webp',
-      // Only fixed print runs (owner, 31.10.2026): 96 / 200 / 300 / 500
-      qty: { min: 96, max: 500, default: 96, presets: [96, 200, 300, 500] },
+      // Owner, 01.11.2026: fixed runs 96 / 200 / 300, from 500 any quantity
+      qty: { min: 96, max: 20000, default: 96, presets: [96, 200, 300], freeFrom: 500 },
       variantLabel: 'Печать',
       variants: [
-        { id: 's1', label: 'Односторонняя', hint: '4+0', tiers: tiers([96, 200, 300, 500], [6.2, 4.9, 4, 3.5]) },
-        { id: 's2', label: 'Двусторонняя', hint: '4+4', tiers: tiers([96, 200, 300, 500], [9.6, 7.1, 5.9, 5]) },
+        { id: 's1', label: 'Односторонняя', hint: '4+0', tiers: tiers([96, 200, 300, 500, 1000, 6000], [6.2, 4.9, 4, 3.5, 3.2, 2.4]) },
+        { id: 's2', label: 'Двусторонняя', hint: '4+4', tiers: tiers([96, 200, 300, 500, 1000, 6000], [9.6, 7.1, 5.9, 5, 4.7, 3.2]) },
       ],
       choices: [
         {
@@ -683,7 +691,7 @@ const cards: Category = {
           default: 'gloss',
         },
       ],
-      notes: ['Визитки печатаются тиражами 96, 200, 300 или 500 шт. Срок — от 1 дня. Глянцевая и матовая бумага — по одной цене.'],
+      notes: ['До 500 шт визитки печатаются тиражами 96, 200 или 300 шт, от 500 шт — любое количество. Срок — от 1 дня. Глянцевая и матовая бумага — по одной цене.'],
     }),
   ],
 };

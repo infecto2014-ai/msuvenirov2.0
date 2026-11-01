@@ -4,9 +4,10 @@ import {
   defaultSelection,
   findCategory,
   rub,
-  rangeLabels,
+  qtyLabels,
   type Category,
   type Product,
+  type QtyConfig,
   type Selection,
 } from '@/data/pricing';
 import { addToEstimate, openOrder } from '@/lib/estimate';
@@ -38,6 +39,38 @@ const toQty = (pos: number, min: number, max: number) => {
 };
 
 const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, Math.round(n)));
+
+/** Share of the slider given to fixed print runs when larger amounts are free (presets + freeFrom). */
+const PRESET_SPAN = 0.4 * SLIDER_STEPS;
+
+/** Slider position <-> quantity for every quantity mode: free, presets only, presets + free from N. */
+const sliderMaxOf = (q: QtyConfig) => (q.presets && !q.freeFrom ? q.presets.length - 1 : SLIDER_STEPS);
+const qtyToPos = (n: number, q: QtyConfig) => {
+  if (!q.presets) return toPos(n, q.min, q.max);
+  if (!q.freeFrom) return Math.max(0, q.presets.indexOf(n));
+  if (n < q.freeFrom) return Math.round((Math.max(0, q.presets.indexOf(n)) * PRESET_SPAN) / q.presets.length);
+  return Math.round(PRESET_SPAN + (toPos(n, q.freeFrom, q.max) / SLIDER_STEPS) * (SLIDER_STEPS - PRESET_SPAN));
+};
+const posToQty = (pos: number, q: QtyConfig) => {
+  if (!q.presets) return toQty(pos, q.min, q.max);
+  if (!q.freeFrom) return q.presets[pos];
+  if (pos < PRESET_SPAN) return q.presets[Math.min(q.presets.length - 1, Math.round((pos / PRESET_SPAN) * q.presets.length))];
+  return toQty(((pos - PRESET_SPAN) / (SLIDER_STEPS - PRESET_SPAN)) * SLIDER_STEPS, q.freeFrom, q.max);
+};
+/** Snap any number to an allowed quantity. */
+const normalizeQty = (n: number, q: QtyConfig) => {
+  const v = clamp(n, q.min, q.max);
+  if (!q.presets) return v;
+  if (q.freeFrom && v >= q.freeFrom) return v;
+  return q.presets.find((x) => x >= v) ?? q.freeFrom ?? q.presets[q.presets.length - 1];
+};
+/** Next allowed quantity up (+1) or down (-1) for the stepper buttons. */
+const stepQty = (n: number, dir: 1 | -1, q: QtyConfig) => {
+  if (!q.presets || (q.freeFrom && n + dir >= q.freeFrom)) return clamp(n + dir, q.min, q.max);
+  const list = q.freeFrom ? [...q.presets, q.freeFrom] : q.presets;
+  const i = list.indexOf(n);
+  return list[Math.min(list.length - 1, Math.max(0, (i < 0 ? list.length - 1 : i) + dir))];
+};
 
 const describe = (p: Product, s: Selection): string => {
   const parts: string[] = [];
@@ -97,9 +130,7 @@ export default function Calculator({ category, product, only, hideCategories, ti
   };
 
   const setQty = (n: number) => {
-    const { min, max, presets } = prod.qty;
-    let q = clamp(n, min, max);
-    if (presets) q = presets.find((x) => x >= q) ?? presets[presets.length - 1];
+    const q = normalizeQty(n, prod.qty);
     setSel((s) => ({ ...s, qty: q }));
     setQtyText(String(q));
   };
@@ -113,13 +144,11 @@ export default function Calculator({ category, product, only, hideCategories, ti
 
   const quote = useMemo(() => prod.quote(sel), [prod, sel]);
   const ladder = useMemo(() => prod.ladder?.(sel) ?? [], [prod, sel]);
-  const ladderLabels = prod.qty.presets
-    ? ladder.map((t) => `${t.from.toLocaleString('ru-RU')} шт`)
-    : rangeLabels(ladder.map((t) => t.from));
+  const ladderLabels = qtyLabels(ladder.map((t) => t.from), prod.qty);
 
-  const { min, max, presets } = prod.qty;
-  const sliderMax = presets ? presets.length - 1 : SLIDER_STEPS;
-  const sliderVal = presets ? Math.max(0, presets.indexOf(sel.qty)) : toPos(sel.qty, min, max);
+  const { min, max, presets, freeFrom } = prod.qty;
+  const sliderMax = sliderMaxOf(prod.qty);
+  const sliderVal = qtyToPos(sel.qty, prod.qty);
 
   const add = (thenOrder: boolean) => {
     if (quote.error) return;
@@ -252,7 +281,7 @@ export default function Calculator({ category, product, only, hideCategories, ti
             </legend>
             <div class="calc-qty">
               <div class="calc-stepper">
-                <button type="button" aria-label="Меньше" onClick={() => setQty(presets ? presets[Math.max(0, sliderVal - 1)] : sel.qty - 1)} disabled={sel.qty <= min}>
+                <button type="button" aria-label="Меньше" onClick={() => setQty(stepQty(sel.qty, -1, prod.qty))} disabled={sel.qty <= min}>
                   −
                 </button>
                 <input
@@ -267,12 +296,12 @@ export default function Calculator({ category, product, only, hideCategories, ti
                     const t = (e.target as HTMLInputElement).value;
                     setQtyText(t);
                     const n = Number(t);
-                    if (Number.isFinite(n) && n >= min && !presets) setSel((s) => ({ ...s, qty: clamp(n, min, max) }));
+                    if (Number.isFinite(n) && n >= min && (!presets || (freeFrom && n >= freeFrom))) setSel((s) => ({ ...s, qty: clamp(n, min, max) }));
                   }}
                   onBlur={() => setQty(Number(qtyText) || min)}
                 />
                 <span class="calc-qty-unit">шт</span>
-                <button type="button" aria-label="Больше" onClick={() => setQty(presets ? presets[Math.min(presets.length - 1, sliderVal + 1)] : sel.qty + 1)} disabled={sel.qty >= max}>
+                <button type="button" aria-label="Больше" onClick={() => setQty(stepQty(sel.qty, 1, prod.qty))} disabled={sel.qty >= max}>
                   +
                 </button>
               </div>
@@ -286,7 +315,7 @@ export default function Calculator({ category, product, only, hideCategories, ti
                 style={{ '--p': `${(sliderVal / sliderMax) * 100}%` }}
                 onInput={(e) => {
                   const pos = Number((e.target as HTMLInputElement).value);
-                  setQty(presets ? presets[pos] : toQty(pos, min, max));
+                  setQty(posToQty(pos, prod.qty));
                 }}
               />
               <div class="calc-slider-scale" aria-hidden="true">
@@ -365,7 +394,7 @@ export default function Calculator({ category, product, only, hideCategories, ti
 
             {quote.next && !quote.error && (
               <button type="button" class="calc-nudge" onClick={() => setQty(quote.next!.qty)}>
-                {prod.qty.presets ? 'Тираж' : 'От'} {quote.next.qty.toLocaleString('ru-RU')} шт — <b>{rub(quote.next.unit)}</b> за штуку. Показать
+                {presets && quote.next.qty < (freeFrom ?? Infinity) ? 'Тираж' : 'От'} {quote.next.qty.toLocaleString('ru-RU')} шт — <b>{rub(quote.next.unit)}</b> за штуку. Показать
               </button>
             )}
 

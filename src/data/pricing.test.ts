@@ -61,6 +61,18 @@ describe('pricing', () => {
     expect(p.quote(s).total).toBe(1795);
   });
 
+  it('business cards: fixed runs below 500, any amount from 500', () => {
+    const one = (qty: number) => { const { p, s } = sel('cards', 'business-cards', { qty }); return p.quote(s); };
+    expect(one(96).total).toBe(595);
+    expect(one(300).unit).toBe(4);
+    expect(one(750).unit).toBe(3.5);
+    expect(one(1000).unit).toBe(3.2);
+    expect(one(6000).unit).toBe(2.4);
+    const { p, s } = sel('cards', 'business-cards', { qty: 6000, options: { variant: 's2' } });
+    expect(p.quote(s).unit).toBe(3.2);
+    expect(p.table?.columns).toEqual(['96 шт', '200 шт', '300 шт', '500–999 шт', '1000–5999 шт', 'от 6000 шт']);
+  });
+
   it('formats labels', () => {
     expect(rangeLabels([1, 5, 10, 50, 200])).toEqual(['1–4 шт', '5–9 шт', '10–49 шт', '50–199 шт', 'от 200 шт']);
     expect(rub(7.5).replace(/\s/g, ' ')).toBe('7,5 ₽');
