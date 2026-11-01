@@ -78,6 +78,9 @@ const serviceLd = {
           </button>
           <a class="btn btn-ghost" href={site.social.telegram} target="_blank" rel="noopener"><Icon name="telegram" size={20} /> <span><span class="long">Написать в </span>Telegram</span></a>
         </div>
+        <a class="chero-pdf" href="/kp-msuvenirov.pdf" download="КП Мастерская сувениров.pdf">
+          <Icon name="upload" size={18} /> Скачать коммерческое предложение (PDF)
+        </a>
       </div>
       <div class="chero-media">
         <span class="chero-dot chero-dot-c" aria-hidden="true"></span>
@@ -375,6 +378,21 @@ const serviceLd = {
   }
   .chero-chips :global(svg) {
     color: var(--m-ink);
+  }
+  /* «Скачать КП (PDF)» — a quiet link under the main buttons */
+  .chero-pdf {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .chero-pdf :global(svg) {
+    transform: rotate(180deg);
+    color: var(--m);
   }
   .chero-actions {
     display: flex;

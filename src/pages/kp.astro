@@ -1,0 +1,415 @@
+---
+// Print version of the commercial offer for companies. Turned into public/kp-msuvenirov.pdf by `npm run kp`.
+// Not in the menu, hidden from search. Content comes from src/data/corporate.ts — no prices (owner, 02.11.2026).
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import logoSvg from '@/assets/logo.svg?raw';
+import { corporate as c } from '@/data/corporate';
+import { site } from '@/data/site';
+
+const clients = [
+  { src: '/img/clients/client-1.webp', alt: 'Россети' },
+  { src: '/img/clients/client-6.webp', alt: 'БФУ имени И. Канта' },
+  { src: '/img/clients/client-2.webp', alt: 'Арле Парк' },
+  { src: '/img/clients/client-4.webp', alt: 'Папаша Беппе' },
+  { src: '/img/clients/client-5.webp', alt: 'Неудержимые' },
+  { src: '/img/clients/client-7.webp', alt: 'Systech' },
+  { src: '/img/clients/client-8.webp', alt: 'Музей мороженого' },
+];
+const tones = ['var(--c)', 'var(--m)', 'var(--y)'];
+const year = new Date().getFullYear();
+---
+
+<BaseLayout title="Коммерческое предложение для компаний" description="Коммерческое предложение «Мастерской сувениров» для компаний" path="/kp" noindex bare>
+  <div class="kp">
+    <!-- page 1 -->
+    <section class="kp-page kp-cover">
+      <header class="kp-top">
+        <span class="kp-logo" set:html={logoSvg} />
+        <span class="kp-top-contacts mono">{site.phone} · msuvenirov.ru</span>
+      </header>
+      <p class="kp-eyebrow mono">Коммерческое предложение · {year}</p>
+      <h1>Корпоративный мерч и брендирование продукции</h1>
+      <p class="kp-lead">{c.lead}</p>
+      <ul class="kp-chips">{c.highlights.map((h) => <li>{h}</li>)}</ul>
+      <div class="kp-cover-img">
+        <img src={c.heroImage} alt={c.heroImageAlt} />
+        <span class="kp-sticker">ваш логотип здесь</span>
+      </div>
+      <div class="kp-clients">
+        <p class="mono">Нам доверяют</p>
+        <ul>{clients.map((cl) => <li><img src={cl.src} alt={cl.alt} /></li>)}</ul>
+      </div>
+      <h2 class="kp-h2">Что брендируем</h2>
+      <ol class="kp-dirlist">
+        {c.directions.map((d, i) => (
+          <li style={`--tone:${tones[i % 3]}`}>
+            <b class="mono">{String(i + 1).padStart(2, '0')}</b> {d.title}
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <!-- page 2: directions -->
+    <section class="kp-page">
+      <h2 class="kp-h2">Направления</h2>
+      <div class="kp-dirs">
+        {c.directions.map((d, i) => (
+          <article class="kp-dir" style={`--tone:${tones[i % 3]}`}>
+            <img src={d.image} alt={d.imageAlt} />
+            <div>
+              <h3>
+                <span class="mono">{String(i + 1).padStart(2, '0')}</span> {d.title}
+              </h3>
+              <p>{d.items.slice(0, 5).join(' · ')}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- page 3: how we work, terms, contacts -->
+    <section class="kp-page">
+      <h2 class="kp-h2">Как мы работаем</h2>
+      <ol class="kp-steps">
+        {c.process.map((p, i) => (
+          <li style={`--tone:${tones[i % 3]}`}>
+            <b class="mono">{i + 1}</b>
+            <div>
+              <h3>{p.title}</h3>
+              <p>{p.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+      <h2 class="kp-h2">Условия для компаний</h2>
+      <div class="kp-terms">
+        {c.terms.map((t) => (
+          <div>
+            <h3>{t.title}</h3>
+            <p>{t.text}</p>
+          </div>
+        ))}
+      </div>
+      <div class="kp-contacts">
+        <div>
+          <h2>Обсудим ваш заказ</h2>
+          <p>Пришлите задачу, примерный тираж и дату — подберём изделия, подготовим макет и сделаем образец.</p>
+        </div>
+        <ul>
+          <li><span>Телефон</span><b class="mono">{site.phone}</b></li>
+          <li><span>Почта</span><b>{site.email}</b></li>
+          <li><span>Telegram</span><b>t.me/msuvenirov39zakaz</b></li>
+          <li><span>Сайт</span><b>msuvenirov.ru</b></li>
+          <li><span>Адрес</span><b>{site.address.city}, {site.address.street}, {site.address.place}</b></li>
+          <li><span>Режим работы</span><b>{site.hours}</b></li>
+        </ul>
+        <p class="kp-legal">{site.legal.name} · ОГРНИП {site.legal.ogrnip} · ИНН {site.legal.inn}</p>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  /* A4 pages: 210×297 mm. On screen they are shown one under another, in the PDF each section is a page. */
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  :global(body) {
+    background: #e9e4d8;
+  }
+  .kp {
+    display: grid;
+    gap: 24px;
+    justify-content: center;
+    padding: 24px 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .kp-page {
+    position: relative;
+    width: 210mm;
+    height: 297mm;
+    padding: 14mm 14mm 12mm;
+    background: var(--paper);
+    overflow: hidden;
+    break-after: page;
+  }
+  @media print {
+    :global(body) {
+      background: var(--paper);
+    }
+    .kp {
+      display: block;
+      padding: 0;
+    }
+  }
+  .kp-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10mm;
+  }
+  .kp-logo :global(svg) {
+    display: block;
+    height: 15mm;
+    width: auto;
+    color: var(--ink);
+  }
+  .kp-top-contacts {
+    font-size: 10pt;
+    font-weight: 700;
+  }
+  .kp-eyebrow {
+    margin: 0 0 3mm;
+    font-size: 9pt;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  h1 {
+    max-width: 120mm;
+    font-size: 30pt;
+    line-height: 1.04;
+  }
+  .kp-lead {
+    max-width: 112mm;
+    margin: 5mm 0 4mm;
+    font-size: 11pt;
+    color: var(--ink-2);
+  }
+  .kp-chips {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-width: 112mm;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2mm;
+  }
+  .kp-chips li {
+    padding: 1.5mm 3.5mm;
+    border-radius: 999px;
+    border: 1.2px solid var(--line-strong);
+    background: var(--card);
+    font-size: 8.5pt;
+    font-weight: 600;
+  }
+  .kp-cover-img {
+    position: absolute;
+    right: 14mm;
+    top: 34mm;
+    width: 64mm;
+    height: 80mm;
+    border-radius: 10mm 10mm 10mm 2mm;
+    overflow: hidden;
+    box-shadow: 4mm 4mm 0 var(--c);
+  }
+  .kp-cover-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .kp-sticker {
+    position: absolute;
+    left: 3mm;
+    bottom: 4mm;
+    padding: 1.5mm 3mm;
+    border-radius: 2.5mm;
+    background: var(--y);
+    font-size: 8pt;
+    font-weight: 800;
+    transform: rotate(-4deg);
+  }
+  .kp-clients {
+    margin: 12mm 0 9mm;
+    padding: 5mm 7mm;
+    border-radius: 7mm;
+    background: var(--ink);
+    color: #cfc8ba;
+  }
+  .kp-clients p {
+    margin: 0 0 3mm;
+    font-size: 8pt;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .kp-clients ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4mm 8mm;
+  }
+  .kp-clients img {
+    display: block;
+    height: 10mm;
+    width: auto;
+    max-width: 30mm;
+    object-fit: contain;
+  }
+  .kp-h2 {
+    margin: 0 0 5mm;
+    font-size: 18pt;
+  }
+  .kp-dirlist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5mm 6mm;
+  }
+  .kp-dirlist li {
+    display: flex;
+    gap: 3mm;
+    align-items: baseline;
+    padding: 2.5mm 4mm;
+    border-radius: 4mm;
+    border-left: 2mm solid var(--tone);
+    background: var(--card);
+    font-size: 10pt;
+    font-weight: 700;
+  }
+  .kp-dirlist b {
+    color: var(--muted);
+    font-size: 8.5pt;
+  }
+  .kp-dirs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5mm;
+  }
+  .kp-dir {
+    display: grid;
+    grid-template-columns: 28mm 1fr;
+    gap: 4mm;
+    align-items: start;
+    padding: 4mm;
+    border-radius: 6mm 6mm 6mm 2mm;
+    background: var(--card);
+    border: 1.2px solid var(--line);
+  }
+  .kp-dir img {
+    width: 28mm;
+    height: 28mm;
+    object-fit: cover;
+    border-radius: 50%;
+    outline: 1.2mm solid var(--tone);
+    outline-offset: 0.8mm;
+  }
+  .kp-dir h3 {
+    margin: 0 0 1.5mm;
+    font-size: 10.5pt;
+    line-height: 1.2;
+  }
+  .kp-dir h3 span {
+    color: var(--muted);
+    font-size: 8.5pt;
+  }
+  .kp-dir p {
+    margin: 0;
+    font-size: 8.5pt;
+    line-height: 1.4;
+    color: var(--ink-2);
+  }
+  .kp-steps {
+    list-style: none;
+    margin: 0 0 8mm;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 3mm;
+  }
+  .kp-steps li {
+    display: grid;
+    grid-template-columns: 8mm 1fr;
+    gap: 2.5mm;
+    padding: 3.5mm;
+    border-radius: 5mm;
+    background: var(--card);
+    border: 1.2px solid var(--line);
+  }
+  .kp-steps b {
+    display: grid;
+    place-items: center;
+    width: 8mm;
+    height: 8mm;
+    border-radius: 50%;
+    background: var(--tone);
+    font-size: 9pt;
+  }
+  .kp-steps h3,
+  .kp-terms h3 {
+    margin: 0 0 1mm;
+    font-size: 9.5pt;
+  }
+  .kp-steps p,
+  .kp-terms p {
+    margin: 0;
+    font-size: 8pt;
+    line-height: 1.4;
+    color: var(--ink-2);
+  }
+  .kp-terms {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 3mm;
+    padding: 5mm;
+    border-radius: 7mm;
+    background: var(--y-soft);
+  }
+  .kp-terms div {
+    padding: 3mm;
+    border-radius: 4mm;
+    background: var(--card);
+  }
+  .kp-contacts {
+    position: absolute;
+    left: 14mm;
+    right: 14mm;
+    bottom: 12mm;
+    display: grid;
+    grid-template-columns: 1fr 1.25fr;
+    gap: 3mm 8mm;
+    padding: 7mm;
+    border-radius: 8mm 8mm 8mm 22mm;
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .kp-contacts h2 {
+    margin: 0 0 2mm;
+    font-size: 16pt;
+    color: #fff;
+  }
+  .kp-contacts p {
+    margin: 0;
+    font-size: 9pt;
+    color: #d8d2c5;
+  }
+  .kp-contacts ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1.5mm;
+  }
+  .kp-contacts li {
+    display: grid;
+    grid-template-columns: 24mm 1fr;
+    font-size: 9pt;
+  }
+  .kp-contacts li span {
+    color: #a9a294;
+  }
+  .kp-contacts li b {
+    color: #fff;
+  }
+  .kp-contacts .kp-legal {
+    grid-column: 1 / -1;
+    font-size: 7.5pt;
+    color: #a9a294;
+  }
+</style>
