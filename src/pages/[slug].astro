@@ -88,7 +88,6 @@ const related = page.related.map((r) => services.find((s) => s.slug === r)).filt
   {
     garment && garmentProduct ? (
       <>
-        <GarmentPackages info={garment} productName={garmentProduct.name} />
         <section id="calc" class="section calc-sec" aria-labelledby="calc-h">
           <div class="wrap">
             <div class="section-head">
@@ -101,6 +100,8 @@ const related = page.related.map((r) => services.find((s) => s.slug === r)).filt
             <Calculator client:visible category="textile" product={garment.productId} hideCategories lockProduct />
           </div>
         </section>
+        <GarmentPackages info={garment} productName={garmentProduct.name} />
+        <GarmentDetails info={garment} productName={garmentProduct.name} />
         <section class="section prices-sec" aria-labelledby="prices-h">
           <div class="wrap">
             <div class="section-head">
@@ -144,7 +145,6 @@ const related = page.related.map((r) => services.find((s) => s.slug === r)).filt
   }
   <ServiceBlocks blocks={page.blocks} />
 
-  {garment && garmentProduct && <GarmentDetails info={garment} productName={garmentProduct.name} />}
   <PortfolioGrid tags={page.portfolioTags} title={`Примеры: ${page.name.toLowerCase()}`} />
 
   {garment && garmentReviews > 0 && <Reviews keywords={garment.reviewKeywords} title={`Отзывы: ${page.name.toLowerCase()}`} />}
