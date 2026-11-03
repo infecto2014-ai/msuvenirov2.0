@@ -1,0 +1,226 @@
+---
+// «Готовые варианты» on /kalendari: ready orders of quarterly calendars, turnkey price from pricing.ts (product.quote).
+// Same look as GarmentPackages, but the picture is a calendar drawing instead of a photo.
+import CalendarArt from '@/components/calendar/CalendarArt.astro';
+import { defaultSelection, findProduct, rub, type Selection } from '@/data/pricing';
+import { calendarsPage } from '@/data/calendarsPage';
+
+const product = findProduct('calendars', 'cal-quarterly')!;
+const tones = ['c', 'm', 'y', 'c'];
+const items = calendarsPage.packages.map((pk, i) => {
+  const base = defaultSelection(product);
+  const sel: Selection = { ...base, qty: pk.qty, options: { ...base.options, ...pk.options } };
+  const q = product.quote(sel);
+  return { ...pk, unit: q.unit, total: q.total, from: q.from, tone: tones[i % tones.length] };
+});
+---
+
+<section class="section cpk" aria-labelledby="cpk-h">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Популярное</p>
+        <h2 id="cpk-h">Готовые варианты с ценой</h2>
+      </div>
+      <p class="cpk-sub">Цена за весь тираж вместе с печатью и сборкой. Свой вариант — в калькуляторе выше.</p>
+    </div>
+    <ul class="cpk-grid">
+      {
+        items.map((it) => {
+          const label = `Квартальный календарь ${it.title}, ${it.qty} шт — ${it.from ? 'от ' : ''}${rub(it.total)}`;
+          return (
+            <li class={`cpk-card cpk-${it.tone}`}>
+              <div class="cpk-art" aria-hidden="true">
+                <CalendarArt type={it.model} strip={it.strip ?? 'none'} fold={it.fold} scale={0.36} title={it.title} />
+                <span class="cpk-qty mono">{it.qty} шт</span>
+              </div>
+              <div class="cpk-body">
+                <h3>{it.title}</h3>
+                <p class="cpk-note">{it.note}</p>
+                <p class="cpk-price mono">
+                  {it.from && <small>от</small>}
+                  {rub(it.total)}
+                  <small>{rub(it.unit)} / шт</small>
+                </p>
+                <button type="button" class="btn btn-sm btn-magenta" data-order={label}>
+                  Заказать
+                </button>
+              </div>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .cpk-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .cpk-card {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    border-radius: var(--radius-l);
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    overflow: clip;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .cpk-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 5px 5px 0 var(--tone);
+  }
+  .cpk-c { --tone: var(--c); --soft: var(--c-soft); }
+  .cpk-m { --tone: var(--m); --soft: var(--m-soft); }
+  .cpk-y { --tone: var(--y); --soft: var(--y-soft); }
+  /* the calendar hangs from the top edge of a coloured «wall»; tall models are cut off at the bottom */
+  .cpk-art {
+    position: relative;
+    height: 230px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 18px;
+    overflow: clip;
+    background:
+      radial-gradient(circle, rgba(22, 20, 27, 0.09) 1.3px, transparent 1.5px) 0 0 / 14px 14px,
+      var(--soft);
+  }
+  .cpk-art :global(svg) {
+    flex: none;
+    filter: drop-shadow(0 10px 14px rgba(22, 20, 27, 0.18));
+  }
+  .cpk-art::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    height: 46px;
+    background: linear-gradient(transparent, var(--soft));
+  }
+  .cpk-qty {
+    position: absolute;
+    z-index: 1;
+    right: 12px;
+    bottom: 12px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+  .cpk-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 14px 16px 18px;
+  }
+  .cpk-body h3 {
+    font-size: 1.08rem;
+  }
+  .cpk-note {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .cpk-price {
+    margin: auto 0 10px;
+    padding-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+  .cpk-price small {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0;
+  }
+  @media (max-width: 1020px) {
+    .cpk-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  /* phone: a carousel of compact cards, like «Готовые варианты» on the t-shirt page */
+  @media (max-width: 760px) {
+    .cpk {
+      padding-block: 32px;
+    }
+    .cpk .section-head {
+      margin-bottom: 14px;
+      gap: 6px;
+    }
+    .cpk .section-head .eyebrow {
+      margin-bottom: 6px;
+    }
+    .cpk-sub {
+      display: none;
+    }
+    .cpk-grid {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: var(--gutter);
+      margin-inline: calc(var(--gutter) * -1);
+      padding: 0 var(--gutter) 8px;
+      scrollbar-width: none;
+    }
+    .cpk-grid::-webkit-scrollbar {
+      display: none;
+    }
+    .cpk-card {
+      flex: 0 0 min(220px, 62%);
+      scroll-snap-align: start;
+      border-radius: 22px;
+    }
+    .cpk-art {
+      height: 140px;
+      padding-top: 12px;
+    }
+    .cpk-art :global(svg) {
+      zoom: 0.62;
+    }
+    .cpk-qty {
+      right: 8px;
+      bottom: 8px;
+      font-size: 0.72rem;
+    }
+    .cpk-body {
+      gap: 2px;
+      padding: 10px 12px 12px;
+    }
+    .cpk-body h3 {
+      font-size: 0.95rem;
+    }
+    .cpk-note {
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+    .cpk-price {
+      margin-bottom: 8px;
+      padding-top: 8px;
+      gap: 4px;
+      font-size: 1.1rem;
+    }
+    .cpk-price small {
+      font-size: 0.72rem;
+    }
+    .cpk-body .btn {
+      min-height: 38px;
+      padding: 0 16px;
+      font-size: 0.85rem;
+    }
+  }
+</style>

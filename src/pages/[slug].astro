@@ -21,8 +21,9 @@ import { breadcrumbs, faqPage, service as serviceLd } from '@/lib/schema';
 import type { ServicePage } from '@/data/types';
 
 export function getStaticPaths() {
-  // /korporativnym-klientam has its own page (src/pages/korporativnym-klientam.astro); the services.ts entry stays for menus and sitemap
-  return services.filter((s) => s.slug !== '/korporativnym-klientam').map((s) => ({ params: { slug: s.slug.replace(/^\//, '') }, props: { page: s } }));
+  // these have their own pages (src/pages/korporativnym-klientam.astro, kalendari.astro); the services.ts entries stay for menus and sitemap
+  const own = ['/korporativnym-klientam', '/kalendari'];
+  return services.filter((s) => !own.includes(s.slug)).map((s) => ({ params: { slug: s.slug.replace(/^\//, '') }, props: { page: s } }));
 }
 
 interface Props {

@@ -1,0 +1,1930 @@
+---
+// «Печать календарей» — own page (like the t-shirt page): first screen, calculator, ready options, five quarterly models
+// drawn in one scale, options, anatomy, other calendars, audience, how to order, works, reviews, FAQ, SEO text.
+// Content — src/data/calendarsPage.ts; every price — src/data/pricing.ts. The services.ts entry stays for menus/sitemap.
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Calculator from '@/components/islands/Calculator';
+import AlsoOrder from '@/components/garment/AlsoOrder.astro';
+import CalendarArt from '@/components/calendar/CalendarArt.astro';
+import CalendarPackages from '@/components/calendar/CalendarPackages.astro';
+import PortfolioGrid from '@/components/PortfolioGrid.astro';
+import Reviews from '@/components/Reviews.astro';
+import FaqSection from '@/components/FaqSection.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import Icon from '@/components/Icon.astro';
+import { calendarsPage as page } from '@/data/calendarsPage';
+import { services } from '@/data/services';
+import { defaultSelection, findCategory, findProduct, rub, type Product, type Selection } from '@/data/pricing';
+import { breadcrumbs, faqPage, service as serviceLd } from '@/lib/schema';
+import type { ServicePage } from '@/data/types';
+
+const crumbs = [
+  { name: 'Главная', href: '/' },
+  { name: 'Услуги', href: '/uslugi' },
+  { name: 'Календари', href: page.slug },
+];
+
+// ---- prices, all from pricing.ts
+const cat = findCategory('calendars')!;
+const quarterly = findProduct('calendars', 'cal-quarterly')!;
+const selOf = (p: Product, options: Selection['options'] = {}, qty = p.qty.min): Selection => {
+  const b = defaultSelection(p);
+  return { ...b, qty, options: { ...b.options, ...options } };
+};
+const ladderMin = (p: Product, options: Selection['options'] = {}) => Math.min(...(p.ladder ? p.ladder(selOf(p, options)).map((t) => t.price) : [p.fromPrice]));
+const modelFrom = Object.fromEntries(page.models.map((m) => [m.id, ladderMin(quarterly, { model: m.id })]));
+const extra = (options: Selection['options']) => quarterly.quote(selOf(quarterly, options)).unit - quarterly.quote(selOf(quarterly)).unit;
+const extraPrice = { silver: extra({ strip: 'silver' }), gold: extra({ strip: 'gold' }), fold: extra({ fold: ['fold'] }) };
+const others = page.others.map((o) => {
+  const p = findProduct('calendars', o.product)!;
+  if (p.qty.presets) {
+    const q = p.quote(selOf(p));
+    return { ...o, price: `от ${rub(q.total)}`, per: `за ${p.qty.min} шт` };
+  }
+  return { ...o, price: `от ${rub(o.variant ? ladderMin(p, { variant: o.variant }) : p.fromPrice)}`, per: '/ шт' };
+});
+const related = page.related.map((r) => services.find((s) => s.slug === r)).filter(Boolean) as ServicePage[];
+
+// ---- «Виды календарей»: one scale for all five drawings (px per mm); 10 cm grid on the wall behind them
+const KSCALE = 0.42;
+const tallest = Math.max(...page.models.map((m) => m.height));
+
+// ---- anatomy: markers over the drawing, in mm of the calendar (MIDI, 3 fields).
+// Margins of the drawing with dimension lines — the same formulas as in CalendarArt.astro (dims, no strip).
+const ASCALE = 0.52;
+const ART = { w: 325, h: 900, padL: 4, padR: 64 / ASCALE, padT: 4 + 26 / ASCALE, padB: 8 };
+const pos = (x: number, y: number) => ({
+  left: ((ART.padL + x) / (ART.w + ART.padL + ART.padR)) * 100,
+  top: ((ART.padT + y) / (ART.h + ART.padT + ART.padB)) * 100,
+});
+const marks = [
+  { n: 1, x: 262, y: 120 },
+  { n: 2, x: 22, y: 330 },
+  { n: 3, x: 250, y: 430 },
+  { n: 4, x: 200, y: 240 },
+  { n: 5, x: 168, y: 551 },
+].map((m) => ({ n: m.n, ...pos(m.x, m.y) }));
+// the cursor (a sliding window over today's date) is not part of the drawing — a frame on top of it, on 13 January
+const cursor = { ...pos(106, 541), w: (39 / (ART.w + ART.padL + ART.padR)) * 100, h: (20 / (ART.h + ART.padT + ART.padB)) * 100 };
+const tones = ['c', 'm', 'y'];
+---
+
+<BaseLayout
+  title={page.title}
+  description={page.description}
+  path={page.slug}
+  image="/portfolio/portfolio-29.webp"
+  schema={[
+    breadcrumbs(crumbs),
+    serviceLd({ name: page.h1, description: page.description, url: page.slug, lowPrice: Math.min(...cat.products.map((p) => p.fromPrice)), offerCount: cat.products.length }),
+    faqPage(page.faq),
+  ]}
+>
+  <!-- ============ first screen ============ -->
+  <section class="khero">
+    <div class="wrap khero-grid">
+      <div class="khero-text">
+        <Breadcrumbs items={crumbs} />
+        <p class="eyebrow khero-eyebrow">{page.eyebrow}</p>
+        <h1>{page.h1}</h1>
+        <p class="lead">{page.lead}</p>
+        <ul class="khero-chips">
+          {page.highlights.map((h) => <li><Icon name="check" size={18} /> {h}</li>)}
+        </ul>
+        <div class="khero-actions">
+          <a class="btn btn-magenta" href="#calc"><Icon name="calc" size={20} /> <span>Рассчитать<span class="long"> стоимость</span></span></a>
+          <button type="button" class="btn btn-ghost" data-order>Отправить макет</button>
+        </div>
+      </div>
+      <div class="khero-media" role="img" aria-label={page.heroAlt}>
+        <span class="khero-dot khero-dot-c" aria-hidden="true"></span>
+        <span class="khero-dot khero-dot-m" aria-hidden="true"></span>
+        <span class="khero-dot khero-dot-y" aria-hidden="true"></span>
+        <div class="khero-wall halftone" aria-hidden="true">
+          <span class="khero-nail khero-nail-1"></span>
+          <span class="khero-nail khero-nail-2"></span>
+          <CalendarArt type="midi3" strip="gold" scale={0.5} class="khero-cal khero-cal-1" />
+          <CalendarArt type="trio" strip="silver" scale={0.5} class="khero-cal khero-cal-2" />
+        </div>
+        <span class="sticker khero-price">
+          от <span class="mono">{rub(quarterly.fromPrice)}</span><small>квартальный</small>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ calculator ============ -->
+  <section id="calc" class="section calc-sec" aria-labelledby="calc-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Калькулятор</p>
+          <h2 id="calc-h">Посчитайте свои календари</h2>
+        </div>
+        <p class="calc-sub">Выберите модель, планку и тираж — цена за штуку и за весь тираж пересчитается сразу. Настенные, домики и карманные — переключите вид календаря.</p>
+      </div>
+      <Calculator client:visible category="calendars" product="cal-quarterly" hideCategories />
+    </div>
+    <AlsoOrder slugs={page.alsoOrder} />
+  </section>
+
+  <CalendarPackages />
+
+  <!-- ============ five quarterly models in one scale ============ -->
+  <section class="section kinds" aria-labelledby="kinds-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Виды календарей</p>
+          <h2 id="kinds-h">Квартальные календари МИДИ, МИНИ и «3 в 1»</h2>
+        </div>
+        <p class="kinds-sub">Все пять моделей нарисованы в одном масштабе — видно, какой календарь крупнее. Одна клетка на фоне — 10 × 10 см.</p>
+      </div>
+      <div class="kinds-wall" style={`--cell:${100 * KSCALE}px;--wall:${Math.round(tallest * KSCALE) + 44}px`}>
+        <span class="kinds-rail" aria-hidden="true"></span>
+        <ol class="kinds-row">
+          {
+            page.models.map((m, i) => (
+              <li class={`kinds-item kinds-${tones[i % 3]}`}>
+                <a class="kinds-art" href={`#kind-${m.id}`} aria-label={m.name}>
+                  <span class="kinds-nail" aria-hidden="true" />
+                  <CalendarArt type={m.id} scale={KSCALE} title={`Квартальный календарь ${m.name}, ширина ${m.width} мм`} />
+                </a>
+                <span class="kinds-num mono" aria-hidden="true">{i + 1}</span>
+                <span class="kinds-h mono">≈ {Math.round(m.height / 10)} см</span>
+              </li>
+            ))
+          }
+        </ol>
+        <span class="kinds-legend mono" aria-hidden="true"><i></i> 10 см</span>
+      </div>
+      <ul class="kinds-cards">
+        {
+          page.models.map((m, i) => (
+            <li id={`kind-${m.id}`} class={`kcard kinds-${tones[i % 3]}`}>
+              <div class="kcard-top">
+                <span class="kinds-num mono" aria-hidden="true">{i + 1}</span>
+                <span class="kcard-tag">{m.tag}</span>
+              </div>
+              <h3>{m.name}</h3>
+              <dl class="kcard-specs">
+                <div><dt>Ширина</dt><dd class="mono">{m.width} мм</dd></div>
+                <div><dt>Высота</dt><dd class="mono">≈ {m.height} мм</dd></div>
+                <div><dt>Постер</dt><dd class="mono">{m.poster}</dd></div>
+                <div><dt>Рекламных полей</dt><dd class="mono">{m.fields}</dd></div>
+              </dl>
+              <p>{m.text}</p>
+              <div class="kcard-foot">
+                <span class="kcard-price mono">от {rub(modelFrom[m.id])}<small>/шт</small></span>
+                <button type="button" class="btn btn-sm btn-ghost" data-order={`Квартальный календарь ${m.name} — рассчитать тираж`}>Заказать</button>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ options ============ -->
+  <section class="section opts" aria-labelledby="opts-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Опции</p>
+          <h2 id="opts-h">Металлическая планка и подгиб постера</h2>
+        </div>
+        <p>Добавляются к любой квартальной модели. Доплата — за один календарь, в калькуляторе она учитывается сразу.</p>
+      </div>
+      <ul class="opts-grid">
+        {
+          page.options.map((o) => (
+            <li class={`opt opt-${o.id}`}>
+              <div class="opt-art" aria-hidden="true">
+                <CalendarArt type="midi1" strip={o.id === 'fold' ? 'none' : o.id} fold={o.id === 'fold'} scale={0.62} />
+                <span class="opt-lens" />
+              </div>
+              <div class="opt-body">
+                <span class="opt-price mono">+{rub(extraPrice[o.id])} / шт</span>
+                <h3>{o.title}</h3>
+                <p>{o.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ anatomy ============ -->
+  <section class="section anat" aria-labelledby="anat-h">
+    <div class="wrap anat-grid">
+      <figure class="anat-art">
+        <div class="anat-pic">
+          <CalendarArt type="midi3" dims scale={ASCALE} title="Схема квартального календаря МИДИ с тремя рекламными полями и размерами" />
+          <span class="anat-cursor" style={`left:${cursor.left}%;top:${cursor.top}%;width:${cursor.w}%;height:${cursor.h}%`} aria-hidden="true"></span>
+          {marks.map((m) => <span class="anat-mark mono" style={`left:${m.left}%;top:${m.top}%`} aria-hidden="true">{m.n}</span>)}
+        </div>
+        <figcaption class="mono">МИДИ, 3 рекламных поля · размеры в мм</figcaption>
+      </figure>
+      <div class="anat-text">
+        <p class="eyebrow">Устройство</p>
+        <h2 id="anat-h">Из чего состоит квартальный календарь</h2>
+        <ol class="anat-list">
+          {
+            page.anatomy.map((a, i) => (
+              <li class={`anat-${tones[i % 3]}`}>
+                <span class="anat-num mono">{a.n}</span>
+                <div>
+                  <h3>{a.title}</h3>
+                  <p>{a.text}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ other calendars ============ -->
+  <section class="section oth" aria-labelledby="oth-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Ещё календари</p>
+          <h2 id="oth-h">Настенные, настольные и карманные календари на заказ</h2>
+        </div>
+        <p class="oth-sub">Их можно заказать даже в одном экземпляре — например, перекидной календарь с семейными фото в подарок.</p>
+      </div>
+      <ul class="oth-grid">
+        {
+          others.map((o, i) => (
+            <li class={`oth-card kinds-${tones[i % 3]}`}>
+              <span class="oth-art" aria-hidden="true">
+                {o.art === 'poster' && (
+                  <svg viewBox="0 0 80 100" width="80" height="100">
+                    <rect x="8" y="4" width="64" height="92" rx="3" fill="#fff" stroke="currentColor" stroke-width="2" />
+                    <rect x="14" y="10" width="52" height="16" rx="2" fill="var(--tone)" />
+                    {Array.from({ length: 12 }, (_, k) => (
+                      <rect x={14 + (k % 3) * 18} y={32 + Math.floor(k / 3) * 15} width="15" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.55" />
+                    ))}
+                  </svg>
+                )}
+                {o.art === 'flip' && (
+                  <svg viewBox="0 0 80 100" width="80" height="100">
+                    <rect x="12" y="10" width="60" height="86" rx="3" fill="#fff" stroke="currentColor" stroke-width="2" opacity="0.5" />
+                    <rect x="8" y="8" width="60" height="86" rx="3" fill="#fff" stroke="currentColor" stroke-width="2" />
+                    <rect x="14" y="16" width="48" height="38" rx="2" fill="var(--tone)" />
+                    <circle cx="26" cy="30" r="5" fill="#fff" opacity="0.8" />
+                    <path d="M14 54 30 38l10 10 8-6 14 12z" fill="#fff" opacity="0.55" />
+                    {Array.from({ length: 20 }, (_, k) => (
+                      <rect x={15 + (k % 7) * 7} y={60 + Math.floor(k / 7) * 9} width="5" height="5" rx="1" fill="currentColor" opacity="0.4" />
+                    ))}
+                    {Array.from({ length: 7 }, (_, k) => (
+                      <circle cx={16 + k * 7.5} cy="8" r="2.4" fill="none" stroke="currentColor" stroke-width="1.6" />
+                    ))}
+                  </svg>
+                )}
+                {o.art === 'desk' && (
+                  <svg viewBox="0 0 100 100" width="100" height="100">
+                    <path d="M14 86 36 18h28l22 68z" fill="var(--tone)" opacity="0.35" />
+                    <path d="M14 86 36 18h28l22 68z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                    <path d="M22 80 40 26h20l18 54z" fill="#fff" />
+                    {Array.from({ length: 21 }, (_, k) => (
+                      <rect x={38 + (k % 7) * 4} y={46 + Math.floor(k / 7) * 8} width="2.6" height="2.6" fill="currentColor" opacity="0.45" />
+                    ))}
+                    <rect x="38" y="32" width="26" height="6" rx="1.5" fill="var(--tone)" />
+                    <path d="M8 88h84" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  </svg>
+                )}
+                {o.art === 'pocket' && (
+                  <svg viewBox="0 0 100 100" width="100" height="100">
+                    <rect x="34" y="14" width="46" height="72" rx="5" fill="#fff" stroke="currentColor" stroke-width="2" transform="rotate(10 57 50)" opacity="0.5" />
+                    <rect x="22" y="14" width="46" height="72" rx="5" fill="#fff" stroke="currentColor" stroke-width="2" />
+                    {Array.from({ length: 12 }, (_, k) => (
+                      <rect x={27 + (k % 3) * 12.5} y={20 + Math.floor(k / 3) * 13} width="11" height="10" rx="1" fill="none" stroke="currentColor" stroke-width="1" opacity="0.5" />
+                    ))}
+                    <rect x="27" y="74" width="36" height="7" rx="2" fill="var(--tone)" />
+                  </svg>
+                )}
+              </span>
+              <div class="oth-body">
+                <h3>{o.title}</h3>
+                <p>{o.text}</p>
+                <p class="oth-meta">
+                  <span class="oth-price mono">
+                    {o.price} <small>{o.per}</small>
+                  </span>
+                  <span class="oth-min">{o.min}</span>
+                </p>
+                <a class="oth-link" href={`/kalendari?calc=calendars:${o.product}#calc`}>
+                  Рассчитать <Icon name="arrow" size={16} />
+                </a>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ for whom ============ -->
+  <section class="section aud" aria-labelledby="aud-h">
+    <div class="wrap">
+      <p class="eyebrow">Для кого</p>
+      <h2 id="aud-h" class="aud-title">Кому и зачем заказывают календари</h2>
+      <ul class="aud-grid">
+        {
+          page.audience.map((a, i) => (
+            <li class={`aud-card kinds-${tones[i % 3]}`}>
+              <span class="aud-tag mono">{a.tag}</span>
+              <h3>{a.title}</h3>
+              <p>{a.text}</p>
+              <span class="aud-num mono" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ how to order ============ -->
+  <section class="section how" aria-labelledby="how-h">
+    <div class="wrap how-grid">
+      <div>
+        <p class="eyebrow">Заказ</p>
+        <h2 id="how-h">Как заказать корпоративные календари с логотипом</h2>
+        <ol class="how-steps">
+          {
+            page.steps.map((s, i) => (
+              <li>
+                <span class="how-dot mono">{i + 1}</span>
+                <div>
+                  <h3>{s.title}</h3>
+                  <p>{s.text}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+      <aside class="how-side">
+        <div class="how-season">
+          <span class="how-season-cal mono" aria-hidden="true"><b>XI–XII</b>сезон</span>
+          <h3>{page.season.title}</h3>
+          <p>{page.season.text}</p>
+          <button type="button" class="btn btn-sm" data-order="Корпоративные календари на 2027 год — хочу заказать заранее">Оставить заявку</button>
+        </div>
+        <details class="how-card" open data-fold>
+          <summary><h3>{page.layout.title}</h3></summary>
+          <ul class="how-list">
+            {page.layout.items.map((t) => <li>{t}</li>)}
+          </ul>
+          <a class="how-more" href="/trebovaniya-k-maketam">Требования к макетам →</a>
+        </details>
+        <div class="how-b2b">
+          <h3>{page.b2b.title}</h3>
+          <ul class="how-chips">
+            {page.b2b.items.map((t) => <li><Icon name="check" size={16} /> {t}</li>)}
+          </ul>
+          <a class="how-more" href="/korporativnym-klientam">Корпоративным клиентам →</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <script is:inline>
+    // «Макет и календарная сетка» is always open on a computer; on a phone it starts folded (tap to open), as on the t-shirt page
+    (function () {
+      var m = matchMedia('(max-width: 760px)');
+      document.querySelectorAll('.how [data-fold]').forEach(function (d) {
+        if (m.matches) d.open = false;
+        d.querySelector('summary').addEventListener('click', function (e) {
+          if (!m.matches) e.preventDefault();
+        });
+        m.addEventListener('change', function (e) {
+          d.open = !e.matches;
+        });
+      });
+    })();
+  </script>
+
+  <PortfolioGrid tags={page.portfolioTags} limit={4} title="Примеры: календари и магниты" />
+
+  <Reviews />
+
+  <FaqSection items={page.faq} title="Вопросы о календарях" />
+
+  <!-- ============ SEO text (folded on phones) ============ -->
+  <section class="section seo-text" aria-labelledby="seo-h">
+    <div class="wrap">
+      <h2 id="seo-h">{page.seo.title}</h2>
+      <input type="checkbox" id="seo-more" class="seo-toggle" />
+      <div class="seo-cols">
+        {
+          page.seo.sections.map((s) => (
+            <div>
+              <h3>{s.h}</h3>
+              <p>{s.p}</p>
+            </div>
+          ))
+        }
+        <div>
+          <h3>Смотрите также</h3>
+          <p>
+            <a href="/korporativnym-klientam">Корпоративным клиентам</a> · <a href="/magnity">магниты-календари</a> · <a href="/vizitki">визитки</a> ·
+            <a href="/poligrafiya">листовки и блокноты</a> · <a href="/trebovaniya-k-maketam">требования к макетам</a> · <a href="/price">все цены</a>
+          </p>
+        </div>
+      </div>
+      <label for="seo-more" class="seo-more-btn">Читать полностью</label>
+    </div>
+  </section>
+
+  {
+    related.length > 0 && (
+      <section class="section related" aria-labelledby="rel-h">
+        <div class="wrap">
+          <h2 id="rel-h" class="related-h">Ещё печатаем</h2>
+          <div class="related-grid">
+            {related.map((r) => (
+              <a class="related-card" href={r.slug}>
+                <img src={r.image} alt="" width="120" height="120" loading="lazy" />
+                <span>{r.name}</span>
+                <Icon name="arrow" />
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <CtaBand title="Нужны календари к Новому году?" text="Пришлите логотип и пожелания — подберём модель, посчитаем тираж и соберём макет с сеткой на 2027 год." />
+</BaseLayout>
+
+<style>
+  /* ================= first screen ================= */
+  .khero {
+    padding-block: clamp(28px, 4vw, 48px) clamp(24px, 4vw, 40px);
+    overflow: clip;
+  }
+  .khero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: clamp(28px, 5vw, 72px);
+    align-items: center;
+  }
+  .khero-text {
+    display: grid;
+    gap: 20px;
+    justify-items: start;
+  }
+  .khero-eyebrow {
+    margin: 0 0 -8px;
+  }
+  .khero-text h1 {
+    font-size: clamp(2.2rem, 5vw, 4rem);
+  }
+  .khero-chips {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .khero-chips li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+  .khero-chips :global(svg) {
+    color: var(--m-ink);
+  }
+  .khero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .khero-media {
+    position: relative;
+    padding: 24px;
+  }
+  /* a piece of wall with two calendars hanging on nails */
+  .khero-wall {
+    position: relative;
+    z-index: 1;
+    aspect-ratio: 1;
+    border-radius: 40px 40px 40px 120px;
+    background-color: var(--paper-2);
+    --dot: rgba(22, 20, 27, 0.1);
+    overflow: clip;
+  }
+  .khero-wall :global(.khero-cal) {
+    position: absolute;
+    height: auto;
+    filter: drop-shadow(0 16px 22px rgba(22, 20, 27, 0.22));
+  }
+  /* each calendar is turned a little around its nail, like a real one on a wall */
+  .khero-wall :global(.khero-cal-1) {
+    left: 15%;
+    top: 7%;
+    width: 31%;
+    transform: rotate(-1.5deg);
+    transform-origin: 50% 1%;
+  }
+  .khero-wall :global(.khero-cal-2) {
+    left: 53%;
+    top: 14%;
+    width: 34%;
+    transform: rotate(2deg);
+    transform-origin: 50% 1%;
+  }
+  .khero-nail {
+    position: absolute;
+    z-index: 2;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--ink);
+    box-shadow: 0 2px 0 rgba(255, 255, 255, 0.5) inset;
+  }
+  .khero-nail-1 {
+    left: calc(15% + 15.5% - 5px);
+    top: calc(7% - 1px);
+  }
+  .khero-nail-2 {
+    left: calc(53% + 17% - 5px);
+    top: calc(14% - 1px);
+  }
+  .khero-price {
+    position: absolute;
+    right: 0;
+    bottom: 40px;
+    z-index: 3;
+    display: grid;
+    font-size: 1.25rem;
+    text-align: center;
+  }
+  .khero-price small {
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+  .khero-dot {
+    position: absolute;
+    border-radius: 50%;
+    mix-blend-mode: multiply;
+    z-index: 0;
+  }
+  .khero-dot-c {
+    width: 120px;
+    height: 120px;
+    background: var(--c);
+    top: -6px;
+    right: -10px;
+  }
+  .khero-dot-m {
+    width: 80px;
+    height: 80px;
+    background: var(--m);
+    top: 40px;
+    right: 60px;
+    opacity: 0.8;
+  }
+  .khero-dot-y {
+    width: 110px;
+    height: 110px;
+    background: var(--y);
+    bottom: 0;
+    left: 0;
+  }
+  .calc-sec {
+    background: var(--paper-2);
+    border-radius: 48px;
+    margin-inline: clamp(0px, 1.5vw, 20px);
+  }
+
+  /* ================= kinds: the wall with five calendars ================= */
+  /* --kz: zoom of the drawings on smaller screens; the 10 cm grid and the legend follow it, so the scale stays true */
+  .kinds-wall {
+    --kz: 1;
+    --cz: calc(var(--cell) * var(--kz));
+    position: relative;
+    padding: 34px 24px 52px;
+    border-radius: var(--radius-l);
+    background:
+      linear-gradient(rgba(22, 20, 27, 0.07) 1px, transparent 1px) 0 34px / 100% var(--cz),
+      linear-gradient(90deg, rgba(22, 20, 27, 0.07) 1px, transparent 1px) 0 0 / var(--cz) 100%,
+      var(--paper-2);
+    overflow: clip;
+  }
+  .kinds-rail {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 20px;
+    height: 4px;
+    background: repeating-linear-gradient(90deg, var(--ink) 0 18px, transparent 18px 26px);
+    opacity: 0.12;
+  }
+  .kinds-row {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+    align-items: start;
+  }
+  .kinds-item {
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+  }
+  .kinds-c { --tone: var(--c); --soft: var(--c-soft); }
+  .kinds-m { --tone: var(--m); --soft: var(--m-soft); }
+  .kinds-y { --tone: var(--y); --soft: var(--y-soft); }
+  .kinds-art {
+    zoom: var(--kz);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: var(--wall);
+    padding-top: 10px;
+    color: inherit;
+    transition: transform 0.2s ease;
+  }
+  .kinds-art:hover {
+    transform: translateY(-4px);
+  }
+  .kinds-art :global(svg) {
+    flex: none;
+    filter: drop-shadow(0 14px 18px rgba(22, 20, 27, 0.2));
+  }
+  .kinds-nail {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    margin-left: -5px;
+    border-radius: 50%;
+    background: var(--ink);
+  }
+  .kinds-num {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--tone);
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+  .kinds-m .kinds-num {
+    color: #fff;
+  }
+  .kinds-h {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .kinds-legend {
+    position: absolute;
+    right: 18px;
+    bottom: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--card);
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+  .kinds-legend i {
+    width: var(--cz);
+    height: 6px;
+    border: 1.5px solid var(--ink);
+    border-top: 0;
+  }
+  .kinds-cards {
+    list-style: none;
+    margin: 16px 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .kcard {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    border-radius: 24px 24px 24px 8px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    border-top: 5px solid var(--tone);
+    scroll-margin-top: 90px;
+  }
+  .kcard:target {
+    box-shadow: 5px 5px 0 var(--tone);
+  }
+  .kcard-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .kcard .kinds-num {
+    width: 28px;
+    height: 28px;
+    font-size: 0.82rem;
+  }
+  .kcard-tag {
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--soft);
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+  .kcard h3 {
+    font-size: 1.05rem;
+  }
+  .kcard-specs {
+    margin: 0;
+    display: grid;
+    gap: 3px;
+    font-size: 0.82rem;
+  }
+  .kcard-specs div {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding-bottom: 3px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .kcard-specs dt {
+    color: var(--muted);
+  }
+  .kcard-specs dd {
+    margin: 0;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .kcard p {
+    margin: 0;
+    font-size: 0.86rem;
+    color: var(--ink-2);
+    line-height: 1.45;
+  }
+  .kcard-foot {
+    margin-top: auto;
+    padding-top: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .kcard-price {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+  .kcard-price small {
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0;
+  }
+
+  /* ================= options ================= */
+  .opts {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 48px;
+    margin-inline: clamp(0px, 1.5vw, 20px);
+  }
+  .opts h2,
+  .opts .eyebrow {
+    color: var(--paper);
+  }
+  .opts .section-head p {
+    color: rgba(255, 252, 245, 0.72);
+  }
+  .opts-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .opt {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    border-radius: var(--radius-l);
+    background: rgba(255, 252, 245, 0.06);
+    border: 1.5px solid rgba(255, 252, 245, 0.14);
+    overflow: clip;
+  }
+  /* close-up of the top of a calendar: the strip or the fold */
+  .opt-art {
+    position: relative;
+    height: 190px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 26px;
+    overflow: clip;
+    background: radial-gradient(circle at 50% 0, rgba(255, 252, 245, 0.16), transparent 70%);
+  }
+  .opt-art :global(svg) {
+    flex: none;
+    filter: drop-shadow(0 14px 18px rgba(0, 0, 0, 0.45));
+  }
+  .opt-art::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    height: 60px;
+    background: linear-gradient(transparent, var(--ink));
+  }
+  .opt-lens {
+    position: absolute;
+    z-index: 1;
+    top: 10px;
+    left: 50%;
+    width: 240px;
+    height: 56px;
+    margin-left: -120px;
+    border-radius: 999px;
+    border: 2px dashed var(--y);
+  }
+  .opt-silver .opt-lens { border-color: #d6dae2; }
+  .opt-gold .opt-lens { border-color: var(--y); }
+  .opt-fold .opt-lens { border-color: var(--c); }
+  .opt-body {
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: 8px;
+    padding: 6px 22px 24px;
+  }
+  .opt-price {
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--y);
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+  .opt-silver .opt-price { background: #e4e7ec; }
+  .opt-fold .opt-price { background: var(--c); }
+  .opt h3 {
+    color: var(--paper);
+    font-size: 1.2rem;
+  }
+  .opt p {
+    margin: 0;
+    color: rgba(255, 252, 245, 0.78);
+    font-size: 0.93rem;
+  }
+
+  /* ================= anatomy ================= */
+  .anat-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(28px, 5vw, 72px);
+    align-items: center;
+  }
+  .anat-art {
+    margin: 0;
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    padding: 28px 20px 18px;
+    border-radius: 40px 40px 120px 40px;
+    background: var(--c-soft);
+  }
+  .anat-pic {
+    position: relative;
+    line-height: 0;
+  }
+  .anat-pic :global(svg) {
+    max-width: 100%;
+    height: auto;
+  }
+  .anat-cursor {
+    position: absolute;
+    border: 2px solid var(--m);
+    border-radius: 3px;
+    background: rgba(229, 0, 125, 0.12);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
+  }
+  .anat-mark {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    margin: -15px 0 0 -15px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1;
+    box-shadow: 0 0 0 3px #fff;
+  }
+  .anat-art figcaption {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .anat-text h2 {
+    margin-bottom: 22px;
+  }
+  .anat-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+  .anat-list li {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 14px;
+    align-items: start;
+    padding: 14px 18px 14px 14px;
+    border-radius: 22px 22px 22px 6px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+  }
+  .anat-c { --tone: var(--c); }
+  .anat-m { --tone: var(--m); }
+  .anat-y { --tone: var(--y); }
+  .anat-num {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+    font-weight: 700;
+    box-shadow: 3px 3px 0 var(--tone);
+  }
+  .anat-list h3 {
+    margin: 2px 0 4px;
+    font-size: 1.05rem;
+  }
+  .anat-list p {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--ink-2);
+  }
+
+  /* ================= other calendars ================= */
+  .oth-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .oth-card {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    border-radius: var(--radius-l);
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    overflow: clip;
+  }
+  .oth-art {
+    display: grid;
+    place-items: center;
+    height: 150px;
+    background: var(--soft);
+    color: var(--ink);
+  }
+  .oth-art svg {
+    width: 110px;
+    height: 110px;
+  }
+  .oth-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 16px 18px 18px;
+  }
+  .oth-body h3 {
+    font-size: 1.1rem;
+  }
+  .oth-body > p:not(.oth-meta) {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--ink-2);
+  }
+  .oth-meta {
+    margin: auto 0 0;
+    padding-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 10px;
+  }
+  .oth-price {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+  .oth-price small {
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0;
+  }
+  .oth-min {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .oth-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    color: var(--m-ink);
+  }
+
+  /* ================= audience ================= */
+  .aud-title {
+    margin-bottom: 28px;
+    max-width: 820px;
+  }
+  .aud-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .aud-card {
+    position: relative;
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: 8px;
+    padding: 22px 22px 56px;
+    border-radius: 26px 26px 26px 8px;
+    background: var(--soft);
+    overflow: clip;
+  }
+  .aud-tag {
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--card);
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+  .aud-card h3 {
+    font-size: 1.2rem;
+  }
+  .aud-card p {
+    margin: 0;
+    font-size: 0.93rem;
+    color: var(--ink-2);
+  }
+  .aud-num {
+    position: absolute;
+    right: 16px;
+    bottom: -14px;
+    font-size: 4rem;
+    font-weight: 800;
+    color: var(--tone);
+    opacity: 0.5;
+    line-height: 1;
+  }
+
+  /* ================= how to order ================= */
+  .how {
+    background: var(--paper-2);
+    border-radius: 48px;
+    margin-inline: clamp(0px, 1.5vw, 20px);
+  }
+  .how-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: clamp(28px, 5vw, 64px);
+    align-items: start;
+  }
+  .how-grid h2 {
+    margin-bottom: 26px;
+  }
+  .how-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+  }
+  .how-steps li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 16px;
+    padding-bottom: 22px;
+  }
+  .how-steps li:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 23px;
+    top: 48px;
+    bottom: 4px;
+    border-left: 2px dashed var(--line-strong);
+  }
+  .how-dot {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    background: var(--card);
+    font-weight: 700;
+  }
+  .how-steps li:nth-child(3n + 1) .how-dot { box-shadow: 3px 3px 0 var(--c); }
+  .how-steps li:nth-child(3n + 2) .how-dot { box-shadow: 3px 3px 0 var(--m); }
+  .how-steps li:nth-child(3n + 3) .how-dot { box-shadow: 3px 3px 0 var(--y); }
+  .how-steps h3 {
+    margin: 10px 0 4px;
+    font-size: 1.1rem;
+  }
+  .how-steps p {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 0.95rem;
+  }
+  .how-side {
+    display: grid;
+    gap: 14px;
+  }
+  .how-season,
+  .how-card,
+  .how-b2b {
+    position: relative;
+    display: grid;
+    justify-items: start;
+    gap: 8px;
+    padding: 22px;
+    border-radius: var(--radius-l);
+  }
+  .how-season {
+    background: var(--y);
+    padding-right: 112px;
+  }
+  .how-season-cal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: grid;
+    place-items: center;
+    width: 76px;
+    height: 80px;
+    border-radius: 12px;
+    background: var(--card);
+    border-top: 14px solid var(--m);
+    font-size: 0.68rem;
+    font-weight: 700;
+    transform: rotate(4deg);
+    box-shadow: 0 10px 18px -10px rgba(22, 20, 27, 0.5);
+  }
+  .how-season-cal b {
+    font-size: 1.05rem;
+  }
+  .how-season p,
+  .how-card li {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--ink-2);
+  }
+  .how-card {
+    background: var(--card);
+    border: 1.5px solid var(--line);
+  }
+  .how-card summary {
+    list-style: none;
+    cursor: default;
+  }
+  .how-card summary::-webkit-details-marker {
+    display: none;
+  }
+  .how-card[open] {
+    gap: 8px;
+  }
+  .how-list {
+    margin: 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 6px;
+  }
+  .how-list li::marker {
+    color: var(--m);
+  }
+  .how-more {
+    font-weight: 700;
+    color: var(--m-ink);
+  }
+  .how-b2b {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .how-b2b h3 {
+    color: var(--paper);
+  }
+  .how-b2b .how-more {
+    color: var(--y);
+  }
+  .how-chips {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .how-chips li {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 11px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(255, 252, 245, 0.25);
+    font-size: 0.84rem;
+    font-weight: 600;
+  }
+  .how-chips :global(svg) {
+    color: var(--y);
+  }
+
+  /* ================= seo text ================= */
+  .seo-text h2 {
+    margin-bottom: 24px;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+  }
+  .seo-cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 48px;
+  }
+  .seo-cols h3 {
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+  }
+  .seo-cols p {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 0.96rem;
+    line-height: 1.6;
+  }
+  .seo-toggle,
+  .seo-more-btn {
+    display: none;
+  }
+
+  /* ================= related ================= */
+  .related-h {
+    margin-bottom: 24px;
+  }
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+  }
+  .related-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 18px 10px 10px;
+    border-radius: 24px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    font-weight: 700;
+    text-decoration: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .related-card img {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    object-fit: cover;
+  }
+  .related-card span {
+    flex: 1;
+  }
+  .related-card:hover {
+    border-color: var(--ink);
+    box-shadow: 4px 4px 0 var(--y);
+    color: var(--ink);
+  }
+
+  /* ================= tablets ================= */
+  @media (max-width: 1100px) {
+    .kinds-cards {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .oth-grid,
+    .aud-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 860px) {
+    .khero-grid,
+    .anat-grid,
+    .how-grid {
+      grid-template-columns: 1fr;
+    }
+    .khero-media {
+      max-width: 400px;
+      justify-self: center;
+      padding: 12px;
+    }
+    .opts-grid {
+      grid-template-columns: 1fr;
+    }
+    .kinds-wall {
+      --kz: 0.7;
+    }
+  }
+
+  /* ================= phones (≤ 760px): compact, desktop untouched ================= */
+  @media (max-width: 760px) {
+    .khero {
+      padding-block: 14px 22px;
+    }
+    .khero-grid {
+      grid-template-columns: minmax(0, 1fr) 118px;
+      gap: 12px 14px;
+      align-items: start;
+    }
+    .khero-text {
+      display: contents;
+    }
+    .khero-text > :global(.crumbs),
+    .khero-text h1,
+    .khero-chips,
+    .khero-actions {
+      grid-column: 1 / -1;
+    }
+    .khero-eyebrow {
+      display: none;
+    }
+    .khero-text > :global(.crumbs) {
+      order: 1;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .khero-text > :global(.crumbs) :global(ol) {
+      flex-wrap: nowrap;
+      white-space: nowrap;
+      font-size: 0.78rem;
+    }
+    .khero-text h1 {
+      order: 2;
+      font-size: clamp(1.7rem, 7.6vw, 2.1rem);
+    }
+    .lead {
+      order: 3;
+      grid-column: 1;
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+    .khero-media {
+      order: 4;
+      grid-column: 2;
+      grid-row: 3;
+      max-width: none;
+      justify-self: stretch;
+      padding: 0 0 12px;
+    }
+    .khero-wall {
+      aspect-ratio: 3 / 4.4;
+      border-radius: 20px 20px 20px 48px;
+    }
+    .khero-wall :global(.khero-cal-1) {
+      left: 6%;
+      top: 5%;
+      width: 46%;
+    }
+    .khero-wall :global(.khero-cal-2) {
+      left: 50%;
+      top: 24%;
+      width: 46%;
+    }
+    .khero-nail,
+    .khero-dot {
+      display: none;
+    }
+    .khero-price {
+      right: -4px;
+      bottom: 0;
+      padding: 5px 9px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+    }
+    .khero-price small {
+      font-size: 0.6rem;
+    }
+    .khero-price::before {
+      display: none;
+    }
+    .khero-chips {
+      order: 5;
+      flex-wrap: nowrap;
+      gap: 6px;
+      overflow-x: auto;
+      margin-inline: calc(var(--gutter) * -1);
+      padding-inline: var(--gutter);
+      scrollbar-width: none;
+    }
+    .khero-chips::-webkit-scrollbar,
+    .khero-text > :global(.crumbs)::-webkit-scrollbar {
+      display: none;
+    }
+    .khero-chips li {
+      flex: none;
+      gap: 4px;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+    .khero-chips :global(svg) {
+      width: 14px;
+      height: 14px;
+    }
+    .khero-actions {
+      order: 6;
+      flex-wrap: nowrap;
+      gap: 8px;
+    }
+    .khero-actions .btn {
+      flex: 1 1 0;
+      min-height: 46px;
+      padding: 0 12px;
+      gap: 6px;
+      font-size: 0.92rem;
+      white-space: nowrap;
+    }
+    .khero-actions .btn :global(svg) {
+      width: 18px;
+      height: 18px;
+    }
+    .long {
+      display: none;
+    }
+    .calc-sec {
+      border-radius: 28px;
+      padding-block: 28px 32px;
+    }
+    .calc-sec .section-head {
+      margin-bottom: 16px;
+    }
+    .calc-sec .section-head .eyebrow {
+      margin-bottom: 6px;
+    }
+    .calc-sub {
+      display: none;
+    }
+
+    /* tighter sections */
+    .kinds,
+    .opts,
+    .anat,
+    .oth,
+    .aud,
+    .how,
+    .seo-text,
+    .related {
+      padding-block: 32px;
+    }
+    .kinds .section-head,
+    .opts .section-head,
+    .oth .section-head {
+      margin-bottom: 14px;
+      gap: 6px;
+    }
+    .kinds .section-head .eyebrow,
+    .opts .section-head .eyebrow,
+    .oth .section-head .eyebrow {
+      margin-bottom: 6px;
+    }
+    .opts .section-head p,
+    .oth-sub {
+      display: none;
+    }
+    .kinds-sub {
+      font-size: 0.86rem;
+    }
+
+    /* kinds: all five still side by side, smaller (same scale); cards below become a carousel */
+    .kinds-wall {
+      margin-inline: calc(var(--gutter) * -0.5);
+      padding: 22px 8px 34px;
+      border-radius: 24px;
+      --kz: 0.45;
+      background-position: 0 22px, 0 0, 0 0;
+    }
+    .kinds-rail {
+      top: 12px;
+    }
+    .kinds-row {
+      gap: 4px;
+    }
+    .kinds-item {
+      gap: 4px;
+    }
+    .kinds-wall .kinds-num {
+      width: 24px;
+      height: 24px;
+      font-size: 0.75rem;
+    }
+    .kinds-h {
+      font-size: 0.66rem;
+    }
+    .kinds-legend {
+      right: 10px;
+      bottom: 8px;
+      font-size: 0.66rem;
+    }
+    .kinds-cards {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: var(--gutter);
+      margin-inline: calc(var(--gutter) * -1);
+      padding: 0 var(--gutter) 8px;
+      scrollbar-width: none;
+    }
+    .kinds-cards::-webkit-scrollbar {
+      display: none;
+    }
+    .kcard {
+      flex: 0 0 min(250px, 74%);
+      scroll-snap-align: start;
+      gap: 6px;
+      padding: 12px 14px 14px;
+    }
+    .kcard h3 {
+      font-size: 0.98rem;
+    }
+    .kcard p {
+      font-size: 0.8rem;
+    }
+    .kcard .btn {
+      min-height: 36px;
+      padding: 0 14px;
+      font-size: 0.82rem;
+    }
+
+    /* options: compact rows — small close-up on the left */
+    .opts {
+      border-radius: 28px;
+    }
+    .opts-grid {
+      gap: 10px;
+    }
+    .opt {
+      grid-template-columns: 112px minmax(0, 1fr);
+      grid-template-rows: none;
+      border-radius: 22px;
+    }
+    /* contain: size — the close-up takes the height of the text next to it and cuts the drawing */
+    .opt-art {
+      height: auto;
+      min-height: 120px;
+      padding-top: 14px;
+      contain: size;
+    }
+    .opt-art :global(svg) {
+      zoom: 0.42;
+    }
+    .opt-lens {
+      top: 6px;
+      width: 96px;
+      height: 30px;
+      margin-left: -48px;
+    }
+    .opt-body {
+      gap: 4px;
+      padding: 12px 14px 14px 4px;
+    }
+    .opt-price {
+      padding: 2px 9px;
+      font-size: 0.76rem;
+    }
+    .opt h3 {
+      font-size: 0.98rem;
+    }
+    .opt p {
+      font-size: 0.8rem;
+      line-height: 1.4;
+    }
+
+    /* anatomy: small drawing on the left, list on the right */
+    .anat-grid {
+      grid-template-columns: 124px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+    }
+    .anat-text {
+      display: contents;
+    }
+    .anat-text .eyebrow {
+      display: none;
+    }
+    .anat-text h2 {
+      grid-column: 1 / -1;
+      grid-row: 1;
+      margin-bottom: 0;
+    }
+    .anat-art {
+      grid-row: 2;
+      padding: 12px 6px 8px;
+      border-radius: 18px 18px 40px 18px;
+      gap: 4px;
+    }
+    .anat-pic {
+      zoom: 0.5;
+    }
+    .anat-mark {
+      width: 40px;
+      height: 40px;
+      margin: -20px 0 0 -20px;
+      font-size: 1.3rem;
+    }
+    .anat-art figcaption {
+      display: none;
+    }
+    .anat-list {
+      grid-row: 2;
+      gap: 6px;
+    }
+    .anat-list li {
+      grid-template-columns: 26px 1fr;
+      gap: 8px;
+      padding: 8px 10px 9px 8px;
+      border-radius: 16px 16px 16px 6px;
+    }
+    .anat-num {
+      width: 26px;
+      height: 26px;
+      font-size: 0.78rem;
+      box-shadow: 2px 2px 0 var(--tone);
+    }
+    .anat-list h3 {
+      margin: 2px 0 2px;
+      font-size: 0.9rem;
+    }
+    .anat-list p {
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+
+    /* other calendars: 2×2 compact tiles */
+    .oth-grid {
+      gap: 8px;
+    }
+    .oth-card {
+      border-radius: 20px;
+    }
+    .oth-art {
+      height: 86px;
+    }
+    .oth-art svg {
+      width: 70px;
+      height: 70px;
+    }
+    .oth-body {
+      gap: 3px;
+      padding: 10px 12px 12px;
+    }
+    .oth-body h3 {
+      font-size: 0.92rem;
+    }
+    .oth-body > p:not(.oth-meta) {
+      font-size: 0.78rem;
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .oth-meta {
+      padding-top: 6px;
+    }
+    .oth-price {
+      font-size: 0.95rem;
+    }
+    .oth-min {
+      display: none;
+    }
+    .oth-link {
+      font-size: 0.85rem;
+    }
+
+    /* audience: compact list */
+    .aud-title {
+      margin-bottom: 14px;
+    }
+    .aud-grid {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .aud-card {
+      gap: 4px;
+      padding: 12px 70px 12px 14px;
+      border-radius: 20px 20px 20px 6px;
+    }
+    .aud-card h3 {
+      font-size: 1rem;
+    }
+    .aud-card p {
+      font-size: 0.82rem;
+      line-height: 1.4;
+    }
+    .aud-tag {
+      padding: 2px 8px;
+      font-size: 0.66rem;
+    }
+    .aud-num {
+      right: 10px;
+      bottom: auto;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2.6rem;
+    }
+
+    /* how to order */
+    .how {
+      border-radius: 28px;
+    }
+    .how-grid h2 {
+      margin-bottom: 16px;
+    }
+    .how-steps li {
+      grid-template-columns: 36px 1fr;
+      gap: 12px;
+      padding-bottom: 14px;
+    }
+    .how-steps li:not(:last-child)::before {
+      left: 17px;
+      top: 36px;
+    }
+    .how-dot {
+      width: 36px;
+      height: 36px;
+      font-size: 0.85rem;
+    }
+    .how-steps h3 {
+      margin: 6px 0 2px;
+      font-size: 0.98rem;
+    }
+    .how-steps p {
+      font-size: 0.84rem;
+      line-height: 1.4;
+    }
+    .how-side {
+      gap: 10px;
+    }
+    .how-season,
+    .how-card,
+    .how-b2b {
+      gap: 6px;
+      padding: 16px;
+      border-radius: 24px;
+    }
+    .how-season {
+      padding-right: 86px;
+    }
+    .how-season-cal {
+      top: 14px;
+      right: 14px;
+      width: 58px;
+      height: 62px;
+      border-top-width: 10px;
+      font-size: 0.6rem;
+    }
+    .how-season-cal b {
+      font-size: 0.85rem;
+    }
+    .how-season p,
+    .how-card li {
+      font-size: 0.82rem;
+    }
+    .how-card summary {
+      cursor: pointer;
+    }
+    .how-card summary h3 {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .how-card summary h3::after {
+      content: '+';
+      display: grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      flex: none;
+      border-radius: 50%;
+      border: 1.5px solid var(--ink);
+      font-size: 1rem;
+    }
+    .how-card[open] summary h3::after {
+      content: '−';
+    }
+    .how-side h3 {
+      font-size: 1rem;
+    }
+    .how-chips li {
+      padding: 4px 9px;
+      font-size: 0.76rem;
+    }
+  }
+
+  @media (max-width: 560px) {
+    /* seo text: first lines + «Читать полностью» */
+    .seo-text h2 {
+      margin-bottom: 14px;
+    }
+    .seo-cols {
+      grid-template-columns: 1fr;
+      gap: 14px;
+      max-height: 230px;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(#000 60%, transparent);
+      mask-image: linear-gradient(#000 60%, transparent);
+    }
+    .seo-toggle:checked + .seo-cols {
+      max-height: none;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+    .seo-more-btn {
+      display: inline-block;
+      margin-top: 8px;
+      font-weight: 700;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .seo-toggle:checked ~ .seo-more-btn {
+      display: none;
+    }
+    /* «Ещё печатаем»: 2×2 tiles with the picture on top */
+    .related-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .related-card {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 8px 10px 12px;
+      border-radius: 18px;
+      font-size: 0.88rem;
+      line-height: 1.25;
+    }
+    .related-card img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 10;
+      border-radius: 12px;
+    }
+    .related-card :global(svg) {
+      display: none;
+    }
+    .related-h {
+      margin-bottom: 14px;
+    }
+  }
+  @media (max-width: 380px) {
+    .kinds-wall {
+      --kz: 0.42;
+    }
+  }
+</style>
