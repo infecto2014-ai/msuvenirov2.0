@@ -196,6 +196,15 @@ const tones = ['c', 'm', 'y'];
               <div class="fin-body">
                 <h3>{f.title}</h3>
                 <p>{f.text}</p>
+                {f.id === 'color' && (
+                  <ul class="fin-colors" aria-label="Цвета ручки и внутренней стороны">
+                    {page.innerColors.map((c) => (
+                      <li title={c.name} style={`--sw:${c.hex}`}>
+                        <span class="sr-only">{c.name}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
                 <p class="fin-meta">
                   <span class="fin-price mono">от {rub(f.from)}</span>
                   <span class="fin-one">1 шт — <b class="mono">{rub(f.one)}</b></span>
@@ -743,6 +752,22 @@ const tones = ['c', 'm', 'y'];
     letter-spacing: 0;
   }
 
+  /* colour dots on the «цветная ручка и внутри» card */
+  .fin-colors {
+    list-style: none;
+    margin: 4px 0 8px;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .fin-colors li {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--sw);
+    box-shadow: 0 0 0 1.5px rgba(255, 252, 245, 0.55);
+  }
   /* ================= coatings (dark band) ================= */
   .fin {
     background: var(--ink);
