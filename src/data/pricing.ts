@@ -862,8 +862,8 @@ const calendars: Category = {
         { id: 'mini1', label: 'МИНИ, 1 рекламное поле', hint: '297 мм, 3 блока', prices: up([340, 320, 310, 300, 290, 280, 270]) },
         { id: 'trio', label: '«3 в 1», 1 рекламное поле', hint: '335 мм, один большой блок', prices: up([350, 320, 310, 300]) },
       ];
-      const STRIP = { none: 0, silver: Math.round(90 * 1.2), gold: Math.round(110 * 1.2) };
-      const FOLD = Math.round(35 * 1.2);
+      const STRIP = { none: 0, silver: 110, gold: 130 }; // owner, 04.11.2026
+      const FOLD = 40; // owner, 04.11.2026
       const tiersOf = (m: (typeof models)[number]) => tiers(runs.slice(0, m.prices.length), m.prices);
       const model = (sel: Selection) => models.find((m) => m.id === one(sel, 'model', 'midi3')) ?? models[0];
       const extras = (sel: Selection) => {

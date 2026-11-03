@@ -113,8 +113,8 @@ describe('pricing', () => {
     expect(q(10).unit).toBe(672); // МИДИ 3 поля: 560 × 1,2
     expect(q(100, { model: 'mini1' }).unit).toBe(372);
     expect(q(1000, { model: 'midi1' }).unit).toBe(348);
-    expect(q(50, { model: 'midi3', strip: 'gold', fold: ['fold'] }).unit).toBe(636 + 132 + 42);
-    expect(q(100, { model: 'mini3', strip: 'silver' }).total).toBe((444 + 108) * 100);
+    expect(q(50, { model: 'midi3', strip: 'gold', fold: ['fold'] }).unit).toBe(636 + 130 + 40);
+    expect(q(100, { model: 'mini3', strip: 'silver' }).total).toBe((444 + 110) * 100);
     expect(q(300, { model: 'trio' }).unit).toBe(360);
   });
 
