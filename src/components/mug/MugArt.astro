@@ -1,0 +1,542 @@
+---
+// Иллюстрация кружки (плоская графика «CMYK 2.0»), вид сбоку, ручка справа.
+// viewBox — в миллиметрах, поэтому модели в одном scale сравниваются по реальному размеру.
+import { buildMug, type MugType } from './mug-geometry';
+
+interface Props {
+  type: 'mug330' | 'mug425' | 'coffee' | 'beer600';
+  finish?: 'white' | 'color' | 'chameleon' | 'glitter' | 'marble' | 'gold'; // покрытие, по умолчанию 'white'
+  print?: 'logo' | 'photo' | 'text' | 'none'; // что нарисовано на кружке, по умолчанию 'logo'
+  dims?: boolean; // подписи размеров в мм (высота, диаметр, объём) со стрелками
+  scale?: number; // px на мм, по умолчанию 1.2 — модели в одном масштабе
+  title?: string;
+  class?: string;
+}
+
+const { type, finish = 'white', print = 'logo', dims = false, scale = 1.2, title, class: cls } = Astro.props;
+
+const L = buildMug(type as MugType);
+const { cx, rt, rb, e, eb, h, print: P } = L;
+const u = 1 / scale; // 1 экранный пиксель в мм
+const uid = 'mug' + crypto.randomUUID().slice(0, 8);
+const id = (s: string) => `${uid}-${s}`;
+const url = (s: string) => `url(#${id(s)})`;
+
+const FINISH: Record<string, string> = {
+  white: '',
+  color: ', цветная внутри',
+  chameleon: ', хамелеон',
+  glitter: ', с блёстками',
+  marble: ', мраморная',
+  gold: ', золотая',
+};
+const label = title ?? L.model.name + (FINISH[finish] ?? '');
+
+// Цвета покрытия
+const dark = finish === 'chameleon';
+const vivid = finish === 'glitter';
+const bodyFill =
+  finish === 'chameleon' ? 'var(--ink, #16141b)' : finish === 'glitter' ? url('glit') : finish === 'gold' ? url('gold') : 'var(--card, #fff)';
+const handleFill = finish === 'color' || finish === 'glitter' ? 'var(--m, #e5007d)' : bodyFill;
+const innerFill = finish === 'color' || finish === 'glitter' ? 'var(--m, #e5007d)' : dark ? '#2a2731' : 'var(--paper-2, #f7f1e3)';
+const outline = dark ? 'var(--ink, #16141b)' : finish === 'gold' ? '#9c7a12' : 'var(--line-strong, #cfc5b1)';
+const textOnBody = dark || vivid ? 'f-paper' : 'f-ink';
+
+// Края корпуса и стенки
+const wall = type === 'beer600' ? 3.4 : 2.6;
+const inRx = rt - wall;
+const inRy = e - wall * 0.62;
+
+// Пар над хамелеоном
+const steamH = dark ? 26 : 0;
+
+// Размеры
+const fsDim = 10.5 * u;
+const arrow = 6 * u;
+const aw = 2.4 * u;
+const charW = fsDim * 0.62;
+const hLabel = `≈ ${L.model.h} мм`;
+const dLabel = `d ${L.model.d} мм`;
+const vLabel = `${L.model.vol} мл`;
+const sLabel = L.saucer ? `d ≈ ${L.saucer.rx * 2} мм` : '';
+const vDimX = cx - Math.max(rt, rb) - 11 * u;
+const vTextX = vDimX - 7 * u;
+const leftMost = dims ? Math.min(0, vTextX - hLabel.length * charW) : 0;
+const topDimY = -steamH - 14 * u;
+const sDimY = L.height + 16 * u;
+const pillH = 17 * u;
+const pillW = vLabel.length * charW + 16 * u;
+const pillY = (L.saucer ? sDimY + 12 * u : L.height + 12 * u);
+
+const padL = 3 - leftMost;
+const padR = 3;
+const padT = 3 + steamH + (dims ? 32 * u : 0);
+const padB = dims ? pillY + pillH + 3 - L.height : 6;
+const vbW = padL + L.width + padR;
+const vbH = padT + L.height + padB;
+
+// Поле печати
+const pr = Math.min(P.w, P.h);
+const pcx = P.x + P.w / 2;
+const pcy = P.y + P.h / 2;
+const textLines = type === 'beer600' ? ['ЛУЧШЕМУ', 'ПАПЕ'] : ['С ДНЁМ', 'РОЖДЕНИЯ'];
+
+// Мраморные прожилки (в долях корпуса)
+const W = Math.max(rt, rb) * 2;
+const x0 = cx - W / 2;
+const veins = [
+  { a: [0, 0.18], c1: [0.3, 0.05], c2: [0.55, 0.45], b: [1, 0.3], w: 2.4, o: 0.08 },
+  { a: [0, 0.42], c1: [0.25, 0.3], c2: [0.6, 0.7], b: [1, 0.55], w: 0.9, o: 0.32 },
+  { a: [0, 0.7], c1: [0.4, 0.55], c2: [0.55, 0.95], b: [1, 0.82], w: 0.6, o: 0.26 },
+  { a: [0.2, 1], c1: [0.35, 0.75], c2: [0.7, 0.8], b: [0.95, 0.05], w: 0.5, o: 0.2 },
+  { a: [0, 0.9], c1: [0.3, 0.86], c2: [0.7, 1.0], b: [1, 0.98], w: 3.2, o: 0.06 },
+].map((v) => {
+  const p = (q: number[]) => `${(x0 + q[0] * W).toFixed(1)} ${(q[1] * h).toFixed(1)}`;
+  return { d: `M ${p(v.a)} C ${p(v.c1)}, ${p(v.c2)}, ${p(v.b)}`, w: v.w, o: v.o };
+});
+const goldVein = `M ${(x0 + W * 0.05).toFixed(1)} ${(h * 0.6).toFixed(1)} C ${(x0 + W * 0.35).toFixed(1)} ${(h * 0.48).toFixed(1)}, ${(x0 + W * 0.5).toFixed(1)} ${(h * 0.78).toFixed(1)}, ${(x0 + W * 0.98).toFixed(1)} ${(h * 0.62).toFixed(1)}`;
+
+// Блёстки-звёздочки
+const sparkles = [
+  [0.22, 0.25, 2.4],
+  [0.78, 0.42, 1.8],
+  [0.35, 0.86, 2],
+  [0.66, 0.15, 1.5],
+].map(([sx, sy, s]) => ({ x: x0 + sx * W, y: sy * h, s }));
+const star = (x: number, y: number, s: number) =>
+  `M ${x} ${y - s} Q ${x} ${y} ${x + s} ${y} Q ${x} ${y} ${x} ${y + s} Q ${x} ${y} ${x - s} ${y} Q ${x} ${y} ${x} ${y - s} Z`;
+
+// Блик керамики
+const hlX = cx - rt * 0.66;
+const hlW = rt * 0.09;
+const hlY = e * 2 + 3;
+const hlH = h - eb - hlY - 8;
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox={`0 0 ${vbW.toFixed(1)} ${vbH.toFixed(1)}`}
+  width={Math.round(vbW * scale)}
+  height={Math.round(vbH * scale)}
+  role="img"
+  aria-label={label}
+  class:list={['mugart', cls]}
+>
+  <title>{label}</title>
+  <defs>
+    <clipPath id={id('body')}><path d={L.body} /></clipPath>
+    <clipPath id={id('pclip')}><rect x={P.x} y={P.y} width={P.w} height={P.h} rx="2.4" /></clipPath>
+    <linearGradient id={id('shade')} x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#16141b" stop-opacity={dark ? 0 : 0.17} />
+      <stop offset="0.24" stop-color="#16141b" stop-opacity="0" />
+      <stop offset="0.6" stop-color="#16141b" stop-opacity="0" />
+      <stop offset="1" stop-color="#16141b" stop-opacity={dark ? 0.35 : 0.24} />
+    </linearGradient>
+    <linearGradient id={id('hl')} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity={finish === 'gold' ? 0.95 : 0.85} />
+      <stop offset="1" stop-color="#fff" stop-opacity="0.05" />
+    </linearGradient>
+    <linearGradient id={id('inner')} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#16141b" stop-opacity="0" />
+      <stop offset="1" stop-color="#16141b" stop-opacity="0.22" />
+    </linearGradient>
+    <radialGradient id={id('shadow')}>
+      <stop offset="0" stop-color="#16141b" stop-opacity="0.26" />
+      <stop offset="0.6" stop-color="#16141b" stop-opacity="0.1" />
+      <stop offset="1" stop-color="#16141b" stop-opacity="0" />
+    </radialGradient>
+    {
+      finish === 'gold' && (
+        <linearGradient id={id('gold')} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#8a6a12" />
+          <stop offset="0.16" stop-color="#f3d36b" />
+          <stop offset="0.26" stop-color="#fff4c4" />
+          <stop offset="0.42" stop-color="#d9b13a" />
+          <stop offset="0.7" stop-color="#f0cd5c" />
+          <stop offset="0.86" stop-color="#a8841c" />
+          <stop offset="1" stop-color="#6f520a" />
+        </linearGradient>
+      )
+    }
+    {
+      finish === 'glitter' && (
+        <>
+          <linearGradient id={id('glit')} x1="0" y1="0" x2="0.4" y2="1">
+            <stop offset="0" class="st-m" />
+            <stop offset="0.55" stop-color="#7a3fb0" />
+            <stop offset="1" class="st-c" />
+          </linearGradient>
+          <pattern id={id('dots')} width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(18)">
+            <circle cx="1.2" cy="1.4" r="0.75" fill="#fff" opacity="0.85" />
+            <circle cx="4.6" cy="2.6" r="0.45" fill="#fff" opacity="0.55" />
+            <circle cx="3" cy="5.4" r="0.6" class="f-y" opacity="0.8" />
+            <circle cx="6.1" cy="5.9" r="0.35" fill="#fff" opacity="0.7" />
+          </pattern>
+        </>
+      )
+    }
+    {
+      dark && (
+        <>
+          <linearGradient id={id('reveal')} x1="0" y1="0" x2="1" y2="0.7">
+            <stop offset="0" stop-color="#fff" />
+            <stop offset="0.42" stop-color="#fff" />
+            <stop offset="0.7" stop-color="#fff" stop-opacity="0" />
+          </linearGradient>
+          <mask id={id('mask')} maskContentUnits="userSpaceOnUse">
+            <rect x={P.x - 1} y={P.y - 1} width={P.w + 2} height={P.h + 2} fill={url('reveal')} />
+          </mask>
+        </>
+      )
+    }
+    {
+      print === 'photo' && (
+        <linearGradient id={id('sky')} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" class="st-cs" />
+          <stop offset="1" class="st-ys" />
+        </linearGradient>
+      )
+    }
+    {
+      L.spoon && (
+        <linearGradient id={id('silver')} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#eef0f2" />
+          <stop offset="0.5" stop-color="#c9cdd2" />
+          <stop offset="1" stop-color="#8f969e" />
+        </linearGradient>
+      )
+    }
+  </defs>
+
+  <g transform={`translate(${padL.toFixed(2)} ${padT.toFixed(2)})`}>
+    {/* Тень */}
+    <ellipse cx={L.shadow.cx} cy={L.shadow.cy} rx={L.shadow.rx} ry={L.saucer ? 5 : 4.2} fill={url('shadow')} />
+
+    {/* Блюдце */}
+    {
+      L.saucer && (
+        <g>
+          <path
+            d={`M ${cx - L.saucer.rx} ${L.saucer.y} A ${L.saucer.rx} ${L.saucer.ry + L.saucer.depth} 0 0 0 ${cx + L.saucer.rx} ${L.saucer.y} Z`}
+            class="f-card"
+            stroke={outline}
+            stroke-width={u}
+          />
+          <path
+            d={`M ${cx - L.saucer.rx} ${L.saucer.y} A ${L.saucer.rx} ${L.saucer.ry + L.saucer.depth} 0 0 0 ${cx + L.saucer.rx} ${L.saucer.y} Z`}
+            fill={url('shade')}
+          />
+          <ellipse cx={cx} cy={L.saucer.y} rx={L.saucer.rx} ry={L.saucer.ry} class="f-card" stroke={outline} stroke-width={u} />
+          <ellipse cx={cx} cy={L.saucer.y + 0.6} rx={L.saucer.rx * 0.82} ry={L.saucer.ry * 0.76} fill="none" stroke={outline} stroke-width={u} opacity="0.6" />
+          <ellipse cx={cx} cy={L.saucer.y + 0.8} rx={rb + 6} ry={L.saucer.ry * 0.42} fill="none" stroke={outline} stroke-width={u} opacity="0.45" />
+          <path
+            d={`M ${cx - L.saucer.rx * 0.9} ${L.saucer.y - L.saucer.ry * 0.25} A ${L.saucer.rx * 0.9} ${L.saucer.ry * 0.8} 0 0 1 ${cx - L.saucer.rx * 0.3} ${L.saucer.y - L.saucer.ry * 0.8}`}
+            fill="none"
+            stroke="#fff"
+            stroke-width="1.4"
+            stroke-linecap="round"
+            opacity="0.9"
+          />
+        </g>
+      )
+    }
+
+    {/* Ручка */}
+    <g>
+      <path d={L.handle.d} fill="none" stroke={outline} stroke-width={L.handle.t + 2 * u} stroke-linecap="round" stroke-linejoin="round" />
+      <path d={L.handle.d} fill="none" stroke={handleFill} stroke-width={L.handle.t} stroke-linecap="round" stroke-linejoin="round" />
+      <path d={L.handle.d} fill="none" stroke="#16141b" stroke-opacity={dark ? 0.0 : 0.08} stroke-width={L.handle.t * 0.45} stroke-linecap="round" transform={`translate(${L.handle.t * 0.18} ${L.handle.t * 0.18})`} />
+      <path d={L.handle.d} fill="none" stroke="#fff" stroke-opacity={dark ? 0.22 : 0.5} stroke-width={L.handle.t * 0.18} stroke-linecap="round" transform={`translate(${-L.handle.t * 0.16} ${-L.handle.t * 0.16})`} />
+    </g>
+
+    {/* Корпус */}
+    <path d={L.body} fill={bodyFill} />
+    <g clip-path={url('body')}>
+      {finish === 'glitter' && <rect x={x0} y="0" width={W} height={h} fill={url('dots')} />}
+      {finish === 'glitter' && sparkles.map((s) => <path d={star(s.x, s.y, s.s)} fill="#fff" opacity="0.95" />)}
+      {
+        finish === 'marble' && (
+          <g fill="none" stroke-linecap="round">
+            {veins.map((v) => (
+              <path d={v.d} stroke="#3d3944" stroke-width={v.w} opacity={v.o} />
+            ))}
+            <path d={goldVein} stroke="#c9a227" stroke-width="0.7" opacity="0.75" />
+          </g>
+        )
+      }
+      {
+        L.facets.slice(0, -1).map((fa, i) => {
+          const nx = L.facets[i + 1];
+          return (
+            <path
+              d={`M ${fa.xt} 0 L ${fa.xb} ${h} L ${nx.xb} ${h} L ${nx.xt} 0 Z`}
+              fill="#16141b"
+              opacity={i % 2 ? 0.05 : 0}
+              stroke={outline}
+              stroke-width={u}
+              stroke-opacity="0.7"
+            />
+          );
+        })
+      }
+
+      {/* Печать */}
+      {
+        print !== 'none' && (
+          <g mask={dark ? url('mask') : undefined}>
+            {print === 'logo' && (
+              <g>
+                <g class={dark || vivid ? '' : 'blend'}>
+                  <circle cx={pcx - pr * 0.15} cy={pcy - pr * 0.2} r={pr * 0.22} class="f-c" />
+                  <circle cx={pcx + pr * 0.15} cy={pcy - pr * 0.2} r={pr * 0.22} class="f-m" opacity={dark || vivid ? 0.92 : 1} />
+                  <circle cx={pcx} cy={pcy + pr * 0.06} r={pr * 0.22} class="f-y" opacity={dark || vivid ? 0.92 : 1} />
+                </g>
+                <text
+                  x={pcx}
+                  y={P.y + P.h * 0.95}
+                  font-size={P.w * 0.105}
+                  text-anchor="middle"
+                  font-weight="800"
+                  class={`t ${textOnBody}`}
+                  textLength={P.w * 0.82}
+                  lengthAdjust="spacingAndGlyphs"
+                >
+                  ВАШ ЛОГОТИП
+                </text>
+              </g>
+            )}
+            {print === 'photo' && (
+              <g>
+                <g clip-path={url('pclip')}>
+                  <rect x={P.x} y={P.y} width={P.w} height={P.h} fill={url('sky')} />
+                  <circle cx={P.x + P.w * 0.7} cy={P.y + P.h * 0.32} r={pr * 0.14} class="f-y" />
+                  <path
+                    d={`M ${P.x} ${P.y + P.h * 0.78} L ${P.x + P.w * 0.3} ${P.y + P.h * 0.42} L ${P.x + P.w * 0.48} ${P.y + P.h * 0.62} L ${P.x + P.w * 0.66} ${P.y + P.h * 0.48} L ${P.x + P.w} ${P.y + P.h * 0.86} V ${P.y + P.h} H ${P.x} Z`}
+                    class="f-c"
+                    opacity="0.75"
+                  />
+                  <path
+                    d={`M ${P.x + P.w * 0.3} ${P.y + P.h * 0.42} L ${P.x + P.w * 0.37} ${P.y + P.h * 0.5} L ${P.x + P.w * 0.32} ${P.y + P.h * 0.52} L ${P.x + P.w * 0.27} ${P.y + P.h * 0.47} Z`}
+                    fill="#fff"
+                    opacity="0.85"
+                  />
+                  <path
+                    d={`M ${P.x} ${P.y + P.h * 0.9} Q ${P.x + P.w * 0.3} ${P.y + P.h * 0.62} ${P.x + P.w * 0.55} ${P.y + P.h * 0.8} T ${P.x + P.w} ${P.y + P.h * 0.74} V ${P.y + P.h} H ${P.x} Z`}
+                    class="f-ink2"
+                  />
+                </g>
+                <rect x={P.x} y={P.y} width={P.w} height={P.h} rx="2.4" fill="none" stroke="#fff" stroke-width="1.6" />
+              </g>
+            )}
+            {print === 'text' && (
+              <g>
+                <text
+                  x={pcx}
+                  y={pcy - P.h * 0.04}
+                  font-size={P.w * (type === 'beer600' ? 0.17 : 0.2)}
+                  text-anchor="middle"
+                  font-weight="800"
+                  class="t f-m"
+                  textLength={P.w * (type === 'beer600' ? 0.9 : 0.72)}
+                  lengthAdjust="spacingAndGlyphs"
+                >
+                  {textLines[0]}
+                </text>
+                <text
+                  x={pcx}
+                  y={pcy + P.h * 0.2}
+                  font-size={P.w * (type === 'beer600' ? 0.26 : 0.16)}
+                  text-anchor="middle"
+                  font-weight="800"
+                  class={`t ${dark || vivid ? 'f-paper' : 'f-ink'}`}
+                  textLength={P.w * (type === 'beer600' ? 0.66 : 0.92)}
+                  lengthAdjust="spacingAndGlyphs"
+                >
+                  {textLines[1]}
+                </text>
+                <circle cx={P.x + P.w * 0.08} cy={P.y + P.h * 0.14} r={pr * 0.05} class="f-c" />
+                <circle cx={P.x + P.w * 0.92} cy={P.y + P.h * 0.2} r={pr * 0.04} class="f-y" />
+                <circle cx={P.x + P.w * 0.84} cy={P.y + P.h * 0.9} r={pr * 0.05} class="f-m" />
+                <circle cx={P.x + P.w * 0.14} cy={P.y + P.h * 0.86} r={pr * 0.035} class="f-y" />
+                <rect x={P.x + P.w * 0.44} y={P.y + P.h * 0.02} width={pr * 0.06} height={pr * 0.12} rx={pr * 0.02} class="f-c" transform={`rotate(25 ${P.x + P.w * 0.44} ${P.y})`} />
+                <path d={`M ${P.x + P.w * 0.3} ${P.y + P.h * 0.98} h ${P.w * 0.4}`} stroke="var(--y, #ffd21f)" stroke-width={pr * 0.04} stroke-linecap="round" />
+              </g>
+            )}
+          </g>
+        )
+      }
+
+      {/* Объём: затенение по краям и блик */}
+      <rect x={x0} y="0" width={W} height={h} fill={url('shade')} />
+      <rect x={hlX} y={hlY} width={hlW} height={hlH} rx={hlW / 2} fill={url('hl')} opacity={dark ? 0.45 : 0.9} />
+      <rect x={hlX + hlW * 1.7} y={hlY + 4} width={hlW * 0.35} height={hlH * 0.45} rx={hlW * 0.2} fill={url('hl')} opacity="0.7" />
+    </g>
+    <path d={L.body} fill="none" stroke={outline} stroke-width={u} stroke-linejoin="round" />
+    {L.base && <path d={L.base} fill="none" stroke={outline} stroke-width={u} opacity="0.9" />}
+
+    {/* Край и внутренность */}
+    <ellipse cx={cx} cy={e} rx={rt} ry={e} fill={bodyFill} stroke={outline} stroke-width={u} />
+    <ellipse cx={cx} cy={e + wall * 0.3} rx={inRx} ry={inRy} fill={innerFill} />
+    <ellipse cx={cx} cy={e + wall * 0.3} rx={inRx} ry={inRy} fill={url('inner')} />
+    <ellipse cx={cx} cy={e + wall * 0.3} rx={inRx} ry={inRy} fill="none" stroke={outline} stroke-width={u} opacity="0.8" />
+    <path
+      d={`M ${cx - rt * 0.8} ${e - e * 0.5} A ${rt * 0.92} ${e * 0.9} 0 0 1 ${cx - rt * 0.25} ${e - e * 0.92}`}
+      fill="none"
+      stroke="#fff"
+      stroke-width="1.1"
+      stroke-linecap="round"
+      opacity={dark ? 0.35 : 0.9}
+    />
+
+    {/* Пар — хамелеон «проявляется» от горячего */}
+    {
+      dark && (
+        <g class="steam" fill="none" stroke-linecap="round">
+          {[-0.36, 0, 0.36].map((k, i) => {
+            const sx = cx + rt * k;
+            const top = -steamH + 2 + i * 3;
+            return (
+              <path
+                d={`M ${sx} ${e - 2} c -5 -5, 5 -9, 0 -${(e - 2 - top) * 0.55} s 5 -9, 0 -${(e - 2 - top) * 0.45}`}
+                stroke-width={i === 1 ? 2.2 : 1.6}
+                opacity={i === 1 ? 0.75 : 0.5}
+              />
+            );
+          })}
+        </g>
+      )
+    }
+
+    {/* Ложка на блюдце */}
+    {
+      L.spoon && (
+        <g>
+          <path d={L.spoon.handle} fill={url('silver')} stroke="#8f969e" stroke-width={u * 0.8} />
+          <ellipse
+            cx={L.spoon.bowl.cx}
+            cy={L.spoon.bowl.cy}
+            rx={L.spoon.bowl.rx}
+            ry={L.spoon.bowl.ry}
+            fill={url('silver')}
+            stroke="#8f969e"
+            stroke-width={u * 0.8}
+            transform={`rotate(-4 ${L.spoon.bowl.cx} ${L.spoon.bowl.cy})`}
+          />
+          <ellipse cx={L.spoon.bowl.cx - 2} cy={L.spoon.bowl.cy - 0.8} rx={2.6} ry={0.8} fill="#fff" opacity="0.8" />
+        </g>
+      )
+    }
+
+    {/* Размеры */}
+    {
+      dims && (
+        <g class="dims">
+          {/* диаметр */}
+          <line x1={cx - rt} x2={cx - rt} y1={e - 3 * u} y2={topDimY - 4 * u} class="ext" stroke-width={u} />
+          <line x1={cx + rt} x2={cx + rt} y1={e - 3 * u} y2={topDimY - 4 * u} class="ext" stroke-width={u} />
+          <line x1={cx - rt + arrow * 0.6} x2={cx + rt - arrow * 0.6} y1={topDimY} y2={topDimY} class="s-ink2" stroke-width={u} />
+          <path
+            d={`M ${cx - rt} ${topDimY} l ${arrow} ${-aw} v ${aw * 2} z M ${cx + rt} ${topDimY} l ${-arrow} ${-aw} v ${aw * 2} z`}
+            class="f-ink2"
+          />
+          <text x={cx} y={topDimY - 5 * u} font-size={fsDim} text-anchor="middle" class="mono f-ink2">
+            {dLabel}
+          </text>
+          {/* высота */}
+          <line x1={cx - rt - 2 * u} x2={vDimX - 4 * u} y1="0" y2="0" class="ext" stroke-width={u} />
+          <line x1={cx - rb - 2 * u} x2={vDimX - 4 * u} y1={h} y2={h} class="ext" stroke-width={u} />
+          <line x1={vDimX} x2={vDimX} y1={arrow * 0.6} y2={h - arrow * 0.6} class="s-ink2" stroke-width={u} />
+          <path d={`M ${vDimX} 0 l ${-aw} ${arrow} h ${aw * 2} z M ${vDimX} ${h} l ${-aw} ${-arrow} h ${aw * 2} z`} class="f-ink2" />
+          <text x={vTextX} y={h / 2 + fsDim * 0.36} font-size={fsDim} text-anchor="end" class="mono f-ink2">
+            {hLabel}
+          </text>
+          {/* блюдце */}
+          {L.saucer && (
+            <g>
+              <line x1={cx - L.saucer.rx} x2={cx - L.saucer.rx} y1={L.saucer.y + 3 * u} y2={sDimY + 4 * u} class="ext" stroke-width={u} />
+              <line x1={cx + L.saucer.rx} x2={cx + L.saucer.rx} y1={L.saucer.y + 3 * u} y2={sDimY + 4 * u} class="ext" stroke-width={u} />
+              <line x1={cx - L.saucer.rx + arrow * 0.6} x2={cx + L.saucer.rx - arrow * 0.6} y1={sDimY} y2={sDimY} class="s-ink2" stroke-width={u} />
+              <path
+                d={`M ${cx - L.saucer.rx} ${sDimY} l ${arrow} ${-aw} v ${aw * 2} z M ${cx + L.saucer.rx} ${sDimY} l ${-arrow} ${-aw} v ${aw * 2} z`}
+                class="f-ink2"
+              />
+              <rect x={cx - (sLabel.length * charW) / 2 - 4 * u} y={sDimY - fsDim * 0.75} width={sLabel.length * charW + 8 * u} height={fsDim * 1.5} class="f-paper" />
+              <text x={cx} y={sDimY + fsDim * 0.36} font-size={fsDim} text-anchor="middle" class="mono f-ink2">
+                {sLabel}
+              </text>
+            </g>
+          )}
+          {/* объём */}
+          <rect x={cx - pillW / 2} y={pillY} width={pillW} height={pillH} rx={pillH / 2} class="f-ink" />
+          <circle cx={cx - pillW / 2 + 7.5 * u} cy={pillY + pillH / 2} r={2.6 * u} class="f-y" />
+          <text x={cx + 4 * u} y={pillY + pillH / 2 + fsDim * 0.36} font-size={fsDim} text-anchor="middle" class="mono f-paper" font-weight="600">
+            {vLabel}
+          </text>
+        </g>
+      )
+    }
+  </g>
+</svg>
+
+<style>
+  .mugart {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .t {
+    font-family: var(--font, system-ui, sans-serif);
+  }
+  .mono {
+    font-family: var(--mono, ui-monospace, monospace);
+  }
+  .blend > * {
+    mix-blend-mode: multiply;
+  }
+  .f-ink {
+    fill: var(--ink, #16141b);
+  }
+  .f-ink2 {
+    fill: var(--ink-2, #3d3944);
+  }
+  .f-paper {
+    fill: var(--paper, #fffcf5);
+  }
+  .f-paper2 {
+    fill: var(--paper-2, #f7f1e3);
+  }
+  .f-card {
+    fill: var(--card, #fff);
+  }
+  .f-c {
+    fill: var(--c, #00a0dc);
+  }
+  .f-m {
+    fill: var(--m, #e5007d);
+  }
+  .f-y {
+    fill: var(--y, #ffd21f);
+  }
+  .st-m {
+    stop-color: var(--m, #e5007d);
+  }
+  .st-c {
+    stop-color: var(--c, #00a0dc);
+  }
+  .st-cs {
+    stop-color: var(--c-soft, #e2f4fb);
+  }
+  .st-ys {
+    stop-color: var(--y-soft, #fff5c9);
+  }
+  .s-ink2 {
+    stroke: var(--ink-2, #3d3944);
+  }
+  .ext {
+    stroke: var(--line-strong, #cfc5b1);
+  }
+  .steam path {
+    stroke: var(--line-strong, #cfc5b1);
+  }
+</style>
