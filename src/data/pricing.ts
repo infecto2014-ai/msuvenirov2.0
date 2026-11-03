@@ -852,30 +852,84 @@ const calendars: Category = {
   page: '/kalendari',
   products: [
     (() => {
-      const types: Record<string, { label: string; midi: number[]; mini: number[] }> = {
-        stdplus: { label: '«Стандарт+»', midi: [610, 580], mini: [400, 370] },
-        std: { label: '«Стандарт»', midi: [395, 390], mini: [270, 345] },
-        classic: { label: '«Классик»', midi: [340, 335], mini: [255, 250] },
-        single: { label: '«Одноблочный»', midi: [335, 300], mini: [270, 260] },
+      // Supplier price list 2026–2027 (owner, 03.11.2026) +20%, whole rubles. Price per calendar by print run.
+      const up = (xs: number[]) => xs.map((x) => Math.round(x * 1.2));
+      const runs = [10, 50, 100, 200, 300, 500, 1000];
+      const models: { id: string; label: string; hint: string; prices: number[] }[] = [
+        { id: 'midi3', label: 'МИДИ, 3 рекламных поля', hint: '325 мм, 3 блока', prices: up([560, 530, 490, 420, 390, 370, 350]) },
+        { id: 'midi1', label: 'МИДИ, 1 рекламное поле', hint: '325 мм, 3 блока', prices: up([460, 420, 390, 360, 340, 320, 290]) },
+        { id: 'mini3', label: 'МИНИ, 3 рекламных поля', hint: '297 мм, 3 блока', prices: up([410, 380, 370, 360, 350, 340, 330]) },
+        { id: 'mini1', label: 'МИНИ, 1 рекламное поле', hint: '297 мм, 3 блока', prices: up([340, 320, 310, 300, 290, 280, 270]) },
+        { id: 'trio', label: '«3 в 1», 1 рекламное поле', hint: '335 мм, один большой блок', prices: up([350, 320, 310, 300]) },
+      ];
+      const STRIP = { none: 0, silver: Math.round(90 * 1.2), gold: Math.round(110 * 1.2) };
+      const FOLD = Math.round(35 * 1.2);
+      const tiersOf = (m: (typeof models)[number]) => tiers(runs.slice(0, m.prices.length), m.prices);
+      const model = (sel: Selection) => models.find((m) => m.id === one(sel, 'model', 'midi3')) ?? models[0];
+      const extras = (sel: Selection) => {
+        const strip = one(sel, 'strip', 'none') as keyof typeof STRIP;
+        const fold = many(sel, 'fold').includes('fold');
+        return { strip, stripPrice: STRIP[strip] ?? 0, fold, foldPrice: fold ? FOLD : 0 };
       };
-      const p = tiered({
+      const p: Product = {
         id: 'cal-quarterly',
         name: 'Квартальный календарь',
-        short: 'тиражи от 50 шт',
+        short: 'МИДИ, МИНИ и «3 в 1», от 10 шт',
         image: '/img/showcase/stationery.webp',
-        qty: { min: 50, max: 1000, default: 50 },
-        variantLabel: 'Модель и размер',
-        variants: Object.entries(types).flatMap(([id, t]) => [
-          { id: `${id}-midi`, label: `${t.label} МИДИ`, tiers: tiers([50, 100], t.midi) },
-          { id: `${id}-mini`, label: `${t.label} МИНИ`, tiers: tiers([50, 100], t.mini) },
-        ]),
-        extrasLabel: 'Опции',
-        extras: [
-          { id: 'strips', label: 'Металлические планки', price: 85 },
-          { id: 'cursor', label: 'Магнитный курсор с подложкой', price: 100 },
-          { id: 'lamination', label: 'Матовая ламинация', price: 35 },
+        qty: { min: 10, max: 5000, default: 50 },
+        options: [
+          { id: 'model', label: 'Модель', type: 'one', choices: models.map((m) => ({ id: m.id, label: m.label, hint: m.hint })), default: 'midi3' },
+          {
+            id: 'strip',
+            label: 'Металлическая планка',
+            type: 'one',
+            choices: [
+              { id: 'none', label: 'Без планки' },
+              { id: 'silver', label: 'Серебро', hint: `+${STRIP.silver} ₽/шт` },
+              { id: 'gold', label: 'Золото', hint: `+${STRIP.gold} ₽/шт` },
+            ],
+            default: 'none',
+          },
+          {
+            id: 'fold',
+            label: 'Постер',
+            type: 'many',
+            choices: [{ id: 'fold', label: 'Подгиб постера', hint: `+${FOLD} ₽/шт, верх плотнее` }],
+            default: [],
+          },
         ],
-      });
+        fromPrice: Math.min(...models.map((m) => Math.min(...m.prices))),
+        table: {
+          columns: runs.map((r) => `от ${r} шт`),
+          rows: [
+            ...models.map((m) => ({ label: m.label, cells: runs.map((_, i) => (m.prices[i] ? rub(m.prices[i]) : '—')) })),
+            { label: '+ металлическая планка: серебро / золото', cells: runs.map(() => `+${STRIP.silver} / +${STRIP.gold} ₽`) },
+            { label: '+ подгиб постера', cells: runs.map(() => `+${rub(FOLD)}`) },
+          ],
+          note: 'Цена за 1 календарь. «3 в 1» — тиражом до 200 шт, больше — по запросу.',
+        },
+        ladder: (sel) => tiersOf(model(sel)),
+        quote: (sel) => {
+          const m = model(sel);
+          const t = tiersOf(m);
+          const base = tierPrice(t, sel.qty);
+          const x = extras(sel);
+          const unit = base + x.stripPrice + x.foldPrice;
+          const breakdown: Quote['breakdown'] = [{ label: `Календарь ${m.label}`, amount: base, per: 'шт' }];
+          if (x.stripPrice) breakdown.push({ label: `Металлическая планка (${x.strip === 'gold' ? 'золото' : 'серебро'})`, amount: x.stripPrice, per: 'шт' });
+          if (x.foldPrice) breakdown.push({ label: 'Подгиб постера', amount: x.foldPrice, per: 'шт' });
+          const nt = nextTier(t, sel.qty);
+          const notes: string[] = [];
+          if (m.id === 'trio' && sel.qty > 200) notes.push('«3 в 1» больше 200 шт — цену рассчитаем индивидуально, отправьте заявку.');
+          return {
+            unit,
+            total: Math.round(unit * sel.qty),
+            breakdown,
+            next: nt ? { qty: nt.from, unit: unit - base + nt.price } : undefined,
+            notes,
+          };
+        },
+      };
       return p;
     })(),
     tiered({

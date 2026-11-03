@@ -105,6 +105,19 @@ describe('pricing', () => {
     expect(p.table?.columns).toEqual(['96 шт', '200 шт', '300 шт', '500–999 шт', '1000–5999 шт', 'от 6000 шт']);
   });
 
+  it('quarterly calendars: supplier price +20%, planks and fold extra', () => {
+    const q = (qty: number, options: Selection['options'] = {}) => {
+      const { p, s } = sel('calendars', 'cal-quarterly', { qty, options });
+      return p.quote(s);
+    };
+    expect(q(10).unit).toBe(672); // МИДИ 3 поля: 560 × 1,2
+    expect(q(100, { model: 'mini1' }).unit).toBe(372);
+    expect(q(1000, { model: 'midi1' }).unit).toBe(348);
+    expect(q(50, { model: 'midi3', strip: 'gold', fold: ['fold'] }).unit).toBe(636 + 132 + 42);
+    expect(q(100, { model: 'mini3', strip: 'silver' }).total).toBe((444 + 108) * 100);
+    expect(q(300, { model: 'trio' }).unit).toBe(360);
+  });
+
   it('formats labels', () => {
     expect(rangeLabels([1, 5, 10, 50, 200])).toEqual(['1–4 шт', '5–9 шт', '10–49 шт', '50–199 шт', 'от 200 шт']);
     expect(rub(7.5).replace(/\s/g, ' ')).toBe('7,5 ₽');
