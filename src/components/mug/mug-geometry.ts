@@ -20,15 +20,22 @@ interface Model {
   handle: { w: number; t: number; top: number; bottom: number; boxy?: boolean };
   /** число граней (гранёная пивная кружка) */
   facets?: number;
+  /** доля высоты снизу, занятая гранями */
+  facetBand?: number;
   saucer?: number;
   name: string;
 }
 
 export const MODELS: Record<MugType, Model> = {
-  mug330: { d: 82, dBottom: 82, h: 95, vol: 330, handle: { w: 25, t: 8, top: 0.16, bottom: 0.78 }, name: 'Кружка для сублимации 330 мл' },
-  mug425: { d: 82, dBottom: 82, h: 120, vol: 425, handle: { w: 27, t: 8.5, top: 0.15, bottom: 0.8 }, name: 'Кружка 425 мл' },
-  coffee: { d: 78, dBottom: 54, h: 65, vol: 150, handle: { w: 18, t: 6, top: 0.18, bottom: 0.66 }, saucer: 140, name: 'Кофейный набор: чашка 150 мл, блюдце и ложка' },
-  beer600: { d: 82, dBottom: 92, h: 150, vol: 600, handle: { w: 34, t: 13, top: 0.12, bottom: 0.8, boxy: true }, facets: 8, name: 'Пивная кружка 600 мл' },
+  // shapes follow the owner's photos (04.11.2026)
+  // classic straight cylinder, big D-handle from top to bottom
+  mug330: { d: 82, dBottom: 82, h: 95, vol: 330, handle: { w: 27, t: 8.5, top: 0.08, bottom: 0.86 }, name: 'Кружка для сублимации 330 мл' },
+  // taller, slightly narrower towards the bottom
+  mug425: { d: 82, dBottom: 76, h: 120, vol: 425, handle: { w: 29, t: 9, top: 0.08, bottom: 0.84 }, name: 'Кружка 425 мл' },
+  // low wide cup with a small round loop, porcelain spoon across the saucer
+  coffee: { d: 78, dBottom: 72, h: 65, vol: 150, handle: { w: 15, t: 5.5, top: 0.1, bottom: 0.62 }, saucer: 140, name: 'Кофейный набор: чашка 150 мл, блюдце и ложка' },
+  // tall straight beer mug, faceted band at the bottom, thick squared handle in the upper part
+  beer600: { d: 82, dBottom: 84, h: 150, vol: 600, handle: { w: 30, t: 12, top: 0.1, bottom: 0.64, boxy: true }, facets: 10, facetBand: 0.3, name: 'Пивная кружка 600 мл' },
 };
 
 export interface MugLayout {
@@ -47,6 +54,8 @@ export interface MugLayout {
   handle: { d: string; t: number };
   print: Rect;
   facets: { xt: number; xb: number }[];
+  /** y верхней границы пояса граней */
+  facetTop: number;
   /** дуга утолщённого дна (пивная) */
   base?: string;
   saucer?: { cx: number; y: number; rx: number; ry: number; depth: number };
@@ -96,16 +105,18 @@ export function buildMug(type: MugType): MugLayout {
 
   // Поле печати — по центру передней стороны.
   const pw = (type === 'beer600' ? 1.1 : type === 'coffee' ? 1.18 : 1.3) * Math.min(rt, rb);
-  const ph = type === 'coffee' ? span * 0.62 : type === 'beer600' ? span * 0.5 : span * 0.56;
-  const pcy = e + span * (type === 'coffee' ? 0.5 : 0.52);
+  const ph = type === 'coffee' ? span * 0.62 : type === 'beer600' ? span * 0.42 : span * 0.56;
+  const pcy = e + span * (type === 'coffee' ? 0.5 : type === 'beer600' ? 0.36 : 0.52);
   const print: Rect = { x: cx - pw / 2 - rt * 0.04, y: pcy - ph / 2, w: pw, h: ph };
 
   const facets: MugLayout['facets'] = [];
+  const facetTop = model.facets ? h - eb - (h - e - eb) * (model.facetBand ?? 1) : e;
   if (model.facets) {
     const n = model.facets;
+    const rAt = rt + ((rb - rt) * (facetTop - e)) / (h - e - eb);
     for (let i = 0; i <= n; i++) {
       const c = -Math.cos((Math.PI * i) / n);
-      facets.push({ xt: cx + rt * c, xb: cx + rb * c });
+      facets.push({ xt: cx + rAt * c, xb: cx + rb * c });
     }
   }
 
@@ -120,20 +131,22 @@ export function buildMug(type: MugType): MugLayout {
     const y = h - 2;
     const depth = 9;
     saucer = { cx, y, rx: saucerR, ry, depth };
-    const bx = cx - saucerR * 0.66;
-    const by = y + ry * 0.52;
+    // porcelain spoon in front of the cup: bowl on the left part of the saucer, handle runs past the saucer rim
+    const bx = cx - saucerR * 0.42;
+    const by = y + ry * 0.62;
+    const ex = cx + saucerR + 14;
+    const ey = by - 2.5;
     spoon = {
-      bowl: { cx: bx, cy: by, rx: 7.5, ry: 3.1 },
-      handle: `M ${f(bx + 6)} ${f(by - 0.9)} Q ${f(bx + 20)} ${f(by + 0.6)} ${f(bx + 38)} ${f(by + 3.4)} q 1.6 0.6 1 1.6 Q ${f(bx + 20)} ${f(by + 2.6)} ${f(bx + 6)} ${f(by + 1)} Z`,
+      bowl: { cx: bx, cy: by, rx: 14, ry: 5.6 },
+      handle: `M ${f(bx + 10)} ${f(by - 2.6)} Q ${f(cx + 10)} ${f(by - 4.6)} ${f(ex)} ${f(ey - 2.4)} q 3.4 0.4 3.2 2.4 q -0.2 2 -3.4 2.2 Q ${f(cx + 10)} ${f(by + 0.8)} ${f(bx + 10)} ${f(by + 2.6)} Z`,
     };
-    width = Math.max(width, cx + saucerR);
+    width = Math.max(width, ex + 3);
     height = y + ry + depth * 0.7;
     shadow = { cx, cy: height - 0.5, rx: saucerR * 0.92 };
   }
 
-  const base = model.facets
-    ? `M ${f(cx - rb + 1.2)} ${f(h - eb - 10)} A ${f(rb - 1.2)} ${f(eb)} 0 0 0 ${f(cx + rb - 1.2)} ${f(h - eb - 10)}`
-    : undefined;
+  // ring above the faceted band (beer mug)
+  const base = model.facets ? `M ${f(facets[0].xt)} ${f(facetTop)} A ${f(cx - facets[0].xt)} ${f(eb)} 0 0 0 ${f(facets[facets.length - 1].xt)} ${f(facetTop)}` : undefined;
 
-  return { model, width, height, cx, rt, rb, e, eb, h, body, handle: { d: hd, t: hp.t }, print, facets, base, saucer, spoon, shadow };
+  return { model, width, height, cx, rt, rb, e, eb, h, body, handle: { d: hd, t: hp.t }, print, facets, facetTop, base, saucer, spoon, shadow };
 }

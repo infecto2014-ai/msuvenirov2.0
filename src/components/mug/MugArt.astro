@@ -269,7 +269,7 @@ const hlH = h - eb - hlY - 8;
           const nx = L.facets[i + 1];
           return (
             <path
-              d={`M ${fa.xt} 0 L ${fa.xb} ${h} L ${nx.xb} ${h} L ${nx.xt} 0 Z`}
+              d={`M ${fa.xt} ${L.facetTop} L ${fa.xb} ${h} L ${nx.xb} ${h} L ${nx.xt} ${L.facetTop} Z`}
               fill="#16141b"
               opacity={i % 2 ? 0.05 : 0}
               stroke={outline}
@@ -411,18 +411,18 @@ const hlH = h - eb - hlY - 8;
     {
       L.spoon && (
         <g>
-          <path d={L.spoon.handle} fill={url('silver')} stroke="#8f969e" stroke-width={u * 0.8} />
+          <path d={L.spoon.handle} class="f-card" stroke={outline} stroke-width={u * 0.8} />
           <ellipse
             cx={L.spoon.bowl.cx}
             cy={L.spoon.bowl.cy}
             rx={L.spoon.bowl.rx}
             ry={L.spoon.bowl.ry}
-            fill={url('silver')}
-            stroke="#8f969e"
+            class="f-card"
+            stroke={outline}
             stroke-width={u * 0.8}
             transform={`rotate(-4 ${L.spoon.bowl.cx} ${L.spoon.bowl.cy})`}
           />
-          <ellipse cx={L.spoon.bowl.cx - 2} cy={L.spoon.bowl.cy - 0.8} rx={2.6} ry={0.8} fill="#fff" opacity="0.8" />
+          <ellipse cx={L.spoon.bowl.cx - 3} cy={L.spoon.bowl.cy - 1} rx={4} ry={1.1} fill="#16141b" opacity="0.07" />
         </g>
       )
     }

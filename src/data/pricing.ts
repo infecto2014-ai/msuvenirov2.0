@@ -12,6 +12,8 @@ export interface Choice {
   label: string;
   /** short hint under the label */
   hint?: string;
+  /** colour dot shown in the chip, e.g. '#d9261c' */
+  swatch?: string;
 }
 
 export interface OptionGroup {
@@ -24,6 +26,8 @@ export interface OptionGroup {
   default?: string | string[];
   /** hide this group while another group has this value, e.g. colour is hidden for the customer's own t-shirt */
   hideWhen?: { group: string; value: string };
+  /** show this group only while another group has this value, e.g. mug colours only for the coloured mug */
+  showWhen?: { group: string; value: string };
   /** optional extra group (e.g. 2nd–4th print): hidden while 'none', the customer adds it with a button */
   addable?: boolean;
 }
@@ -540,6 +544,27 @@ const mugs: Category = {
         { id: 'glitter', label: 'Глиттер градиент', tiers: tiers(mugTiers, [1630, 980, 890, 815, 650]) },
         { id: 'marble', label: 'Мрамор, зеркальное золото или серебро', tiers: tiers(mugTiers, [1945, 1170, 1070, 970, 780]) },
         { id: 'gold', label: 'Золото, серебро, стекло', tiers: tiers(mugTiers, [1320, 790, 730, 660, 530]) },
+      ],
+      choices: [
+        {
+          // owner, 04.11.2026: 9 colours of the handle and the inside
+          id: 'inner',
+          label: 'Цвет ручки и внутри',
+          type: 'one',
+          showWhen: { group: 'variant', value: 'color' },
+          choices: [
+            { id: 'navy', label: 'Тёмно-синий', swatch: '#0d1f8c' },
+            { id: 'darkgreen', label: 'Тёмно-зелёный', swatch: '#0f5a40' },
+            { id: 'black', label: 'Чёрный', swatch: '#141414' },
+            { id: 'pink', label: 'Розовый', swatch: '#efb3c2' },
+            { id: 'blue', label: 'Синий', swatch: '#2c5fd6' },
+            { id: 'lime', label: 'Салатовый', swatch: '#7ed321' },
+            { id: 'red', label: 'Красный', swatch: '#d9261c' },
+            { id: 'orange', label: 'Оранжевый', swatch: '#f26a1b' },
+            { id: 'yellow', label: 'Жёлтый', swatch: '#f6c21a' },
+          ],
+          default: 'red',
+        },
       ],
       notes: ['Кружка для сублимации 330 мл, d=82 мм. Цена включает кружку, печать по кругу и подготовку макета.'],
     }),

@@ -77,6 +77,7 @@ const describe = (p: Product, s: Selection): string => {
   const parts: string[] = [];
   for (const g of p.options ?? []) {
     if (g.hideWhen && s.options[g.hideWhen.group] === g.hideWhen.value) continue;
+    if (g.showWhen && s.options[g.showWhen.group] !== g.showWhen.value) continue;
     const v = s.options[g.id];
     if (g.type === 'one') {
       const c = g.choices.find((x) => x.id === v);
@@ -265,7 +266,8 @@ export default function Calculator({ category, product, only, hideCategories, lo
           {(() => {
             // Extra prints (addable groups) are hidden until the customer adds them; numbering follows the visible groups.
             const groups = prod.options ?? [];
-            const hidden = (g: OptionGroup) => !!g.hideWhen && sel.options[g.hideWhen.group] === g.hideWhen.value;
+            const hidden = (g: OptionGroup) =>
+              (!!g.hideWhen && sel.options[g.hideWhen.group] === g.hideWhen.value) || (!!g.showWhen && sel.options[g.showWhen.group] !== g.showWhen.value);
             const isOn = (g: OptionGroup) => !hidden(g) && (!g.addable || (sel.options[g.id] ?? 'none') !== 'none');
             const visible = groups.filter(isOn);
             const nextAdd = groups.find((g) => g.addable && !hidden(g) && !isOn(g));
@@ -302,6 +304,7 @@ export default function Calculator({ category, product, only, hideCategories, lo
                           const on = g.type === 'many' ? Array.isArray(v) && v.includes(c.id) : v === c.id;
                           return (
                             <button type="button" class="chip" aria-pressed={on} onClick={() => setOption(g.id, c.id, g.type === 'many')}>
+                              {c.swatch && <span class="calc-swatch" style={{ background: c.swatch }} aria-hidden="true" />}
                               {g.type === 'many' && <span class={`calc-check${on ? ' on' : ''}`} aria-hidden="true" />}
                               <span>{c.label}</span>
                               {c.hint && <small>{c.hint}</small>}

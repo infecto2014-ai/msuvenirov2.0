@@ -948,3 +948,20 @@
     display: none;
   }
 }
+
+/* colour dot in a chip (mug colours) */
+.calc-swatch {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 2px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(22, 20, 27, 0.25);
+  vertical-align: -3px;
+}
+.chip:has(.calc-swatch) {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
