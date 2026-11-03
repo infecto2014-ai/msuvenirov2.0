@@ -528,8 +528,8 @@ const mugs: Category = {
   products: [
     tiered({
       id: 'mug',
-      name: 'Кружка с вашим дизайном',
-      short: 'кружка и печать — в цене',
+      name: 'Кружка 330 мл',
+      short: 'классическая, d=82 мм — кружка и печать в цене',
       image: '/img/showcase/mug.webp',
       qty: { min: 1, max: 300, default: 1 },
       variantLabel: 'Вид кружки',
@@ -541,9 +541,36 @@ const mugs: Category = {
         { id: 'marble', label: 'Мрамор, зеркальное золото или серебро', tiers: tiers(mugTiers, [1945, 1170, 1070, 970, 780]) },
         { id: 'gold', label: 'Золото, серебро, стекло', tiers: tiers(mugTiers, [1320, 790, 730, 660, 530]) },
       ],
-      notes: ['Цена включает кружку, печать по кругу и подготовку макета.'],
+      notes: ['Кружка для сублимации 330 мл, d=82 мм. Цена включает кружку, печать по кругу и подготовку макета.'],
     }),
-    fixed('beer-mug', 'Пивная кружка 630 мл', 1200, { image: '/img/mug/gallery-3.jpg' }),
+    // owner, 04.11.2026
+    tiered({
+      id: 'mug-big',
+      name: 'Кружка 425 мл',
+      short: 'увеличенной ёмкости, белая, d=82 мм',
+      image: '/img/showcase/mug.webp',
+      qty: { min: 1, max: 300, default: 1 },
+      variants: [{ id: 'white', label: 'Белая 425 мл', tiers: tiers(mugTiers, [800, 600, 500, 425, 400]) }],
+      notes: ['Кружка для сублимации увеличенной ёмкости, 425 мл, d=82 мм. Цена включает кружку и печать.'],
+    }),
+    tiered({
+      id: 'coffee-set',
+      name: 'Кофейный набор',
+      short: 'чашка 150 мл, блюдце и ложка, белый',
+      image: '/img/showcase/mug.webp',
+      qty: { min: 1, max: 300, default: 1 },
+      variants: [{ id: 'white', label: 'Белый 150 мл', tiers: tiers(mugTiers, [1630, 980, 890, 815, 650]) }],
+      notes: ['Кофейный набор для сублимации: чашка 150 мл (d=78 мм), блюдце и ложка. Цена включает набор и печать.'],
+    }),
+    tiered({
+      id: 'beer-mug',
+      name: 'Пивная кружка 600 мл',
+      short: 'белая, d=82 мм',
+      image: '/img/mug/gallery-3.jpg',
+      qty: { min: 1, max: 300, default: 1 },
+      variants: [{ id: 'white', label: 'Белая 600 мл', tiers: tiers(mugTiers, [950, 800, 750, 690, 650]) }],
+      notes: ['Пивная кружка для сублимации, 600 мл, d=82 мм. Цена включает кружку и печать.'],
+    }),
   ],
 };
 

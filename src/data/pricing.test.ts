@@ -118,6 +118,18 @@ describe('pricing', () => {
     expect(q(300, { model: 'trio' }).unit).toBe(360);
   });
 
+  it('mugs: 330 ml types, 425 ml, coffee set and 600 ml beer mug on the same tiers', () => {
+    const u = (id: string, qty: number) => {
+      const { p, s } = sel('mugs', id, { qty });
+      return p.quote(s).unit;
+    };
+    expect(u('mug-big', 1)).toBe(800);
+    expect(u('mug-big', 200)).toBe(400);
+    expect(u('coffee-set', 10)).toBe(890);
+    expect(u('beer-mug', 5)).toBe(800);
+    expect(u('beer-mug', 50)).toBe(690);
+  });
+
   it('formats labels', () => {
     expect(rangeLabels([1, 5, 10, 50, 200])).toEqual(['1–4 шт', '5–9 шт', '10–49 шт', '50–199 шт', 'от 200 шт']);
     expect(rub(7.5).replace(/\s/g, ' ')).toBe('7,5 ₽');
