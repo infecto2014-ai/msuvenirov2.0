@@ -15,7 +15,7 @@ export const portfolio: PortfolioItem[] = [
   { src: '/portfolio/portfolio-1.webp', title: 'Фанатский мерч по вселенной Harry Potter', tech: 'DTF-печать', tags: ['futbolki', 'fandom'] },
   { src: '/portfolio/portfolio-11.webp', title: 'Комплект футболок для фанатов BLACKPINK', tech: 'DTF-печать', tags: ['futbolki', 'fandom'] },
   { src: '/portfolio/portfolio-18.webp', title: 'Подарочные бокалы с нанесением', tech: 'УФ-печать', tags: ['podarki'] },
-  { src: '/portfolio/portfolio-25.webp', title: 'Кофейный набор с фотопечатью', tech: 'Сублимация', tags: ['kruzhki', 'podarki'] },
+  { src: '/portfolio/portfolio-25.webp', title: 'Кружки с надписью «Дедушка всегда прав»', tech: 'Сублимация', tags: ['kruzhki', 'podarki'] },
   { src: '/portfolio/portfolio-3.webp', title: 'Ретро-принт в стиле Punch-Out!!', tech: 'DTF-печать', tags: ['futbolki', 'fandom'] },
   { src: '/portfolio/portfolio-5.webp', title: 'Худи с иллюстрацией в стиле манга', tech: 'DTF-печать', tags: ['hudi', 'fandom'] },
   { src: '/portfolio/portfolio-24.webp', title: 'Акриловые брелоки с полиграфической вставкой', tech: 'Цифровая печать', tags: ['breloki'] },

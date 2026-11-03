@@ -1,0 +1,222 @@
+---
+// «Готовые варианты» on /pechat-na-kruzhkah: ready orders with the turnkey price from pricing.ts (product.quote).
+// Same look as CalendarPackages, the picture is a mug drawing.
+import MugArt from '@/components/mug/MugArt.astro';
+import { defaultSelection, findProduct, rub, type Selection } from '@/data/pricing';
+import { mugsPage } from '@/data/mugsPage';
+
+const tones = ['c', 'm', 'y', 'c', 'm'];
+const items = mugsPage.packages.map((pk, i) => {
+  const product = findProduct('mugs', pk.product)!;
+  const base = defaultSelection(product);
+  const sel: Selection = { ...base, qty: pk.qty, options: { ...base.options, ...pk.options } };
+  const q = product.quote(sel);
+  return { ...pk, unit: q.unit, total: q.total, from: q.from, tone: tones[i % tones.length] };
+});
+---
+
+<section class="section mpk" aria-labelledby="mpk-h">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Популярное</p>
+        <h2 id="mpk-h">Готовые варианты с ценой</h2>
+      </div>
+      <p class="mpk-sub">Цена вместе с кружкой, печатью и макетом. Другое количество или покрытие — в калькуляторе выше.</p>
+    </div>
+    <ul class="mpk-grid">
+      {
+        items.map((it) => {
+          const label = `${it.title}, ${it.qty} шт — ${it.from ? 'от ' : ''}${rub(it.total)}`;
+          return (
+            <li class={`mpk-card mpk-${it.tone}`}>
+              <div class="mpk-art" aria-hidden="true">
+                <MugArt type={it.art} finish={it.finish} print={it.print} scale={it.art === 'beer600' ? 0.95 : it.art === 'coffee' ? 1.05 : 1.2} />
+                <span class="mpk-qty mono">{it.qty} шт</span>
+              </div>
+              <div class="mpk-body">
+                <h3>{it.title}</h3>
+                <p class="mpk-note">{it.note}</p>
+                <p class="mpk-price mono">
+                  {it.from && <small>от</small>}
+                  {rub(it.total)}
+                  {it.qty > 1 && <small>{rub(it.unit)} / шт</small>}
+                </p>
+                <button type="button" class="btn btn-sm btn-magenta" data-order={label}>
+                  Заказать
+                </button>
+              </div>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .mpk-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .mpk-card {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    border-radius: var(--radius-l);
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    overflow: clip;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .mpk-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 5px 5px 0 var(--tone);
+  }
+  .mpk-c { --tone: var(--c); --soft: var(--c-soft); }
+  .mpk-m { --tone: var(--m); --soft: var(--m-soft); }
+  .mpk-y { --tone: var(--y); --soft: var(--y-soft); }
+  /* the mug stands on the bottom edge of a coloured «table» */
+  .mpk-art {
+    position: relative;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding-bottom: 22px;
+    overflow: clip;
+    background:
+      linear-gradient(transparent calc(100% - 36px), rgba(22, 20, 27, 0.06) calc(100% - 36px)),
+      radial-gradient(circle, rgba(22, 20, 27, 0.09) 1.3px, transparent 1.5px) 0 0 / 14px 14px,
+      var(--soft);
+  }
+  .mpk-art :global(svg) {
+    flex: none;
+    max-width: 92%;
+    height: auto;
+    filter: drop-shadow(0 10px 12px rgba(22, 20, 27, 0.16));
+  }
+  .mpk-qty {
+    position: absolute;
+    z-index: 1;
+    right: 12px;
+    top: 12px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+  .mpk-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 14px 16px 18px;
+  }
+  .mpk-body h3 {
+    font-size: 1.05rem;
+  }
+  .mpk-note {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .mpk-price {
+    margin: auto 0 10px;
+    padding-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+  .mpk-price small {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0;
+  }
+  @media (max-width: 1180px) {
+    .mpk-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  /* phone: a carousel of compact cards, like on the calendars and t-shirt pages */
+  @media (max-width: 760px) {
+    .mpk {
+      padding-block: 32px;
+    }
+    .mpk .section-head {
+      margin-bottom: 14px;
+      gap: 6px;
+    }
+    .mpk .section-head .eyebrow {
+      margin-bottom: 6px;
+    }
+    .mpk-sub {
+      display: none;
+    }
+    .mpk-grid {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: var(--gutter);
+      margin-inline: calc(var(--gutter) * -1);
+      padding: 0 var(--gutter) 8px;
+      scrollbar-width: none;
+    }
+    .mpk-grid::-webkit-scrollbar {
+      display: none;
+    }
+    .mpk-card {
+      flex: 0 0 min(210px, 60%);
+      scroll-snap-align: start;
+      border-radius: 22px;
+    }
+    .mpk-art {
+      height: 130px;
+      padding-bottom: 14px;
+    }
+    .mpk-art :global(svg) {
+      zoom: 0.62;
+    }
+    .mpk-qty {
+      right: 8px;
+      top: 8px;
+      font-size: 0.72rem;
+    }
+    .mpk-body {
+      gap: 2px;
+      padding: 10px 12px 12px;
+    }
+    .mpk-body h3 {
+      font-size: 0.95rem;
+    }
+    .mpk-note {
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+    .mpk-price {
+      margin-bottom: 8px;
+      padding-top: 8px;
+      gap: 4px;
+      font-size: 1.1rem;
+    }
+    .mpk-price small {
+      font-size: 0.72rem;
+    }
+    .mpk-body .btn {
+      min-height: 38px;
+      padding: 0 16px;
+      font-size: 0.85rem;
+    }
+  }
+</style>
