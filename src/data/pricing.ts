@@ -302,6 +302,8 @@ function garment(args: {
   colors?: boolean;
   /** own colour set instead of white/black/other-from-10 (e.g. shopper: light, black, other from 20) */
   colorSet?: { choices: Choice[]; otherMin: number; what: string };
+  /** priced up to this quantity, more — individually (default GARMENT_MAX) */
+  max?: number;
   /** offer «своя вещь»: e.g. 'футболка' → choice «Своя футболка», only the print is charged */
   own?: string;
 }): Product {
@@ -328,7 +330,8 @@ function garment(args: {
       id: 'color',
       label: 'Цвет изделия',
       type: 'one',
-      choices: [...colorSet.choices, { id: 'other', label: 'Другой цвет', hint: `от ${colorSet.otherMin} шт` }],
+      // otherMin 0 → only the listed colours, no «другой цвет»
+      choices: colorSet.otherMin ? [...colorSet.choices, { id: 'other', label: 'Другой цвет', hint: `от ${colorSet.otherMin} шт` }] : colorSet.choices,
       default: colorSet.choices[0].id,
     });
   }
@@ -367,24 +370,27 @@ function garment(args: {
     return [...set].sort((a, b) => a - b).map((from) => ({ from, price: unitAt(sel, from) }));
   };
   const blankMin = args.blank ? minPrice(args.blank) : 0;
+  const maxQty = args.max ?? GARMENT_MAX;
+  // price table columns: DTF tiers plus the blank's own tiers (caps: 1 / 10 / 30)
+  const cols = [...new Set([1, 5, 20, ...(args.blank ?? []).map((t) => t.from)])].sort((a, b) => a - b);
   return {
     id: args.id,
     name: args.name,
     short: args.short,
     image: args.image,
-    // owner, 02.11.2026: prices up to 50 pcs; more than 50 — individual price
-    qty: { min: 1, max: GARMENT_MAX, default: 1, individualAbove: true },
+    // owner, 02.11.2026: prices up to 50 pcs; more than 50 — individual price (caps: up to 100)
+    qty: { min: 1, max: maxQty, default: 1, individualAbove: true },
     options,
     fromPrice: blankMin + minPrice(dtfPrint[args.formats[0]].tiers),
     table: {
-      columns: qtyLabels([1, 5, 20], { min: 1, max: GARMENT_MAX, default: 1, individualAbove: true }),
+      columns: qtyLabels(cols, { min: 1, max: maxQty, default: 1, individualAbove: true }),
       rows: [
         ...(args.blank
-          ? [{ label: args.name, cells: [1, 5, 20].map((q) => `${args.blankFrom ? 'от ' : ''}${rub(tierPrice(args.blank!, q))}`) }]
+          ? [{ label: args.name, cells: cols.map((q) => `${args.blankFrom ? 'от ' : ''}${rub(tierPrice(args.blank!, q))}`) }]
           : []),
-        ...args.formats.map((f) => ({ label: `+ печать DTF ${dtfPrint[f].label}`, cells: dtfPrint[f].tiers.map((t) => `+${rub(t.price)}`) })),
+        ...args.formats.map((f) => ({ label: `+ печать DTF ${dtfPrint[f].label}`, cells: cols.map((q) => `+${rub(tierPrice(dtfPrint[f].tiers, q))}`) })),
       ],
-      note: `Больше ${GARMENT_MAX} шт — цена рассчитывается индивидуально.`,
+      note: `Больше ${maxQty} шт — цена рассчитывается индивидуально.`,
     },
     ladder: breakpoints,
     quote: (sel) => {
@@ -412,7 +418,7 @@ function garment(args: {
       if (args.blankFrom && !isOwn(sel)) notes.push('Наличие и точную цену изделия уточнит менеджер.');
       if (isOwn(sel)) notes.push(`${cap(`своя ${args.own}`)}: принесите её в мастерскую, напечатаем на ней. Подойдут хлопок, смесовые ткани, синтетика.`);
       if (!args.blank) notes.push('Печать на вашем изделии. Подойдут хлопок, смесовые ткани, синтетика.');
-      if (qty >= GARMENT_MAX) notes.push(`Нужно больше ${GARMENT_MAX} шт? Цену рассчитаем индивидуально — отправьте заявку.`);
+      if (qty >= maxQty) notes.push(`Нужно больше ${maxQty} шт? Цену рассчитаем индивидуально — отправьте заявку.`);
       return {
         unit,
         total: Math.round(unit * qty),
@@ -547,11 +553,26 @@ const textile: Category = {
     garment({
       id: 'cap',
       name: 'Бейсболка',
-      short: 'печать на передней части',
+      short: 'TEXTILLER, 100% хлопок, саржа, 5 панелей',
       image: '/img/showcase/cap.webp',
-      blank: tiers([1, 5, 20], [750, 650, 550]),
+      // owner, 06.11.2026: 1–9 — 650, 10–29 — 550, 30–100 — 450; print priced as DTF A6; more than 100 — individually
+      blank: tiers([1, 10, 30], [650, 550, 450]),
       formats: ['a6'],
       places: 2,
+      max: 100,
+      colorSet: {
+        choices: [
+          { id: 'black', label: 'Чёрный', swatch: '#111111' },
+          { id: 'white', label: 'Белый', swatch: '#ffffff' },
+          { id: 'red', label: 'Красный', swatch: '#e10f0f' },
+          { id: 'blue', label: 'Синий', swatch: '#2a5be8' },
+          { id: 'yellow', label: 'Жёлтый', swatch: '#ffee00' },
+          { id: 'green', label: 'Зелёный', swatch: '#0f8a0f' },
+          { id: 'khaki', label: 'Хаки', swatch: '#7d6a2c' },
+        ],
+        otherMin: 0,
+        what: '',
+      },
     }),
     garment({
       id: 'shopper',

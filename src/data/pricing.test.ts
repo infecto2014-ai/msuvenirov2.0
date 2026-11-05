@@ -152,6 +152,20 @@ describe('pricing', () => {
     expect(p.quote({ ...s, options: { ...s.options, color: 'black' } }).error).toBeUndefined();
   });
 
+  it('cap: 650 / 550 / 450 by run + DTF A6, up to 100 pcs, 7 colours', () => {
+    const u = (qty: number) => {
+      const { p, s } = sel('textile', 'cap', { qty });
+      return p.quote(s).unit;
+    };
+    expect(u(1)).toBe(650 + 600);
+    expect(u(10)).toBe(550 + 350);
+    expect(u(30)).toBe(450 + 280);
+    const p = findProduct('textile', 'cap')!;
+    expect(p.qty.max).toBe(100);
+    expect(p.options!.find((g) => g.id === 'color')!.choices).toHaveLength(7);
+    expect(p.table?.columns).toEqual(['1–4 шт', '5–9 шт', '10–19 шт', '20–29 шт', '30–100 шт']);
+  });
+
   it('formats labels', () => {
     expect(rangeLabels([1, 5, 10, 50, 200])).toEqual(['1–4 шт', '5–9 шт', '10–49 шт', '50–199 шт', 'от 200 шт']);
     expect(rub(7.5).replace(/\s/g, ' ')).toBe('7,5 ₽');
