@@ -139,6 +139,8 @@ describe('pricing', () => {
     expect(q(20, { print1: 'a3' })).toBe(250 + 380);
     expect(q(50, { print1: 'a4', print2: 'a6' })).toBe(230 + 150 + 80);
     expect(q(100, { print1: 'a5' })).toBe(230 + 80);
+    const { p: tp, s: ts } = sel('textile', 'tshirt-sub', { qty: 10, options: { print1: 'a4', print2: 'a3' } });
+    expect(tp.quote(ts).unit).toBe(720 + 400 + 600);
     const { p, s } = sel('textile', 'sub-print', { qty: 1, options: { print1: 'a6' } });
     expect(p.quote(s).unit).toBe(175);
   });

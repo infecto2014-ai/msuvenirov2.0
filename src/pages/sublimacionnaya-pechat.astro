@@ -13,7 +13,7 @@ import FaqSection from '@/components/FaqSection.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import Icon from '@/components/Icon.astro';
 import { sublimationPage as page, buildSublimationFaq } from '@/data/sublimationPage';
-import { findProduct, rangeLabels, rub, subPrint } from '@/data/pricing';
+import { defaultSelection, findProduct, rangeLabels, rub, subPrint } from '@/data/pricing';
 import { breadcrumbs, faqPage, service as serviceLd } from '@/lib/schema';
 
 const crumbs = [
@@ -41,6 +41,9 @@ const items = page.items.map((it) => {
   return { ...it, from };
 });
 const tones = ['c', 'm', 'y'];
+// our t-shirt for sublimation: 10 pcs with A4 on the front
+const teeProd = findProduct('textile', 'tshirt-sub')!;
+const teeOne = teeProd.quote({ ...defaultSelection(teeProd), qty: 10 }).unit;
 ---
 
 <BaseLayout
@@ -158,7 +161,7 @@ const tones = ['c', 'm', 'y'];
         </div>
         <p class="calc-sub">Печать на вашем изделии или наш шоппер для сублимации: выберите формат и количество — цена за штуку и за весь заказ пересчитается сразу.</p>
       </div>
-      <Calculator client:visible category="textile" product="sub-print" products={['sub-print', 'shopper-sub']} hideCategories />
+      <Calculator client:visible category="textile" product="sub-print" products={['sub-print', 'tshirt-sub', 'shopper-sub']} hideCategories />
     </div>
   </section>
 
@@ -241,6 +244,62 @@ const tones = ['c', 'm', 'y'];
             <li><Icon name="check" size={16} /> Нужен шоппер? Наш шоппер для сублимации с печатью считает калькулятор выше.</li>
             <li><Icon name="check" size={16} /> Кружки и фотоподарки — с изделием в цене, смотрите их страницы.</li>
           </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ our t-shirt for sublimation ============ -->
+  <section class="section tee" aria-labelledby="tee-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Футболки</p>
+          <h2 id="tee-h">{page.tee.title}</h2>
+        </div>
+        <p>{page.tee.lead}</p>
+      </div>
+      <div class="tee-grid">
+        <div class="tee-card">
+          <dl class="tee-specs">
+            {page.tee.specs.map((sp) => (
+              <div>
+                <dt>{sp.label}</dt>
+                <dd>{sp.value}</dd>
+              </div>
+            ))}
+          </dl>
+          <p class="tee-price">
+            <span class="mono">{rub(teeOne)}</span> за футболку с принтом А4 при заказе 10 шт
+          </p>
+          <a class="btn btn-magenta btn-sm" href="?calc=textile:tshirt-sub#calc">Рассчитать футболки</a>
+        </div>
+        <div class="tee-sizes">
+          {[{ t: 'Детские', d: page.tee.kids }, { t: 'Взрослые', d: page.tee.adults }].map((g) => (
+            <div class="tee-table">
+              <h3>{g.t}</h3>
+              <div class="tee-wrap">
+                <table class="tee-tbl">
+                  {/* sizes go down the rows so the table never needs sideways scrolling */}
+                  <thead>
+                    <tr>
+                      <th scope="col">{g.d.columns[0]}</th>
+                      {g.d.rows.map((r) => <th scope="col">{r[0]}</th>)}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {g.d.columns.slice(1).map((size, ci) => (
+                      <tr>
+                        <th scope="row">{size}</th>
+                        {g.d.rows.map((r) => <td>{r[ci + 1]}</td>)}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ))}
+          <p class="tee-note">{page.tee.note}</p>
         </div>
       </div>
     </div>
@@ -1789,6 +1848,125 @@ const tones = ['c', 'm', 'y'];
     }
     .pcard dl div {
       font-size: 0.74rem;
+    }
+  }
+  /* ---------- our t-shirt for sublimation ---------- */
+  .tee-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
+    gap: 20px;
+    align-items: start;
+  }
+  .tee-card {
+    display: grid;
+    gap: 16px;
+    justify-items: start;
+    padding: 22px;
+    border-radius: var(--radius-l);
+    background: var(--c-soft);
+  }
+  .tee-specs {
+    margin: 0;
+    display: grid;
+    gap: 8px;
+    width: 100%;
+  }
+  .tee-specs div {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--line-strong);
+  }
+  .tee-specs dt {
+    color: var(--muted);
+  }
+  .tee-specs dd {
+    margin: 0;
+    font-weight: 700;
+    text-align: right;
+  }
+  .tee-price {
+    margin: 0;
+    font-size: 0.92rem;
+  }
+  .tee-price .mono {
+    font-size: 1.3rem;
+    font-weight: 800;
+  }
+  .tee-sizes {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 14px 18px;
+    align-items: start;
+    min-width: 0;
+  }
+  .tee-note {
+    grid-column: 1 / -1;
+  }
+  .tee-table {
+    min-width: 0;
+  }
+  .tee-table .table-wrap {
+    overflow-x: auto;
+  }
+  .tee-table h3 {
+    margin-bottom: 8px;
+    font-size: 1.05rem;
+  }
+  .tee-wrap {
+    border-radius: 18px;
+    border: 1.5px solid var(--line);
+    background: var(--card);
+    overflow: hidden;
+  }
+  .tee-tbl {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+  }
+  .tee-tbl th,
+  .tee-tbl td {
+    padding: 7px 12px;
+    white-space: nowrap;
+    text-align: center;
+    border-bottom: 1px solid var(--line);
+  }
+  .tee-tbl thead th {
+    background: var(--paper-2);
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .tee-tbl tbody th {
+    text-align: left;
+    font-weight: 700;
+  }
+  .tee-tbl td {
+    font-family: var(--mono);
+  }
+  .tee-tbl tr:last-child th,
+  .tee-tbl tr:last-child td {
+    border-bottom: 0;
+  }
+  .tee-note {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  @media (max-width: 900px) {
+    .tee-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 560px) {
+    .tee-sizes {
+      grid-template-columns: 1fr;
+    }
+    .tee-tbl th,
+    .tee-tbl td {
+      padding: 6px 10px;
     }
   }
 </style>

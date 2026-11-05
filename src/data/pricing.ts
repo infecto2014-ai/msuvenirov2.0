@@ -440,8 +440,8 @@ type SubFormat = keyof typeof subPrint;
 const subTierFrom = [1, 11, 21, 100];
 
 /** Product priced as optional blank + one or two sublimation prints (each side at its own price). */
-function sublimated(args: { id: string; name: string; short: string; image?: string; blank?: Tier[]; min: number; places: number; formats: SubFormat[]; notes: string[] }): Product {
-  const placeLabels = ['Сторона 1', 'Сторона 2'];
+function sublimated(args: { id: string; name: string; short: string; image?: string; blank?: Tier[]; min: number; places: number; formats: SubFormat[]; notes: string[]; places_?: string[] }): Product {
+  const placeLabels = args.places_ ?? ['Сторона 1', 'Сторона 2'];
   const options: OptionGroup[] = [];
   for (let i = 0; i < args.places; i++) {
     options.push({
@@ -574,6 +574,19 @@ const textile: Category = {
       places: 2,
       formats: ['a6', 'a5', 'a4', 'a3'],
       notes: ['Светлый шоппер цвета небелёного льна, 330 г/м², 36×42 см (±3 см), ручки 70 см. Сублимация — яркая полноцветная печать, от 10 шт.'],
+    }),
+    // owner, 05.11.2026: synthetic t-shirt for sublimation, 720 ₽, from 10 pcs
+    sublimated({
+      id: 'tshirt-sub',
+      name: 'Футболка для сублимации',
+      short: '50% полиэстер / 50% хлопок, от 10 шт',
+      image: '/img/showcase/tshirt.webp',
+      blank: tiers([10], [720]),
+      min: 10,
+      places: 2,
+      places_: ['Перед', 'Спина'],
+      formats: ['a6', 'a5', 'a4', 'a3'],
+      notes: ['Белая футболка для сублимации: 50% полиэстер / 50% хлопок, кулирная гладь, 180 г/м², Россия. Размеры детские 128–152 и взрослые 42–60 (XS–6XL). Заказ от 10 шт.'],
     }),
     sublimated({
       id: 'sub-print',

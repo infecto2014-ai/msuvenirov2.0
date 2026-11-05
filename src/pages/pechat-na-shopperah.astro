@@ -187,7 +187,7 @@ const KSCALE = 0.62;
               {kc.specs.map((s, r) => (
                 <tr>
                   <th scope="row">{s.label}</th>
-                  <td class:list={[{ 'cmp-todo': s.todo }]}>{s.value}</td>
+                  <td class:list={[{ 'cmp-todo': 'todo' in s && s.todo }]}>{s.value}</td>
                   <td>{kl.specs[r]?.value}</td>
                 </tr>
               ))}
