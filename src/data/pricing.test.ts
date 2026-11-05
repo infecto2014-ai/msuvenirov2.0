@@ -130,6 +130,19 @@ describe('pricing', () => {
     expect(u('beer-mug', 50)).toBe(690);
   });
 
+  it('sublimation shopper: blank 250/230 + sublimation print by run', () => {
+    const q = (qty: number, options: Selection['options'] = {}) => {
+      const { p, s } = sel('textile', 'shopper-sub', { qty, options });
+      return p.quote(s).unit;
+    };
+    expect(q(10)).toBe(250 + 400); // А4 до 10 шт
+    expect(q(20, { print1: 'a3' })).toBe(250 + 380);
+    expect(q(50, { print1: 'a4', print2: 'a6' })).toBe(230 + 150 + 80);
+    expect(q(100, { print1: 'a5' })).toBe(230 + 80);
+    const { p, s } = sel('textile', 'sub-print', { qty: 1, options: { print1: 'a6' } });
+    expect(p.quote(s).unit).toBe(175);
+  });
+
   it('formats labels', () => {
     expect(rangeLabels([1, 5, 10, 50, 200])).toEqual(['1–4 шт', '5–9 шт', '10–49 шт', '50–199 шт', 'от 200 шт']);
     expect(rub(7.5).replace(/\s/g, ' ')).toBe('7,5 ₽');

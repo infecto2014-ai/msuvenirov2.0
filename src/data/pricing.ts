@@ -427,6 +427,68 @@ function garment(args: {
   };
 }
 
+// ---------------------------------------------------------------- sublimation (owner, 05.11.2026)
+
+/** Sublimation print price per print by format; tiers «до 10 / до 20 / до 50 / от 100 шт» → 1–10 / 11–20 / 21–99 / 100+. */
+export const subPrint: Record<'a6' | 'a5' | 'a4' | 'a3', { label: string; size: string; tiers: Tier[] }> = {
+  a6: { label: 'А6', size: '10,5×14,8 см', tiers: tiers([1, 11, 21, 100], [175, 110, 80, 60]) },
+  a5: { label: 'А5', size: '14,8×21 см', tiers: tiers([1, 11, 21, 100], [240, 150, 100, 80]) },
+  a4: { label: 'А4', size: '21×29,7 см', tiers: tiers([1, 11, 21, 100], [400, 210, 150, 130]) },
+  a3: { label: 'А3', size: '29,7×42 см', tiers: tiers([1, 11, 21, 100], [600, 380, 250, 200]) },
+};
+type SubFormat = keyof typeof subPrint;
+const subTierFrom = [1, 11, 21, 100];
+
+/** Product priced as optional blank + one or two sublimation prints (each side at its own price). */
+function sublimated(args: { id: string; name: string; short: string; image?: string; blank?: Tier[]; min: number; places: number; formats: SubFormat[]; notes: string[] }): Product {
+  const placeLabels = ['Сторона 1', 'Сторона 2'];
+  const options: OptionGroup[] = [];
+  for (let i = 0; i < args.places; i++) {
+    options.push({
+      id: `print${i + 1}`,
+      label: args.places > 1 ? `${placeLabels[i]} · сублимация` : 'Размер печати · сублимация',
+      type: 'one',
+      choices: [
+        ...(i > 0 ? [{ id: 'none', label: 'Нет' }] : []),
+        ...args.formats.map((f) => ({ id: f, label: subPrint[f].label, hint: subPrint[f].size })),
+      ],
+      default: i === 0 ? (args.formats.includes('a4') ? 'a4' : args.formats[0]) : 'none',
+      addable: i > 0,
+    });
+  }
+  const prints = (sel: Selection): SubFormat[] =>
+    options.map((g, i) => one(sel, g.id, i === 0 ? args.formats[0] : 'none')).filter((v): v is SubFormat => v in subPrint);
+  const unitAt = (sel: Selection, qty: number) =>
+    round((args.blank ? tierPrice(args.blank, qty) : 0) + prints(sel).reduce((a, f) => a + tierPrice(subPrint[f].tiers, qty), 0));
+  const breaks = [...new Set([args.min, ...subTierFrom.filter((t) => t > args.min), ...(args.blank ?? []).map((t) => t.from)])].sort((a, b) => a - b);
+  return {
+    id: args.id,
+    name: args.name,
+    short: args.short,
+    image: args.image,
+    qty: { min: args.min, max: 2000, default: args.min },
+    options,
+    fromPrice: (args.blank ? minPrice(args.blank) : 0) + Math.min(...args.formats.map((f) => minPrice(subPrint[f].tiers))),
+    table: {
+      columns: rangeLabels(subTierFrom),
+      rows: [
+        ...(args.blank ? [{ label: args.name, cells: subTierFrom.map((q) => rub(tierPrice(args.blank!, Math.max(q, args.min)))) }] : []),
+        ...args.formats.map((f) => ({ label: `+ сублимация ${subPrint[f].label}`, cells: subPrint[f].tiers.map((t) => `+${rub(t.price)}`) })),
+      ],
+    },
+    ladder: (sel) => breaks.map((from) => ({ from, price: unitAt(sel, from) })),
+    quote: (sel) => {
+      const qty = sel.qty;
+      const breakdown: Quote['breakdown'] = [];
+      if (args.blank) breakdown.push({ label: args.name, amount: tierPrice(args.blank, qty), per: 'шт' });
+      prints(sel).forEach((f, i) => breakdown.push({ label: `Сублимация ${subPrint[f].label}${args.places > 1 ? ` (${placeLabels[i].toLowerCase()})` : ''}`, amount: tierPrice(subPrint[f].tiers, qty), per: 'шт' }));
+      const unit = unitAt(sel, qty);
+      const nb = breaks.map((from) => ({ from, price: unitAt(sel, from) })).find((t) => t.from > qty && t.price < unit);
+      return { unit, total: Math.round(unit * qty), breakdown, next: nb ? { qty: nb.from, unit: nb.price } : undefined, notes: args.notes };
+    },
+  };
+}
+
 const textile: Category = {
   id: 'textile',
   name: 'Одежда и текстиль',
@@ -500,6 +562,27 @@ const textile: Category = {
       blank: tiers([1, 5, 20], [450, 350, 250]),
       formats: ['a6', 'a5', 'a4'],
       places: 2,
+    }),
+    // owner, 05.11.2026: light linen shopper for sublimation, from 10 pcs
+    sublimated({
+      id: 'shopper-sub',
+      name: 'Шоппер для сублимации',
+      short: 'небелёный лён, 330 г/м², от 10 шт',
+      image: '/img/showcase/shopper.webp',
+      blank: tiers([10, 50], [250, 230]),
+      min: 10,
+      places: 2,
+      formats: ['a6', 'a5', 'a4', 'a3'],
+      notes: ['Светлый шоппер цвета небелёного льна, 330 г/м², 36×42 см (±3 см), ручки 70 см. Сублимация — яркая полноцветная печать, от 10 шт.'],
+    }),
+    sublimated({
+      id: 'sub-print',
+      name: 'Сублимационная печать',
+      short: 'на вашем изделии из светлой синтетики',
+      min: 1,
+      places: 1,
+      formats: ['a6', 'a5', 'a4', 'a3'],
+      notes: ['Сублимация подходит для светлых тканей из полиэстера и изделий с полимерным покрытием. Подойдёт ли ваше изделие — подскажем.'],
     }),
     garment({
       id: 'apron',
