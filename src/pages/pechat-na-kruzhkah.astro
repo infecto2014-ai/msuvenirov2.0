@@ -190,15 +190,15 @@ const tones = ['c', 'm', 'y'];
                     <span class="cham-label mono"><b class="cham-l-cold">холодная</b><b class="cham-l-hot">горячая</b></span>
                   </span>
                 ) : (
-                  <MugArt type="mug330" finish={f.id} print={f.print} scale={1.25} />
+                  <MugArt type="mug330" finish={f.id} print={f.print} tint={f.id === 'glitter' ? 'turquoise' : f.id === 'marble' ? 'pink' : undefined} scale={1.25} />
                 )}
               </div>
               <div class="fin-body">
                 <h3>{f.title}</h3>
                 <p>{f.text}</p>
-                {f.id === 'color' && (
-                  <ul class="fin-colors" aria-label="Цвета ручки и внутренней стороны">
-                    {page.innerColors.map((c) => (
+                {(f.id === 'color' || f.id === 'glitter' || f.id === 'marble') && (
+                  <ul class="fin-colors" aria-label="Цвета">
+                    {(f.id === 'color' ? page.innerColors : f.id === 'glitter' ? page.glitterColors : page.marbleColors).map((c) => (
                       <li title={c.name} style={`--sw:${c.hex}`}>
                         <span class="sr-only">{c.name}</span>
                       </li>

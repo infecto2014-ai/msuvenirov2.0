@@ -7,13 +7,27 @@ interface Props {
   type: 'mug330' | 'mug425' | 'coffee' | 'beer600';
   finish?: 'white' | 'color' | 'chameleon' | 'glitter' | 'marble' | 'gold'; // покрытие, по умолчанию 'white'
   print?: 'logo' | 'photo' | 'text' | 'none'; // что нарисовано на кружке, по умолчанию 'logo'
+  /** цвет глиттера (gold, silver, turquoise, pink) или мрамора (grey, pink, blue) — по фото владельца */
+  tint?: 'gold' | 'silver' | 'turquoise' | 'pink' | 'grey' | 'blue';
   dims?: boolean; // подписи размеров в мм (высота, диаметр, объём) со стрелками
   scale?: number; // px на мм, по умолчанию 1.2 — модели в одном масштабе
   title?: string;
   class?: string;
 }
 
-const { type, finish = 'white', print = 'logo', dims = false, scale = 1.2, title, class: cls } = Astro.props;
+const { type, finish = 'white', print = 'logo', dims = false, scale = 1.2, title, class: cls, tint } = Astro.props;
+
+// Глиттер: однотонная кружка с мелкими блёстками по всей поверхности, внутри белая (фото владельца, 04.11.2026)
+const GLITTER = {
+  gold: { a: '#f1d35c', b: '#c99d1f' },
+  silver: { a: '#eceef0', b: '#a9adb2' },
+  turquoise: { a: '#b6e0e2', b: '#6fb4ba' },
+  pink: { a: '#f6c0de', b: '#d978ae' },
+} as const;
+// Мрамор: белая кружка с цветными разводами, ручка тоже мраморная
+const MARBLE = { grey: '#4a4750', pink: '#e0566a', blue: '#3c86c4' } as const;
+const glit = GLITTER[(tint && tint in GLITTER ? tint : 'gold') as keyof typeof GLITTER];
+const vein = MARBLE[(tint && tint in MARBLE ? tint : 'grey') as keyof typeof MARBLE];
 
 const L = buildMug(type as MugType);
 const { cx, rt, rb, e, eb, h, print: P } = L;
@@ -34,11 +48,11 @@ const label = title ?? L.model.name + (FINISH[finish] ?? '');
 
 // Цвета покрытия
 const dark = finish === 'chameleon';
-const vivid = finish === 'glitter';
+const vivid = false;
 const bodyFill =
   finish === 'chameleon' ? 'var(--ink, #16141b)' : finish === 'glitter' ? url('glit') : finish === 'gold' ? url('gold') : 'var(--card, #fff)';
-const handleFill = finish === 'color' || finish === 'glitter' ? 'var(--m, #e5007d)' : bodyFill;
-const innerFill = finish === 'color' || finish === 'glitter' ? 'var(--m, #e5007d)' : dark ? '#2a2731' : 'var(--paper-2, #f7f1e3)';
+const handleFill = finish === 'color' ? 'var(--m, #e5007d)' : bodyFill;
+const innerFill = finish === 'color' ? 'var(--m, #e5007d)' : dark ? '#2a2731' : finish === 'marble' ? `color-mix(in srgb, ${vein} 12%, #fff)` : 'var(--paper-2, #f7f1e3)';
 const outline = dark ? 'var(--ink, #16141b)' : finish === 'gold' ? '#9c7a12' : 'var(--line-strong, #cfc5b1)';
 const textOnBody = dark || vivid ? 'f-paper' : 'f-ink';
 
@@ -84,17 +98,24 @@ const textLines = type === 'beer600' ? ['ЛУЧШЕМУ', 'ПАПЕ'] : ['С Д�
 // Мраморные прожилки (в долях корпуса)
 const W = Math.max(rt, rb) * 2;
 const x0 = cx - W / 2;
+// diagonal flowing streaks, like real marbled ceramic: wide soft washes + thin sharp veins
 const veins = [
-  { a: [0, 0.18], c1: [0.3, 0.05], c2: [0.55, 0.45], b: [1, 0.3], w: 2.4, o: 0.08 },
-  { a: [0, 0.42], c1: [0.25, 0.3], c2: [0.6, 0.7], b: [1, 0.55], w: 0.9, o: 0.32 },
-  { a: [0, 0.7], c1: [0.4, 0.55], c2: [0.55, 0.95], b: [1, 0.82], w: 0.6, o: 0.26 },
-  { a: [0.2, 1], c1: [0.35, 0.75], c2: [0.7, 0.8], b: [0.95, 0.05], w: 0.5, o: 0.2 },
-  { a: [0, 0.9], c1: [0.3, 0.86], c2: [0.7, 1.0], b: [1, 0.98], w: 3.2, o: 0.06 },
+  { a: [0.05, -0.05], c1: [0.25, 0.3], c2: [0.15, 0.55], b: [0.45, 1.05], w: 9, o: 0.18, blur: true },
+  { a: [0.55, -0.05], c1: [0.75, 0.25], c2: [0.6, 0.6], b: [0.95, 1.05], w: 11, o: 0.2, blur: true },
+  { a: [0.12, -0.02], c1: [0.3, 0.28], c2: [0.22, 0.5], b: [0.42, 0.78], w: 0.9, o: 0.55 },
+  { a: [0.42, 0.78], c1: [0.5, 0.86], c2: [0.46, 0.95], b: [0.56, 1.02], w: 2.2, o: 0.45 },
+  { a: [0.6, 0.02], c1: [0.8, 0.22], c2: [0.66, 0.5], b: [0.84, 0.72], w: 0.7, o: 0.5 },
+  { a: [0.84, 0.72], c1: [0.9, 0.8], c2: [0.8, 0.86], b: [0.74, 0.9], w: 1.6, o: 0.4 },
+  { a: [0.3, 0.35], c1: [0.42, 0.42], c2: [0.38, 0.55], b: [0.5, 0.6], w: 0.5, o: 0.4 },
+  { a: [0.32, -0.02], c1: [0.5, 0.2], c2: [0.4, 0.45], b: [0.62, 0.66], w: 5, o: 0.16, blur: true },
+  { a: [0.36, 0.0], c1: [0.52, 0.18], c2: [0.42, 0.42], b: [0.6, 0.62], w: 0.6, o: 0.45 },
+  { a: [0.6, 0.62], c1: [0.66, 0.7], c2: [0.58, 0.8], b: [0.66, 1.02], w: 1.2, o: 0.35 },
+  { a: [-0.02, 0.5], c1: [0.12, 0.6], c2: [0.08, 0.8], b: [0.22, 1.02], w: 0.8, o: 0.4 },
+  { a: [0.72, 0.3], c1: [0.8, 0.4], c2: [0.95, 0.45], b: [1.02, 0.6], w: 0.5, o: 0.35 },
 ].map((v) => {
   const p = (q: number[]) => `${(x0 + q[0] * W).toFixed(1)} ${(q[1] * h).toFixed(1)}`;
-  return { d: `M ${p(v.a)} C ${p(v.c1)}, ${p(v.c2)}, ${p(v.b)}`, w: v.w, o: v.o };
+  return { d: `M ${p(v.a)} C ${p(v.c1)}, ${p(v.c2)}, ${p(v.b)}`, w: v.w, o: v.o, blur: !!v.blur };
 });
-const goldVein = `M ${(x0 + W * 0.05).toFixed(1)} ${(h * 0.6).toFixed(1)} C ${(x0 + W * 0.35).toFixed(1)} ${(h * 0.48).toFixed(1)}, ${(x0 + W * 0.5).toFixed(1)} ${(h * 0.78).toFixed(1)}, ${(x0 + W * 0.98).toFixed(1)} ${(h * 0.62).toFixed(1)}`;
 
 // Блёстки-звёздочки
 const sparkles = [
@@ -158,19 +179,27 @@ const hlH = h - eb - hlY - 8;
         </linearGradient>
       )
     }
+    {finish === 'marble' && (
+      <filter id={id('soft')} x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="2.2" />
+      </filter>
+    )}
     {
       finish === 'glitter' && (
         <>
-          <linearGradient id={id('glit')} x1="0" y1="0" x2="0.4" y2="1">
-            <stop offset="0" class="st-m" />
-            <stop offset="0.55" stop-color="#7a3fb0" />
-            <stop offset="1" class="st-c" />
+          <linearGradient id={id('glit')} x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color={glit.b} />
+            <stop offset="0.35" stop-color={glit.a} />
+            <stop offset="0.7" stop-color={glit.a} />
+            <stop offset="1" stop-color={glit.b} />
           </linearGradient>
-          <pattern id={id('dots')} width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(18)">
-            <circle cx="1.2" cy="1.4" r="0.75" fill="#fff" opacity="0.85" />
-            <circle cx="4.6" cy="2.6" r="0.45" fill="#fff" opacity="0.55" />
-            <circle cx="3" cy="5.4" r="0.6" class="f-y" opacity="0.8" />
-            <circle cx="6.1" cy="5.9" r="0.35" fill="#fff" opacity="0.7" />
+          {/* fine sandy sparkle: many tiny light and dark grains */}
+          <pattern id={id('dots')} width="3.2" height="3.2" patternUnits="userSpaceOnUse" patternTransform="rotate(23)">
+            <circle cx="0.5" cy="0.6" r="0.32" fill="#fff" opacity="0.85" />
+            <circle cx="2.1" cy="0.9" r="0.22" fill="#000" opacity="0.16" />
+            <circle cx="1.4" cy="2.2" r="0.26" fill="#fff" opacity="0.55" />
+            <circle cx="2.8" cy="2.7" r="0.2" fill="#000" opacity="0.12" />
+            <circle cx="0.4" cy="2.9" r="0.18" fill="#fff" opacity="0.7" />
           </pattern>
         </>
       )
@@ -245,6 +274,9 @@ const hlH = h - eb - hlY - 8;
     <g>
       <path d={L.handle.d} fill="none" stroke={outline} stroke-width={L.handle.t + 2 * u} stroke-linecap="round" stroke-linejoin="round" />
       <path d={L.handle.d} fill="none" stroke={handleFill} stroke-width={L.handle.t} stroke-linecap="round" stroke-linejoin="round" />
+      {finish === 'glitter' && <path d={L.handle.d} fill="none" stroke={url('dots')} stroke-width={L.handle.t} stroke-linecap="round" />}
+      {finish === 'marble' && <path d={L.handle.d} fill="none" stroke={vein} stroke-opacity="0.18" stroke-width={L.handle.t * 0.9} stroke-dasharray="14 6 4 10" filter={url('soft')} />}
+      {finish === 'marble' && <path d={L.handle.d} fill="none" stroke={vein} stroke-opacity="0.5" stroke-width={L.handle.t * 0.12} stroke-dasharray="9 14" />}
       <path d={L.handle.d} fill="none" stroke="#16141b" stroke-opacity={dark ? 0.0 : 0.08} stroke-width={L.handle.t * 0.45} stroke-linecap="round" transform={`translate(${L.handle.t * 0.18} ${L.handle.t * 0.18})`} />
       <path d={L.handle.d} fill="none" stroke="#fff" stroke-opacity={dark ? 0.22 : 0.5} stroke-width={L.handle.t * 0.18} stroke-linecap="round" transform={`translate(${-L.handle.t * 0.16} ${-L.handle.t * 0.16})`} />
     </g>
@@ -253,14 +285,14 @@ const hlH = h - eb - hlY - 8;
     <path d={L.body} fill={bodyFill} />
     <g clip-path={url('body')}>
       {finish === 'glitter' && <rect x={x0} y="0" width={W} height={h} fill={url('dots')} />}
-      {finish === 'glitter' && sparkles.map((s) => <path d={star(s.x, s.y, s.s)} fill="#fff" opacity="0.95" />)}
+      {finish === 'glitter' && sparkles.map((s) => <path d={star(s.x, s.y, s.s * 0.7)} fill="#fff" opacity="0.9" />)}
       {
         finish === 'marble' && (
           <g fill="none" stroke-linecap="round">
+            <rect x={x0} y="0" width={W} height={h} fill={vein} opacity="0.05" />
             {veins.map((v) => (
-              <path d={v.d} stroke="#3d3944" stroke-width={v.w} opacity={v.o} />
+              <path d={v.d} stroke={vein} stroke-width={v.w} opacity={v.o} filter={v.blur ? url('soft') : undefined} />
             ))}
-            <path d={goldVein} stroke="#c9a227" stroke-width="0.7" opacity="0.75" />
           </g>
         )
       }
