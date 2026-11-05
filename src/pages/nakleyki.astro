@@ -18,7 +18,7 @@ import Icon from '@/components/Icon.astro';
 import { stickersPage as page, buildStickerFaq } from '@/data/stickersPage';
 import { services } from '@/data/services';
 import { reviews } from '@/data/reviews';
-import { PACK_MAX, PACK_MIN, STICKER_MAX, STICKER_MIN, VINYL_MIN, VINYL_PACK_MIN, defaultSelection, findProduct, rub, stickerDiscounts, stickerRate, vinylTiers } from '@/data/pricing';
+import { PACK_MAX, PACK_MIN, STICKER_MAX, STICKER_MIN, STICKER_MIN_SUM, VINYL_MIN, VINYL_PACK_MIN, defaultSelection, findProduct, rub, stickerDiscounts, stickerRate, vinylTiers } from '@/data/pricing';
 import { breadcrumbs, faqPage, service as serviceLd } from '@/lib/schema';
 import type { ServicePage } from '@/data/types';
 
@@ -55,6 +55,7 @@ const faq = buildStickerFaq({
   vinylPackMin: VINYL_PACK_MIN,
   packMin: PACK_MIN,
   packMax: PACK_MAX,
+  minSum: STICKER_MIN_SUM,
 });
 const vinylPackRows = vinylPack.table!.rows;
 const vinylPackCols = vinylPack.table!.columns;
@@ -126,7 +127,7 @@ const packArt = [
           <p class="eyebrow">Калькулятор</p>
           <h2 id="calc-h">Посчитайте свои стикеры</h2>
         </div>
-        <p class="calc-sub">Выберите 3D или виниловые стикеры, укажите размер, вырубку и количество — цена за штуку и за весь заказ пересчитается сразу. 3D — от {STICKER_MIN} шт, виниловые — от {VINYL_MIN} шт.</p>
+        <p class="calc-sub">Выберите 3D или виниловые стикеры, укажите размер, вырубку и количество — цена за штуку и за весь заказ пересчитается сразу. 3D — от {STICKER_MIN} шт, виниловые — от {VINYL_MIN} шт; заказ стикеров — от {STICKER_MIN_SUM} ₽, для маленьких размеров калькулятор сам подставит нужное количество.</p>
       </div>
       <Calculator client:visible category="stickers" product="sticker-3d" hideCategories />
     </div>
@@ -143,7 +144,7 @@ const packArt = [
           <p class="eyebrow">Цена</p>
           <h2 id="pr-h">Как считается цена стикера</h2>
         </div>
-        <p class="pr-sub">3D-стикеры: платите только за площадь — ширина × высота × цена за см². Минимальный заказ — {STICKER_MIN} стикеров, больше {STICKER_MAX} — индивидуально.</p>
+        <p class="pr-sub">3D-стикеры: платите только за площадь — ширина × высота × цена за см². Минимальный заказ — {STICKER_MIN} стикеров и не меньше {STICKER_MIN_SUM} ₽, больше {STICKER_MAX} — индивидуально.</p>
       </div>
       <div class="pr-grid">
         <div class="pr-demo">
@@ -311,7 +312,7 @@ const packArt = [
           <p class="eyebrow">Виниловые стикеры</p>
           <h2 id="vn-h">Стикеры на виниловой плёнке с контурной резкой</h2>
         </div>
-        <p>Плоские, глянцевые или матовые — дешевле 3D-стикеров и подходят для больших тиражей. Форма вырубки на цену не влияет.</p>
+        <p>Плоские, глянцевые или матовые — дешевле 3D-стикеров и подходят для больших тиражей. Форма вырубки на цену не влияет. Заказ — от {VINYL_MIN} шт и от {STICKER_MIN_SUM} ₽.</p>
       </div>
       <div class="typ-grid">
         <article class="typ-card typ-y">

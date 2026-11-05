@@ -88,6 +88,8 @@ export interface Product {
   /** quantities at which the price per piece drops (for the tier ladder in the UI) */
   ladder?: (sel: Selection) => Tier[];
   quote: (sel: Selection) => Quote;
+  /** smallest run for this selection when it depends on the size (stickers: minimum order sum); default qty.min */
+  minQty?: (sel: Selection) => number;
   /** static price table for the HTML price list (always visible, indexable) */
   table?: PriceTable;
   /** lowest possible price per piece, for "от N ₽" labels */
@@ -878,6 +880,15 @@ const cutGroup: OptionGroup = {
 };
 const rateOf = (sel: Selection) => (one(sel, 'cut', 'simple') === 'complex' ? stickerRate.complex : stickerRate.simple);
 export const STICKER_MAX = 300;
+/** minimum order sum for single stickers (epoxy and vinyl), owner 05.11.2026 */
+export const STICKER_MIN_SUM = 850;
+/** smallest run for a size: the base minimum, or more — rounded up to tens — so the order is at least STICKER_MIN_SUM */
+const minRun = (base: number, max: number, unitAt: (qty: number) => number) => {
+  if (base * unitAt(base) >= STICKER_MIN_SUM) return base;
+  let n = Math.ceil(base / 10) * 10;
+  while (n < max && n * unitAt(n) < STICKER_MIN_SUM) n += 10;
+  return Math.min(n, max);
+};
 export const PACK_MIN = 10;
 export const PACK_MAX = 200;
 const stickerTable = (label: string): PriceTable => ({
@@ -886,15 +897,20 @@ const stickerTable = (label: string): PriceTable => ({
     { label: `${label}: простая вырубка, за см²`, cells: [0, 0.05, 0.1].map((o) => rub(round(stickerRate.simple * (1 - o)))) },
     { label: `${label}: сложная вырубка, за см²`, cells: [0, 0.05, 0.1].map((o) => rub(round(stickerRate.complex * (1 - o)))) },
   ],
-  note: `Минимальный заказ — ${STICKER_MIN} стикеров, больше ${STICKER_MAX} — индивидуально. Цена стикера = площадь (ширина × высота, см²) × цена за см².`,
+  note: `Минимальный заказ — ${STICKER_MIN} стикеров и не меньше ${STICKER_MIN_SUM} ₽ (для маленьких стикеров — больше штук), больше ${STICKER_MAX} — индивидуально. Цена стикера = площадь (ширина × высота, см²) × цена за см².`,
 });
 const PACK_SIZES = [3, 4, 5, 6, 8, 10, 12];
+const epoxyMin = (sel: Selection) =>
+  minRun(STICKER_MIN, STICKER_MAX, (n) => round((sel.dims.w ?? 4) * (sel.dims.h ?? 4) * rateOf(sel) * (1 - stickerOff(n))));
+const minError = (n: number, w: number, h: number) =>
+  `Минимальный заказ — ${STICKER_MIN_SUM} ₽: стикеров ${w}×${h} см — от ${n} шт.`;
 
 // vinyl contour-cut stickers: price per cm² by the number of stickers, the cut does not change the price
 export const VINYL_MIN = 100;
 export const VINYL_PACK_MIN = 50;
 export const vinylTiers: Tier[] = tiers([VINYL_MIN, 300], [0.25, 0.2]);
 const vinylRate = (qty: number) => [...vinylTiers].reverse().find((t) => qty >= t.from)?.price ?? vinylTiers[0].price;
+const vinylMin = (sel: Selection) => minRun(VINYL_MIN, 10000, (n) => round((sel.dims.w ?? 5) * (sel.dims.h ?? 5) * vinylRate(n)));
 const vinylFilm: OptionGroup = {
   id: 'film',
   label: 'Плёнка',
@@ -910,7 +926,7 @@ const vinylSticker: Product = {
   name: 'Виниловые стикеры с контурной резкой',
   short: `глянец или мат, от ${VINYL_MIN} шт`,
   image: '/img/showcase/stickers-3d.webp',
-  qty: { min: VINYL_MIN, max: 10000, default: VINYL_MIN },
+  qty: { min: VINYL_MIN, max: 10000, default: 140 },
   options: [vinylFilm],
   dims: [
     { id: 'w', label: 'Ширина', unit: 'см', min: 1, max: 30, default: 5 },
@@ -921,9 +937,14 @@ const vinylSticker: Product = {
   table: {
     columns: [`${VINYL_MIN}–299 шт`, 'от 300 шт'],
     rows: [{ label: 'Виниловый стикер, за см²', cells: vinylTiers.map((t) => rub(t.price)) }],
-    note: `Минимальный заказ — ${VINYL_MIN} стикеров. Цена стикера = площадь (ширина × высота, см²) × цена за см², форма вырубки на цену не влияет.`,
+    note: `Минимальный заказ — ${VINYL_MIN} стикеров и не меньше ${STICKER_MIN_SUM} ₽ (для маленьких стикеров — больше штук). Цена стикера = площадь (ширина × высота, см²) × цена за см², форма вырубки на цену не влияет.`,
   },
-  ladder: (sel) => vinylTiers.map((t) => ({ from: t.from, price: round((sel.dims.w ?? 5) * (sel.dims.h ?? 5) * t.price) })),
+  minQty: (sel) => vinylMin(sel),
+  ladder: (sel) => {
+    const first = vinylMin(sel);
+    const area = (sel.dims.w ?? 5) * (sel.dims.h ?? 5);
+    return [{ from: first, price: round(area * vinylRate(first)) }, ...vinylTiers.filter((t) => t.from > first).map((t) => ({ from: t.from, price: round(area * t.price) }))];
+  },
   quote: (sel) => {
     const w = sel.dims.w ?? 5;
     const h = sel.dims.h ?? 5;
@@ -937,7 +958,7 @@ const vinylSticker: Product = {
       breakdown: [{ label: `Стикер ${w}×${h} см, ${one(sel, 'film', 'gloss') === 'matte' ? 'матовая' : 'глянцевая'} плёнка`, amount: unit, per: 'шт' }],
       next: next ? { qty: next.from, unit: round(area * next.price) } : undefined,
       notes: [`Площадь стикера ${String(area).replace('.', ',')} см² × ${String(rate).replace('.', ',')} ₽/см².`],
-      error: sel.qty < VINYL_MIN ? `Минимальный заказ — ${VINYL_MIN} стикеров.` : undefined,
+      error: sel.qty < vinylMin(sel) ? minError(vinylMin(sel), w, h) : undefined,
     };
   },
 };
@@ -961,9 +982,11 @@ const stickers: Category = {
       fromPrice: stickerRate.simple,
       fromUnit: 'см²',
       table: stickerTable('Стикер'),
+      minQty: (sel) => epoxyMin(sel),
       ladder: (sel) => {
         const base = round((sel.dims.w ?? 4) * (sel.dims.h ?? 4) * rateOf(sel));
-        return [{ from: STICKER_MIN, price: base }, ...stickerDiscounts.map((d) => ({ from: d.from, price: round(base * (1 - d.off)) }))];
+        const first = epoxyMin(sel);
+        return [{ from: first, price: base }, ...stickerDiscounts.filter((d) => d.from > first).map((d) => ({ from: d.from, price: round(base * (1 - d.off)) }))];
       },
       quote: (sel) => {
         const rate = rateOf(sel);
@@ -980,7 +1003,7 @@ const stickers: Category = {
           breakdown: [{ label: `Стикер ${w}×${h} см, ${rate === stickerRate.complex ? 'сложная' : 'простая'} вырубка${off ? ` (−${Math.round(off * 100)}%)` : ''}`, amount: unit, per: 'шт' }],
           next: next ? { qty: next.from, unit: round(area * rate * (1 - next.off)) } : undefined,
           notes,
-          error: sel.qty < STICKER_MIN ? `Минимальный заказ — ${STICKER_MIN} стикеров.` : undefined,
+          error: sel.qty < epoxyMin(sel) ? minError(epoxyMin(sel), w, h) : undefined,
         };
       },
     },
@@ -1056,7 +1079,7 @@ const stickers: Category = {
       name: 'Стикерпак на виниловой плёнке',
       short: `А6 или А5, контурная резка, от ${VINYL_PACK_MIN} шт`,
       image: '/img/showcase/stickers-3d.webp',
-      qty: { min: VINYL_PACK_MIN, max: 2000, default: VINYL_PACK_MIN },
+      qty: { min: VINYL_PACK_MIN, max: 200, default: VINYL_PACK_MIN, individualAbove: true },
       variantLabel: 'Формат листа',
       variants: [
         { id: 'a6', label: 'А6', hint: '10,5 × 14,8 см', tiers: tiers([VINYL_PACK_MIN, 100], [80, 70]) },

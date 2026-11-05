@@ -60,12 +60,28 @@ describe('pricing', () => {
   });
 
   it('vinyl stickers: from 100, 0.25 ₽/см² up to 299, 0.2 from 300; cut and film do not change the price', () => {
-    const { p, s } = sel('stickers', 'vinyl-sticker', { qty: 100, dims: { w: 5, h: 5 } });
+    const { p, s } = sel('stickers', 'vinyl-sticker', { qty: 140, dims: { w: 5, h: 5 } });
     expect(p.quote(s).unit).toBe(6.25);
     expect(p.quote({ ...s, qty: 299 }).unit).toBe(6.25);
     expect(p.quote({ ...s, qty: 300 }).unit).toBe(5);
     expect(p.quote({ ...s, options: { film: 'matte' } }).unit).toBe(6.25);
     expect(p.quote({ ...s, qty: 99 }).error).toBeDefined();
+  });
+
+  it('stickers: minimum order 850 ₽ — the smallest run grows for small sizes, rounded up to tens', () => {
+    const v = findProduct('stickers', 'vinyl-sticker')!;
+    const vmin = (w: number, h: number) => v.minQty!({ ...defaultSelection(v), dims: { w, h } });
+    expect(vmin(5, 5)).toBe(140); // 6,25 ₽ → 875 ₽
+    expect(vmin(10, 10)).toBe(100); // 25 ₽ × 100 = 2500 ₽
+    expect(vmin(3, 3)).toBe(480); // from 300 pcs 1,8 ₽ × 480 = 864 ₽
+    expect(v.quote({ ...defaultSelection(v), qty: 130, dims: { w: 5, h: 5 } }).error).toBeDefined();
+    const e = findProduct('stickers', 'sticker-3d')!;
+    const emin = (w: number, h: number, cut = 'simple') => e.minQty!({ ...defaultSelection(e), options: { cut }, dims: { w, h } });
+    expect(emin(4, 4)).toBe(30);
+    expect(emin(2, 2)).toBe(50); // 20 ₽ × 50 = 1000 ₽ (40 шт — 800 ₽)
+    expect(emin(2, 2, 'complex')).toBe(40); // 28 ₽ × 40 = 1120 ₽
+    expect(e.ladder!({ ...defaultSelection(e), dims: { w: 2, h: 2 } })[0].from).toBe(50);
+    expect(findProduct('stickers', 'vinyl-pack')!.qty.max).toBe(200);
   });
 
   it('vinyl sticker packs: from 50 — А6 80 / А5 120, from 100 — 70 / 105', () => {

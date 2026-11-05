@@ -158,8 +158,17 @@ export default function Calculator({ category, product, only, hideCategories, lo
     setQtyText(String(s.qty));
   };
 
+  // the smallest run can depend on the size (stickers: minimum order sum, rounded up to tens)
+  const qcfg = useMemo(() => (prod.minQty ? { ...prod.qty, min: Math.min(prod.qty.max, prod.minQty(sel)) } : prod.qty), [prod, sel.dims, sel.options]);
+  useEffect(() => {
+    if (sel.qty < qcfg.min) {
+      setSel((s) => ({ ...s, qty: qcfg.min }));
+      setQtyText(String(qcfg.min));
+    }
+  }, [qcfg.min]);
+
   const setQty = (n: number) => {
-    const q = normalizeQty(n, prod.qty);
+    const q = normalizeQty(n, qcfg);
     setSel((s) => ({ ...s, qty: q }));
     setQtyText(String(q));
   };
@@ -179,16 +188,16 @@ export default function Calculator({ category, product, only, hideCategories, lo
 
   const quote = useMemo(() => prod.quote(sel), [prod, sel]);
 
-  const { min, max, presets, freeFrom } = prod.qty;
-  const sliderMax = sliderMaxOf(prod.qty);
-  const sliderVal = qtyToPos(sel.qty, prod.qty);
+  const { min, max, presets, freeFrom } = qcfg;
+  const sliderMax = sliderMaxOf(qcfg);
+  const sliderVal = qtyToPos(sel.qty, qcfg);
   // stickers on the quantity bar: where the price per piece drops and by how much
   const ladder = useMemo(() => prod.ladder?.(sel) ?? [], [prod, sel]);
   const stickers = (() => {
     const top = ladder[0]?.price ?? 0;
     const out: { qty: number; pct: number; save: number; row: number }[] = [];
     for (const t of ladder.slice(1)) {
-      const pct = qtyToPos(t.from, prod.qty) / sliderMax;
+      const pct = qtyToPos(t.from, qcfg) / sliderMax;
       const save = top > 0 ? Math.round((1 - t.price / top) * 100) : 0;
       if (save <= 0 || pct > 1) continue;
       const prev = out[out.length - 1];
@@ -384,7 +393,7 @@ export default function Calculator({ category, product, only, hideCategories, lo
             </legend>
             <div class="calc-qty">
               <div class="calc-stepper">
-                <button type="button" aria-label="Меньше" onClick={() => setQty(stepQty(sel.qty, -1, prod.qty))} disabled={sel.qty <= min}>
+                <button type="button" aria-label="Меньше" onClick={() => setQty(stepQty(sel.qty, -1, qcfg))} disabled={sel.qty <= min}>
                   −
                 </button>
                 <input
@@ -405,7 +414,7 @@ export default function Calculator({ category, product, only, hideCategories, lo
                   onBlur={() => setQty(Number(qtyText) || min)}
                 />
                 <span class="calc-qty-unit">шт</span>
-                <button type="button" aria-label="Больше" onClick={() => setQty(stepQty(sel.qty, 1, prod.qty))} disabled={sel.qty >= max}>
+                <button type="button" aria-label="Больше" onClick={() => setQty(stepQty(sel.qty, 1, qcfg))} disabled={sel.qty >= max}>
                   +
                 </button>
               </div>
@@ -432,7 +441,7 @@ export default function Calculator({ category, product, only, hideCategories, lo
                   style={{ '--p': `${(sliderVal / sliderMax) * 100}%` }}
                   onInput={(e) => {
                     const pos = Number((e.target as HTMLInputElement).value);
-                    setQty(posToQty(pos, prod.qty));
+                    setQty(posToQty(pos, qcfg));
                   }}
                 />
               </div>
@@ -440,8 +449,8 @@ export default function Calculator({ category, product, only, hideCategories, lo
                 <span>{min.toLocaleString('ru-RU')}</span>
                 <span>
                   {max.toLocaleString('ru-RU')}
-                  {prod.qty.individualAbove && ' · больше — цена индивидуально'}
-                  {prod.qty.moreIn && ` · больше — ${prod.qty.moreIn.label}`}
+                  {qcfg.individualAbove && ' · больше — цена индивидуально'}
+                  {qcfg.moreIn && ` · больше — ${qcfg.moreIn.label}`}
                 </span>
               </div>
             </div>
@@ -454,7 +463,7 @@ export default function Calculator({ category, product, only, hideCategories, lo
                 ))}
               </div>
             )}
-            {!quote.next && !quote.error && prod.qty.individualAbove && ladder.length > 1 && sel.qty >= ladder[ladder.length - 1].from && (
+            {!quote.next && !quote.error && qcfg.individualAbove && ladder.length > 1 && sel.qty >= ladder[ladder.length - 1].from && (
               // the best price is reached: tell about larger runs (clothing: more than 50 pcs is priced individually)
               <button type="button" class="calc-boost calc-boost-ink" data-order={`Индивидуальный расчёт: ${prod.name}, больше ${max} шт`}>
                 <span class="calc-boost-pct mono">{max}+</span>
@@ -468,11 +477,11 @@ export default function Calculator({ category, product, only, hideCategories, lo
             )}
             {!quote.next &&
               !quote.error &&
-              prod.qty.moreIn &&
+              qcfg.moreIn &&
               sel.qty >= max &&
               (() => {
                 // more than the set allows: switch to the product that takes larger runs
-                const more = prod.qty.moreIn!;
+                const more = qcfg.moreIn!;
                 const target = list.find((x) => x.id === more.product);
                 if (!target) return null;
                 return (
