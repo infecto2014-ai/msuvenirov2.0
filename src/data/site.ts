@@ -46,6 +46,9 @@ export const site = {
 export interface NavLink {
   href: string;
   label: string;
+  /** for pages that have no services.ts entry (own .astro page): card picture and price on /uslugi */
+  image?: string;
+  calc?: { category: string; product: string };
 }
 
 /** Service landing pages grouped for the menu and footer. Must match src/data/services.ts slugs. */
@@ -58,6 +61,7 @@ export const serviceNav: { group: string; links: NavLink[] }[] = [
       { href: '/pechat-na-hudi', label: 'Печать на худи' },
       { href: '/pechat-na-shopperah', label: 'Печать на шопперах' },
       { href: '/pechat-na-kepkah', label: 'Печать на бейсболках' },
+      { href: '/sublimacionnaya-pechat', label: 'Сублимационная печать', image: '/portfolio/sublimation-anime.webp', calc: { category: 'textile', product: 'sub-print' } },
     ],
   },
   {

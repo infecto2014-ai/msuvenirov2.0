@@ -164,58 +164,7 @@ export const garments: GarmentInfo[] = [
     reviewKeywords: ['худи'],
   },
 
-  /* ── Шоппер: без выбора цвета, print1–print2, А6–А4 ── */
-  {
-    slug: '/pechat-na-shopperah',
-    productId: 'shopper',
-    silhouette: 'shopper',
-    packages: [
-      {
-        title: 'Шоппер в подарок',
-        note: 'рисунок, надпись или фото А4 с одной стороны',
-        qty: 1,
-        options: { print1: 'a4', print2: 'none' },
-        img: '/portfolio/shopper-bags.webp',
-      },
-      {
-        title: 'С двух сторон',
-        note: 'два принта А4 — одинаковые или разные',
-        qty: 1,
-        options: { print1: 'a4', print2: 'a4' },
-        img: '/img/showcase/shopper.webp',
-      },
-      {
-        title: 'Для мероприятия или магазина',
-        note: '20 шопперов с логотипом или афишей А5',
-        qty: 20,
-        options: { print1: 'a5', print2: 'none' },
-        img: '/portfolio/portfolio-7.webp',
-      },
-    ],
-    alsoOrder: ['/pechat-na-futbolkah', '/znachki', '/breloki', '/pechat-na-kruzhkah', '/nakleyki'],
-    colors: [
-      { name: 'Натуральный', hex: '#e9dfc9', note: 'уточняйте наличие' },
-      { name: 'Белый', hex: '#ffffff', note: 'уточняйте наличие' },
-      { name: 'Чёрный', hex: '#1b1b1d', note: 'уточняйте наличие' },
-    ],
-    specs: [
-      { label: 'Состав', value: '100% хлопок', todo: true },
-      { label: 'Плотность ткани', value: '220 г/м²', todo: true },
-      { label: 'Размер сумки', value: '38×42 см', todo: true },
-      { label: 'Ручки', value: 'длинные, около 65 см — сумку можно носить на плече', todo: true },
-      { label: 'Технология печати', value: 'DTF — на светлой и тёмной ткани' },
-      { label: 'Места печати', value: 'две стороны сумки' },
-      { label: 'Размер принта', value: 'от А6 (10×15 см) до А4 (21×28 см) с каждой стороны' },
-      { label: 'Стойкость принта', value: '50+ стирок при правильном уходе' },
-    ],
-    care: [
-      'Стирайте навыворот вручную или в деликатном режиме до 30 °C.',
-      'Без отбеливателя и пятновыводителей на принте.',
-      'Гладьте с изнанки — по принту утюгом не проводите.',
-      'Сушите расправленной, не в барабанной сушилке.',
-    ],
-    reviewKeywords: [],
-  },
+  // Шоппер: own page src/pages/pechat-na-shopperah.astro (content — src/data/shoppersPage.ts)
 
   /* ── Бейсболка: без выбора цвета, print1–print2, только А6 ── */
   {

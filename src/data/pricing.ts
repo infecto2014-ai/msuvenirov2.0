@@ -1222,8 +1222,8 @@ export const findProduct = (categoryId: string, productId?: string) => {
 export const categoryFrom = (id: string): { price: number; unit: string } => {
   const c = findCategory(id);
   if (!c) return { price: 0, unit: 'шт' };
-  // "print on your own item" has no blank price, so it would make "от" misleadingly low
-  const pool = c.products.filter((p) => p.id !== 'own-item');
+  // "print on your own item" (DTF or sublimation) has no blank price, so it would make "от" misleadingly low
+  const pool = c.products.filter((p) => p.id !== 'own-item' && p.id !== 'sub-print');
   const p = pool.reduce((a, b) => (b.fromPrice < a.fromPrice && !b.fromUnit ? b : a), pool[0]);
   return { price: p.fromPrice, unit: p.fromUnit ?? 'шт' };
 };

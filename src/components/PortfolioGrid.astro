@@ -3,13 +3,19 @@ import { portfolio } from '@/data/portfolio';
 import type { PortfolioItem } from '@/data/types';
 interface Props {
   tags?: string[];
+  /** only works made with this technology (e.g. 'Сублимация'); combined with tags if both are set */
+  tech?: string;
+  /** image paths of works to leave out */
+  exclude?: string[];
   limit?: number;
   title?: string;
   /** show "all works" link */
   more?: boolean;
 }
-const { tags, limit = 8, title = 'Наши работы', more = true } = Astro.props;
+const { tags, tech, exclude, limit = 8, title = 'Наши работы', more = true } = Astro.props;
 let items: PortfolioItem[] = tags?.length ? portfolio.filter((p) => p.tags.some((t) => tags.includes(t))) : portfolio;
+if (tech) items = items.filter((p) => p.tech === tech);
+if (exclude?.length) items = items.filter((p) => !exclude.includes(p.src));
 // fill up with other works so the grid never looks empty
 if (items.length < Math.min(4, limit)) items = [...items, ...portfolio.filter((p) => !items.includes(p))];
 items = items.slice(0, limit);

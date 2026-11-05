@@ -13,9 +13,13 @@ const crumbs = [
   { name: 'Услуги', href: '/uslugi' },
 ];
 const bySlug = new Map(services.map((s) => [s.slug, s]));
-const fromOf = (slug: string) => {
+const fromOf = (slug: string, calc?: { category: string; product: string }) => {
   const s = bySlug.get(slug);
-  if (!s) return '';
+  if (!s) {
+    // own page without a services.ts entry: price of the product named in serviceNav
+    const p = calc && findProduct(calc.category, calc.product);
+    return p ? `от ${rub(p.fromPrice)}` : '';
+  }
   const p = s.calcProduct ? findProduct(s.calcCategory, s.calcProduct) : undefined;
   const f = p && !p.fromUnit ? { price: p.fromPrice, unit: 'шт' } : categoryFrom(s.calcCategory);
   return `от ${rub(f.price)}${f.unit !== 'шт' ? `/${f.unit}` : ''}`;
@@ -44,10 +48,10 @@ const fromOf = (slug: string) => {
               const s = bySlug.get(l.href);
               return (
                 <a class="svc" href={l.href}>
-                  {s && <img src={s.image} alt="" width="320" height="220" loading="lazy" />}
+                  {(s?.image ?? l.image) && <img src={s?.image ?? l.image} alt="" width="320" height="220" loading="lazy" />}
                   <span class="svc-body">
                     <span class="svc-name">{l.label}</span>
-                    <span class="svc-from mono">{fromOf(l.href)}</span>
+                    <span class="svc-from mono">{fromOf(l.href, l.calc)}</span>
                   </span>
                   <span class="svc-arrow">
                     <Icon name="arrow" />

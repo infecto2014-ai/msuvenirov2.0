@@ -25,6 +25,8 @@ interface Props {
   hideCategories?: boolean;
   /** only the preselected product: no product switcher (garment pages) */
   lockProduct?: boolean;
+  /** limit the product switcher to these product ids (e.g. two shoppers); omit for all products of the category */
+  products?: string[];
   /** heading level text shown above the calculator */
   title?: string;
 }
@@ -95,13 +97,19 @@ const describe = (p: Product, s: Selection): string => {
   return parts.join(' · ');
 };
 
-export default function Calculator({ category, product, only, hideCategories, lockProduct, title }: Props) {
+export default function Calculator({ category, product, only, hideCategories, lockProduct, products, title }: Props) {
   const cats: Category[] = useMemo(() => (only ? categories.filter((c) => only.includes(c.id)) : categories), [only]);
   const [catId, setCatId] = useState(() => findCategory(category ?? '')?.id ?? cats[0].id);
   const cat = findCategory(catId) ?? cats[0];
-  const [prodId, setProdId] = useState(() => cat.products.find((p) => p.id === product)?.id ?? cat.products[0].id);
-  const prod = cat.products.find((p) => p.id === prodId) ?? cat.products[0];
-  const showProducts = cat.products.length > 1 && !lockProduct;
+  /** products offered in the switcher: the whole category or only the listed ids */
+  const listOf = (c: Category) => {
+    const l = products ? c.products.filter((p) => products.includes(p.id)) : c.products;
+    return l.length ? l : c.products;
+  };
+  const list = listOf(cat);
+  const [prodId, setProdId] = useState(() => list.find((p) => p.id === product)?.id ?? list[0].id);
+  const prod = list.find((p) => p.id === prodId) ?? list[0];
+  const showProducts = list.length > 1 && !lockProduct;
   const [sel, setSel] = useState<Selection>(() => defaultSelection(prod));
   const [qtyText, setQtyText] = useState(String(sel.qty));
   const [toast, setToast] = useState('');
@@ -124,7 +132,8 @@ export default function Calculator({ category, product, only, hideCategories, lo
     const fc = findCategory(c);
     if (fc && (!only || only.includes(fc.id))) {
       setCatId(fc.id);
-      const fp = fc.products.find((x) => x.id === p) ?? fc.products[0];
+      const fl = listOf(fc);
+      const fp = fl.find((x) => x.id === p) ?? fl[0];
       setProdId(fp.id);
       const s = defaultSelection(fp);
       setSel(s);
@@ -135,8 +144,9 @@ export default function Calculator({ category, product, only, hideCategories, lo
   const pickCategory = (id: string) => {
     const c = findCategory(id)!;
     setCatId(id);
-    setProdId(c.products[0].id);
-    const s = defaultSelection(c.products[0]);
+    const first = listOf(c)[0];
+    setProdId(first.id);
+    const s = defaultSelection(first);
     setSel(s);
     setQtyText(String(s.qty));
   };
@@ -241,7 +251,7 @@ export default function Calculator({ category, product, only, hideCategories, lo
                 <span class="calc-step">1</span> Изделие
               </legend>
               <div class="calc-products">
-                {cat.products.map((p) => (
+                {list.map((p) => (
                   <button
                     type="button"
                     class={`calc-product${p.id === prod.id ? ' is-active' : ''}`}
@@ -317,7 +327,7 @@ export default function Calculator({ category, product, only, hideCategories, lo
                 {nextAdd && (
                   <button type="button" class="calc-add" onClick={() => addGroup(nextAdd)}>
                     <span aria-hidden="true">+</span> Добавить принт
-                    <small>{nextAdd.label.toLowerCase()} — дешевле: −30% / −50%</small>
+                    <small>{nextAdd.label.includes('сублимация') ? `${nextAdd.label.split(' ·')[0].toLowerCase()} — по цене выбранного формата` : `${nextAdd.label.toLowerCase()} — дешевле: −30% / −50%`}</small>
                   </button>
                 )}
               </>
