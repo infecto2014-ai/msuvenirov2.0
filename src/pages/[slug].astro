@@ -21,8 +21,8 @@ import { breadcrumbs, faqPage, service as serviceLd } from '@/lib/schema';
 import type { ServicePage } from '@/data/types';
 
 export function getStaticPaths() {
-  // these have their own pages (src/pages/korporativnym-klientam.astro, kalendari.astro, pechat-na-kruzhkah.astro, pechat-na-shopperah.astro); the services.ts entries stay for menus and sitemap
-  const own = ['/korporativnym-klientam', '/kalendari', '/pechat-na-kruzhkah', '/pechat-na-shopperah'];
+  // these have their own pages (src/pages/korporativnym-klientam.astro, kalendari.astro, pechat-na-kruzhkah.astro, pechat-na-shopperah.astro, pechat-na-kepkah.astro); the services.ts entries stay for menus and sitemap
+  const own = ['/korporativnym-klientam', '/kalendari', '/pechat-na-kruzhkah', '/pechat-na-shopperah', '/pechat-na-kepkah'];
   return services.filter((s) => !own.includes(s.slug)).map((s) => ({ params: { slug: s.slug.replace(/^\//, '') }, props: { page: s } }));
 }
 

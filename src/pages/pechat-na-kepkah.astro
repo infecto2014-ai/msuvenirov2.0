@@ -1,0 +1,1607 @@
+---
+// «Печать на бейсболках» — own page (like the shoppers and mugs pages): first screen, calculator of the cap only,
+// ready options, the cap itself (specs + 7 colours), where we print, audience, how to order, works, reviews, FAQ, SEO text.
+// Content — src/data/capsPage.ts; every price — src/data/pricing.ts ('cap', category 'textile');
+// drawings — src/components/cap/CapArt.astro + cap-geometry.ts. The services.ts entry stays for menus/sitemap.
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Calculator from '@/components/islands/Calculator';
+import AlsoOrder from '@/components/garment/AlsoOrder.astro';
+import CapArt from '@/components/cap/CapArt.astro';
+import CapPackages from '@/components/cap/CapPackages.astro';
+import PortfolioGrid from '@/components/PortfolioGrid.astro';
+import Reviews from '@/components/Reviews.astro';
+import FaqSection from '@/components/FaqSection.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import Icon from '@/components/Icon.astro';
+import { capsPage as page, buildCapFaq } from '@/data/capsPage';
+import { services } from '@/data/services';
+import { reviews } from '@/data/reviews';
+import { defaultSelection, extraPrintFactor, findProduct, rub, type Selection } from '@/data/pricing';
+import { breadcrumbs, faqPage, service as serviceLd } from '@/lib/schema';
+import type { CapColor } from '@/components/cap/cap-geometry';
+import type { ServicePage } from '@/data/types';
+
+const crumbs = [
+  { name: 'Главная', href: '/' },
+  { name: 'Услуги', href: '/uslugi' },
+  { name: 'Печать на бейсболках', href: page.slug },
+];
+
+// ---- prices, all from pricing.ts
+const cap = findProduct('textile', 'cap')!;
+const unitAt = (qty: number, options: Selection['options'] = {}) => {
+  const b = defaultSelection(cap);
+  return cap.quote({ ...b, qty, options: { ...b.options, ...options } }).unit;
+};
+const colorGroup = cap.options!.find((g) => g.id === 'color')!;
+const colors = colorGroup.choices.map((c) => ({ id: c.id as CapColor, name: c.label, hex: c.swatch ?? '#ccc' }));
+const blankTiers = [1, 10, 30];
+const extraOff = Math.round((1 - extraPrintFactor[1]) * 100);
+const faq = buildCapFaq({
+  one: rub(unitAt(1)),
+  ten: rub(unitAt(10)),
+  thirty: rub(unitAt(30)),
+  max: cap.qty.max,
+  extraOff,
+  colors: colors.map((c, i) => (i === 0 ? c.name : c.name.toLowerCase())).join(', '),
+});
+const related = page.related.map((r) => services.find((s) => s.slug === r)).filter(Boolean) as ServicePage[];
+// reviews about caps, if there are any; otherwise the general reviews
+const hasCapReviews = reviews.some((r) => page.reviewKeywords.some((k) => r.text.toLowerCase().includes(k)));
+const tones = ['c', 'm', 'y'];
+---
+
+<BaseLayout
+  title={page.title}
+  description={page.description}
+  path={page.slug}
+  image="/portfolio/branded-caps.webp"
+  schema={[
+    breadcrumbs(crumbs),
+    serviceLd({ name: page.h1, description: page.description, url: page.slug, lowPrice: cap.fromPrice, offerCount: colors.length }),
+    faqPage(faq),
+  ]}
+>
+  <!-- ============ first screen ============ -->
+  <section class="shero">
+    <div class="wrap shero-grid">
+      <div class="shero-text">
+        <Breadcrumbs items={crumbs} />
+        <p class="eyebrow shero-eyebrow">{page.eyebrow}</p>
+        <h1>{page.h1}</h1>
+        <p class="lead">{page.lead}</p>
+        <ul class="shero-chips">
+          {page.highlights.map((h) => <li><Icon name="check" size={18} /> {h}</li>)}
+        </ul>
+        <div class="shero-actions">
+          <a class="btn btn-magenta" href="#calc"><Icon name="calc" size={20} /> <span>Рассчитать<span class="long"> стоимость</span></span></a>
+          <button type="button" class="btn btn-ghost" data-order>Отправить макет</button>
+        </div>
+      </div>
+      <div class="shero-media" role="img" aria-label={page.heroAlt}>
+        <span class="shero-dot shero-dot-c" aria-hidden="true"></span>
+        <span class="shero-dot shero-dot-m" aria-hidden="true"></span>
+        <span class="shero-dot shero-dot-y" aria-hidden="true"></span>
+        <div class="shero-wall halftone" aria-hidden="true">
+          <div class="shero-stage">
+            <CapArt view="side" color="red" print="logo" place="side" scale={0.92} class="shero-cap shero-red" />
+            <CapArt view="front" color="white" print="text" scale={0.86} class="shero-cap shero-white" />
+            <CapArt view="three-quarter" color="black" print="logo" scale={1.32} class="shero-cap shero-black" />
+          </div>
+          <ul class="shero-swatches">
+            {colors.map((c) => <li style={`--sw:${c.hex}`} title={c.name}></li>)}
+          </ul>
+        </div>
+        <span class="sticker shero-price">
+          от <span class="mono">{rub(cap.fromPrice)}</span><small>кепка с печатью</small>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ calculator ============ -->
+  <section id="calc" class="section calc-sec" aria-labelledby="calc-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Калькулятор</p>
+          <h2 id="calc-h">Посчитайте свои кепки</h2>
+        </div>
+        <p class="calc-sub">Выберите цвет, один или два места печати и количество — цена за штуку и за весь заказ пересчитается сразу. Кепка, печать и макет уже в цене.</p>
+      </div>
+      <Calculator client:visible category="textile" product="cap" products={['cap']} hideCategories />
+    </div>
+    <AlsoOrder slugs={page.alsoOrder} />
+  </section>
+
+  <CapPackages />
+
+  <!-- ============ the cap itself ============ -->
+  <section class="section our" aria-labelledby="our-h">
+    <div class="wrap our-grid">
+      <div class="our-art">
+        {colors.map((c, i) => <input type="radio" name="cap-color" id={`capc-${c.id}`} class={`our-in our-in-${c.id}`} checked={i === 0} />)}
+        <div class="our-stage halftone">
+          {colors.map((c) => (
+            <div class={`our-v our-v-${c.id}`}>
+              <CapArt view="three-quarter" color={c.id} print="logo" markers scale={2} title={`Бейсболка TEXTILLER, ${c.name.toLowerCase()}`} />
+            </div>
+          ))}
+          <ol class="our-marks">
+            {page.cap.marks.map((m) => <li>{m}</li>)}
+          </ol>
+        </div>
+        <fieldset class="our-pal">
+          <legend>Цвета бейсболок — нажмите, чтобы примерить</legend>
+          <ul>
+            {colors.map((c) => (
+              <li>
+                <label for={`capc-${c.id}`} class={`our-sw our-sw-${c.id}`}>
+                  <i style={`--sw:${c.hex}`}></i>
+                  <span>{c.name}</span>
+                </label>
+              </li>
+            ))}
+          </ul>
+        </fieldset>
+      </div>
+      <div class="our-info">
+        <p class="eyebrow">Наша бейсболка</p>
+        <h2 id="our-h">{page.cap.name}: хлопок, саржа, 5 панелей</h2>
+        <p class="our-text">{page.cap.text}</p>
+        <dl class="our-specs">
+          {page.cap.specs.map((s) => (
+            <div>
+              <dt>{s.label}</dt>
+              <dd>{s.value}</dd>
+            </div>
+          ))}
+          <div>
+            <dt>Цвета</dt>
+            <dd>{colors.map((c) => c.name.toLowerCase()).join(', ')}</dd>
+          </div>
+        </dl>
+        <p class="our-price">
+          <span>Кепка с печатью спереди</span>
+          {blankTiers.map((q) => (
+            <span class="our-tier">
+              <small>от {q} шт</small>
+              <b class="mono">{rub(unitAt(q))}</b>
+            </span>
+          ))}
+        </p>
+        <details class="our-care" open data-fold>
+          <summary><h3>Уход за кепкой</h3></summary>
+          <ul>
+            {page.cap.care.map((t) => <li>{t}</li>)}
+          </ul>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ where we print ============ -->
+  <section class="section plc" aria-labelledby="plc-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Места печати</p>
+          <h2 id="plc-h">Где печатаем на кепке</h2>
+        </div>
+        <p>До двух принтов на одной кепке. Второй принт стоит на {extraOff}% дешевле первого.</p>
+      </div>
+      <ul class="plc-grid">
+        {page.places.map((p, i) => (
+          <li class={`plc-card plc-${tones[i === 0 ? 0 : 1]}`}>
+            <div class="plc-art" aria-hidden="true">
+              <CapArt view={p.view} color={p.color} print="logo" place={p.id} dims scale={1.35} />
+              <span class="plc-num mono">{i + 1}</span>
+            </div>
+            <div class="plc-body">
+              <span class="plc-tag mono">{p.tag}</span>
+              <h3>{p.title}</h3>
+              <p class="plc-size"><Icon name="check" size={16} /> {p.size}</p>
+              <p>{p.text}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ for whom ============ -->
+  <section class="section aud" aria-labelledby="aud-h">
+    <div class="wrap">
+      <p class="eyebrow">Для кого</p>
+      <h2 id="aud-h" class="aud-title">Кому заказывают кепки с логотипом</h2>
+      <ul class="aud-grid">
+        {
+          page.audience.map((a, i) => (
+            <li class={`aud-card kinds-${tones[i % 3]}`}>
+              <span class="aud-tag mono">{a.tag}</span>
+              <h3>{a.title}</h3>
+              <p>{a.text}</p>
+              <span class="aud-num mono" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ how to order ============ -->
+  <section class="section how" aria-labelledby="how-h">
+    <div class="wrap how-grid">
+      <div>
+        <p class="eyebrow">Заказ</p>
+        <h2 id="how-h">Как заказать печать на кепке</h2>
+        <ol class="how-steps">
+          {
+            page.steps.map((s, i) => (
+              <li>
+                <span class="how-dot mono">{i + 1}</span>
+                <div>
+                  <h3>{s.title}</h3>
+                  <p>{s.text}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+      <aside class="how-side">
+        <details class="how-card" open data-fold>
+          <summary><h3>{page.layout.title}</h3></summary>
+          <ul class="how-list">
+            {page.layout.items.map((t) => <li>{t}</li>)}
+          </ul>
+          <a class="how-more" href="/trebovaniya-k-maketam">Требования к макетам →</a>
+        </details>
+        <div class="how-b2b">
+          <h3>{page.b2b.title}</h3>
+          <ul class="how-chips">
+            {page.b2b.items.map((t) => <li><Icon name="check" size={16} /> {t}</li>)}
+          </ul>
+          <button type="button" class="btn btn-sm how-b2b-btn" data-order="Кепки с логотипом для компании — рассчитать тираж">Рассчитать тираж</button>
+          <a class="how-more" href="/korporativnym-klientam">Корпоративным клиентам →</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <script is:inline>
+    // folding cards are always open on a computer; on a phone they start folded (tap to open), as on the shoppers page
+    (function () {
+      var m = matchMedia('(max-width: 760px)');
+      document.querySelectorAll('[data-fold]').forEach(function (d) {
+        if (m.matches) d.open = false;
+        d.querySelector('summary').addEventListener('click', function (e) {
+          if (!m.matches) e.preventDefault();
+        });
+        m.addEventListener('change', function (e) {
+          d.open = !e.matches;
+        });
+      });
+    })();
+  </script>
+
+  <PortfolioGrid tags={page.portfolioTags} limit={4} title="Примеры: кепки и одежда" />
+
+  <Reviews keywords={hasCapReviews ? page.reviewKeywords : undefined} title={hasCapReviews ? 'Отзывы о кепках' : 'Что говорят клиенты'} />
+
+  <FaqSection items={faq} title="Вопросы о печати на кепках" />
+
+  <!-- ============ SEO text (folded on phones) ============ -->
+  <section class="section seo-text" aria-labelledby="seo-h">
+    <div class="wrap">
+      <h2 id="seo-h">{page.seo.title}</h2>
+      <input type="checkbox" id="seo-more" class="seo-toggle" />
+      <div class="seo-cols">
+        {
+          page.seo.sections.map((s) => (
+            <div>
+              <h3>{s.h}</h3>
+              <p>{s.p}</p>
+            </div>
+          ))
+        }
+        <div>
+          <h3>Смотрите также</h3>
+          <p>
+            <a href="/pechat-na-odezhde">печать на одежде</a> · <a href="/pechat-na-futbolkah">печать на футболках</a> · <a href="/pechat-na-hudi">худи</a> ·
+            <a href="/pechat-na-shopperah">шопперы</a> · <a href="/korporativnym-klientam">корпоративным клиентам</a> ·
+            <a href="/trebovaniya-k-maketam">требования к макетам</a> · <a href="/price">все цены</a>
+          </p>
+        </div>
+      </div>
+      <label for="seo-more" class="seo-more-btn">Читать полностью</label>
+    </div>
+  </section>
+
+  {
+    related.length > 0 && (
+      <section class="section related" aria-labelledby="rel-h">
+        <div class="wrap">
+          <h2 id="rel-h" class="related-h">Ещё печатаем</h2>
+          <div class="related-grid">
+            {related.map((r) => (
+              <a class="related-card" href={r.slug}>
+                <img src={r.image} alt="" width="120" height="120" loading="lazy" />
+                <span>{r.name}</span>
+                <Icon name="arrow" />
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <CtaBand title="Хотите кепку со своим логотипом?" text="Пришлите логотип, надпись или идею — соберём макет, покажем, как он ляжет на кепку, и посчитаем цену." />
+</BaseLayout>
+
+<style>
+  /* ================= first screen ================= */
+  .shero {
+    padding-block: clamp(28px, 4vw, 48px) clamp(24px, 4vw, 40px);
+    overflow: clip;
+  }
+  .shero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: clamp(28px, 5vw, 72px);
+    align-items: center;
+  }
+  .shero-text {
+    display: grid;
+    gap: 20px;
+    justify-items: start;
+  }
+  .shero-eyebrow {
+    margin: 0 0 -8px;
+  }
+  .shero-text h1 {
+    font-size: clamp(2.2rem, 5vw, 4rem);
+  }
+  .shero-chips {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .shero-chips li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+  .shero-chips :global(svg) {
+    color: var(--m-ink);
+  }
+  .shero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .shero-media {
+    position: relative;
+    padding: 24px;
+  }
+  /* a wall: three caps on it; the stage is drawn at a fixed size and zoomed with the column */
+  .shero-wall {
+    position: relative;
+    z-index: 1;
+    aspect-ratio: 1;
+    border-radius: 40px 40px 120px 40px;
+    background-color: var(--paper-2);
+    --dot: rgba(22, 20, 27, 0.1);
+    overflow: clip;
+  }
+  .shero-stage {
+    --hz: 1;
+    zoom: var(--hz);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 440px;
+    height: 440px;
+    margin: -220px 0 0 -220px;
+    z-index: 1;
+  }
+  .shero-price {
+    position: absolute;
+    right: 0;
+    bottom: 40px;
+    z-index: 3;
+    display: grid;
+    font-size: 1.25rem;
+    text-align: center;
+  }
+  .shero-price small {
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+  .shero-dot {
+    position: absolute;
+    border-radius: 50%;
+    mix-blend-mode: multiply;
+    z-index: 0;
+  }
+  .shero-dot-c {
+    width: 120px;
+    height: 120px;
+    background: var(--c);
+    top: -6px;
+    right: -10px;
+  }
+  .shero-dot-m {
+    width: 80px;
+    height: 80px;
+    background: var(--m);
+    bottom: 10px;
+    left: 70px;
+    opacity: 0.8;
+  }
+  .shero-dot-y {
+    width: 110px;
+    height: 110px;
+    background: var(--y);
+    top: 40%;
+    left: 0;
+  }
+  .calc-sec {
+    background: var(--paper-2);
+    border-radius: 48px;
+    margin-inline: clamp(0px, 1.5vw, 20px);
+  }
+
+
+  /* caps on the wall */
+  .shero-stage :global(.shero-cap) {
+    position: absolute;
+    filter: drop-shadow(0 14px 16px rgba(22, 20, 27, 0.18));
+  }
+  .shero-stage :global(.shero-red) {
+    left: -8px;
+    top: 34px;
+    transform: rotate(-7deg);
+  }
+  .shero-stage :global(.shero-white) {
+    right: -14px;
+    top: 118px;
+    transform: rotate(6deg);
+  }
+  .shero-stage :global(.shero-black) {
+    left: 40px;
+    top: 178px;
+    z-index: 2;
+  }
+  .shero-swatches {
+    position: absolute;
+    z-index: 3;
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%);
+    list-style: none;
+    margin: 0;
+    padding: 7px 10px;
+    display: flex;
+    gap: 6px;
+    border-radius: 999px;
+    background: var(--card);
+    box-shadow: 0 8px 18px -10px rgba(22, 20, 27, 0.4);
+  }
+  .shero-swatches li {
+    width: 18px;
+    height: 18px;
+    border-radius: 6px;
+    background: var(--sw);
+    box-shadow: inset 0 0 0 1px rgba(22, 20, 27, 0.18);
+  }
+
+  /* ================= the cap: picture with colour picker + specs ================= */
+  .kinds-c { --tone: var(--c); --soft: var(--c-soft); }
+  .kinds-m { --tone: var(--m); --soft: var(--m-soft); }
+  .kinds-y { --tone: var(--y); --soft: var(--y-soft); }
+  .our-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(24px, 4vw, 56px);
+    align-items: start;
+  }
+  .our-in {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .our-stage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 420px;
+    padding: 28px 18px 18px;
+    border-radius: 40px 40px 40px 120px;
+    background-color: var(--paper-2);
+    --dot: rgba(22, 20, 27, 0.09);
+    overflow: clip;
+  }
+  .our-v {
+    display: none;
+  }
+  .our-v :global(svg) {
+    width: min(100%, 470px);
+    filter: drop-shadow(0 18px 18px rgba(22, 20, 27, 0.18));
+  }
+  .our-in-black:checked ~ .our-stage .our-v-black,
+  .our-in-white:checked ~ .our-stage .our-v-white,
+  .our-in-red:checked ~ .our-stage .our-v-red,
+  .our-in-blue:checked ~ .our-stage .our-v-blue,
+  .our-in-yellow:checked ~ .our-stage .our-v-yellow,
+  .our-in-green:checked ~ .our-stage .our-v-green,
+  .our-in-khaki:checked ~ .our-stage .our-v-khaki {
+    display: block;
+  }
+  .our-marks {
+    list-style: none;
+    counter-reset: mk;
+    margin: 10px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px 14px;
+    font-size: 0.86rem;
+    font-weight: 600;
+  }
+  .our-marks li {
+    counter-increment: mk;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .our-marks li::before {
+    content: counter(mk);
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--m);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 800;
+  }
+  .our-pal {
+    margin: 16px 0 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+  .our-pal legend {
+    margin-bottom: 10px;
+    padding: 0;
+    font-weight: 700;
+    font-size: 0.92rem;
+  }
+  .our-pal ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .our-sw {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px 6px 6px;
+    border-radius: 14px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .our-sw i {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: var(--sw);
+    box-shadow: inset 0 0 0 1px rgba(22, 20, 27, 0.2);
+  }
+  .our-sw:hover {
+    border-color: var(--ink);
+  }
+  .our-in-black:checked ~ .our-pal .our-sw-black,
+  .our-in-white:checked ~ .our-pal .our-sw-white,
+  .our-in-red:checked ~ .our-pal .our-sw-red,
+  .our-in-blue:checked ~ .our-pal .our-sw-blue,
+  .our-in-yellow:checked ~ .our-pal .our-sw-yellow,
+  .our-in-green:checked ~ .our-pal .our-sw-green,
+  .our-in-khaki:checked ~ .our-pal .our-sw-khaki {
+    border-color: var(--ink);
+    box-shadow: 3px 3px 0 var(--y);
+  }
+  .our-in:focus-visible ~ .our-pal .our-sw {
+    outline: none;
+  }
+  .our-in-black:focus-visible ~ .our-pal .our-sw-black,
+  .our-in-white:focus-visible ~ .our-pal .our-sw-white,
+  .our-in-red:focus-visible ~ .our-pal .our-sw-red,
+  .our-in-blue:focus-visible ~ .our-pal .our-sw-blue,
+  .our-in-yellow:focus-visible ~ .our-pal .our-sw-yellow,
+  .our-in-green:focus-visible ~ .our-pal .our-sw-green,
+  .our-in-khaki:focus-visible ~ .our-pal .our-sw-khaki {
+    outline: 2px solid var(--c);
+    outline-offset: 2px;
+  }
+  .our-info {
+    display: grid;
+    gap: 14px;
+    justify-items: start;
+  }
+  .our-info .eyebrow {
+    margin: 0 0 -6px;
+  }
+  .our-text {
+    margin: 0;
+    color: var(--ink-2);
+  }
+  .our-specs {
+    width: 100%;
+    margin: 0;
+    border-radius: var(--radius-l);
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    overflow: clip;
+  }
+  .our-specs div {
+    display: grid;
+    grid-template-columns: 34% 1fr;
+    gap: 12px;
+    padding: 10px 18px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .our-specs div:last-child {
+    border-bottom: 0;
+  }
+  .our-specs dt {
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .our-specs dd {
+    margin: 0;
+    font-weight: 600;
+  }
+  .our-price {
+    width: 100%;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 16px;
+    border-radius: 24px;
+    background: var(--ink);
+    color: var(--paper);
+    font-weight: 700;
+  }
+  .our-price > span:first-child {
+    flex: 1 1 100%;
+    font-size: 0.9rem;
+    color: rgba(255, 252, 245, 0.75);
+  }
+  .our-tier {
+    display: grid;
+    flex: 1 1 0;
+    padding: 8px 12px;
+    border-radius: 16px;
+    background: rgba(255, 252, 245, 0.08);
+  }
+  .our-tier:nth-child(2) { box-shadow: inset 0 -4px 0 var(--c); }
+  .our-tier:nth-child(3) { box-shadow: inset 0 -4px 0 var(--m); }
+  .our-tier:nth-child(4) { box-shadow: inset 0 -4px 0 var(--y); }
+  .our-tier small {
+    font-size: 0.74rem;
+    color: rgba(255, 252, 245, 0.7);
+  }
+  .our-tier b {
+    font-size: 1.25rem;
+    letter-spacing: -0.03em;
+  }
+  .our-care {
+    width: 100%;
+    padding: 16px 20px;
+    border-radius: 24px;
+    background: var(--y-soft);
+  }
+  .our-care summary {
+    list-style: none;
+    cursor: default;
+  }
+  .our-care summary::-webkit-details-marker {
+    display: none;
+  }
+  .our-care h3 {
+    font-size: 1.05rem;
+  }
+  .our-care ul {
+    margin: 8px 0 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 4px;
+    font-size: 0.92rem;
+    color: var(--ink-2);
+  }
+  .our-care li::marker {
+    color: var(--m);
+  }
+
+  /* ================= where we print ================= */
+  .plc-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .plc-c { --tone: var(--c); --soft: var(--c-soft); }
+  .plc-m { --tone: var(--m); --soft: var(--m-soft); }
+  .plc-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    align-items: center;
+    border-radius: 34px 34px 34px 10px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    overflow: clip;
+  }
+  .plc-art {
+    position: relative;
+    display: grid;
+    place-items: center;
+    height: 100%;
+    min-height: 260px;
+    padding: 18px 10px;
+    background:
+      radial-gradient(circle, rgba(22, 20, 27, 0.08) 1.3px, transparent 1.5px) 0 0 / 14px 14px,
+      var(--soft);
+  }
+  .plc-art :global(svg) {
+    filter: drop-shadow(0 12px 12px rgba(22, 20, 27, 0.18));
+  }
+  .plc-num {
+    position: absolute;
+    left: 14px;
+    top: 14px;
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+    font-weight: 800;
+    font-size: 1.1rem;
+    box-shadow: 3px 3px 0 var(--tone);
+  }
+  .plc-body {
+    display: grid;
+    justify-items: start;
+    gap: 8px;
+    padding: 20px 22px;
+  }
+  .plc-tag {
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--tone);
+    color: var(--ink);
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+  .plc-m .plc-tag {
+    color: #fff;
+  }
+  .plc-body h3 {
+    font-size: 1.4rem;
+  }
+  .plc-size {
+    margin: 0;
+    display: flex;
+    gap: 6px;
+    align-items: flex-start;
+    font-weight: 700;
+    font-size: 0.92rem;
+  }
+  .plc-size :global(svg) {
+    flex: none;
+    margin-top: 3px;
+    color: var(--m-ink);
+  }
+  .plc-body p:not(.plc-size) {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--ink-2);
+  }
+
+  /* ================= audience ================= */
+  .aud-title {
+    margin-bottom: 28px;
+    max-width: 820px;
+  }
+  .aud-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .aud-card {
+    position: relative;
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: 8px;
+    padding: 22px 22px 56px;
+    border-radius: 26px 26px 26px 8px;
+    background: var(--soft);
+    overflow: clip;
+  }
+  .aud-tag {
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--card);
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+  .aud-card h3 {
+    font-size: 1.2rem;
+  }
+  .aud-card p {
+    margin: 0;
+    font-size: 0.93rem;
+    color: var(--ink-2);
+  }
+  .aud-num {
+    position: absolute;
+    right: 16px;
+    bottom: -14px;
+    font-size: 4rem;
+    font-weight: 800;
+    color: var(--tone);
+    opacity: 0.5;
+    line-height: 1;
+  }
+
+  /* ================= how to order ================= */
+  .how-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: clamp(28px, 5vw, 64px);
+    align-items: start;
+  }
+  .how-grid h2 {
+    margin-bottom: 26px;
+  }
+  .how-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+  }
+  .how-steps li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 16px;
+    padding-bottom: 22px;
+  }
+  .how-steps li:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 23px;
+    top: 48px;
+    bottom: 4px;
+    border-left: 2px dashed var(--line-strong);
+  }
+  .how-dot {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    background: var(--card);
+    font-weight: 700;
+  }
+  .how-steps li:nth-child(3n + 1) .how-dot { box-shadow: 3px 3px 0 var(--c); }
+  .how-steps li:nth-child(3n + 2) .how-dot { box-shadow: 3px 3px 0 var(--m); }
+  .how-steps li:nth-child(3n + 3) .how-dot { box-shadow: 3px 3px 0 var(--y); }
+  .how-steps h3 {
+    margin: 10px 0 4px;
+    font-size: 1.1rem;
+  }
+  .how-steps p {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 0.95rem;
+  }
+  .how-side {
+    display: grid;
+    gap: 14px;
+  }
+  .how-card,
+  .how-b2b {
+    position: relative;
+    display: grid;
+    justify-items: start;
+    gap: 8px;
+    padding: 22px;
+    border-radius: var(--radius-l);
+  }
+  .how-card li {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--ink-2);
+  }
+  .how-card {
+    background: var(--y-soft);
+  }
+  .how-card summary {
+    list-style: none;
+    cursor: default;
+  }
+  .how-card summary::-webkit-details-marker {
+    display: none;
+  }
+  .how-list {
+    margin: 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 6px;
+  }
+  .how-list li::marker {
+    color: var(--m);
+  }
+  .how-more {
+    font-weight: 700;
+    color: var(--m-ink);
+  }
+  .how-b2b {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .how-b2b h3 {
+    color: var(--paper);
+  }
+  .how-b2b .how-more {
+    color: var(--y);
+  }
+  .how-b2b-btn {
+    background: var(--y);
+    color: var(--ink);
+    border-color: var(--y);
+  }
+  .how-chips {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .how-chips li {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 11px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(255, 252, 245, 0.25);
+    font-size: 0.84rem;
+    font-weight: 600;
+  }
+  .how-chips :global(svg) {
+    color: var(--y);
+  }
+
+  /* ================= seo text ================= */
+  .seo-text h2 {
+    margin-bottom: 24px;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+  }
+  .seo-cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 48px;
+  }
+  .seo-cols h3 {
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+  }
+  .seo-cols p {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 0.96rem;
+    line-height: 1.6;
+  }
+  .seo-toggle,
+  .seo-more-btn {
+    display: none;
+  }
+
+  /* ================= related ================= */
+  .related-h {
+    margin-bottom: 24px;
+  }
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+  }
+  .related-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 18px 10px 10px;
+    border-radius: 24px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    font-weight: 700;
+    text-decoration: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .related-card img {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    object-fit: cover;
+  }
+  .related-card span {
+    flex: 1;
+  }
+  .related-card:hover {
+    border-color: var(--ink);
+    box-shadow: 4px 4px 0 var(--y);
+    color: var(--ink);
+  }
+
+  /* ================= tablets ================= */
+  @media (max-width: 1180px) {
+    .aud-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .shero-stage {
+      --hz: 0.85;
+    }
+    .plc-card {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 960px) {
+    .how-grid,
+    .our-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 860px) {
+    .shero-grid {
+      grid-template-columns: 1fr;
+    }
+    .shero-media {
+      max-width: 400px;
+      justify-self: center;
+      padding: 12px;
+    }
+    .shero-stage {
+      --hz: 0.82;
+    }
+  }
+
+  /* ================= phones (≤ 760px): compact, desktop untouched ================= */
+  @media (max-width: 760px) {
+    .shero {
+      padding-block: 14px 22px;
+    }
+    .shero-grid {
+      grid-template-columns: minmax(0, 1fr) 118px;
+      gap: 12px 14px;
+      align-items: start;
+    }
+    .shero-text {
+      display: contents;
+    }
+    .shero-text > :global(.crumbs),
+    .shero-text h1,
+    .shero-chips,
+    .shero-actions {
+      grid-column: 1 / -1;
+    }
+    .shero-eyebrow {
+      display: none;
+    }
+    .shero-text > :global(.crumbs) {
+      order: 1;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .shero-text > :global(.crumbs) :global(ol) {
+      flex-wrap: nowrap;
+      white-space: nowrap;
+      font-size: 0.78rem;
+    }
+    .shero-text h1 {
+      order: 2;
+      font-size: clamp(1.7rem, 7.6vw, 2.1rem);
+    }
+    .lead {
+      order: 3;
+      grid-column: 1;
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+    .shero-media {
+      order: 4;
+      grid-column: 2;
+      grid-row: 3;
+      max-width: none;
+      justify-self: stretch;
+      padding: 0 0 12px;
+    }
+    .shero-wall {
+      aspect-ratio: 3 / 4.6;
+      border-radius: 20px 20px 48px 20px;
+    }
+    /* phone: only the black cap and the colour row */
+    .shero-stage {
+      --hz: 1;
+      zoom: 1;
+      inset: 0;
+      width: auto;
+      height: auto;
+      margin: 0;
+    }
+    .shero-stage :global(.shero-red),
+    .shero-stage :global(.shero-white) {
+      display: none;
+    }
+    .shero-stage :global(.shero-black) {
+      left: -6%;
+      top: 16%;
+      width: 112%;
+      height: auto;
+      filter: drop-shadow(0 6px 8px rgba(22, 20, 27, 0.2));
+    }
+    .shero-swatches {
+      bottom: 34px;
+      gap: 3px;
+      padding: 4px 5px;
+    }
+    .shero-swatches li {
+      width: 9px;
+      height: 9px;
+      border-radius: 3px;
+    }
+    .shero-dot {
+      display: none;
+    }
+    .shero-price {
+      right: -4px;
+      bottom: 0;
+      padding: 4px 8px;
+      border-radius: 10px;
+      font-size: 0.76rem;
+      line-height: 1.15;
+    }
+    .shero-price small {
+      font-size: 0.6rem;
+    }
+    .shero-price::before {
+      display: none;
+    }
+    .shero-chips {
+      order: 5;
+      flex-wrap: nowrap;
+      gap: 6px;
+      overflow-x: auto;
+      margin-inline: calc(var(--gutter) * -1);
+      padding-inline: var(--gutter);
+      scrollbar-width: none;
+    }
+    .shero-chips::-webkit-scrollbar,
+    .shero-text > :global(.crumbs)::-webkit-scrollbar {
+      display: none;
+    }
+    .shero-chips li {
+      flex: none;
+      gap: 4px;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+    .shero-chips :global(svg) {
+      width: 14px;
+      height: 14px;
+    }
+    .shero-actions {
+      order: 6;
+      flex-wrap: nowrap;
+      gap: 8px;
+    }
+    .shero-actions .btn {
+      flex: 1 1 0;
+      min-height: 46px;
+      padding: 0 12px;
+      gap: 6px;
+      font-size: 0.92rem;
+      white-space: nowrap;
+    }
+    .shero-actions .btn :global(svg) {
+      width: 18px;
+      height: 18px;
+    }
+    .long {
+      display: none;
+    }
+    .calc-sec {
+      border-radius: 28px;
+      padding-block: 28px 32px;
+    }
+    .calc-sec .section-head {
+      margin-bottom: 16px;
+    }
+    .calc-sec .section-head .eyebrow {
+      margin-bottom: 6px;
+    }
+    .calc-sub {
+      display: none;
+    }
+
+    /* tighter sections */
+    .our,
+    .plc,
+    .aud,
+    .how,
+    .seo-text,
+    .related {
+      padding-block: 32px;
+    }
+    .plc .section-head {
+      margin-bottom: 14px;
+      gap: 6px;
+    }
+    .plc .section-head .eyebrow {
+      margin-bottom: 6px;
+    }
+    .plc .section-head p {
+      font-size: 0.86rem;
+    }
+
+    /* the cap: picture first, colours as a compact row, specs compact */
+    .our-grid {
+      gap: 16px;
+    }
+    .our-stage {
+      min-height: 0;
+      padding: 14px 8px 12px;
+      border-radius: 24px 24px 24px 60px;
+    }
+    .our-marks {
+      gap: 4px 10px;
+      font-size: 0.74rem;
+    }
+    .our-marks li::before {
+      width: 17px;
+      height: 17px;
+      font-size: 0.64rem;
+    }
+    .our-pal {
+      margin-top: 10px;
+    }
+    .our-pal legend {
+      margin-bottom: 6px;
+      font-size: 0.82rem;
+    }
+    .our-pal ul {
+      gap: 5px;
+    }
+    .our-sw {
+      gap: 5px;
+      padding: 4px 8px 4px 4px;
+      border-radius: 11px;
+      font-size: 0.76rem;
+    }
+    .our-sw i {
+      width: 18px;
+      height: 18px;
+      border-radius: 6px;
+    }
+    .our-info {
+      gap: 10px;
+    }
+    .our-text {
+      font-size: 0.9rem;
+    }
+    .our-specs {
+      border-radius: 22px;
+      font-size: 0.82rem;
+    }
+    .our-specs div {
+      grid-template-columns: 36% 1fr;
+      gap: 8px;
+      padding: 7px 12px;
+    }
+    .our-price {
+      gap: 6px;
+      padding: 10px;
+      border-radius: 20px;
+    }
+    .our-price > span:first-child {
+      font-size: 0.78rem;
+    }
+    .our-tier {
+      padding: 6px 8px;
+      border-radius: 12px;
+    }
+    .our-tier small {
+      font-size: 0.66rem;
+    }
+    .our-tier b {
+      font-size: 1rem;
+    }
+    .our-care {
+      padding: 12px 16px;
+      border-radius: 20px;
+    }
+    .our-care summary {
+      cursor: pointer;
+    }
+    .our-care summary h3 {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.98rem;
+    }
+    .our-care summary h3::after {
+      content: '+';
+      display: grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      flex: none;
+      border-radius: 50%;
+      border: 1.5px solid var(--ink);
+      font-size: 1rem;
+    }
+    .our-care[open] summary h3::after {
+      content: '−';
+    }
+    .our-care ul {
+      font-size: 0.82rem;
+    }
+
+    /* where we print: two compact cards side by side, picture on top */
+    .plc-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .plc-card {
+      grid-template-columns: 1fr;
+      align-items: stretch;
+      border-radius: 20px 20px 20px 6px;
+    }
+    .plc-art {
+      min-height: 0;
+      height: auto;
+      padding: 30px 4px 8px;
+    }
+    .plc-art :global(svg) {
+      width: 100%;
+      height: auto;
+    }
+    .plc-num {
+      left: 8px;
+      top: 8px;
+      width: 30px;
+      height: 30px;
+      font-size: 0.8rem;
+      box-shadow: 2px 2px 0 var(--tone);
+    }
+    .plc-body {
+      gap: 5px;
+      padding: 10px 10px 12px;
+    }
+    .plc-tag {
+      padding: 2px 8px;
+      font-size: 0.62rem;
+    }
+    .plc-body h3 {
+      font-size: 1.05rem;
+    }
+    .plc-size {
+      font-size: 0.76rem;
+      line-height: 1.35;
+    }
+    .plc-size :global(svg) {
+      width: 13px;
+      height: 13px;
+      margin-top: 2px;
+    }
+    .plc-body p:not(.plc-size) {
+      font-size: 0.76rem;
+      line-height: 1.38;
+    }
+    /* audience: compact 2×2 */
+    .aud-title {
+      margin-bottom: 14px;
+    }
+    .aud .eyebrow {
+      margin-bottom: 6px;
+    }
+    .aud-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .aud-card {
+      gap: 4px;
+      padding: 12px 12px 30px;
+      border-radius: 20px 20px 20px 6px;
+    }
+    .aud-card h3 {
+      font-size: 0.95rem;
+      line-height: 1.2;
+    }
+    .aud-card p {
+      font-size: 0.78rem;
+      line-height: 1.38;
+    }
+    .aud-tag {
+      padding: 2px 8px;
+      font-size: 0.64rem;
+    }
+    .aud-num {
+      right: 10px;
+      bottom: -8px;
+      font-size: 2.4rem;
+    }
+
+    /* how to order */
+    .how-grid h2 {
+      margin-bottom: 16px;
+    }
+    .how-steps li {
+      grid-template-columns: 36px 1fr;
+      gap: 12px;
+      padding-bottom: 14px;
+    }
+    .how-steps li:not(:last-child)::before {
+      left: 17px;
+      top: 36px;
+    }
+    .how-dot {
+      width: 36px;
+      height: 36px;
+      font-size: 0.85rem;
+    }
+    .how-steps h3 {
+      margin: 6px 0 2px;
+      font-size: 0.98rem;
+    }
+    .how-steps p {
+      font-size: 0.84rem;
+      line-height: 1.4;
+    }
+    .how-side {
+      gap: 10px;
+    }
+    .how-card,
+    .how-b2b {
+      gap: 6px;
+      padding: 16px;
+      border-radius: 24px;
+    }
+    .how-card li {
+      font-size: 0.82rem;
+    }
+    .how-card summary {
+      cursor: pointer;
+    }
+    .how-card summary h3 {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-size: 1rem;
+    }
+    .how-card summary h3::after {
+      content: '+';
+      display: grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      flex: none;
+      border-radius: 50%;
+      border: 1.5px solid var(--ink);
+      font-size: 1rem;
+    }
+    .how-card[open] summary h3::after {
+      content: '−';
+    }
+    .how-side h3 {
+      font-size: 1rem;
+    }
+    .how-chips li {
+      padding: 4px 9px;
+      font-size: 0.76rem;
+    }
+  }
+
+  @media (max-width: 560px) {
+    /* seo text: first lines + «Читать полностью» */
+    .seo-text h2 {
+      margin-bottom: 14px;
+    }
+    .seo-cols {
+      grid-template-columns: 1fr;
+      gap: 14px;
+      max-height: 230px;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(#000 60%, transparent);
+      mask-image: linear-gradient(#000 60%, transparent);
+    }
+    .seo-toggle:checked + .seo-cols {
+      max-height: none;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+    .seo-more-btn {
+      display: inline-block;
+      margin-top: 8px;
+      font-weight: 700;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .seo-toggle:checked ~ .seo-more-btn {
+      display: none;
+    }
+    /* «Ещё печатаем»: 2×2 tiles with the picture on top */
+    .related-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .related-card {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 8px 10px 12px;
+      border-radius: 18px;
+      font-size: 0.88rem;
+      line-height: 1.25;
+    }
+    .related-card img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 10;
+      border-radius: 12px;
+    }
+    .related-card :global(svg) {
+      display: none;
+    }
+    .related-h {
+      margin-bottom: 14px;
+    }
+  }
+</style>

@@ -1,0 +1,235 @@
+---
+// «Готовые варианты» on /pechat-na-kepkah: ready orders with the turnkey price from pricing.ts (product.quote).
+// Same look as MugPackages, the picture is a cap drawing (CapArt).
+import CapArt from "@/components/cap/CapArt.astro";
+import type { CapColor } from '@/components/cap/cap-geometry';
+import { defaultSelection, findProduct, rub, type Selection } from '@/data/pricing';
+import { capsPage } from '@/data/capsPage';
+
+const tones = ['c', 'm', 'y', 'c', 'm'];
+const items = capsPage.packages.map((pk, i) => {
+  const product = findProduct('textile', 'cap')!;
+  const base = defaultSelection(product);
+  const sel: Selection = { ...base, qty: pk.qty, options: { ...base.options, ...pk.options } };
+  const q = product.quote(sel);
+  return { ...pk, unit: q.unit, total: q.total, from: q.from, tone: tones[i % tones.length] };
+});
+---
+
+<section class="section spk" aria-labelledby="spk-h">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Популярное</p>
+        <h2 id="spk-h">Готовые варианты с ценой</h2>
+      </div>
+      <p class="spk-sub">Цена вместе с кепкой, печатью и макетом. Другое количество, цвет или второй принт — в калькуляторе выше.</p>
+    </div>
+    <ul class="spk-grid">
+      {
+        items.map((it) => {
+          const label = `${it.title}, ${it.qty} шт — ${it.from ? 'от ' : ''}${rub(it.total)}`;
+          return (
+            <li class={`spk-card spk-${it.tone}`}>
+              <div class="spk-art" aria-hidden="true">
+                <CapArt view={it.view} color={it.options.color as CapColor} print={it.print} place={it.place} text={it.text} scale={0.82} />
+                <span class="spk-qty mono">{it.qty} шт</span>
+                <span class="spk-tech mono">{it.options.print2 && it.options.print2 !== 'none' ? '2 принта' : 'DTF'}</span>
+              </div>
+              <div class="spk-body">
+                <h3>{it.title}</h3>
+                <p class="spk-note">{it.note}</p>
+                <p class="spk-price mono">
+                  {it.from && <small>от</small>}
+                  {rub(it.total)}
+                  {it.qty > 1 && <small>{rub(it.unit)} / шт</small>}
+                </p>
+                <button type="button" class="btn btn-sm btn-magenta" data-order={label}>
+                  Заказать
+                </button>
+              </div>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .spk-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .spk-card {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    border-radius: var(--radius-l);
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    overflow: clip;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .spk-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 5px 5px 0 var(--tone);
+  }
+  .spk-c { --tone: var(--c); --soft: var(--c-soft); }
+  .spk-m { --tone: var(--m); --soft: var(--m-soft); }
+  .spk-y { --tone: var(--y); --soft: var(--y-soft); }
+  /* the cap sits in a coloured frame with halftone dots */
+  .spk-art {
+    position: relative;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: clip;
+    background:
+      radial-gradient(circle, rgba(22, 20, 27, 0.09) 1.3px, transparent 1.5px) 0 0 / 14px 14px,
+      var(--soft);
+  }
+  .spk-art :global(svg) {
+    flex: none;
+    max-width: 92%;
+    height: auto;
+    filter: drop-shadow(0 10px 12px rgba(22, 20, 27, 0.16));
+  }
+  .spk-qty,
+  .spk-tech {
+    position: absolute;
+    z-index: 1;
+    top: 12px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+  .spk-qty {
+    right: 12px;
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .spk-tech {
+    left: 12px;
+    background: var(--card);
+  }
+  .spk-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 14px 16px 18px;
+  }
+  .spk-body h3 {
+    font-size: 1.05rem;
+  }
+  .spk-note {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .spk-price {
+    margin: auto 0 10px;
+    padding-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+  }
+  .spk-price small {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0;
+  }
+  @media (max-width: 1180px) {
+    .spk-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  /* phone: a carousel of compact cards, like on the mugs and calendars pages */
+  @media (max-width: 760px) {
+    .spk {
+      padding-block: 32px;
+    }
+    .spk .section-head {
+      margin-bottom: 14px;
+      gap: 6px;
+    }
+    .spk .section-head .eyebrow {
+      margin-bottom: 6px;
+    }
+    .spk-sub {
+      display: none;
+    }
+    .spk-grid {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: var(--gutter);
+      margin-inline: calc(var(--gutter) * -1);
+      padding: 0 var(--gutter) 8px;
+      scrollbar-width: none;
+    }
+    .spk-grid::-webkit-scrollbar {
+      display: none;
+    }
+    .spk-card {
+      flex: 0 0 min(210px, 60%);
+      scroll-snap-align: start;
+      border-radius: 22px;
+    }
+    .spk-art {
+      height: 150px;
+    }
+    .spk-art :global(svg) {
+      zoom: 0.62;
+    }
+    .spk-qty,
+    .spk-tech {
+      top: 8px;
+      padding: 3px 8px;
+      font-size: 0.68rem;
+    }
+    .spk-qty {
+      right: 8px;
+    }
+    .spk-tech {
+      left: 8px;
+    }
+    .spk-body {
+      gap: 2px;
+      padding: 10px 12px 12px;
+    }
+    .spk-body h3 {
+      font-size: 0.95rem;
+    }
+    .spk-note {
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+    .spk-price {
+      margin-bottom: 8px;
+      padding-top: 8px;
+      gap: 4px;
+      font-size: 1.1rem;
+    }
+    .spk-price small {
+      font-size: 0.72rem;
+    }
+    .spk-body .btn {
+      min-height: 38px;
+      padding: 0 16px;
+      font-size: 0.85rem;
+    }
+  }
+</style>

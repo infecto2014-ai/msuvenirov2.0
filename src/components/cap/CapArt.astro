@@ -1,0 +1,296 @@
+---
+// Иллюстрация бейсболки (плоская графика «CMYK 2.0»): 5 панелей, цельная передняя панель без шва по центру,
+// козырёк со строчкой, люверсы, пуговица сверху, металлическая застёжка сзади (на виде сбоку).
+// viewBox — в миллиметрах: принт рисуется в реальном масштабе (зона спереди ≈ 11 × 6 см).
+// Ткань — саржа (диагональная фактура). Без растров и внешних шрифтов.
+import { buildCap, CAP_COLORS, isDark, mix, type CapColor, type CapPlace, type CapView } from './cap-geometry';
+
+interface Props {
+  view?: CapView; // по умолчанию 'three-quarter'
+  color?: CapColor; // по умолчанию 'black'
+  print?: 'logo' | 'text' | 'none'; // по умолчанию 'logo'
+  place?: CapPlace | 'both'; // где принт: 'front' (по умолчанию), 'side' или 'both' (спереди и сбоку; сбоку — логотип)
+  dims?: boolean; // рамка зоны печати (спереди — с размером ≈ 11 × 6 см)
+  markers?: boolean; // нумерованные точки деталей; подписи — buildCap(view).callouts, по порядку
+  scale?: number; // px на мм, по умолчанию 1
+  /** надпись для print="text" (по умолчанию «КОМАНДА») */
+  text?: string;
+  title?: string;
+  class?: string;
+}
+
+const { view = 'three-quarter', color = 'black', print = 'logo', place = 'front', dims = false, markers = false, scale = 1, text = 'КОМАНДА', title, class: cls } = Astro.props;
+
+const L = buildCap(view as CapView);
+const C = CAP_COLORS[color as CapColor] ?? CAP_COLORS.black;
+const base = C.hex;
+const dark = isDark(base);
+const isWhite = color === 'white';
+const fabric = color === 'black' ? '#1a1a1d' : base;
+const edge = color === 'black' ? '#000000' : mix(base, '#000000', isWhite ? 0.22 : 0.38);
+const thread = dark ? mix(fabric, '#ffffff', color === 'black' ? 0.18 : 0.3) : mix(base, '#000000', isWhite ? 0.16 : 0.24);
+const under = mix(fabric, '#000000', dark ? 0.35 : 0.2);
+const u = 1 / scale;
+const uid = 'cap' + crypto.randomUUID().slice(0, 8);
+const id = (s: string) => `${uid}-${s}`;
+const url = (s: string) => `url(#${id(s)})`;
+
+const label = title ?? `Бейсболка, ${C.name}${print !== 'none' ? `, принт ${place === 'side' ? 'сбоку' : place === 'both' ? 'спереди и сбоку' : 'спереди'}` : ''}`;
+
+// принт
+const places: CapPlace[] = print === 'none' ? [] : place === 'both' ? ['front', 'side'] : [place as CapPlace];
+const zones = places
+  .map((pl) => ({ pl, z: L.prints[pl]!, clip: pl === 'side' ? L.sidePanel : L.frontPanel, kind: pl === 'side' && place === 'both' ? 'logo' : print }))
+  .filter((x) => x.z && x.clip)
+  .map((x) => ({ ...x, hv: (100 * x.z.h) / x.z.w, T: `translate(${x.z.cx} ${x.z.cy}) skewY(${x.z.skew}) scale(${x.z.sx} 1) translate(${-x.z.w / 2} ${-x.z.h / 2})` }));
+const zone = zones[0]?.z;
+const zoneT = zones[0]?.T ?? '';
+const zonePlace = zones[0]?.pl;
+const accent = color === 'red' || color === 'khaki' ? 'f-y' : color === 'yellow' ? 'f-m' : 'f-m';
+const ink = dark ? 'f-paper' : 'f-ink';
+
+// подписи
+const fs = 10 * u;
+const textW = (t: string) => t.length * fs * 0.6;
+const zoneLabel = '≈ 11 × 6 см';
+const pad = 4 + (markers ? 11 * u : 0);
+const vbX = L.box.x0 - pad;
+const vbY = L.box.y0 - pad;
+const vbW = L.box.x1 - L.box.x0 + 2 * pad;
+const vbH = L.box.y1 - vbY + pad + 6;
+const stitch = '2.2 1.5';
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox={`${vbX.toFixed(1)} ${vbY.toFixed(1)} ${vbW.toFixed(1)} ${vbH.toFixed(1)}`}
+  width={Math.round(vbW * scale)}
+  height={Math.round(vbH * scale)}
+  role="img"
+  aria-label={label}
+  class:list={['capart', cls]}
+>
+  <title>{label}</title>
+  <defs>
+    <clipPath id={id('crown')}><path d={L.crown} /></clipPath>
+    {zones.map((zz) => <clipPath id={id('zone-' + zz.pl)}><path d={zz.clip} /></clipPath>)}
+    <clipPath id={id('visor')}><path d={L.visor} /></clipPath>
+    {/* саржа: диагональный рубчик */}
+    <pattern id={id('twill')} width="2.2" height="2.2" patternUnits="userSpaceOnUse" patternTransform="rotate(-38)">
+      <path d="M 0.55 0 V 2.2" stroke={dark ? '#ffffff' : '#000000'} stroke-opacity={dark ? 0.07 : 0.07} stroke-width="0.7" />
+      <path d="M 1.65 0 V 2.2" stroke={dark ? '#000000' : '#ffffff'} stroke-opacity={dark ? 0.18 : 0.22} stroke-width="0.45" />
+    </pattern>
+    <linearGradient id={id('hshade')} x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#000" stop-opacity={dark ? 0.35 : 0.16} />
+      <stop offset="0.22" stop-color="#000" stop-opacity="0" />
+      <stop offset="0.7" stop-color="#000" stop-opacity="0" />
+      <stop offset="1" stop-color="#000" stop-opacity={dark ? 0.4 : 0.2} />
+    </linearGradient>
+    <linearGradient id={id('vshade')} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#000" stop-opacity="0" />
+      <stop offset="0.75" stop-color="#000" stop-opacity="0" />
+      <stop offset="1" stop-color="#000" stop-opacity={dark ? 0.3 : 0.12} />
+    </linearGradient>
+    <radialGradient id={id('hl')} cx={view === 'side' ? '0.38' : '0.4'} cy="0.28" r="0.55">
+      <stop offset="0" stop-color="#fff" stop-opacity={dark ? 0.2 : 0.45} />
+      <stop offset="1" stop-color="#fff" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id={id('vis')} x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#000" stop-opacity={dark ? 0.22 : 0.1} />
+      <stop offset="0.3" stop-color="#fff" stop-opacity={dark ? 0.06 : 0.12} />
+      <stop offset="1" stop-color="#000" stop-opacity={dark ? 0.12 : 0.06} />
+    </linearGradient>
+    <linearGradient id={id('metal')} x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f4f4f6" />
+      <stop offset="0.45" stop-color="#a9adb6" />
+      <stop offset="0.6" stop-color="#e2e4e8" />
+      <stop offset="1" stop-color="#6f737c" />
+    </linearGradient>
+    <filter id={id('soft')} x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="5" />
+    </filter>
+  </defs>
+
+  {/* тень под кепкой */}
+  <ellipse cx={(L.box.x0 + L.box.x1) / 2} cy={L.box.y1 - 2} rx={(L.box.x1 - L.box.x0) * 0.44} ry="7" fill="#16141b" opacity={dark ? 0.28 : 0.2} filter={url('soft')} />
+
+  {/* тулья */}
+  <path d={L.crown} fill={fabric} />
+  <g clip-path={url('crown')}>
+    <rect x={L.box.x0} y={L.box.y0} width={L.box.x1 - L.box.x0} height="140" fill={url('twill')} />
+    {/* передняя панель — к зрителю, чуть светлее; боковая — в тени */}
+    {view !== 'side' && <path d={L.frontPanel} fill="#fff" opacity={dark ? 0.05 : 0.12} />}
+    {view === 'three-quarter' && L.sidePanel && <path d={L.sidePanel} fill="#000" opacity={dark ? 0.18 : 0.07} />}
+    {view === 'side' && <path d={L.frontPanel} fill="#000" opacity={dark ? 0.12 : 0.05} />}
+
+    {/* принт */}
+    {
+      zones.map(({ pl, z: zone, hv, T, kind }) => (
+        <g clip-path={url('zone-' + pl)}>
+          <g transform={T}>
+            <svg x="0" y="0" width={zone.w} height={zone.h} viewBox={`0 0 100 ${hv.toFixed(2)}`} overflow="visible">
+              {kind === 'logo' && (
+                <g>
+                  <g class={dark ? '' : 'blend'}>
+                    <circle cx="41" cy={hv * 0.3} r={hv * 0.19} class="f-c" />
+                    <circle cx="59" cy={hv * 0.3} r={hv * 0.19} class={color === 'red' ? 'f-y' : 'f-m'} />
+                    <circle cx="50" cy={hv * 0.55} r={hv * 0.19} class={color === 'yellow' ? 'f-ink' : 'f-y'} />
+                  </g>
+                  <text x="50" y={hv * 0.95} font-size={hv * 0.19} text-anchor="middle" font-weight="800" textLength="78" lengthAdjust="spacingAndGlyphs" class:list={['t', ink]}>
+                    ВАШ ЛОГОТИП
+                  </text>
+                </g>
+              )}
+              {kind === 'text' && (
+                <g>
+                  <text x="50" y={hv * 0.6} font-size={hv * 0.5} text-anchor="middle" font-weight="900" textLength="94" lengthAdjust="spacingAndGlyphs" class:list={['t', ink]}>
+                    {text}
+                  </text>
+                  <rect x="18" y={hv * 0.72} width="64" height={hv * 0.2} rx={hv * 0.1} class={accent} />
+                  <text x="50" y={hv * 0.87} font-size={hv * 0.13} text-anchor="middle" font-weight="700" letter-spacing="1.5" class:list={['mono', color === 'yellow' || color === 'red' || color === 'khaki' ? 'f-ink' : 'f-paper']}>
+                    КАЛИНИНГРАД
+                  </text>
+                </g>
+              )}
+            </svg>
+            {/* фактура поверх принта */}
+            <rect x="-2" y="-2" width={zone.w + 4} height={zone.h + 4} fill={url('twill')} opacity="0.6" />
+          </g>
+        </g>
+      ))
+    }
+
+    {/* объём */}
+    <rect x={L.box.x0} y={L.box.y0} width={L.box.x1 - L.box.x0} height="140" fill={url('hl')} />
+    <rect x={L.box.x0} y={L.box.y0} width={L.box.x1 - L.box.x0} height="140" fill={url('hshade')} />
+    <rect x={L.box.x0} y={L.box.y0} width={L.box.x1 - L.box.x0} height="125" fill={url('vshade')} />
+
+    {/* швы панелей: шов + двойная отстрочка */}
+    {
+      L.seams.map((d) => (
+        <g fill="none">
+          <path d={d} stroke={edge} stroke-width="1.1" stroke-opacity="0.8" />
+          <path d={d} stroke={thread} stroke-width="0.6" stroke-dasharray={stitch} transform="translate(-2.2 0)" />
+          <path d={d} stroke={thread} stroke-width="0.6" stroke-dasharray={stitch} transform="translate(2.2 0)" />
+        </g>
+      ))
+    }
+    {/* строчка по низу тульи */}
+    <path d={L.band} fill="none" stroke={thread} stroke-width="0.7" stroke-dasharray={stitch} />
+    <path d={L.band} fill="none" stroke={thread} stroke-width="0.7" stroke-dasharray={stitch} transform="translate(0 -3)" opacity="0.8" />
+
+    {/* люверсы */}
+    {
+      L.eyelets.map((e) => (
+        <g>
+          <ellipse cx={e.x} cy={e.y} rx={e.rx + 1.3} ry={e.ry + 1.3} fill={thread} />
+          <ellipse cx={e.x} cy={e.y} rx={e.rx} ry={e.ry} fill={under} />
+          <ellipse cx={e.x} cy={e.y} rx={e.rx * 0.55} ry={e.ry * 0.55} fill="#000" opacity="0.55" />
+        </g>
+      ))
+    }
+  </g>
+  <path d={L.crown} fill="none" stroke={edge} stroke-width={1.2 * u} stroke-linejoin="round" />
+
+  {/* пуговица сверху */}
+  <g>
+    <path d={`M ${L.button.x - L.button.w / 2} ${L.button.y + 2} Q ${L.button.x - L.button.w / 2} ${L.button.y - 4.5} ${L.button.x} ${L.button.y - 5} Q ${L.button.x + L.button.w / 2} ${L.button.y - 4.5} ${L.button.x + L.button.w / 2} ${L.button.y + 2} Z`} fill={fabric} stroke={edge} stroke-width={u} />
+    <path d={`M ${L.button.x - L.button.w / 2} ${L.button.y + 2} Q ${L.button.x - L.button.w / 2} ${L.button.y - 4.5} ${L.button.x} ${L.button.y - 5} Q ${L.button.x + L.button.w / 2} ${L.button.y - 4.5} ${L.button.x + L.button.w / 2} ${L.button.y + 2} Z`} fill={url('twill')} />
+    <ellipse cx={L.button.x - 2} cy={L.button.y - 2.4} rx="2.4" ry="1.1" fill="#fff" opacity={dark ? 0.25 : 0.55} />
+  </g>
+
+  {/* застёжка сзади (вид сбоку) */}
+  {
+    L.strap && (
+      <g>
+        <path d={L.strap.band} fill={mix(fabric, '#000000', 0.25)} stroke={edge} stroke-width={u} stroke-linejoin="round" />
+        <path d={L.strap.band} fill={url('twill')} />
+        <path d={L.strap.tail} fill={mix(fabric, '#000000', 0.15)} stroke={edge} stroke-width={u} stroke-linejoin="round" />
+        <g transform={`rotate(${L.strap.buckle.rot} ${L.strap.buckle.x + L.strap.buckle.w / 2} ${L.strap.buckle.y + L.strap.buckle.h / 2})`}>
+          <rect x={L.strap.buckle.x} y={L.strap.buckle.y} width={L.strap.buckle.w} height={L.strap.buckle.h} rx="2" fill={url('metal')} stroke="#55585f" stroke-width={0.8 * u} />
+          <rect x={L.strap.buckle.x + 2.4} y={L.strap.buckle.y + 2.6} width={L.strap.buckle.w - 4.8} height="2.4" rx="1" fill="#3d3f45" opacity="0.7" />
+          <rect x={L.strap.buckle.x + 2.4} y={L.strap.buckle.y + 7} width={L.strap.buckle.w - 4.8} height="2.4" rx="1" fill="#3d3f45" opacity="0.7" />
+        </g>
+      </g>
+    )
+  }
+
+  {/* козырёк: торец, верх, строчки */}
+  <path d={L.visorEdge} fill={under} stroke={edge} stroke-width={u} stroke-linejoin="round" />
+  <path d={L.visor} fill={fabric} />
+  <g clip-path={url('visor')}>
+    <rect x={L.box.x0} y="90" width={L.box.x1 - L.box.x0} height="80" fill={url('twill')} />
+    <rect x={L.box.x0} y="105" width={L.box.x1 - L.box.x0} height={view === 'side' ? 30 : 62} fill={url('vis')} />
+    {L.visorRows.map((d) => <path d={d} fill="none" stroke={thread} stroke-width="0.6" stroke-dasharray={stitch} />)}
+  </g>
+  <path d={L.visor} fill="none" stroke={edge} stroke-width={1.2 * u} stroke-linejoin="round" />
+
+  {/* размеры: рамка зоны печати; markers — нумерованные точки деталей (легенда — на странице) */}
+  {
+    dims && zone && (
+      <g>
+        <g transform={zoneT}>
+          <rect x="0" y="0" width={zone.w} height={zone.h} rx="3" fill="none" stroke={dark ? '#fff' : '#16141b'} stroke-opacity="0.8" stroke-width={1.2 * u} stroke-dasharray={`${4 * u} ${3 * u}`} vector-effect="non-scaling-stroke" />
+        </g>
+        {zonePlace === 'front' && view !== 'side' && (
+          <g>
+            <rect x={zone.cx - textW(zoneLabel) / 2 - 5 * u} y={zone.cy - zone.h / 2 - fs * 1.7} width={textW(zoneLabel) + 10 * u} height={fs * 1.45} rx={fs * 0.72} class="f-ink" />
+            <text x={zone.cx} y={zone.cy - zone.h / 2 - fs * 0.67} font-size={fs * 0.92} text-anchor="middle" font-weight="600" class="mono f-paper">
+              {zoneLabel}
+            </text>
+          </g>
+        )}
+      </g>
+    )
+  }
+  {
+    markers &&
+      L.callouts.map((c, i) => (
+        <g>
+          <circle cx={c.x} cy={c.y} r={10 * u} class="f-m" stroke="#fff" stroke-width={1.8 * u} />
+          <text x={c.x} y={c.y + 4.3 * u} font-size={12 * u} text-anchor="middle" font-weight="800" class="t f-white">
+            {i + 1}
+          </text>
+        </g>
+      ))
+  }
+</svg>
+
+<style>
+  .capart {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .t {
+    font-family: var(--font, system-ui, sans-serif);
+  }
+  .mono {
+    font-family: var(--mono, ui-monospace, monospace);
+  }
+  .blend > * {
+    mix-blend-mode: multiply;
+  }
+  .f-ink {
+    fill: var(--ink, #16141b);
+  }
+  .f-ink2 {
+    fill: var(--ink-2, #3d3944);
+  }
+  .f-paper {
+    fill: var(--paper, #fffcf5);
+  }
+  .f-c {
+    fill: var(--c, #00a0dc);
+  }
+  .f-m {
+    fill: var(--m, #e5007d);
+  }
+  .f-y {
+    fill: var(--y, #ffd21f);
+  }
+  .f-white {
+    fill: #fff;
+  }
+</style>

@@ -166,60 +166,7 @@ export const garments: GarmentInfo[] = [
 
   // Шоппер: own page src/pages/pechat-na-shopperah.astro (content — src/data/shoppersPage.ts)
 
-  /* ── Бейсболка: без выбора цвета, print1–print2, только А6 ── */
-  {
-    slug: '/pechat-na-kepkah',
-    productId: 'cap',
-    silhouette: 'cap',
-    packages: [
-      {
-        title: 'Именная кепка',
-        note: 'имя, надпись или логотип спереди',
-        qty: 1,
-        options: { print1: 'a6', print2: 'none' },
-        img: '/img/showcase/cap.webp',
-      },
-      {
-        title: 'Спереди и сзади',
-        note: 'логотип спереди и короткая надпись сзади или сбоку',
-        qty: 1,
-        options: { print1: 'a6', print2: 'a6' },
-        img: '/portfolio/portfolio-8.webp',
-      },
-      {
-        title: 'Для персонала или команды',
-        note: '20 кепок с логотипом спереди',
-        qty: 20,
-        options: { print1: 'a6', print2: 'none' },
-        img: '/portfolio/branded-caps.webp',
-      },
-    ],
-    alsoOrder: ['/pechat-na-futbolkah', '/pechat-na-hudi', '/znachki', '/pechat-na-shopperah', '/breloki'],
-    colors: [
-      { name: 'Чёрный', hex: '#111111' },
-      { name: 'Белый', hex: '#ffffff' },
-      { name: 'Красный', hex: '#e10f0f' },
-      { name: 'Синий', hex: '#2a5be8' },
-      { name: 'Жёлтый', hex: '#ffee00' },
-      { name: 'Зелёный', hex: '#0f8a0f' },
-      { name: 'Хаки', hex: '#7d6a2c' },
-    ],
-    specs: [
-      { label: 'Модель', value: 'TEXTILLER, унисекс, 5 панелей' },
-      { label: 'Состав', value: '100% хлопок' },
-      { label: 'Ткань', value: 'саржа, 250 г/м²' },
-      { label: 'Размер', value: '56–58 см' },
-      { label: 'Застёжка', value: 'металлическая' },
-      { label: 'Печать', value: 'DTF, формат А6, спереди и сбоку' },
-    ],
-    care: [
-      'Не стирайте в машинке — козырёк и передняя часть могут потерять форму.',
-      'Чистите вручную: тёплая вода, мягкая губка, без отбеливателя.',
-      'Не трите принт щёткой.',
-      'Сушите на форме — например, на банке или мяче, а не на батарее.',
-    ],
-    reviewKeywords: [],
-  },
+  // Бейсболка: own page src/pages/pechat-na-kepkah.astro (content — src/data/capsPage.ts)
 ];
 
 export const garmentBySlug = (slug: string) => garments.find((g) => g.slug === slug);
