@@ -1,0 +1,81 @@
+---
+// Cookie / analytics notice shown on the first visit (owner, 06.11.2026).
+// Closing it is remembered in this browser; if storage is unavailable the notice simply shows again next time.
+---
+
+<div class="cookie" role="region" aria-label="Уведомление о cookies" data-cookie hidden>
+  <p>
+    Сайт использует файлы cookies и сервис сбора технических данных посетителей. Продолжая пользоваться сайтом, вы соглашаетесь с использованием этих технологий.
+    <a href="/privacy-policy">Подробнее</a>
+  </p>
+  <button type="button" class="btn btn-sm btn-magenta" data-cookie-ok>Понятно</button>
+</div>
+
+<script>
+  const KEY = 'cookie-ok';
+  const box = document.querySelector<HTMLElement>('[data-cookie]');
+  let seen = false;
+  try {
+    seen = localStorage.getItem(KEY) === '1';
+  } catch {
+    /* storage blocked — show the notice */
+  }
+  if (box && !seen) {
+    box.hidden = false;
+    box.querySelector('[data-cookie-ok]')?.addEventListener('click', () => {
+      try {
+        localStorage.setItem(KEY, '1');
+      } catch {
+        /* ignore */
+      }
+      box.hidden = true;
+    });
+  }
+</script>
+
+<style>
+  .cookie {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    max-width: 520px;
+    padding: 14px 16px 14px 18px;
+    border-radius: 20px 20px 20px 6px;
+    background: var(--ink);
+    color: var(--paper);
+    box-shadow: 0 14px 30px -14px rgba(22, 20, 27, 0.6);
+  }
+  .cookie[hidden] {
+    display: none;
+  }
+  .cookie p {
+    margin: 0;
+    font-size: 0.84rem;
+    line-height: 1.45;
+    color: #d8d2c5;
+  }
+  .cookie a {
+    color: var(--y);
+  }
+  .cookie .btn {
+    flex: none;
+  }
+  /* phones: full width above the bottom action bar */
+  @media (max-width: 760px) {
+    .cookie {
+      left: 10px;
+      right: 10px;
+      bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+      max-width: none;
+      padding: 12px 12px 12px 14px;
+      gap: 10px;
+    }
+    .cookie p {
+      font-size: 0.78rem;
+    }
+  }
+</style>
