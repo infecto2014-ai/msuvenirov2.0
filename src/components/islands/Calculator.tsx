@@ -441,6 +441,7 @@ export default function Calculator({ category, product, only, hideCategories, lo
                 <span>
                   {max.toLocaleString('ru-RU')}
                   {prod.qty.individualAbove && ' · больше — цена индивидуально'}
+                  {prod.qty.moreIn && ` · больше — ${prod.qty.moreIn.label}`}
                 </span>
               </div>
             </div>
@@ -465,6 +466,34 @@ export default function Calculator({ category, product, only, hideCategories, lo
                 </span>
               </button>
             )}
+            {!quote.next &&
+              !quote.error &&
+              prod.qty.moreIn &&
+              sel.qty >= max &&
+              (() => {
+                // more than the set allows: switch to the product that takes larger runs
+                const more = prod.qty.moreIn!;
+                const target = list.find((x) => x.id === more.product);
+                if (!target) return null;
+                return (
+                  <button
+                    type="button"
+                    class="calc-boost calc-boost-ink"
+                    onClick={() => {
+                      pickProduct(target);
+                      if (more.dims) setSel((s) => ({ ...s, dims: { ...s.dims, ...more.dims } }));
+                    }}
+                  >
+                    <span class="calc-boost-pct mono">{max}+</span>
+                    <span class="calc-boost-text">
+                      <span>
+                        Нужно <b>больше {max} шт</b>? Считайте как «{target.name}»
+                      </span>
+                      <small>Нажмите — калькулятор переключится</small>
+                    </span>
+                  </button>
+                );
+              })()}
             {quote.next &&
               !quote.error &&
               (() => {

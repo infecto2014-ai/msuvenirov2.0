@@ -18,19 +18,23 @@ import Icon from '@/components/Icon.astro';
 import { stickersPage as page, buildStickerFaq } from '@/data/stickersPage';
 import { services } from '@/data/services';
 import { reviews } from '@/data/reviews';
-import { STICKER_MIN, defaultSelection, findProduct, rub, stickerDiscounts, stickerRate } from '@/data/pricing';
+import { PACK_MAX, PACK_MIN, STICKER_MAX, STICKER_MIN, VINYL_MIN, VINYL_PACK_MIN, defaultSelection, findProduct, rub, stickerDiscounts, stickerRate, vinylTiers } from '@/data/pricing';
 import { breadcrumbs, faqPage, service as serviceLd } from '@/lib/schema';
 import type { ServicePage } from '@/data/types';
 
 const crumbs = [
   { name: 'Главная', href: '/' },
   { name: 'Услуги', href: '/uslugi' },
-  { name: '3D-стикеры', href: page.slug },
+  { name: 'Стикеры', href: page.slug },
 ];
 
 // ---- prices, all from pricing.ts
 const sticker = findProduct('stickers', 'sticker-3d')!;
 const set = findProduct('stickers', 'sticker-set')!;
+const vinyl = findProduct('stickers', 'vinyl-sticker')!;
+const vinylPack = findProduct('stickers', 'vinyl-pack')!;
+const vinylUnit = (w: number, h: number, qty: number) => vinyl.quote({ ...defaultSelection(vinyl), qty, dims: { w, h } }).unit;
+const vinylDemo = { w: 5, h: 5 };
 const unitOf = (w: number, h: number, cut: 'simple' | 'complex', qty = STICKER_MIN) =>
   sticker.quote({ ...defaultSelection(sticker), qty, options: { cut }, dims: { w, h } }).unit;
 const fmt = (n: number) => String(n).replace('.', ',');
@@ -45,7 +49,15 @@ const faq = buildStickerFaq({
   complex: stickerRate.complex,
   example: `стикер ${demo.w} × ${demo.h} см = ${demoArea} см² × ${stickerRate.simple} ₽ = ${rub(unitOf(demo.w, demo.h, 'simple'))}`,
   setMin: set.qty.min,
+  max: STICKER_MAX,
+  vinylMin: VINYL_MIN,
+  vinylRates: `${rub(vinylTiers[0].price)} при заказе от ${vinylTiers[0].from} штук и ${rub(vinylTiers[1].price)} от ${vinylTiers[1].from} штук`,
+  vinylPackMin: VINYL_PACK_MIN,
+  packMin: PACK_MIN,
+  packMax: PACK_MAX,
 });
+const vinylPackRows = vinylPack.table!.rows;
+const vinylPackCols = vinylPack.table!.columns;
 const related = page.related.map((r) => services.find((s) => s.slug === r)).filter(Boolean) as ServicePage[];
 const hasStickerReviews = reviews.some((r) => page.reviewKeywords.some((k) => r.text.toLowerCase().includes(k)));
 const tones = ['c', 'm', 'y'];
@@ -66,7 +78,7 @@ const packArt = [
   image="/img/showcase/stickers-3d.webp"
   schema={[
     breadcrumbs(crumbs),
-    serviceLd({ name: page.h1, description: page.description, url: page.slug, lowPrice: Math.min(...examples.map((e) => e.simple)), offerCount: 3 }),
+    serviceLd({ name: page.h1, description: page.description, url: page.slug, lowPrice: Math.min(...examples.map((e) => e.simple)), offerCount: 5 }),
     faqPage(faq),
   ]}
 >
@@ -114,7 +126,7 @@ const packArt = [
           <p class="eyebrow">Калькулятор</p>
           <h2 id="calc-h">Посчитайте свои стикеры</h2>
         </div>
-        <p class="calc-sub">Укажите размер одного стикера, вырубку и количество — цена за штуку и за весь заказ пересчитается сразу. Минимальный заказ — {STICKER_MIN} стикеров.</p>
+        <p class="calc-sub">Выберите 3D или виниловые стикеры, укажите размер, вырубку и количество — цена за штуку и за весь заказ пересчитается сразу. 3D — от {STICKER_MIN} шт, виниловые — от {VINYL_MIN} шт.</p>
       </div>
       <Calculator client:visible category="stickers" product="sticker-3d" hideCategories />
     </div>
@@ -131,7 +143,7 @@ const packArt = [
           <p class="eyebrow">Цена</p>
           <h2 id="pr-h">Как считается цена стикера</h2>
         </div>
-        <p class="pr-sub">Платите только за площадь: ширина × высота × цена за см². Минимальный заказ — {STICKER_MIN} стикеров.</p>
+        <p class="pr-sub">3D-стикеры: платите только за площадь — ширина × высота × цена за см². Минимальный заказ — {STICKER_MIN} стикеров, больше {STICKER_MAX} — индивидуально.</p>
       </div>
       <div class="pr-grid">
         <div class="pr-demo">
@@ -176,7 +188,7 @@ const packArt = [
               ))}
             </tbody>
           </table>
-          <p class="pr-note"><Icon name="check" size={16} /> От {offs[0].from} шт — минус {offs[0].pct}%, от {offs[1].from} шт — минус {offs[1].pct}%. Любой другой размер — в калькуляторе.</p>
+          <p class="pr-note"><Icon name="check" size={16} /> От {offs[0].from} шт — минус {offs[0].pct}%, от {offs[1].from} шт — минус {offs[1].pct}%. Больше {STICKER_MAX} шт — индивидуально. Любой другой размер — в калькуляторе.</p>
         </div>
       </div>
     </div>
@@ -291,6 +303,101 @@ const packArt = [
     </div>
   </section>
 
+  <!-- ============ vinyl stickers ============ -->
+  <section class="section typ vn" aria-labelledby="vn-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Виниловые стикеры</p>
+          <h2 id="vn-h">Стикеры на виниловой плёнке с контурной резкой</h2>
+        </div>
+        <p>Плоские, глянцевые или матовые — дешевле 3D-стикеров и подходят для больших тиражей. Форма вырубки на цену не влияет.</p>
+      </div>
+      <div class="typ-grid">
+        <article class="typ-card typ-y">
+          <div class="typ-art" aria-hidden="true">
+            <StickerArt shape="contour" w={44} motif="star" dome={false} scale={4.2} class="typ-front" />
+            <StickerArt shape="contour" w={40} h={34} motif="wave" dome={false} scale={3.4} class="typ-back" />
+          </div>
+          <div class="typ-body">
+            <div class="typ-top">
+              <h3>{page.vinyl.title}</h3>
+              <span class="typ-tag mono">от {VINYL_MIN} шт</span>
+            </div>
+            <p class="typ-text">{page.vinyl.text}</p>
+            <ul class="typ-points">
+              {page.vinyl.points.map((x) => <li>{x}</li>)}
+            </ul>
+            <ul class="pk-tiers pk-tiers-2">
+              {vinylTiers.map((t, i) => (
+                <li>
+                  <small>{i < vinylTiers.length - 1 ? `${t.from}–${vinylTiers[i + 1].from - 1} шт` : `от ${t.from} шт`}</small>
+                  <b class="mono">{rub(t.price)}</b>
+                  <small>за см² · {vinylDemo.w} × {vinylDemo.h} см — {rub(vinylUnit(vinylDemo.w, vinylDemo.h, t.from))}</small>
+                </li>
+              ))}
+            </ul>
+            <a class="btn btn-sm btn-magenta" href={`${page.slug}?calc=stickers:vinyl-sticker#calc`}>Рассчитать виниловые</a>
+          </div>
+        </article>
+        <article class="typ-card typ-c">
+          <div class="typ-art pk-art" aria-hidden="true">
+            <div class="pk-sheet pk-sheet-flat">
+              {packArt.map((a) => <StickerArt shape="contour" w={30} motif={a.motif} text="HI" dome={false} scale={2.7} />)}
+            </div>
+          </div>
+          <div class="typ-body">
+            <div class="typ-top">
+              <h3>{page.vinyl.pack.title}</h3>
+              <span class="typ-tag mono">от {VINYL_PACK_MIN} шт</span>
+            </div>
+            <p class="typ-text">{page.vinyl.pack.text}</p>
+            <div class="typ-tbl-wrap">
+              <table class="typ-tbl">
+                <thead>
+                  <tr>
+                    <th scope="col">Лист</th>
+                    {vinylPackCols.map((c) => <th scope="col">{c}</th>)}
+                  </tr>
+                </thead>
+                <tbody>
+                  {vinylPackRows.map((r) => (
+                    <tr>
+                      <th scope="row">{r.label}</th>
+                      {r.cells.map((c) => <td class="mono">{c}</td>)}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <a class="btn btn-sm btn-magenta" href={`${page.slug}?calc=stickers:vinyl-pack#calc`}>Рассчитать стикерпак</a>
+          </div>
+        </article>
+      </div>
+      <div class="vn-cmp-wrap">
+        <table class="vn-cmp">
+          <caption>3D-стикер или виниловый</caption>
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">3D-стикер из смолы</th>
+              <th scope="col">Виниловый стикер</th>
+            </tr>
+          </thead>
+          <tbody>
+            {page.compare.map((r) => (
+              <tr>
+                <th scope="row">{r.label}</th>
+                <td>{r.epoxy}</td>
+                <td>{r.vinyl}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ what a 3D sticker is made of + layout ============ -->
   <section class="section gd" aria-labelledby="gd-h">
     <div class="wrap gd-grid">
@@ -346,7 +453,7 @@ const packArt = [
   <section class="section aud" aria-labelledby="aud-h">
     <div class="wrap">
       <p class="eyebrow">Для кого</p>
-      <h2 id="aud-h" class="aud-title">Кому заказывают 3D-стикеры</h2>
+      <h2 id="aud-h" class="aud-title">Кому заказывают стикеры</h2>
       <ul class="aud-grid">
         {
           page.audience.map((a, i) => (
@@ -367,7 +474,7 @@ const packArt = [
     <div class="wrap how-grid">
       <div>
         <p class="eyebrow">Заказ</p>
-        <h2 id="how-h">Как заказать 3D-стикеры</h2>
+        <h2 id="how-h">Как заказать стикеры</h2>
         <ol class="how-steps">
           {
             page.steps.map((s, i) => (
@@ -388,7 +495,7 @@ const packArt = [
           <ul class="how-chips">
             {page.b2b.items.map((t) => <li><Icon name="check" size={16} /> {t}</li>)}
           </ul>
-          <button type="button" class="btn btn-sm how-b2b-btn" data-order="3D-стикеры с логотипом для компании — рассчитать тираж">Рассчитать тираж</button>
+          <button type="button" class="btn btn-sm how-b2b-btn" data-order="Стикеры с логотипом для компании — рассчитать тираж">Рассчитать тираж</button>
           <a class="how-more" href="/korporativnym-klientam">Корпоративным клиентам →</a>
         </div>
       </aside>
@@ -411,11 +518,11 @@ const packArt = [
     })();
   </script>
 
-  <PortfolioGrid tags={page.portfolioTags} limit={4} title="Примеры: 3D-стикеры и наклейки" />
+  <PortfolioGrid tags={page.portfolioTags} limit={4} title="Примеры: стикеры и наклейки" />
 
   <Reviews keywords={hasStickerReviews ? page.reviewKeywords : undefined} title={hasStickerReviews ? 'Отзывы о стикерах' : 'Что говорят клиенты'} />
 
-  <FaqSection items={faq} title="Вопросы о 3D-стикерах" />
+  <FaqSection items={faq} title="Вопросы о стикерах" />
 
   <!-- ============ SEO text (folded on phones) ============ -->
   <section class="section seo-text" aria-labelledby="seo-h">
@@ -463,7 +570,7 @@ const packArt = [
     )
   }
 
-  <CtaBand title="Хотите 3D-стикеры со своим логотипом?" text="Пришлите логотип, рисунок или фото — подготовим макет и контур резки, покажем, как будет выглядеть стикер, и посчитаем цену." />
+  <CtaBand title="Хотите стикеры со своим логотипом?" text="Пришлите логотип, рисунок или фото — подготовим макет и контур резки, покажем, как будет выглядеть стикер, и посчитаем цену." />
 </BaseLayout>
 
 <style>
@@ -808,6 +915,53 @@ const packArt = [
   }
   .pk-tiers b {
     font-size: 1.25rem;
+  }
+  .typ-y { --tone: var(--y); --soft: var(--y-soft); }
+  .pk-tiers-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .pk-sheet-flat {
+    transform: rotate(3deg);
+  }
+  .vn-cmp-wrap {
+    margin-top: 18px;
+    overflow-x: auto;
+  }
+  .vn-cmp {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 24px;
+    border: 1.5px solid var(--line);
+    background: var(--card);
+    overflow: clip;
+    font-size: 0.92rem;
+  }
+  .vn-cmp caption {
+    caption-side: top;
+    text-align: left;
+    padding: 0 4px 10px;
+    font-weight: 800;
+    font-size: 1.15rem;
+  }
+  .vn-cmp th,
+  .vn-cmp td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px dashed var(--line);
+    vertical-align: top;
+  }
+  .vn-cmp tbody tr:last-child > * {
+    border-bottom: 0;
+  }
+  .vn-cmp thead th {
+    background: var(--paper-2);
+    font-size: 0.86rem;
+  }
+  .vn-cmp tbody th {
+    width: 18%;
+    color: var(--muted);
+    font-weight: 600;
   }
   .gd-note ul {
     margin: 6px 0 0;
@@ -1565,6 +1719,20 @@ const packArt = [
       padding: 6px 8px;
     }
     .pk-tiers b {
+      font-size: 1rem;
+    }
+    .vn .section-head p {
+      font-size: 0.86rem;
+    }
+    .vn-cmp {
+      font-size: 0.78rem;
+      border-radius: 18px;
+    }
+    .vn-cmp th,
+    .vn-cmp td {
+      padding: 7px 8px;
+    }
+    .vn-cmp caption {
       font-size: 1rem;
     }
 

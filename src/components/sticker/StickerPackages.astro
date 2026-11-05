@@ -6,7 +6,7 @@ import { defaultSelection, findProduct, rub, type Selection } from '@/data/prici
 import { stickersPage } from '@/data/stickersPage';
 
 const tones = ['c', 'm', 'y', 'c', 'm'];
-const tech: Record<string, string> = { 'sticker-3d': '3D-стикер', 'sticker-pack': 'стикерпак', 'sticker-set': 'набор 3×3' };
+const tech: Record<string, string> = { 'sticker-3d': '3D-стикер', 'sticker-pack': 'стикерпак', 'sticker-set': 'набор 3×3', 'vinyl-pack': 'винил' };
 const items = stickersPage.packages.map((pk, i) => {
   const product = findProduct('stickers', pk.product)!;
   const base = defaultSelection(product);
@@ -29,15 +29,15 @@ const items = stickersPage.packages.map((pk, i) => {
       {
         items.map((it) => {
           const many = it.product !== 'sticker-3d';
-          const qtyLabel = it.product === 'sticker-pack' ? `${it.qty} наб.` : `${it.qty} шт`;
+          const qtyLabel = it.product === 'sticker-pack' ? `${it.qty} наб.` : it.product === 'vinyl-pack' ? `${it.qty} лист.` : `${it.qty} шт`;
           const label = `${it.title}, ${qtyLabel} — ${it.from ? 'от ' : ''}${rub(it.total)}`;
           const sc = 120 / Math.max(it.w, it.h);
           return (
             <li class={`spk-card spk-${it.tone}`}>
               <div class="spk-art" aria-hidden="true">
                 <span class="spk-pile">
-                  {many && <StickerArt shape={it.shape === 'rect' ? 'circle' : 'rect'} w={it.w} h={it.h} motif={it.motif === 'logo' ? 'wave' : 'logo'} scale={sc * 0.8} class="spk-b2" />}
-                  <StickerArt shape={it.shape} w={it.w} h={it.h} motif={it.motif} text={it.text} scale={sc} class={many ? 'spk-b1' : 'spk-solo'} />
+                  {many && <StickerArt shape={it.flat ? 'contour' : it.shape === 'rect' ? 'circle' : 'rect'} w={it.w} h={it.h} motif={it.motif === 'logo' ? 'wave' : 'logo'} dome={!it.flat} scale={sc * 0.8} class="spk-b2" />}
+                  <StickerArt shape={it.shape} w={it.w} h={it.h} motif={it.motif} text={it.text} dome={!it.flat} scale={sc} class={many ? 'spk-b1' : 'spk-solo'} />
                 </span>
                 <span class="spk-qty mono">{qtyLabel}</span>
                 <span class="spk-tech mono">{tech[it.product]}</span>
@@ -48,7 +48,7 @@ const items = stickersPage.packages.map((pk, i) => {
                 <p class="spk-price mono">
                   {it.from && <small>от</small>}
                   {rub(it.total)}
-                  {it.qty > 1 && <small>{rub(it.unit)} / {it.product === 'sticker-pack' ? 'набор' : 'шт'}</small>}
+                  {it.qty > 1 && <small>{rub(it.unit)} / {it.product === 'sticker-pack' ? 'набор' : it.product === 'vinyl-pack' ? 'лист' : 'шт'}</small>}
                 </p>
                 <button type="button" class="btn btn-sm btn-magenta" data-order={label}>
                   Заказать
@@ -68,7 +68,7 @@ const items = stickersPage.packages.map((pk, i) => {
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 14px;
   }
   .spk-card {

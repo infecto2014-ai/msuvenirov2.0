@@ -71,7 +71,7 @@ export const serviceNav: { group: string; links: NavLink[] }[] = [
       { href: '/znachki', label: 'Значки' },
       { href: '/breloki', label: 'Брелоки' },
       { href: '/magnity', label: 'Магниты' },
-      { href: '/nakleyki', label: '3D-стикеры' },
+      { href: '/nakleyki', label: 'Стикеры' },
       { href: '/fotopodarki', label: 'Фотоподарки' },
     ],
   },

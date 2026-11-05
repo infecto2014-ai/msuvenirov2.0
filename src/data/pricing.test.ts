@@ -43,13 +43,36 @@ describe('pricing', () => {
     expect(p.quote({ ...s, qty: 100 }).unit).toBe(76);
     expect(p.quote({ ...s, qty: 200 }).unit).toBe(72);
     expect(p.quote({ ...s, qty: 29 }).error).toBeDefined();
+    expect(p.qty.max).toBe(300);
+    expect(p.table?.columns).toEqual(['30–99 шт', '100–199 шт', '200–300 шт']);
   });
 
   it('sticker pack: same formula, discount by the total number of stickers', () => {
     const { p, s } = sel('stickers', 'sticker-pack', { qty: 5, options: { count: '6' }, dims: { w: 4, h: 4 } });
     expect(p.quote(s).unit).toBe(6 * 80);
-    expect(p.quote({ ...s, qty: 4 }).error).toBeDefined(); // 24 stickers < 30
+    expect(p.qty.min).toBe(10);
+    expect(p.qty.max).toBe(200);
+    expect(p.quote({ ...s, qty: 10 }).unit).toBe(6 * 80); // 60 stickers
     expect(p.quote({ ...s, qty: 17 }).unit).toBe(6 * 76); // 102 stickers
+    expect(p.ladder!({ ...s, qty: 10 }).map((t) => t.from)).toEqual([10, 17, 34]);
+    // 12 in a pack: 10 packs = 120 stickers, the first step is already −5%
+    expect(p.ladder!({ ...s, options: { count: '12', cut: 'simple' } }).map((t) => t.from)).toEqual([10, 17]);
+  });
+
+  it('vinyl stickers: from 100, 0.25 ₽/см² up to 299, 0.2 from 300; cut and film do not change the price', () => {
+    const { p, s } = sel('stickers', 'vinyl-sticker', { qty: 100, dims: { w: 5, h: 5 } });
+    expect(p.quote(s).unit).toBe(6.25);
+    expect(p.quote({ ...s, qty: 299 }).unit).toBe(6.25);
+    expect(p.quote({ ...s, qty: 300 }).unit).toBe(5);
+    expect(p.quote({ ...s, options: { film: 'matte' } }).unit).toBe(6.25);
+    expect(p.quote({ ...s, qty: 99 }).error).toBeDefined();
+  });
+
+  it('vinyl sticker packs: from 50 — А6 80 / А5 120, from 100 — 70 / 105', () => {
+    const p = findProduct('stickers', 'vinyl-pack')!;
+    const at = (qty: number, variant: string) => p.quote({ ...defaultSelection(p), qty, options: { ...defaultSelection(p).options, variant } }).unit;
+    expect([at(50, 'a6'), at(99, 'a6'), at(100, 'a6'), at(50, 'a5'), at(100, 'a5')]).toEqual([80, 80, 70, 120, 105]);
+    expect(p.qty.min).toBe(50);
   });
 
   it('set of 3×3 stickers: 3 — 200, 5 — 150, 10–30 — 100 ₽/шт', () => {
