@@ -25,11 +25,11 @@ describe('pricing', () => {
     expect(p.quote({ ...sel('mugs', 'mug', { options: { variant: 'chameleon' } }).s, qty: 1 }).unit).toBe(1100);
   });
 
-  it('badges: first discount from 50 pcs (was 100), prices unchanged', () => {
+  it('badges: roll −30% from 50 pcs, −50% from 100; pin first discount from 50', () => {
     const roll = findProduct('badges', 'badge-roll')!;
     const r = (qty: number, variant = 'd38') => roll.quote({ ...defaultSelection(roll), qty, options: { variant } }).unit;
-    expect([r(10), r(49), r(50), r(199), r(200), r(500)]).toEqual([85, 85, 45, 45, 38, 30]);
-    expect([r(49, 'd56'), r(50, 'd56')]).toEqual([100, 49]);
+    expect([r(10), r(49), r(50), r(99), r(100), r(199), r(200), r(500)]).toEqual([85, 85, 59.5, 59.5, 42.5, 42.5, 38, 30]);
+    expect([r(49, 'd56'), r(50, 'd56'), r(100, 'd56'), r(200, 'd56')]).toEqual([100, 70, 50, 45]);
     const pin = findProduct('badges', 'badge-pin')!;
     const p = (qty: number) => pin.quote({ ...defaultSelection(pin), qty, options: { variant: 'd25' } }).unit;
     expect([p(25), p(49), p(50), p(200)]).toEqual([200, 200, 185, 170]);

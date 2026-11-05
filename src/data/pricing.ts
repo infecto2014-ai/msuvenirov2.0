@@ -749,9 +749,11 @@ const mugs: Category = {
 
 // ---------------------------------------------------------------- badges, keychains, magnets
 
-// first discount from 50 pcs (owner, 05.11.2026; was 100), prices unchanged
+// pin badges: first discount from 50 pcs (owner, 05.11.2026; was 100), prices unchanged
 const badgeTiers = [25, 50, 200, 300, 400, 500];
-const rollTiers = [10, 50, 200, 300, 400, 500]; // from 10 pcs at the 25-pcs price
+// roll badges (owner, 05.11.2026): from 50 pcs −30%, from 100 pcs −50% of the 10–49 price; 200+ unchanged
+const rollTiers = [10, 50, 100, 200, 300, 400, 500];
+const rollPrices = (base: number, rest: number[]) => [base, Math.round(base * 7) / 10, Math.round(base * 5) / 10, ...rest];
 
 const badges: Category = {
   id: 'badges',
@@ -766,8 +768,8 @@ const badges: Category = {
       qty: { min: 10, max: 1000, default: 25 },
       variantLabel: 'Диаметр',
       variants: [
-        { id: 'd38', label: '38 мм', tiers: tiers(rollTiers, [85, 45, 38, 35, 32, 30]) },
-        { id: 'd56', label: '56 мм', tiers: tiers(rollTiers, [100, 49, 45, 41, 38, 33]) },
+        { id: 'd38', label: '38 мм', tiers: tiers(rollTiers, rollPrices(85, [38, 35, 32, 30])) },
+        { id: 'd56', label: '56 мм', tiers: tiers(rollTiers, rollPrices(100, [45, 41, 38, 33])) },
       ],
     }),
     tiered({
