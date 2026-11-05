@@ -275,7 +275,7 @@ export const services: ServicePage[] = [
     calcCategory: 'textile',
     calcProduct: 'shopper',
     image: '/img/showcase/shopper.webp',
-    imageAlt: 'Чёрный и белый шопперы с логотипом — печать на шопперах в Калининграде',
+    imageAlt: 'Чёрный и светлый шопперы с логотипом — печать на шопперах в Калининграде',
     blocks: [
       {
         kind: 'compare',

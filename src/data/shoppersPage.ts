@@ -2,7 +2,7 @@
 // Prices are NOT written here — every number in rubles comes from src/data/pricing.ts
 // (category 'textile': 'shopper' — cotton shopper, DTF; 'shopper-sub' — light shopper for sublimation).
 // Rules (owner): no delivery, no «same day» promises, no rush surcharge; production time is agreed per order.
-// Cotton shopper (owner, 05.11.2026): TEXTILLER®, 100% cotton, twill, 240 g/m², 38×42 cm, handle height 35 cm, width 3 cm. Colours — not confirmed yet.
+// Cotton shopper (owner, 05.11.2026): TEXTILLER®, 100% cotton, twill, 240 g/m², 38×42 cm, handle height 35 cm, width 3 cm. Colours: light (linen-like) and black.
 // Light shopper (owner, 05.11.2026): colour «небелёный лён», 330 g/m², 36×42 cm (±3 cm), handles 70 cm, from 10 pcs.
 import type { Faq } from './types';
 
@@ -28,7 +28,7 @@ export const shoppersPage = {
 
   /** ready orders: product id + calculator options of that product */
   packages: [
-    { title: 'Шоппер с принтом в подарок', note: 'хлопковый, рисунок или фото А4 с одной стороны', product: 'shopper', qty: 1, options: { print1: 'a4', print2: 'none' }, art: 'cotton', color: 'white', print: 'art', size: 'a4' },
+    { title: 'Шоппер с принтом в подарок', note: 'хлопковый, рисунок или фото А4 с одной стороны', product: 'shopper', qty: 1, options: { print1: 'a4', print2: 'none' }, art: 'cotton', color: 'natural', print: 'art', size: 'a4' },
     { title: 'С двух сторон', note: 'хлопковый, два принта А4 — одинаковые или разные', product: 'shopper', qty: 1, options: { print1: 'a4', print2: 'a4' }, art: 'cotton', color: 'black', print: 'text', size: 'a4' },
     { title: '20 шопперов для мероприятия', note: 'хлопковые, логотип или афиша А5', product: 'shopper', qty: 20, options: { print1: 'a5', print2: 'none' }, art: 'cotton', color: 'natural', print: 'logo', size: 'a5' },
     { title: '50 светлых шопперов с сублимацией', note: 'цвет льна, яркое фото или рисунок А4', product: 'shopper-sub', qty: 50, options: { print1: 'a4', print2: 'none' }, art: 'linen', color: 'natural', print: 'photo', size: 'a4' },
@@ -50,14 +50,14 @@ export const shoppersPage = {
     {
       art: 'cotton' as ShopperType,
       product: 'shopper',
-      color: 'white' as ShopperColor,
+      color: 'natural' as ShopperColor,
       print: 'art' as ShopperPrint,
       name: 'Хлопковый шоппер',
       tag: 'от 1 штуки',
       tech: 'DTF',
       specs: [
         { label: 'Материал', value: '100% хлопок, саржа, 240 г/м²' },
-        { label: 'Цвет', value: 'уточняйте наличие' },
+        { label: 'Цвет', value: 'светлый (как лён) или чёрный' },
         { label: 'Размер', value: '38 × 42 см' },
         { label: 'Ручки', value: 'высота 35 см, ширина 3 см, укреплены строчкой' },
         { label: 'Печать', value: 'DTF, любые цвета' },
