@@ -47,7 +47,7 @@ describe('pricing', () => {
     const { p, s } = sel('textile', 'tshirt-unisex', { qty: 1, options: { print1: 'a6', print2: 'a3', print3: 'a6', print4: 'a4' } });
     expect(p.quote(s).total).toBe(750 + 1100 + 800 * 0.7 + 600 * 0.5 + 600 * 0.5);
     expect(findProduct('textile', 'hoodie')!.options!.filter((g) => g.id.startsWith('print'))).toHaveLength(4);
-    expect(findProduct('textile', 'cap')!.options!.filter((g) => g.id.startsWith('print'))).toHaveLength(2);
+    expect(findProduct('textile', 'cap')!.options!.filter((g) => g.id.startsWith('print'))).toHaveLength(3);
   });
 
   it('clothing is priced up to 50 pcs, more — individually', () => {
@@ -164,6 +164,11 @@ describe('pricing', () => {
     expect(p.qty.max).toBe(100);
     expect(p.options!.find((g) => g.id === 'color')!.choices).toHaveLength(7);
     expect(p.table?.columns).toEqual(['1–4 шт', '5–9 шт', '10–19 шт', '20–29 шт', '30–100 шт']);
+  });
+
+  it('own cap: only the print is charged', () => {
+    const { p, s } = sel('textile', 'cap', { qty: 1, options: { blank: 'own' } });
+    expect(p.quote(s).total).toBe(600);
   });
 
   it('formats labels', () => {

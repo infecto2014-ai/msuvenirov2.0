@@ -193,9 +193,14 @@ const tones = ['c', 'm', 'y'];
       </div>
       <ul class="plc-grid">
         {page.places.map((p, i) => (
-          <li class={`plc-card plc-${tones[i === 0 ? 0 : 1]}`}>
+          <li class={`plc-card plc-${tones[i % 3]}`}>
             <div class="plc-art" aria-hidden="true">
-              <CapArt view={p.view} color={p.color} print="logo" place={p.id} dims scale={1.35} />
+              {'back' in p && p.back ? (
+                // back of the cap: side view shows the clasp; the print sits above it
+                <CapArt view="side" color={p.color} print="none" scale={1.35} />
+              ) : (
+                <CapArt view={p.view} color={p.color} print="logo" place={p.id} dims scale={1.35} />
+              )}
               <span class="plc-num mono">{i + 1}</span>
             </div>
             <div class="plc-body">
@@ -753,15 +758,18 @@ const tones = ['c', 'm', 'y'];
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 18px;
   }
   .plc-c { --tone: var(--c); --soft: var(--c-soft); }
   .plc-m { --tone: var(--m); --soft: var(--m-soft); }
+  .plc-y { --tone: var(--y); --soft: var(--y-soft); }
+  /* three places: picture on top, text below */
   .plc-card {
     display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-    align-items: center;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    align-items: start;
     border-radius: 34px 34px 34px 10px;
     background: var(--card);
     border: 1.5px solid var(--line);
@@ -771,8 +779,7 @@ const tones = ['c', 'm', 'y'];
     position: relative;
     display: grid;
     place-items: center;
-    height: 100%;
-    min-height: 260px;
+    min-height: 220px;
     padding: 18px 10px;
     background:
       radial-gradient(circle, rgba(22, 20, 27, 0.08) 1.3px, transparent 1.5px) 0 0 / 14px 14px,
@@ -809,6 +816,10 @@ const tones = ['c', 'm', 'y'];
     color: var(--ink);
     font-size: 0.72rem;
     font-weight: 700;
+  }
+  .plc-y .plc-tag {
+    background: var(--y);
+    color: var(--ink);
   }
   .plc-m .plc-tag {
     color: #fff;
@@ -1393,20 +1404,24 @@ const tones = ['c', 'm', 'y'];
       font-size: 0.82rem;
     }
 
-    /* where we print: two compact cards side by side, picture on top */
+    /* where we print: three compact rows — small picture left, text right */
     .plc-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: 1fr;
       gap: 8px;
     }
     .plc-card {
-      grid-template-columns: 1fr;
+      grid-template-columns: 128px minmax(0, 1fr);
+      grid-template-rows: auto;
       align-items: stretch;
       border-radius: 20px 20px 20px 6px;
     }
     .plc-art {
       min-height: 0;
-      height: auto;
-      padding: 30px 4px 8px;
+      height: 100%;
+      padding: 26px 6px 8px;
+    }
+    .plc-tag {
+      justify-self: start;
     }
     .plc-art :global(svg) {
       width: 100%;

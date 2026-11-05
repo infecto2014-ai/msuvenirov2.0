@@ -558,7 +558,9 @@ const textile: Category = {
       // owner, 06.11.2026: 1–9 — 650, 10–29 — 550, 30–100 — 450; print priced as DTF A6; more than 100 — individually
       blank: tiers([1, 10, 30], [650, 550, 450]),
       formats: ['a6'],
-      places: 2,
+      // owner, 06.11.2026: front (≈11×6 cm), side (size depends on the cap), back above the clasp; own cap — print only
+      places: 3,
+      own: 'бейсболка',
       max: 100,
       colorSet: {
         choices: [
