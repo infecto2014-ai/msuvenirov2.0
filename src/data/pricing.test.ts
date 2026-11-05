@@ -145,6 +145,13 @@ describe('pricing', () => {
     expect(p.quote(s).unit).toBe(175);
   });
 
+  it('cotton shopper: other colours sewn from 20 pcs', () => {
+    const { p, s } = sel('textile', 'shopper', { qty: 5, options: { color: 'other' } });
+    expect(p.quote(s).error).toContain('от 20 шт');
+    expect(p.quote({ ...s, qty: 20 }).error).toBeUndefined();
+    expect(p.quote({ ...s, options: { ...s.options, color: 'black' } }).error).toBeUndefined();
+  });
+
   it('formats labels', () => {
     expect(rangeLabels([1, 5, 10, 50, 200])).toEqual(['1–4 шт', '5–9 шт', '10–49 шт', '50–199 шт', 'от 200 шт']);
     expect(rub(7.5).replace(/\s/g, ' ')).toBe('7,5 ₽');

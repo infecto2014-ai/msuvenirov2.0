@@ -300,6 +300,8 @@ function garment(args: {
   /** max number of print places */
   places: number;
   colors?: boolean;
+  /** own colour set instead of white/black/other-from-10 (e.g. shopper: light, black, other from 20) */
+  colorSet?: { choices: Choice[]; otherMin: number; what: string };
   /** offer «своя вещь»: e.g. 'футболка' → choice «Своя футболка», only the print is charged */
   own?: string;
 }): Product {
@@ -319,18 +321,15 @@ function garment(args: {
     });
   }
   const isOwn = (sel: Selection) => !!args.own && one(sel, 'blank', 'ours') === 'own';
-  if (args.colors) {
+  const colorSet = args.colorSet ?? (args.colors ? { choices: [{ id: 'white', label: 'Белый' }, { id: 'black', label: 'Чёрный' }], otherMin: 10, what: 'Футболки других цветов (кроме белого и чёрного)' } : undefined);
+  if (colorSet) {
     options.push({
       ...(args.own ? { hideWhen: { group: 'blank', value: 'own' } } : {}),
       id: 'color',
       label: 'Цвет изделия',
       type: 'one',
-      choices: [
-        { id: 'white', label: 'Белый' },
-        { id: 'black', label: 'Чёрный' },
-        { id: 'other', label: 'Другой цвет', hint: 'от 10 шт' },
-      ],
-      default: 'white',
+      choices: [...colorSet.choices, { id: 'other', label: 'Другой цвет', hint: `от ${colorSet.otherMin} шт` }],
+      default: colorSet.choices[0].id,
     });
   }
   for (let i = 0; i < args.places; i++) {
@@ -407,8 +406,8 @@ function garment(args: {
       const unit = unitAt(sel, qty);
       const nb = breakpoints(sel).find((t) => t.from > qty && t.price < unit);
       let error: string | undefined;
-      if (args.colors && !isOwn(sel) && one(sel, 'color', 'white') === 'other' && qty < 10) {
-        error = 'Футболки других цветов (кроме белого и чёрного) — под заказ от 10 шт.';
+      if (colorSet && !isOwn(sel) && one(sel, 'color', colorSet.choices[0].id) === 'other' && qty < colorSet.otherMin) {
+        error = `${colorSet.what} — под заказ от ${colorSet.otherMin} шт.`;
       }
       if (args.blankFrom && !isOwn(sel)) notes.push('Наличие и точную цену изделия уточнит менеджер.');
       if (isOwn(sel)) notes.push(`${cap(`своя ${args.own}`)}: принесите её в мастерскую, напечатаем на ней. Подойдут хлопок, смесовые ткани, синтетика.`);
@@ -562,6 +561,8 @@ const textile: Category = {
       blank: tiers([1, 5, 20], [450, 350, 250]),
       formats: ['a6', 'a5', 'a4'],
       places: 2,
+      // owner, 05.11.2026: light (linen-like) and black in stock, any other colour sewn to order from 20 pcs
+      colorSet: { choices: [{ id: 'light', label: 'Светлый', hint: 'как лён' }, { id: 'black', label: 'Чёрный' }], otherMin: 20, what: 'Шопперы другого цвета шьём' },
     }),
     // owner, 05.11.2026: light linen shopper for sublimation, from 10 pcs
     sublimated({
