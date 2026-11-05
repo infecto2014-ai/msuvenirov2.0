@@ -878,7 +878,14 @@ const cutGroup: OptionGroup = {
   ],
   default: 'simple',
 };
-const rateOf = (sel: Selection) => (one(sel, 'cut', 'simple') === 'complex' ? stickerRate.complex : stickerRate.simple);
+const baseRateOf = (sel: Selection) => (one(sel, 'cut', 'simple') === 'complex' ? stickerRate.complex : stickerRate.simple);
+/** small 3D stickers (owner, 05.11.2026): area under 4 cm² — +30% to the price */
+export const SMALL_STICKER_AREA = 4;
+export const SMALL_STICKER_EXTRA = 0.3;
+const isSmall = (sel: Selection) => (sel.dims.w ?? 4) * (sel.dims.h ?? 4) < SMALL_STICKER_AREA;
+/** price per cm² with the small-size surcharge */
+const rateOf = (sel: Selection) => round(baseRateOf(sel) * (isSmall(sel) ? 1 + SMALL_STICKER_EXTRA : 1));
+const smallNote = `Стикер меньше ${SMALL_STICKER_AREA} см² — цена +${Math.round(SMALL_STICKER_EXTRA * 100)}%.`;
 export const STICKER_MAX = 300;
 /** minimum order sum for single stickers (epoxy and vinyl), owner 05.11.2026 */
 export const STICKER_MIN_SUM = 850;
@@ -897,7 +904,7 @@ const stickerTable = (label: string): PriceTable => ({
     { label: `${label}: простая вырубка, за см²`, cells: [0, 0.05, 0.1].map((o) => rub(round(stickerRate.simple * (1 - o)))) },
     { label: `${label}: сложная вырубка, за см²`, cells: [0, 0.05, 0.1].map((o) => rub(round(stickerRate.complex * (1 - o)))) },
   ],
-  note: `Минимальный заказ — ${STICKER_MIN} стикеров и не меньше ${STICKER_MIN_SUM} ₽ (для маленьких стикеров — больше штук), больше ${STICKER_MAX} — индивидуально. Цена стикера = площадь (ширина × высота, см²) × цена за см².`,
+  note: `Стикер меньше ${SMALL_STICKER_AREA} см² — +${Math.round(SMALL_STICKER_EXTRA * 100)}% к цене. Минимальный заказ — ${STICKER_MIN} стикеров и не меньше ${STICKER_MIN_SUM} ₽ (для маленьких стикеров — больше штук), больше ${STICKER_MAX} — индивидуально. Цена стикера = площадь (ширина × высота, см²) × цена за см².`,
 });
 const PACK_SIZES = [3, 4, 5, 6, 8, 10, 12];
 const epoxyMin = (sel: Selection) =>
@@ -995,12 +1002,13 @@ const stickers: Category = {
         const area = round(w * h);
         const off = stickerOff(sel.qty);
         const unit = round(area * rate * (1 - off));
-        const notes = [`Площадь стикера ${String(area).replace('.', ',')} см² × ${rate} ₽/см²${off ? ` − ${Math.round(off * 100)}% за тираж` : ''}.`];
+        const notes = [`Площадь стикера ${String(area).replace('.', ',')} см² × ${String(rate).replace('.', ',')} ₽/см²${off ? ` − ${Math.round(off * 100)}% за тираж` : ''}.`];
+        if (isSmall(sel)) notes.push(smallNote);
         const next = stickerDiscounts.find((d) => d.from > sel.qty);
         return {
           unit,
           total: Math.round(unit * sel.qty),
-          breakdown: [{ label: `Стикер ${w}×${h} см, ${rate === stickerRate.complex ? 'сложная' : 'простая'} вырубка${off ? ` (−${Math.round(off * 100)}%)` : ''}`, amount: unit, per: 'шт' }],
+          breakdown: [{ label: `Стикер ${w}×${h} см, ${baseRateOf(sel) === stickerRate.complex ? 'сложная' : 'простая'} вырубка${isSmall(sel) ? ', маленький +30%' : ''}${off ? ` (−${Math.round(off * 100)}%)` : ''}`, amount: unit, per: 'шт' }],
           next: next ? { qty: next.from, unit: round(area * rate * (1 - next.off)) } : undefined,
           notes,
           error: sel.qty < epoxyMin(sel) ? minError(epoxyMin(sel), w, h) : undefined,
@@ -1059,6 +1067,7 @@ const stickers: Category = {
           notes: [
             `В заказе ${count} стикеров (${sel.qty} × ${n}). Скидка считается по общему числу стикеров: −5% от 100, −10% от 200.`,
             'Стикеры разного размера или сложная раскладка — посчитаем индивидуально.',
+            ...(isSmall(sel) ? [smallNote] : []),
           ],
           error: sel.qty < packsMin ? `Минимальный заказ — ${packsMin} наборов.` : undefined,
         };

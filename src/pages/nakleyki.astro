@@ -181,15 +181,15 @@ const packArt = [
             <tbody>
               {examples.map((e) => (
                 <tr>
-                  <th scope="row">{e.w} × {e.h} см<small>{e.note}</small></th>
-                  <td class="mono">{e.area} см²</td>
+                  <th scope="row">{fmt(e.w)} × {fmt(e.h)} см<small>{e.note}</small></th>
+                  <td class="mono">{fmt(e.area)} см²</td>
                   <td class="mono">{rub(e.simple)}</td>
                   <td class="mono">{rub(e.complex)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <p class="pr-note"><Icon name="check" size={16} /> От {offs[0].from} шт — минус {offs[0].pct}%, от {offs[1].from} шт — минус {offs[1].pct}%. Больше {STICKER_MAX} шт — индивидуально. Любой другой размер — в калькуляторе.</p>
+          <p class="pr-note"><Icon name="check" size={16} /> От {offs[0].from} шт — минус {offs[0].pct}%, от {offs[1].from} шт — минус {offs[1].pct}%. Стикеры меньше 4 см² — +30%. Больше {STICKER_MAX} шт — индивидуально. Любой другой размер — в калькуляторе.</p>
         </div>
       </div>
     </div>

@@ -7,6 +7,8 @@ const sel = (categoryId: string, productId: string, patch: Partial<Selection> & 
   return { p, s: { ...base, ...patch, options: { ...base.options, ...(patch.options ?? {}) }, dims: { ...base.dims, ...(patch.dims ?? {}) } } };
 };
 
+const round2 = (n: number) => Math.round(n * 100) / 100;
+
 describe('pricing', () => {
   it('every product quotes its default selection without errors', () => {
     for (const c of categories)
@@ -82,6 +84,15 @@ describe('pricing', () => {
     expect(emin(2, 2, 'complex')).toBe(40); // 28 ₽ × 40 = 1120 ₽
     expect(e.ladder!({ ...defaultSelection(e), dims: { w: 2, h: 2 } })[0].from).toBe(50);
     expect(findProduct('stickers', 'vinyl-pack')!.qty.max).toBe(200);
+  });
+
+  it('3D stickers under 4 cm² cost +30%', () => {
+    const { p, s } = sel('stickers', 'sticker-3d', { qty: 100, dims: { w: 1.5, h: 2 } });
+    expect(p.quote(s).unit).toBe(round2(3 * 5 * 1.3 * 0.95));
+    expect(p.quote({ ...s, dims: { w: 2, h: 2 } }).unit).toBe(19); // exactly 4 cm² — no surcharge
+    expect(p.quote({ ...s, options: { cut: 'complex' } }).unit).toBeCloseTo(3 * 7 * 1.3 * 0.95, 1);
+    const pk = sel('stickers', 'sticker-pack', { qty: 10, options: { count: '6' }, dims: { w: 1.5, h: 1.5 } });
+    expect(pk.p.quote(pk.s).unit).toBe(round2(6 * round2(2.25 * 6.5)));
   });
 
   it('vinyl sticker packs: from 50 — А6 80 / А5 120, from 100 — 70 / 105', () => {
