@@ -1,0 +1,222 @@
+---
+// Иллюстрация 3D-стикера с эпоксидной смолой (плоская графика «CMYK 2.0»): напечатанная наклейка
+// под прозрачной выпуклой «линзой» смолы — блик, тёмный край у бортика, небольшая толщина снизу.
+// shape: circle / rect (простая вырубка) или contour (сложная — по контуру рисунка, с белым кантом).
+// viewBox — в миллиметрах: стикеры разного размера при одном scale рисуются в реальном соотношении.
+import type { StickerMotif, StickerShape } from './sticker-types';
+
+interface Props {
+  shape?: StickerShape; // по умолчанию 'circle'
+  w?: number; // ширина, мм (по умолчанию 40)
+  h?: number; // высота, мм (по умолчанию = w)
+  motif?: StickerMotif; // по умолчанию 'logo'
+  bg?: string; // фон рисунка (hex)
+  text?: string; // надпись для motif="text"
+  dims?: boolean; // размеры «4 × 4 см» под стикером
+  grid?: boolean; // клетка 1 см под стикером (для «как считается площадь»)
+  dome?: boolean; // показывать смолу (по умолчанию true); false — наклейка до заливки
+  scale?: number; // px на мм, по умолчанию 4
+  title?: string;
+  class?: string;
+}
+
+const { shape = 'circle', w = 40, h: hIn, motif = 'logo', bg, text = 'LOGO', dims = false, grid = false, dome = true, scale = 4, title, class: cls } = Astro.props;
+const h = hIn ?? w;
+
+const C = '#00a0dc';
+const M = '#e5007d';
+const Y = '#ffd21f';
+const K = '#16141b';
+const P = '#fffcf5';
+const defaultBg: Record<StickerMotif, string> = { logo: K, text: Y, heart: '#fde7f2', star: M, smile: Y, wave: C, none: '#f2efe8' };
+const fill = bg ?? defaultBg[motif as StickerMotif];
+
+const u = 1 / scale;
+const depth = Math.max(0.7, Math.min(w, h) * 0.035);
+const pad = 3 + 6 * u;
+const fs = 11 * u;
+const dimH = dims ? 16 * u + 3 : 0;
+const vbW = w + 2 * pad;
+const vbH = h + depth + 2 * pad + dimH;
+const x0 = pad;
+const y0 = pad;
+const cx = x0 + w / 2;
+const cy = y0 + h / 2;
+
+const uid = 'stk' + crypto.randomUUID().slice(0, 8);
+const id = (s: string) => `${uid}-${s}`;
+const url = (s: string) => `url(#${id(s)})`;
+
+// форма
+const rr = Math.min(w, h) * 0.16;
+const kant = shape === 'contour' ? Math.max(1.2, Math.min(w, h) * 0.07) : 0; // белый кант по контуру
+const contour = (inset: number) => {
+  // «облачко» из 7 волн — вырубка по контуру рисунка
+  const pts = Array.from({ length: 140 }, (_, i) => {
+    const t = (i / 140) * Math.PI * 2;
+    const k = 1 + 0.085 * Math.sin(7 * t + 0.6) + 0.04 * Math.sin(3 * t);
+    const rx = (w / 2 - inset) / 1.125;
+    const ry = (h / 2 - inset) / 1.125;
+    return `${(cx + rx * k * Math.cos(t)).toFixed(2)} ${(cy + ry * k * Math.sin(t)).toFixed(2)}`;
+  });
+  return `M ${pts.join(' L ')} Z`;
+};
+const outline =
+  shape === 'circle'
+    ? `M ${cx - w / 2} ${cy} a ${w / 2} ${h / 2} 0 1 0 ${w} 0 a ${w / 2} ${h / 2} 0 1 0 ${-w} 0 Z`
+    : shape === 'rect'
+      ? `M ${x0 + rr} ${y0} H ${x0 + w - rr} Q ${x0 + w} ${y0} ${x0 + w} ${y0 + rr} V ${y0 + h - rr} Q ${x0 + w} ${y0 + h} ${x0 + w - rr} ${y0 + h} H ${x0 + rr} Q ${x0} ${y0 + h} ${x0} ${y0 + h - rr} V ${y0 + rr} Q ${x0} ${y0} ${x0 + rr} ${y0} Z`
+      : contour(0);
+const inner = shape === 'contour' ? contour(kant) : outline;
+
+const label = title ?? `3D-стикер ${String(w / 10).replace('.', ',')} × ${String(h / 10).replace('.', ',')} см, ${shape === 'contour' ? 'сложная вырубка по контуру' : 'простая вырубка'}`;
+
+// рисунок — в квадрате 100×100, вписан по меньшей стороне
+const side = Math.min(w, h) - 2 * kant;
+const k = side / 100;
+const art = `translate(${cx - side / 2} ${cy - side / 2}) scale(${k})`;
+const starPath = (x: number, y: number, R: number, ri: number, n = 5, rot = -90) =>
+  Array.from({ length: n * 2 }, (_, i) => {
+    const a = ((rot + (i * 180) / n) * Math.PI) / 180;
+    const r = i % 2 ? ri : R;
+    return `${i ? 'L' : 'M'} ${(x + r * Math.cos(a)).toFixed(2)} ${(y + r * Math.sin(a)).toFixed(2)}`;
+  }).join(' ') + ' Z';
+const tfs = Math.min(30, 120 / Math.max(3, text.length));
+const darkBg = fill === K || fill === M || fill === C;
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox={`0 0 ${vbW.toFixed(2)} ${vbH.toFixed(2)}`}
+  width={Math.round(vbW * scale)}
+  height={Math.round(vbH * scale)}
+  role="img"
+  aria-label={label}
+  class:list={['stickerart', cls]}
+>
+  <title>{label}</title>
+  <defs>
+    <clipPath id={id('in')}><path d={inner} /></clipPath>
+    <clipPath id={id('out')}><path d={outline} /></clipPath>
+    <linearGradient id={id('gloss')} x1="0" y1="0" x2="0.9" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.6" />
+      <stop offset="0.38" stop-color="#fff" stop-opacity="0.08" />
+      <stop offset="0.7" stop-color="#fff" stop-opacity="0" />
+      <stop offset="1" stop-color="#000" stop-opacity="0.12" />
+    </linearGradient>
+    <filter id={id('soft')} x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation={Math.max(0.35, Math.min(w, h) * 0.03)} />
+    </filter>
+    <pattern id={id('dots')} width="7" height="7" patternUnits="userSpaceOnUse">
+      <circle cx="3.5" cy="3.5" r="1.1" fill="#000" fill-opacity="0.12" />
+    </pattern>
+  </defs>
+
+  {/* толщина смолы — тень и бортик снизу */}
+  <path d={outline} transform={`translate(0 ${depth})`} fill="#000" fill-opacity={dome ? 0.22 : 0.12} />
+
+  {/* основа: у сложной вырубки — белый кант */}
+  <path d={outline} fill={shape === 'contour' ? '#fff' : fill} />
+  <g clip-path={url('in')}>
+    <path d={outline} fill={fill} />
+    <g transform={art}>
+      {motif === 'logo' && (
+        <g>
+          <circle cx="50" cy="50" r="31" fill="none" stroke={P} stroke-width="5" />
+          <circle cx="42" cy="45" r="12" fill={C} />
+          <circle cx="58" cy="45" r="12" fill={M} style="mix-blend-mode:screen" />
+          <circle cx="50" cy="59" r="12" fill={Y} style="mix-blend-mode:screen" />
+        </g>
+      )}
+      {motif === 'text' && (
+        <g>
+          <rect x="-20" y="0" width="140" height="100" fill={url('dots')} />
+          <text x="50" y={50 + tfs * 0.36} font-size={tfs} font-weight="900" text-anchor="middle" fill={K}>
+            {text}
+          </text>
+          <path d={`M 22 ${62 + tfs * 0.1} H 78`} stroke={M} stroke-width="4" stroke-linecap="round" />
+        </g>
+      )}
+      {motif === 'heart' && (
+        <g>
+          <rect x="-20" y="-20" width="140" height="140" fill={url('dots')} />
+          <path d="M 50 78 C 20 58 14 43 21 32 C 28 21 43 22 50 35 C 57 22 72 21 79 32 C 86 43 80 58 50 78 Z" fill={M} stroke={K} stroke-width="3" stroke-linejoin="round" />
+        </g>
+      )}
+      {motif === 'star' && (
+        <g>
+          <path d={starPath(50, 53, 34, 15)} fill={Y} stroke={K} stroke-width="3" stroke-linejoin="round" />
+          <circle cx="44" cy="48" r="3" fill={K} />
+          <circle cx="56" cy="48" r="3" fill={K} />
+          <path d="M 44 58 Q 50 63 56 58" fill="none" stroke={K} stroke-width="2.6" stroke-linecap="round" />
+        </g>
+      )}
+      {motif === 'smile' && (
+        <g>
+          <circle cx="37" cy="42" r="5.5" fill={K} />
+          <circle cx="63" cy="42" r="5.5" fill={K} />
+          <path d="M 27 58 Q 50 82 73 58" fill="none" stroke={K} stroke-width="5.5" stroke-linecap="round" />
+        </g>
+      )}
+      {motif === 'wave' && (
+        <g fill="none" stroke-linecap="round" stroke-width="7">
+          <circle cx="68" cy="30" r="11" fill={Y} stroke="none" />
+          <path d="M 4 62 Q 18 50 32 62 T 60 62 T 88 62 T 116 62" stroke={P} />
+          <path d="M 4 78 Q 18 66 32 78 T 60 78 T 88 78 T 116 78" stroke={P} stroke-opacity="0.6" />
+        </g>
+      )}
+    </g>
+  </g>
+
+  {
+    dome && (
+      <g clip-path={url('out')}>
+        {/* линза смолы: общий блик, затемнение у края, яркий отблеск сверху слева */}
+        <path d={outline} fill={url('gloss')} />
+        <path d={outline} fill="none" stroke="#000" stroke-opacity={darkBg ? 0.4 : 0.22} stroke-width={Math.max(1, Math.min(w, h) * 0.1)} filter={url('soft')} />
+        <ellipse cx={x0 + w * 0.3} cy={y0 + h * 0.24} rx={w * 0.2} ry={h * 0.085} transform={`rotate(-28 ${x0 + w * 0.3} ${y0 + h * 0.24})`} fill="#fff" fill-opacity="0.75" filter={url('soft')} />
+        <ellipse cx={x0 + w * 0.74} cy={y0 + h * 0.8} rx={w * 0.08} ry={h * 0.035} transform={`rotate(-28 ${x0 + w * 0.74} ${y0 + h * 0.8})`} fill="#fff" fill-opacity="0.45" filter={url('soft')} />
+      </g>
+    )
+  }
+  <path d={outline} fill="none" stroke="#000" stroke-opacity="0.18" stroke-width={Math.max(0.15, u)} />
+  {
+    grid && (
+      <g clip-path={url('out')} stroke={K} stroke-opacity="0.4" stroke-dasharray={`${3 * u} ${2 * u}`} stroke-width={u}>
+        {Array.from({ length: Math.floor(w / 10) + 1 }, (_, i) => (
+          <path d={`M ${x0 + i * 10} ${y0} V ${y0 + h}`} />
+        ))}
+        {Array.from({ length: Math.floor(h / 10) + 1 }, (_, i) => (
+          <path d={`M ${x0} ${y0 + i * 10} H ${x0 + w}`} />
+        ))}
+      </g>
+    )
+  }
+
+
+  {
+    dims && (
+      <g>
+        <path
+          d={`M ${x0} ${y0 + h + depth + 2.5} v ${4 * u + 2} M ${x0 + w} ${y0 + h + depth + 2.5} v ${4 * u + 2} M ${x0} ${y0 + h + depth + 3.5 + 2 * u} H ${x0 + w}`}
+          fill="none"
+          stroke={K}
+          stroke-width={1.2 * u}
+        />
+        <rect x={cx - 6.2 * fs * 0.5} y={y0 + h + depth + 3.5 + 2 * u - fs * 0.62} width={6.2 * fs} height={fs * 1.24} rx={fs * 0.4} fill={Y} />
+        <text x={cx} y={y0 + h + depth + 3.5 + 2 * u + fs * 0.36} font-size={fs} font-weight="800" text-anchor="middle" fill={K} class="mono">
+          {String(w / 10).replace('.', ',')} × {String(h / 10).replace('.', ',')} см
+        </text>
+      </g>
+    )
+  }
+</svg>
+
+<style>
+  .stickerart {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+</style>

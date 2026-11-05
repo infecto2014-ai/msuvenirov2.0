@@ -1,0 +1,1817 @@
+---
+// «3D-стикеры» — own page (like the badges and mugs pages): first screen, calculator (стикеры, стикерпак, набор 3×3),
+// ready options, how the price is counted (area × rate, examples), simple or complex cut, sticker packs and sets,
+// what a 3D sticker is made of + layout tips, audience, how to order, works, reviews, FAQ, SEO text.
+// Content — src/data/stickersPage.ts; every price — src/data/pricing.ts (category 'stickers');
+// drawings — src/components/sticker/StickerArt.astro. The services.ts entry stays for menus/sitemap.
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Calculator from '@/components/islands/Calculator';
+import AlsoOrder from '@/components/garment/AlsoOrder.astro';
+import StickerArt from '@/components/sticker/StickerArt.astro';
+import StickerPackages from '@/components/sticker/StickerPackages.astro';
+import PortfolioGrid from '@/components/PortfolioGrid.astro';
+import Reviews from '@/components/Reviews.astro';
+import FaqSection from '@/components/FaqSection.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import Icon from '@/components/Icon.astro';
+import { stickersPage as page, buildStickerFaq } from '@/data/stickersPage';
+import { services } from '@/data/services';
+import { reviews } from '@/data/reviews';
+import { STICKER_MIN, defaultSelection, findProduct, rub, stickerDiscounts, stickerRate } from '@/data/pricing';
+import { breadcrumbs, faqPage, service as serviceLd } from '@/lib/schema';
+import type { ServicePage } from '@/data/types';
+
+const crumbs = [
+  { name: 'Главная', href: '/' },
+  { name: 'Услуги', href: '/uslugi' },
+  { name: '3D-стикеры', href: page.slug },
+];
+
+// ---- prices, all from pricing.ts
+const sticker = findProduct('stickers', 'sticker-3d')!;
+const set = findProduct('stickers', 'sticker-set')!;
+const unitOf = (w: number, h: number, cut: 'simple' | 'complex', qty = STICKER_MIN) =>
+  sticker.quote({ ...defaultSelection(sticker), qty, options: { cut }, dims: { w, h } }).unit;
+const fmt = (n: number) => String(n).replace('.', ',');
+const examples = page.examples.map((e) => ({ ...e, area: e.w * e.h, simple: unitOf(e.w, e.h, 'simple'), complex: unitOf(e.w, e.h, 'complex') }));
+const demo = { w: 4, h: 4 };
+const demoArea = demo.w * demo.h;
+const offs = stickerDiscounts.map((d) => ({ from: d.from, pct: Math.round(d.off * 100), unit: unitOf(demo.w, demo.h, 'simple', d.from) }));
+const setTiers = set.ladder!(defaultSelection(set));
+const faq = buildStickerFaq({
+  min: STICKER_MIN,
+  simple: stickerRate.simple,
+  complex: stickerRate.complex,
+  example: `стикер ${demo.w} × ${demo.h} см = ${demoArea} см² × ${stickerRate.simple} ₽ = ${rub(unitOf(demo.w, demo.h, 'simple'))}`,
+  setMin: set.qty.min,
+});
+const related = page.related.map((r) => services.find((s) => s.slug === r)).filter(Boolean) as ServicePage[];
+const hasStickerReviews = reviews.some((r) => page.reviewKeywords.some((k) => r.text.toLowerCase().includes(k)));
+const tones = ['c', 'm', 'y'];
+const packArt = [
+  { shape: 'contour', motif: 'heart' },
+  { shape: 'circle', motif: 'logo' },
+  { shape: 'rect', motif: 'smile' },
+  { shape: 'circle', motif: 'wave' },
+  { shape: 'contour', motif: 'star' },
+  { shape: 'rect', motif: 'text' },
+] as const;
+---
+
+<BaseLayout
+  title={page.title}
+  description={page.description}
+  path={page.slug}
+  image="/img/showcase/stickers-3d.webp"
+  schema={[
+    breadcrumbs(crumbs),
+    serviceLd({ name: page.h1, description: page.description, url: page.slug, lowPrice: Math.min(...examples.map((e) => e.simple)), offerCount: 3 }),
+    faqPage(faq),
+  ]}
+>
+  <!-- ============ first screen ============ -->
+  <section class="shero">
+    <div class="wrap shero-grid">
+      <div class="shero-text">
+        <Breadcrumbs items={crumbs} />
+        <p class="eyebrow shero-eyebrow">{page.eyebrow}</p>
+        <h1>{page.h1}</h1>
+        <p class="lead">{page.lead}</p>
+        <ul class="shero-chips">
+          {page.highlights.map((h) => <li><Icon name="check" size={18} /> {h}</li>)}
+        </ul>
+        <div class="shero-actions">
+          <a class="btn btn-magenta" href="#calc"><Icon name="calc" size={20} /> <span>Рассчитать<span class="long"> стоимость</span></span></a>
+          <button type="button" class="btn btn-ghost" data-order>Отправить макет</button>
+        </div>
+      </div>
+      <div class="shero-media" role="img" aria-label={page.heroAlt}>
+        <span class="shero-dot shero-dot-c" aria-hidden="true"></span>
+        <span class="shero-dot shero-dot-m" aria-hidden="true"></span>
+        <span class="shero-dot shero-dot-y" aria-hidden="true"></span>
+        <div class="shero-wall halftone" aria-hidden="true">
+          <div class="shero-stage">
+            <StickerArt shape="contour" w={36} h={34} motif="heart" scale={3.6} class="bb bb-heart" />
+            <StickerArt shape="rect" w={50} h={20} motif="text" text="BRAND" scale={3.4} class="bb bb-text" />
+            <StickerArt shape="circle" w={44} motif="logo" scale={5.2} class="bb bb-main" />
+            <StickerArt shape="contour" w={30} motif="star" scale={4.2} class="bb bb-pin" />
+            <StickerArt shape="rect" w={28} motif="smile" scale={3.4} class="bb bb-back" />
+          </div>
+        </div>
+        <span class="sticker shero-price">
+          <span class="mono">{stickerRate.simple} ₽</span><small>за см²</small>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ calculator ============ -->
+  <section id="calc" class="section calc-sec" aria-labelledby="calc-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Калькулятор</p>
+          <h2 id="calc-h">Посчитайте свои стикеры</h2>
+        </div>
+        <p class="calc-sub">Укажите размер одного стикера, вырубку и количество — цена за штуку и за весь заказ пересчитается сразу. Минимальный заказ — {STICKER_MIN} стикеров.</p>
+      </div>
+      <Calculator client:visible category="stickers" product="sticker-3d" hideCategories />
+    </div>
+    <AlsoOrder slugs={page.alsoOrder} />
+  </section>
+
+  <StickerPackages />
+
+  <!-- ============ how the price is counted ============ -->
+  <section class="section pr" aria-labelledby="pr-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Цена</p>
+          <h2 id="pr-h">Как считается цена стикера</h2>
+        </div>
+        <p class="pr-sub">Платите только за площадь: ширина × высота × цена за см². Минимальный заказ — {STICKER_MIN} стикеров.</p>
+      </div>
+      <div class="pr-grid">
+        <div class="pr-demo">
+          <div class="pr-art" aria-hidden="true">
+            <StickerArt shape="rect" w={demo.w * 10} h={demo.h * 10} motif="smile" grid dims scale={5.4} />
+          </div>
+          <p class="pr-formula mono">
+            <span>{demo.w} × {demo.h} см</span>
+            <i>=</i>
+            <span>{demoArea} см²</span>
+            <i>×</i>
+            <span>{stickerRate.simple} ₽</span>
+            <i>=</i>
+            <b>{rub(unitOf(demo.w, demo.h, 'simple'))}</b>
+          </p>
+          <ul class="pr-offs">
+            <li><span class="mono">{STICKER_MIN}–{offs[0].from - 1} шт</span><b class="mono">{rub(unitOf(demo.w, demo.h, 'simple'))}</b></li>
+            {offs.map((o) => (
+              <li class="pr-off"><span class="mono">от {o.from} шт · −{o.pct}%</span><b class="mono">{rub(o.unit)}</b></li>
+            ))}
+          </ul>
+        </div>
+        <div class="pr-tbl-wrap">
+          <p class="pr-cap">Цена одного стикера при заказе от {STICKER_MIN} шт</p>
+          <table class="pr-tbl">
+            <thead>
+              <tr>
+                <th scope="col">Размер</th>
+                <th scope="col">Площадь</th>
+                <th scope="col">Простая<br /><small>{stickerRate.simple} ₽/см²</small></th>
+                <th scope="col">Сложная<br /><small>{stickerRate.complex} ₽/см²</small></th>
+              </tr>
+            </thead>
+            <tbody>
+              {examples.map((e) => (
+                <tr>
+                  <th scope="row">{e.w} × {e.h} см<small>{e.note}</small></th>
+                  <td class="mono">{e.area} см²</td>
+                  <td class="mono">{rub(e.simple)}</td>
+                  <td class="mono">{rub(e.complex)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p class="pr-note"><Icon name="check" size={16} /> От {offs[0].from} шт — минус {offs[0].pct}%, от {offs[1].from} шт — минус {offs[1].pct}%. Любой другой размер — в калькуляторе.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ simple or complex cut ============ -->
+  <section class="section typ" aria-labelledby="typ-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Вырубка</p>
+          <h2 id="typ-h">Простая или сложная вырубка</h2>
+        </div>
+        <p>От формы зависит цена за см². Пример — стикер {demo.w} × {demo.h} см при заказе от {STICKER_MIN} штук.</p>
+      </div>
+      <div class="typ-grid">
+        {
+          page.cuts.map((c, i) => {
+            const rate = c.id === 'complex' ? stickerRate.complex : stickerRate.simple;
+            return (
+              <article class={`typ-card typ-${i ? 'c' : 'm'}`}>
+                <div class="typ-art" aria-hidden="true">
+                  {c.id === 'simple' ? (
+                    <>
+                      <StickerArt shape="circle" w={40} motif="logo" scale={4.4} class="typ-front" />
+                      <StickerArt shape="rect" w={46} h={24} motif="text" text="BRAND" scale={3.6} class="typ-back" />
+                    </>
+                  ) : (
+                    <>
+                      <StickerArt shape="contour" w={42} motif="star" scale={4.4} class="typ-front" />
+                      <StickerArt shape="contour" w={40} h={34} motif="heart" scale={3.4} class="typ-back" />
+                    </>
+                  )}
+                </div>
+                <div class="typ-body">
+                  <div class="typ-top">
+                    <h3>{c.title}</h3>
+                    <span class="typ-tag mono">{c.tag}</span>
+                  </div>
+                  <p class="typ-sizes"><Icon name="check" size={16} /> {rate} ₽ за см²</p>
+                  <p class="typ-text">{c.text}</p>
+                  <ul class="typ-points">
+                    <li>{demo.w} × {demo.h} см — {rub(unitOf(demo.w, demo.h, c.id as 'simple' | 'complex'))}</li>
+                    {offs.map((o) => <li>от {o.from} шт — {rub(unitOf(demo.w, demo.h, c.id as 'simple' | 'complex', o.from))}</li>)}
+                  </ul>
+                  <a class="btn btn-sm btn-magenta" href={`${page.slug}?calc=stickers:sticker-3d#calc`}>Рассчитать</a>
+                </div>
+              </article>
+            );
+          })
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ sticker packs and sets ============ -->
+  <section class="section typ pk" aria-labelledby="pk-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Наборы</p>
+          <h2 id="pk-h">Стикерпаки и наборы по фото</h2>
+        </div>
+        <p>Несколько разных стикеров в одном наборе — для мерча, подарков и маркетов.</p>
+      </div>
+      <div class="typ-grid">
+        <article class="typ-card typ-m">
+          <div class="typ-art pk-art" aria-hidden="true">
+            <div class="pk-sheet">
+              {packArt.map((a) => <StickerArt shape={a.shape} w={30} motif={a.motif} text="HI" scale={2.7} />)}
+            </div>
+          </div>
+          <div class="typ-body">
+            <div class="typ-top">
+              <h3>{page.pack.title}</h3>
+              <span class="typ-tag mono">по формуле</span>
+            </div>
+            <p class="typ-text">{page.pack.text}</p>
+            <ul class="typ-points">
+              {page.pack.points.map((x) => <li>{x}</li>)}
+            </ul>
+            <a class="btn btn-sm btn-magenta" href={`${page.slug}?calc=stickers:sticker-pack#calc`}>Рассчитать стикерпак</a>
+          </div>
+        </article>
+        <article class="typ-card typ-c">
+          <div class="typ-art pk-art" aria-hidden="true">
+            <div class="pk-trio">
+              <StickerArt shape="rect" w={30} motif="smile" scale={4} />
+              <StickerArt shape="rect" w={30} motif="heart" scale={4} />
+              <StickerArt shape="rect" w={30} motif="wave" scale={4} />
+            </div>
+          </div>
+          <div class="typ-body">
+            <div class="typ-top">
+              <h3>{page.set.title}</h3>
+              <span class="typ-tag mono">от {set.qty.min} шт</span>
+            </div>
+            <p class="typ-text">{page.set.text}</p>
+            <ul class="pk-tiers">
+              {setTiers.map((t, i) => (
+                <li>
+                  <small>{i < setTiers.length - 1 ? `${t.from}–${setTiers[i + 1].from - 1} шт` : `${t.from}–${set.qty.max} шт`}</small>
+                  <b class="mono">{rub(t.price)}</b>
+                  <small>за стикер</small>
+                </li>
+              ))}
+            </ul>
+            <a class="btn btn-sm btn-magenta" href={`${page.slug}?calc=stickers:sticker-set#calc`}>Рассчитать набор</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ what a 3D sticker is made of + layout ============ -->
+  <section class="section gd" aria-labelledby="gd-h">
+    <div class="wrap gd-grid">
+      <div class="gd-art" aria-hidden="true">
+        <svg class="lay-svg" viewBox="0 0 320 210" width="320" height="210">
+          {/* cross-section: base, print, epoxy lens */}
+          <path d="M 30 150 Q 30 70 160 66 Q 290 70 290 150 Z" fill="#00a0dc" fill-opacity="0.28" stroke="#00a0dc" stroke-width="2.5" />
+          <path d="M 64 96 Q 110 74 170 74" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-opacity="0.85" />
+          <rect x="30" y="150" width="260" height="9" rx="2" fill="#e5007d" />
+          <rect x="30" y="159" width="260" height="13" rx="3" fill="#ffd21f" stroke="#16141b" stroke-width="1.5" />
+          <path d="M 30 176 H 290" stroke="#16141b" stroke-width="1.5" stroke-dasharray="5 4" />
+          {[
+            { n: 1, x: 250, y: 92, c: '#00a0dc', f: '#16141b' },
+            { n: 2, x: 304, y: 154, c: '#e5007d', f: '#fff' },
+            { n: 3, x: 304, y: 180, c: '#ffd21f', f: '#16141b' },
+          ].map((m) => (
+            <g>
+              <circle cx={m.x} cy={m.y} r="12" fill={m.c} stroke="#16141b" stroke-width="1.5" />
+              <text x={m.x} y={m.y + 4.5} font-size="13" font-weight="800" text-anchor="middle" fill={m.f}>{m.n}</text>
+            </g>
+          ))}
+          <text x="160" y="200" font-size="11" font-weight="700" text-anchor="middle" fill="#16141b" class="mono">стикер в разрезе</text>
+        </svg>
+      </div>
+      <div class="gd-info">
+        <p class="eyebrow">Что внутри</p>
+        <h2 id="gd-h">Из чего состоит 3D-стикер</h2>
+        <ol class="gd-list">
+          {
+            page.layers.map((it, i) => (
+              <li class={`gd-${it.tone}`}>
+                <span class="gd-num mono">{i + 1}</span>
+                <div>
+                  <h3>{it.title}</h3>
+                  <p>{it.text}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+        <div class="gd-note">
+          <b>{page.layout.title}</b>
+          <ul>
+            {page.layout.items.map((t) => <li>{t}</li>)}
+          </ul>
+        </div>
+        <a class="how-more" href="/trebovaniya-k-maketam">Требования к макетам →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ for whom ============ -->
+  <section class="section aud" aria-labelledby="aud-h">
+    <div class="wrap">
+      <p class="eyebrow">Для кого</p>
+      <h2 id="aud-h" class="aud-title">Кому заказывают 3D-стикеры</h2>
+      <ul class="aud-grid">
+        {
+          page.audience.map((a, i) => (
+            <li class={`aud-card kinds-${tones[i % 3]}`}>
+              <span class="aud-tag mono">{a.tag}</span>
+              <h3>{a.title}</h3>
+              <p>{a.text}</p>
+              <span class="aud-num mono" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ how to order ============ -->
+  <section class="section how" aria-labelledby="how-h">
+    <div class="wrap how-grid">
+      <div>
+        <p class="eyebrow">Заказ</p>
+        <h2 id="how-h">Как заказать 3D-стикеры</h2>
+        <ol class="how-steps">
+          {
+            page.steps.map((s, i) => (
+              <li>
+                <span class="how-dot mono">{i + 1}</span>
+                <div>
+                  <h3>{s.title}</h3>
+                  <p>{s.text}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+      <aside class="how-side">
+        <div class="how-b2b">
+          <h3>{page.b2b.title}</h3>
+          <ul class="how-chips">
+            {page.b2b.items.map((t) => <li><Icon name="check" size={16} /> {t}</li>)}
+          </ul>
+          <button type="button" class="btn btn-sm how-b2b-btn" data-order="3D-стикеры с логотипом для компании — рассчитать тираж">Рассчитать тираж</button>
+          <a class="how-more" href="/korporativnym-klientam">Корпоративным клиентам →</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <script is:inline>
+    // folding cards are always open on a computer; on a phone they start folded (tap to open), as on the shoppers page
+    (function () {
+      var m = matchMedia('(max-width: 760px)');
+      document.querySelectorAll('[data-fold]').forEach(function (d) {
+        if (m.matches) d.open = false;
+        d.querySelector('summary').addEventListener('click', function (e) {
+          if (!m.matches) e.preventDefault();
+        });
+        m.addEventListener('change', function (e) {
+          d.open = !e.matches;
+        });
+      });
+    })();
+  </script>
+
+  <PortfolioGrid tags={page.portfolioTags} limit={4} title="Примеры: 3D-стикеры и наклейки" />
+
+  <Reviews keywords={hasStickerReviews ? page.reviewKeywords : undefined} title={hasStickerReviews ? 'Отзывы о стикерах' : 'Что говорят клиенты'} />
+
+  <FaqSection items={faq} title="Вопросы о 3D-стикерах" />
+
+  <!-- ============ SEO text (folded on phones) ============ -->
+  <section class="section seo-text" aria-labelledby="seo-h">
+    <div class="wrap">
+      <h2 id="seo-h">{page.seo.title}</h2>
+      <input type="checkbox" id="seo-more" class="seo-toggle" />
+      <div class="seo-cols">
+        {
+          page.seo.sections.map((s) => (
+            <div>
+              <h3>{s.h}</h3>
+              <p>{s.p}</p>
+            </div>
+          ))
+        }
+        <div>
+          <h3>Смотрите также</h3>
+          <p>
+            <a href="/znachki">значки</a> · <a href="/breloki">брелоки</a> · <a href="/shirokoformatnaya-pechat">плёночные наклейки и наклейки на авто</a> ·
+            <a href="/pechat-na-futbolkah">печать на футболках</a> · <a href="/korporativnym-klientam">корпоративным клиентам</a> ·
+            <a href="/trebovaniya-k-maketam">требования к макетам</a> · <a href="/price">все цены</a>
+          </p>
+        </div>
+      </div>
+      <label for="seo-more" class="seo-more-btn">Читать полностью</label>
+    </div>
+  </section>
+
+  {
+    related.length > 0 && (
+      <section class="section related" aria-labelledby="rel-h">
+        <div class="wrap">
+          <h2 id="rel-h" class="related-h">Ещё печатаем</h2>
+          <div class="related-grid">
+            {related.map((r) => (
+              <a class="related-card" href={r.slug}>
+                <img src={r.image} alt="" width="120" height="120" loading="lazy" />
+                <span>{r.name}</span>
+                <Icon name="arrow" />
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <CtaBand title="Хотите 3D-стикеры со своим логотипом?" text="Пришлите логотип, рисунок или фото — подготовим макет и контур резки, покажем, как будет выглядеть стикер, и посчитаем цену." />
+</BaseLayout>
+
+<style>
+  /* ================= first screen ================= */
+  .shero {
+    padding-block: clamp(28px, 4vw, 48px) clamp(24px, 4vw, 40px);
+    overflow: clip;
+  }
+  .shero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: clamp(28px, 5vw, 72px);
+    align-items: center;
+  }
+  .shero-text {
+    display: grid;
+    gap: 20px;
+    justify-items: start;
+  }
+  .shero-eyebrow {
+    margin: 0 0 -8px;
+  }
+  .shero-text h1 {
+    font-size: clamp(2.2rem, 5vw, 4rem);
+  }
+  .shero-chips {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .shero-chips li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+  .shero-chips :global(svg) {
+    color: var(--m-ink);
+  }
+  .shero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .shero-media {
+    position: relative;
+    padding: 24px;
+  }
+  /* a wall: badges on it; the stage is drawn at a fixed size and zoomed with the column */
+  .shero-wall {
+    position: relative;
+    z-index: 1;
+    aspect-ratio: 1;
+    border-radius: 40px 40px 120px 40px;
+    background-color: var(--paper-2);
+    --dot: rgba(22, 20, 27, 0.1);
+    overflow: clip;
+  }
+  .shero-stage {
+    --hz: 1;
+    zoom: var(--hz);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 440px;
+    height: 440px;
+    margin: -220px 0 0 -220px;
+    z-index: 1;
+  }
+  .shero-price {
+    position: absolute;
+    right: 0;
+    bottom: 40px;
+    z-index: 3;
+    display: grid;
+    font-size: 1.25rem;
+    text-align: center;
+  }
+  .shero-price small {
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+  .shero-dot {
+    position: absolute;
+    border-radius: 50%;
+    mix-blend-mode: multiply;
+    z-index: 0;
+  }
+  .shero-dot-c {
+    width: 120px;
+    height: 120px;
+    background: var(--c);
+    top: -6px;
+    right: -10px;
+  }
+  .shero-dot-m {
+    width: 80px;
+    height: 80px;
+    background: var(--m);
+    bottom: 10px;
+    left: 70px;
+    opacity: 0.8;
+  }
+  .shero-dot-y {
+    width: 110px;
+    height: 110px;
+    background: var(--y);
+    top: 40%;
+    left: 0;
+  }
+  .calc-sec {
+    background: var(--paper-2);
+    border-radius: 48px;
+    margin-inline: clamp(0px, 1.5vw, 20px);
+  }
+
+
+  /* badges on the wall */
+  .shero-stage :global(.bb) {
+    position: absolute;
+    filter: drop-shadow(0 14px 16px rgba(22, 20, 27, 0.2));
+  }
+  .shero-stage :global(.bb-heart) {
+    left: 6px;
+    top: 14px;
+    transform: rotate(-12deg);
+  }
+  .shero-stage :global(.bb-text) {
+    right: 6px;
+    top: 36px;
+    transform: rotate(9deg);
+  }
+  .shero-stage :global(.bb-main) {
+    left: 70px;
+    top: 128px;
+    z-index: 2;
+  }
+  .shero-stage :global(.bb-pin) {
+    right: 14px;
+    bottom: 34px;
+    z-index: 3;
+    transform: rotate(-8deg);
+  }
+  .shero-stage :global(.bb-back) {
+    left: 0;
+    bottom: 10px;
+    z-index: 1;
+    transform: rotate(16deg);
+  }
+
+  .kinds-c { --tone: var(--c); --soft: var(--c-soft); }
+  .kinds-m { --tone: var(--m); --soft: var(--m-soft); }
+  .kinds-y { --tone: var(--y); --soft: var(--y-soft); }
+
+  /* ================= how the price is counted ================= */
+  .pr-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: clamp(20px, 4vw, 48px);
+    align-items: start;
+  }
+  .pr-demo {
+    display: grid;
+    gap: 14px;
+    justify-items: center;
+    padding: 24px 20px 20px;
+    border-radius: 40px 40px 40px 120px;
+    background:
+      radial-gradient(circle, rgba(22, 20, 27, 0.08) 1.3px, transparent 1.5px) 0 0 / 14px 14px,
+      var(--c-soft);
+  }
+  .pr-art :global(svg) {
+    filter: drop-shadow(0 14px 14px rgba(22, 20, 27, 0.2));
+  }
+  .pr-formula {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+  }
+  .pr-formula span,
+  .pr-formula b {
+    padding: 5px 10px;
+    border-radius: 12px;
+    background: var(--card);
+  }
+  .pr-formula b {
+    background: var(--ink);
+    color: var(--y);
+  }
+  .pr-formula i {
+    font-style: normal;
+    color: var(--muted);
+  }
+  .pr-offs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .pr-offs li {
+    display: grid;
+    gap: 2px;
+    padding: 8px 10px;
+    border-radius: 16px;
+    background: var(--card);
+    text-align: center;
+  }
+  .pr-offs li span {
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+  .pr-offs li b {
+    font-size: 1.1rem;
+  }
+  .pr-offs .pr-off {
+    box-shadow: inset 0 -4px 0 var(--m);
+  }
+  .pr-tbl-wrap {
+    display: grid;
+    gap: 12px;
+    min-width: 0;
+  }
+  .pr-tbl {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 24px;
+    border: 1.5px solid var(--line);
+    background: var(--card);
+    overflow: clip;
+  }
+  .pr-cap {
+    margin: 0 0 -4px;
+    font-weight: 700;
+  }
+  .pr-tbl th,
+  .pr-tbl td {
+    padding: 10px 14px;
+    text-align: right;
+    border-bottom: 1px dashed var(--line);
+    white-space: nowrap;
+  }
+  .pr-tbl tbody tr:last-child > * {
+    border-bottom: 0;
+  }
+  .pr-tbl thead th {
+    background: var(--paper-2);
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.2;
+  }
+  .pr-tbl thead small {
+    font-weight: 600;
+  }
+  .pr-tbl th:first-child {
+    text-align: left;
+  }
+  .pr-tbl tbody th {
+    display: grid;
+    font-weight: 700;
+  }
+  .pr-tbl tbody th small {
+    font-weight: 500;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .pr-tbl td {
+    font-weight: 700;
+  }
+  .pr-note {
+    margin: 0;
+    display: flex;
+    gap: 6px;
+    align-items: flex-start;
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+  .pr-note :global(svg) {
+    flex: none;
+    margin-top: 3px;
+    color: var(--m-ink);
+  }
+
+  /* sticker pack sheet and the 3×3 set */
+  .pk-sheet {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 6px 10px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: var(--card);
+    box-shadow: 0 14px 22px -14px rgba(22, 20, 27, 0.45);
+    transform: rotate(-4deg);
+  }
+  .pk-sheet :global(svg) {
+    filter: none;
+  }
+  .pk-trio {
+    display: flex;
+    gap: 8px;
+  }
+  .pk-trio :global(svg:nth-child(1)) { transform: rotate(-8deg); }
+  .pk-trio :global(svg:nth-child(2)) { transform: translateY(-12px); }
+  .pk-trio :global(svg:nth-child(3)) { transform: rotate(7deg); }
+  .pk-tiers {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .pk-tiers li {
+    display: grid;
+    padding: 8px 12px;
+    border-radius: 16px;
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .pk-tiers li:nth-child(1) { box-shadow: inset 0 -4px 0 var(--c); }
+  .pk-tiers li:nth-child(2) { box-shadow: inset 0 -4px 0 var(--m); }
+  .pk-tiers li:nth-child(3) { box-shadow: inset 0 -4px 0 var(--y); }
+  .pk-tiers small {
+    font-size: 0.72rem;
+    color: rgba(255, 252, 245, 0.7);
+  }
+  .pk-tiers b {
+    font-size: 1.25rem;
+  }
+  .gd-note ul {
+    margin: 6px 0 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 4px;
+    font-weight: 500;
+  }
+  .lay-svg {
+    width: min(100%, 420px);
+    height: auto;
+  }
+
+  /* ================= roll or pin ================= */
+  .typ-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .typ-c { --tone: var(--c); --soft: var(--c-soft); }
+  .typ-m { --tone: var(--m); --soft: var(--m-soft); }
+  .typ-card {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    border-radius: 34px 34px 34px 10px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    overflow: clip;
+  }
+  .typ-art {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6%;
+    height: 300px;
+    padding: 24px 16px 40px;
+    background:
+      radial-gradient(circle, rgba(22, 20, 27, 0.08) 1.3px, transparent 1.5px) 0 0 / 14px 14px,
+      var(--soft);
+  }
+  .typ-art :global(svg) {
+    filter: drop-shadow(0 12px 12px rgba(22, 20, 27, 0.18));
+  }
+  .typ-art :global(.typ-back) {
+    transform: rotate(-10deg);
+  }
+  .typ-flip {
+    position: absolute;
+    left: 50%;
+    bottom: 12px;
+    transform: translateX(-50%);
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--card);
+    font-size: 0.72rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .typ-body {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 20px 22px 24px;
+  }
+  .typ-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+  }
+  .typ-top h3 {
+    font-size: 1.45rem;
+  }
+  .typ-tag {
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--tone);
+    font-size: 0.74rem;
+    font-weight: 700;
+  }
+  .typ-m .typ-tag {
+    color: #fff;
+  }
+  .typ-sizes {
+    margin: 0;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    font-weight: 700;
+  }
+  .typ-sizes :global(svg) {
+    color: var(--m-ink);
+  }
+  .typ-text {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 0.95rem;
+  }
+  .typ-points {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .typ-points li {
+    padding: 4px 11px;
+    border-radius: 999px;
+    border: 1.5px solid var(--line);
+    font-size: 0.84rem;
+    font-weight: 600;
+  }
+  .typ-tbl-wrap {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 18px;
+    border: 1.5px solid var(--line);
+  }
+  .typ-tbl {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.86rem;
+  }
+  .typ-tbl th,
+  .typ-tbl td {
+    padding: 7px 8px;
+    text-align: right;
+    white-space: nowrap;
+    border-bottom: 1px dashed var(--line);
+  }
+  .typ-tbl tbody tr:last-child > * {
+    border-bottom: 0;
+  }
+  .typ-tbl thead th {
+    background: var(--paper-2);
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .typ-tbl th:first-child {
+    text-align: left;
+  }
+  .typ-tbl tbody th {
+    font-weight: 700;
+  }
+  .typ-tbl td:nth-child(3) {
+    background: var(--y-soft);
+    font-weight: 700;
+  }
+  .typ-body .btn {
+    margin-top: auto;
+  }
+
+  /* ================= how to prepare the picture ================= */
+  .gd-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(24px, 5vw, 64px);
+    align-items: center;
+  }
+  .gd-art {
+    position: relative;
+    display: grid;
+    place-items: center;
+    padding: 30px;
+    border-radius: 40px 40px 120px 40px;
+    background:
+      radial-gradient(circle, rgba(22, 20, 27, 0.08) 1.3px, transparent 1.5px) 0 0 / 14px 14px,
+      var(--m-soft);
+  }
+  .gd-art :global(svg) {
+    width: min(100%, 340px);
+    filter: drop-shadow(0 16px 16px rgba(22, 20, 27, 0.2));
+  }
+  .gd-info {
+    display: grid;
+    gap: 12px;
+    justify-items: start;
+  }
+  .gd-info .eyebrow {
+    margin: 0 0 -6px;
+  }
+  .gd-lead {
+    margin: 0;
+    color: var(--ink-2);
+  }
+  .gd-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+    width: 100%;
+  }
+  .gd-list li {
+    display: grid;
+    grid-template-columns: 38px 1fr;
+    gap: 12px;
+    align-items: start;
+    padding: 14px 16px;
+    border-radius: 22px 22px 22px 8px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+  }
+  .gd-num {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    font-weight: 800;
+  }
+  .gd-k .gd-num {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .gd-m .gd-num {
+    background: var(--m);
+    color: #fff;
+  }
+  .gd-c .gd-num {
+    background: var(--c);
+  }
+  .gd-y .gd-num {
+    background: var(--y);
+  }
+  .gd-list h3 {
+    margin: 6px 0 2px;
+    font-size: 1.05rem;
+  }
+  .gd-list p {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--ink-2);
+  }
+  .gd-note {
+    margin: 0;
+    padding: 12px 16px;
+    border-radius: 18px;
+    background: var(--y-soft);
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+  /* ================= audience ================= */
+  .aud-title {
+    margin-bottom: 28px;
+    max-width: 820px;
+  }
+  .aud-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .aud-card {
+    position: relative;
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: 8px;
+    padding: 22px 22px 56px;
+    border-radius: 26px 26px 26px 8px;
+    background: var(--soft);
+    overflow: clip;
+  }
+  .aud-tag {
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--card);
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+  .aud-card h3 {
+    font-size: 1.2rem;
+  }
+  .aud-card p {
+    margin: 0;
+    font-size: 0.93rem;
+    color: var(--ink-2);
+  }
+  .aud-num {
+    position: absolute;
+    right: 16px;
+    bottom: -14px;
+    font-size: 4rem;
+    font-weight: 800;
+    color: var(--tone);
+    opacity: 0.5;
+    line-height: 1;
+  }
+
+  /* ================= how to order ================= */
+  .how-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: clamp(28px, 5vw, 64px);
+    align-items: start;
+  }
+  .how-grid h2 {
+    margin-bottom: 26px;
+  }
+  .how-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+  }
+  .how-steps li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 16px;
+    padding-bottom: 22px;
+  }
+  .how-steps li:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 23px;
+    top: 48px;
+    bottom: 4px;
+    border-left: 2px dashed var(--line-strong);
+  }
+  .how-dot {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid var(--ink);
+    background: var(--card);
+    font-weight: 700;
+  }
+  .how-steps li:nth-child(3n + 1) .how-dot { box-shadow: 3px 3px 0 var(--c); }
+  .how-steps li:nth-child(3n + 2) .how-dot { box-shadow: 3px 3px 0 var(--m); }
+  .how-steps li:nth-child(3n + 3) .how-dot { box-shadow: 3px 3px 0 var(--y); }
+  .how-steps h3 {
+    margin: 10px 0 4px;
+    font-size: 1.1rem;
+  }
+  .how-steps p {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 0.95rem;
+  }
+  .how-side {
+    display: grid;
+    gap: 14px;
+  }
+  .how-card,
+  .how-b2b {
+    position: relative;
+    display: grid;
+    justify-items: start;
+    gap: 8px;
+    padding: 22px;
+    border-radius: var(--radius-l);
+  }
+  .how-card li {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--ink-2);
+  }
+  .how-card {
+    background: var(--y-soft);
+  }
+  .how-card summary {
+    list-style: none;
+    cursor: default;
+  }
+  .how-card summary::-webkit-details-marker {
+    display: none;
+  }
+  .how-list {
+    margin: 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 6px;
+  }
+  .how-list li::marker {
+    color: var(--m);
+  }
+  .how-more {
+    font-weight: 700;
+    color: var(--m-ink);
+  }
+  .how-b2b {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .how-b2b h3 {
+    color: var(--paper);
+  }
+  .how-b2b .how-more {
+    color: var(--y);
+  }
+  .how-b2b-btn {
+    background: var(--y);
+    color: var(--ink);
+    border-color: var(--y);
+  }
+  .how-chips {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .how-chips li {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 11px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(255, 252, 245, 0.25);
+    font-size: 0.84rem;
+    font-weight: 600;
+  }
+  .how-chips :global(svg) {
+    color: var(--y);
+  }
+
+  /* ================= seo text ================= */
+  .seo-text h2 {
+    margin-bottom: 24px;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+  }
+  .seo-cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 48px;
+  }
+  .seo-cols h3 {
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+  }
+  .seo-cols p {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 0.96rem;
+    line-height: 1.6;
+  }
+  .seo-toggle,
+  .seo-more-btn {
+    display: none;
+  }
+
+  /* ================= related ================= */
+  .related-h {
+    margin-bottom: 24px;
+  }
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+  }
+  .related-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 18px 10px 10px;
+    border-radius: 24px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    font-weight: 700;
+    text-decoration: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .related-card img {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    object-fit: cover;
+  }
+  .related-card span {
+    flex: 1;
+  }
+  .related-card:hover {
+    border-color: var(--ink);
+    box-shadow: 4px 4px 0 var(--y);
+    color: var(--ink);
+  }
+
+
+  /* ================= tablets ================= */
+  @media (max-width: 1180px) {
+    .aud-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .shero-stage {
+      --hz: 0.85;
+    }
+  }
+  @media (max-width: 960px) {
+    .how-grid,
+    .typ-grid,
+    .pr-grid,
+    .gd-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .gd-art {
+      max-width: 420px;
+    }
+  }
+  @media (max-width: 860px) {
+    .shero-grid {
+      grid-template-columns: 1fr;
+    }
+    .shero-media {
+      max-width: 400px;
+      justify-self: center;
+      padding: 12px;
+    }
+    .shero-stage {
+      --hz: 0.82;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .shero {
+      padding-block: 14px 22px;
+    }
+    .shero-grid {
+      grid-template-columns: minmax(0, 1fr) 118px;
+      gap: 12px 14px;
+      align-items: start;
+    }
+    .shero-text {
+      display: contents;
+    }
+    .shero-text > :global(.crumbs),
+    .shero-text h1,
+    .shero-chips,
+    .shero-actions {
+      grid-column: 1 / -1;
+    }
+    .shero-eyebrow {
+      display: none;
+    }
+    .shero-text > :global(.crumbs) {
+      order: 1;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .shero-text > :global(.crumbs) :global(ol) {
+      flex-wrap: nowrap;
+      white-space: nowrap;
+      font-size: 0.78rem;
+    }
+    .shero-text h1 {
+      order: 2;
+      font-size: clamp(1.7rem, 7.6vw, 2.1rem);
+    }
+    .lead {
+      order: 3;
+      grid-column: 1;
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+    .shero-media {
+      order: 4;
+      grid-column: 2;
+      grid-row: 3;
+      max-width: none;
+      justify-self: stretch;
+      padding: 0 0 12px;
+    }
+    .shero-wall {
+      aspect-ratio: 3 / 4.6;
+      border-radius: 20px 20px 48px 20px;
+    }
+    /* phone: the big badge and one small one */
+    .shero-stage {
+      --hz: 1;
+      zoom: 1;
+      inset: 0;
+      width: auto;
+      height: auto;
+      margin: 0;
+    }
+    .shero-stage :global(.bb) {
+      display: none;
+    }
+    .shero-stage :global(.bb-main) {
+      display: block;
+      left: -8%;
+      top: 8%;
+      width: 116%;
+      height: auto;
+      filter: drop-shadow(0 6px 8px rgba(22, 20, 27, 0.2));
+    }
+    .shero-stage :global(.bb-pin) {
+      display: block;
+      left: auto;
+      right: 2%;
+      top: auto;
+      bottom: 16%;
+      width: 46%;
+      height: auto;
+    }
+    .shero-dot {
+      display: none;
+    }
+    .shero-price {
+      right: -4px;
+      bottom: 0;
+      padding: 4px 8px;
+      border-radius: 10px;
+      font-size: 0.76rem;
+      line-height: 1.15;
+    }
+    .shero-price small {
+      font-size: 0.6rem;
+    }
+    .shero-price::before {
+      display: none;
+    }
+    .shero-chips {
+      order: 5;
+      flex-wrap: nowrap;
+      gap: 6px;
+      overflow-x: auto;
+      margin-inline: calc(var(--gutter) * -1);
+      padding-inline: var(--gutter);
+      scrollbar-width: none;
+    }
+    .shero-chips::-webkit-scrollbar,
+    .shero-text > :global(.crumbs)::-webkit-scrollbar {
+      display: none;
+    }
+    .shero-chips li {
+      flex: none;
+      gap: 4px;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+    .shero-chips :global(svg) {
+      width: 14px;
+      height: 14px;
+    }
+    .shero-actions {
+      order: 6;
+      flex-wrap: nowrap;
+      gap: 8px;
+    }
+    .shero-actions .btn {
+      flex: 1 1 0;
+      min-height: 46px;
+      padding: 0 12px;
+      gap: 6px;
+      font-size: 0.92rem;
+      white-space: nowrap;
+    }
+    .shero-actions .btn :global(svg) {
+      width: 18px;
+      height: 18px;
+    }
+    .long {
+      display: none;
+    }
+    .calc-sec {
+      border-radius: 28px;
+      padding-block: 28px 32px;
+    }
+    .calc-sec .section-head {
+      margin-bottom: 16px;
+    }
+    .calc-sec .section-head .eyebrow {
+      margin-bottom: 6px;
+    }
+    .calc-sub {
+      display: none;
+    }
+
+    /* tighter sections */
+    .pr,
+    .typ,
+    .gd,
+    .aud,
+    .how,
+    .seo-text,
+    .related {
+      padding-block: 32px;
+    }
+    .pr .section-head {
+      margin-bottom: 14px;
+      gap: 6px;
+    }
+    .pr .section-head .eyebrow {
+      margin-bottom: 6px;
+    }
+    .pr .section-head p {
+      font-size: 0.86rem;
+    }
+
+    .pr-sub {
+      font-size: 0.86rem;
+    }
+
+    /* price: demo on top, table compact */
+    .pr-grid {
+      gap: 14px;
+    }
+    .pr-demo {
+      padding: 16px 12px 14px;
+      border-radius: 24px 24px 24px 60px;
+    }
+    .pr-art :global(svg) {
+      zoom: 0.62;
+    }
+    .pr-formula {
+      gap: 4px;
+      font-size: 0.8rem;
+    }
+    .pr-formula span,
+    .pr-formula b {
+      padding: 3px 7px;
+      border-radius: 9px;
+    }
+    .pr-offs li {
+      padding: 6px;
+    }
+    .pr-offs li span {
+      font-size: 0.62rem;
+    }
+    .pr-offs li b {
+      font-size: 0.92rem;
+    }
+    .pr-tbl {
+      border-radius: 18px;
+      font-size: 0.8rem;
+    }
+    .pr-tbl th,
+    .pr-tbl td {
+      padding: 7px 8px;
+    }
+    .pr-note {
+      font-size: 0.8rem;
+    }
+    .pk-sheet {
+      zoom: 0.7;
+    }
+    .pk-trio {
+      zoom: 0.62;
+    }
+    .pk-tiers li {
+      padding: 6px 8px;
+    }
+    .pk-tiers b {
+      font-size: 1rem;
+    }
+
+    /* roll or pin */
+    .typ .section-head {
+      margin-bottom: 14px;
+      gap: 6px;
+    }
+    .typ .section-head .eyebrow {
+      margin-bottom: 6px;
+    }
+    .typ .section-head p {
+      font-size: 0.86rem;
+    }
+    .typ-grid {
+      gap: 12px;
+    }
+    .typ-card {
+      border-radius: 24px 24px 24px 8px;
+    }
+    .typ-art {
+      height: 200px;
+      padding: 14px 10px 34px;
+    }
+    .typ-art :global(svg) {
+      zoom: 0.66;
+    }
+    .typ-flip {
+      bottom: 8px;
+      font-size: 0.64rem;
+    }
+    .typ-body {
+      gap: 8px;
+      padding: 14px 14px 16px;
+    }
+    .typ-top h3 {
+      font-size: 1.15rem;
+    }
+    .typ-sizes,
+    .typ-text {
+      font-size: 0.86rem;
+    }
+    .typ-points li {
+      padding: 3px 9px;
+      font-size: 0.74rem;
+    }
+    .typ-tbl {
+      font-size: 0.76rem;
+    }
+    .typ-tbl th,
+    .typ-tbl td {
+      padding: 6px 7px;
+    }
+
+    /* picture guide: small badge left, list compact */
+    .gd-grid {
+      gap: 14px;
+    }
+    .gd-art {
+      max-width: none;
+      padding: 16px;
+      border-radius: 24px 24px 60px 24px;
+    }
+    .gd-art :global(svg) {
+      width: min(62%, 220px);
+    }
+    .gd-list {
+      gap: 8px;
+    }
+    .gd-list li {
+      grid-template-columns: 30px 1fr;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 18px 18px 18px 6px;
+    }
+    .gd-num {
+      width: 30px;
+      height: 30px;
+      font-size: 0.8rem;
+    }
+    .gd-list h3 {
+      margin-top: 4px;
+      font-size: 0.95rem;
+    }
+    .gd-list p,
+    .gd-note,
+    .gd-lead {
+      font-size: 0.82rem;
+    }
+    /* audience: compact 2×2 */
+    .aud-title {
+      margin-bottom: 14px;
+    }
+    .aud .eyebrow {
+      margin-bottom: 6px;
+    }
+    .aud-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .aud-card {
+      gap: 4px;
+      padding: 12px 12px 30px;
+      border-radius: 20px 20px 20px 6px;
+    }
+    .aud-card h3 {
+      font-size: 0.95rem;
+      line-height: 1.2;
+    }
+    .aud-card p {
+      font-size: 0.78rem;
+      line-height: 1.38;
+    }
+    .aud-tag {
+      padding: 2px 8px;
+      font-size: 0.64rem;
+    }
+    .aud-num {
+      right: 10px;
+      bottom: -8px;
+      font-size: 2.4rem;
+    }
+
+    /* how to order */
+    .how-grid h2 {
+      margin-bottom: 16px;
+    }
+    .how-steps li {
+      grid-template-columns: 36px 1fr;
+      gap: 12px;
+      padding-bottom: 14px;
+    }
+    .how-steps li:not(:last-child)::before {
+      left: 17px;
+      top: 36px;
+    }
+    .how-dot {
+      width: 36px;
+      height: 36px;
+      font-size: 0.85rem;
+    }
+    .how-steps h3 {
+      margin: 6px 0 2px;
+      font-size: 0.98rem;
+    }
+    .how-steps p {
+      font-size: 0.84rem;
+      line-height: 1.4;
+    }
+    .how-side {
+      gap: 10px;
+    }
+    .how-card,
+    .how-b2b {
+      gap: 6px;
+      padding: 16px;
+      border-radius: 24px;
+    }
+    .how-card li {
+      font-size: 0.82rem;
+    }
+    .how-card summary {
+      cursor: pointer;
+    }
+    .how-card summary h3 {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-size: 1rem;
+    }
+    .how-card summary h3::after {
+      content: '+';
+      display: grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      flex: none;
+      border-radius: 50%;
+      border: 1.5px solid var(--ink);
+      font-size: 1rem;
+    }
+    .how-card[open] summary h3::after {
+      content: '−';
+    }
+    .how-side h3 {
+      font-size: 1rem;
+    }
+    .how-chips li {
+      padding: 4px 9px;
+      font-size: 0.76rem;
+    }
+  }
+
+  @media (max-width: 560px) {
+    /* seo text: first lines + «Читать полностью» */
+    .seo-text h2 {
+      margin-bottom: 14px;
+    }
+    .seo-cols {
+      grid-template-columns: 1fr;
+      gap: 14px;
+      max-height: 230px;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(#000 60%, transparent);
+      mask-image: linear-gradient(#000 60%, transparent);
+    }
+    .seo-toggle:checked + .seo-cols {
+      max-height: none;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+    .seo-more-btn {
+      display: inline-block;
+      margin-top: 8px;
+      font-weight: 700;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .seo-toggle:checked ~ .seo-more-btn {
+      display: none;
+    }
+    /* «Ещё печатаем»: 2×2 tiles with the picture on top */
+    .related-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .related-card {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 8px 10px 12px;
+      border-radius: 18px;
+      font-size: 0.88rem;
+      line-height: 1.25;
+    }
+    .related-card img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 10;
+      border-radius: 12px;
+    }
+    .related-card :global(svg) {
+      display: none;
+    }
+    .related-h {
+      margin-bottom: 14px;
+    }
+  }
+</style>

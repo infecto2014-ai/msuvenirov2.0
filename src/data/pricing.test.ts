@@ -35,6 +35,30 @@ describe('pricing', () => {
     expect([p(25), p(49), p(50), p(200)]).toEqual([200, 200, 185, 170]);
   });
 
+  it('3D stickers: 5/7 ₽ per cm², min 30, −5% from 100, −10% from 200', () => {
+    const { p, s } = sel('stickers', 'sticker-3d', { qty: 30, dims: { w: 4, h: 4 } });
+    expect(p.quote(s).unit).toBe(80);
+    expect(p.quote(s).total).toBe(2400);
+    expect(p.quote({ ...s, options: { cut: 'complex' } }).unit).toBe(112);
+    expect(p.quote({ ...s, qty: 100 }).unit).toBe(76);
+    expect(p.quote({ ...s, qty: 200 }).unit).toBe(72);
+    expect(p.quote({ ...s, qty: 29 }).error).toBeDefined();
+  });
+
+  it('sticker pack: same formula, discount by the total number of stickers', () => {
+    const { p, s } = sel('stickers', 'sticker-pack', { qty: 5, options: { count: '6' }, dims: { w: 4, h: 4 } });
+    expect(p.quote(s).unit).toBe(6 * 80);
+    expect(p.quote({ ...s, qty: 4 }).error).toBeDefined(); // 24 stickers < 30
+    expect(p.quote({ ...s, qty: 17 }).unit).toBe(6 * 76); // 102 stickers
+  });
+
+  it('set of 3×3 stickers: 3 — 200, 5 — 150, 10–30 — 100 ₽/шт', () => {
+    const p = findProduct('stickers', 'sticker-set')!;
+    const at = (qty: number) => p.quote({ ...defaultSelection(p), qty }).unit;
+    expect([at(3), at(4), at(5), at(9), at(10), at(30)]).toEqual([200, 200, 150, 150, 100, 100]);
+    expect(p.table?.columns).toEqual(['3–4 шт', '5–9 шт', '10–30 шт']);
+  });
+
   it('t-shirt = blank + DTF print, extra prints at 70% and 50%', () => {
     const { p, s } = sel('textile', 'tshirt-unisex', { options: { print1: 'a4', print2: 'a6', print3: 'a6' }, qty: 1 });
     // 750 + 800 + 600*0.7 + 600*0.5
@@ -85,12 +109,6 @@ describe('pricing', () => {
   it('hints the next cheaper tier', () => {
     const { p, s } = sel('mugs', 'mug', { qty: 3 });
     expect(p.quote(s).next).toEqual({ qty: 5, unit: 450 });
-  });
-
-  it('3D stickers respect the minimum order sum', () => {
-    const { p, s } = sel('stickers', 'sticker-3d', { dims: { w: 2, h: 2 }, qty: 10 });
-    expect(p.quote(s).total).toBe(2000);
-    expect(p.quote({ ...s, qty: 200 }).total).toBe(2 * 2 * 5 * 200);
   });
 
   it('wide format is priced by area', () => {

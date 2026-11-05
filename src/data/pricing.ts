@@ -849,8 +849,38 @@ const magnets: Category = {
 };
 
 // ---------------------------------------------------------------- 3D stickers (area)
+// Owner (05.11.2026): epoxy 3D stickers, minimum 30 pcs; 5 ₽/см² simple cut, 7 ₽/см² complex cut;
+// −5% from 100 pcs, −10% from 200 pcs. A sticker pack (several designs) is priced by the same formula
+// (or individually); a set of 3×3 cm stickers: 3 pcs — 200 ₽/шт, 5 — 150 ₽/шт, 10–30 — 100 ₽/шт.
 
-const STICKER_MIN_ORDER = 2000;
+export const STICKER_MIN = 30;
+export const stickerRate = { simple: 5, complex: 7 } as const;
+/** discount by the total number of stickers in the order */
+export const stickerDiscounts = [
+  { from: 100, off: 0.05 },
+  { from: 200, off: 0.1 },
+];
+const stickerOff = (count: number) => stickerDiscounts.filter((d) => count >= d.from).reduce((m, d) => Math.max(m, d.off), 0);
+const cutGroup: OptionGroup = {
+  id: 'cut',
+  label: 'Вырубка',
+  type: 'one',
+  choices: [
+    { id: 'simple', label: 'Простая', hint: `круг, квадрат, прямоугольник · ${stickerRate.simple} ₽/см²` },
+    { id: 'complex', label: 'Сложная', hint: `по контуру рисунка · ${stickerRate.complex} ₽/см²` },
+  ],
+  default: 'simple',
+};
+const rateOf = (sel: Selection) => (one(sel, 'cut', 'simple') === 'complex' ? stickerRate.complex : stickerRate.simple);
+const stickerTable = (label: string): PriceTable => ({
+  columns: [`${STICKER_MIN}–99 шт`, '100–199 шт', 'от 200 шт'],
+  rows: [
+    { label: `${label}: простая вырубка, за см²`, cells: [0, 0.05, 0.1].map((o) => rub(round(stickerRate.simple * (1 - o)))) },
+    { label: `${label}: сложная вырубка, за см²`, cells: [0, 0.05, 0.1].map((o) => rub(round(stickerRate.complex * (1 - o)))) },
+  ],
+  note: `Минимальный заказ — ${STICKER_MIN} стикеров. Цена стикера = площадь (ширина × высота, см²) × цена за см².`,
+});
+const PACK_SIZES = [3, 4, 5, 6, 8, 10, 12];
 
 const stickers: Category = {
   id: 'stickers',
@@ -860,52 +890,106 @@ const stickers: Category = {
     {
       id: 'sticker-3d',
       name: '3D-стикеры с эпоксидной смолой',
-      short: 'объёмные наклейки с логотипом',
+      short: `объёмные наклейки, от ${STICKER_MIN} шт`,
       image: '/img/showcase/stickers-3d.webp',
-      qty: { min: 1, max: 2000, default: 50 },
-      options: [
-        {
-          id: 'cut',
-          label: 'Форма',
-          type: 'one',
-          choices: [
-            { id: 'simple', label: 'Простая', hint: 'круг, квадрат, прямоугольник' },
-            { id: 'complex', label: 'Сложная', hint: 'по контуру рисунка' },
-          ],
-          default: 'simple',
-        },
-      ],
+      qty: { min: STICKER_MIN, max: 2000, default: 50 },
+      options: [cutGroup],
       dims: [
         { id: 'w', label: 'Ширина', unit: 'см', min: 1, max: 20, default: 4 },
         { id: 'h', label: 'Высота', unit: 'см', min: 1, max: 20, default: 4 },
       ],
-      fromPrice: 5,
+      fromPrice: stickerRate.simple,
       fromUnit: 'см²',
-      table: {
-        columns: ['Цена за см²'],
-        rows: [
-          { label: 'Простая форма', cells: ['5 ₽'] },
-          { label: 'Сложная форма (по контуру)', cells: ['6,5 ₽'] },
-          { label: 'Минимальный заказ', cells: [rub(STICKER_MIN_ORDER)] },
-        ],
+      table: stickerTable('Стикер'),
+      ladder: (sel) => {
+        const base = round((sel.dims.w ?? 4) * (sel.dims.h ?? 4) * rateOf(sel));
+        return [{ from: STICKER_MIN, price: base }, ...stickerDiscounts.map((d) => ({ from: d.from, price: round(base * (1 - d.off)) }))];
       },
       quote: (sel) => {
-        const rate = one(sel, 'cut', 'simple') === 'complex' ? 6.5 : 5;
-        const area = (sel.dims.w ?? 4) * (sel.dims.h ?? 4);
-        const unit = round(area * rate);
-        const raw = unit * sel.qty;
-        const total = Math.max(STICKER_MIN_ORDER, Math.round(raw));
-        const notes = [`Площадь одного стикера — ${area} см² × ${String(rate).replace('.', ',')} ₽/см².`];
-        if (raw < STICKER_MIN_ORDER) notes.push(`Минимальная сумма заказа — ${STICKER_MIN_ORDER.toLocaleString('ru-RU')} ₽.`);
+        const rate = rateOf(sel);
+        const w = sel.dims.w ?? 4;
+        const h = sel.dims.h ?? 4;
+        const area = round(w * h);
+        const off = stickerOff(sel.qty);
+        const unit = round(area * rate * (1 - off));
+        const notes = [`Площадь стикера ${String(area).replace('.', ',')} см² × ${rate} ₽/см²${off ? ` − ${Math.round(off * 100)}% за тираж` : ''}.`];
+        const next = stickerDiscounts.find((d) => d.from > sel.qty);
         return {
-          unit: round(total / sel.qty),
-          total,
-          breakdown: [{ label: `Стикер ${sel.dims.w ?? 4}×${sel.dims.h ?? 4} см`, amount: unit, per: 'шт' }],
+          unit,
+          total: Math.round(unit * sel.qty),
+          breakdown: [{ label: `Стикер ${w}×${h} см, ${rate === stickerRate.complex ? 'сложная' : 'простая'} вырубка${off ? ` (−${Math.round(off * 100)}%)` : ''}`, amount: unit, per: 'шт' }],
+          next: next ? { qty: next.from, unit: round(area * rate * (1 - next.off)) } : undefined,
           notes,
+          error: sel.qty < STICKER_MIN ? `Минимальный заказ — ${STICKER_MIN} стикеров.` : undefined,
         };
       },
     },
-    fixed('sticker-set', 'Набор 3D-стикеров, 3 шт', 500, { short: 'по вашим фото или картинкам' }),
+    {
+      id: 'sticker-pack',
+      name: 'Стикерпак из 3D-стикеров',
+      short: 'набор из нескольких разных стикеров',
+      image: '/img/showcase/stickers-3d.webp',
+      qty: { min: 1, max: 500, default: 5 },
+      options: [
+        {
+          id: 'count',
+          label: 'Стикеров в одном наборе',
+          type: 'one',
+          choices: PACK_SIZES.map((n) => ({ id: String(n), label: `${n} шт` })),
+          default: '6',
+        },
+        cutGroup,
+      ],
+      dims: [
+        { id: 'w', label: 'Ширина стикера', unit: 'см', min: 1, max: 20, default: 4 },
+        { id: 'h', label: 'Высота стикера', unit: 'см', min: 1, max: 20, default: 4 },
+      ],
+      fromPrice: stickerRate.simple,
+      fromUnit: 'см²',
+      table: {
+        columns: ['Цена'],
+        rows: [{ label: 'Стикерпак', cells: ['по той же цене за см²'] }],
+        note: `Стикеры в наборе считаются по площади, как отдельные; минимум — ${STICKER_MIN} стикеров в заказе. Стикеры разного размера — посчитаем индивидуально.`,
+      },
+      ladder: (sel) => {
+        const n = Number(one(sel, 'count', '6'));
+        const base = round(n * (sel.dims.w ?? 4) * (sel.dims.h ?? 4) * rateOf(sel));
+        const first = Math.ceil(STICKER_MIN / n);
+        return [{ from: first, price: base }, ...stickerDiscounts.map((d) => ({ from: Math.max(first, Math.ceil(d.from / n)), price: round(base * (1 - d.off)) }))];
+      },
+      quote: (sel) => {
+        const n = Number(one(sel, 'count', '6'));
+        const rate = rateOf(sel);
+        const w = sel.dims.w ?? 4;
+        const h = sel.dims.h ?? 4;
+        const count = n * sel.qty;
+        const off = stickerOff(count);
+        const sticker = round(w * h * rate * (1 - off));
+        const unit = round(sticker * n);
+        const next = stickerDiscounts.find((d) => d.from > count);
+        const packsMin = Math.ceil(STICKER_MIN / n);
+        return {
+          unit,
+          total: Math.round(unit * sel.qty),
+          breakdown: [{ label: `${n} стикеров ${w}×${h} см по ${rub(sticker)}${off ? ` (−${Math.round(off * 100)}%)` : ''}`, amount: unit, per: 'шт' }],
+          next: next ? { qty: Math.ceil(next.from / n), unit: round(w * h * rate * (1 - next.off) * n) } : undefined,
+          notes: [
+            `В заказе ${count} стикеров (${sel.qty} × ${n}). Скидка считается по общему числу стикеров: −5% от 100, −10% от 200.`,
+            'Стикеры разного размера или сложная раскладка — посчитаем индивидуально.',
+          ],
+          error: count < STICKER_MIN ? `Минимальный заказ — ${STICKER_MIN} стикеров: при ${n} в наборе это от ${packsMin} наборов.` : undefined,
+        };
+      },
+    },
+    tiered({
+      id: 'sticker-set',
+      name: 'Набор 3D-стикеров 3×3 см',
+      short: 'по вашим фото или картинкам, от 3 шт',
+      image: '/img/showcase/stickers-3d.webp',
+      qty: { min: 3, max: 30, default: 3, individualAbove: true },
+      variants: [{ id: 'std', label: '3×3 см', tiers: tiers([3, 5, 10], [200, 150, 100]) }],
+      notes: ['Стикеры 3×3 см по вашим фото или картинкам. Больше 30 шт — по цене за см² (3D-стикеры).'],
+    }),
   ],
 };
 
