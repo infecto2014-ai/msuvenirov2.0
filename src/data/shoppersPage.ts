@@ -2,7 +2,7 @@
 // Prices are NOT written here — every number in rubles comes from src/data/pricing.ts
 // (category 'textile': 'shopper' — cotton shopper, DTF; 'shopper-sub' — light shopper for sublimation).
 // Rules (owner): no delivery, no «same day» promises, no rush surcharge; production time is agreed per order.
-// Cotton shopper: fabric, density, size and handles are NOT confirmed by the owner yet — shown as «уточняйте».
+// Cotton shopper (owner, 05.11.2026): TEXTILLER®, 100% cotton, twill, 240 g/m², 38×42 cm, handle height 35 cm, width 3 cm. Colours — not confirmed yet.
 // Light shopper (owner, 05.11.2026): colour «небелёный лён», 330 g/m², 36×42 cm (±3 cm), handles 70 cm, from 10 pcs.
 import type { Faq } from './types';
 
@@ -56,10 +56,10 @@ export const shoppersPage = {
       tag: 'от 1 штуки',
       tech: 'DTF',
       specs: [
-        { label: 'Материал', value: 'хлопок' },
+        { label: 'Материал', value: '100% хлопок, саржа, 240 г/м²' },
         { label: 'Цвет', value: 'уточняйте наличие' },
-        { label: 'Размер', value: 'уточняйте', todo: true },
-        { label: 'Ручки', value: 'длинные, уточняйте', todo: true },
+        { label: 'Размер', value: '38 × 42 см' },
+        { label: 'Ручки', value: 'высота 35 см, ширина 3 см, укреплены строчкой' },
         { label: 'Печать', value: 'DTF, любые цвета' },
       ],
       use: 'Подарок, мерч художника, шоппер для себя или небольшая партия — когда нужно от одной штуки.',
@@ -73,7 +73,7 @@ export const shoppersPage = {
       tag: 'для тиража',
       tech: 'Сублимация',
       specs: [
-        { label: 'Материал', value: 'ткань для сублимации, 330 г/м²' },
+        { label: 'Материал', value: 'синтетическая ткань для сублимации, 330 г/м²' },
         { label: 'Цвет', value: 'небелёный лён' },
         { label: 'Размер', value: '36 × 42 см (±3 см)' },
         { label: 'Ручки', value: '70 см' },
@@ -201,7 +201,7 @@ export const buildShopperFaq = (p: { oneDtf: string; sub10: string; dtfMax: numb
   },
   {
     q: 'Какой размер у шопперов?',
-    a: 'Светлый шоппер для сублимации — 36×42 см (±3 см), ткань 330 г/м², ручки 70 см. Размер, состав и плотность хлопкового шоппера уточняйте у мастера — модели в наличии бывают разные.',
+    a: 'Хлопковый шоппер TEXTILLER® — 38×42 см, 100% хлопок (саржа), 240 г/м², ручки высотой 35 см и шириной 3 см, швы на ручках укреплены дополнительной строчкой. Светлый шоппер для сублимации — 36×42 см (±3 см), синтетическая ткань 330 г/м², ручки 70 см. По цвету они почти одинаковые.',
   },
   {
     q: 'Какого размера принт поместится?',
@@ -221,7 +221,7 @@ export const buildShopperFaq = (p: { oneDtf: string; sub10: string; dtfMax: numb
   },
   {
     q: 'Как стирать шоппер с печатью?',
-    a: 'Хлопковый шоппер с DTF-принтом стирайте навыворот вручную или в деликатном режиме до 30 °C, без отбеливателя, гладьте с изнанки. Как ухаживать за светлым шоппером с сублимацией, подскажем при заказе.',
+    a: 'Хлопковый шоппер с DTF-принтом стирайте навыворот вручную или в деликатном режиме до 30 °C, без отбеливателя, гладьте с изнанки. Светлый шоппер с сублимацией можно стирать в машинке при 30–40 °C.',
   },
   {
     q: 'Делаете шопперы оптом для мероприятий и компаний?',

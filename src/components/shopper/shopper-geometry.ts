@@ -33,7 +33,8 @@ export const MODELS: Record<ShopperType, Model> = {
   // сублимация: светлый шоппер цвета небелёного льна, 36×42 см, ручки 70 см, 330 г/м²
   linen: { w: 360, h: 420, strap: 700, strapW: 30, strapGap: 150, hem: 30, gsm: 330, name: 'Шоппер для сублимации, цвет небелёного льна' },
   // DTF: хлопковый шоппер 38×42 см, ручки тоньше
-  cotton: { w: 380, h: 420, strap: 700, strapW: 24, strapGap: 150, hem: 26, name: 'Хлопковый шоппер' },
+  cotton: { w: 380, h: 420, strap: 700, strapW: 30, // owner, 05.11.2026: TEXTILLER 38×42, handle height 35 cm, width 3 cm
+    strapGap: 150, hem: 26, name: 'Хлопковый шоппер' },
 };
 
 /**
