@@ -25,6 +25,16 @@ describe('pricing', () => {
     expect(p.quote({ ...sel('mugs', 'mug', { options: { variant: 'chameleon' } }).s, qty: 1 }).unit).toBe(1100);
   });
 
+  it('badges: first discount from 50 pcs (was 100), prices unchanged', () => {
+    const roll = findProduct('badges', 'badge-roll')!;
+    const r = (qty: number, variant = 'd38') => roll.quote({ ...defaultSelection(roll), qty, options: { variant } }).unit;
+    expect([r(10), r(49), r(50), r(199), r(200), r(500)]).toEqual([85, 85, 45, 45, 38, 30]);
+    expect([r(49, 'd56'), r(50, 'd56')]).toEqual([100, 49]);
+    const pin = findProduct('badges', 'badge-pin')!;
+    const p = (qty: number) => pin.quote({ ...defaultSelection(pin), qty, options: { variant: 'd25' } }).unit;
+    expect([p(25), p(49), p(50), p(200)]).toEqual([200, 200, 185, 170]);
+  });
+
   it('t-shirt = blank + DTF print, extra prints at 70% and 50%', () => {
     const { p, s } = sel('textile', 'tshirt-unisex', { options: { print1: 'a4', print2: 'a6', print3: 'a6' }, qty: 1 });
     // 750 + 800 + 600*0.7 + 600*0.5

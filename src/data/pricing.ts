@@ -749,8 +749,9 @@ const mugs: Category = {
 
 // ---------------------------------------------------------------- badges, keychains, magnets
 
-const badgeTiers = [25, 100, 200, 300, 400, 500];
-const rollTiers = [10, 100, 200, 300, 400, 500]; // from 10 pcs at the 25-pcs price
+// first discount from 50 pcs (owner, 05.11.2026; was 100), prices unchanged
+const badgeTiers = [25, 50, 200, 300, 400, 500];
+const rollTiers = [10, 50, 200, 300, 400, 500]; // from 10 pcs at the 25-pcs price
 
 const badges: Category = {
   id: 'badges',
