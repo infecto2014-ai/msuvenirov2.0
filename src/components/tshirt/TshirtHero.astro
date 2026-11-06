@@ -1,0 +1,542 @@
+---
+// First screen of the t-shirt page: title with a marker word, lead, chips, two buttons, three big facts;
+// on the right a collage — the page photo, two real works as pinned polaroids, CMYK dots and a price sticker.
+// Every number comes from props (page data and pricing.ts), nothing is typed here.
+import '@fontsource/caveat/600.css';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Icon from '@/components/Icon.astro';
+import { rub } from '@/data/pricing';
+import type { ServicePage } from '@/data/types';
+
+interface Props {
+  page: ServicePage;
+  crumbs: { name: string; href: string }[];
+  /** lowest «from» price of a t-shirt with print, from pricing.ts */
+  from: number;
+  /** short line over the title */
+  kicker: string;
+  /** word of the h1 to underline with the marker */
+  mark: string;
+  /** three big facts under the buttons */
+  facts: { big: string; small: string }[];
+  /** two real works pinned next to the photo */
+  polaroids: { src: string; alt: string; note: string }[];
+}
+const { page, crumbs, from, kicker, mark, facts, polaroids } = Astro.props;
+const at = page.h1.indexOf(mark);
+const h1 = at >= 0 ? [page.h1.slice(0, at), mark, page.h1.slice(at + mark.length)] : [page.h1, '', ''];
+---
+
+<section class="th">
+  <div class="th-bg halftone" aria-hidden="true"></div>
+  <div class="wrap th-grid">
+    <div class="th-text">
+      <Breadcrumbs items={crumbs} />
+      <p class="th-kicker mono"><span class="th-cmyk" aria-hidden="true"><i></i><i></i><i></i><i></i></span>{kicker}</p>
+      <h1>
+        {h1[0]}{h1[1] && <span class="th-mark">{h1[1]}</span>}{h1[2]}
+      </h1>
+      <p class="lead">{page.lead}</p>
+      <ul class="th-chips">
+        {page.highlights.map((h) => <li><Icon name="check" size={18} /> {h}</li>)}
+      </ul>
+      <div class="th-actions">
+        <a class="btn btn-magenta" href="#calc"><Icon name="calc" size={20} /> <span>Рассчитать<span class="th-long"> стоимость</span></span></a>
+        <button type="button" class="btn btn-ghost" data-order><Icon name="upload" size={20} /> <span>Отправить макет</span></button>
+      </div>
+      <dl class="th-facts">
+        {
+          facts.map((f) => (
+            <div>
+              <dt class="mono">{f.big}</dt>
+              <dd>{f.small}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+
+    <div class="th-media">
+      <span class="th-dot th-dot-c" aria-hidden="true"></span>
+      <span class="th-dot th-dot-y" aria-hidden="true"></span>
+      <span class="th-dot th-dot-m" aria-hidden="true"></span>
+      <figure class="th-photo">
+        <img src={page.image} alt={page.imageAlt} width="519" height="696" fetchpriority="high" decoding="async" />
+      </figure>
+      {
+        polaroids.slice(0, 2).map((p, i) => (
+          <figure class={`th-pol th-pol-${i + 1}`}>
+            <span class="th-pin" aria-hidden="true" />
+            <span class="th-pol-frame">
+              <img src={p.src} alt={p.alt} width="240" height="240" loading="lazy" decoding="async" />
+            </span>
+            <figcaption>{p.note}</figcaption>
+          </figure>
+        ))
+      }
+      <p class="th-price">
+        <span>от</span> <b class="mono">{rub(from)}</b>
+        <small>футболка с печатью</small>
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .th {
+    position: relative;
+    isolation: isolate;
+    overflow: clip;
+    padding-block: clamp(24px, 3.5vw, 44px) clamp(36px, 4.5vw, 64px);
+  }
+  /* soft halftone field fading towards the text */
+  .th-bg {
+    position: absolute;
+    inset: 0 0 0 46%;
+    z-index: -1;
+    --dot: rgba(22, 20, 27, 0.09);
+    -webkit-mask: radial-gradient(70% 70% at 70% 45%, #000 30%, transparent 75%);
+    mask: radial-gradient(70% 70% at 70% 45%, #000 30%, transparent 75%);
+  }
+  .th-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+    gap: clamp(28px, 5vw, 72px);
+    align-items: center;
+  }
+  .th-text {
+    display: grid;
+    gap: 20px;
+    justify-items: start;
+  }
+  .th-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 4px 0 -6px;
+    padding: 6px 14px 6px 8px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .th-cmyk {
+    display: inline-flex;
+  }
+  .th-cmyk i {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: -3px;
+    border: 1.5px solid var(--ink);
+  }
+  .th-cmyk i:nth-child(1) { background: var(--c); }
+  .th-cmyk i:nth-child(2) { background: var(--m); }
+  .th-cmyk i:nth-child(3) { background: var(--y); }
+  .th-cmyk i:nth-child(4) { background: var(--paper); margin-right: 0; }
+  .th-text h1 {
+    font-size: clamp(2.4rem, 5.2vw, 4.3rem);
+    line-height: 1.02;
+  }
+  .th-mark {
+    position: relative;
+    white-space: nowrap;
+    padding-inline: 0.04em;
+    background: linear-gradient(transparent 62%, var(--y) 62% 92%, transparent 92%);
+  }
+  .th-chips {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .th-chips li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+  .th-chips li:nth-child(3n + 1) :global(svg) { color: var(--c-ink); }
+  .th-chips li:nth-child(3n + 2) :global(svg) { color: var(--m-ink); }
+  .th-chips li:nth-child(3n + 3) :global(svg) { color: #8a6d00; }
+  .th-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .th-facts {
+    margin: 6px 0 0;
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 0;
+    border-top: 1.5px solid var(--line-strong);
+    padding-top: 16px;
+  }
+  .th-facts div {
+    display: grid;
+    gap: 2px;
+    padding-right: clamp(16px, 2.4vw, 32px);
+  }
+  .th-facts div + div {
+    padding-left: clamp(16px, 2.4vw, 32px);
+    border-left: 1.5px dashed var(--line-strong);
+  }
+  .th-facts dt {
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+  }
+  .th-facts dd {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.86rem;
+    line-height: 1.35;
+    max-width: 18ch;
+  }
+
+  /* ---------- collage */
+  .th-media {
+    position: relative;
+    min-height: 560px;
+  }
+  .th-photo {
+    position: absolute;
+    top: 0;
+    right: 2%;
+    width: 66%;
+    margin: 0;
+    z-index: 1;
+    border-radius: 44px 44px 44px 150px;
+    overflow: clip;
+    box-shadow: 0 30px 60px -30px rgba(22, 20, 27, 0.55);
+  }
+  .th-photo img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    /* keep the top: the corner of the source has a watermark */
+    object-position: 50% 0;
+    background: var(--paper-2);
+  }
+  .th-dot {
+    position: absolute;
+    border-radius: 50%;
+    mix-blend-mode: multiply;
+    z-index: 0;
+  }
+  .th-dot-c {
+    width: 46%;
+    aspect-ratio: 1;
+    background: var(--c);
+    top: -4%;
+    right: -10%;
+    opacity: 0.85;
+  }
+  .th-dot-y {
+    width: 34%;
+    aspect-ratio: 1;
+    background: var(--y);
+    bottom: 0;
+    right: 26%;
+  }
+  .th-dot-m {
+    width: 13%;
+    aspect-ratio: 1;
+    background: var(--m);
+    top: 46%;
+    left: 4%;
+    opacity: 0.9;
+  }
+  /* polaroids with a push pin */
+  .th-pol {
+    position: absolute;
+    z-index: 2;
+    width: 36%;
+    margin: 0;
+    padding: 10px 10px 0;
+    border-radius: 3px;
+    background: #fff;
+    box-shadow:
+      0 0 0 1px rgba(22, 20, 27, 0.06),
+      0 22px 34px -18px rgba(22, 20, 27, 0.55);
+    transition: transform 0.25s cubic-bezier(0.34, 1.35, 0.64, 1);
+  }
+  .th-pol-1 {
+    left: 0;
+    top: 9%;
+    transform: rotate(-7deg);
+  }
+  .th-pol-2 {
+    left: 14%;
+    bottom: 2%;
+    width: 33%;
+    transform: rotate(5deg);
+    z-index: 3;
+  }
+  @media (hover: hover) {
+    .th-pol:hover {
+      transform: rotate(0deg) translateY(-6px);
+    }
+  }
+  .th-pol-frame {
+    display: block;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: var(--paper-2);
+  }
+  .th-pol-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .th-pol figcaption {
+    padding: 6px 2px 10px;
+    font-family: 'Caveat', 'Segoe Print', cursive;
+    font-weight: 600;
+    font-size: 1.35rem;
+    line-height: 1.05;
+    text-align: center;
+    color: #3d3944;
+  }
+  .th-pin {
+    position: absolute;
+    top: -11px;
+    left: 50%;
+    width: 24px;
+    height: 24px;
+    margin-left: -12px;
+    border-radius: 50%;
+    background:
+      radial-gradient(ellipse 34% 24% at 36% 28%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 100%),
+      radial-gradient(circle at 40% 36%, #ff6fb5 0, var(--m) 50%, #8c004c 100%);
+    box-shadow:
+      inset -2px -3px 4px rgba(0, 0, 0, 0.25),
+      3px 5px 6px rgba(22, 20, 27, 0.35);
+  }
+  .th-pol-2 .th-pin {
+    background:
+      radial-gradient(ellipse 34% 24% at 36% 28%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 100%),
+      radial-gradient(circle at 40% 36%, #7fd8ff 0, var(--c) 50%, #005c80 100%);
+  }
+  /* price sticker on the photo corner */
+  .th-price {
+    position: absolute;
+    z-index: 4;
+    right: 0;
+    top: 58%;
+    display: grid;
+    justify-items: start;
+    margin: 0;
+    padding: 12px 20px 14px;
+    border-radius: 20px 20px 20px 6px;
+    background: var(--y);
+    color: var(--ink);
+    line-height: 1;
+    transform: rotate(-4deg);
+    box-shadow: 0 16px 26px -14px rgba(22, 20, 27, 0.6);
+  }
+  .th-price span {
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+  .th-price b {
+    font-size: clamp(2rem, 3.4vw, 2.7rem);
+    font-weight: 800;
+    letter-spacing: -0.05em;
+  }
+  .th-price small {
+    margin-top: 4px;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  @media (max-width: 1100px) {
+    .th-media {
+      min-height: 480px;
+    }
+    .th-facts {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 860px) {
+    .th-grid {
+      grid-template-columns: 1fr;
+    }
+    .th-media {
+      width: min(520px, 100%);
+      justify-self: center;
+    }
+  }
+
+  /* ---------- phone: compact first screen — title, lead with a small photo, chips in one line, buttons, facts */
+  @media (max-width: 760px) {
+    .th {
+      padding-block: 14px 44px;
+    }
+    .th-bg {
+      inset: 0 0 40% 40%;
+    }
+    .th-grid {
+      grid-template-columns: minmax(0, 1fr) 118px;
+      gap: 12px 14px;
+      align-items: start;
+    }
+    .th-text {
+      display: contents;
+    }
+    .th-text > :global(.crumbs),
+    .th-text h1,
+    .th-chips,
+    .th-actions,
+    .th-facts {
+      grid-column: 1 / -1;
+    }
+    .th-text > :global(.crumbs) {
+      order: 1;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .th-text > :global(.crumbs) :global(ol) {
+      flex-wrap: nowrap;
+      white-space: nowrap;
+      font-size: 0.78rem;
+    }
+    .th-kicker {
+      display: none;
+    }
+    .th-text h1 {
+      order: 2;
+      font-size: clamp(1.75rem, 7.8vw, 2.15rem);
+    }
+    .lead {
+      order: 3;
+      grid-column: 1;
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+    .th-media {
+      order: 4;
+      grid-column: 2;
+      grid-row: 3;
+      width: auto;
+      min-height: 0;
+      padding-bottom: 14px;
+    }
+    .th-photo {
+      position: relative;
+      inset: auto;
+      width: 100%;
+      border-radius: 20px 20px 20px 52px;
+    }
+    .th-pol,
+    .th-dot-m {
+      display: none;
+    }
+    .th-dot-c {
+      width: 70%;
+      top: -10px;
+      right: -18px;
+    }
+    .th-dot-y {
+      width: 50%;
+      right: auto;
+      left: -14px;
+      bottom: 4px;
+    }
+    .th-price {
+      top: auto;
+      right: -6px;
+      bottom: 0;
+      padding: 6px 10px 7px;
+      border-radius: 12px 12px 12px 4px;
+    }
+    .th-price span {
+      font-size: 0.7rem;
+    }
+    .th-price b {
+      font-size: 1.15rem;
+    }
+    .th-price small {
+      display: none;
+    }
+    .th-chips {
+      order: 5;
+      flex-wrap: nowrap;
+      gap: 6px;
+      overflow-x: auto;
+      margin-inline: calc(var(--gutter) * -1);
+      padding-inline: var(--gutter);
+      scrollbar-width: none;
+    }
+    .th-chips::-webkit-scrollbar,
+    .th-text > :global(.crumbs)::-webkit-scrollbar {
+      display: none;
+    }
+    .th-chips li {
+      flex: none;
+      gap: 4px;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+    .th-chips :global(svg) {
+      width: 14px;
+      height: 14px;
+    }
+    .th-actions {
+      order: 6;
+      flex-wrap: nowrap;
+      gap: 8px;
+    }
+    .th-actions .btn {
+      flex: 1 1 0;
+      min-height: 46px;
+      padding: 0 12px;
+      gap: 6px;
+      font-size: 0.92rem;
+      white-space: nowrap;
+    }
+    .th-actions .btn :global(svg) {
+      width: 18px;
+      height: 18px;
+    }
+    .th-long {
+      display: none;
+    }
+    .th-facts {
+      order: 7;
+      margin: 0;
+      padding-top: 12px;
+    }
+    .th-facts div {
+      padding-right: 10px;
+    }
+    .th-facts div + div {
+      padding-left: 10px;
+    }
+    .th-facts dt {
+      font-size: 1.2rem;
+    }
+    .th-facts dd {
+      font-size: 0.74rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .th-pol {
+      transition: none;
+    }
+  }
+</style>

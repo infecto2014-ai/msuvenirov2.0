@@ -1,0 +1,529 @@
+---
+// «Изделие» on the t-shirt page (sits on a dark band): a big t-shirt that takes the colour you tap in the list
+// (colour list: square + name, no notes), a spec sheet, care tips and the size chart.
+// On a phone care tips and the size chart start folded. Data — src/data/garments.ts.
+import TshirtHead from './TshirtHead.astro';
+import logoSvg from '@/assets/logo.svg?raw';
+import type { GarmentInfo } from '@/data/types';
+
+interface Props {
+  info: GarmentInfo;
+  productName: string;
+  num: string;
+}
+const { info, productName, num } = Astro.props;
+
+/** dark print (ink) on light fabric, white print on dark fabric */
+const isLight = (hex: string) => {
+  const n = parseInt(hex.replace('#', ''), 16);
+  const [r, g, b] = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((v) => {
+    const s = v / 255;
+    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.32;
+};
+const colors = info.colors.map((c) => ({ ...c, print: isLight(c.hex) ? '#16141b' : '#ffffff' }));
+const first = colors[0];
+const logo = logoSvg.replace('<svg ', '<svg aria-hidden="true" focusable="false" ');
+---
+
+<section class="section tdet" aria-labelledby="tdet-h" data-tdet>
+  <div class="wrap">
+    <TshirtHead num={num} eyebrow="Изделие" id="tdet-h" title={`${productName}: цвет, ткань, размеры`} mark="цвет" tone="c" />
+
+    <div class="tdet-grid">
+      <!-- colours with a live preview -->
+      <div class="tdet-card tdet-colors">
+        <div class="tdet-shirt" style={`--shirt:${first.hex};--print:${first.print}`} aria-hidden="true">
+          <svg viewBox="0 0 300 320" class="tdet-shirt-svg">
+            <defs>
+              <linearGradient id="tdet-fold" x1="0" x2="1" y1="0" y2="0">
+                <stop offset="0" stop-color="#000" stop-opacity="0.16" />
+                <stop offset="0.25" stop-color="#000" stop-opacity="0" />
+                <stop offset="0.75" stop-color="#000" stop-opacity="0" />
+                <stop offset="1" stop-color="#000" stop-opacity="0.16" />
+              </linearGradient>
+            </defs>
+            <path class="tdet-shirt-body" d="M104 16c14 22 78 22 92 0l56 22 44 60-42 30-20-16v200c0 6-4 10-10 10H76c-6 0-10-4-10-10V112l-20 16L4 98l44-60z" />
+            <path d="M104 16c14 22 78 22 92 0l56 22 44 60-42 30-20-16v200c0 6-4 10-10 10H76c-6 0-10-4-10-10V112l-20 16L4 98l44-60z" fill="url(#tdet-fold)" />
+            <path class="tdet-shirt-collar" d="M104 16c14 30 78 30 92 0" />
+            <path class="tdet-shirt-seam" d="M66 112 48 40M234 112l18-72" />
+          </svg>
+          <span class="tdet-logo" set:html={logo} />
+        </div>
+        <div class="tdet-colors-side">
+          <h3>Цвет</h3>
+          <p class="tdet-current" aria-live="polite">
+            <span class="sr-only">Выбран цвет: </span><b data-tdet-name>{first.name}</b>
+          </p>
+          <ul class="tdet-swatches" aria-label="Цвета футболок">
+            {
+              colors.map((c, i) => (
+                <li>
+                  <button type="button" class="tdet-sw" data-hex={c.hex} data-print={c.print} data-name={c.name} aria-pressed={i === 0 ? 'true' : 'false'}>
+                    <span class="tdet-sq" style={`--sw:${c.hex}`} aria-hidden="true" />
+                    <span>{c.name}</span>
+                  </button>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+
+      <!-- spec sheet -->
+      <div class="tdet-card tdet-specs-card">
+        <h3>Характеристики</h3>
+        <dl class="tdet-specs">
+          {
+            info.specs.map((s) => (
+              <div>
+                <dt class="mono">{s.label}</dt>
+                <dd>
+                  {s.value}
+                  {s.todo && <small class="tdet-todo">уточняйте</small>}
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+
+      <!-- care -->
+      <details class="tdet-card tdet-care-card tdet-fold" open data-tfold>
+        <summary><h3>Как ухаживать</h3></summary>
+        <ol class="tdet-care">
+          {info.care.map((c) => <li>{c}</li>)}
+        </ol>
+      </details>
+
+      <!-- size chart -->
+      {
+        info.sizes && (
+          <details class="tdet-card tdet-sizes tdet-fold" open data-tfold>
+            <summary>
+              <h3>
+                Таблица размеров{info.sizes.todo && <small class="tdet-todo">уточняйте у менеджера</small>}
+              </h3>
+            </summary>
+            <div class="table-wrap">
+              <table class="price-table">
+                <thead>
+                  <tr>
+                    {info.sizes.columns.map((c) => (
+                      <th scope="col">{c}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {info.sizes.rows.map((r) => (
+                    <tr>
+                      {r.map((cell, i) => (i === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </details>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  // Folding cards: always open on a computer, folded on a phone (tap to open). Runs before the first paint.
+  (function () {
+    var m = matchMedia('(max-width: 760px)');
+    document.querySelectorAll('[data-tfold]').forEach(function (d) {
+      if (m.matches) d.open = false;
+      d.querySelector('summary').addEventListener('click', function (e) {
+        if (!m.matches) e.preventDefault();
+      });
+      m.addEventListener('change', function (e) {
+        d.open = !e.matches;
+      });
+    });
+  })();
+</script>
+
+<script>
+  // tapping a colour repaints the big t-shirt
+  for (const root of document.querySelectorAll<HTMLElement>('[data-tdet]')) {
+    const shirt = root.querySelector<HTMLElement>('.tdet-shirt');
+    const name = root.querySelector<HTMLElement>('[data-tdet-name]');
+    const buttons = root.querySelectorAll<HTMLButtonElement>('.tdet-sw');
+    buttons.forEach((b) =>
+      b.addEventListener('click', () => {
+        buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        shirt?.style.setProperty('--shirt', b.dataset.hex ?? '');
+        shirt?.style.setProperty('--print', b.dataset.print ?? '');
+        if (name) name.textContent = b.dataset.name ?? '';
+      }),
+    );
+  }
+</script>
+
+<style>
+  .tdet-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .tdet-card {
+    padding: 24px;
+    border-radius: 30px 30px 30px 10px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+  }
+  .tdet-card h3 {
+    margin-bottom: 14px;
+    font-size: 1.15rem;
+  }
+  .tdet-colors {
+    grid-column: span 7;
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 24px;
+    align-items: center;
+  }
+  .tdet-specs-card {
+    grid-column: span 5;
+  }
+  .tdet-care-card {
+    grid-column: span 5;
+  }
+  .tdet-sizes {
+    grid-column: span 7;
+  }
+
+  /* ---------- the big t-shirt */
+  .tdet-shirt {
+    position: relative;
+    display: grid;
+    place-items: center;
+    padding: 18px 6px;
+    border-radius: 24px;
+    background: radial-gradient(circle at 50% 40%, rgba(255, 252, 245, 0.16), transparent 70%);
+  }
+  .tdet-shirt-svg {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.45));
+  }
+  .tdet-shirt-body {
+    fill: var(--shirt);
+    stroke: rgba(0, 0, 0, 0.18);
+    stroke-width: 1.5;
+    transition: fill 0.3s ease;
+  }
+  .tdet-shirt-collar,
+  .tdet-shirt-seam {
+    fill: none;
+    stroke: rgba(0, 0, 0, 0.2);
+    stroke-width: 2;
+  }
+  .tdet-shirt-seam {
+    stroke-dasharray: 3 4;
+    stroke-width: 1.2;
+  }
+  /* owner's logo printed on the chest */
+  .tdet-logo {
+    position: absolute;
+    left: 33%;
+    top: 34%;
+    width: 34%;
+    color: var(--print);
+    transition: color 0.3s ease;
+    pointer-events: none;
+  }
+  .tdet-logo :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .tdet-current {
+    margin: -6px 0 14px;
+    font-family: 'Caveat', 'Segoe Print', cursive;
+    font-size: 1.6rem;
+    line-height: 1;
+    color: var(--y);
+  }
+  .tdet-current b {
+    font-weight: 600;
+  }
+
+  /* ---------- colour list: square + name */
+  .tdet-swatches {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 10px;
+  }
+  .tdet-sw {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 44px;
+    padding: 4px 10px 4px 4px;
+    border: 1.5px solid transparent;
+    border-radius: 14px;
+    background: none;
+    color: var(--ink);
+    font: inherit;
+    font-size: 0.98rem;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .tdet-sw:hover {
+    background: rgba(255, 252, 245, 0.08);
+  }
+  .tdet-sw[aria-pressed='true'] {
+    border-color: var(--y);
+    background: rgba(255, 210, 31, 0.1);
+    font-weight: 700;
+  }
+  .tdet-sw:focus-visible {
+    outline: 2px solid var(--y);
+    outline-offset: 2px;
+  }
+  .tdet-sq {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: var(--sw);
+    box-shadow: inset 0 0 0 1.5px rgba(255, 252, 245, 0.35);
+  }
+
+  /* ---------- spec sheet */
+  .tdet-specs {
+    margin: 0;
+    display: grid;
+  }
+  .tdet-specs div {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 14px;
+    align-items: baseline;
+    padding: 9px 0;
+    border-bottom: 1px dashed var(--line-strong);
+  }
+  .tdet-specs div:last-child {
+    border-bottom: 0;
+  }
+  .tdet-specs dt {
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .tdet-specs dd {
+    margin: 0;
+    font-weight: 600;
+    font-size: 0.96rem;
+    line-height: 1.4;
+  }
+  .tdet-todo {
+    margin-left: 8px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--y);
+    color: #16141b;
+    font-size: 0.72rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  /* ---------- care: numbered list */
+  .tdet-care {
+    list-style: none;
+    counter-reset: care;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+  }
+  .tdet-care li {
+    counter-increment: care;
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    color: var(--ink-2);
+  }
+  .tdet-care li::before {
+    content: counter(care);
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--c);
+    color: #16141b;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+  .tdet-care li:nth-child(3n + 2)::before { background: var(--m); color: #fff; }
+  .tdet-care li:nth-child(3n + 3)::before { background: var(--y); }
+
+  /* ---------- sizes */
+  .tdet-sizes .table-wrap {
+    border-radius: 18px;
+  }
+  .tdet-sizes .price-table {
+    min-width: 0;
+  }
+  .tdet-sizes .price-table th:first-child,
+  .tdet-sizes .price-table td:first-child {
+    min-width: 0;
+  }
+  .tdet-sizes h3 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 0;
+  }
+
+  /* summaries look like plain headings on a computer */
+  .tdet-fold > summary {
+    display: block;
+    list-style: none;
+    cursor: default;
+  }
+  .tdet-fold > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  @media (max-width: 1100px) {
+    .tdet-colors,
+    .tdet-specs-card,
+    .tdet-care-card,
+    .tdet-sizes {
+      grid-column: 1 / -1;
+    }
+  }
+
+  /* ---------- phone */
+  @media (max-width: 760px) {
+    .tdet {
+      padding-block: 32px;
+    }
+    .tdet-grid {
+      gap: 10px;
+    }
+    .tdet-card {
+      padding: 14px 16px;
+      border-radius: 22px 22px 22px 8px;
+    }
+    .tdet-card h3 {
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+    .tdet-colors {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .tdet-shirt {
+      width: 62%;
+      justify-self: center;
+      padding: 6px;
+    }
+    .tdet-colors-side {
+      display: grid;
+    }
+    .tdet-colors-side h3 {
+      margin-bottom: 2px;
+    }
+    .tdet-current {
+      margin: 0 0 8px;
+      font-size: 1.35rem;
+    }
+    .tdet-sw {
+      gap: 8px;
+      font-size: 0.9rem;
+    }
+    .tdet-sq {
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+    }
+    .tdet-specs div {
+      gap: 10px;
+      padding: 7px 0;
+    }
+    .tdet-specs dt {
+      font-size: 0.68rem;
+    }
+    .tdet-specs dd {
+      font-size: 0.86rem;
+      line-height: 1.35;
+    }
+    .tdet-care {
+      gap: 8px;
+    }
+    .tdet-care li {
+      grid-template-columns: 24px minmax(0, 1fr);
+      gap: 10px;
+      font-size: 0.86rem;
+    }
+    .tdet-care li::before {
+      width: 24px;
+      height: 24px;
+      font-size: 0.72rem;
+    }
+    .tdet-fold > summary {
+      position: relative;
+      padding-right: 34px;
+      cursor: pointer;
+    }
+    .tdet-fold > summary::after {
+      content: '+';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      width: 28px;
+      height: 28px;
+      margin-top: -14px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      border: 1.5px solid var(--ink);
+      font-weight: 700;
+      line-height: 1;
+    }
+    .tdet-fold[open] > summary::after {
+      content: '−';
+    }
+    .tdet-fold:not([open]) > summary h3 {
+      margin-bottom: 0;
+    }
+    .tdet-sizes .price-table {
+      font-size: 0.86rem;
+    }
+    .tdet-sizes .price-table th,
+    .tdet-sizes .price-table td {
+      padding: 7px 10px;
+    }
+    .tdet-sizes .price-table thead th {
+      white-space: normal;
+      font-size: 0.72rem;
+      vertical-align: bottom;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tdet-shirt-body,
+    .tdet-logo {
+      transition: none;
+    }
+  }
+</style>
