@@ -67,12 +67,12 @@ const values = [
 
 
 const clients = [
-  { src: '/img/clients/client-1.webp', alt: 'Россети' },
-  { src: '/img/clients/client-6.webp', alt: 'БФУ имени И. Канта' },
+  { src: '/img/clients/client-1.webp', alt: 'Россети', white: true },
+  { src: '/img/clients/client-6.webp', alt: 'БФУ имени И. Канта', white: true },
   { src: '/img/clients/client-2.webp', alt: 'Арле Парк' },
   { src: '/img/clients/client-4.webp', alt: 'Папаша Беппе' },
   { src: '/img/clients/client-5.webp', alt: 'Бойцовский клуб «Неудержимые»' },
-  { src: '/img/clients/client-7.webp', alt: 'Systech' },
+  { src: '/img/clients/client-7.webp', alt: 'Systech', white: true },
   { src: '/img/clients/client-8.webp', alt: 'Музей мороженого' },
 ];
 
@@ -86,7 +86,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   schema={[faqPage(homeFaq)]}
 >
   <!-- HERO: full-width photo right under the header, text aligned with the page column, wave at the bottom -->
-  <section class="hero">
+  <section class="hero hero-light">
     <div class="wrap">
       <div class="hero-card">
         <div class="hero-media">
@@ -113,7 +113,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
           <ul>
             {
               clients.map((c) => (
-                <li>
+                <li class:list={{ 'is-white': c.white }}>
                   <img src={c.src} alt={c.alt} title={c.alt} width="140" height="70" decoding="async" />
                 </li>
               ))
@@ -614,6 +614,57 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     width: 100%;
     height: clamp(40px, 6vw, 80px);
     fill: var(--paper);
+  }
+
+  /* ---------------- light first screen (owner, 06.11.2026: try white instead of dark navy, no burgundy ribbon) */
+  .hero-light {
+    --hero-bg: var(--paper);
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .hero-light .hero-media::after {
+    background:
+      linear-gradient(0deg, rgba(255, 252, 245, 0.92) 0, rgba(255, 252, 245, 0.45) 18%, rgba(255, 252, 245, 0) 32%),
+      linear-gradient(90deg, var(--paper) 0%, rgba(255, 252, 245, 0.85) 10%, rgba(255, 252, 245, 0.2) 26%, rgba(255, 252, 245, 0) 38%);
+  }
+  .hero-light .hero-title .serif {
+    color: var(--c-ink);
+  }
+  .hero-light .hero-lead {
+    color: var(--ink-2);
+  }
+  .hero-light .hero-ghost {
+    background: transparent;
+    color: var(--ink);
+    border-color: rgba(23, 21, 28, 0.35);
+  }
+  .hero-light .hero-ghost:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .hero-light .hero-facts,
+  .hero-light .hero-clients {
+    border-top-color: rgba(23, 21, 28, 0.14);
+  }
+  .hero-light .hero-facts li {
+    color: var(--ink-2);
+  }
+  .hero-light .hero-facts b {
+    color: var(--ink);
+  }
+  .hero-light .hero-facts :global(svg) {
+    color: var(--c-ink);
+  }
+  .hero-light .hero-clients p {
+    color: var(--ink-2);
+  }
+  /* white logos turn dark on the light background */
+  .hero-light .hero-clients .is-white img {
+    filter: brightness(0);
+    opacity: 0.75;
+  }
+  :global(.hero-light + .nyb)::before {
+    display: none;
   }
 
   /* ---------------- about: collage + values */
@@ -1245,6 +1296,9 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     }
     .hero-media::after {
       background: linear-gradient(180deg, rgba(15, 29, 39, 0) 90px, rgba(15, 29, 39, 0.85) 230px, var(--hero-bg) 300px);
+    }
+    .hero-light .hero-media::after {
+      background: linear-gradient(180deg, rgba(255, 252, 245, 0) 120px, rgba(255, 252, 245, 0.85) 250px, var(--paper) 310px);
     }
     .hero-text {
       gap: 14px;
