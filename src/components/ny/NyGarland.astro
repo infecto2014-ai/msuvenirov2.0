@@ -1,0 +1,29 @@
+---
+/** A festive garland: a sagging string with small baubles in the site's colours. Purely decorative. */
+interface Props {
+  class?: string;
+}
+const { class: cls = '' } = Astro.props;
+const balls = [
+  { x: 60, y: 30, c: '#d7262e' },
+  { x: 180, y: 50, c: '#f3d77c' },
+  { x: 300, y: 60, c: '#00a0dc' },
+  { x: 420, y: 62, c: '#d7262e' },
+  { x: 540, y: 58, c: '#e5007d' },
+  { x: 660, y: 48, c: '#f3d77c' },
+  { x: 780, y: 30, c: '#00a0dc' },
+];
+---
+
+<svg class={`garland ${cls}`} viewBox="0 0 840 90" preserveAspectRatio="none" aria-hidden="true" role="presentation">
+  <path d="M0 6C220 70 620 70 840 6" fill="none" stroke="#2e9e5b" stroke-width="3" />
+  {
+    balls.map((b) => (
+      <g>
+        <rect x={b.x - 4} y={b.y - 6} width="8" height="6" rx="1.5" fill="#c9a64e" />
+        <circle cx={b.x} cy={b.y + 8} r="9" fill={b.c} />
+        <circle cx={b.x - 3} cy={b.y + 5} r="2.5" fill="#fff" opacity="0.55" />
+      </g>
+    ))
+  }
+</svg>

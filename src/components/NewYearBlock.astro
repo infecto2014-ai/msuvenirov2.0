@@ -6,6 +6,7 @@
  * Shown only from 1 November to 31 December (script). `link` — where the button leads (the New Year article later).
  */
 import '@fontsource/caveat/600.css';
+import NyBall from '@/components/ny/NyBall.astro';
 import '@fontsource/cormorant-garamond/600-italic.css';
 
 interface Props {
@@ -22,31 +23,7 @@ const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Иде�
 
     <!-- red Christmas ball with a photo window -->
     <div class="nyb-ball" aria-hidden="true">
-      <svg viewBox="0 0 200 250" role="presentation">
-        <defs>
-          <radialGradient id="nyb-g" cx="36%" cy="36%" r="72%">
-            <stop offset="0" stop-color="#ff7d82" />
-            <stop offset="0.5" stop-color="#d7262e" />
-            <stop offset="1" stop-color="#6e0a10" />
-          </radialGradient>
-          <linearGradient id="nyb-cap" x1="0" x2="1">
-            <stop offset="0" stop-color="#9c7a2b" />
-            <stop offset="0.45" stop-color="#f3d77c" />
-            <stop offset="1" stop-color="#a8832e" />
-          </linearGradient>
-          <clipPath id="nyb-win"><circle cx="100" cy="152" r="68" /></clipPath>
-        </defs>
-        <path d="M100 0v34" stroke="#d6dde2" stroke-width="2" />
-        <circle cx="100" cy="36" r="9" fill="none" stroke="url(#nyb-cap)" stroke-width="4" />
-        <rect x="80" y="42" width="40" height="20" rx="4" fill="url(#nyb-cap)" />
-        <path d="M82 48h36M82 54h36" stroke="#7d5f1f" stroke-width="1.2" opacity="0.5" />
-        <circle cx="100" cy="152" r="92" fill="url(#nyb-g)" />
-        <circle cx="100" cy="152" r="78" fill="none" stroke="#f3d77c" stroke-width="3" stroke-dasharray="1 9" stroke-linecap="round" />
-        <circle cx="100" cy="152" r="73" fill="#fffcf5" />
-        <g clip-path="url(#nyb-win)"><image href={photo} x="30" y="82" width="140" height="140" preserveAspectRatio="xMidYMid slice" transform="rotate(11 100 152)" /></g>
-        <circle cx="100" cy="152" r="70" fill="none" stroke="#f3d77c" stroke-width="3.5" />
-        <ellipse cx="52" cy="104" rx="20" ry="10" fill="#fff" opacity="0.4" transform="rotate(-38 52 104)" />
-      </svg>
+      <NyBall id="nyb" photo={photo} />
     </div>
 
     <!-- text in a candy-cane frame -->

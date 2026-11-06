@@ -1,12 +1,16 @@
 ---
 // Article: New Year gift ideas (owner, 06.11.2026) — SEO and easy browsing, no calculator.
 // Ideas and prices — src/data/nyGiftsArticle.ts (prices quoted from pricing.ts).
+import '@fontsource/caveat/600.css';
+import '@fontsource/cormorant-garamond/600-italic.css';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import FaqSection from '@/components/FaqSection.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import { articleBySlug, ruDate } from '@/data/articles';
-import { budgets, faq, groups, ideasCount, steps } from '@/data/nyGiftsArticle';
+import NyBall from '@/components/ny/NyBall.astro';
+import NyGarland from '@/components/ny/NyGarland.astro';
+import { budgets, faq, groups, ideasCount, intro, outro, steps, tips } from '@/data/nyGiftsArticle';
 import { site } from '@/data/site';
 import { BUSINESS_ID, breadcrumbs, faqPage } from '@/lib/schema';
 
@@ -33,28 +37,39 @@ const articleLd = {
 
 <BaseLayout title={`${a.title} — Мастерская сувениров, Калининград`} description={a.description} path={slug} image={a.cover} schema={[articleLd, breadcrumbs(crumbs), faqPage(faq)]}>
   <article class="ng">
+    <!-- festive night header: garland, snow, red ball with a family photo, Ded Moroz with the countdown -->
     <header class="ng-head">
-      <div class="wrap">
+      <span class="ng-snow" aria-hidden="true"></span>
+      <NyGarland class="ng-garland" />
+      <div class="wrap ng-head-in">
         <Breadcrumbs items={crumbs} />
         <div class="ng-head-grid">
           <div class="ng-head-text">
-            <p class="eyebrow">Статьи · {a.tag}</p>
-            <h1>Что подарить на Новый год: {ideasCount} идей подарков с&nbsp;фото и&nbsp;логотипом</h1>
-            <p class="lead">
-              Подарок с фотографией, именем или логотипом не купишь в магазине — его делают специально для человека. Собрали идеи для семьи, детей, друзей и
-              коллег: с ценами, сроками и подсказками, что выбрать.
+            <p class="ng-eyebrow mono">Статьи · {a.tag}</p>
+            <h1>Что подарить на Новый год: {ideasCount} идей подарков <span class="ng-serif">с&nbsp;фото и&nbsp;логотипом</span></h1>
+            <p class="ng-lead">
+              Без носков с оленями и дежурных свечек. Собрали подарки, которые делают специально для человека, — с ценами, сроками и честными советами из
+              мастерской.
             </p>
             <p class="ng-meta mono">
               <time datetime={a.published}>{ruDate(a.published)}</time> · {a.readMinutes} минут чтения
             </p>
           </div>
-          <div class="ng-head-pics" aria-hidden="true">
-            <img class="p1" src="/img/ny/ball-photo.webp" alt="" width="420" height="420" />
-            <img class="p2" src="/img/mug/gallery-2.jpg" alt="" width="640" height="640" />
-            <img class="p3" src="/portfolio/portfolio-15.webp" alt="" width="378" height="366" />
+          <div class="ng-head-art" aria-hidden="true">
+            <div class="ng-ball"><NyBall id="ngb" photo="/img/ny/ball-photo.webp" /></div>
+            <span class="ng-hand">проверено<br />на родственниках!</span>
+            <div class="ng-santa">
+              <img src="/img/ny/ded-moroz-640.webp" srcset="/img/ny/ded-moroz-360.webp 360w, /img/ny/ded-moroz-640.webp 640w" sizes="(max-width: 760px) 46vw, 300px" alt="" width="640" height="640" />
+              <span class="ng-sign">
+                <span class="ng-sign-top">до Нового года</span>
+                <b data-ny-days>—</b>
+                <span data-ny-word>дней</span>
+              </span>
+            </div>
           </div>
         </div>
       </div>
+      <svg class="ng-head-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 60V30C240 0 480 50 720 30s480-40 720-6v36z" /></svg>
     </header>
 
     <!-- toolbar: jump to a recipient, filter by budget -->
@@ -76,12 +91,22 @@ const articleLd = {
       </div>
     </div>
 
+    <section class="ng-intro" aria-labelledby="intro-h">
+      <div class="wrap ng-text">
+        <h2 id="intro-h">Почему подарок с фото — это не банально</h2>
+        {intro.map((p) => <p>{p}</p>)}
+      </div>
+    </section>
+
     {
       groups.map((g) => (
         <section class="section ng-group" id={g.id} aria-labelledby={`${g.id}-h`} data-group>
           <div class="wrap">
             <div class="ng-group-head">
-              <h2 id={`${g.id}-h`}>{g.title}</h2>
+              <h2 id={`${g.id}-h`}>
+                <span class={`ng-orn ng-orn-${g.id}`} aria-hidden="true"></span>
+                {g.title}
+              </h2>
               <p>{g.intro}</p>
             </div>
             <ul class="ng-grid">
@@ -108,6 +133,12 @@ const articleLd = {
                 </li>
               ))}
             </ul>
+            <aside class="ng-tip-card">
+              <div>
+                <p class="ng-tip-label">Совет мастерской</p>
+                <p>{g.tip}</p>
+              </div>
+            </aside>
             <p class="ng-empty" hidden data-empty>
               В этом бюджете идей здесь нет — выберите другой бюджет выше или напишите нам, подберём.
             </p>
@@ -115,6 +146,24 @@ const articleLd = {
         </section>
       ))
     }
+
+    <section class="section ng-tips" aria-labelledby="tips-h">
+      <NyGarland class="ng-garland ng-garland-tips" />
+      <div class="wrap">
+        <h2 id="tips-h">Как выбрать подарок, который <span class="ng-serif">не&nbsp;передарят</span></h2>
+        <ol class="ng-tips-list">
+          {
+            tips.map((t, i) => (
+              <li>
+                <span class="ng-tip-n" aria-hidden="true">{i + 1}</span>
+                <h3>{t.title}</h3>
+                <p>{t.text}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
 
     <section class="section ng-how" aria-labelledby="how-h">
       <div class="wrap">
@@ -157,6 +206,19 @@ const articleLd = {
       </div>
     </section>
 
+    <section class="section ng-outro" aria-labelledby="outro-h">
+      <div class="wrap">
+        <div class="ng-outro-frame">
+          <div class="ng-outro-in">
+            <p class="ng-hand ng-hand-dark">С наступающим!</p>
+            <h2 id="outro-h">Итого</h2>
+            <p>{outro}</p>
+            <button type="button" class="btn btn-magenta" data-order="Новогодний подарок">Подобрать подарок</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <FaqSection items={faq} title="Вопросы о новогодних подарках" />
 
     <section class="section ng-links" aria-labelledby="links-h">
@@ -178,6 +240,18 @@ const articleLd = {
 </BaseLayout>
 
 <script>
+  // Days to New Year on Ded Moroz's sign (visitor's clock)
+  const daysEl = document.querySelector('[data-ny-days]');
+  if (daysEl) {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const d = Math.round((new Date(now.getFullYear() + 1, 0, 1).getTime() - today.getTime()) / 86400000);
+    const a = d % 10, b = d % 100;
+    daysEl.textContent = String(d);
+    const w = document.querySelector('[data-ny-word]');
+    if (w) w.textContent = a === 1 && b !== 11 ? 'день' : a >= 2 && a <= 4 && (b < 12 || b > 14) ? 'дня' : 'дней';
+  }
+
   // Budget filter: hides ideas whose price for one gift is above the chosen budget
   const chips = document.querySelectorAll<HTMLButtonElement>('[data-budget]');
   const count = document.querySelector<HTMLElement>('[data-count]');
@@ -203,66 +277,201 @@ const articleLd = {
 </script>
 
 <style>
-  /* ---------- header */
+  /* ---------- festive header */
+  .ng {
+    --candy: #d7262e;
+    --candy-ink: #a3121a;
+    --night: #0f1d27;
+  }
   .ng-head {
-    overflow-x: clip;
-    padding-block: clamp(12px, 2vw, 24px) clamp(28px, 4vw, 48px);
-    background: linear-gradient(180deg, var(--paper) 0%, #eaf4f7 100%);
+    position: relative;
+    overflow: clip;
+    isolation: isolate;
+    padding-block: 34px clamp(56px, 7vw, 90px);
+    color: #fffcf5;
+    background:
+      radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.9) 0 1.5px, transparent 2.5px) 0 0 / 60px 60px,
+      radial-gradient(circle at 60% 70%, rgba(255, 210, 31, 0.8) 0 1.2px, transparent 2.2px) 0 0 / 80px 80px,
+      linear-gradient(180deg, var(--night) 0%, #142f3d 100%);
+  }
+  .ng-snow {
+    position: absolute;
+    inset: -70px 0 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(circle, rgba(255, 255, 255, 0.85) 0 2px, transparent 2.6px) 0 0 / 70px 70px,
+      radial-gradient(circle, rgba(255, 255, 255, 0.6) 0 1.4px, transparent 2px) 35px 20px / 50px 50px;
+    animation: ng-snow 14s linear infinite;
+  }
+  @keyframes ng-snow {
+    to {
+      transform: translateY(70px);
+    }
+  }
+  .ng-garland {
+    position: absolute;
+    left: 0;
+    top: -4px;
+    width: 100%;
+    height: clamp(50px, 6vw, 80px);
+    z-index: 0;
+  }
+  .ng-head-in {
+    position: relative;
+    z-index: 1;
+  }
+  .ng-head :global(.crumbs a),
+  .ng-head :global(.crumbs span),
+  .ng-head :global(.crumbs li) {
+    color: rgba(255, 252, 245, 0.75);
   }
   .ng-head-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
     gap: clamp(24px, 4vw, 56px);
     align-items: center;
-    margin-top: 18px;
+    margin-top: 22px;
   }
   .ng-head-text {
     display: grid;
     gap: 14px;
   }
+  .ng-eyebrow {
+    margin: 0;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--y);
+  }
   .ng-head h1 {
-    font-size: clamp(1.9rem, 3.6vw, 3rem);
-    line-height: 1.08;
+    font-size: clamp(1.9rem, 3.6vw, 3.1rem);
+    line-height: 1.06;
     text-wrap: balance;
+  }
+  .ng-serif {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.1em;
+    letter-spacing: 0;
+    color: #ff8f94;
+  }
+  .ng-lead {
+    margin: 0;
+    max-width: 52ch;
+    font-size: clamp(1.02rem, 1.4vw, 1.18rem);
+    line-height: 1.6;
+    color: rgba(255, 252, 245, 0.85);
   }
   .ng-meta {
     margin: 0;
     font-size: 0.82rem;
-    color: var(--muted);
+    color: rgba(255, 252, 245, 0.6);
   }
-  .ng-head-pics {
+  .ng-head-art {
     position: relative;
-    aspect-ratio: 1 / 0.8;
+    aspect-ratio: 1 / 0.86;
     max-width: 100%;
   }
-  .ng-head-pics img {
+  .ng-ball {
     position: absolute;
-    object-fit: cover;
-    box-shadow: 0 20px 34px -24px rgba(15, 29, 39, 0.55);
-  }
-  .p1 {
-    left: 0;
-    top: 6%;
-    width: 52%;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    border: 6px solid #fff;
-  }
-  .p2 {
-    right: 0;
-    top: 0;
+    left: 2%;
+    top: -18%;
     width: 46%;
-    aspect-ratio: 1;
-    border-radius: 28px;
-    transform: rotate(4deg);
+    transform: rotate(-12deg);
+    transform-origin: 50% 0;
+    filter: drop-shadow(0 20px 24px rgba(0, 0, 0, 0.45));
   }
-  .p3 {
-    right: 10%;
-    bottom: 0;
-    width: 44%;
-    aspect-ratio: 1;
-    border-radius: 28px;
-    transform: rotate(-3deg);
+  .ng-ball :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .ng-hand {
+    margin: 0;
+    font-family: 'Caveat', 'Segoe Print', cursive;
+    font-weight: 600;
+    font-size: clamp(1.25rem, 1.8vw, 1.6rem);
+    line-height: 1.05;
+    color: var(--y);
+  }
+  .ng-head-art .ng-hand {
+    position: absolute;
+    left: 6%;
+    bottom: 4%;
+    transform: rotate(-7deg);
+  }
+  .ng-santa {
+    position: absolute;
+    right: 0;
+    /* sit on the header's bottom edge, but high enough that the wave never covers the sign */
+    bottom: calc(clamp(56px, 7vw, 90px) * -1 + clamp(22px, 3vw, 36px));
+    width: 62%;
+    container-type: inline-size;
+  }
+  .ng-santa img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  /* the blank sign in the picture: 13.5%–85% across, 56%–91.5% down */
+  .ng-sign {
+    position: absolute;
+    left: 13.5%;
+    width: 71.5%;
+    top: 56%;
+    height: 35.5%;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    line-height: 1;
+    color: var(--candy-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .ng-sign-top {
+    font-family: 'Caveat', cursive;
+    font-weight: 600;
+    font-size: 6.6cqi;
+    color: var(--ink-2);
+  }
+  .ng-sign b {
+    font-size: 17cqi;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+  }
+  .ng-sign [data-ny-word] {
+    font-size: 5.4cqi;
+    font-weight: 700;
+  }
+  .ng-head-wave {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    width: 100%;
+    height: clamp(26px, 4vw, 54px);
+    fill: var(--paper);
+    z-index: 2;
+  }
+
+  /* ---------- intro text (readable measure) */
+  .ng-intro {
+    padding-block: clamp(36px, 5vw, 64px) 8px;
+  }
+  .ng-text {
+    max-width: calc(72ch + var(--gutter) * 2);
+  }
+  .ng-text h2 {
+    margin-bottom: 14px;
+    font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  }
+  .ng-text p {
+    margin: 0 0 14px;
+    font-size: 1.06rem;
+    line-height: 1.7;
+    color: var(--ink-2);
   }
 
   /* ---------- toolbar */
@@ -272,7 +481,17 @@ const articleLd = {
     z-index: 20;
     background: color-mix(in srgb, var(--paper) 94%, transparent);
     backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--line);
+    border-bottom: 0;
+  }
+  .ng-bar::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -6px;
+    height: 6px;
+    background: repeating-linear-gradient(-45deg, var(--candy) 0 10px, #fff 10px 20px);
+    opacity: 0.9;
   }
   .ng-bar-in {
     display: flex;
@@ -329,9 +548,26 @@ const articleLd = {
   .ng-group {
     scroll-margin-top: 150px;
   }
-  .ng-group:nth-of-type(even) {
-    background: #eaf4f7;
+  .ng-group:nth-of-type(odd) {
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%2300a0dc' stroke-opacity='.12' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M30 14v32M14 30h32M19 19l22 22M41 19L19 41'/%3E%3Cpath d='M90 74v26M77 87h26M81 78l18 18M99 78L81 96'/%3E%3C/g%3E%3C/svg%3E"),
+      #eaf4f7;
   }
+  .ng-orn {
+    display: inline-block;
+    width: 0.8em;
+    height: 0.95em;
+    margin-right: 0.3em;
+    vertical-align: -0.08em;
+    background:
+      linear-gradient(#c9a64e, #c9a64e) 50% 0 / 34% 18% no-repeat,
+      radial-gradient(circle at 38% 62%, rgba(255, 255, 255, 0.6) 0 8%, transparent 9%) 0 0 / 100% 100% no-repeat,
+      radial-gradient(circle at 50% 60%, var(--orn) 0 49%, transparent 51%) 0 0 / 100% 100% no-repeat;
+  }
+  .ng-orn-family { --orn: var(--candy); }
+  .ng-orn-kids { --orn: var(--c); }
+  .ng-orn-friends { --orn: var(--m); }
+  .ng-orn-work { --orn: #c9a64e; }
   .ng-group-head {
     display: grid;
     gap: 8px;
@@ -343,8 +579,123 @@ const articleLd = {
   }
   .ng-group-head p {
     margin: 0;
+    max-width: 72ch;
     color: var(--ink-2);
-    font-size: 1.02rem;
+    font-size: 1.04rem;
+    line-height: 1.7;
+  }
+  .ng-tip-card {
+    margin-top: 22px;
+    max-width: 820px;
+    padding: 7px;
+    border-radius: 24px;
+    background: repeating-linear-gradient(-45deg, var(--candy) 0 11px, #fff 11px 22px);
+  }
+  .ng-tip-card > div {
+    padding: 14px 20px;
+    border-radius: 18px;
+    background: #fffcf5;
+  }
+  .ng-tip-card p {
+    margin: 0;
+    line-height: 1.6;
+    color: var(--ink-2);
+  }
+  .ng-tip-card .ng-tip-label {
+    font-family: 'Caveat', cursive;
+    font-weight: 600;
+    font-size: 1.35rem;
+    line-height: 1.1;
+    color: var(--candy);
+  }
+  .ng-tip-card[hidden] {
+    display: none;
+  }
+
+  /* ---------- tips: night band */
+  .ng-tips {
+    position: relative;
+    overflow: clip;
+    padding-top: clamp(70px, 8vw, 100px);
+    color: #fffcf5;
+    background:
+      radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.85) 0 1.5px, transparent 2.5px) 0 0 / 60px 60px,
+      radial-gradient(circle at 60% 70%, rgba(255, 210, 31, 0.7) 0 1.2px, transparent 2.2px) 0 0 / 80px 80px,
+      linear-gradient(180deg, var(--night) 0%, #142f3d 100%);
+  }
+  .ng-tips h2 {
+    margin-bottom: 26px;
+    font-size: clamp(1.6rem, 2.8vw, 2.3rem);
+    text-wrap: balance;
+  }
+  .ng-tips-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .ng-tips-list li {
+    display: grid;
+    align-content: start;
+    gap: 8px;
+    padding: 18px;
+    border-radius: 22px;
+    background: rgba(255, 252, 245, 0.07);
+    border: 1px solid rgba(255, 252, 245, 0.14);
+  }
+  .ng-tip-n {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #ff7d82, var(--candy) 55%, #6e0a10);
+    font-weight: 800;
+    box-shadow: inset 0 0 0 2px rgba(243, 215, 124, 0.7);
+  }
+  .ng-tips-list h3 {
+    font-size: 1.05rem;
+    line-height: 1.25;
+  }
+  .ng-tips-list p {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: rgba(255, 252, 245, 0.8);
+  }
+
+  /* ---------- outro in a candy-cane frame */
+  .ng-outro-frame {
+    max-width: 860px;
+    margin-inline: auto;
+    padding: 10px;
+    border-radius: 30px;
+    background: repeating-linear-gradient(-45deg, var(--candy) 0 13px, #fff 13px 26px);
+    box-shadow: 0 20px 34px -24px rgba(15, 29, 39, 0.5);
+  }
+  .ng-outro-in {
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    padding: clamp(22px, 3vw, 38px);
+    border-radius: 22px;
+    background: #fffcf5;
+    text-align: center;
+  }
+  .ng-outro-in h2 {
+    font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+  }
+  .ng-outro-in p:not(.ng-hand) {
+    margin: 0 0 6px;
+    max-width: 62ch;
+    line-height: 1.7;
+    color: var(--ink-2);
+  }
+  .ng-hand-dark {
+    color: var(--candy);
+    transform: rotate(-3deg);
   }
   .ng-grid {
     list-style: none;
@@ -550,6 +901,9 @@ const articleLd = {
     .ng-pic img {
       transition: none;
     }
+    .ng-snow {
+      animation: none;
+    }
   }
 
   @media (max-width: 1020px) {
@@ -562,14 +916,18 @@ const articleLd = {
     .ng-b2b-card {
       grid-template-columns: 1fr;
     }
+    .ng-tips-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
   @media (max-width: 760px) {
     .ng-head-grid {
       grid-template-columns: 1fr;
     }
-    .ng-head-pics {
-      width: min(100%, 420px);
+    .ng-head-art {
+      width: min(100%, 380px);
       justify-self: center;
+      margin-top: 30px;
     }
     .ng-bar {
       top: 60px;
@@ -631,6 +989,13 @@ const articleLd = {
     .ng-steps {
       grid-template-columns: 1fr;
       gap: 10px;
+    }
+    .ng-tips-list {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .ng-text p {
+      font-size: 1rem;
     }
   }
 </style>
