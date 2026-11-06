@@ -110,6 +110,10 @@
 ## Cookies (06.11.2026)
 - Плашка о cookies и сборе технических данных при первом входе — `src/components/CookieNotice.astro` в BaseLayout, «Понятно» запоминается в localStorage, ссылка «Подробнее» на /privacy-policy. Вышивку не делаем — на сайте не предлагать.
 
+## Скилл ui-ux-pro-max (06.11.2026)
+- По просьбе владельца добавлен в проект: `.claude/skills/ui-ux-pro-max/` (из github.com/nextlevelbuilder/ui-ux-pro-max-skill, лицензия MIT, коммит b7d5353). Запускать только когда владелец прямо просит (общее правило про скилы).
+- Поиск — из корня проекта: `python3 .claude/skills/ui-ux-pro-max/scripts/search.py "<запрос>" --design-system` или `--domain <ux|style|color|typography|landing>`, `--stack astro`. В SKILL.md путь записан через `${CLAUDE_PLUGIN_ROOT}` — в этом проекте используйте путь выше. Рекомендации скилла не отменяют дизайн-систему «CMYK 2.0» и решения владельца.
+
 ## Публикация
 - **НАПОМНИТЬ ВЛАДЕЛЬЦУ при публикации сайта (просил 06.11.2026):** запустить чат и панель по `docs/ЧАТ_ИНСТРУКЦИЯ.md` — сервер Timeweb 2 ГБ, `setup.mjs` (пароль), служба `msuvenirov-chat`, nginx `/api/`; затем вместе установить «Чат МС» на ПК, Android/iPhone, включить и проверить уведомления; после проверки отключить подписку Jivo. Там же — юридическая часть (152-ФЗ), которую владелец решит отдельно.
 - Тестовая копия для владельца: https://infecto2014-ai.github.io/msuvenirov2.0/ — `.github/workflows/preview.yml`, обновляется при каждом push в main; ссылки получают префикс репозитория через `scripts/preview-rewrite.mjs`, копия закрыта от индексации. Форма заявки там не отправляет (Supabase-функции ещё не развёрнуты).
