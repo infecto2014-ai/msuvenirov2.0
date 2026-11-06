@@ -405,6 +405,18 @@ const openOf = (l: { href: string; children?: { href: string }[] }) => l.href ==
     gap: 10px;
   }
 
+  /* «Статьи» in the menu: a bit less padding so everything fits on 1366px laptops */
+  @media (max-width: 1440px) {
+    .hdr-link {
+      padding: 0 9px;
+    }
+  }
+  @media (max-width: 1240px) {
+    .hdr-link {
+      padding: 0 7px;
+      font-size: 0.92rem;
+    }
+  }
   @media (max-width: 1360px) {
     .hdr-phone span {
       display: none;

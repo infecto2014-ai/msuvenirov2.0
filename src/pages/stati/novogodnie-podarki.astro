@@ -1,0 +1,636 @@
+---
+// Article: New Year gift ideas (owner, 06.11.2026) — SEO and easy browsing, no calculator.
+// Ideas and prices — src/data/nyGiftsArticle.ts (prices quoted from pricing.ts).
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import FaqSection from '@/components/FaqSection.astro';
+import CtaBand from '@/components/CtaBand.astro';
+import { articleBySlug, ruDate } from '@/data/articles';
+import { budgets, faq, groups, ideasCount, steps } from '@/data/nyGiftsArticle';
+import { site } from '@/data/site';
+import { BUSINESS_ID, breadcrumbs, faqPage } from '@/lib/schema';
+
+const slug = '/stati/novogodnie-podarki';
+const a = articleBySlug(slug)!;
+const crumbs = [
+  { name: 'Главная', href: '/' },
+  { name: 'Статьи', href: '/stati' },
+  { name: 'Новогодние подарки', href: slug },
+];
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: a.title,
+  description: a.description,
+  image: `${site.url}${a.cover}`,
+  datePublished: a.published,
+  dateModified: a.updated ?? a.published,
+  author: { '@type': 'Organization', name: site.name, url: site.url },
+  publisher: { '@id': BUSINESS_ID },
+  mainEntityOfPage: `${site.url}${slug}`,
+};
+---
+
+<BaseLayout title={`${a.title} — Мастерская сувениров, Калининград`} description={a.description} path={slug} image={a.cover} schema={[articleLd, breadcrumbs(crumbs), faqPage(faq)]}>
+  <article class="ng">
+    <header class="ng-head">
+      <div class="wrap">
+        <Breadcrumbs items={crumbs} />
+        <div class="ng-head-grid">
+          <div class="ng-head-text">
+            <p class="eyebrow">Статьи · {a.tag}</p>
+            <h1>Что подарить на Новый год: {ideasCount} идей подарков с&nbsp;фото и&nbsp;логотипом</h1>
+            <p class="lead">
+              Подарок с фотографией, именем или логотипом не купишь в магазине — его делают специально для человека. Собрали идеи для семьи, детей, друзей и
+              коллег: с ценами, сроками и подсказками, что выбрать.
+            </p>
+            <p class="ng-meta mono">
+              <time datetime={a.published}>{ruDate(a.published)}</time> · {a.readMinutes} минут чтения
+            </p>
+          </div>
+          <div class="ng-head-pics" aria-hidden="true">
+            <img class="p1" src="/img/ny/ball-photo.webp" alt="" width="420" height="420" />
+            <img class="p2" src="/img/mug/gallery-2.jpg" alt="" width="640" height="640" />
+            <img class="p3" src="/portfolio/portfolio-15.webp" alt="" width="378" height="366" />
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- toolbar: jump to a recipient, filter by budget -->
+    <div class="ng-bar">
+      <div class="wrap ng-bar-in">
+        <nav class="ng-who" aria-label="Кому дарим">
+          <span class="ng-bar-label">Кому:</span>
+          {groups.map((g) => <a class="ng-chip" href={`#${g.id}`}>{g.label}</a>)}
+        </nav>
+        <div class="ng-budget" role="group" aria-label="Бюджет на один подарок">
+          <span class="ng-bar-label">Бюджет:</span>
+          {budgets.map((b, i) => (
+            <button type="button" class="ng-chip" data-budget={b.max === Infinity ? '' : String(b.max)} aria-pressed={i === 0 ? 'true' : 'false'}>
+              {b.label}
+            </button>
+          ))}
+        </div>
+        <p class="ng-count" aria-live="polite" data-count>Показано идей: {ideasCount}</p>
+      </div>
+    </div>
+
+    {
+      groups.map((g) => (
+        <section class="section ng-group" id={g.id} aria-labelledby={`${g.id}-h`} data-group>
+          <div class="wrap">
+            <div class="ng-group-head">
+              <h2 id={`${g.id}-h`}>{g.title}</h2>
+              <p>{g.intro}</p>
+            </div>
+            <ul class="ng-grid">
+              {g.ideas.map((it) => (
+                <li class="ng-card" data-price={it.price}>
+                  <a class="ng-pic" href={it.href} tabindex="-1" aria-hidden="true">
+                    <img src={it.img} alt="" width="400" height="300" loading="lazy" decoding="async" />
+                  </a>
+                  <div class="ng-body">
+                    <h3>
+                      <a href={it.href}>{it.title}</a>
+                    </h3>
+                    <p>{it.text}</p>
+                    <p class="ng-price mono">{it.priceLabel}</p>
+                    <div class="ng-actions">
+                      <button type="button" class="btn btn-sm btn-magenta" data-order={it.order}>
+                        Заказать
+                      </button>
+                      <a class="ng-more" href={it.href}>
+                        Подробнее →
+                      </a>
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <p class="ng-empty" hidden data-empty>
+              В этом бюджете идей здесь нет — выберите другой бюджет выше или напишите нам, подберём.
+            </p>
+          </div>
+        </section>
+      ))
+    }
+
+    <section class="section ng-how" aria-labelledby="how-h">
+      <div class="wrap">
+        <h2 id="how-h">Как заказать подарок к Новому году</h2>
+        <ol class="ng-steps">
+          {
+            steps.map((s, i) => (
+              <li>
+                <span class="ng-step-n mono">{String(i + 1).padStart(2, '0')}</span>
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
+              </li>
+            ))
+          }
+        </ol>
+        <p class="ng-tip">
+          <b>Совет:</b> в декабре заказов больше, чем обычно. Если нужен тираж для коллег или подарок к конкретной дате — напишите заранее, и мы спокойно
+          всё успеем.
+        </p>
+      </div>
+    </section>
+
+    <section class="section ng-b2b" aria-labelledby="b2b-h">
+      <div class="wrap">
+        <div class="ng-b2b-card">
+          <div>
+            <p class="eyebrow">Компаниям</p>
+            <h2 id="b2b-h">Новогодние подарки сотрудникам и партнёрам</h2>
+            <p>
+              Соберём набор под ваш бюджет: кружки, футболки, календари, бейсболки и значки с логотипом. Счёт без НДС, закрывающие документы, макет по вашему
+              брендбуку и образец перед тиражом.
+            </p>
+          </div>
+          <div class="ng-b2b-actions">
+            <button type="button" class="btn btn-yellow" data-order="Новогодние подарки для компании">Запросить расчёт</button>
+            <a class="ng-b2b-link" href="/kp-msuvenirov.pdf" download>Скачать КП (PDF)</a>
+            <a class="ng-b2b-link" href="/korporativnym-klientam">Условия для компаний →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <FaqSection items={faq} title="Вопросы о новогодних подарках" />
+
+    <section class="section ng-links" aria-labelledby="links-h">
+      <div class="wrap">
+        <h2 id="links-h">Смотрите также</h2>
+        <ul>
+          <li><a href="/fotopodarki">Фотоподарки</a></li>
+          <li><a href="/pechat-na-kruzhkah">Печать на кружках</a></li>
+          <li><a href="/pechat-na-futbolkah">Печать на футболках</a></li>
+          <li><a href="/kalendari">Календари на 2027 год</a></li>
+          <li><a href="/korporativnym-klientam">Мерч для компаний</a></li>
+          <li><a href="/stati">Все статьи</a></li>
+        </ul>
+      </div>
+    </section>
+  </article>
+
+  <CtaBand title="Не нашли подходящую идею?" text="Напишите, кому дарите и какой бюджет, — подскажем подарок и покажем макет." />
+</BaseLayout>
+
+<script>
+  // Budget filter: hides ideas whose price for one gift is above the chosen budget
+  const chips = document.querySelectorAll<HTMLButtonElement>('[data-budget]');
+  const count = document.querySelector<HTMLElement>('[data-count]');
+  chips.forEach((chip) =>
+    chip.addEventListener('click', () => {
+      const max = chip.dataset.budget ? Number(chip.dataset.budget) : Infinity;
+      chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+      let shown = 0;
+      document.querySelectorAll<HTMLElement>('[data-group]').forEach((g) => {
+        let inGroup = 0;
+        g.querySelectorAll<HTMLElement>('.ng-card').forEach((card) => {
+          const ok = Number(card.dataset.price) <= max;
+          card.hidden = !ok;
+          if (ok) inGroup++;
+        });
+        const empty = g.querySelector<HTMLElement>('[data-empty]');
+        if (empty) empty.hidden = inGroup > 0;
+        shown += inGroup;
+      });
+      if (count) count.textContent = `Показано идей: ${shown}`;
+    }),
+  );
+</script>
+
+<style>
+  /* ---------- header */
+  .ng-head {
+    overflow-x: clip;
+    padding-block: clamp(12px, 2vw, 24px) clamp(28px, 4vw, 48px);
+    background: linear-gradient(180deg, var(--paper) 0%, #eaf4f7 100%);
+  }
+  .ng-head-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: clamp(24px, 4vw, 56px);
+    align-items: center;
+    margin-top: 18px;
+  }
+  .ng-head-text {
+    display: grid;
+    gap: 14px;
+  }
+  .ng-head h1 {
+    font-size: clamp(1.9rem, 3.6vw, 3rem);
+    line-height: 1.08;
+    text-wrap: balance;
+  }
+  .ng-meta {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+  .ng-head-pics {
+    position: relative;
+    aspect-ratio: 1 / 0.8;
+    max-width: 100%;
+  }
+  .ng-head-pics img {
+    position: absolute;
+    object-fit: cover;
+    box-shadow: 0 20px 34px -24px rgba(15, 29, 39, 0.55);
+  }
+  .p1 {
+    left: 0;
+    top: 6%;
+    width: 52%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 6px solid #fff;
+  }
+  .p2 {
+    right: 0;
+    top: 0;
+    width: 46%;
+    aspect-ratio: 1;
+    border-radius: 28px;
+    transform: rotate(4deg);
+  }
+  .p3 {
+    right: 10%;
+    bottom: 0;
+    width: 44%;
+    aspect-ratio: 1;
+    border-radius: 28px;
+    transform: rotate(-3deg);
+  }
+
+  /* ---------- toolbar */
+  .ng-bar {
+    position: sticky;
+    top: 72px;
+    z-index: 20;
+    background: color-mix(in srgb, var(--paper) 94%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .ng-bar-in {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 28px;
+    padding-block: 12px;
+  }
+  .ng-who,
+  .ng-budget {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+  }
+  .ng-bar-label {
+    margin-right: 4px;
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .ng-chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 16px;
+    border-radius: 999px;
+    border: 1.5px solid var(--line-strong);
+    background: var(--card);
+    color: var(--ink);
+    font: inherit;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+  }
+  .ng-chip:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+  .ng-chip[aria-pressed='true'] {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+  .ng-count {
+    margin: 0 0 0 auto;
+    font-size: 0.86rem;
+    color: var(--muted);
+  }
+
+  /* ---------- groups and cards */
+  .ng-group {
+    scroll-margin-top: 150px;
+  }
+  .ng-group:nth-of-type(even) {
+    background: #eaf4f7;
+  }
+  .ng-group-head {
+    display: grid;
+    gap: 8px;
+    max-width: 760px;
+    margin-bottom: 26px;
+  }
+  .ng-group-head h2 {
+    font-size: clamp(1.6rem, 2.8vw, 2.3rem);
+  }
+  .ng-group-head p {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 1.02rem;
+  }
+  .ng-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .ng-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 26px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    overflow: clip;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .ng-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 22px 36px -26px rgba(15, 29, 39, 0.45);
+  }
+  .ng-card[hidden] {
+    display: none;
+  }
+  .ng-pic {
+    position: relative;
+    display: block;
+    flex: none;
+    aspect-ratio: 4 / 3;
+    overflow: clip;
+    background: var(--paper-2);
+  }
+  .ng-pic img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  .ng-card:hover .ng-pic img {
+    transform: scale(1.04);
+  }
+  .ng-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 18px 20px 20px;
+  }
+  .ng-body h3 {
+    font-size: 1.15rem;
+    line-height: 1.2;
+  }
+  .ng-body h3 a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .ng-body h3 a:hover {
+    text-decoration: underline;
+  }
+  .ng-body > p {
+    margin: 0;
+    font-size: 0.93rem;
+    color: var(--ink-2);
+  }
+  .ng-price {
+    margin-top: auto !important;
+    padding-top: 6px;
+    font-weight: 700;
+    font-size: 1.02rem !important;
+    color: var(--ink) !important;
+  }
+  .ng-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+  }
+  .ng-more {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--ink);
+  }
+  .ng-empty {
+    margin: 0;
+    padding: 18px 20px;
+    border-radius: 18px;
+    border: 1.5px dashed var(--line-strong);
+    color: var(--ink-2);
+  }
+
+  /* ---------- how to order */
+  .ng-how h2,
+  .ng-links h2 {
+    margin-bottom: 24px;
+    font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+  }
+  .ng-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .ng-steps li {
+    display: grid;
+    align-content: start;
+    gap: 6px;
+    padding: 20px;
+    border-radius: 24px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+  }
+  .ng-step-n {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--m-ink);
+  }
+  .ng-steps h3 {
+    font-size: 1.08rem;
+  }
+  .ng-steps p {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--ink-2);
+  }
+  .ng-tip {
+    margin: 20px 0 0;
+    padding: 16px 20px;
+    border-radius: 18px;
+    background: var(--y-soft);
+    max-width: 820px;
+  }
+
+  /* ---------- companies */
+  .ng-b2b-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) auto;
+    gap: 24px 40px;
+    align-items: center;
+    padding: clamp(24px, 4vw, 44px);
+    border-radius: 32px;
+    background: #0f1d27;
+    color: #fffcf5;
+  }
+  .ng-b2b-card h2 {
+    margin: 4px 0 10px;
+    font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  }
+  .ng-b2b-card p:not(.eyebrow) {
+    margin: 0;
+    color: rgba(255, 252, 245, 0.8);
+  }
+  .ng-b2b-card :global(.eyebrow) {
+    color: #9fe0f6;
+  }
+  .ng-b2b-card :global(.eyebrow)::before {
+    mix-blend-mode: normal;
+  }
+  .ng-b2b-actions {
+    display: grid;
+    gap: 10px;
+    justify-items: start;
+  }
+  .ng-b2b-link {
+    color: #fffcf5;
+    font-weight: 700;
+  }
+  .ng-b2b-link:hover {
+    color: var(--y);
+  }
+
+  /* ---------- see also */
+  .ng-links ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .ng-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: 999px;
+    border: 1.5px solid var(--line-strong);
+    background: var(--card);
+    color: var(--ink);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .ng-links a:hover {
+    border-color: var(--ink);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ng-card,
+    .ng-pic img {
+      transition: none;
+    }
+  }
+
+  @media (max-width: 1020px) {
+    .ng-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .ng-steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .ng-b2b-card {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 760px) {
+    .ng-head-grid {
+      grid-template-columns: 1fr;
+    }
+    .ng-head-pics {
+      width: min(100%, 420px);
+      justify-self: center;
+    }
+    .ng-bar {
+      top: 60px;
+    }
+    .ng-bar-in {
+      gap: 8px;
+      padding-block: 8px;
+    }
+    .ng-who,
+    .ng-budget {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      width: calc(100% + var(--gutter) * 2);
+      margin-inline: calc(var(--gutter) * -1);
+      padding-inline: var(--gutter);
+      scrollbar-width: none;
+    }
+    .ng-chip {
+      flex: none;
+      min-height: 36px;
+      padding: 0 13px;
+      font-size: 0.84rem;
+    }
+    .ng-count {
+      display: none;
+    }
+    .ng-group {
+      scroll-margin-top: 170px;
+    }
+  }
+  @media (max-width: 560px) {
+    .ng-grid {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    .ng-card {
+      flex-direction: row;
+      border-radius: 20px;
+    }
+    .ng-pic {
+      flex: 0 0 38%;
+      aspect-ratio: auto;
+      min-height: 150px;
+    }
+    .ng-body {
+      padding: 12px 14px 14px;
+      gap: 6px;
+    }
+    .ng-body h3 {
+      font-size: 1rem;
+    }
+    .ng-body > p:not(.ng-price) {
+      font-size: 0.82rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .ng-steps {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+  }
+</style>

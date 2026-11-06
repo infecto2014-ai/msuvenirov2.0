@@ -102,6 +102,7 @@ export const mainNav: NavLink[] = [
   { href: '/price', label: 'Цены и калькулятор' },
   { href: '/korporativnym-klientam', label: 'Компаниям' },
   { href: '/portfolio', label: 'Работы' },
+  { href: '/stati', label: 'Статьи' },
   { href: '/o-nas', label: 'О нас' },
   { href: '/kontakty', label: 'Контакты' },
 ];
