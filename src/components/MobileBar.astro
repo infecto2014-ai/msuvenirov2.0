@@ -5,7 +5,7 @@ import { site } from '@/data/site';
 
 <nav class="mbar" aria-label="Быстрые действия">
   <a href={site.phoneHref}><Icon name="phone" /><span>Позвонить</span></a>
-  <a href={site.social.telegram} target="_blank" rel="noopener"><Icon name="telegram" /><span>Telegram</span></a>
+  <button type="button" data-chat><Icon name="chat" /><span>Чат</span></button>
   <a href="/price"><Icon name="calc" /><span>Цена</span></a>
   <button type="button" data-order class="mbar-cta"><Icon name="upload" /><span>Заявка</span></button>
 </nav>

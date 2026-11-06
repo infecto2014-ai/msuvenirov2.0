@@ -4,6 +4,7 @@ import '@/styles/global.css';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import MobileBar from '@/components/MobileBar.astro';
+import ChatWidget from '@/components/islands/ChatWidget';
 import OrderDialog from '@/components/islands/OrderDialog';
 import { localBusiness, website } from '@/lib/schema';
 import { site } from '@/data/site';
@@ -71,10 +72,12 @@ const ld = [localBusiness(), website(), ...schema];
       )
     }
     <OrderDialog client:idle />
+    {!bare && <ChatWidget client:idle />}
     {!bare && <CookieNotice />}
 
-    <script is:inline define:vars={{ metrikaId: site.metrikaId, jivoSrc: site.jivoSrc }}>
-      // Analytics and chat load after the page is interactive and idle, so they never slow down the first paint.
+    <script is:inline define:vars={{ metrikaId: site.metrikaId }}>
+      // Analytics loads after the page is interactive and idle, so it never slows down the first paint.
+      // Jivo was replaced by our own chat (ChatWidget, owner 06.11.2026).
       (function () {
         var started = false;
         function start() {
@@ -87,14 +90,6 @@ const ld = [localBusiness(), website(), ...schema];
             k.async = 1; k.src = r; a.parentNode.insertBefore(k, a);
           })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
           window.ym(metrikaId, 'init', { webvisor: true, clickmap: true, accurateTrackBounce: true, trackLinks: true });
-          // On phones the chat button would cover the bottom action bar (call / Telegram / order) — skip it there.
-          if (window.matchMedia('(max-width: 760px)').matches) return;
-          setTimeout(function () {
-            var s = document.createElement('script');
-            s.src = jivoSrc;
-            s.async = true;
-            document.body.appendChild(s);
-          }, 4000);
         }
         ['scroll', 'pointerdown', 'keydown', 'touchstart'].forEach(function (ev) {
           window.addEventListener(ev, start, { once: true, passive: true });

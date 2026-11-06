@@ -40,7 +40,6 @@ export const site = {
     { platform: '2ГИС', rating: 4.6, count: 31, unit: 'оценка', href: 'https://2gis.ru/kaliningrad/firm/70000001042531447/tab/reviews' },
   ],
   metrikaId: 108361089,
-  jivoSrc: 'https://code.jivo.ru/widget/STxub3I6lS',
 } as const;
 
 export interface NavLink {

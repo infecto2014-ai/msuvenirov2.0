@@ -10,4 +10,6 @@ export default defineConfig({
   build: { format: 'file', inlineStylesheets: 'auto' },
   integrations: [preact()],
   prefetch: { prefetchAll: false, defaultStrategy: 'hover' },
+  // `npm run dev`: the chat API (server/chat) runs separately on 127.0.0.1:8787; on the server nginx proxies /api/.
+  vite: { server: { proxy: { '/api': 'http://127.0.0.1:8787' } } },
 });

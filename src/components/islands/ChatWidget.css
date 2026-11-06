@@ -1,0 +1,356 @@
+/* Site chat — «CMYK 2.0»: dark pill launcher bottom-right, card window with a cyan offset shadow.
+   On phones the launcher is hidden (the «Чат» button of the bottom bar opens it) and the window is full-screen. */
+.chatw-launch {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 44;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 54px;
+  padding: 0 20px 0 18px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 var(--m), 0 18px 30px -14px rgba(22, 20, 27, 0.55);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.chatw-launch:hover {
+  transform: translateY(-2px);
+  box-shadow: 5px 6px 0 var(--m), 0 22px 34px -14px rgba(22, 20, 27, 0.55);
+}
+.chatw-launch.is-hidden {
+  display: none;
+}
+.chatw-launch i,
+.chatw-status i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #9a948a;
+}
+.chatw-launch i.is-on,
+.chatw-status i.is-on {
+  background: #2ccf6d;
+  box-shadow: 0 0 0 3px rgba(44, 207, 109, 0.25);
+}
+.chatw-badge {
+  position: absolute;
+  top: -6px;
+  right: -4px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--m);
+  color: #fff;
+  font-size: 0.75rem;
+}
+
+.chatw {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 60;
+  width: min(380px, calc(100vw - 32px));
+  height: min(580px, calc(100dvh - 120px));
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  border-radius: 28px 28px 28px 10px;
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--c), 0 30px 60px -30px rgba(22, 20, 27, 0.55);
+  overflow: hidden;
+}
+.chatw-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 16px 16px 14px 20px;
+  background: var(--ink);
+  color: var(--paper);
+}
+.chatw-title {
+  margin: 0;
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+.chatw-status {
+  margin: 4px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.8rem;
+  color: rgba(255, 252, 245, 0.75);
+}
+.chatw-close {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 252, 245, 0.12);
+  color: var(--paper);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.chatw-close:hover {
+  background: var(--y);
+  color: var(--ink);
+}
+.chatw-list {
+  overflow-y: auto;
+  padding: 16px 14px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background:
+    radial-gradient(circle, rgba(22, 20, 27, 0.06) 1.2px, transparent 1.4px) 0 0 / 14px 14px,
+    var(--paper);
+}
+.chatw-msg {
+  max-width: 84%;
+  padding: 9px 13px 6px;
+  border-radius: 18px 18px 18px 6px;
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  align-self: flex-start;
+}
+.chatw-msg p {
+  margin: 0;
+  font-size: 0.93rem;
+  line-height: 1.42;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.chatw-msg small {
+  display: block;
+  margin-top: 2px;
+  text-align: right;
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+.chatw-msg.is-visitor {
+  align-self: flex-end;
+  border-radius: 18px 18px 6px 18px;
+  background: var(--c-soft);
+  border-color: transparent;
+}
+.chatw-msg.is-pending {
+  opacity: 0.6;
+}
+.chatw-msg.is-failed {
+  background: var(--m-soft);
+}
+.chatw-quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 2px 0 4px;
+}
+.chatw-quick button {
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1.5px solid var(--ink);
+  background: var(--card);
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.chatw-quick button:hover {
+  background: var(--y);
+}
+.chatw-note,
+.chatw-contact,
+.chatw-saved {
+  margin: 4px 0;
+  padding: 10px 12px;
+  border-radius: 16px;
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+.chatw-note {
+  background: var(--y-soft);
+}
+.chatw-note a {
+  font-weight: 700;
+}
+.chatw-contact {
+  display: grid;
+  gap: 8px;
+  background: var(--card);
+  border: 1.5px dashed var(--line-strong);
+}
+.chatw-contact label {
+  font-weight: 600;
+}
+.chatw-contact div {
+  display: flex;
+  gap: 6px;
+}
+.chatw-contact .input {
+  flex: 1;
+  min-width: 0;
+  min-height: 40px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+}
+.chatw-saved {
+  color: #1f7a45;
+  font-weight: 600;
+}
+.chatw-input {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 10px 12px;
+  border-top: 1.5px solid var(--line);
+  background: var(--card);
+}
+.chatw-input textarea {
+  flex: 1;
+  min-height: 44px;
+  max-height: 120px;
+  padding: 11px 14px;
+  border-radius: 22px;
+  border: 1.5px solid var(--line-strong);
+  background: var(--paper);
+  font: inherit;
+  font-size: 0.95rem;
+  resize: none;
+  field-sizing: content;
+}
+.chatw-input textarea:focus {
+  outline: none;
+  border-color: var(--ink);
+}
+.chatw-send {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: var(--m);
+  color: #fff;
+  cursor: pointer;
+}
+.chatw-send:disabled {
+  background: var(--line-strong);
+  cursor: default;
+}
+.chatw-foot {
+  margin: 0;
+  padding: 0 12px 10px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  background: var(--card);
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.chatw-foot button {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 700;
+  color: var(--m-ink);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.chatw-cb {
+  grid-row: 2 / -1;
+  overflow-y: auto;
+  padding: 20px;
+  background: var(--paper);
+}
+.chatw-cb form,
+.chatw-cb-done {
+  display: grid;
+  gap: 12px;
+}
+.chatw-cb p {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--ink-2);
+}
+.chatw-cb .chatw-cb-big {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+.chatw-cb label {
+  display: grid;
+  gap: 4px;
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+.chatw-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.chatw-err {
+  color: var(--m-ink) !important;
+  font-weight: 700;
+}
+.chatw-legal {
+  font-size: 0.74rem !important;
+  color: var(--muted) !important;
+}
+.chatw-back {
+  justify-self: start;
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (max-width: 760px) {
+  .chatw-launch {
+    display: none;
+  }
+  .chatw {
+    inset: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    height: 100dvh;
+    border-radius: 0;
+    border: 0;
+    box-shadow: none;
+    z-index: 70;
+  }
+  .chatw-head {
+    padding-top: calc(14px + env(safe-area-inset-top));
+  }
+  .chatw-input {
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
+  }
+  .chatw-input textarea {
+    font-size: 16px; /* no zoom on iOS */
+  }
+  .chatw-contact .input {
+    font-size: 16px;
+  }
+  /* the phone bar and the cookie notice stay under the full-screen chat */
+  :root.chat-open {
+    overflow: hidden;
+  }
+}

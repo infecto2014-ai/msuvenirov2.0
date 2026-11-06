@@ -1,0 +1,24 @@
+# systemd unit of the site chat (server/chat). Install: see docs/DEPLOY.md, section 11.
+[Unit]
+Description=msuvenirov.ru site chat (messages to Telegram)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/var/www/msuvenirov.ru/server/chat
+EnvironmentFile=/etc/msuvenirov-chat.env
+ExecStart=/usr/bin/node /var/www/msuvenirov.ru/server/chat/server.mjs
+Restart=always
+RestartSec=3
+StateDirectory=msuvenirov-chat
+# hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/msuvenirov-chat
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

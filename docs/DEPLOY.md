@@ -162,3 +162,40 @@ curl -sI https://msuvenirov.ru/no-such-page      # 404
 - С другого домена запрос к `send-telegram` блокируется CORS.
 - Более 5 заявок с одного IP за 10 минут → 429.
 - Нажатие «Одобрить/Отклонить» под отзывом в Telegram работает только у ID из `TELEGRAM_ADMIN_IDS`.
+
+## 11. Чат на сайте (свой, вместо Jivo)
+
+Окно чата (`src/components/islands/ChatWidget.tsx`) шлёт сообщения на небольшую программу на этом же сервере
+(`server/chat/`, без сторонних библиотек, нужен Node ≥ 18). Она хранит переписку в `/var/lib/msuvenirov-chat`
+и пересылает сообщения в Telegram; ответ владельца (кнопка «Ответить» на сообщении бота) возвращается в окно чата.
+Там же — заявки «Перезвоните мне».
+
+1. **Отдельный бот для чата.** В Telegram: @BotFather → `/newbot` → имя, например «Мастерская сувениров — чат».
+   Сохраните токен. Отдельный бот нужен потому, что у бота может быть только один вебхук, а у бота заявок
+   он уже занят модерацией отзывов (Supabase).
+2. **Куда приходят сообщения.** Напишите новому боту `/start`. Свой ID узнайте у @userinfobot.
+   Если отвечать будут несколько человек — создайте группу, добавьте туда бота и возьмите ID группы (начинается с `-100`).
+3. **Настройки на сервере** (под root):
+   ```bash
+   cp /var/www/msuvenirov.ru/deploy/chat/msuvenirov-chat.env.example /etc/msuvenirov-chat.env
+   nano /etc/msuvenirov-chat.env        # TG_BOT_TOKEN, TG_CHAT_ID, TG_WEBHOOK_SECRET
+   chmod 600 /etc/msuvenirov-chat.env
+   cp /var/www/msuvenirov.ru/deploy/chat/msuvenirov-chat.service /etc/systemd/system/
+   systemctl daemon-reload && systemctl enable --now msuvenirov-chat
+   systemctl status msuvenirov-chat      # должно быть active (running)
+   curl -s http://127.0.0.1:8787/api/health   # {"ok":true}
+   ```
+4. **nginx:** блок `location ^~ /api/` уже есть в `deploy/nginx/msuvenirov.ru.conf` (раздел 8 — как обновить конфиг).
+5. **Вебхук бота чата:**
+   ```bash
+   curl -sS "https://api.telegram.org/bot<TG_BOT_TOKEN>/setWebhook" \
+     -d "url=https://msuvenirov.ru/api/tg/webhook" \
+     -d "secret_token=<TG_WEBHOOK_SECRET>" \
+     -d 'allowed_updates=["message"]'
+   ```
+6. **Проверка:** откройте сайт, напишите в чат — сообщение придёт от бота. Нажмите «Ответить» и напишите ответ —
+   он появится в окне чата, а на вашем ответе бот поставит 👍. Кнопка «Перезвоните мне» присылает номер.
+7. Jivo с сайта убран (скрипт больше не подключается). Подписку Jivo можно отключить после проверки чата.
+
+Персональные данные: переписка и номера хранятся на этом сервере в России; пересылка в Telegram — трансграничная
+передача (решение по юридической части владелец примет отдельно).

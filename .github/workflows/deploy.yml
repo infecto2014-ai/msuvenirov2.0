@@ -57,4 +57,7 @@ jobs:
 
             npm ci --no-audit --no-fund
             npm run build
+
+            # site chat (server/chat): restart only if it is installed (docs/DEPLOY.md, section 11)
+            systemctl try-restart msuvenirov-chat 2>/dev/null || true
           EOF
