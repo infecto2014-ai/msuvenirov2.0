@@ -285,7 +285,7 @@
   border-radius: 50%;
   background: var(--y);
   border: 2.5px solid var(--ink);
-  box-shadow: 0 4px 10px -4px rgba(22, 20, 27, 0.5);
+  box-shadow: 0 4px 10px -4px rgba(3, 32, 48, 0.5);
 }
 
 .calc-slider::-moz-range-thumb {
@@ -446,9 +446,9 @@
   height: 150px;
   z-index: -1;
   background:
-    radial-gradient(circle at 40% 45%, rgba(0, 160, 220, 0.85) 34px, transparent 35px),
-    radial-gradient(circle at 62% 45%, rgba(229, 0, 125, 0.85) 34px, transparent 35px),
-    radial-gradient(circle at 51% 64%, rgba(255, 210, 31, 0.9) 34px, transparent 35px);
+    radial-gradient(circle at 40% 45%, rgba(19, 70, 91, 0.85) 34px, transparent 35px),
+    radial-gradient(circle at 62% 45%, rgba(138, 30, 28, 0.85) 34px, transparent 35px),
+    radial-gradient(circle at 51% 64%, rgba(209, 123, 122, 0.9) 34px, transparent 35px);
   opacity: 0.35;
 }
 
@@ -533,7 +533,7 @@
   margin-top: 14px;
   padding: 12px 14px;
   border-radius: 14px;
-  background: rgba(229, 0, 125, 0.22);
+  background: rgba(138, 30, 28, 0.22);
   color: #fff;
   font-weight: 600;
   font-size: 0.92rem;
@@ -586,7 +586,7 @@
   background: var(--ink);
   color: var(--paper);
   font-weight: 600;
-  box-shadow: 0 16px 30px -12px rgba(22, 20, 27, 0.6);
+  box-shadow: 0 16px 30px -12px rgba(3, 32, 48, 0.6);
   transition: opacity 0.2s ease, transform 0.2s ease;
   white-space: nowrap;
   max-width: calc(100vw - 32px);
@@ -900,7 +900,7 @@
     border-radius: 20px;
     background: var(--ink);
     color: var(--paper);
-    box-shadow: 0 12px 24px -10px rgba(22, 20, 27, 0.55);
+    box-shadow: 0 12px 24px -10px rgba(3, 32, 48, 0.55);
   }
   .calc-dock-sum {
     flex: 1;
@@ -956,7 +956,7 @@
   height: 16px;
   margin-right: 2px;
   border-radius: 50%;
-  border: 1.5px solid rgba(22, 20, 27, 0.25);
+  border: 1.5px solid rgba(3, 32, 48, 0.25);
   vertical-align: -3px;
 }
 .chip:has(.calc-swatch) {
