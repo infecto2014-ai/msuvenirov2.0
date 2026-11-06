@@ -1,4 +1,6 @@
 ---
+import '@fontsource/caveat/600.css';
+import '@fontsource/cormorant-garamond/600-italic.css';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import HowItWorks from '@/components/HowItWorks.astro';
 import PortfolioGrid from '@/components/PortfolioGrid.astro';
@@ -12,14 +14,14 @@ import { site } from '@/data/site';
 import { faqPage } from '@/lib/schema';
 
 const tiles = [
-  { href: '/pechat-na-futbolkah', title: 'Печать на футболках и худи', text: 'от 1 шт, на нашей футболке или на вашей', img: '/img/showcase/tshirt.webp', alt: 'Футболки с печатью логотипа', cat: 'textile', tone: 'c', size: 'xl', from: findProduct('textile', 'tshirt-unisex')!.fromPrice },
-  { href: '/pechat-na-kruzhkah', title: 'Печать на кружках', text: 'белые, хамелеон, золото', img: '/img/showcase/colored-mugs.webp', alt: 'Цветные кружки с печатью', cat: 'mugs', tone: 'm', size: 'tall' },
-  { href: '/znachki', title: 'Значки', text: 'закатные и на цанге', img: '/img/showcase/keychains.webp', alt: 'Значки и брелоки с логотипом', cat: 'badges', tone: 'y' },
-  { href: '/vizitki', title: 'Визитки', text: 'одно- и двусторонние', img: '/img/showcase/business-cards.webp', alt: 'Визитки', cat: 'cards', tone: 'c' },
-  { href: '/pechat-na-kepkah', title: 'Бейсболки и шопперы', text: 'печать логотипа', img: '/img/showcase/cap.webp', alt: 'Бейсболка с логотипом', cat: 'textile', tone: 'y', from: findProduct('textile', 'shopper')!.fromPrice },
-  { href: '/kalendari', title: 'Календари', text: 'квартальные, настенные, домики', img: '/img/showcase/stationery.webp', alt: 'Календари и полиграфия', cat: 'calendars', tone: 'm' },
-  { href: '/nakleyki', title: 'Стикеры', text: '3D из смолы и виниловые', img: '/img/showcase/stickers-3d.webp', alt: 'Объёмные 3D-стикеры', cat: 'stickers', tone: 'c' },
-  { href: '/fotopodarki', title: 'Фотоподарки', text: 'подушки, пазлы, магниты', img: '/img/showcase/pillow.webp', alt: 'Подушка с фото', cat: 'gifts', tone: 'y' },
+  { href: '/pechat-na-futbolkah', group: 'wear', title: 'Печать на футболках и худи', text: 'от 1 шт, на нашей футболке или на вашей', img: '/img/showcase/tshirt.webp', alt: 'Футболки с печатью логотипа', cat: 'textile', size: 'xl', from: findProduct('textile', 'tshirt-unisex')!.fromPrice },
+  { href: '/pechat-na-kruzhkah', group: 'souv', title: 'Печать на кружках', text: 'белые, хамелеон, золото', img: '/img/showcase/colored-mugs.webp', alt: 'Цветные кружки с печатью', cat: 'mugs', size: 'tall' },
+  { href: '/znachki', group: 'souv', title: 'Значки', text: 'закатные и на цанге', img: '/img/showcase/keychains.webp', alt: 'Значки и брелоки с логотипом', cat: 'badges' },
+  { href: '/vizitki', group: 'print', title: 'Визитки', text: 'одно- и двусторонние', img: '/img/showcase/business-cards.webp', alt: 'Визитки', cat: 'cards' },
+  { href: '/pechat-na-kepkah', group: 'wear', title: 'Бейсболки и шопперы', text: 'печать логотипа', img: '/img/showcase/cap.webp', alt: 'Бейсболка с логотипом', cat: 'textile', from: findProduct('textile', 'shopper')!.fromPrice },
+  { href: '/kalendari', group: 'print', title: 'Календари', text: 'квартальные, настенные, домики', img: '/img/showcase/stationery.webp', alt: 'Календари и полиграфия', cat: 'calendars' },
+  { href: '/nakleyki', group: 'souv', title: 'Стикеры', text: '3D из смолы и виниловые', img: '/img/showcase/stickers-3d.webp', alt: 'Объёмные 3D-стикеры', cat: 'stickers' },
+  { href: '/fotopodarki', group: 'gifts', title: 'Фотоподарки', text: 'подушки, пазлы, магниты', img: '/img/showcase/pillow.webp', alt: 'Подушка с фото', cat: 'gifts' },
 ];
 
 /** Popular orders with a ready "turnkey" price — always computed from pricing.ts, never typed by hand. */
@@ -39,13 +41,30 @@ const popular = [
 ];
 
 const occasions = [
-  { when: '31 декабря', title: 'Новый год', text: 'Ёлочные шары с фото, календари, подарки коллегам и клиентам', href: '/fotopodarki', tone: 'c' },
-  { when: '23 февраля', title: 'День защитника', text: 'Футболки и худи с надписью, кружки, значки', href: '/pechat-na-futbolkah', tone: 'y' },
-  { when: '8 марта', title: 'Женский день', text: 'Кружки с фото, подушки, пазлы, шопперы', href: '/pechat-na-kruzhkah', tone: 'm' },
-  { when: 'в любой день', title: 'День рождения', text: 'Футболка или худи с фото именинника, фотоподарки', href: '/pechat-na-hudi', tone: 'c' },
-  { when: 'май–июнь', title: 'Выпускной', text: 'Футболки для класса, значки, медали и вымпелы', href: '/znachki', tone: 'y' },
-  { when: 'круглый год', title: 'Для компании', text: 'Мерч для сотрудников, форма, подарки партнёрам', href: '/korporativnym-klientam', tone: 'm' },
+  { when: '31 декабря', title: 'Новый год', text: 'Ёлочные шары с фото, календари, подарки коллегам и клиентам', href: '/fotopodarki', img: '/portfolio/portfolio-6.webp' },
+  { when: '23 февраля', title: 'День защитника', text: 'Футболки и худи с надписью, кружки, значки', href: '/pechat-na-futbolkah', img: '/portfolio/portfolio-25.webp' },
+  { when: '8 марта', title: 'Женский день', text: 'Кружки с фото, подушки, пазлы, шопперы', href: '/pechat-na-kruzhkah', img: '/portfolio/portfolio-19.webp' },
+  { when: 'в любой день', title: 'День рождения', text: 'Футболка или худи с фото именинника, фотоподарки', href: '/pechat-na-hudi', img: '/portfolio/portfolio-22.webp' },
+  { when: 'май–июнь', title: 'Выпускной', text: 'Футболки для класса, значки, медали и вымпелы', href: '/znachki', img: '/portfolio/portfolio-20.webp' },
+  { when: 'круглый год', title: 'Для компании', text: 'Мерч для сотрудников, форма, подарки партнёрам', href: '/korporativnym-klientam', img: '/portfolio/branded-caps.webp' },
 ];
+
+const groups = [
+  { id: 'all', label: 'Всё' },
+  { id: 'wear', label: 'Одежда' },
+  { id: 'souv', label: 'Сувениры' },
+  { id: 'gifts', label: 'Фотоподарки' },
+  { id: 'print', label: 'Полиграфия' },
+];
+
+const values = [
+  { icon: 'calc', label: 'Цена сразу онлайн' },
+  { icon: 'clock', label: 'Срочно — без наценки' },
+  { icon: 'upload', label: 'Простой макет — бесплатно' },
+  { icon: 'check', label: 'Брак по нашей вине — переделаем' },
+] as const;
+
+const tshirtFrom = findProduct('textile', 'tshirt-unisex')!.fromPrice;
 
 const terms = [
   { icon: 'clock', title: 'Сроки', text: 'Обычно 1–3 рабочих дня. Срочные заказы — без наценки, успеем к нужной дате.' },
@@ -73,42 +92,79 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   path="/"
   schema={[faqPage(homeFaq)]}
 >
-  <!-- HERO -->
+  <!-- HERO: full-bleed photo card with a wave edge -->
   <section class="hero">
-    <div class="wrap hero-grid">
-      <div class="hero-text">
-        <p class="eyebrow">ТЦ «Экватор» · с {site.founded} года</p>
-        <h1 class="hero-title">
-          Печать на&nbsp;одежде и&nbsp;сувенирах <span class="mark">в&nbsp;Калининграде</span>
-        </h1>
-        <p class="lead">
-          Футболки, худи, кружки, значки, визитки и календари с вашим дизайном — от 1 штуки. Своё производство и больше 10 лет опыта в печати.
-        </p>
-        <div class="hero-actions">
-          <a class="btn btn-magenta" href="/price"><Icon name="calc" size={20} /> <span>Рассчитать<span class="hide-sm"> стоимость</span></span></a>
-          <button type="button" class="btn btn-ghost" data-order><Icon name="upload" size={20} /> <span class="hide-sm">Отправить макет</span><span class="show-sm">Макет</span></button>
+    <div class="wrap">
+      <div class="hero-card">
+        <img class="hero-photo" src="/portfolio/dtf-bestdad.webp" alt="" width="799" height="800" fetchpriority="high" decoding="async" />
+        <div class="hero-text">
+          <p class="hero-eyebrow mono">ТЦ «Экватор» · с {site.founded} года</p>
+          <h1 class="hero-title">Печать на&nbsp;одежде и&nbsp;сувенирах <span class="serif">в&nbsp;Калининграде</span></h1>
+          <p class="hero-lead">
+            Футболки, худи, кружки, значки, визитки и календари с вашим дизайном — от 1 штуки. Своё производство и больше 10 лет опыта в печати.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-magenta" href="/price"><Icon name="calc" size={20} /> <span>Рассчитать<span class="hide-sm"> стоимость</span></span></a>
+            <button type="button" class="btn hero-ghost" data-order><Icon name="upload" size={20} /> <span class="hide-sm">Отправить макет</span><span class="show-sm">Макет</span></button>
+          </div>
+          <div class="hero-proof">
+            <span class="hero-faces" aria-hidden="true">
+              <img src="/portfolio/portfolio-21.webp" alt="" width="40" height="40" />
+              <img src="/portfolio/portfolio-2.webp" alt="" width="40" height="40" />
+              <img src="/portfolio/branded-caps.webp" alt="" width="40" height="40" />
+            </span>
+            <span>Печатаем сами, в своей мастерской —<br class="hide-sm" /> от одной футболки до тиража для компании</span>
+          </div>
         </div>
-        <ul class="hero-facts">
-          <li><b>от 1 шт</b><span>без минимального тиража</span></li>
-          <li><b>0 ₽</b><span>наценка за срочность</span></li>
-          <li><b>50+</b><span>стирок выдерживает DTF</span></li>
-        </ul>
-      </div>
-
-      <div class="hero-collage" aria-hidden="true">
-        <div class="hc hc-1"><img src="/img/showcase/tshirt.webp" alt="" width="360" height="360" fetchpriority="high" /></div>
-        <div class="hc hc-2"><img src="/img/showcase/mug.webp" alt="" width="260" height="260" /></div>
-        <div class="hc hc-3"><img src="/img/showcase/keychains.webp" alt="" width="220" height="220" /></div>
-        <div class="hc hc-4"><img src="/img/showcase/cap.webp" alt="" width="200" height="200" /></div>
-        <span class="sticker hc-sticker">Срочные заказы</span>
-        <span class="reg hc-reg-1"></span>
-        <span class="reg hc-reg-2"></span>
-        <div class="hc-dots halftone"></div>
+        <a class="hero-float" href="/pechat-na-futbolkah">
+          <img src="/portfolio/portfolio-21.webp" alt="Футболка с фотоколлажем на заказ" width="378" height="504" />
+          <span class="hero-float-body">
+            <span class="hero-float-tag mono">Хит · от 1 шт</span>
+            <b>Футболка с вашим принтом</b>
+            <span class="mono">от {rub(tshirtFrom)}</span>
+          </span>
+          <span class="hero-float-go"><Icon name="arrow" size={18} /></span>
+        </a>
+        <span class="hand hero-hand" aria-hidden="true">сделано<br />в Калининграде
+          <svg viewBox="0 0 80 40" width="80" height="40"><path d="M4 6c14 22 38 30 66 26m0 0-9-8m9 8-10 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        </span>
+        <svg class="hero-wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0 80V44c160-30 320-40 520-14s360 44 560 22 260-44 360-46v74z" /></svg>
       </div>
     </div>
   </section>
 
-  <div class="band band-warm">
+  <!-- ABOUT: photo collage + values -->
+  <section class="section about" aria-labelledby="about-h">
+    <div class="wrap about-grid">
+      <div class="about-collage" aria-hidden="true">
+        <span class="ab-blob"></span>
+        <div class="ab ab-1"><img src="/portfolio/wedding-tshirts.webp" alt="" width="745" height="800" loading="lazy" decoding="async" /></div>
+        <div class="ab ab-2"><img src="/portfolio/corporate-polo.webp" alt="" width="745" height="800" loading="lazy" decoding="async" /></div>
+        <div class="ab ab-3"><img src="/portfolio/portfolio-2.webp" alt="" width="378" height="374" loading="lazy" decoding="async" /></div>
+        <span class="hand ab-hand">наши работы</span>
+      </div>
+      <div class="about-text">
+        <p class="eyebrow">Своя мастерская</p>
+        <h2 id="about-h">Печатаем то, что <span class="serif">хочется дарить</span></h2>
+        <p class="lead">
+          Свадебные футболки, поло для ресторана, кружки с видами города — каждый заказ делаем сами, в мастерской в ТЦ «Экватор». Перед печатью присылаем
+          макет на согласование, а простой соберём бесплатно.
+        </p>
+        <ul class="values">
+          {
+            values.map((v) => (
+              <li>
+                <span class="values-icon"><Icon name={v.icon} size={22} /></span>
+                <span>{v.label}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="band band-tint">
   <!-- POPULAR -->
   <section class="section popular" aria-labelledby="pop-h">
     <div class="wrap">
@@ -153,36 +209,39 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   </section>
   </div>
 
-  <div class="band band-paper">
-  <!-- CATEGORIES -->
+  <div class="band">
+  <!-- CATEGORIES: text + filter chips on the left, photo cards on the right -->
   <section class="section cats" aria-labelledby="cats-h">
     <div class="wrap">
-      <div class="section-head">
-        <div>
+      <div class="cats-grid">
+        <div class="cats-side">
           <p class="eyebrow">Что печатаем</p>
-          <h2 id="cats-h">Изделия и цены</h2>
+          <h2 id="cats-h">Изделия <span class="serif">и цены</span></h2>
+          <p>Цена «от» — за готовое изделие с печатью. Точную сумму покажет калькулятор на странице изделия.</p>
+          <div class="chips" role="group" aria-label="Показать группу">
+            {groups.map((g, i) => (<button type="button" class="chip" data-filter={g.id} aria-pressed={i === 0 ? 'true' : 'false'}>{g.label}</button>))}
+          </div>
+          <a class="cats-all" href="/uslugi"><span class="cats-all-go"><Icon name="arrow" size={18} /></span> Все услуги</a>
+          <span class="hand cats-hand" aria-hidden="true">нажмите, чтобы<br />посчитать</span>
         </div>
-        <a class="btn btn-ghost btn-sm" href="/uslugi">Все услуги →</a>
-      </div>
-      <div class="bento">
-        {
-          tiles.map((t) => {
-            const f = t.from ?? categoryFrom(t.cat).price;
-            return (
-              <a class={`tile tile-${t.tone} ${t.size ? `tile-${t.size}` : ''}`} href={t.href}>
-                <span class="tile-img">
+        <div class="pcards">
+          {
+            tiles.map((t) => {
+              const f = t.from ?? categoryFrom(t.cat).price;
+              return (
+                <a class={`pc ${t.size ? `pc-${t.size}` : ''}`} href={t.href} data-group={t.group}>
                   <img src={t.img} alt={t.alt} width="320" height="320" loading="lazy" decoding="async" />
-                </span>
-                <span class="tile-body">
-                  <h3 class="tile-title">{t.title}</h3>
-                  <span class="tile-text">{t.text}</span>
-                  <span class="tile-price mono">от {rub(f)}</span>
-                </span>
-                <span class="tile-arrow"><Icon name="arrow" /></span>
-              </a>
-            );
-          })
-        }
+                  <span class="pc-body">
+                    <span class="pc-price mono">от {rub(f)}</span>
+                    <h3>{t.title}</h3>
+                    <span class="pc-text">{t.text}</span>
+                  </span>
+                  <span class="pc-go"><Icon name="arrow" size={18} /></span>
+                </a>
+              );
+            })
+          }
+        </div>
       </div>
       <p class="cats-more">
         А ещё: <a href="/breloki">брелоки</a>, <a href="/magnity">магниты</a>, <a href="/poligrafiya">листовки и блокноты</a>,
@@ -196,26 +255,30 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   <PortfolioGrid />
   </div>
 
-  <div class="band band-paper">
+  <div class="band">
   <!-- OCCASIONS -->
   <section class="section occasions" aria-labelledby="occ-h">
     <div class="wrap">
       <div class="section-head">
         <div>
           <p class="eyebrow">Идеи подарков</p>
-          <h2 id="occ-h">Подарки к празднику</h2>
+          <h2 id="occ-h">Подарки <span class="serif">к празднику</span></h2>
         </div>
+        <span class="hand occ-hand" aria-hidden="true">лучше написать заранее!</span>
         <p>Подскажем, что подарить, и сделаем к нужной дате. Перед праздниками лучше написать заранее.</p>
       </div>
       <ul class="occ-grid">
         {
           occasions.map((o) => (
             <li>
-              <a class={`occ occ-${o.tone}`} href={o.href}>
+              <a class="occ" href={o.href}>
+                <img src={o.img} alt="" width="378" height="378" loading="lazy" decoding="async" />
                 <span class="occ-when mono">{o.when}</span>
-                <h3>{o.title}</h3>
-                <p>{o.text}</p>
-                <span class="occ-arrow" aria-hidden="true">→</span>
+                <span class="occ-body">
+                  <h3>{o.title}</h3>
+                  <p>{o.text}</p>
+                </span>
+                <span class="occ-go" aria-hidden="true"><Icon name="arrow" size={18} /></span>
               </a>
             </li>
           ))
@@ -225,11 +288,11 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   </section>
   </div>
 
-  <div class="band band-warm">
+  <div class="band band-tint">
   <Reviews />
   </div>
 
-  <div class="band band-paper">
+  <div class="band">
   <!-- B2B -->
   <section class="section" aria-labelledby="b2b-h">
     <div class="wrap">
@@ -270,7 +333,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   </section>
   </div>
 
-  <div class="band band-warm">
+  <div class="band band-tint">
   <HowItWorks />
 
   <!-- TERMS -->
@@ -292,7 +355,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   </section>
   </div>
 
-  <div class="band band-paper">
+  <div class="band">
   <!-- SEO TEXT -->
   <section class="section seo-text" aria-labelledby="seo-h">
     <div class="wrap">
@@ -335,271 +398,512 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   </section>
   </div>
 
-  <div class="band band-warm">
+  <div class="band band-tint">
   <FaqSection items={homeFaq} />
   </div>
 
-  <div class="band band-paper">
+  <div class="band">
   <ContactBlock />
   </div>
 </BaseLayout>
 
+<script>
+  // «Изделия и цены»: chips show one group; without JS every card stays visible
+  const grid = document.querySelector<HTMLElement>('.pcards');
+  document.querySelectorAll<HTMLButtonElement>('.chip[data-filter]').forEach((chip, _, all) => {
+    chip.addEventListener('click', () => {
+      const f = chip.dataset.filter;
+      all.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+      grid?.classList.toggle('is-filtered', f !== 'all');
+      grid?.querySelectorAll<HTMLElement>('.pc').forEach((card) => {
+        card.hidden = f !== 'all' && card.dataset.group !== f;
+      });
+    });
+  });
+</script>
+
 <style>
-  /* ---------------- hero */
-  .hero {
-    padding-block: clamp(20px, 3vw, 40px) clamp(24px, 4vw, 48px);
-    overflow: clip;
+  /* ---------------- shared accents (home only): serif italic word, handwritten notes */
+  .serif {
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.12em;
+    letter-spacing: 0;
+    line-height: 0.9;
   }
-  .hero-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-    gap: clamp(28px, 4vw, 56px);
+  .hand {
+    font-family: 'Caveat', 'Segoe Print', cursive;
+    font-weight: 600;
+    font-size: 1.45rem;
+    line-height: 1.05;
+    color: var(--c-ink);
+    pointer-events: none;
+  }
+
+  /* ---------------- hero: photo card with a wave edge */
+  .hero {
+    padding-block: clamp(12px, 2vw, 24px) 0;
+  }
+  .hero-card {
+    --hero-bg: #0f1d27;
+    position: relative;
+    display: flex;
     align-items: center;
+    min-height: clamp(500px, 46vw, 620px);
+    padding: clamp(28px, 4.5vw, 64px) clamp(22px, 4.5vw, 64px) clamp(84px, 9vw, 120px);
+    border-radius: clamp(26px, 3vw, 40px);
+    background: var(--hero-bg);
+    color: #fffcf5;
+    overflow: clip;
+    isolation: isolate;
+  }
+  .hero-photo {
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: 64%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 28%;
+    z-index: -2;
+  }
+  .hero-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(90deg, var(--hero-bg) 34%, rgba(15, 29, 39, 0.82) 46%, rgba(15, 29, 39, 0.2) 70%, rgba(15, 29, 39, 0) 86%),
+      radial-gradient(60% 80% at 0% 100%, rgba(0, 160, 220, 0.28), transparent 70%);
   }
   .hero-text {
     display: grid;
-    gap: 20px;
+    gap: 18px;
     justify-items: start;
+    max-width: 560px;
+  }
+  .hero-eyebrow {
+    margin: 0;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #9fe0f6;
   }
   .hero-title {
-    font-size: clamp(2rem, 3.6vw, 3.3rem);
-    line-height: 1.06;
+    margin: 0;
+    font-size: clamp(2.1rem, 4.2vw, 3.7rem);
+    line-height: 1.04;
     font-weight: 800;
-    max-width: 15ch;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
   }
-  .hero-text .lead {
-    max-width: 52ch;
+  .hero-title .serif {
+    color: #9fe0f6;
+  }
+  .hero-lead {
+    margin: 0;
+    max-width: 46ch;
+    font-size: clamp(1rem, 1.3vw, 1.15rem);
+    color: rgba(255, 252, 245, 0.82);
   }
   .hero-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    margin-top: 4px;
   }
-  .hero-facts {
-    list-style: none;
-    margin: 4px 0 0;
-    padding: 0;
+  .hero-ghost {
+    background: rgba(255, 252, 245, 0.1);
+    color: #fffcf5;
+    border: 1.5px solid rgba(255, 252, 245, 0.45);
+  }
+  .hero-ghost:hover {
+    background: #fffcf5;
+    color: var(--ink);
+  }
+  .hero-proof {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    align-items: center;
+    gap: 12px;
+    margin-top: 6px;
+    font-size: 0.86rem;
+    line-height: 1.35;
+    color: rgba(255, 252, 245, 0.75);
   }
-  .hero-facts li {
+  .hero-faces {
+    display: flex;
+    flex: none;
+  }
+  .hero-faces img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--hero-bg);
+  }
+  .hero-faces img + img {
+    margin-left: -12px;
+  }
+  .hero-float {
+    position: absolute;
+    top: clamp(22px, 3vw, 40px);
+    right: clamp(22px, 3vw, 40px);
+    width: 250px;
+    display: grid;
+    gap: 10px;
+    padding: 10px 10px 14px;
+    border-radius: 24px;
+    background: rgba(255, 252, 245, 0.96);
+    color: var(--ink);
+    text-decoration: none;
+    box-shadow: 0 24px 40px -20px rgba(0, 0, 0, 0.55);
+    transition: transform 0.2s ease;
+  }
+  .hero-float:hover {
+    color: var(--ink);
+    transform: translateY(-3px);
+  }
+  .hero-float img {
+    width: 100%;
+    aspect-ratio: 16 / 11;
+    object-fit: cover;
+    object-position: 50% 30%;
+    border-radius: 16px;
+  }
+  .hero-float-body {
     display: grid;
     gap: 2px;
-    padding: 12px 16px;
-    border-radius: 18px;
-    background: var(--card);
-    border: 1.5px solid var(--line);
-    min-width: 150px;
+    padding: 0 6px;
+    padding-right: 44px;
   }
-  .hero-facts b {
-    font-family: var(--mono);
-    font-size: 1.25rem;
-    letter-spacing: -0.03em;
+  .hero-float-body b {
+    font-size: 1rem;
+    line-height: 1.25;
   }
-  .hero-facts span {
+  .hero-float-body .mono {
     font-size: 0.82rem;
     color: var(--muted);
   }
-
-  .hero-collage {
-    position: relative;
-    aspect-ratio: 1 / 1.02;
-    max-width: 540px;
-    width: min(100%, calc((100svh - 190px) / 1.02));
-    justify-self: end;
-  }
-  .hc {
-    position: absolute;
-    overflow: clip;
-    box-shadow: 0 24px 40px -24px rgba(22, 20, 27, 0.45);
-  }
-  .hc img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: var(--pos, 50% 50%);
-    transform: scale(var(--zoom, 1)) translate(var(--dx, 0), var(--dy, 0));
-    mix-blend-mode: multiply;
-  }
-  /* The photos are portrait and the shapes are irregular: these values put each product
-     in the visual middle of its shape (zoom leaves room for the small shift). */
-  .hc-1 img { --pos: 50% 0%; --zoom: 1.08; --dx: 3%; }
-  .hc-2 img { --pos: 50% 0%; --zoom: 1.1; --dy: 3%; }
-  .hc-3 img { --pos: 50% 10%; --zoom: 1.08; --dx: 2%; }
-  .hc-4 img { --pos: 50% 0%; --zoom: 1.12; --dx: 4%; --dy: 2%; }
-  .hc-1 {
-    left: 0;
-    top: 6%;
-    width: 60%;
-    aspect-ratio: 1;
-    background: var(--c-soft);
-    border-radius: 48% 52% 46% 54% / 55% 45% 55% 45%;
-  }
-  .hc-2 {
-    right: 2%;
-    top: 0;
-    width: 40%;
-    aspect-ratio: 1;
-    background: var(--m-soft);
-    border-radius: 50%;
-  }
-  .hc-3 {
-    right: 0;
-    bottom: 6%;
-    width: 46%;
-    aspect-ratio: 1;
-    background: var(--y-soft);
-    border-radius: 36px 36px 120px 36px;
-  }
-  .hc-4 {
-    left: 14%;
-    bottom: 0;
-    width: 34%;
-    aspect-ratio: 1;
-    background: var(--paper-2);
-    border-radius: 120px 36px 36px 36px;
-  }
-  .hc-sticker {
-    position: absolute;
-    left: 38%;
-    top: 46%;
-    z-index: 3;
-    transform: rotate(-6deg);
-    font-size: 0.95rem;
-    max-width: 200px;
-    text-align: center;
-    line-height: 1.2;
-  }
-  .hc-reg-1 {
-    position: absolute;
-    left: -4px;
-    bottom: 38%;
-    color: var(--ink);
-    opacity: 0.6;
-  }
-  .hc-reg-2 {
-    position: absolute;
-    right: 44%;
-    top: -2px;
-    color: var(--ink);
-    opacity: 0.6;
-  }
-  .hc-dots {
-    position: absolute;
-    inset: 20% 10% 10% 20%;
-    z-index: -1;
-    border-radius: 50%;
-  }
-
-  /* ---------------- categories (bento) */
-  .bento {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-auto-rows: minmax(200px, auto);
-    gap: 16px;
-  }
-  .tile {
-    --bg: var(--c-soft);
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 20px;
-    border-radius: var(--radius-l);
-    background: var(--bg);
-    text-decoration: none;
-    color: var(--ink);
-    overflow: clip;
-    isolation: isolate;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  .tile:hover {
-    color: var(--ink);
-    transform: translateY(-3px);
-    box-shadow: 6px 6px 0 var(--ink);
-  }
-  .tile-c { --bg: var(--c-soft); }
-  .tile-m { --bg: var(--m-soft); }
-  .tile-y { --bg: var(--y-soft); }
-  .tile-xl {
-    grid-column: span 2;
-    grid-row: span 2;
-  }
-  .tile-tall {
-    grid-row: span 2;
-  }
-  .tile-img {
-    position: absolute;
-    right: -8%;
-    top: -6%;
-    width: 62%;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    overflow: clip;
-    z-index: -1;
-    background: rgba(255, 255, 255, 0.6);
-  }
-  .tile-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    mix-blend-mode: multiply;
-    transition: transform 0.35s ease;
-  }
-  .tile:hover .tile-img img {
-    transform: scale(1.06) rotate(-2deg);
-  }
-  .tile-xl .tile-img,
-  .tile-tall .tile-img {
-    width: 78%;
-    right: -4%;
-    top: 4%;
-  }
-  .tile-body {
-    margin-top: auto;
-    display: grid;
-    gap: 4px;
-    padding-right: 40px;
-  }
-  .tile-title {
-    font-weight: 900;
-    font-size: clamp(1.15rem, 1.6vw, 1.4rem);
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-  }
-  .tile-xl .tile-title {
-    font-size: clamp(1.6rem, 3vw, 2.4rem);
-  }
-  .tile-text {
-    font-size: 0.9rem;
-    color: var(--ink-2);
-  }
-  .tile-price {
-    justify-self: start;
-    margin-top: 8px;
-    padding: 6px 12px;
-    border-radius: 999px;
-    background: var(--card);
+  .hero-float-body .hero-float-tag {
+    color: var(--c-ink);
     font-weight: 700;
-    font-size: 0.88rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
-  .tile-arrow {
+  .hero-float-go {
     position: absolute;
-    right: 16px;
+    right: 14px;
     bottom: 16px;
     display: grid;
     place-items: center;
-    width: 42px;
-    height: 42px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--c);
+    color: #fff;
+  }
+  .hero-hand {
+    position: absolute;
+    right: clamp(150px, 20vw, 290px);
+    bottom: clamp(90px, 10vw, 130px);
+    color: #fffcf5;
+    transform: rotate(-6deg);
+    text-align: right;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+  }
+  .hero-hand svg {
+    display: block;
+    margin: 2px 0 0 auto;
+  }
+  .hero-wave {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    width: 100%;
+    height: clamp(40px, 6vw, 80px);
+    fill: var(--paper);
+  }
+
+  /* ---------------- about: collage + values */
+  .about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    gap: clamp(32px, 6vw, 96px);
+    align-items: center;
+  }
+  .about-collage {
+    position: relative;
+    aspect-ratio: 1 / 0.92;
+    max-width: 100%;
+  }
+  .ab {
+    position: absolute;
+    overflow: clip;
+    box-shadow: 0 24px 40px -26px rgba(22, 20, 27, 0.5);
+    background: var(--paper-2);
+  }
+  .ab img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .ab-1 {
+    left: 0;
+    top: 0;
+    width: 52%;
+    height: 58%;
+    border-radius: 34px 60px 34px 34px;
+    transform: rotate(-2deg);
+  }
+  .ab-2 {
+    right: 2%;
+    top: 6%;
+    width: 42%;
+    height: 50%;
+    border-radius: 60px 34px 34px 34px;
+    transform: rotate(2deg);
+  }
+  .ab-3 {
+    left: 14%;
+    bottom: 0;
+    width: 74%;
+    height: 40%;
+    border-radius: 34px 34px 80px 34px;
+  }
+  .ab-3 img {
+    object-position: 50% 40%;
+  }
+  .ab-blob {
+    position: absolute;
+    left: -4%;
+    bottom: -4%;
+    width: 46%;
+    aspect-ratio: 1;
+    border-radius: 58% 42% 50% 50% / 50% 56% 44% 50%;
+    background: var(--c-soft);
+    z-index: -1;
+  }
+  .ab-hand {
+    position: absolute;
+    right: 6%;
+    top: -9%;
+    transform: rotate(-6deg);
+  }
+  .about-text {
+    display: grid;
+    gap: 16px;
+    justify-items: start;
+  }
+  .about-text h2 {
+    font-size: clamp(1.9rem, 3.4vw, 2.9rem);
+    line-height: 1.06;
+    text-wrap: balance;
+  }
+  .about-text h2 .serif,
+  .cats-side h2 .serif,
+  .occasions h2 .serif {
+    color: var(--c-ink);
+  }
+  .values {
+    list-style: none;
+    margin: 12px 0 0;
+    padding: 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .values li {
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    text-align: center;
+    font-size: 0.88rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .values-icon {
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    border: 1.5px solid var(--line-strong);
+    color: var(--c-ink);
+    background: var(--card);
+  }
+
+  /* ---------------- categories: text + chips, photo cards */
+  .cats-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 2.2fr);
+    gap: clamp(24px, 4vw, 56px);
+    align-items: start;
+  }
+  .cats-side {
+    position: sticky;
+    top: 110px;
+    display: grid;
+    gap: 16px;
+    justify-items: start;
+  }
+  .cats-side h2 {
+    font-size: clamp(1.9rem, 3.2vw, 2.7rem);
+    line-height: 1.05;
+  }
+  .cats-side > p {
+    margin: 0;
+    color: var(--muted);
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    min-height: 40px;
+    padding: 0 16px;
+    border-radius: 999px;
+    border: 1.5px solid var(--line-strong);
+    background: var(--card);
+    color: var(--ink);
+    font: inherit;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .chip:hover {
+    border-color: var(--ink);
+  }
+  .chip[aria-pressed='true'] {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+  .cats-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 6px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .cats-all-go {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
     border-radius: 50%;
     background: var(--ink);
     color: var(--paper);
     transition: transform 0.2s ease;
   }
-  .tile:hover .tile-arrow {
+  .cats-all:hover .cats-all-go {
+    transform: translateX(4px);
+  }
+  .cats-hand {
+    margin-top: 10px;
+    transform: rotate(-4deg);
+  }
+  .pcards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-rows: 210px;
+    grid-auto-flow: dense;
+    gap: 14px;
+  }
+  .pc {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    padding: 18px;
+    border-radius: 26px;
+    overflow: clip;
+    isolation: isolate;
+    color: #fff;
+    text-decoration: none;
+    background: #2a2033;
+  }
+  .pc img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+    transition: transform 0.4s ease;
+  }
+  .pc::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, rgba(15, 29, 39, 0) 38%, rgba(15, 29, 39, 0.82) 100%);
+  }
+  .pc:hover {
+    color: #fff;
+  }
+  .pc:hover img {
+    transform: scale(1.05);
+  }
+  .pc-xl {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+  .pc-tall {
+    grid-row: span 2;
+  }
+  .pc-body {
+    display: grid;
+    gap: 4px;
+    justify-items: start;
+    padding-right: 46px;
+  }
+  .pc h3 {
+    font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+    line-height: 1.15;
+  }
+  .pc-xl h3 {
+    font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+  }
+  .pc-text {
+    font-size: 0.86rem;
+    color: rgba(255, 255, 255, 0.82);
+  }
+  .pc-price {
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(255, 252, 245, 0.95);
+    color: var(--ink);
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+  .pc-go {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #fffcf5;
+    color: var(--ink);
+    transition: transform 0.2s ease;
+  }
+  .pc:hover .pc-go {
     transform: rotate(-45deg);
+  }
+  .pcards.is-filtered .pc {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .pcards .pc[hidden] {
+    display: none;
   }
   .cats-more {
     margin-top: 22px;
@@ -610,7 +914,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     font-weight: 600;
   }
 
-  /* ---------------- b2b */
+/* ---------------- b2b */
   .b2b {
     position: relative;
     display: grid;
@@ -788,66 +1092,283 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     color: var(--ink);
   }
 
-  /* ---------------- occasions */
+  /* ---------------- occasions: photo cards */
+  .occasions .section-head {
+    position: relative;
+  }
+  .occ-hand {
+    position: absolute;
+    left: clamp(320px, 38vw, 470px);
+    top: 8px;
+    transform: rotate(-6deg);
+  }
   .occ-grid {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 14px;
+    gap: 16px;
   }
   .occ {
-    --bg: var(--c-soft);
     position: relative;
-    display: grid;
-    gap: 6px;
+    display: flex;
+    align-items: flex-end;
+    min-height: 270px;
     height: 100%;
-    padding: 22px 56px 22px 22px;
-    border-radius: 28px 28px 28px 8px;
-    background: var(--bg);
-    color: var(--ink);
+    padding: 20px;
+    border-radius: 26px;
+    overflow: clip;
+    isolation: isolate;
+    color: #fff;
     text-decoration: none;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background: #2a2033;
+  }
+  .occ img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+    transition: transform 0.4s ease;
+  }
+  .occ::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, rgba(15, 29, 39, 0.05) 30%, rgba(15, 29, 39, 0.85) 100%);
   }
   .occ:hover {
-    color: var(--ink);
-    transform: translateY(-3px);
-    box-shadow: 5px 5px 0 var(--ink);
+    color: #fff;
   }
-  .occ-m { --bg: var(--m-soft); }
-  .occ-y { --bg: var(--y-soft); }
+  .occ:hover img {
+    transform: scale(1.05);
+  }
   .occ-when {
-    justify-self: start;
-    padding: 3px 10px;
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    padding: 5px 12px;
     border-radius: 999px;
-    background: var(--card);
-    font-size: 0.78rem;
+    background: rgba(255, 252, 245, 0.95);
+    color: var(--ink);
+    font-size: 0.76rem;
     font-weight: 700;
   }
+  .occ-body {
+    display: grid;
+    gap: 4px;
+    padding-right: 46px;
+  }
   .occ h3 {
-    font-size: 1.25rem;
+    font-size: 1.3rem;
   }
   .occ p {
     margin: 0;
-    font-size: 0.92rem;
-    color: var(--ink-2);
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.85);
   }
-  .occ-arrow {
+  .occ-go {
     position: absolute;
-    right: 18px;
+    right: 16px;
     bottom: 18px;
     display: grid;
     place-items: center;
-    width: 34px;
-    height: 34px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
-    background: var(--ink);
-    color: var(--paper);
-    font-weight: 700;
+    background: #fffcf5;
+    color: var(--ink);
+    transition: transform 0.2s ease;
+  }
+  .occ:hover .occ-go {
+    transform: rotate(-45deg);
   }
 
-  /* ---------------- terms */
+  /* ---------------- tablets */
+  @media (max-width: 1020px) {
+    .hero-photo {
+      width: 72%;
+    }
+    .hero-float {
+      display: none;
+    }
+    .about-grid,
+    .cats-grid {
+      grid-template-columns: 1fr;
+    }
+    .about-collage {
+      width: min(100%, 520px);
+      justify-self: center;
+    }
+    .cats-side {
+      position: static;
+    }
+    .cats-hand {
+      display: none;
+    }
+    .occ-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .occ-hand {
+      display: none;
+    }
+  }
+
+  /* ---------------- phones */
+  @media (max-width: 560px) {
+    .hero {
+      padding-top: 8px;
+    }
+    .hero-card {
+      min-height: 0;
+      align-items: flex-end;
+      padding: 230px 18px 64px;
+      border-radius: 26px;
+    }
+    .hero-photo {
+      width: 100%;
+      height: 330px;
+      object-position: 50% 22%;
+    }
+    .hero-card::before {
+      background: linear-gradient(180deg, rgba(15, 29, 39, 0) 90px, rgba(15, 29, 39, 0.85) 230px, var(--hero-bg) 300px);
+    }
+    .hero-text {
+      gap: 14px;
+    }
+    .hero-title {
+      font-size: 2rem;
+    }
+    .hero-lead {
+      font-size: 0.98rem;
+    }
+    .hero-actions {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      width: 100%;
+      gap: 8px;
+    }
+    .hero-actions .btn {
+      justify-content: center;
+      padding-inline: 10px;
+    }
+    .hero-proof {
+      font-size: 0.8rem;
+    }
+    .hero-faces img {
+      width: 34px;
+      height: 34px;
+    }
+    .hero-hand {
+      right: 16px;
+      bottom: auto;
+      top: 150px;
+      font-size: 1.2rem;
+    }
+    .hero-hand svg {
+      display: none;
+    }
+    .about-collage {
+      width: 100%;
+    }
+    .ab-hand {
+      font-size: 1.2rem;
+    }
+    .values {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px 10px;
+    }
+    .values li {
+      grid-template-columns: 44px 1fr;
+      justify-items: start;
+      align-items: center;
+      text-align: left;
+      font-size: 0.82rem;
+    }
+    .values-icon {
+      width: 44px;
+      height: 44px;
+    }
+    .chips {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      width: calc(100% + var(--gutter) * 2);
+      margin-inline: calc(var(--gutter) * -1);
+      padding: 0 var(--gutter) 4px;
+      scrollbar-width: none;
+    }
+    .chip {
+      flex: none;
+    }
+    .pcards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-rows: 168px;
+      gap: 10px;
+    }
+    .pc {
+      padding: 12px;
+      border-radius: 20px;
+    }
+    .pc-tall {
+      grid-row: auto;
+    }
+    .pc-xl {
+      grid-row: span 1;
+    }
+    .pc-body {
+      padding-right: 0;
+    }
+    .pc h3 {
+      font-size: 1rem;
+    }
+    .pc-xl h3 {
+      font-size: 1.35rem;
+    }
+    .pc-text,
+    .pc-go {
+      display: none;
+    }
+    .pc-xl .pc-text {
+      display: block;
+    }
+    .cats-more {
+      margin-top: 14px;
+      font-size: 0.9rem;
+    }
+    .occ-grid {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      margin-inline: calc(var(--gutter) * -1);
+      padding: 0 var(--gutter) 8px;
+      scrollbar-width: none;
+    }
+    .occ-grid li {
+      flex: 0 0 74%;
+      scroll-snap-align: center;
+    }
+    .occ {
+      min-height: 250px;
+      padding: 16px;
+      border-radius: 22px;
+    }
+    .occ p {
+      font-size: 0.84rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pc img,
+    .occ img,
+    .hero-float {
+      transition: none;
+    }
+  }
+
+/* ---------------- terms */
   .terms-band {
     padding-bottom: var(--section);
   }
@@ -906,23 +1427,10 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   }
 
   @media (max-width: 1020px) {
-    .hero-grid {
-      grid-template-columns: 1fr;
-    }
-    .hero-collage {
-      justify-self: center;
-      max-width: 460px;
-    }
-    .bento {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
     .b2b {
       grid-template-columns: 1fr;
     }
     .pop-grid,
-    .occ-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
     .terms {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -933,57 +1441,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     }
   }
   @media (max-width: 560px) {
-    /* phones: two small tiles per row, the big one full width */
-    .bento {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      grid-auto-rows: auto;
-      gap: 10px;
-    }
-    .tile {
-      min-height: 168px;
-      padding: 14px;
-      gap: 8px;
-    }
-    .tile-xl {
-      grid-column: 1 / -1;
-      grid-row: auto;
-      min-height: 220px;
-    }
-    .tile-tall {
-      grid-row: auto;
-    }
-    .tile-img,
-    .tile-tall .tile-img {
-      width: 96px;
-      right: -10px;
-      top: -10px;
-    }
-    .tile-xl .tile-img {
-      width: 170px;
-      right: 8px;
-      top: 8px;
-    }
-    .tile-body {
-      padding-right: 0;
-    }
-    .tile-title,
-    .tile-xl .tile-title {
-      font-size: 1.05rem;
-    }
-    .tile-xl .tile-title {
-      font-size: 1.45rem;
-      max-width: 60%;
-    }
-    .tile-text {
-      font-size: 0.8rem;
-    }
-    .tile-price {
-      font-size: 0.8rem;
-      padding: 4px 10px;
-    }
-    .tile-arrow {
-      display: none;
-    }
     /* phones: popular items scroll sideways, picture on top */
     .pop-grid {
       display: flex;
@@ -1007,19 +1464,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
       height: auto;
       aspect-ratio: 4 / 3;
     }
-    .tile {
-      min-height: 184px;
-    }
-    .bento > .tile:last-child:nth-child(even) {
-      grid-column: 1 / -1;
-    }
-    .occ-grid {
-      grid-template-columns: 1fr;
-      gap: 10px;
-    }
-    .occ {
-      padding: 16px 52px 16px 16px;
-    }
     .terms {
       grid-template-columns: 1fr;
       gap: 10px;
@@ -1039,27 +1483,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
       height: 38px;
       max-width: 110px;
     }
-    .hero-facts {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      width: 100%;
-      gap: 8px;
-    }
-    .hero-facts li {
-      min-width: 0;
-      padding: 10px 12px;
-      border-radius: 16px;
-    }
-    .hero-facts b {
-      font-size: 1.05rem;
-    }
-    .hero-facts span {
-      font-size: 0.74rem;
-      line-height: 1.3;
-    }
-    .hc-reg-1 {
-      display: none;
-    }
     .b2b {
       border-radius: 32px 32px 32px 80px;
     }
@@ -1078,44 +1501,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     .show-sm {
       display: inline;
     }
-    /* hero */
-    .hero {
-      padding-block: 14px 8px;
-    }
-    .hero-grid {
-      gap: 18px;
-    }
-    .hero-text {
-      gap: 14px;
-    }
-    .hero-title {
-      font-size: 1.85rem;
-    }
-    .hero-text .lead {
-      font-size: 0.98rem;
-    }
-    .hero-actions {
-      display: grid;
-      grid-template-columns: 1.3fr 1fr;
-      width: 100%;
-      gap: 8px;
-    }
-    .hero-actions .btn {
-      justify-content: center;
-      padding-inline: 10px;
-    }
-    .hero-collage {
-      max-width: 300px;
-      width: 78%;
-    }
-    .hc-sticker {
-      font-size: 0.78rem;
-      padding: 6px 10px;
-    }
-    .hc-reg-1,
-    .hc-reg-2 {
-      display: none;
-    }
     /* popular: narrower cards */
     .pop {
       flex-basis: 62%;
@@ -1129,61 +1514,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     .pop-price {
       font-size: 1.15rem;
       margin: 2px 0 4px;
-    }
-    /* product tiles */
-    .tile {
-      min-height: 132px;
-      padding: 12px;
-    }
-    .tile-xl {
-      min-height: 168px;
-    }
-    .tile-img,
-    .tile-tall .tile-img {
-      width: 78px;
-    }
-    .tile-xl .tile-img {
-      width: 140px;
-    }
-    .tile-text {
-      display: none;
-    }
-    .tile-xl .tile-text {
-      display: block;
-      max-width: 55%;
-    }
-    .tile-xl .tile-title {
-      font-size: 1.3rem;
-    }
-    .cats-more {
-      margin-top: 14px;
-      font-size: 0.9rem;
-    }
-    /* occasions: 2 columns, short cards */
-    .occ-grid {
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-    .occ {
-      padding: 12px 12px 14px;
-      gap: 4px;
-      border-radius: 20px 20px 20px 6px;
-    }
-    .occ h3 {
-      font-size: 1rem;
-    }
-    .occ p {
-      font-size: 0.78rem;
-      line-height: 1.35;
-    }
-    .occ-when {
-      font-size: 0.68rem;
-    }
-    .occ-arrow {
-      display: none;
-    }
-    .occasions .section-head p {
-      display: none;
     }
     /* companies */
     .b2b {
