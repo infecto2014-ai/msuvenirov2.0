@@ -109,6 +109,16 @@ describe('pricing', () => {
     expect(p.table?.columns).toEqual(['3–4 шт', '5–9 шт', '10–30 шт']);
   });
 
+  it('DTF sheets А3: 900 / 700 / 500 / 400, sublimation sheets А3 220…120, А4 — half; up to 50', () => {
+    const d = findProduct('transfers', 'dtf-sheet')!;
+    const at = (p: typeof d, qty: number, variant = 'a3') => p.quote({ ...defaultSelection(p), qty, options: { variant } }).unit;
+    expect([1, 4, 5, 9, 10, 29, 30, 50].map((q) => at(d, q))).toEqual([900, 900, 700, 700, 500, 500, 400, 400]);
+    expect(d.table?.columns).toEqual(['1–4 шт', '5–9 шт', '10–29 шт', '30–50 шт']);
+    const sub = findProduct('transfers', 'sub-sheet')!;
+    expect([1, 5, 10, 30].map((q) => at(sub, q))).toEqual([220, 180, 150, 120]);
+    expect([1, 5, 10, 30].map((q) => at(sub, q, 'a4'))).toEqual([110, 90, 75, 60]);
+  });
+
   it('t-shirt = blank + DTF print, extra prints at 70% and 50%', () => {
     const { p, s } = sel('textile', 'tshirt-unisex', { options: { print1: 'a4', print2: 'a6', print3: 'a6' }, qty: 1 });
     // 750 + 800 + 600*0.7 + 600*0.5

@@ -1,0 +1,220 @@
+---
+// Иллюстрация листа с принтами без нанесения (плоская графика «CMYK 2.0»).
+// kind="dtf" — прозрачная DTF-плёнка с яркими принтами и отогнутым уголком (поле 28 × 38 см);
+// kind="sub" — сублимационная бумага А3 или А4: на бумаге краски бледнее, надписи зеркальные (яркость — после переноса).
+// viewBox в миллиметрах: листы разных форматов при одном scale рисуются в реальном соотношении.
+import type { SheetKind, SheetLayout } from './sheet-types';
+
+interface Props {
+  kind?: SheetKind; // по умолчанию 'dtf'
+  format?: 'a3' | 'a4'; // для сублимации; DTF — всегда поле 28 × 38 см
+  layout?: SheetLayout; // раскладка принтов, по умолчанию 'mix'
+  dims?: boolean; // размеры листа
+  scale?: number; // px на мм, по умолчанию 1
+  title?: string;
+  class?: string;
+}
+
+const { kind = 'dtf', format = 'a3', layout = 'mix', dims = false, scale = 1, title, class: cls } = Astro.props;
+const sub = kind === 'sub';
+const [W, H] = sub ? (format === 'a4' ? [210, 297] : [297, 420]) : [280, 380];
+const u = 1 / scale;
+const pad = 10 + 8 * u;
+const dimPad = dims ? 26 * u + 8 : 0;
+const vbW = W + 2 * pad + dimPad;
+const vbH = H + 2 * pad + dimPad;
+const x0 = pad;
+const y0 = pad;
+const uid = 'sh' + crypto.randomUUID().slice(0, 8);
+const id = (s: string) => `${uid}-${s}`;
+const url = (s: string) => `url(#${id(s)})`;
+const label =
+  title ?? (sub ? `Сублимационный лист ${format === 'a4' ? 'А4' : 'А3'} с принтами` : 'Лист DTF-плёнки 28 × 38 см с принтами');
+
+type Item = { x: number; y: number; w: number; h: number; m: 'logo' | 'star' | 'heart' | 'text' | 'wave' | 'smile' };
+// раскладки в долях листа (0..1), чтобы подходили и к А3, и к А4
+const L: Record<SheetLayout, Item[]> = {
+  one: [{ x: 0.06, y: 0.05, w: 0.88, h: 0.9, m: 'logo' }],
+  four: [
+    { x: 0.08, y: 0.06, w: 0.38, h: 0.41, m: 'star' },
+    { x: 0.54, y: 0.06, w: 0.38, h: 0.41, m: 'logo' },
+    { x: 0.08, y: 0.53, w: 0.38, h: 0.41, m: 'heart' },
+    { x: 0.54, y: 0.53, w: 0.38, h: 0.41, m: 'wave' },
+  ],
+  logos: Array.from({ length: 30 }, (_, i) => {
+    const c = i % 5;
+    const r = Math.floor(i / 5);
+    const ms = ['logo', 'star', 'heart', 'smile', 'wave'] as const;
+    return { x: 0.04 + c * 0.19, y: 0.035 + r * 0.16, w: 0.16, h: 0.13, m: ms[(c + r) % 5] };
+  }),
+  mix: [
+    { x: 0.06, y: 0.05, w: 0.56, h: 0.5, m: 'logo' },
+    { x: 0.68, y: 0.05, w: 0.26, h: 0.15, m: 'star' },
+    { x: 0.68, y: 0.23, w: 0.26, h: 0.15, m: 'heart' },
+    { x: 0.68, y: 0.41, w: 0.26, h: 0.15, m: 'smile' },
+    { x: 0.06, y: 0.61, w: 0.88, h: 0.14, m: 'text' },
+    { x: 0.06, y: 0.8, w: 0.27, h: 0.16, m: 'wave' },
+    { x: 0.365, y: 0.8, w: 0.27, h: 0.16, m: 'star' },
+    { x: 0.67, y: 0.8, w: 0.27, h: 0.16, m: 'logo' },
+  ],
+};
+const items = L[layout as SheetLayout].map((it) => ({ ...it, x: x0 + it.x * W, y: y0 + it.y * H, w: it.w * W, h: it.h * H }));
+const C = '#00a0dc';
+const M = '#e5007d';
+const Y = '#ffd21f';
+const K = '#16141b';
+const fade = sub ? 0.62 : 1; // на сублимационной бумаге краски бледнее
+const curl = Math.min(W, H) * 0.12;
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox={`0 0 ${vbW.toFixed(1)} ${vbH.toFixed(1)}`}
+  width={Math.round(vbW * scale)}
+  height={Math.round(vbH * scale)}
+  role="img"
+  aria-label={label}
+  class:list={['sheetart', cls]}
+>
+  <title>{label}</title>
+  <defs>
+    <pattern id={id('check')} width="10" height="10" patternUnits="userSpaceOnUse">
+      <rect width="10" height="10" fill="#eef1f4" />
+      <rect width="5" height="5" fill="#e2e7ec" />
+      <rect x="5" y="5" width="5" height="5" fill="#e2e7ec" />
+    </pattern>
+    <linearGradient id={id('sheen')} x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.55" />
+      <stop offset="0.35" stop-color="#fff" stop-opacity="0" />
+      <stop offset="0.7" stop-color="#fff" stop-opacity="0.18" />
+      <stop offset="1" stop-color="#fff" stop-opacity="0" />
+    </linearGradient>
+    <clipPath id={id('sheet')}>
+      <path d={sub ? `M ${x0} ${y0} H ${x0 + W} V ${y0 + H} H ${x0} Z` : `M ${x0} ${y0} H ${x0 + W} V ${y0 + H - curl} L ${x0 + W - curl} ${y0 + H} H ${x0} Z`} />
+    </clipPath>
+  </defs>
+
+  {/* лист */}
+  <rect x={x0 + 3} y={y0 + 4} width={W} height={H} fill="#000" fill-opacity="0.12" rx="2" />
+  <g clip-path={url('sheet')}>
+    <rect x={x0} y={y0} width={W} height={H} fill={sub ? '#fbfaf7' : url('check')} />
+    {!sub && <rect x={x0} y={y0} width={W} height={H} fill="#bfe3f2" fill-opacity="0.18" />}
+
+    {/* принты */}
+    <g opacity={fade}>
+      {items.map((it) => {
+        const s = Math.min(it.w, it.h);
+        const cx = it.x + it.w / 2;
+        const cy = it.y + it.h / 2;
+        const mir = sub ? `translate(${2 * cx} 0) scale(-1 1)` : undefined;
+        return (
+          <g transform={mir}>
+            {/* белая подложка DTF чуть выступает из-под цвета */}
+            {it.m === 'logo' && (
+              <g>
+                <circle cx={cx} cy={cy - s * 0.08} r={s * 0.36} fill={K} />
+                <circle cx={cx} cy={cy - s * 0.08} r={s * 0.29} fill="#fff" />
+                <circle cx={cx - s * 0.08} cy={cy - s * 0.13} r={s * 0.13} fill={C} />
+                <circle cx={cx + s * 0.08} cy={cy - s * 0.13} r={s * 0.13} fill={M} style="mix-blend-mode:multiply" />
+                <circle cx={cx} cy={cy + s * 0.02} r={s * 0.13} fill={Y} style="mix-blend-mode:multiply" />
+                <rect x={cx - s * 0.32} y={cy + s * 0.34} width={s * 0.64} height={s * 0.08} rx={s * 0.03} fill={K} />
+              </g>
+            )}
+            {it.m === 'star' && (
+              <path
+                d={Array.from({ length: 10 }, (_, i) => {
+                  const a = ((-90 + i * 36) * Math.PI) / 180;
+                  const r = i % 2 ? s * 0.2 : s * 0.46;
+                  return `${i ? 'L' : 'M'} ${(cx + r * Math.cos(a)).toFixed(1)} ${(cy + r * Math.sin(a)).toFixed(1)}`;
+                }).join(' ') + ' Z'}
+                fill={Y}
+                stroke={K}
+                stroke-width={s * 0.04}
+                stroke-linejoin="round"
+              />
+            )}
+            {it.m === 'heart' && (
+              <path
+                d={`M ${cx} ${cy + s * 0.38} C ${cx - s * 0.5} ${cy + s * 0.05} ${cx - s * 0.42} ${cy - s * 0.42} ${cx} ${cy - s * 0.18} C ${cx + s * 0.42} ${cy - s * 0.42} ${cx + s * 0.5} ${cy + s * 0.05} ${cx} ${cy + s * 0.38} Z`}
+                fill={M}
+                stroke={K}
+                stroke-width={s * 0.04}
+              />
+            )}
+            {it.m === 'smile' && (
+              <g>
+                <circle cx={cx} cy={cy} r={s * 0.44} fill={Y} stroke={K} stroke-width={s * 0.04} />
+                <circle cx={cx - s * 0.15} cy={cy - s * 0.1} r={s * 0.05} fill={K} />
+                <circle cx={cx + s * 0.15} cy={cy - s * 0.1} r={s * 0.05} fill={K} />
+                <path d={`M ${cx - s * 0.22} ${cy + s * 0.08} Q ${cx} ${cy + s * 0.32} ${cx + s * 0.22} ${cy + s * 0.08}`} fill="none" stroke={K} stroke-width={s * 0.05} stroke-linecap="round" />
+              </g>
+            )}
+            {it.m === 'wave' && (
+              <g>
+                <rect x={it.x + it.w * 0.05} y={it.y + it.h * 0.1} width={it.w * 0.9} height={it.h * 0.8} rx={s * 0.12} fill={C} />
+                <circle cx={it.x + it.w * 0.68} cy={it.y + it.h * 0.35} r={s * 0.12} fill={Y} />
+                <path
+                  d={`M ${it.x + it.w * 0.1} ${it.y + it.h * 0.66} q ${it.w * 0.1} ${-s * 0.12} ${it.w * 0.2} 0 t ${it.w * 0.2} 0 t ${it.w * 0.2} 0 t ${it.w * 0.2} 0`}
+                  fill="none"
+                  stroke="#fff"
+                  stroke-width={s * 0.07}
+                  stroke-linecap="round"
+                />
+              </g>
+            )}
+            {it.m === 'text' && (
+              <g>
+                <rect x={it.x} y={it.y} width={it.w} height={it.h} rx={it.h * 0.2} fill={K} />
+                <text x={cx} y={cy + it.h * 0.2} font-size={it.h * 0.55} textLength={it.w * 0.8} lengthAdjust="spacingAndGlyphs" font-weight="900" text-anchor="middle" fill={Y}>
+                  YOUR BRAND
+                </text>
+              </g>
+            )}
+          </g>
+        );
+      })}
+    </g>
+    {!sub && <rect x={x0} y={y0} width={W} height={H} fill={url('sheen')} />}
+  </g>
+  <path
+    d={sub ? `M ${x0} ${y0} H ${x0 + W} V ${y0 + H} H ${x0} Z` : `M ${x0} ${y0} H ${x0 + W} V ${y0 + H - curl} L ${x0 + W - curl} ${y0 + H} H ${x0} Z`}
+    fill="none"
+    stroke={sub ? '#d9d4c7' : '#9fb4c2'}
+    stroke-width={1.2 * u}
+  />
+  {/* отогнутый уголок плёнки */}
+  {
+    !sub && (
+      <g>
+        <path d={`M ${x0 + W} ${y0 + H - curl} L ${x0 + W - curl} ${y0 + H} Q ${x0 + W - curl * 0.62} ${y0 + H - curl * 0.62} ${x0 + W} ${y0 + H - curl} Z`} fill="#dfe9ef" stroke="#9fb4c2" stroke-width={1.2 * u} />
+        <path d={`M ${x0 + W - curl * 0.15} ${y0 + H - curl * 0.85} L ${x0 + W - curl * 0.75} ${y0 + H - curl * 0.25}`} stroke="#fff" stroke-opacity="0.8" stroke-width={2 * u} />
+      </g>
+    )
+  }
+
+  {
+    dims && (
+      <g font-weight="800" fill="#16141b" class="mono">
+        <path d={`M ${x0} ${y0 + H + 10} H ${x0 + W} M ${x0} ${y0 + H + 6} v 8 M ${x0 + W} ${y0 + H + 6} v 8`} stroke="#16141b" stroke-width={1.2 * u} />
+        <rect x={x0 + W / 2 - 34 * u} y={y0 + H + 10 - 9 * u} width={68 * u} height={18 * u} rx={6 * u} fill="#ffd21f" />
+        <text x={x0 + W / 2} y={y0 + H + 10 + 4 * u} font-size={12 * u} text-anchor="middle">
+          {String(W / 10).replace(".", ",")} см
+        </text>
+        <path d={`M ${x0 + W + 10} ${y0} V ${y0 + H} M ${x0 + W + 6} ${y0} h 8 M ${x0 + W + 6} ${y0 + H} h 8`} stroke="#16141b" stroke-width={1.2 * u} />
+        <rect x={x0 + W + 10 - 9 * u} y={y0 + H / 2 - 34 * u} width={18 * u} height={68 * u} rx={6 * u} fill="#ffd21f" />
+        <text x={x0 + W + 10} y={y0 + H / 2} font-size={12 * u} text-anchor="middle" transform={`rotate(-90 ${x0 + W + 10} ${y0 + H / 2})`} dy={4 * u}>
+          {String(H / 10).replace(".", ",")} см
+        </text>
+      </g>
+    )
+  }
+</svg>
+
+<style>
+  .sheetart {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+</style>

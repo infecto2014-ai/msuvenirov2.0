@@ -91,6 +91,10 @@
 - Страница `src/pages/pechat-na-sportivnoy-forme.astro` (+ `src/data/sportPage.ts`, SVG `components/sport/SportArt.astro` — type jersey|tee|tank|shorts, view, color/trim, number, name, emblem, sponsor, zones). В меню «Одежда», в staticPages sitemap, ссылка с «Компаниям». Калькулятор: `own-item` (печать на форме клиента), `tshirt-sub`, `tshirt-unisex`.
 - Сделано на уже согласованных фактах (DTF на любой ткани; сублимация только светлая синтетика до А3, не «на всё изделие»; фамилии и номера по списку). Ждёт подтверждения владельца: есть ли своя спортивная форма (сейчас — только наши футболки), фамилия+номер считаются одним принтом А4 или двумя, есть ли доплата за персонализацию.
 
+## Принты без нанесения (06.11.2026)
+- DTF-печать листами А3 (поле 28×38 см): 1–4 — 900, 5–9 — 700, 10–29 — 500, 30–50 — 400 ₽ за лист; сублимационные листы А3: 220 / 180 / 150 / 120, А4 — ровно половина А3; больше 50 листов — индивидуально. Категория `transfers` в pricing.ts (`dtf-sheet`, `sub-sheet`, `SHEET_MAX`).
+- Страница `src/pages/dtf-pechat.astro` (+ `src/data/transfersPage.ts`, SVG `components/sheet/SheetArt.astro` — kind dtf|sub, format a3|a4, layout one|four|logos|mix, dims). В меню «Одежда» («DTF-печать без нанесения») и staticPages sitemap.
+
 ## Cookies (06.11.2026)
 - Плашка о cookies и сборе технических данных при первом входе — `src/components/CookieNotice.astro` в BaseLayout, «Понятно» запоминается в localStorage, ссылка «Подробнее» на /privacy-policy. Вышивку не делаем — на сайте не предлагать.
 

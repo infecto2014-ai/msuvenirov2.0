@@ -1441,7 +1441,43 @@ const gifts: Category = {
   ],
 };
 
-export const categories: Category[] = [textile, mugs, badges, keychains, magnets, stickers, cards, flyers, calendars, wide, gifts];
+// ---------------------------------------------------------------- prints without application (transfers)
+// Owner (06.11.2026): DTF transfers sold in А3 sheets (layout field 28×38 cm): 1–4 — 900, 5–9 — 700, 10–29 — 500,
+// 30–50 — 400 ₽ per sheet. Sublimation transfer sheets: А3 1–4 — 220, 5–9 — 180, 10–29 — 150, 30–50 — 120 ₽;
+// А4 is half of А3 (prices divided by two). More than 50 sheets — individually.
+export const SHEET_MAX = 50;
+const sheetTiers = [1, 5, 10, 30];
+const subSheetA3 = [220, 180, 150, 120];
+
+const transfers: Category = {
+  id: 'transfers',
+  name: 'Принты без нанесения',
+  page: '/dtf-pechat',
+  products: [
+    tiered({
+      id: 'dtf-sheet',
+      name: 'DTF-печать листами А3',
+      short: 'готовые трансферы, поле 28×38 см',
+      qty: { min: 1, max: SHEET_MAX, default: 1, individualAbove: true },
+      variants: [{ id: 'a3', label: 'Лист А3 — 28×38 см', tiers: tiers(sheetTiers, [900, 700, 500, 400]) }],
+      notes: ['Цена за лист: на одном листе можно разместить сколько угодно принтов, которые поместятся в поле 28×38 см.'],
+    }),
+    tiered({
+      id: 'sub-sheet',
+      name: 'Сублимационная печать листами',
+      short: 'на сублимационной бумаге, А3 или А4',
+      qty: { min: 1, max: SHEET_MAX, default: 1, individualAbove: true },
+      variantLabel: 'Формат листа',
+      variants: [
+        { id: 'a3', label: 'А3', hint: '29,7 × 42 см', tiers: tiers(sheetTiers, subSheetA3) },
+        { id: 'a4', label: 'А4', hint: '21 × 29,7 см', tiers: tiers(sheetTiers, subSheetA3.map((p) => p / 2)) },
+      ],
+      notes: ['Цена за лист: на листе можно разместить несколько принтов.'],
+    }),
+  ],
+};
+
+export const categories: Category[] = [textile, transfers, mugs, badges, keychains, magnets, stickers, cards, flyers, calendars, wide, gifts];
 
 export const findCategory = (id: string) => categories.find((c) => c.id === id);
 export const findProduct = (categoryId: string, productId?: string) => {
