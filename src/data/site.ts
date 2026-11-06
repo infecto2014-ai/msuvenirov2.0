@@ -61,6 +61,7 @@ export const serviceNav: { group: string; links: NavLink[] }[] = [
       { href: '/pechat-na-hudi', label: 'Печать на худи' },
       { href: '/pechat-na-shopperah', label: 'Печать на шопперах' },
       { href: '/pechat-na-kepkah', label: 'Печать на бейсболках' },
+      { href: '/pechat-na-specodezhde', label: 'Печать на спецодежде' },
       { href: '/sublimacionnaya-pechat', label: 'Сублимационная печать', image: '/portfolio/sublimation-anime.webp', calc: { category: 'textile', product: 'sub-print' } },
     ],
   },

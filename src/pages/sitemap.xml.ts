@@ -4,7 +4,7 @@ import { site } from '@/data/site';
 
 // Every indexable page. lastmod is omitted on purpose: a fake "build date" lastmod misleads crawlers.
 // own pages that are not in services.ts (src/pages/*.astro) are listed here
-const staticPages = ['/', '/price', '/uslugi', '/sublimacionnaya-pechat', '/portfolio', '/otzyvy', '/kontakty', '/o-nas', '/faq', '/trebovaniya-k-maketam', '/public-offer', '/privacy-policy'];
+const staticPages = ['/', '/price', '/uslugi', '/sublimacionnaya-pechat', '/pechat-na-specodezhde', '/portfolio', '/otzyvy', '/kontakty', '/o-nas', '/faq', '/trebovaniya-k-maketam', '/public-offer', '/privacy-policy'];
 
 export const GET: APIRoute = () => {
   const urls = [...new Set([...staticPages, ...services.map((s) => s.slug)])];
