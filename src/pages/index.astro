@@ -1304,8 +1304,10 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   }
   @media (prefers-reduced-motion: reduce) {
     .pc img,
-    .occ img,
+    .occ img {
+      transition: none;
     }
+  }
 
 /* ---------------- terms */
   .terms-band {
