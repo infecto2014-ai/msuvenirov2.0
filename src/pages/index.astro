@@ -98,16 +98,26 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
         </div>
         <div class="hero-text">
           <h1 class="hero-title">Печать на&nbsp;одежде и&nbsp;сувенирах <span class="serif">в&nbsp;Калининграде</span></h1>
-          <p class="hero-lead">
-            Футболки, худи, кружки, значки, визитки и календари с вашим дизайном — от 1 штуки. Своё производство и больше 10 лет опыта в печати.
-          </p>
+          <p class="hero-lead">Футболки, кружки, значки и полиграфия с&nbsp;вашим дизайном&nbsp;— от&nbsp;1&nbsp;штуки.</p>
           <div class="hero-actions">
             <a class="btn btn-magenta" href="/price"><Icon name="calc" size={20} /> <span>Рассчитать<span class="hide-sm"> стоимость</span></span></a>
             <button type="button" class="btn hero-ghost" data-order><Icon name="upload" size={20} /> <span class="hide-sm">Отправить макет</span><span class="show-sm">Макет</span></button>
           </div>
           <ul class="hero-facts">
-            <li><b>10&nbsp;000+</b><span>заказов выполнено<br />с&nbsp;{site.founded} года</span></li>
+            <li><b>10&nbsp;000+</b><span>заказов с&nbsp;{site.founded} года<br />и&nbsp;10+ лет опыта в&nbsp;печати</span></li>
             <li><Icon name="clock" size={22} /><span>{site.hours}<br />ТЦ «Экватор»</span></li>
+          </ul>
+        </div>
+        <div class="hero-clients">
+          <p class="mono">Нам доверяют</p>
+          <ul>
+            {
+              clients.map((c) => (
+                <li>
+                  <img src={c.src} alt={c.alt} title={c.alt} width="140" height="70" decoding="async" />
+                </li>
+              ))
+            }
           </ul>
         </div>
       </div>
@@ -435,10 +445,12 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   }
   .hero-card {
     position: relative;
-    display: flex;
+    display: grid;
+    grid-template-rows: 1fr auto;
     align-items: center;
-    min-height: clamp(500px, 44vw, 640px);
-    padding: clamp(32px, 4.5vw, 64px) 0 clamp(84px, 9vw, 120px);
+    gap: clamp(24px, 3vw, 40px);
+    min-height: clamp(560px, 48vw, 700px);
+    padding: clamp(32px, 4.5vw, 64px) 0 clamp(64px, 7vw, 100px);
   }
   /* photo box: from the text column to the right edge of the screen */
   .hero-media {
@@ -463,8 +475,45 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, var(--hero-bg) 0%, rgba(15, 29, 39, 0.8) 10%, rgba(15, 29, 39, 0.15) 26%, rgba(15, 29, 39, 0) 38%);
+    background:
+      linear-gradient(0deg, rgba(15, 29, 39, 0.92) 0, rgba(15, 29, 39, 0.55) 22%, rgba(15, 29, 39, 0) 40%),
+      linear-gradient(90deg, var(--hero-bg) 0%, rgba(15, 29, 39, 0.8) 10%, rgba(15, 29, 39, 0.15) 26%, rgba(15, 29, 39, 0) 38%);
     pointer-events: none;
+  }
+  /* client logos right under the first screen text (owner, 06.11.2026); dark background — some logos are white */
+  .hero-clients {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 14px clamp(20px, 3vw, 40px);
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 252, 245, 0.16);
+  }
+  .hero-clients p {
+    flex: none;
+    margin: 0;
+    font-size: 0.74rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 252, 245, 0.6);
+  }
+  .hero-clients ul {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px clamp(20px, 3vw, 40px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .hero-clients img {
+    display: block;
+    width: auto;
+    height: 44px;
+    max-width: 130px;
+    object-fit: contain;
+    opacity: 0.9;
   }
   .hero-text {
     position: relative;
@@ -553,8 +602,8 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   .hero-hand svg {
     position: absolute;
     left: 100%;
-    top: 26px;
-    margin-left: -10px;
+    top: 30px;
+    margin-left: 2px;
     filter: drop-shadow(0 0 3px rgba(255, 252, 245, 0.9));
   }
   .hero-wave {
@@ -1223,14 +1272,21 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     .hero-facts li {
       font-size: 0.8rem;
     }
-    .hero-hand {
-      right: 14px;
-      top: 14px;
-      font-size: 1.15rem;
-      color: #fffcf5;
-      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
+    .hero-clients {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      padding-top: 16px;
     }
-    .hero-hand svg {
+    .hero-clients ul {
+      gap: 12px 18px;
+    }
+    .hero-clients img {
+      height: 30px;
+      max-width: 96px;
+    }
+    /* the note sat on the trees and had no arrow on phones — hidden (owner, 06.11.2026) */
+    .hero-hand {
       display: none;
     }
     .about-collage {
