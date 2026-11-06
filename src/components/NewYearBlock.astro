@@ -1,329 +1,150 @@
 ---
 /**
- * New Year block: a tilted Christmas-ball SVG with a round photo window (left), the text in a candy-cane
- * frame (middle), Ded Moroz holding a sign with the countdown to New Year (right).
- * Three looks for the owner to choose from: 'light', 'night', 'red'.
- * By default it is shown only from 1 November to 31 December (script); `always` shows it all year (demo page).
+ * New Year block (owner chose the «night» look, 06.11.2026): a tilted red Christmas ball with a round photo
+ * window (left), the text in a candy-cane frame (middle), Ded Moroz holding a sign with the countdown (right).
+ * The top edge repeats the hero's wave, so the two dark blocks read as one composition with a paper ribbon between.
+ * Shown only from 1 November to 31 December (script). `link` — where the button leads (the New Year article later).
  */
 import '@fontsource/caveat/600.css';
 import '@fontsource/cormorant-garamond/600-italic.css';
 
 interface Props {
-  variant?: 'light' | 'night' | 'red';
   photo?: string;
-  always?: boolean;
-  headingId?: string;
+  link?: string;
+  linkLabel?: string;
 }
-const { variant = 'light', photo = '/portfolio/portfolio-6.webp', always = false, headingId = `ny-h-${variant}` } = Astro.props;
-const uid = `nyb-${variant}`;
-const mode = variant === 'light' ? 'days' : 'dhm';
+const { photo = '/portfolio/portfolio-6.webp', link = '#occ-h', linkLabel = 'Идеи подарков к Новому году' } = Astro.props;
 ---
 
-<section class={`nyb nyb-${variant} wrap`} aria-labelledby={headingId} data-nyb hidden={!always} data-always={always ? '' : undefined}>
+<section class="nyb wrap" aria-labelledby="nyb-h" data-nyb hidden>
   <div class="nyb-card">
-    {variant === 'night' && <span class="nyb-snow" aria-hidden="true"></span>}
+    <svg class="nyb-wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
+      <path class="nyb-wave-paper" d="M0 0v44c160-30 320-40 520-14s360 44 560 22 260-44 360-46V0z" />
+    </svg>
+    <span class="nyb-snow" aria-hidden="true"></span>
 
-    <!-- Christmas ball with a photo window -->
+    <!-- red Christmas ball with a photo window -->
     <div class="nyb-ball" aria-hidden="true">
       <svg viewBox="0 0 200 250" role="presentation">
         <defs>
-          <radialGradient id={`${uid}-g`} cx="38%" cy="38%" r="70%">
-            <stop offset="0" stop-color="var(--ball-hi)" />
-            <stop offset="0.55" stop-color="var(--ball)" />
-            <stop offset="1" stop-color="var(--ball-dark)" />
+          <radialGradient id="nyb-g" cx="36%" cy="36%" r="72%">
+            <stop offset="0" stop-color="#ff7d82" />
+            <stop offset="0.5" stop-color="#d7262e" />
+            <stop offset="1" stop-color="#6e0a10" />
           </radialGradient>
-          <linearGradient id={`${uid}-cap`} x1="0" x2="1">
+          <linearGradient id="nyb-cap" x1="0" x2="1">
             <stop offset="0" stop-color="#9c7a2b" />
             <stop offset="0.45" stop-color="#f3d77c" />
             <stop offset="1" stop-color="#a8832e" />
           </linearGradient>
-          <clipPath id={`${uid}-win`}><circle cx="100" cy="150" r="54" /></clipPath>
+          <clipPath id="nyb-win"><circle cx="100" cy="152" r="68" /></clipPath>
         </defs>
-        <path d="M100 0v34" stroke="var(--ball-string)" stroke-width="2" />
-        <circle cx="100" cy="36" r="9" fill="none" stroke={`url(#${uid}-cap)`} stroke-width="4" />
-        <rect x="80" y="42" width="40" height="20" rx="4" fill={`url(#${uid}-cap)`} />
+        <path d="M100 0v34" stroke="#d6dde2" stroke-width="2" />
+        <circle cx="100" cy="36" r="9" fill="none" stroke="url(#nyb-cap)" stroke-width="4" />
+        <rect x="80" y="42" width="40" height="20" rx="4" fill="url(#nyb-cap)" />
         <path d="M82 48h36M82 54h36" stroke="#7d5f1f" stroke-width="1.2" opacity="0.5" />
-        <circle cx="100" cy="150" r="90" fill={`url(#${uid}-g)`} />
-        <path d="M14 128c40 14 132 14 172 0M12 172c42 14 134 14 176 0" fill="none" stroke="var(--ball-band)" stroke-width="5" stroke-dasharray="2 9" stroke-linecap="round" />
-        <circle cx="100" cy="150" r="61" fill="#fffcf5" />
-        <image href={photo} x="46" y="96" width="108" height="108" preserveAspectRatio="xMidYMid slice" clip-path={`url(#${uid}-win)`} />
-        <circle cx="100" cy="150" r="57.5" fill="none" stroke="var(--ball-band)" stroke-width="3" />
-        <ellipse cx="62" cy="100" rx="20" ry="11" fill="#fff" opacity="0.45" transform="rotate(-35 62 100)" />
+        <circle cx="100" cy="152" r="92" fill="url(#nyb-g)" />
+        <circle cx="100" cy="152" r="78" fill="none" stroke="#f3d77c" stroke-width="3" stroke-dasharray="1 9" stroke-linecap="round" />
+        <circle cx="100" cy="152" r="73" fill="#fffcf5" />
+        <image href={photo} x="32" y="84" width="136" height="136" preserveAspectRatio="xMidYMid slice" clip-path="url(#nyb-win)" />
+        <circle cx="100" cy="152" r="70" fill="none" stroke="#f3d77c" stroke-width="3.5" />
+        <ellipse cx="52" cy="104" rx="20" ry="10" fill="#fff" opacity="0.4" transform="rotate(-38 52 104)" />
       </svg>
     </div>
 
     <!-- text in a candy-cane frame -->
     <div class="nyb-frame">
       <div class="nyb-inner">
-        <p class="nyb-eyebrow mono">Новый год · 31 декабря</p>
-        <h2 id={headingId}>Подарки к Новому году <span class="nyb-serif">закажите заранее</span></h2>
-        <p class="nyb-text">Ёлочные шары с фото, календари на 2027 год, футболки и подарки коллегам — подскажем, что выбрать, и сделаем к нужной дате.</p>
-        <div class="nyb-actions">
-          <a class="btn btn-magenta btn-sm" href="/#occ-h">Идеи подарков</a>
-          <a class="nyb-link" href="/kalendari">Календари 2027 →</a>
-        </div>
+        <p class="nyb-hand">Новый год уже близко!</p>
+        <h2 id="nyb-h">Подарки с вашим фото <span class="nyb-serif">и&nbsp;логотипом</span></h2>
+        <p class="nyb-text">Ёлочные шары, кружки, календари на 2027 год и мерч для коллег</p>
+        <a class="btn btn-magenta nyb-btn" href={link}>{linkLabel} <span aria-hidden="true">→</span></a>
       </div>
     </div>
 
     <!-- Ded Moroz with the countdown on his sign -->
     <div class="nyb-santa">
-      <img src="/img/ny/ded-moroz-640.webp" srcset="/img/ny/ded-moroz-360.webp 360w, /img/ny/ded-moroz-640.webp 640w" sizes="(max-width: 760px) 45vw, 340px" alt="" width="640" height="640" loading="lazy" decoding="async" />
-      <p class="nyb-sign" data-nyb-cd={mode} aria-label="До Нового года">
-        {
-          mode === 'days' ? (
-            <>
-              <span class="nyb-sign-top">до Нового года</span>
-              <b data-d>—</b>
-              <span data-dw>дней</span>
-            </>
-          ) : (
-            <>
-              <span class="nyb-sign-top">до Нового года</span>
-              <span class="nyb-tiles">
-                <span><b data-d>—</b><small>дн</small></span>
-                <span><b data-h>—</b><small>ч</small></span>
-                <span><b data-m>—</b><small>мин</small></span>
-              </span>
-            </>
-          )
-        }
-      </p>
+      <img src="/img/ny/ded-moroz-640.webp" srcset="/img/ny/ded-moroz-360.webp 360w, /img/ny/ded-moroz-640.webp 640w" sizes="(max-width: 760px) 50vw, 340px" alt="" width="640" height="640" loading="lazy" decoding="async" />
+      <div class="nyb-sign" data-nyb-cd role="timer" aria-label="До Нового года">
+        <span class="nyb-sign-top">до Нового года</span>
+        <span class="nyb-tiles">
+          <span><b data-d>—</b><small data-dw>дней</small></span>
+          <span><b data-h>—</b><small>часов</small></span>
+          <span><b data-m>—</b><small>минут</small></span>
+        </span>
+      </div>
     </div>
   </div>
 </section>
 
 <script>
-  // Season (1 Nov – 31 Dec) and countdown to 1 January by the visitor's clock; updates once a minute.
+  // Season (1 Nov – 31 Dec) and the countdown to 1 January by the visitor's clock; updates every 30 s.
   const plural = (n: number, one: string, few: string, many: string) => {
     const a = n % 10, b = n % 100;
     return a === 1 && b !== 11 ? one : a >= 2 && a <= 4 && (b < 12 || b > 14) ? few : many;
   };
   const pad = (n: number) => String(n).padStart(2, '0');
-  function tick() {
-    const now = new Date();
-    const target = new Date(now.getFullYear() + 1, 0, 1);
-    const ms = Math.max(0, target.getTime() - now.getTime());
-    const totalMin = Math.floor(ms / 60000);
-    const dhm = { d: Math.floor(totalMin / 1440), h: Math.floor((totalMin % 1440) / 60), m: totalMin % 60 };
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const days = Math.round((target.getTime() - today.getTime()) / 86400000);
-    document.querySelectorAll<HTMLElement>('[data-nyb-cd]').forEach((el) => {
-      const set = (sel: string, v: string) => {
-        const n = el.querySelector(sel);
-        if (n) n.textContent = v;
-      };
-      if (el.dataset.nybCd === 'days') {
-        set('[data-d]', String(days));
-        set('[data-dw]', plural(days, 'день', 'дня', 'дней'));
-        el.setAttribute('aria-label', `До Нового года ${days} ${plural(days, 'день', 'дня', 'дней')}`);
-      } else {
-        set('[data-d]', String(dhm.d));
-        set('[data-h]', pad(dhm.h));
-        set('[data-m]', pad(dhm.m));
-        el.setAttribute('aria-label', `До Нового года ${dhm.d} дн. ${dhm.h} ч ${dhm.m} мин`);
-      }
-    });
-  }
+  const block = document.querySelector<HTMLElement>('[data-nyb]');
   const month = new Date().getMonth();
-  document.querySelectorAll<HTMLElement>('[data-nyb]').forEach((s) => {
-    if (s.hasAttribute('data-always') || month === 10 || month === 11) s.hidden = false;
-  });
-  tick();
-  setInterval(tick, 30000);
+  if (block && (month === 10 || month === 11)) {
+    block.hidden = false;
+    const el = block.querySelector<HTMLElement>('[data-nyb-cd]')!;
+    const set = (sel: string, v: string) => {
+      const n = el.querySelector(sel);
+      if (n) n.textContent = v;
+    };
+    const tick = () => {
+      const now = new Date();
+      const ms = Math.max(0, new Date(now.getFullYear() + 1, 0, 1).getTime() - now.getTime());
+      const min = Math.floor(ms / 60000);
+      const d = Math.floor(min / 1440), h = Math.floor((min % 1440) / 60), m = min % 60;
+      set('[data-d]', String(d));
+      set('[data-dw]', plural(d, 'день', 'дня', 'дней'));
+      set('[data-h]', pad(h));
+      set('[data-m]', pad(m));
+      el.setAttribute('aria-label', `До Нового года ${d} ${plural(d, 'день', 'дня', 'дней')} ${h} ч ${m} мин`);
+    };
+    tick();
+    setInterval(tick, 30000);
+  }
 </script>
 
 <style>
   .nyb {
     --candy: #d7262e;
     --candy-ink: #a3121a;
-    margin-block: clamp(18px, 3vw, 36px);
+    --wave-h: clamp(40px, 6vw, 80px);
+    /* pull up so the two equal curves sit 22px apart */
+    margin-top: calc(var(--wave-h) * -1 + 22px);
   }
   .nyb-card {
     position: relative;
     display: grid;
-    grid-template-columns: minmax(130px, 0.7fr) minmax(0, 2fr) minmax(220px, 1.15fr);
+    grid-template-columns: minmax(150px, 0.85fr) minmax(0, 1.9fr) minmax(230px, 1.15fr);
     grid-template-areas: 'ball frame santa';
     align-items: center;
     gap: clamp(14px, 2.4vw, 32px);
-    padding: clamp(18px, 2.6vw, 34px) clamp(16px, 2.6vw, 34px) 0;
-    border-radius: 34px;
+    padding: calc(var(--wave-h) + 4px) clamp(16px, 2.6vw, 34px) 0;
+    border-radius: 0 0 34px 34px;
     overflow: clip;
     isolation: isolate;
-  }
-
-  /* ---------- ball */
-  .nyb-ball {
-    grid-area: ball;
-    align-self: start;
-    margin-top: calc(clamp(18px, 2.6vw, 34px) * -1);
-    transform: rotate(-12deg);
-    transform-origin: 50% 0;
-  }
-  .nyb-ball svg {
-    display: block;
-    width: 100%;
-    max-width: 210px;
-    height: auto;
-    margin-inline: auto;
-    filter: drop-shadow(0 18px 22px rgba(15, 29, 39, 0.28));
-  }
-
-  /* ---------- candy-cane frame */
-  .nyb-frame {
-    grid-area: frame;
-    align-self: center;
-    margin-bottom: clamp(18px, 2.6vw, 34px);
-    padding: 10px;
-    border-radius: 30px;
-    background: repeating-linear-gradient(-45deg, var(--candy) 0 13px, #fff 13px 26px);
-    box-shadow: 0 16px 30px -22px rgba(15, 29, 39, 0.5);
-  }
-  .nyb-inner {
-    display: grid;
-    gap: 10px;
-    justify-items: start;
-    padding: clamp(18px, 2.4vw, 28px) clamp(18px, 2.6vw, 32px);
-    border-radius: 22px;
-    background: #fffcf5;
-    color: var(--ink);
-  }
-  .nyb-eyebrow {
-    margin: 0;
-    font-size: 0.74rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--candy-ink);
-  }
-  .nyb h2 {
-    font-size: clamp(1.35rem, 2.3vw, 1.9rem);
-    line-height: 1.12;
-    text-wrap: balance;
-  }
-  .nyb-serif {
-    display: inline-block;
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-style: italic;
-    font-weight: 600;
-    font-size: 1.14em;
-    line-height: 0.95;
-    color: var(--candy-ink);
-  }
-  .nyb-text {
-    margin: 0;
-    max-width: 56ch;
-    font-size: 0.95rem;
-    color: var(--ink-2);
-  }
-  .nyb-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 6px 16px;
-    margin-top: 4px;
-  }
-  .nyb-link {
-    font-weight: 700;
-    font-size: 0.92rem;
-    color: var(--ink);
-  }
-
-  /* ---------- Ded Moroz + sign */
-  .nyb-santa {
-    grid-area: santa;
-    position: relative;
-    align-self: end;
-    width: 100%;
-    max-width: 340px;
-    justify-self: center;
-  }
-  .nyb-santa img {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-  /* the blank sign in the picture: 13.5%–85% across, 56%–91.5% down */
-  .nyb-sign {
-    position: absolute;
-    left: 13.5%;
-    width: 71.5%;
-    top: 56%;
-    height: 35.5%;
-    margin: 0;
-    display: grid;
-    place-content: center;
-    justify-items: center;
-    text-align: center;
-    color: var(--candy-ink);
-    font-variant-numeric: tabular-nums;
-    line-height: 1;
-  }
-  .nyb-sign-top {
-    font-family: 'Caveat', cursive;
-    font-weight: 600;
-    font-size: clamp(0.9rem, 1.4vw, 1.2rem);
-    color: var(--ink-2);
-  }
-  .nyb-sign b {
-    font-size: clamp(2rem, 3.8vw, 3.2rem);
-    font-weight: 900;
-    letter-spacing: -0.03em;
-  }
-  .nyb-sign [data-dw] {
-    font-weight: 700;
-    font-size: clamp(0.85rem, 1.2vw, 1rem);
-  }
-  .nyb-tiles {
-    display: flex;
-    gap: 6px;
-    margin-top: 4px;
-  }
-  .nyb-tiles > span {
-    display: grid;
-    justify-items: center;
-    gap: 2px;
-    min-width: 2.6em;
-    padding: 5px 4px 4px;
-    border-radius: 10px;
-    background: var(--candy);
-    color: #fff;
-  }
-  .nyb-tiles b {
-    font-size: clamp(1.15rem, 2vw, 1.6rem);
-  }
-  .nyb-tiles small {
-    font-size: 0.66rem;
-    font-weight: 700;
-    opacity: 0.9;
-  }
-
-  /* ================= variant: light ================= */
-  .nyb-light .nyb-card {
-    --ball: #00a0dc;
-    --ball-hi: #8fdcf7;
-    --ball-dark: #00577a;
-    --ball-band: #ffd21f;
-    --ball-string: #3d3944;
-    background:
-      radial-gradient(circle at 18% 22%, #fff 0 2px, transparent 3px) 0 0 / 46px 46px,
-      radial-gradient(circle at 70% 60%, rgba(255, 255, 255, 0.85) 0 1.5px, transparent 2.5px) 0 0 / 34px 34px,
-      linear-gradient(160deg, #e2f4fb 0%, #f4fbfe 55%, #fde7f2 100%);
-  }
-
-  /* ================= variant: night ================= */
-  .nyb-night .nyb-card {
-    --ball: #e5007d;
-    --ball-hi: #ff8cc8;
-    --ball-dark: #7d0044;
-    --ball-band: #fff3c4;
-    --ball-string: #c9d3da;
     background:
       radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.9) 0 1.5px, transparent 2.5px) 0 0 / 60px 60px,
       radial-gradient(circle at 60% 70%, rgba(255, 210, 31, 0.8) 0 1.2px, transparent 2.2px) 0 0 / 80px 80px,
       linear-gradient(180deg, #0f1d27 0%, #142f3d 100%);
   }
-  .nyb-night .nyb-link {
-    color: var(--ink);
+
+  /* top edge: paper above the same wave line as the hero's bottom — the paper ribbon between them stays even */
+  .nyb-wave {
+    position: absolute;
+    left: 0;
+    top: -1px;
+    width: 100%;
+    height: var(--wave-h);
+    z-index: 0;
+  }
+  .nyb-wave-paper {
+    fill: var(--paper);
   }
   .nyb-snow {
     position: absolute;
@@ -340,8 +161,24 @@ const mode = variant === 'light' ? 'days' : 'dhm';
       transform: translateY(70px);
     }
   }
-  .nyb-night .nyb-ball {
+
+  /* ---------- ball: hangs from the wave */
+  .nyb-ball {
+    grid-area: ball;
+    position: relative;
+    z-index: 1;
+    align-self: start;
+    margin-top: calc(var(--wave-h) * -0.55);
+    transform-origin: 50% 0;
     animation: nyb-swing 5s ease-in-out infinite alternate;
+  }
+  .nyb-ball svg {
+    display: block;
+    width: 100%;
+    max-width: 260px;
+    height: auto;
+    margin-inline: auto;
+    filter: drop-shadow(0 20px 24px rgba(0, 0, 0, 0.4));
   }
   @keyframes nyb-swing {
     from {
@@ -352,51 +189,158 @@ const mode = variant === 'light' ? 'days' : 'dhm';
     }
   }
 
-  /* ================= variant: red ================= */
-  .nyb-red .nyb-card {
-    --ball: #ffd21f;
-    --ball-hi: #fff3b0;
-    --ball-dark: #b8860b;
-    --ball-band: #d7262e;
-    --ball-string: #fff3c4;
-    background:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 90 90'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='.22' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M22 10v24M10 22h24M13.5 13.5l17 17M30.5 13.5l-17 17'/%3E%3Cpath d='M68 52v20M58 62h20M61 55l14 14M75 55L61 69'/%3E%3C/g%3E%3C/svg%3E"),
-      linear-gradient(150deg, #c8141d 0%, #e0262f 50%, #a90f17 100%);
+  /* ---------- candy-cane frame */
+  .nyb-frame {
+    grid-area: frame;
+    position: relative;
+    z-index: 1;
+    margin-bottom: clamp(22px, 3vw, 38px);
+    padding: 10px;
+    border-radius: 30px;
+    background: repeating-linear-gradient(-45deg, var(--candy) 0 13px, #fff 13px 26px);
+    box-shadow: 0 20px 34px -22px rgba(0, 0, 0, 0.7);
   }
-  .nyb-red .nyb-frame {
-    background: repeating-linear-gradient(-45deg, #fff 0 13px, #2e9e5b 13px 26px);
+  .nyb-inner {
+    display: grid;
+    gap: 10px;
+    justify-items: center;
+    text-align: center;
+    padding: clamp(20px, 2.6vw, 32px) clamp(18px, 2.6vw, 34px);
+    border-radius: 22px;
+    background: #fffcf5;
+    color: var(--ink);
   }
-  .nyb-red .nyb-eyebrow {
+  .nyb-hand {
+    margin: 0;
+    font-family: 'Caveat', 'Segoe Print', cursive;
+    font-weight: 600;
+    font-size: clamp(1.4rem, 2vw, 1.75rem);
+    line-height: 1;
+    color: var(--candy);
+    transform: rotate(-2deg);
+  }
+  .nyb h2 {
+    font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  .nyb-serif {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.12em;
+    letter-spacing: 0;
     color: var(--candy-ink);
+  }
+  .nyb-text {
+    margin: 0;
+    max-width: 40ch;
+    font-size: 1rem;
+    color: var(--ink-2);
+  }
+  .nyb-btn {
+    margin-top: 6px;
+  }
+
+  /* ---------- Ded Moroz + sign */
+  .nyb-santa {
+    grid-area: santa;
+    position: relative;
+    z-index: 1;
+    align-self: end;
+    justify-self: center;
+    width: 100%;
+    max-width: 340px;
+    container-type: inline-size;
+  }
+  .nyb-santa img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  /* the blank sign in the picture: 13.5%–85% across, 56%–91.5% down */
+  .nyb-sign {
+    position: absolute;
+    left: 13.5%;
+    width: 71.5%;
+    top: 56%;
+    height: 35.5%;
+    display: grid;
+    align-content: center;
+    gap: 2.2cqi;
+    padding-inline: 3cqi;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .nyb-sign-top {
+    font-family: 'Caveat', cursive;
+    font-weight: 600;
+    font-size: 6.6cqi;
+    color: var(--ink-2);
+  }
+  .nyb-tiles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.2cqi;
+  }
+  .nyb-tiles > span {
+    display: grid;
+    justify-items: center;
+    gap: 0.8cqi;
+    padding: 2.4cqi 0.6cqi 2cqi;
+    border-radius: 3cqi;
+    background: var(--candy);
+    color: #fff;
+    box-shadow: inset 0 -0.9cqi 0 rgba(0, 0, 0, 0.18);
+  }
+  .nyb-tiles b {
+    font-size: 11.5cqi;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+  }
+  .nyb-tiles small {
+    font-size: 4.1cqi;
+    font-weight: 700;
+    opacity: 0.92;
   }
 
   @media (prefers-reduced-motion: reduce) {
     .nyb-snow,
-    .nyb-night .nyb-ball {
+    .nyb-ball {
       animation: none;
+    }
+    .nyb-ball {
+      transform: rotate(-12deg);
     }
   }
 
-  /* ---------- tablets and phones: ball + Ded Moroz on top, text below */
+  @media (max-width: 1020px) {
+    .nyb-card {
+      grid-template-columns: minmax(120px, 0.8fr) minmax(0, 1.8fr) minmax(190px, 1fr);
+    }
+  }
+
+  /* phones and small tablets: ball + Ded Moroz on top, text below */
   @media (max-width: 760px) {
     .nyb-card {
       grid-template-columns: 1fr 1fr;
       grid-template-areas:
         'ball santa'
         'frame frame';
-      gap: 8px 12px;
-      padding: 0 14px 0;
-      border-radius: 26px;
+      gap: 8px 10px;
+      padding-inline: 12px;
+      border-radius: 0 0 26px 26px;
     }
     .nyb-ball {
-      margin-top: 0;
-      align-self: start;
+      margin-top: -14px;
     }
     .nyb-ball svg {
-      max-width: 150px;
+      max-width: 170px;
     }
     .nyb-santa {
-      max-width: 210px;
+      max-width: 230px;
     }
     .nyb-frame {
       margin-bottom: 14px;
@@ -404,31 +348,21 @@ const mode = variant === 'light' ? 'days' : 'dhm';
       border-radius: 24px;
     }
     .nyb-inner {
-      padding: 16px;
+      padding: 18px 14px;
       border-radius: 18px;
     }
+    .nyb h2 {
+      font-size: 1.45rem;
+    }
     .nyb-text {
-      font-size: 0.88rem;
+      font-size: 0.9rem;
     }
-    .nyb-sign-top {
-      font-size: 0.85rem;
-    }
-    .nyb-sign b {
-      font-size: 1.8rem;
-    }
-    .nyb-tiles {
-      gap: 3px;
-    }
-    .nyb-tiles > span {
-      min-width: 2.2em;
-      padding: 3px 2px;
-      border-radius: 7px;
-    }
-    .nyb-tiles b {
-      font-size: 1rem;
-    }
-    .nyb-tiles small {
-      font-size: 0.56rem;
+    .nyb-btn {
+      max-width: 100%;
+      padding-inline: 18px;
+      font-size: 0.92rem;
+      white-space: normal;
+      text-align: center;
     }
   }
 </style>

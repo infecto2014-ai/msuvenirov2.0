@@ -8,6 +8,7 @@ import Reviews from '@/components/Reviews.astro';
 import FaqSection from '@/components/FaqSection.astro';
 import ContactBlock from '@/components/ContactBlock.astro';
 import Icon from '@/components/Icon.astro';
+import NewYearBlock from '@/components/NewYearBlock.astro';
 import { categoryFrom, defaultSelection, findProduct, rub, type Selection } from '@/data/pricing';
 import { generalFaq } from '@/data/faq';
 import { site } from '@/data/site';
@@ -117,25 +118,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     </div>
   </section>
 
-  <!-- NEW YEAR strip: shown by script only from 1 November to 31 December -->
-  <section class="ny wrap" aria-labelledby="ny-h" hidden data-ny>
-    <div class="ny-card">
-      <span class="ny-dots" aria-hidden="true"></span>
-      <img class="ny-ball" src="/portfolio/portfolio-6.webp" alt="" width="378" height="373" decoding="async" />
-      <div class="ny-text">
-        <p class="ny-eyebrow mono">Новый год · 31 декабря</p>
-        <h2 id="ny-h">Подарки к Новому году <span class="serif">лучше заказать заранее</span></h2>
-        <p>Ёлочные шары с фото, календари на 2027 год, футболки и подарки коллегам — подскажем, что выбрать, и сделаем к нужной дате.</p>
-      </div>
-      <div class="ny-side">
-        <p class="ny-count"><b data-ny-days>—</b> <span data-ny-word>дней</span><small>до Нового года</small></p>
-        <div class="ny-actions">
-          <a class="btn btn-magenta btn-sm" href="#occ-h">Идеи подарков</a>
-          <a class="ny-link" href="/kalendari">Календари 2027 →</a>
-        </div>
-      </div>
-    </div>
-  </section>
+  <NewYearBlock />
 
   <div class="band">
   <!-- CATEGORIES: text + filter chips on the left, photo cards on the right -->
@@ -407,23 +390,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
 </BaseLayout>
 
 <script>
-  // New Year strip: visible 1 November – 31 December, days counted to 1 January (visitor's date)
-  const ny = document.querySelector<HTMLElement>('[data-ny]');
-  if (ny) {
-    const now = new Date();
-    const m = now.getMonth();
-    if (m === 10 || m === 11) {
-      const target = new Date(now.getFullYear() + 1, 0, 1);
-      const today = new Date(now.getFullYear(), m, now.getDate());
-      const days = Math.round((target.getTime() - today.getTime()) / 86400000);
-      const n10 = days % 10, n100 = days % 100;
-      const word = n10 === 1 && n100 !== 11 ? 'день' : n10 >= 2 && n10 <= 4 && (n100 < 12 || n100 > 14) ? 'дня' : 'дней';
-      ny.querySelector('[data-ny-days]')!.textContent = String(days);
-      ny.querySelector('[data-ny-word]')!.textContent = word;
-      ny.hidden = false;
-    }
-  }
-
   // «Изделия и цены»: chips show one group; without JS every card stays visible
   const grid = document.querySelector<HTMLElement>('.pcards');
   document.querySelectorAll<HTMLButtonElement>('.chip[data-filter]').forEach((chip, _, all) => {
@@ -1355,116 +1321,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     }
   }
 
-/* ---------------- new year strip */
-  .ny {
-    margin-top: clamp(18px, 3vw, 36px);
-  }
-  .ny-card {
-    position: relative;
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    align-items: center;
-    gap: clamp(16px, 3vw, 36px);
-    padding: clamp(18px, 2.4vw, 28px) clamp(18px, 3vw, 36px);
-    border-radius: 30px;
-    background: linear-gradient(120deg, #0f1d27 0%, #13303d 55%, #0f1d27 100%);
-    color: #fffcf5;
-    overflow: clip;
-    isolation: isolate;
-  }
-  .ny-dots {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    opacity: 0.55;
-    background:
-      radial-gradient(circle at 12% 20%, var(--y) 0 3px, transparent 4px),
-      radial-gradient(circle at 30% 85%, var(--c) 0 2.5px, transparent 3.5px),
-      radial-gradient(circle at 48% 12%, var(--m) 0 2.5px, transparent 3.5px),
-      radial-gradient(circle at 62% 78%, #fffcf5 0 2px, transparent 3px),
-      radial-gradient(circle at 76% 18%, var(--c) 0 3px, transparent 4px),
-      radial-gradient(circle at 90% 70%, var(--y) 0 2px, transparent 3px),
-      radial-gradient(circle at 6% 80%, var(--m) 0 2px, transparent 3px);
-  }
-  .ny-ball {
-    width: clamp(78px, 9vw, 112px);
-    aspect-ratio: 1;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid rgba(255, 252, 245, 0.85);
-    box-shadow: 0 0 0 6px rgba(255, 210, 31, 0.18);
-  }
-  .ny-text {
-    display: grid;
-    gap: 6px;
-  }
-  .ny-eyebrow {
-    margin: 0;
-    font-size: 0.74rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--y);
-  }
-  .ny-text h2 {
-    font-size: clamp(1.3rem, 2.2vw, 1.75rem);
-    line-height: 1.15;
-    text-wrap: balance;
-  }
-  .ny-text h2 .serif {
-    color: #9fe0f6;
-  }
-  .ny-text p:last-child {
-    margin: 0;
-    max-width: 60ch;
-    font-size: 0.94rem;
-    color: rgba(255, 252, 245, 0.8);
-  }
-  .ny-side {
-    display: grid;
-    gap: 12px;
-    justify-items: center;
-    text-align: center;
-  }
-  .ny-count {
-    margin: 0;
-    display: grid;
-    grid-template-columns: auto auto;
-    align-items: baseline;
-    justify-content: center;
-    column-gap: 6px;
-    font-variant-numeric: tabular-nums;
-  }
-  .ny-count b {
-    font-size: clamp(2.2rem, 3.6vw, 3rem);
-    line-height: 1;
-    color: var(--y);
-  }
-  .ny-count span {
-    font-weight: 700;
-  }
-  .ny-count small {
-    grid-column: 1 / -1;
-    font-size: 0.8rem;
-    color: rgba(255, 252, 245, 0.7);
-  }
-  .ny-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 6px 14px;
-  }
-  .ny-link {
-    color: #fffcf5;
-    font-weight: 700;
-    font-size: 0.9rem;
-  }
-  .ny-link:hover {
-    color: var(--y);
-  }
-
-  /* ---------------- about: stats + payment */
+/* ---------------- about: stats + payment */
   .stats {
     list-style: none;
     margin: 4px 0 0;
@@ -1497,48 +1354,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     color: var(--ink-2);
   }
 
-  @media (max-width: 1020px) {
-    .ny-card {
-      grid-template-columns: auto minmax(0, 1fr);
-    }
-    .ny-side {
-      grid-column: 1 / -1;
-      grid-template-columns: auto 1fr;
-      justify-items: start;
-      text-align: left;
-      align-items: center;
-      gap: 12px 24px;
-    }
-    .ny-actions {
-      justify-content: flex-start;
-    }
-  }
   @media (max-width: 560px) {
-    .ny-card {
-      grid-template-columns: 1fr;
-      gap: 12px;
-      padding: 18px;
-      border-radius: 24px;
-    }
-    .ny-ball {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      width: 64px;
-    }
-    .ny-text {
-      padding-right: 70px;
-    }
-    .ny-text p:last-child {
-      font-size: 0.86rem;
-    }
-    .ny-side {
-      grid-template-columns: 1fr;
-      gap: 10px;
-    }
-    .ny-count {
-      justify-content: start;
-    }
     .stats {
       gap: 10px 20px;
     }
