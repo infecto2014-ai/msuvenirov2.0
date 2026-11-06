@@ -64,8 +64,6 @@ const values = [
   { icon: 'check', label: 'Брак по нашей вине — переделаем' },
 ] as const;
 
-const tshirtFrom = findProduct('textile', 'tshirt-unisex')!.fromPrice;
-
 const terms = [
   { icon: 'clock', title: 'Сроки', text: 'Обычно 1–3 рабочих дня. Срочные заказы — без наценки, успеем к нужной дате.' },
   { icon: 'calc', title: 'Оплата', text: 'Наличными, картой или по QR-коду. Частным лицам — предоплата 50%, остаток при получении. Организациям — счёт без НДС.' },
@@ -116,15 +114,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
             <span>Печатаем сами, в своей мастерской —<br class="hide-sm" /> от одной футболки до тиража для компании</span>
           </div>
         </div>
-        <a class="hero-float" href="/pechat-na-futbolkah">
-          <img src="/portfolio/portfolio-21.webp" alt="Футболка с фотоколлажем на заказ" width="378" height="504" />
-          <span class="hero-float-body">
-            <span class="hero-float-tag mono">Хит · от 1 шт</span>
-            <b>Футболка с вашим принтом</b>
-            <span class="mono">от {rub(tshirtFrom)}</span>
-          </span>
-          <span class="hero-float-go"><Icon name="arrow" size={18} /></span>
-        </a>
         <span class="hand hero-hand" aria-hidden="true">
           <svg viewBox="0 0 70 46" width="70" height="46"><path d="M64 6C46 4 22 14 10 38m0 0 1-11m-1 11 10-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
           сделано<br />в Калининграде
@@ -142,7 +131,9 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
         <div class="ab ab-1"><img src="/portfolio/wedding-tshirts.webp" alt="" width="745" height="800" loading="lazy" decoding="async" /></div>
         <div class="ab ab-2"><img src="/portfolio/corporate-polo.webp" alt="" width="745" height="800" loading="lazy" decoding="async" /></div>
         <div class="ab ab-3"><img src="/portfolio/portfolio-2.webp" alt="" width="378" height="374" loading="lazy" decoding="async" /></div>
-        <span class="hand ab-hand">наши работы</span>
+        <span class="hand ab-hand">наши работы
+          <svg viewBox="0 0 60 48" width="60" height="48"><path d="M8 6c26 2 42 16 40 36m0 0-7-9m7 9 6-10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        </span>
       </div>
       <div class="about-text">
         <p class="eyebrow">Своя мастерская</p>
@@ -546,65 +537,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   .hero-faces img + img {
     margin-left: -12px;
   }
-  .hero-float {
-    position: absolute;
-    top: clamp(22px, 3vw, 40px);
-    right: clamp(18px, 2vw, 28px);
-    width: 210px;
-    display: grid;
-    gap: 10px;
-    padding: 10px 10px 14px;
-    border-radius: 24px;
-    background: rgba(255, 252, 245, 0.96);
-    color: var(--ink);
-    text-decoration: none;
-    box-shadow: 0 24px 40px -20px rgba(0, 0, 0, 0.55);
-    transition: transform 0.2s ease;
-  }
-  .hero-float:hover {
-    color: var(--ink);
-    transform: translateY(-3px);
-  }
-  .hero-float img {
-    width: 100%;
-    aspect-ratio: 16 / 11;
-    object-fit: cover;
-    object-position: 50% 30%;
-    border-radius: 16px;
-  }
-  .hero-float-body {
-    display: grid;
-    gap: 2px;
-    padding: 0 6px;
-    padding-right: 44px;
-  }
-  .hero-float-body b {
-    font-size: 1rem;
-    line-height: 1.25;
-  }
-  .hero-float-body .mono {
-    font-size: 0.82rem;
-    color: var(--muted);
-  }
-  .hero-float-body .hero-float-tag {
-    color: var(--c-ink);
-    font-weight: 700;
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-  .hero-float-go {
-    position: absolute;
-    right: 14px;
-    bottom: 16px;
-    display: grid;
-    place-items: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: var(--c);
-    color: #fff;
-  }
   .hero-hand {
     position: absolute;
     left: 63%;
@@ -690,9 +622,15 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   }
   .ab-hand {
     position: absolute;
-    right: 6%;
-    top: -9%;
+    right: 0;
+    top: -12%;
     transform: rotate(-6deg);
+  }
+  .ab-hand svg {
+    position: absolute;
+    right: -26px;
+    top: 14px;
+    transform: rotate(8deg);
   }
   .about-text {
     display: grid;
@@ -1194,10 +1132,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     .hero-photo {
       width: 72%;
     }
-    .hero-float {
-      display: none;
-    }
-    .about-grid,
+      .about-grid,
     .cats-grid {
       grid-template-columns: 1fr;
     }
@@ -1280,6 +1215,8 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
       width: 100%;
     }
     .ab-hand {
+      right: 40px;
+      top: -10%;
       font-size: 1.2rem;
     }
     .values {
@@ -1368,10 +1305,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   @media (prefers-reduced-motion: reduce) {
     .pc img,
     .occ img,
-    .hero-float {
-      transition: none;
     }
-  }
 
 /* ---------------- terms */
   .terms-band {
