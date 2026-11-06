@@ -1,0 +1,46 @@
+---
+// Demo page for the owner: three looks of the New Year block. Not in the menu or sitemap, noindex.
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import NewYearBlock from '@/components/NewYearBlock.astro';
+
+const variants = [
+  { id: 'light', title: 'Вариант 1 · Светлый', note: 'Голубой шар, снежинки на светлом фоне, счётчик — дни.' },
+  { id: 'night', title: 'Вариант 2 · Ночь', note: 'Тёмный фон со снегом, розовый шар чуть покачивается, на табличке — дни, часы и минуты.' },
+  { id: 'red', title: 'Вариант 3 · Красный праздник', note: 'Красный фон со снежинками, золотой шар, рамка-леденец красно-белая снаружи и бело-зелёная внутри.' },
+] as const;
+---
+
+<BaseLayout title="Новогодний блок — варианты" description="Варианты новогоднего блока для главной." path="/novyy-god-varianty" noindex>
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Для выбора</p>
+      <h1>Новогодний блок: 3 варианта</h1>
+      <p class="lead">Слева шар с вашим фото, посередине рамка-леденец, справа Дед Мороз со временем до Нового года. Фото в шаре — пример, поставим любое.</p>
+    </div>
+  </section>
+  {
+    variants.map((v) => (
+      <>
+        <div class="wrap demo-head">
+          <h2>{v.title}</h2>
+          <p>{v.note}</p>
+        </div>
+        <NewYearBlock variant={v.id} always />
+      </>
+    ))
+  }
+  <div class="section"></div>
+</BaseLayout>
+
+<style>
+  .demo-head {
+    margin-top: 40px;
+  }
+  .demo-head h2 {
+    font-size: 1.4rem;
+  }
+  .demo-head p {
+    margin: 4px 0 0;
+    color: var(--muted);
+  }
+</style>
