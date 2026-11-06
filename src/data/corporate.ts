@@ -70,6 +70,7 @@ export const corporate: CorporatePage = {
       imageAlt: 'Брендированные кепки для персонала — печать логотипа на униформе в Калининграде',
       links: [
         { href: '/pechat-na-specodezhde', label: 'Печать на спецодежде' },
+        { href: '/pechat-na-sportivnoy-forme', label: 'Спортивная форма' },
         { href: '/pechat-na-odezhde', label: 'Печать на одежде' },
         { href: '/pechat-na-kepkah', label: 'Печать на бейсболках' },
         { href: '/portfolio', label: 'Примеры работ' },

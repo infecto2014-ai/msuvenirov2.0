@@ -1,0 +1,189 @@
+---
+// Иллюстрация спортивной формы (плоская графика «CMYK 2.0»): футбольная футболка-джерси, баскетбольная майка,
+// обычная футболка и шорты. Сзади — фамилия и большой номер, спереди — эмблема, маленький номер, надпись спонсора.
+// Холст 200 × 224 в условных единицах, без растров и внешних шрифтов.
+import { isDark, mix } from '@/components/cap/cap-geometry';
+import type { SportType, SportView } from './sport-types';
+
+interface Props {
+  type?: SportType; // по умолчанию 'jersey'
+  view?: SportView; // по умолчанию 'back'
+  color?: string; // основной цвет (hex), по умолчанию синий
+  trim?: string; // цвет отделки (hex), по умолчанию жёлтый
+  number?: string | number; // номер, по умолчанию 10
+  name?: string; // фамилия на спине; '' — без фамилии
+  emblem?: boolean; // эмблема клуба спереди (по умолчанию true)
+  sponsor?: string; // надпись спонсора на груди
+  zones?: boolean; // пунктир вокруг нанесений с номерами мест
+  scale?: number;
+  title?: string;
+  class?: string;
+}
+
+const {
+  type = 'jersey',
+  view = 'back',
+  color = '#1f4fd1',
+  trim = '#ffd21f',
+  number = 10,
+  name = 'ИВАНОВ',
+  emblem = true,
+  sponsor = '',
+  zones = false,
+  scale = 1,
+  title,
+  class: cls,
+} = Astro.props;
+
+const dark = isDark(color);
+const shade = mix(color, '#000000', dark ? 0.25 : 0.12);
+const edge = mix(color, '#000000', dark ? 0.55 : 0.4);
+const ink = dark ? '#fffcf5' : '#16141b';
+const outline = isDark(trim) === dark ? edge : trim;
+const back = view === 'back';
+const num = String(number);
+const uid = 'sp' + crypto.randomUUID().slice(0, 8);
+const id = (s: string) => `${uid}-${s}`;
+const url = (s: string) => `url(#${id(s)})`;
+
+const body: Record<SportType, string> = {
+  jersey: `M 64 30 L 86 22 ${back ? 'Q 100 28 114 22' : 'L 100 44 L 114 22'} L 136 30 L 146 78 L 150 204 L 50 204 L 54 78 Z`,
+  tee: `M 64 30 L 86 22 ${back ? 'Q 100 28 114 22' : 'Q 100 36 114 22'} L 136 30 L 146 78 L 150 204 L 50 204 L 54 78 Z`,
+  tank: `M 72 22 Q 74 48 56 64 L 52 204 L 148 204 L 144 64 Q 126 48 128 22 L 114 22 ${back ? 'Q 100 30 86 22' : 'Q 100 52 86 22'} Z`,
+  shorts: 'M 52 52 H 148 L 162 176 L 110 182 L 100 116 L 90 182 L 38 176 Z',
+};
+const sleeves = type === 'jersey' || type === 'tee' ? ['M 64 30 L 34 50 L 24 86 L 50 92 L 56 72 Z', 'M 136 30 L 166 50 L 176 86 L 150 92 L 144 72 Z'] : [];
+const label =
+  title ??
+  `${{ jersey: 'Футбольная форма', tee: 'Футболка', tank: 'Баскетбольная майка', shorts: 'Шорты' }[type as SportType]}, ${back ? `сзади — ${name ? `фамилия и ` : ''}номер ${num}` : 'спереди'}`;
+
+// нанесения
+const numFs = num.length > 1 ? 74 : 86;
+const nameFs = Math.min(14, 92 / Math.max(4, name.length));
+const backTop = type === 'tank' ? 64 : 50;
+const zoneList: { x: number; y: number; w: number; h: number; n: number }[] = [];
+if (back && type !== 'shorts') {
+  if (name) zoneList.push({ x: 64, y: backTop - 2, w: 72, h: 20, n: 2 });
+  zoneList.push({ x: 64, y: backTop + 20, w: 72, h: 74, n: 1 });
+}
+if (!back && type !== 'shorts' && emblem) zoneList.push({ x: 110, y: type === 'tank' ? 66 : 44, w: 24, h: 26, n: 3 });
+if (type === 'shorts' && !back) zoneList.push({ x: 56, y: 134, w: 30, h: 30, n: 4 });
+---
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 224" width={Math.round(200 * scale)} height={Math.round(224 * scale)} role="img" aria-label={label} class:list={['spart', cls]}>
+  <title>{label}</title>
+  <defs>
+    <clipPath id={id('body')}><path d={body[type as SportType]} /></clipPath>
+    <pattern id={id('mesh')} width="3.2" height="3.2" patternUnits="userSpaceOnUse">
+      <circle cx="1.6" cy="1.6" r="0.55" fill={dark ? '#fff' : '#000'} fill-opacity="0.08" />
+    </pattern>
+    <linearGradient id={id('light')} x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#000" stop-opacity="0.1" />
+      <stop offset="0.4" stop-color="#fff" stop-opacity="0.1" />
+      <stop offset="1" stop-color="#000" stop-opacity="0.16" />
+    </linearGradient>
+  </defs>
+
+  {sleeves.map((d) => <path d={d} fill={type === 'jersey' ? shade : color} stroke={edge} stroke-width="1.5" stroke-linejoin="round" />)}
+  {type === 'jersey' && <path d="M 24 86 L 50 92 L 51 87 L 25.5 81 Z M 176 86 L 150 92 L 149 87 L 174.5 81 Z" fill={trim} />}
+  <path d={body[type as SportType]} fill={color} stroke={edge} stroke-width="1.5" stroke-linejoin="round" />
+  <g clip-path={url('body')}>
+    <rect width="200" height="224" fill={url('mesh')} />
+    <rect width="200" height="224" fill={url('light')} />
+    {/* боковые вставки и полосы отделки */}
+    {type === 'jersey' && <path d="M 50 80 H 60 V 210 H 50 Z M 140 80 H 150 V 210 H 140 Z" fill={trim} fill-opacity="0.9" />}
+    {type === 'shorts' && <path d="M 38 52 H 50 L 60 182 H 46 Z M 162 52 H 150 L 140 182 H 154 Z" fill={trim} fill-opacity="0.9" />}
+    {type === 'shorts' && <rect x="40" y="52" width="120" height="10" fill={shade} />}
+    {type !== 'shorts' && <rect x="40" y="198" width="120" height="7" fill="#000" fill-opacity="0.12" />}
+  </g>
+  {/* горловина и проймы */}
+  {type === 'jersey' && <path d={back ? 'M 86 22 Q 100 28 114 22' : 'M 86 22 L 100 44 L 114 22'} fill="none" stroke={trim} stroke-width="4" stroke-linejoin="round" />}
+  {type === 'tee' && <path d={back ? 'M 86 22 Q 100 28 114 22' : 'M 86 22 Q 100 36 114 22'} fill="none" stroke={shade} stroke-width="3.5" />}
+  {
+    type === 'tank' && (
+      <path
+        d={`M 72 22 Q 74 48 56 64 M 128 22 Q 126 48 144 64 M 86 22 ${back ? 'Q 100 30 114 22' : 'Q 100 52 114 22'}`}
+        fill="none"
+        stroke={trim}
+        stroke-width="4"
+        stroke-linecap="round"
+      />
+    )
+  }
+
+  {/* ---- сзади: фамилия и номер */}
+  {
+    back && type !== 'shorts' && (
+      <g font-weight="900" text-anchor="middle">
+        {name && (
+          <text x="100" y={backTop + 13} font-size={nameFs} letter-spacing="1.2" fill={ink}>
+            {name}
+          </text>
+        )}
+        <text x="100" y={backTop + 20 + numFs * 0.86} font-size={numFs} fill={ink} stroke={outline} stroke-width="2.4" paint-order="stroke" letter-spacing="-2">
+          {num}
+        </text>
+      </g>
+    )
+  }
+  {/* ---- спереди: эмблема, маленький номер, спонсор */}
+  {
+    !back && type !== 'shorts' && (
+      <g>
+        {emblem && (
+          <g transform={`translate(110 ${type === 'tank' ? 66 : 44})`}>
+            <path d="M 12 0 L 24 4 V 13 Q 24 22 12 26 Q 0 22 0 13 V 4 Z" fill={trim} stroke={ink} stroke-width="1.4" />
+            <circle cx="9.5" cy="11" r="3.4" fill="#00a0dc" />
+            <circle cx="14.5" cy="11" r="3.4" fill="#e5007d" />
+            <circle cx="12" cy="15.2" r="3.4" fill="#ffd21f" stroke={ink} stroke-width="0.4" />
+          </g>
+        )}
+        {type !== 'tank' && (
+          <text x="76" y={type === 'jersey' ? 66 : 64} font-size="20" font-weight="900" text-anchor="middle" fill={ink}>
+            {num}
+          </text>
+        )}
+        {type === 'tank' && (
+          <text x="100" y="150" font-size="60" font-weight="900" text-anchor="middle" fill={ink} stroke={outline} stroke-width="2" paint-order="stroke">
+            {num}
+          </text>
+        )}
+        {sponsor && (
+          <text x="100" y={type === 'tank' ? 104 : 104} font-size={Math.min(15, 96 / Math.max(4, sponsor.length))} font-weight="900" text-anchor="middle" fill={ink}>
+            {sponsor}
+          </text>
+        )}
+      </g>
+    )
+  }
+  {/* ---- шорты: номер на штанине */}
+  {
+    type === 'shorts' && !back && (
+      <text x="71" y="158" font-size="26" font-weight="900" text-anchor="middle" fill={ink} stroke={outline} stroke-width="1.4" paint-order="stroke">
+        {num}
+      </text>
+    )
+  }
+
+  {
+    zones &&
+      zoneList.map((z) => (
+        <g>
+          <rect x={z.x - 3} y={z.y - 3} width={z.w + 6} height={z.h + 6} rx="3" fill="none" stroke={ink} stroke-width="1.1" stroke-dasharray="3 2" />
+          <circle cx={z.x - 3} cy={z.y - 3} r="6" fill="#16141b" stroke="#fffcf5" stroke-width="1.2" />
+          <text x={z.x - 3} y={z.y} font-size="8" font-weight="800" text-anchor="middle" fill="#fffcf5">
+            {z.n}
+          </text>
+        </g>
+      ))
+  }
+</svg>
+
+<style>
+  .spart {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+</style>

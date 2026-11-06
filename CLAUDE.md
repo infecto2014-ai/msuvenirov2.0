@@ -87,6 +87,10 @@
 - Страница `src/pages/pechat-na-specodezhde.astro` (+ `src/data/workwearPage.ts`, SVG `components/workwear/WorkwearArt.astro` — type jacket|vest|signal|overalls|apron|polo, view front|back, print chest|back|sleeve, zones). Не в services.ts: в меню «Одежда» (`site.ts`) и в staticPages sitemap; ссылка со страницы «Компаниям». Калькулятор — `own-item` (печать на изделии клиента, цены как DTF на одежде).
 - Ответы владельца: печатаем на куртках, флисе, жилетах (и сигнальных), комбинезонах, фартуках, поло — халаты НЕ упоминать; «вроде на все ткани»; спина до А3, больше — в несколько прогонов, если позволяет макет; подбор спецодежды от 10 шт, зависит от наличия в Калининграде, если есть — 1–2 дня; цена печати та же; шелкографию на этой странице не упоминать; фото работ владелец добавит позже.
 
+## Спортивная форма (06.11.2026)
+- Страница `src/pages/pechat-na-sportivnoy-forme.astro` (+ `src/data/sportPage.ts`, SVG `components/sport/SportArt.astro` — type jersey|tee|tank|shorts, view, color/trim, number, name, emblem, sponsor, zones). В меню «Одежда», в staticPages sitemap, ссылка с «Компаниям». Калькулятор: `own-item` (печать на форме клиента), `tshirt-sub`, `tshirt-unisex`.
+- Сделано на уже согласованных фактах (DTF на любой ткани; сублимация только светлая синтетика до А3, не «на всё изделие»; фамилии и номера по списку). Ждёт подтверждения владельца: есть ли своя спортивная форма (сейчас — только наши футболки), фамилия+номер считаются одним принтом А4 или двумя, есть ли доплата за персонализацию.
+
 ## Cookies (06.11.2026)
 - Плашка о cookies и сборе технических данных при первом входе — `src/components/CookieNotice.astro` в BaseLayout, «Понятно» запоминается в localStorage, ссылка «Подробнее» на /privacy-policy. Вышивку не делаем — на сайте не предлагать.
 
