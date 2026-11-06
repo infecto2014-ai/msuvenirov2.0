@@ -234,6 +234,33 @@
   outline: none;
   border-color: var(--ink);
 }
+.chatw-attach {
+  flex: none;
+  width: 40px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: none;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.chatw-attach:hover {
+  color: var(--m-ink);
+}
+.chatw-img {
+  display: block;
+  max-width: 100%;
+  max-height: 220px;
+  border-radius: 12px;
+  margin-bottom: 4px;
+}
+.chatw-file {
+  display: inline-block;
+  margin-bottom: 4px;
+  font-weight: 700;
+  color: var(--ink);
+}
 .chatw-send {
   flex: none;
   width: 44px;

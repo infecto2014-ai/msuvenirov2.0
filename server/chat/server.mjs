@@ -1,22 +1,24 @@
-// Entry point of the site chat service. Runs on the site's server behind nginx (location /api/ → 127.0.0.1:CHAT_PORT).
-// Settings come from environment variables (see deploy/chat/msuvenirov-chat.env.example and docs/DEPLOY.md):
-//   TG_BOT_TOKEN        token of the chat bot (@BotFather)
-//   TG_CHAT_ID          chat where messages arrive (your Telegram id or a group id)
-//   TG_WEBHOOK_SECRET   random string, the same as in setWebhook (secret_token)
-//   CHAT_DATA_DIR       where conversations are stored (default /var/lib/msuvenirov-chat)
-//   CHAT_PORT           default 8787
-// Without TG_BOT_TOKEN it runs in «dry run»: messages are printed to the log instead of Telegram (for testing).
+// Entry point of the chat service. Runs on the site's server behind nginx (location /api/ → 127.0.0.1:CHAT_PORT).
+// Settings come from /etc/msuvenirov-chat.env (written by `node server/chat/setup.mjs`, see docs/ЧАТ_ИНСТРУКЦИЯ.md):
+//   ADMIN_PASSWORD_HASH   password of the panel /admin (scrypt hash)
+//   VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, VAPID_SUBJECT   keys for notifications to phone and PC (Web Push)
+//   CHAT_DATA_DIR         where conversations are stored (default /var/lib/msuvenirov-chat)
+//   CHAT_PORT             default 8787
+//   CHAT_INSECURE_COOKIE  «1» only for local testing over http
 import { createServer } from 'node:http';
 import { createApp } from './app.mjs';
 import { Store } from './store.mjs';
-import { Telegram } from './telegram.mjs';
 
 const env = process.env;
 const port = Number(env.CHAT_PORT ?? 8787);
 const store = new Store(env.CHAT_DATA_DIR ?? '/var/lib/msuvenirov-chat');
-const tg = new Telegram({ token: env.TG_BOT_TOKEN, chatId: env.TG_CHAT_ID });
-const app = createApp({ store, tg, webhookSecret: env.TG_WEBHOOK_SECRET ?? '', ownerChatId: env.TG_CHAT_ID ?? '' });
+const app = createApp({
+  store,
+  passwordHash: env.ADMIN_PASSWORD_HASH ?? '',
+  vapid: env.VAPID_PUBLIC_KEY ? { publicKey: env.VAPID_PUBLIC_KEY, privateKey: env.VAPID_PRIVATE_KEY ?? '', subject: env.VAPID_SUBJECT ?? 'mailto:msuvenirov39@yandex.ru' } : undefined,
+  secureCookie: env.CHAT_INSECURE_COOKIE !== '1',
+});
 
 createServer(app).listen(port, '127.0.0.1', () => {
-  console.log(`msuvenirov chat on 127.0.0.1:${port}${tg.dryRun ? ' (dry run: no Telegram token)' : ''}`);
+  console.log(`msuvenirov chat on 127.0.0.1:${port}${env.ADMIN_PASSWORD_HASH ? '' : ' — WARNING: ADMIN_PASSWORD_HASH is empty, the panel login is closed'}`);
 });

@@ -1,13 +1,13 @@
-// Site chat (owner, 06.11.2026: «свой аналог Jivo с отправкой в Telegram»). Messages go to the chat service on the site's
-// own server (server/chat, behind nginx at /api/), it forwards them to Telegram; the owner's replies come back here
-// by long polling. On the test copy (GitHub Pages) there is no server — the widget shows a short notice instead.
+// Site chat (owner, 06.11.2026: own chat instead of Jivo, answered from the panel-app /admin on PC and phone).
+// Messages and files go to the chat service on the site's own server (server/chat, behind nginx at /api/); the owner's
+// replies come back here by long polling. On the test copy (GitHub Pages) there is no server — a short notice instead.
 // Opens from the round button (desktop), from the «Чат» button of the phone bar and from any [data-chat] element.
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { formatPhone } from '@/lib/phone';
 import { site } from '@/data/site';
 import './ChatWidget.css';
 
-type Msg = { id: number; from: 'visitor' | 'manager'; text: string; at: string; pending?: boolean; failed?: boolean };
+type Msg = { id: number; from: 'visitor' | 'manager'; text: string; at: string; file?: { name: string; type: string; size: number }; pending?: boolean; failed?: boolean };
 type View = 'chat' | 'callback';
 
 const API = '/api';
@@ -55,6 +55,8 @@ const isOnline = () => {
 const timeOf = (iso: string) => new Date(iso).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
 
 const QUICK = ['Сколько это будет стоить?', 'За сколько дней сделаете?', 'Можно на моей вещи?'];
+const ACCEPT = '.png,.jpg,.jpeg,.webp,.gif,.heic,.pdf,.ai,.eps,.cdr,.psd,.svg,.tif,.tiff,.zip,.rar,.7z,.docx,.xlsx,.txt';
+const MAX_FILE = 10 * 1024 * 1024;
 
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
@@ -72,6 +74,9 @@ export default function ChatWidget() {
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const polling = useRef(false);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const lastTyping = useRef(0);
+  const [fileError, setFileError] = useState('');
 
   const lastId = (list: Msg[]) => list.reduce((m, x) => (x.id > 0 && x.id > m ? x.id : m), 0);
   const save = (list: Msg[]) => ls.set(K.msgs, JSON.stringify(list.slice(-100)));
@@ -83,6 +88,10 @@ export default function ChatWidget() {
     setMsgs(restored);
     setContactSaved(ls.get(K.contact) === '1');
     setOnline(isOnline());
+    fetch(`${API}/chat/status`, { cache: 'no-store' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => j && typeof j.online === 'boolean' && setOnline(j.online))
+      .catch(() => {});
     const seen = Number(ls.get(K.seen) ?? 0);
     setUnread(restored.filter((m) => m.from === 'manager' && m.id > seen).length);
     const show = (e?: Event) => {
@@ -111,7 +120,10 @@ export default function ChatWidget() {
     if (open) {
       setUnread(0);
       ls.set(K.seen, String(lastId(msgs)));
-      setOnline(isOnline());
+      fetch(`${API}/chat/status`, { cache: 'no-store' })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((j) => j && typeof j.online === 'boolean' && setOnline(j.online))
+        .catch(() => {});
       setTimeout(() => (view === 'chat' ? inputRef.current?.focus({ preventScroll: true }) : null), 60);
     }
   }, [open, view]);
@@ -134,8 +146,9 @@ export default function ChatWidget() {
         const after = lastId(loadMsgs());
         const r = await fetch(`${API}/chat/messages?sid=${sid.current}&after=${after}`, { cache: 'no-store' });
         if (!r.ok) throw new Error(String(r.status));
-        const j = (await r.json()) as { messages: Msg[] };
+        const j = (await r.json()) as { messages: Msg[]; online?: boolean };
         pause = 1000;
+        if (typeof j.online === 'boolean') setOnline(j.online);
         if (j.messages?.length) {
           setMsgs((cur) => {
             const known = new Set(cur.map((m) => m.id));
@@ -180,6 +193,41 @@ export default function ChatWidget() {
       setMsgs((cur) => cur.map((m) => (m.id === temp.id ? { ...m, pending: false, failed: true } : m)));
       setOffline(true);
     }
+  };
+
+  const sendFile = async (f: File) => {
+    setFileError('');
+    if (f.size > MAX_FILE) return setFileError('Файл больше 10 МБ — пришлите поменьше или через «Отправить макет».');
+    const temp: Msg = { id: -Date.now(), from: 'visitor', text: '', at: new Date().toISOString(), file: { name: f.name, type: f.type, size: f.size }, pending: true };
+    setMsgs((cur) => [...cur, temp]);
+    try {
+      const r = await fetch(`${API}/chat/file?sid=${sid.current}&name=${encodeURIComponent(f.name)}`, {
+        method: 'POST',
+        headers: { 'content-type': f.type || 'application/octet-stream' },
+        body: f,
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || !j.ok) throw new Error(j.error ?? 'file');
+      setMsgs((cur) => {
+        const next = cur.map((m) => (m.id === temp.id ? (j.message as Msg) : m));
+        save(next);
+        return next;
+      });
+      setOffline(false);
+      poll();
+    } catch (err) {
+      setMsgs((cur) => cur.filter((m) => m.id !== temp.id));
+      if (err instanceof Error && err.message !== 'file' && err.message !== 'Failed to fetch') setFileError(err.message);
+      else setOffline(true);
+    }
+  };
+
+  /** «печатает…» in the owner's panel — at most once every 4 s */
+  const pingTyping = () => {
+    const t = Date.now();
+    if (t - lastTyping.current < 4000 || !msgs.length || offline) return;
+    lastTyping.current = t;
+    fetch(`${API}/chat/typing`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ sid: sid.current }) }).catch(() => {});
   };
 
   const saveContact = async (e: Event) => {
@@ -265,7 +313,17 @@ export default function ChatWidget() {
                 )}
                 {msgs.map((m) => (
                   <div class={`chatw-msg is-${m.from}${m.pending ? ' is-pending' : ''}${m.failed ? ' is-failed' : ''}`}>
-                    <p>{m.text}</p>
+                    {m.file &&
+                      (m.id > 0 && /^image\/(png|jpeg|webp|gif)$/.test(m.file.type) ? (
+                        <a href={`${API}/chat/file?sid=${sid.current}&id=${m.id}`} target="_blank" rel="noopener">
+                          <img class="chatw-img" src={`${API}/chat/file?sid=${sid.current}&id=${m.id}`} alt={m.file.name} loading="lazy" />
+                        </a>
+                      ) : (
+                        <a class="chatw-file" href={m.id > 0 ? `${API}/chat/file?sid=${sid.current}&id=${m.id}` : undefined} download={m.file.name}>
+                          📄 {m.file.name}
+                        </a>
+                      ))}
+                    {m.text && <p>{m.text}</p>}
                     <small>{m.failed ? 'не отправлено' : m.pending ? 'отправляем…' : timeOf(m.at)}</small>
                   </div>
                 ))}
@@ -290,6 +348,7 @@ export default function ChatWidget() {
                   </form>
                 )}
                 {contactSaved && <p class="chatw-saved">✓ Контакт сохранён — ответим, даже если вы уйдёте с сайта.</p>}
+                {fileError && <p class="chatw-note">{fileError}</p>}
               </div>
               <form
                 class="chatw-input"
@@ -298,6 +357,22 @@ export default function ChatWidget() {
                   send(text);
                 }}
               >
+                <button type="button" class="chatw-attach" aria-label="Прикрепить файл или картинку" title="Прикрепить файл (до 10 МБ)" onClick={() => fileRef.current?.click()}>
+                  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                    <path d="M15.5 6.5 8 14a2.1 2.1 0 0 0 3 3l7.6-7.6a4 4 0 0 0-5.7-5.7L5.3 11.3a6 6 0 0 0 8.5 8.5L19 14.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  </svg>
+                </button>
+                <input
+                  ref={fileRef}
+                  type="file"
+                  accept={ACCEPT}
+                  hidden
+                  onChange={(e) => {
+                    const f = (e.target as HTMLInputElement).files?.[0];
+                    if (f) sendFile(f);
+                    (e.target as HTMLInputElement).value = '';
+                  }}
+                />
                 <textarea
                   ref={inputRef}
                   rows={1}
@@ -305,7 +380,10 @@ export default function ChatWidget() {
                   maxLength={2000}
                   placeholder="Напишите сообщение…"
                   aria-label="Сообщение"
-                  onInput={(e) => setText((e.target as HTMLTextAreaElement).value)}
+                  onInput={(e) => {
+                    setText((e.target as HTMLTextAreaElement).value);
+                    pingTyping();
+                  }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && !e.shiftKey) {
                       e.preventDefault();

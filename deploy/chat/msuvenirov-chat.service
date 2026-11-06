@@ -1,6 +1,6 @@
 # systemd unit of the site chat (server/chat). Install: see docs/DEPLOY.md, section 11.
 [Unit]
-Description=msuvenirov.ru site chat (messages to Telegram)
+Description=msuvenirov.ru site chat and panel /admin
 After=network-online.target
 Wants=network-online.target
 

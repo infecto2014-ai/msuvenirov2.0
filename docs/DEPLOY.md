@@ -163,41 +163,16 @@ curl -sI https://msuvenirov.ru/no-such-page      # 404
 - Более 5 заявок с одного IP за 10 минут → 429.
 - Нажатие «Одобрить/Отклонить» под отзывом в Telegram работает только у ID из `TELEGRAM_ADMIN_IDS`.
 
-## 11. Чат на сайте (свой, вместо Jivo)
+## 11. Чат на сайте и панель /admin (свой, вместо Jivo)
 
-Подробная пошаговая инструкция для владельца — `docs/ЧАТ_ИНСТРУКЦИЯ.md`.
+Пошаговая инструкция для владельца — `docs/ЧАТ_ИНСТРУКЦИЯ.md`. Коротко:
 
-Окно чата (`src/components/islands/ChatWidget.tsx`) шлёт сообщения на небольшую программу на этом же сервере
-(`server/chat/`, без сторонних библиотек, нужен Node ≥ 18). Она хранит переписку в `/var/lib/msuvenirov-chat`
-и пересылает сообщения в Telegram; ответ владельца (кнопка «Ответить» на сообщении бота) возвращается в окно чата.
-Там же — заявки «Перезвоните мне».
+- Окно чата (`src/components/islands/ChatWidget.tsx`) и панель `/admin` (`src/pages/admin.astro`,
+  `src/components/islands/admin/`) работают с программой `server/chat/` на этом сервере (Node ≥ 18, без зависимостей).
+- Telegram не используется (решение владельца, 06.11.2026). Уведомления — Web Push на телефон и ПК владельца.
+- Настройка: `node /var/www/msuvenirov.ru/server/chat/setup.mjs` (пароль панели + ключи уведомлений →
+  `/etc/msuvenirov-chat.env`), затем systemd `deploy/chat/msuvenirov-chat.service`, затем nginx `location ^~ /api/`.
+- Данные: `/var/lib/msuvenirov-chat` (переписка, файлы, звонки, подписки на уведомления, сессии).
+- Деплой перезапускает службу: `systemctl try-restart msuvenirov-chat` в `.github/workflows/deploy.yml`.
 
-1. **Отдельный бот для чата.** В Telegram: @BotFather → `/newbot` → имя, например «Мастерская сувениров — чат».
-   Сохраните токен. Отдельный бот нужен потому, что у бота может быть только один вебхук, а у бота заявок
-   он уже занят модерацией отзывов (Supabase).
-2. **Куда приходят сообщения:** только владельцу лично (решение владельца, 06.11.2026). Нажмите «Запустить» у нового бота,
-   свой ID узнайте у @userinfobot — это `TG_CHAT_ID`.
-3. **Настройки на сервере** (под root):
-   ```bash
-   cp /var/www/msuvenirov.ru/deploy/chat/msuvenirov-chat.env.example /etc/msuvenirov-chat.env
-   nano /etc/msuvenirov-chat.env        # TG_BOT_TOKEN, TG_CHAT_ID, TG_WEBHOOK_SECRET
-   chmod 600 /etc/msuvenirov-chat.env
-   cp /var/www/msuvenirov.ru/deploy/chat/msuvenirov-chat.service /etc/systemd/system/
-   systemctl daemon-reload && systemctl enable --now msuvenirov-chat
-   systemctl status msuvenirov-chat      # должно быть active (running)
-   curl -s http://127.0.0.1:8787/api/health   # {"ok":true}
-   ```
-4. **nginx:** блок `location ^~ /api/` уже есть в `deploy/nginx/msuvenirov.ru.conf` (раздел 8 — как обновить конфиг).
-5. **Вебхук бота чата:**
-   ```bash
-   curl -sS "https://api.telegram.org/bot<TG_BOT_TOKEN>/setWebhook" \
-     -d "url=https://msuvenirov.ru/api/tg/webhook" \
-     -d "secret_token=<TG_WEBHOOK_SECRET>" \
-     -d 'allowed_updates=["message"]'
-   ```
-6. **Проверка:** откройте сайт, напишите в чат — сообщение придёт от бота. Нажмите «Ответить» и напишите ответ —
-   он появится в окне чата, а на вашем ответе бот поставит 👍. Кнопка «Перезвоните мне» присылает номер.
-7. Jivo с сайта убран (скрипт больше не подключается). Подписку Jivo можно отключить после проверки чата.
-
-Персональные данные: переписка и номера хранятся на этом сервере в России; пересылка в Telegram — трансграничная
-передача (решение по юридической части владелец примет отдельно).
+Персональные данные хранятся на этом сервере в России; юридическое оформление (152-ФЗ) владелец решит отдельно.

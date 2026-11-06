@@ -1,0 +1,35 @@
+---
+// Chat panel for the owner (owner, 06.11.2026): installable app on PC and phone with notifications.
+// Not indexed, not in the sitemap or menus. Works only on the site's own server (server/chat behind nginx /api/).
+import '@/styles/global.css';
+import AdminApp from '@/components/islands/admin/AdminApp';
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+    <title>Чат — Мастерская сувениров</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#16141b" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Чат МС" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="manifest" href="/admin.webmanifest" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/favicon-192.png" />
+  </head>
+  <body class="adm-body">
+    <AdminApp client:only="preact" />
+    <noscript>Для панели чата нужен включённый JavaScript.</noscript>
+  </body>
+</html>
+
+<style is:global>
+  .adm-body {
+    margin: 0;
+    overscroll-behavior: none;
+  }
+</style>

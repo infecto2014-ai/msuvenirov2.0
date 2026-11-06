@@ -98,7 +98,10 @@ const ld = [localBusiness(), website(), ...schema];
       })();
       // The old site registered a service worker; remove it so visitors always get fresh pages.
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(function (rs) { rs.forEach(function (r) { r.unregister(); }); });
+        navigator.serviceWorker.getRegistrations().then(function (rs) {
+          // keep only the chat panel's worker (/admin) — it shows the owner's notifications
+          rs.forEach(function (r) { if (r.scope.indexOf('/admin') === -1) r.unregister(); });
+        });
       }
     </script>
   </body>
