@@ -16,6 +16,9 @@ const alt = names.map(esc).sort((a, b) => b.length - a.length).join('|');
 const pathRe = new RegExp(`((?:["'(=\`]|&quot;))/(${alt})(?=[/"'?#)&\`\\s]|$)`, 'g');
 // links to the home page: "/" , "/#anchor", "/?q"
 const homeRe = /((?:href|action)=")\/(?=["#?])/g;
+// srcset lists several URLs separated by ", " — every entry needs the prefix, not only the first
+const srcsetRe = /(srcset=")([^"]*)"/g;
+const srcsetEntryRe = /(^|,\s*)\/(?!\/)/g;
 
 const files = [];
 (function walk(dir) {
@@ -30,6 +33,7 @@ let changed = 0;
 for (const f of files) {
   let s = readFileSync(f, 'utf8');
   const before = s;
+  s = s.replace(srcsetRe, (_, a, list) => `${a}${list.replace(srcsetEntryRe, (_m, sep) => `${sep}${base}/`)}"`);
   s = s.replace(pathRe, `$1${base}/$2`).replace(homeRe, `$1${base}/`);
   if (f.endsWith('.html')) {
     s = s.replace(/<meta name="robots"[^>]*>/g, '');
