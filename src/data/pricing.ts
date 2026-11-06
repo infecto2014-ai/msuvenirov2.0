@@ -1451,7 +1451,7 @@ const subSheetA3 = [220, 180, 150, 120];
 
 const transfers: Category = {
   id: 'transfers',
-  name: 'Принты без нанесения',
+  name: 'DTF и сублимация без нанесения',
   page: '/dtf-pechat',
   products: [
     tiered({
