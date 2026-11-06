@@ -24,6 +24,9 @@
   --y-soft: #fff5c9;
   --m-ink: #b30062; /* magenta that passes 4.5:1 for small text on paper */
   --c-ink: #006f99;
+  /* main action buttons «Заказать» / «Рассчитать» (owner, 06.11.2026: red instead of pink; white text 5:1) */
+  --red: #d7262e;
+  --red-dark: #b81d24;
 
   --radius-s: 12px;
   --radius: 22px;
@@ -435,7 +438,7 @@ p {
 }
 
 .btn-magenta {
-  --btn-bg: var(--m);
+  --btn-bg: var(--red);
   --btn-fg: #fff;
 }
 
