@@ -228,8 +228,14 @@ const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Иде�
     font-size: 1rem;
     color: var(--ink-2);
   }
+  /* owner, 06.11.2026: the button is red, like the candy cane */
   .nyb-btn {
+    --btn-bg: var(--candy);
+    --btn-fg: #fff;
     margin-top: 6px;
+  }
+  .nyb-btn:hover {
+    --btn-bg: var(--candy-ink);
   }
 
   /* ---------- Ded Moroz + sign */
