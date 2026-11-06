@@ -108,6 +108,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     </div>
   </section>
 
+  <div class="band band-warm">
   <!-- POPULAR -->
   <section class="section popular" aria-labelledby="pop-h">
     <div class="wrap">
@@ -150,7 +151,9 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
       </ul>
     </div>
   </section>
+  </div>
 
+  <div class="band band-paper">
   <!-- CATEGORIES -->
   <section class="section cats" aria-labelledby="cats-h">
     <div class="wrap">
@@ -187,9 +190,13 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
       </p>
     </div>
   </section>
+  </div>
 
+  <div class="band band-ink">
   <PortfolioGrid />
+  </div>
 
+  <div class="band band-paper">
   <!-- OCCASIONS -->
   <section class="section occasions" aria-labelledby="occ-h">
     <div class="wrap">
@@ -216,9 +223,13 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
       </ul>
     </div>
   </section>
+  </div>
 
+  <div class="band band-warm">
   <Reviews />
+  </div>
 
+  <div class="band band-paper">
   <!-- B2B -->
   <section class="section" aria-labelledby="b2b-h">
     <div class="wrap">
@@ -257,7 +268,9 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
       </div>
     </div>
   </section>
+  </div>
 
+  <div class="band band-warm">
   <HowItWorks />
 
   <!-- TERMS -->
@@ -277,7 +290,9 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
       </ul>
     </div>
   </section>
+  </div>
 
+  <div class="band band-paper">
   <!-- SEO TEXT -->
   <section class="section seo-text" aria-labelledby="seo-h">
     <div class="wrap">
@@ -318,10 +333,15 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
       <label for="seo-more" class="seo-more-btn">Читать полностью</label>
     </div>
   </section>
+  </div>
 
+  <div class="band band-warm">
   <FaqSection items={homeFaq} />
+  </div>
 
+  <div class="band band-paper">
   <ContactBlock />
+  </div>
 </BaseLayout>
 
 <style>

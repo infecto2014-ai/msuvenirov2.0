@@ -289,6 +289,50 @@ p {
 .colorbar span:nth-child(3) { background: var(--y); }
 .colorbar span:nth-child(4) { background: var(--k); }
 
+/* Section bands («листы»): neighbouring blocks get different grounds and stack like printed sheets —
+   each band has rounded top corners, overlaps the previous one and carries a CMYK colour bar on its edge. */
+.band {
+  --band-r: clamp(26px, 4vw, 56px);
+  position: relative;
+  margin-top: calc(var(--band-r) * -1);
+  padding-top: calc(var(--band-r) * 0.6);
+  border-radius: var(--band-r) var(--band-r) 0 0;
+  background: var(--band-bg, var(--paper));
+  box-shadow: 0 -1px 0 rgba(22, 20, 27, 0.06), 0 -22px 36px -30px rgba(22, 20, 27, 0.35);
+}
+.band::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  width: 84px;
+  height: 6px;
+  transform: translateX(-50%);
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--c) 0 25%, var(--m) 25% 50%, var(--y) 50% 75%, var(--k) 75%);
+  opacity: 0.9;
+}
+.band-paper { --band-bg: var(--paper); }
+.band-warm {
+  --band-bg: #f4ebd8;
+  --line: #e2d6bd;
+}
+/* dark band: tokens flipped so cards, captions and ghost buttons inside stay readable */
+.band-ink {
+  --band-bg: #16141b;
+  --ink: #fffcf5;
+  --ink-2: #ddd7cc;
+  --muted: #b3acbb;
+  --card: #24212b;
+  --paper-2: #2c2934;
+  --line: #3a3644;
+  --line-strong: #4c4757;
+  --dot: rgba(255, 252, 245, 0.12);
+  color: var(--ink);
+}
+.band-ink .eyebrow::before { mix-blend-mode: normal; }
+.band-ink::before { background: linear-gradient(90deg, var(--c) 0 25%, var(--m) 25% 50%, var(--y) 50% 75%, #fffcf5 75%); }
+
 /* Misregistered heading accent: the word looks printed with a slight plate shift */
 .misreg {
   text-shadow: 0.045em 0.03em 0 rgba(0, 160, 220, 0.55), -0.035em -0.02em 0 rgba(229, 0, 125, 0.45);
