@@ -15,9 +15,9 @@ const { photo, id, upright = 11 } = Astro.props;
 <svg viewBox="0 0 200 250" role="presentation" aria-hidden="true">
   <defs>
     <radialGradient id={`${id}-g`} cx="36%" cy="36%" r="72%">
-      <stop offset="0" stop-color="#d17b7a" />
-      <stop offset="0.5" stop-color="#8a1e1c" />
-      <stop offset="1" stop-color="#40020d" />
+      <stop offset="0" stop-color="#ff7d82" />
+      <stop offset="0.5" stop-color="#d7262e" />
+      <stop offset="1" stop-color="#6e0a10" />
     </radialGradient>
     <linearGradient id={`${id}-cap`} x1="0" x2="1">
       <stop offset="0" stop-color="#9c7a2b" />
@@ -32,7 +32,7 @@ const { photo, id, upright = 11 } = Astro.props;
   <path d="M82 48h36M82 54h36" stroke="#7d5f1f" stroke-width="1.2" opacity="0.5" />
   <circle cx="100" cy="152" r="92" fill={`url(#${id}-g)`} />
   <circle cx="100" cy="152" r="78" fill="none" stroke="#f3d77c" stroke-width="3" stroke-dasharray="1 9" stroke-linecap="round" />
-  <circle cx="100" cy="152" r="73" fill="#fbf8f5" />
+  <circle cx="100" cy="152" r="73" fill="#fffcf5" />
   <g clip-path={`url(#${id}-win)`}>
     <image href={photo} x="30" y="82" width="140" height="140" preserveAspectRatio="xMidYMid slice" transform={`rotate(${upright} 100 152)`} />
   </g>

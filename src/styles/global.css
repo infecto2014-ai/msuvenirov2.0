@@ -6,39 +6,29 @@
 @import '@fontsource-variable/jetbrains-mono';
 
 :root {
-  /* Brand palette (owner, 06.11.2026): navy #032030, teal #13465b, wine #40020d, red #8a1e1c, rose #d17b7a.
-     The old CMYK token names are kept so every component follows: --c = teal, --m = red (main action),
-     --y = rose (highlight), --k/--ink = navy. All text pairs checked ≥ 4.5:1. */
-  --navy: #032030;
-  --teal: #13465b;
-  --wine: #40020d;
-  --red: #8a1e1c;
-  --rose: #d17b7a;
-  --rose-light: #f2b4b2; /* rose for text on navy (9.5:1) */
-
-  --paper: #fbf8f5;
-  --paper-2: #f3ece8;
+  --paper: #fffcf5;
+  --paper-2: #f7f1e3;
   --card: #ffffff;
-  --ink: #032030;
-  --ink-2: #2a3f4b;
-  --muted: #55666f;
-  --line: #e7ddd8;
-  --line-strong: #cdbfb9;
+  --ink: #16141b;
+  --ink-2: #3d3944;
+  --muted: #5d5866;
+  --line: #e7dfcf;
+  --line-strong: #cfc5b1;
 
-  --c: #13465b;
-  --m: #8a1e1c;
-  --y: #d17b7a;
-  --k: #032030;
-  --c-soft: #e2edf1;
-  --m-soft: #f6e3e2;
-  --y-soft: #f8e5e4;
-  --m-ink: #8a1e1c;
-  --c-ink: #13465b;
+  --c: #00a0dc;
+  --m: #e5007d;
+  --y: #ffd21f;
+  --k: #16141b;
+  --c-soft: #e2f4fb;
+  --m-soft: #fde7f2;
+  --y-soft: #fff5c9;
+  --m-ink: #b30062; /* magenta that passes 4.5:1 for small text on paper */
+  --c-ink: #006f99;
 
   --radius-s: 12px;
   --radius: 22px;
   --radius-l: 34px;
-  --shadow: 0 1px 0 rgba(3, 32, 48, 0.04), 0 18px 40px -24px rgba(3, 32, 48, 0.28);
+  --shadow: 0 1px 0 rgba(22, 20, 27, 0.04), 0 18px 40px -24px rgba(22, 20, 27, 0.28);
   --shadow-print: 5px 5px 0 var(--c), -3px -3px 0 var(--m);
 
   --font: 'Rubik Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -278,7 +268,7 @@ p {
 
 /* Halftone dot field */
 .halftone {
-  background-image: radial-gradient(circle, var(--dot, rgba(3, 32, 48, 0.13)) 1.4px, transparent 1.6px);
+  background-image: radial-gradient(circle, var(--dot, rgba(22, 20, 27, 0.13)) 1.4px, transparent 1.6px);
   background-size: 14px 14px;
 }
 
@@ -336,12 +326,12 @@ p {
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 60' preserveAspectRatio='none'%3E%3Cpath d='M0 0v30c200 26 420 30 640 12S1080-4 1260 12c70 6 130 16 180 24V0z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
 }
 .band-tint {
-  --band-bg: #e6eef1;
+  --band-bg: #eaf4f7;
   --line: #d5e6ec;
 }
 /* dark band: tokens flipped so cards, captions and ghost buttons inside stay readable */
 .band-ink {
-  --band-bg: #032030;
+  --band-bg: #0f1d27;
   --ink: #fffcf5;
   --ink-2: #d6dde2;
   --muted: #a7b4bd;
@@ -356,7 +346,7 @@ p {
 
 /* Misregistered heading accent: the word looks printed with a slight plate shift */
 .misreg {
-  text-shadow: 0.045em 0.03em 0 rgba(19, 70, 91, 0.5), -0.035em -0.02em 0 rgba(209, 123, 122, 0.55);
+  text-shadow: 0.045em 0.03em 0 rgba(0, 160, 220, 0.55), -0.035em -0.02em 0 rgba(229, 0, 125, 0.45);
 }
 
 /* Highlighter swash under a word */
@@ -524,7 +514,7 @@ p {
   color: var(--ink);
   font-weight: 800;
   transform: rotate(-3deg);
-  box-shadow: 0 10px 20px -12px rgba(3, 32, 48, 0.5);
+  box-shadow: 0 10px 20px -12px rgba(22, 20, 27, 0.5);
 }
 
 .sticker::before {
@@ -536,7 +526,7 @@ p {
   height: 18px;
   transform: translateX(-50%) rotate(4deg);
   background: rgba(255, 255, 255, 0.65);
-  border: 1px solid rgba(3, 32, 48, 0.08);
+  border: 1px solid rgba(22, 20, 27, 0.08);
   border-radius: 3px;
 }
 
