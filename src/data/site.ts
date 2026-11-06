@@ -49,22 +49,32 @@ export interface NavLink {
   /** for pages that have no services.ts entry (own .astro page): card picture and price on /uslugi */
   image?: string;
   calc?: { category: string; product: string };
+  /** nested pages shown as a collapsible list under this link in the menu (owner, 06.11.2026: «Печать на одежде») */
+  children?: NavLink[];
 }
+
+/** a group's links with the nested ones listed right after their parent (footer, /uslugi, active-page checks) */
+export const flatLinks = (links: NavLink[]): NavLink[] => links.flatMap((l) => [l, ...(l.children ?? [])]);
 
 /** Service landing pages grouped for the menu and footer. Must match src/data/services.ts slugs. */
 export const serviceNav: { group: string; links: NavLink[] }[] = [
   {
     group: 'Одежда',
     links: [
-      { href: '/pechat-na-odezhde', label: 'Печать на одежде' },
-      { href: '/pechat-na-futbolkah', label: 'Печать на футболках' },
-      { href: '/pechat-na-hudi', label: 'Печать на худи' },
-      { href: '/pechat-na-shopperah', label: 'Печать на шопперах' },
-      { href: '/pechat-na-kepkah', label: 'Печать на бейсболках' },
-      { href: '/pechat-na-specodezhde', label: 'Печать на спецодежде' },
-      { href: '/pechat-na-sportivnoy-forme', label: 'Печать на спортивной форме' },
-      { href: '/dtf-pechat', label: 'DTF и сублимация без нанесения' },
+      {
+        href: '/pechat-na-odezhde',
+        label: 'Печать на одежде',
+        children: [
+          { href: '/pechat-na-futbolkah', label: 'Футболки' },
+          { href: '/pechat-na-hudi', label: 'Худи' },
+          { href: '/pechat-na-shopperah', label: 'Шопперы' },
+          { href: '/pechat-na-kepkah', label: 'Бейсболки' },
+          { href: '/pechat-na-specodezhde', label: 'Спецодежда', image: '/portfolio/corporate-polo.webp', calc: { category: 'textile', product: 'own-item' } },
+          { href: '/pechat-na-sportivnoy-forme', label: 'Спортивная форма', image: '/portfolio/sport-jersey.webp', calc: { category: 'textile', product: 'own-item' } },
+        ],
+      },
       { href: '/sublimacionnaya-pechat', label: 'Сублимационная печать', image: '/portfolio/sublimation-anime.webp', calc: { category: 'textile', product: 'sub-print' } },
+      { href: '/dtf-pechat', label: 'DTF и сублимация без нанесения', image: '/img/showcase/tshirt.webp', calc: { category: 'transfers', product: 'sub-sheet' } },
     ],
   },
   {

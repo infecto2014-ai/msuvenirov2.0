@@ -4,7 +4,7 @@ import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import Icon from '@/components/Icon.astro';
 import { services } from '@/data/services';
-import { serviceNav } from '@/data/site';
+import { flatLinks, serviceNav } from '@/data/site';
 import { categoryFrom, findProduct, rub } from '@/data/pricing';
 import { breadcrumbs } from '@/lib/schema';
 
@@ -44,7 +44,7 @@ const fromOf = (slug: string, calc?: { category: string; product: string }) => {
         <div class="wrap">
           <h2 id={`g-${gi}`}>{g.group}</h2>
           <div class="svc-grid">
-            {g.links.map((l) => {
+            {flatLinks(g.links).map((l) => {
               const s = bySlug.get(l.href);
               return (
                 <a class="svc" href={l.href}>

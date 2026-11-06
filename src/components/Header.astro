@@ -1,10 +1,12 @@
 ---
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
-import { mainNav, serviceNav, site } from '@/data/site';
+import { flatLinks, mainNav, serviceNav, site } from '@/data/site';
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
-const isServices = serviceNav.some((g) => g.links.some((l) => l.href === path));
+const isServices = serviceNav.some((g) => flatLinks(g.links).some((l) => l.href === path));
+// a link with nested pages starts open when the visitor is on one of them
+const openOf = (l: { href: string; children?: { href: string }[] }) => l.href === path || !!l.children?.some((c) => c.href === path);
 ---
 
 <header class="hdr">
@@ -22,13 +24,37 @@ const isServices = serviceNav.some((g) => g.links.some((l) => l.href === path));
               <div class="hdr-mega-col">
                 <p class="hdr-mega-title">{g.group}</p>
                 <ul>
-                  {g.links.map((l) => (
-                    <li>
-                      <a href={l.href} aria-current={l.href === path ? 'page' : undefined}>
-                        {l.label}
-                      </a>
-                    </li>
-                  ))}
+                  {g.links.map((l) =>
+                    l.children ? (
+                      <li>
+                        {/* the name opens the page, the arrow folds the list; nested links stay in the HTML */}
+                        <details class="hdr-sub" open={openOf(l)}>
+                          <summary>
+                            <a href={l.href} aria-current={l.href === path ? 'page' : undefined}>
+                              {l.label}
+                            </a>
+                            <span class="hdr-sub-arrow" aria-hidden="true"></span>
+                            <span class="sr-only">Показать список</span>
+                          </summary>
+                          <ul>
+                            {l.children.map((c) => (
+                              <li>
+                                <a href={c.href} aria-current={c.href === path ? 'page' : undefined}>
+                                  {c.label}
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        </details>
+                      </li>
+                    ) : (
+                      <li>
+                        <a href={l.href} aria-current={l.href === path ? 'page' : undefined}>
+                          {l.label}
+                        </a>
+                      </li>
+                    ),
+                  )}
                 </ul>
               </div>
             ))
@@ -64,9 +90,24 @@ const isServices = serviceNav.some((g) => g.links.some((l) => l.href === path));
             serviceNav.map((g) => (
               <div class="hdr-drawer-group">
                 <p class="hdr-mega-title">{g.group}</p>
-                {g.links.map((l) => (
-                  <a href={l.href}>{l.label}</a>
-                ))}
+                {g.links.map((l) =>
+                  l.children ? (
+                    <details class="hdr-sub hdr-sub-drawer" open={openOf(l)}>
+                      <summary>
+                        <a href={l.href}>{l.label}</a>
+                        <span class="hdr-sub-arrow" aria-hidden="true"></span>
+                        <span class="sr-only">Показать список</span>
+                      </summary>
+                      <div class="hdr-sub-list">
+                        {l.children.map((c) => (
+                          <a href={c.href}>{c.label}</a>
+                        ))}
+                      </div>
+                    </details>
+                  ) : (
+                    <a href={l.href}>{l.label}</a>
+                  ),
+                )}
               </div>
             ))
           }
@@ -202,6 +243,61 @@ const isServices = serviceNav.some((g) => g.links.some((l) => l.href === path));
   .hdr-mega li a:hover {
     color: var(--m-ink);
   }
+  /* «Печать на одежде» with a collapsible list of clothing pages */
+  .hdr-sub summary {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    cursor: pointer;
+  }
+  .hdr-sub summary::-webkit-details-marker {
+    display: none;
+  }
+  .hdr-sub summary a {
+    display: block;
+    padding: 5px 0;
+  }
+  .hdr-sub summary a:hover {
+    color: var(--m-ink);
+  }
+  .hdr-sub-arrow {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1.5px solid var(--line-strong);
+    transition: background 0.15s ease, transform 0.2s ease;
+  }
+  .hdr-sub-arrow::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-right: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    transform: rotate(45deg) translate(-1px, -1px);
+  }
+  .hdr-sub summary:hover .hdr-sub-arrow {
+    background: var(--y);
+    border-color: var(--ink);
+  }
+  .hdr-sub[open] .hdr-sub-arrow {
+    transform: rotate(180deg);
+  }
+  .hdr-mega .hdr-sub ul {
+    margin: 2px 0 4px;
+    padding-left: 12px;
+    border-left: 2px solid var(--y);
+    gap: 0;
+  }
+  .hdr-mega .hdr-sub ul a {
+    padding: 4px 0;
+    font-weight: 500;
+    font-size: 0.94rem;
+  }
   .hdr-mega-cta {
     grid-column: 1 / -1;
     justify-self: start;
@@ -240,7 +336,7 @@ const isServices = serviceNav.some((g) => g.links.some((l) => l.href === path));
   .hdr-burger {
     display: none;
   }
-  .hdr-burger summary {
+  .hdr-burger > summary {
     list-style: none;
     display: grid;
     place-items: center;
@@ -250,10 +346,10 @@ const isServices = serviceNav.some((g) => g.links.some((l) => l.href === path));
     border: 1.5px solid var(--ink);
     cursor: pointer;
   }
-  .hdr-burger summary::-webkit-details-marker {
+  .hdr-burger > summary::-webkit-details-marker {
     display: none;
   }
-  .hdr-burger[open] summary {
+  .hdr-burger[open] > summary {
     background: var(--y);
   }
   /* absolute to the sticky header: backdrop-filter makes it the containing block anyway */
@@ -282,6 +378,27 @@ const isServices = serviceNav.some((g) => g.links.some((l) => l.href === path));
     font-weight: 700;
     text-decoration: none;
     border-bottom: 1px solid var(--line);
+  }
+  .hdr-sub-drawer summary {
+    border-bottom: 1px solid var(--line);
+  }
+  .hdr-drawer-group .hdr-sub-drawer summary a {
+    flex: 1;
+    border-bottom: 0;
+  }
+  .hdr-sub-drawer .hdr-sub-arrow {
+    width: 34px;
+    height: 34px;
+  }
+  .hdr-sub-list {
+    display: grid;
+    padding-left: 14px;
+    border-left: 3px solid var(--y);
+    margin: 2px 0 4px;
+  }
+  .hdr-drawer-group .hdr-sub-list a {
+    font-size: 1.02rem;
+    font-weight: 600;
   }
   .hdr-drawer-contacts {
     display: grid;
@@ -322,7 +439,7 @@ const isServices = serviceNav.some((g) => g.links.some((l) => l.href === path));
       max-height: calc(100dvh - 60px);
     }
     .hdr-phone,
-    .hdr-burger summary {
+    .hdr-burger > summary {
       width: 42px;
       height: 42px;
     }
