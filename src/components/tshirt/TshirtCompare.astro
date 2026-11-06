@@ -34,9 +34,11 @@ const tone = (i: number) => tones[i % tones.length];
 
 // ---- shirt geometry in centimetres (adult M-ish: ~52 cm chest, ~72 cm length)
 const CX = 40; // centre line
-const TOP = 11; // top edge of the print area, a few cm under the collar
-const maxH = sizes.length ? Math.max(...sizes.map((s) => s.h)) : 0;
-const shirtBottom = Math.max(78, TOP + maxH + 14);
+// owner, 06.11.2026: frames centred on the shirt (not pressed to the collar) and drawn 10% larger
+const K = 1.1;
+const maxH = sizes.length ? Math.max(...sizes.map((s) => s.h)) * K : 0;
+const shirtBottom = Math.max(78, 12 + maxH + 16);
+const CY = (10 + shirtBottom) / 2; // vertical centre of the body
 const B = shirtBottom;
 const shirt =
   `M30.5 5 C33.5 11 46.5 11 49.5 5 L61 7.2 C66 8.5 72 12 75.5 15.5 L79.5 26.5 C75.5 28.8 71.5 30 67.4 30.6 L66.2 26.8 ` +
@@ -89,17 +91,17 @@ const otherCols = block.columns.map((c, i) => ({ c, i })).filter((x) => x.i !== 
 
                 {order.map(({ w, h, i }) => (
                   <g class="tc-r" data-i={i} style={`--tl: ${tone(i).line}; --tf: ${tone(i).fill}`}>
-                    <rect x={CX - w / 2} y={TOP} width={w} height={h} rx="0.6" class="tc-r-box" />
-                    <text x={CX} y={TOP + h - 1.3} text-anchor="middle" class="tc-r-label">
+                    <rect x={CX - (w * K) / 2} y={CY - (h * K) / 2} width={w * K} height={h * K} rx="0.6" class="tc-r-box" />
+                    <text x={CX} y={CY + (h * K) / 2 - 1.3} text-anchor="middle" class="tc-r-label">
                       {block.rows[i].label}
                     </text>
                   </g>
                 ))}
 
-                {/* 10 cm scale bar: proves the drawing is to scale */}
+                {/* 10 cm scale bar, drawn with the same ×1.1 as the frames */}
                 <g class="tc-scale" transform={`translate(19 ${shirtBottom - 6})`}>
-                  <path d="M0 0 H10 M0 -1.1 V1.1 M5 -0.6 V0.6 M10 -1.1 V1.1" fill="none" stroke="#3d3944" stroke-width="0.35" />
-                  <text x="11.6" y="1" class="tc-scale-t">10 см</text>
+                  <path d="M0 0 H11 M0 -1.1 V1.1 M5.5 -0.6 V0.6 M11 -1.1 V1.1" fill="none" stroke="#3d3944" stroke-width="0.35" />
+                  <text x="12.6" y="1" class="tc-scale-t">10 см</text>
                 </g>
               </svg>
               <p class="tc-note" aria-hidden="true">

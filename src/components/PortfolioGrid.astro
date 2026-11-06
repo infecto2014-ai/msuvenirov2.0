@@ -1,4 +1,6 @@
 ---
+// Works as polaroids pinned with multicoloured push pins, slightly askew
+// (owner, 06.11.2026: "on colourful pins, like we did for New Year" — see ny/PolaroidWall.astro).
 import { portfolio } from '@/data/portfolio';
 import type { PortfolioItem } from '@/data/types';
 interface Props {
@@ -19,7 +21,6 @@ if (exclude?.length) items = items.filter((p) => !exclude.includes(p.src));
 // fill up with other works so the grid never looks empty
 if (items.length < Math.min(4, limit)) items = [...items, ...portfolio.filter((p) => !items.includes(p))];
 items = items.slice(0, limit);
-const rot = [-2, 1.5, -1, 2, -1.5, 1, -2.5, 1.5];
 ---
 
 <section class="section works" aria-labelledby="works-h">
@@ -31,18 +32,24 @@ const rot = [-2, 1.5, -1, 2, -1.5, 1, -2.5, 1.5];
       </div>
       {more && <a class="btn btn-ghost btn-sm" href="/portfolio">Все работы →</a>}
     </div>
-    <ul class="works-grid">
+    <ul class="works-grid" role="list">
       {
-        items.map((w, i) => (
-          <li class="work rope-item" style={`--r:${rot[i % rot.length]}deg`}>
-            <span class="rope-pin" aria-hidden="true" />
-            <figure>
-              <img src={w.src} alt={w.title} width="480" height="480" loading="lazy" decoding="async" />
-              <figcaption>
-                <span class="work-title">{w.title}</span>
-                <span class="work-tech mono">{w.tech}</span>
-              </figcaption>
-            </figure>
+        items.map((w) => (
+          <li class="work">
+            <div class="work-hang">
+              <span class="work-pin" aria-hidden="true">
+                <span class="work-pin-head" />
+              </span>
+              <figure class="work-card">
+                <div class="work-frame">
+                  <img src={w.src} alt={w.title} width="480" height="480" loading="lazy" decoding="async" />
+                </div>
+                <figcaption>
+                  <span class="work-title">{w.title}</span>
+                  <span class="work-tech mono">{w.tech}</span>
+                </figcaption>
+              </figure>
+            </div>
           </li>
         ))
       }
@@ -51,51 +58,175 @@ const rot = [-2, 1.5, -1, 2, -1.5, 1, -2.5, 1.5];
 </section>
 
 <style>
+  /* "all works" link: at least a 44px tap target */
+  .works .section-head .btn {
+    min-height: 44px;
+  }
   .works-grid {
+    --tilt: 1; /* scales all rotations; smaller on phones */
     list-style: none;
     margin: 0;
-    padding: 0;
+    padding: 22px 0 8px;
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 58px 22px;
-    padding-top: 36px;
-    --rope-gap: 22px;
+    gap: 52px 26px;
   }
+
+  /* ---------- controlled chaos: tilt, vertical drop, pin offset and pin colour per card */
   .work {
-    --pin-c: var(--m);
+    --r: -2deg;
+    --dy: 0px;
+    --px: 0px;
+    --acc: #00a0dc; /* C */
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding-top: var(--dy);
   }
-  .work:nth-child(4n + 2) {
-    --pin-c: var(--c);
+  .work:nth-child(4n + 2) { --acc: #e5007d; } /* M */
+  .work:nth-child(4n + 3) { --acc: #ffd21f; } /* Y */
+  .work:nth-child(4n + 4) { --acc: #d7262e; } /* red */
+  /* 6-step pattern for the tilt, so it does not line up with the 4-step colours */
+  .work:nth-child(6n + 2) { --r: 1.8deg; --dy: 12px; --px: 12px; }
+  .work:nth-child(6n + 3) { --r: -1deg; --dy: 4px; --px: -10px; }
+  .work:nth-child(6n + 4) { --r: 2.6deg; --dy: 10px; --px: -14px; }
+  .work:nth-child(6n + 5) { --r: -2.8deg; --dy: 0px; --px: 8px; }
+  .work:nth-child(6n) { --r: 1.2deg; --dy: 14px; --px: -4px; }
+
+  /* the card swings around the pin (pivot = pin centre) */
+  .work-hang {
+    position: relative;
+    z-index: 0;
+    flex: 1;
+    display: flex;
+    transform: rotate(calc(var(--r) * var(--tilt)));
+    transform-origin: calc(50% + var(--px)) 4px;
+    transition: transform 0.24s cubic-bezier(0.34, 1.35, 0.64, 1);
   }
-  .work:nth-child(4n + 3) {
-    --pin-c: var(--y);
+  /* lifted-corner shadows under the paper */
+  .work-hang::before,
+  .work-hang::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    bottom: 12px;
+    width: 46%;
+    height: 24%;
+    box-shadow: 0 14px 14px rgba(0, 0, 0, 0.32);
+    transition: box-shadow 0.24s ease;
   }
-  .work figure {
-    transform-origin: 50% 0;
+  .work-hang::before {
+    left: 10px;
+    transform: rotate(-3.5deg);
+  }
+  .work-hang::after {
+    right: 10px;
+    transform: rotate(3.5deg);
+  }
+  @media (hover: hover) {
+    .work:hover .work-hang {
+      transform: rotate(0deg) translateY(-5px);
+    }
+    .work:hover .work-hang::before,
+    .work:hover .work-hang::after {
+      box-shadow: 0 20px 18px rgba(0, 0, 0, 0.28);
+    }
+    .work:hover .work-frame img {
+      transform: scale(1.04);
+    }
+  }
+  .work:focus-within .work-hang {
+    transform: rotate(0deg) translateY(-5px);
+  }
+
+  /* ---------- push pin: glossy dome on a flat rim, cast shadow on the paper */
+  .work-pin {
+    position: absolute;
+    z-index: 3;
+    top: -12px;
+    left: calc(50% + var(--px));
+    width: 34px;
+    height: 34px;
+    margin-left: -17px;
+    pointer-events: none;
+  }
+  .work-pin::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 15px;
+    width: 30px;
+    height: 24px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(22, 20, 27, 0.5), rgba(22, 20, 27, 0));
+    filter: blur(2px);
+  }
+  .work-pin::after {
+    content: '';
+    position: absolute;
+    inset: 4px 0 0 4px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 25%, color-mix(in srgb, var(--acc) 80%, #fff) 0, var(--acc) 50%, color-mix(in srgb, var(--acc) 50%, #000) 100%);
+    box-shadow: 0 1px 1.5px rgba(0, 0, 0, 0.35);
+  }
+  .work-pin-head {
+    position: absolute;
+    z-index: 1;
+    inset: 2px 7px 7px 2px;
+    border-radius: 50%;
+    background:
+      radial-gradient(ellipse 34% 24% at 36% 28%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 100%),
+      radial-gradient(circle at 40% 36%, color-mix(in srgb, var(--acc) 50%, #fff) 0, var(--acc) 48%, color-mix(in srgb, var(--acc) 62%, #000) 100%);
+    box-shadow:
+      inset -2px -3px 4px rgba(0, 0, 0, 0.25),
+      1px 2px 3px rgba(0, 0, 0, 0.3);
+  }
+
+  /* ---------- polaroid: always white paper with dark text (also on the dark home band) */
+  .work-card {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     margin: 0;
-    padding: 10px 10px 14px;
-    background: var(--card);
-    border-radius: 20px;
-    box-shadow: var(--shadow);
-    transform: rotate(var(--r));
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    padding: 10px 10px 0;
+    border-radius: 3px;
+    background: linear-gradient(170deg, #ffffff 0%, #fcfaf5 100%);
+    box-shadow:
+      0 0 0 1px rgba(22, 20, 27, 0.05),
+      0 2px 3px rgba(22, 20, 27, 0.1);
+    color: #16141b;
   }
-  .work:hover figure,
-  .work:focus-within figure {
-    transform: rotate(0deg) translateY(-4px);
-    box-shadow: 6px 6px 0 var(--m), var(--shadow);
-  }
-  .work img {
-    width: 100%;
+  .work-frame {
+    position: relative;
     aspect-ratio: 1;
-    object-fit: cover;
-    border-radius: 14px;
-    background: var(--paper-2);
+    overflow: hidden;
+    background: #efe8da;
   }
-  .work figcaption {
+  .work-frame img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  /* print finish: faint inner edge + soft gloss */
+  .work-frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 0 1px rgba(22, 20, 27, 0.08), inset 0 0 18px rgba(22, 20, 27, 0.12);
+    background: linear-gradient(125deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 38%);
+    pointer-events: none;
+  }
+  /* the thick bottom of the polaroid */
+  .work-card figcaption {
+    flex: 1;
     display: grid;
-    gap: 2px;
-    padding: 10px 4px 0;
+    align-content: start;
+    gap: 3px;
+    padding: 12px 4px 18px;
   }
   .work-title {
     overflow-wrap: anywhere;
@@ -103,29 +234,26 @@ const rot = [-2, 1.5, -1, 2, -1.5, 1, -2.5, 1.5];
     font-weight: 700;
     font-size: 0.92rem;
     line-height: 1.3;
+    color: #16141b;
   }
   .work-tech {
     font-size: 0.75rem;
-    color: var(--muted);
+    color: #5d5866; /* 6.6:1 on white */
   }
-  @media (prefers-reduced-motion: reduce) {
-    .work figure {
-      transition: none;
-    }
-  }
+
+  /* ---------- responsive */
   @media (max-width: 980px) {
     .works-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
-  @media (max-width: 640px) {
+  @media (max-width: 760px) {
     .works-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 52px 14px;
-      --rope-gap: 14px;
+      gap: 44px 18px;
     }
   }
-  /* phones: flat 2×2 grid, four works, short captions */
+  /* phones: 2×2 grid, four works, short captions, gentler tilt */
   @media (max-width: 560px) {
     /* "all works" sits on the short eyebrow line, so the title keeps the full width */
     .works .section-head {
@@ -133,33 +261,41 @@ const rot = [-2, 1.5, -1, 2, -1.5, 1, -2.5, 1.5];
     }
     .works .section-head .btn {
       position: absolute;
-      top: -6px;
+      top: -12px;
       right: 0;
-      min-height: 32px;
+      min-height: 44px;
       padding: 0 12px;
       font-size: 0.82rem;
       border-width: 1.5px;
     }
     .works-grid {
-      gap: 50px 10px;
-      --rope-gap: 10px;
+      --tilt: 0.6;
+      gap: 34px 12px;
+      padding-top: 18px;
+    }
+    .work {
+      padding-top: calc(var(--dy) / 2);
     }
     .work:nth-child(n + 5) {
       display: none;
     }
-    .work figure,
-    .work:hover figure {
-      transform: none;
-      padding: 6px 6px 10px;
-      border-radius: 18px;
-      box-shadow: none;
-      border: 1.5px solid var(--line);
+    .work-pin {
+      top: -10px;
+      width: 28px;
+      height: 28px;
+      margin-left: -14px;
     }
-    .work img {
-      border-radius: 13px;
+    .work-pin::before {
+      left: 10px;
+      top: 12px;
+      width: 24px;
+      height: 20px;
     }
-    .work figcaption {
-      padding: 8px 4px 0;
+    .work-card {
+      padding: 6px 6px 0;
+    }
+    .work-card figcaption {
+      padding: 8px 2px 12px;
       gap: 0;
     }
     .work-title {
@@ -171,7 +307,19 @@ const rot = [-2, 1.5, -1, 2, -1.5, 1, -2.5, 1.5];
       overflow: hidden;
     }
     .work-tech {
-      font-size: 0.68rem;
+      font-size: 0.7rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .work-hang,
+    .work-hang::before,
+    .work-hang::after,
+    .work-frame img {
+      transition: none;
+    }
+    .work:hover .work-frame img {
+      transform: none;
     }
   }
 </style>

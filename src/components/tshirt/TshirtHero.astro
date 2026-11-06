@@ -37,9 +37,6 @@ const h1 = at >= 0 ? [page.h1.slice(0, at), mark, page.h1.slice(at + mark.length
         {h1[0]}{h1[1] && <span class="th-mark">{h1[1]}</span>}{h1[2]}
       </h1>
       <p class="lead">{page.lead}</p>
-      <ul class="th-chips">
-        {page.highlights.map((h) => <li><Icon name="check" size={18} /> {h}</li>)}
-      </ul>
       <div class="th-actions">
         <a class="btn btn-magenta" href="#calc"><Icon name="calc" size={20} /> <span>Рассчитать<span class="th-long"> стоимость</span></span></a>
         <button type="button" class="btn btn-ghost" data-order><Icon name="upload" size={20} /> <span>Отправить макет</span></button>
@@ -49,7 +46,7 @@ const h1 = at >= 0 ? [page.h1.slice(0, at), mark, page.h1.slice(at + mark.length
           facts.map((f) => (
             <div>
               <dt class="mono">{f.big}</dt>
-              <dd>{f.small}</dd>
+              <dd set:html={f.small} />
             </div>
           ))
         }
@@ -147,28 +144,6 @@ const h1 = at >= 0 ? [page.h1.slice(0, at), mark, page.h1.slice(at + mark.length
     padding-inline: 0.04em;
     background: linear-gradient(transparent 62%, var(--y) 62% 92%, transparent 92%);
   }
-  .th-chips {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .th-chips li {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 14px;
-    border-radius: 999px;
-    background: var(--card);
-    border: 1.5px solid var(--line);
-    font-weight: 600;
-    font-size: 0.92rem;
-  }
-  .th-chips li:nth-child(3n + 1) :global(svg) { color: var(--c-ink); }
-  .th-chips li:nth-child(3n + 2) :global(svg) { color: var(--m-ink); }
-  .th-chips li:nth-child(3n + 3) :global(svg) { color: #8a6d00; }
   .th-actions {
     display: flex;
     flex-wrap: wrap;
@@ -398,7 +373,6 @@ const h1 = at >= 0 ? [page.h1.slice(0, at), mark, page.h1.slice(at + mark.length
     }
     .th-text > :global(.crumbs),
     .th-text h1,
-    .th-chips,
     .th-actions,
     .th-facts {
       grid-column: 1 / -1;
@@ -472,29 +446,8 @@ const h1 = at >= 0 ? [page.h1.slice(0, at), mark, page.h1.slice(at + mark.length
     .th-price small {
       display: none;
     }
-    .th-chips {
-      order: 5;
-      flex-wrap: nowrap;
-      gap: 6px;
-      overflow-x: auto;
-      margin-inline: calc(var(--gutter) * -1);
-      padding-inline: var(--gutter);
-      scrollbar-width: none;
-    }
-    .th-chips::-webkit-scrollbar,
     .th-text > :global(.crumbs)::-webkit-scrollbar {
       display: none;
-    }
-    .th-chips li {
-      flex: none;
-      gap: 4px;
-      padding: 5px 10px;
-      font-size: 0.8rem;
-      white-space: nowrap;
-    }
-    .th-chips :global(svg) {
-      width: 14px;
-      height: 14px;
     }
     .th-actions {
       order: 6;

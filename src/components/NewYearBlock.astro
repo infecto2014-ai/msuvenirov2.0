@@ -26,26 +26,22 @@ const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Иде�
       <NyBall id="nyb" photo={photo} />
     </div>
 
-    <!-- envelope (owner, 06.11.2026): the triangular flap is the "open" button → the New Year article,
-         the text sits on the front. Hover / focus opens the flap and a letter slides out. -->
+    <!-- closed envelope (owner, 06.11.2026: no opening animation): the whole envelope links to the New Year
+         article, the wax-seal button on the flap tip says where; the text sits on the front. -->
     <div class="nyb-frame">
       <a class="env" href={link} aria-labelledby="nyb-h nyb-cta">
-        <span class="env-back" aria-hidden="true"></span>
-        <span class="env-letter">
-          <span class="env-letter-hand" aria-hidden="true">для вас</span>
-          <span id="nyb-cta" class="env-letter-cta">{linkLabel} <span aria-hidden="true">→</span></span>
-        </span>
         <span class="env-front">
           <span class="nyb-hand">Новый год уже близко!</span>
           <h2 id="nyb-h">Подарки с вашим фото <span class="nyb-serif">и&nbsp;логотипом</span></h2>
           <span class="nyb-text">Ёлочные шары, кружки, календари на 2027 год и мерч для коллег</span>
         </span>
-        <span class="env-flap" aria-hidden="true">
-          <span class="env-seal">
-            <svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 2v20M3.3 7l17.4 10M3.3 17 20.7 7M9 3.5l3 2.5 3-2.5M9 20.5l3-2.5 3 2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
-          </span>
+        <span class="env-flap" aria-hidden="true"></span>
+        <!-- the button: a wax-seal pill on the tip of the closed flap -->
+        <span class="env-seal">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 2v20M3.3 7l17.4 10M3.3 17 20.7 7M9 3.5l3 2.5 3-2.5M9 20.5l3-2.5 3 2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          <span id="nyb-cta">{linkLabel}</span>
+          <span aria-hidden="true">→</span>
         </span>
-        <span class="env-open" aria-hidden="true">открыть</span>
       </a>
     </div>
 
@@ -200,7 +196,7 @@ const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Иде�
     width: 100%;
     max-width: 620px;
     justify-self: center;
-    margin-block: clamp(70px, 7vw, 96px) clamp(28px, 3vw, 40px);
+    margin-block: clamp(28px, 3vw, 44px) clamp(28px, 3vw, 40px);
   }
   .env {
     --top: clamp(118px, 11vw, 150px); /* depth of the flap area */
@@ -216,50 +212,10 @@ const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Иде�
     outline: 3px solid #ffd21f;
     outline-offset: 6px;
   }
-  /* inside of the envelope, seen when the flap is open */
-  .env-back {
-    position: absolute;
-    z-index: 0;
-    inset: 0;
-    border-radius: 18px;
-    background:
-      repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.08) 0 8px, transparent 8px 16px),
-      linear-gradient(180deg, #8e1626, #5c0c17);
-  }
-  /* the letter: hidden in the pocket, slides up when opened */
-  .env-letter {
-    position: absolute;
-    z-index: 1;
-    left: 7%;
-    right: 7%;
-    top: 14px;
-    height: calc(var(--top) + 30px);
-    display: grid;
-    align-content: start;
-    justify-items: center;
-    gap: 4px;
-    padding-top: 18px;
-    border-radius: 10px;
-    background:
-      linear-gradient(transparent 31px, rgba(0, 111, 153, 0.12) 31px 32px) 0 6px / 100% 32px,
-      #fff;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.12);
-    transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) 0.12s;
-  }
-  .env-letter-hand {
-    font-family: 'Caveat', cursive;
-    font-weight: 600;
-    font-size: 1.3rem;
-    line-height: 1;
-    color: var(--c-ink);
-  }
-  .env-letter-cta {
-    font-weight: 800;
-    font-size: clamp(0.98rem, 1.2vw, 1.12rem);
-    color: var(--candy);
-    text-align: center;
-    padding-inline: 10px;
-  }
+
+
+
+
   /* front pocket: airmail stripes on the edges, V-cut at the top, text at the bottom */
   .env-front {
     position: relative;
@@ -268,7 +224,7 @@ const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Иде�
     gap: 8px;
     justify-items: center;
     text-align: center;
-    padding: calc(var(--top) + 64px) clamp(22px, 3vw, 40px) clamp(24px, 2.6vw, 32px);
+    padding: calc(var(--top) + 76px) clamp(22px, 3vw, 40px) clamp(24px, 2.6vw, 32px);
     border: 9px solid transparent;
     border-radius: 18px;
     background:
@@ -311,9 +267,6 @@ const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Иде�
     right: 0;
     top: 0;
     height: calc(var(--top) + 26px);
-    transform-origin: 50% 0;
-    transform: perspective(900px) rotateX(0deg);
-    transition: transform 0.45s cubic-bezier(0.3, 0.7, 0.2, 1), z-index 0s 0.2s;
   }
   .env-flap::before {
     content: '';
@@ -325,61 +278,41 @@ const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Иде�
   }
   .env-seal {
     position: absolute;
-    left: 50%;
-    bottom: -18px;
-    display: grid;
-    place-items: center;
-    width: 54px;
-    height: 54px;
-    margin-left: -27px;
-    border-radius: 47% 53% 50% 50% / 52% 48% 52% 48%;
-    color: #ffd9c2;
-    background: radial-gradient(circle at 35% 30%, #ef4a50, var(--candy) 45%, #8e1018);
-    box-shadow:
-      0 0 0 4px rgba(176, 20, 28, 0.55),
-      0 6px 12px rgba(0, 0, 0, 0.35);
-    transition: transform 0.25s ease;
-  }
-  .env-open {
-    position: absolute;
     z-index: 4;
-    left: calc(50% + 34px);
-    top: calc(var(--top) + 22px);
-    font-family: 'Caveat', cursive;
-    font-weight: 600;
-    font-size: 1.25rem;
-    line-height: 1;
-    color: var(--candy-ink);
-    transform: rotate(-6deg);
-    transition: opacity 0.2s ease;
-    pointer-events: none;
+    left: 50%;
+    top: calc(var(--top) + 2px);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 50px;
+    padding: 10px 22px 10px 16px;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    color: #fff;
+    font-weight: 800;
+    font-size: clamp(0.95rem, 1.15vw, 1.05rem);
+    white-space: nowrap;
+    background: radial-gradient(120% 140% at 30% 20%, #f0484f, var(--candy) 50%, #9c1219);
+    /* wax-seal look: paper gap + darker red ring, deep shadow */
+    box-shadow:
+      0 0 0 4px #fffaf0,
+      0 0 0 7px #b0141c,
+      0 12px 22px rgba(0, 0, 0, 0.35);
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
   }
-  @media (hover: hover) {
-    .env:hover .env-seal {
-      transform: scale(1.08) rotate(-8deg);
-    }
+  .env-seal svg {
+    color: #ffd9c2;
   }
-  /* opened: flap swings up behind the letter, the letter slides out */
-  .env:hover .env-flap,
-  .env:focus-visible .env-flap {
-    z-index: 0;
-    transform: perspective(900px) rotateX(180deg) translateZ(-1px);
-    transition: transform 0.45s cubic-bezier(0.3, 0.7, 0.2, 1), z-index 0s 0.22s;
+  .env:hover .env-seal,
+  .env:focus-visible .env-seal {
+    background: radial-gradient(120% 140% at 30% 20%, #d9333a, var(--candy-ink) 55%, #7a0d13);
+    box-shadow:
+      0 0 0 4px #fffaf0,
+      0 0 0 7px #ffd21f,
+      0 14px 26px rgba(0, 0, 0, 0.4);
   }
-  .env:hover .env-letter,
-  .env:focus-visible .env-letter {
-    transform: translateY(calc(var(--top) * -0.95));
-  }
-  .env:hover .env-open,
-  .env:focus-visible .env-open {
-    opacity: 0;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .env-flap,
-    .env-letter {
-      transition: none;
-    }
-  }
+
+
 
   /* ---------- Ded Moroz + sign */
   .nyb-santa {
