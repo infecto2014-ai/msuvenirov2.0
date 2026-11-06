@@ -17,7 +17,7 @@ interface Props {
 const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Идеи подарков к Новому году' } = Astro.props;
 ---
 
-<section class="nyb wrap" aria-labelledby="nyb-h" data-nyb hidden>
+<section class="nyb" aria-labelledby="nyb-h" data-nyb hidden>
   <div class="nyb-card">
     <span class="nyb-snow" aria-hidden="true"></span>
 
@@ -98,8 +98,8 @@ const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Иде�
     content: '';
     position: absolute;
     top: calc(var(--gap) * -1);
-    left: var(--gutter);
-    right: var(--gutter);
+    left: 0;
+    right: 0;
     height: calc(var(--wave-h) + var(--gap));
     background: linear-gradient(90deg, #6d0f1c, #8e1626 50%, #6d0f1c);
     -webkit-mask:
@@ -118,8 +118,8 @@ const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Иде�
     grid-template-areas: 'ball frame santa';
     align-items: center;
     gap: clamp(14px, 2.4vw, 32px);
-    padding: calc(var(--wave-h) + 4px) clamp(16px, 2.6vw, 34px) 0;
-    border-radius: 0 0 34px 34px;
+    /* full width like the hero (owner, 06.11.2026); content stays in the page column */
+    padding: calc(var(--wave-h) + 4px) max(var(--gutter), calc((100% - var(--wrap)) / 2)) 0;
     overflow: clip;
     isolation: isolate;
     /* top edge cut along the same wave as the hero's bottom: transparent above it, so the hero shows through */
@@ -325,8 +325,7 @@ const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Иде�
         'ball santa'
         'frame frame';
       gap: 8px 10px;
-      padding-inline: 12px;
-      border-radius: 0 0 26px 26px;
+      padding-inline: var(--gutter);
     }
     .nyb-ball {
       margin-top: -14px;

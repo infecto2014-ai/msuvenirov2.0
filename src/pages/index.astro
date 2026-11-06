@@ -85,13 +85,18 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   path="/"
   schema={[faqPage(homeFaq)]}
 >
-  <!-- HERO: full-bleed photo card with a wave edge -->
+  <!-- HERO: full-width photo right under the header, text aligned with the page column, wave at the bottom -->
   <section class="hero">
     <div class="wrap">
       <div class="hero-card">
-        <img class="hero-photo" src="/img/hero-kaliningrad-1600.webp" srcset="/img/hero-kaliningrad-900.webp 900w, /img/hero-kaliningrad-1600.webp 1600w" sizes="(max-width: 560px) 100vw, 64vw" alt="" width="1600" height="1074" fetchpriority="high" decoding="async" />
+        <div class="hero-media">
+          <img class="hero-photo" src="/img/hero-kaliningrad-1600.webp" srcset="/img/hero-kaliningrad-900.webp 900w, /img/hero-kaliningrad-1600.webp 1600w" sizes="(max-width: 560px) 100vw, 70vw" alt="" width="1600" height="1074" fetchpriority="high" decoding="async" />
+          <span class="hand hero-hand" aria-hidden="true">
+            сделано<br />в Калининграде
+            <svg viewBox="0 0 64 96" width="64" height="96"><path d="M6 6c28 4 46 24 50 74m0 0-9-8m9 8 5-10" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </span>
+        </div>
         <div class="hero-text">
-          <p class="hero-eyebrow mono">ТЦ «Экватор» · с {site.founded} года</p>
           <h1 class="hero-title">Печать на&nbsp;одежде и&nbsp;сувенирах <span class="serif">в&nbsp;Калининграде</span></h1>
           <p class="hero-lead">
             Футболки, худи, кружки, значки, визитки и календари с вашим дизайном — от 1 штуки. Своё производство и больше 10 лет опыта в печати.
@@ -100,22 +105,14 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
             <a class="btn btn-magenta" href="/price"><Icon name="calc" size={20} /> <span>Рассчитать<span class="hide-sm"> стоимость</span></span></a>
             <button type="button" class="btn hero-ghost" data-order><Icon name="upload" size={20} /> <span class="hide-sm">Отправить макет</span><span class="show-sm">Макет</span></button>
           </div>
-          <div class="hero-proof">
-            <span class="hero-faces" aria-hidden="true">
-              <img src="/portfolio/dtf-bestdad.webp" alt="" width="40" height="40" />
-              <img src="/portfolio/portfolio-2.webp" alt="" width="40" height="40" />
-              <img src="/portfolio/branded-caps.webp" alt="" width="40" height="40" />
-            </span>
-            <span>Печатаем сами, в своей мастерской —<br class="hide-sm" /> от одной футболки до тиража для компании</span>
-          </div>
+          <ul class="hero-facts">
+            <li><b>10&nbsp;000+</b><span>заказов выполнено<br />с&nbsp;{site.founded} года</span></li>
+            <li><Icon name="clock" size={22} /><span>{site.hours}<br />ТЦ «Экватор»</span></li>
+          </ul>
         </div>
-        <span class="hand hero-hand" aria-hidden="true">
-          <svg viewBox="0 0 70 46" width="70" height="46"><path d="M64 6C46 4 22 14 10 38m0 0 1-11m-1 11 10-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-          сделано<br />в Калининграде
-        </span>
-        <svg class="hero-wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0 80V44c160-30 320-40 520-14s360 44 560 22 260-44 360-46v74z" /></svg>
       </div>
     </div>
+    <svg class="hero-wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0 80V44c160-30 320-40 520-14s360 44 560 22 260-44 360-46v74z" /></svg>
   </section>
 
   <NewYearBlock link="/stati/novogodnie-podarki" />
@@ -424,53 +421,58 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   }
 
   /* ---------------- hero: photo card with a wave edge */
+  /* full width under the header (owner, 06.11.2026); text stays in the page column (.wrap),
+     the photo runs from the column to the right edge of the screen */
   .hero {
-    padding-block: clamp(12px, 2vw, 24px) 0;
-  }
-  .hero-card {
     --hero-bg: #0f1d27;
     position: relative;
-    display: flex;
-    align-items: center;
-    min-height: clamp(500px, 46vw, 620px);
-    padding: clamp(28px, 4.5vw, 64px) clamp(22px, 4.5vw, 64px) clamp(84px, 9vw, 120px);
-    border-radius: clamp(26px, 3vw, 40px) clamp(26px, 3vw, 40px) 0 0;
-    background: var(--hero-bg);
+    background:
+      radial-gradient(40% 80% at 0% 100%, rgba(0, 160, 220, 0.24), transparent 70%),
+      var(--hero-bg);
     color: #fffcf5;
     overflow: clip;
     isolation: isolate;
   }
+  .hero-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: clamp(500px, 44vw, 640px);
+    padding: clamp(32px, 4.5vw, 64px) 0 clamp(84px, 9vw, 120px);
+  }
+  /* photo box: from the text column to the right edge of the screen */
+  .hero-media {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 36%;
+    right: calc((100% - 100vw) / 2);
+    container-type: size;
+    z-index: 0;
+  }
   .hero-photo {
     position: absolute;
-    inset: 0 0 0 auto;
-    width: 66%;
+    inset: 0;
+    width: 100%;
+    max-width: none;
     height: 100%;
     object-fit: cover;
-    object-position: 100% 40%;
-    z-index: -2;
+    object-position: 100% 25%;
   }
-  .hero-card::before {
+  .hero-media::after {
     content: '';
     position: absolute;
     inset: 0;
-    z-index: -1;
-    background:
-      linear-gradient(90deg, var(--hero-bg) 34%, rgba(15, 29, 39, 0.78) 42%, rgba(15, 29, 39, 0.15) 54%, rgba(15, 29, 39, 0) 62%),
-      radial-gradient(60% 80% at 0% 100%, rgba(0, 160, 220, 0.28), transparent 70%);
+    background: linear-gradient(90deg, var(--hero-bg) 0%, rgba(15, 29, 39, 0.8) 10%, rgba(15, 29, 39, 0.15) 26%, rgba(15, 29, 39, 0) 38%);
+    pointer-events: none;
   }
   .hero-text {
+    position: relative;
+    z-index: 1;
     display: grid;
     gap: 18px;
     justify-items: start;
     max-width: 560px;
-  }
-  .hero-eyebrow {
-    margin: 0;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #9fe0f6;
   }
   .hero-title {
     margin: 0;
@@ -504,42 +506,56 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     background: #fffcf5;
     color: var(--ink);
   }
-  .hero-proof {
+  /* two facts instead of the tiny photo circles: orders count + hours */
+  .hero-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 28px;
+    margin: 8px 0 0;
+    padding: 18px 0 0;
+    list-style: none;
+    border-top: 1px solid rgba(255, 252, 245, 0.18);
+  }
+  .hero-facts li {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-top: 6px;
-    font-size: 0.86rem;
-    line-height: 1.35;
-    color: rgba(255, 252, 245, 0.75);
+    font-size: 0.88rem;
+    line-height: 1.3;
+    color: rgba(255, 252, 245, 0.78);
   }
-  .hero-faces {
-    display: flex;
+  .hero-facts b {
+    font-size: clamp(1.6rem, 2.4vw, 2rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: #fffcf5;
+  }
+  .hero-facts :global(svg) {
     flex: none;
+    color: #9fe0f6;
   }
-  .hero-faces img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--hero-bg);
-  }
-  .hero-faces img + img {
-    margin-left: -12px;
-  }
+  /* handwritten note in the sky left of the man, arrow to his shoulder.
+     Positioned in photo coordinates: the photo is object-fit: cover, right-aligned, 25% vertical,
+     so its drawn size is --iw × --ih (1600×1074 → ratio 1.49), shifted by object-position 100% 25% */
   .hero-hand {
+    --iw: max(100cqw, 149cqh);
+    --ih: max(100cqh, 67.1cqw);
     position: absolute;
-    left: 63%;
-    top: 7%;
-    padding-left: 30px;
+    z-index: 1;
+    right: calc(var(--iw) * 0.405);
+    top: max(10px, calc((100cqh - var(--ih)) * 0.25 + var(--ih) * 0.09));
     color: var(--ink);
-    transform: rotate(-5deg);
-    text-shadow: 0 0 12px rgba(255, 252, 245, 0.9);
+    text-align: right;
+    transform: rotate(-4deg);
+    text-shadow: 0 0 10px rgba(255, 252, 245, 0.95), 0 0 3px rgba(255, 252, 245, 0.9);
   }
   .hero-hand svg {
     position: absolute;
-    left: -38px;
-    top: 18px;
+    left: 100%;
+    top: 26px;
+    margin-left: -10px;
+    filter: drop-shadow(0 0 3px rgba(255, 252, 245, 0.9));
   }
   .hero-wave {
     position: absolute;
@@ -1138,8 +1154,8 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
 
   /* ---------------- tablets */
   @media (max-width: 1020px) {
-    .hero-photo {
-      width: 72%;
+    .hero-media {
+      left: 30%;
     }
       .about-grid,
     .cats-grid {
@@ -1165,21 +1181,20 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
 
   /* ---------------- phones */
   @media (max-width: 560px) {
-    .hero {
-      padding-top: 8px;
-    }
     .hero-card {
       min-height: 0;
       align-items: flex-end;
-      padding: 230px 18px 64px;
-      border-radius: 26px 26px 0 0;
+      padding: 230px 0 64px;
+    }
+    .hero-media {
+      left: calc((100% - 100vw) / 2);
+      bottom: auto;
+      height: 330px;
     }
     .hero-photo {
-      width: 100%;
-      height: 330px;
       object-position: 62% 30%;
     }
-    .hero-card::before {
+    .hero-media::after {
       background: linear-gradient(180deg, rgba(15, 29, 39, 0) 90px, rgba(15, 29, 39, 0.85) 230px, var(--hero-bg) 300px);
     }
     .hero-text {
@@ -1201,18 +1216,16 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
       justify-content: center;
       padding-inline: 10px;
     }
-    .hero-proof {
+    .hero-facts {
+      gap: 12px 20px;
+      padding-top: 14px;
+    }
+    .hero-facts li {
       font-size: 0.8rem;
     }
-    .hero-faces img {
-      width: 34px;
-      height: 34px;
-    }
     .hero-hand {
-      left: auto;
       right: 14px;
       top: 14px;
-      padding-left: 0;
       font-size: 1.15rem;
       color: #fffcf5;
       text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
