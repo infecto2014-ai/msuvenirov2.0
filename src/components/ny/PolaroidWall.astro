@@ -1,0 +1,363 @@
+---
+// Gift ideas as polaroids pinned to the wall with push pins (owner, 06.11.2026:
+// "polaroids in a slightly chaotic order, hanging on a push pin").
+// Background is transparent — the page section provides the wall.
+import '@fontsource/caveat/600.css';
+import type { Idea } from '@/data/nyGiftsArticle';
+
+interface Props {
+  ideas: Idea[];
+  /** group colour: push-pin head and small accents (any CSS colour) */
+  accent?: string;
+}
+
+const { ideas, accent = 'var(--m)' } = Astro.props;
+---
+
+<ul class="pw" role="list" style={`--acc: ${accent}`}>
+  {
+    ideas.map((it) => {
+      // «от 650 ₽ / шт при 10 шт» → big «от 650 ₽» + small «/ шт при 10 шт»
+      const [main, ...rest] = it.priceLabel.split(/ (?=\/|за )/);
+      return (
+        <li class="pw-item">
+          <div class="pw-hang">
+            <span class="pw-pin" aria-hidden="true">
+              <span class="pw-pin-head" />
+            </span>
+            <article class="pw-card">
+              <div class="pw-photo">
+                <a class="pw-frame" href={it.href} tabindex="-1" aria-hidden="true">
+                  <img src={it.img} alt="" width="400" height="300" loading="lazy" decoding="async" />
+                </a>
+                <p class="pw-price">
+                  <span class="sr-only">Цена: </span>
+                  <b>{main}</b>
+                  {rest.length > 0 && <small>{rest.join(' ')}</small>}
+                </p>
+              </div>
+              <div class="pw-body">
+                <p class="pw-who">{it.who}</p>
+                <h3 class="pw-title">
+                  <a href={it.href}>{it.title}</a>
+                </h3>
+                <p class="pw-text">{it.text}</p>
+                <div class="pw-actions">
+                  <button type="button" class="btn btn-sm btn-magenta" data-order={it.order}>
+                    Заказать
+                  </button>
+                  <a class="pw-more" href={it.href}>
+                    Подробнее <span aria-hidden="true">→</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+          </div>
+        </li>
+      );
+    })
+  }
+</ul>
+
+<style>
+  .pw {
+    --tilt: 1; /* scales all rotations; smaller on phones */
+    list-style: none;
+    margin: 0;
+    padding: 26px 0 12px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 64px clamp(24px, 3vw, 40px);
+    align-items: stretch;
+  }
+
+  /* ---------- controlled chaos: tilt, vertical drop and pin offset per card */
+  .pw-item {
+    --r: -2deg;
+    --dy: 0px;
+    --px: 0px;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding-top: var(--dy);
+  }
+  .pw-item:nth-child(6n + 2) { --r: 1.8deg; --dy: 14px; --px: 14px; }
+  .pw-item:nth-child(6n + 3) { --r: -1deg; --dy: 4px; --px: -10px; }
+  .pw-item:nth-child(6n + 4) { --r: 2.6deg; --dy: 10px; --px: -16px; }
+  .pw-item:nth-child(6n + 5) { --r: -2.8deg; --dy: 0px; --px: 8px; }
+  .pw-item:nth-child(6n) { --r: 1.2deg; --dy: 16px; --px: -4px; }
+
+  /* the card swings around the pin (pivot = pin centre) */
+  .pw-hang {
+    position: relative;
+    flex: 1;
+    display: flex;
+    transform: rotate(calc(var(--r) * var(--tilt)));
+    transform-origin: calc(50% + var(--px)) 4px;
+    transition: transform 0.24s cubic-bezier(0.34, 1.35, 0.64, 1);
+  }
+  /* lifted-corner shadows under the paper (behind the card inside this stacking context) */
+  .pw-hang::before,
+  .pw-hang::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    bottom: 12px;
+    width: 46%;
+    height: 24%;
+    box-shadow: 0 14px 14px rgba(22, 20, 27, 0.3);
+    transition: box-shadow 0.24s ease;
+  }
+  .pw-hang::before {
+    left: 10px;
+    transform: rotate(-3.5deg);
+  }
+  .pw-hang::after {
+    right: 10px;
+    transform: rotate(3.5deg);
+  }
+
+  @media (hover: hover) {
+    .pw-item:hover .pw-hang {
+      transform: rotate(0deg) translateY(-5px);
+    }
+    .pw-item:hover .pw-hang::before,
+    .pw-item:hover .pw-hang::after {
+      box-shadow: 0 20px 18px rgba(22, 20, 27, 0.26);
+    }
+  }
+  .pw-item:focus-within .pw-hang {
+    transform: rotate(0deg) translateY(-5px);
+  }
+
+  /* ---------- push pin: glossy dome on a flat rim, cast shadow on the paper */
+  .pw-pin {
+    position: absolute;
+    z-index: 3;
+    top: -12px;
+    left: calc(50% + var(--px));
+    width: 34px;
+    height: 34px;
+    margin-left: -17px;
+    pointer-events: none;
+  }
+  /* soft cast shadow, light from the top-left */
+  .pw-pin::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 15px;
+    width: 30px;
+    height: 24px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(22, 20, 27, 0.5), rgba(22, 20, 27, 0));
+    filter: blur(2px);
+  }
+  /* flat rim under the dome (shows at the bottom-right = perspective) */
+  .pw-pin::after {
+    content: '';
+    position: absolute;
+    inset: 4px 0 0 4px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 25%, color-mix(in srgb, var(--acc) 80%, #fff) 0, var(--acc) 50%, color-mix(in srgb, var(--acc) 50%, #000) 100%);
+    box-shadow: 0 1px 1.5px rgba(0, 0, 0, 0.35);
+  }
+  .pw-pin-head {
+    position: absolute;
+    z-index: 1;
+    inset: 2px 7px 7px 2px;
+    border-radius: 50%;
+    background:
+      radial-gradient(ellipse 34% 24% at 36% 28%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 100%),
+      radial-gradient(circle at 40% 36%, color-mix(in srgb, var(--acc) 50%, #fff) 0, var(--acc) 48%, color-mix(in srgb, var(--acc) 62%, #000) 100%);
+    box-shadow:
+      inset -2px -3px 4px rgba(0, 0, 0, 0.25),
+      1px 2px 3px rgba(0, 0, 0, 0.3);
+  }
+
+  /* ---------- polaroid */
+  .pw-card {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 12px 12px 0;
+    border-radius: 3px;
+    background: linear-gradient(170deg, #ffffff 0%, #fcfaf5 100%);
+    box-shadow:
+      0 0 0 1px rgba(22, 20, 27, 0.05),
+      0 2px 3px rgba(22, 20, 27, 0.1);
+  }
+
+  .pw-photo {
+    position: relative;
+  }
+  .pw-frame {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--paper-2);
+  }
+  .pw-frame img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  /* print finish: faint inner edge + soft gloss */
+  .pw-frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 0 1px rgba(22, 20, 27, 0.08), inset 0 0 18px rgba(22, 20, 27, 0.12);
+    background: linear-gradient(125deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 38%);
+    pointer-events: none;
+  }
+  @media (hover: hover) {
+    .pw-item:hover .pw-frame img {
+      transform: scale(1.04);
+    }
+  }
+
+  /* price sticker stuck on the photo corner */
+  .pw-price {
+    position: absolute;
+    right: 10px;
+    bottom: -14px;
+    z-index: 2;
+    display: grid;
+    justify-items: start;
+    max-width: calc(100% - 20px);
+    margin: 0;
+    padding: 7px 14px 8px;
+    border-radius: 12px 12px 12px 3px;
+    background:
+      linear-gradient(225deg, rgba(0, 0, 0, 0.1) 0 7px, transparent 7px),
+      var(--y);
+    color: #16141b;
+    line-height: 1.12;
+    transform: rotate(-3deg);
+    box-shadow: 0 6px 12px -6px rgba(22, 20, 27, 0.5);
+  }
+  .pw-price b {
+    font-size: 1.12rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .pw-price small {
+    font-size: 0.78rem;
+    font-weight: 500;
+  }
+
+  /* the thick bottom of the polaroid */
+  .pw-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px 6px 16px;
+  }
+  .pw-who {
+    margin: 0;
+    padding-right: 4px;
+    font-family: 'Caveat', 'Segoe Print', cursive;
+    font-weight: 600;
+    font-size: 1.42rem;
+    line-height: 1.05;
+    color: #3d3944;
+    text-decoration: underline wavy color-mix(in srgb, var(--acc) 75%, transparent);
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 5px;
+    text-decoration-skip-ink: none;
+  }
+  .pw-title {
+    margin: 4px 0 0;
+    font-size: 1.12rem;
+    font-weight: 700;
+    line-height: 1.22;
+    text-wrap: balance;
+  }
+  .pw-title a {
+    color: #16141b;
+    text-decoration: none;
+  }
+  .pw-title a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .pw-text {
+    margin: 0;
+    font-size: 0.94rem;
+    line-height: 1.55;
+    color: #3d3944;
+  }
+
+  .pw-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 18px;
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px dashed #e7dfcf;
+  }
+  .pw-actions .btn {
+    min-height: 44px;
+  }
+  .pw-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    font-weight: 700;
+    font-size: 0.94rem;
+    color: #16141b;
+    text-decoration: none;
+  }
+  .pw-more span {
+    transition: transform 0.2s ease;
+  }
+  .pw-more:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .pw-more:hover span {
+    transform: translateX(3px);
+  }
+
+  /* ---------- responsive */
+  @media (max-width: 1019px) {
+    .pw {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 560px) {
+    .pw {
+      --tilt: 0.45;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 52px;
+      max-width: 440px;
+      margin-inline: auto;
+    }
+    .pw-item {
+      padding-top: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pw-hang,
+    .pw-hang::before,
+    .pw-hang::after,
+    .pw-frame img,
+    .pw-more span {
+      transition: none;
+    }
+    .pw-item:hover .pw-frame img {
+      transform: none;
+    }
+  }
+</style>
