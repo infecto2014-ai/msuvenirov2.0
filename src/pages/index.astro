@@ -94,10 +94,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
       <div class="hero-card">
         <div class="hero-media">
           <img class="hero-photo" src="/img/hero-kaliningrad-1600.webp" srcset="/img/hero-kaliningrad-900.webp 900w, /img/hero-kaliningrad-1600.webp 1600w" sizes="(max-width: 560px) 100vw, 70vw" alt="" width="1600" height="1074" fetchpriority="high" decoding="async" />
-          <span class="hand hero-hand" aria-hidden="true">
-            сделано<br />в Калининграде
-            <svg viewBox="0 0 64 96" width="64" height="96"><path d="M6 6c28 4 46 24 50 74m0 0-9-8m9 8 5-10" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
-          </span>
         </div>
         <div class="hero-text">
           <h1 class="hero-title">Печать на&nbsp;одежде и&nbsp;сувенирах <span class="serif">в&nbsp;Калининграде</span></h1>
@@ -263,9 +259,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
         <div class="ab ab-1"><img src="/portfolio/wedding-tshirts.webp" alt="" width="745" height="800" loading="lazy" decoding="async" /></div>
         <div class="ab ab-2"><img src="/portfolio/corporate-polo.webp" alt="" width="745" height="800" loading="lazy" decoding="async" /></div>
         <div class="ab ab-3"><img src="/portfolio/portfolio-2.webp" alt="" width="378" height="374" loading="lazy" decoding="async" /></div>
-        <span class="hand ab-hand">наши работы
-          <svg viewBox="0 0 60 48" width="60" height="48"><path d="M8 6c26 2 42 16 40 36m0 0-7-9m7 9 6-10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-        </span>
       </div>
       <div class="about-text">
         <p class="eyebrow">Своя мастерская</p>
@@ -587,28 +580,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     flex: none;
     color: #9fe0f6;
   }
-  /* handwritten note in the sky left of the man, arrow to his shoulder.
-     Positioned in photo coordinates: the photo is object-fit: cover, right-aligned, 25% vertical,
-     so its drawn size is --iw × --ih (1600×1074 → ratio 1.49), shifted by object-position 100% 25% */
-  .hero-hand {
-    --iw: max(100cqw, 149cqh);
-    --ih: max(100cqh, 67.1cqw);
-    position: absolute;
-    z-index: 1;
-    right: calc(var(--iw) * 0.405);
-    top: max(10px, calc((100cqh - var(--ih)) * 0.25 + var(--ih) * 0.09));
-    color: var(--ink);
-    text-align: right;
-    transform: rotate(-4deg);
-    text-shadow: 0 0 10px rgba(255, 252, 245, 0.95), 0 0 3px rgba(255, 252, 245, 0.9);
-  }
-  .hero-hand svg {
-    position: absolute;
-    left: 100%;
-    top: 30px;
-    margin-left: 2px;
-    filter: drop-shadow(0 0 3px rgba(255, 252, 245, 0.9));
-  }
   .hero-wave {
     position: absolute;
     left: 0;
@@ -747,18 +718,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     border-radius: 58% 42% 50% 50% / 50% 56% 44% 50%;
     background: var(--c-soft);
     z-index: -1;
-  }
-  .ab-hand {
-    position: absolute;
-    right: 0;
-    top: -12%;
-    transform: rotate(-6deg);
-  }
-  .ab-hand svg {
-    position: absolute;
-    right: -26px;
-    top: 14px;
-    transform: rotate(8deg);
   }
   .about-text {
     display: grid;
@@ -1371,17 +1330,8 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     .hero-light .hero-clients ul {
       gap: 14px 22px;
     }
-    /* the note sat on the trees and had no arrow on phones — hidden (owner, 06.11.2026) */
-    .hero-hand {
-      display: none;
-    }
     .about-collage {
       width: 100%;
-    }
-    .ab-hand {
-      right: 40px;
-      top: -10%;
-      font-size: 1.2rem;
     }
     .values {
       grid-template-columns: repeat(2, minmax(0, 1fr));
