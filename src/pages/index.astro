@@ -64,12 +64,6 @@ const values = [
   { icon: 'check', label: 'Брак по нашей вине — переделаем' },
 ] as const;
 
-const terms = [
-  { icon: 'clock', title: 'Сроки', text: 'Обычно 1–3 рабочих дня. Срочные заказы — без наценки, успеем к нужной дате.' },
-  { icon: 'calc', title: 'Оплата', text: 'Наличными, картой или по QR-коду. Частным лицам — предоплата 50%, остаток при получении. Организациям — счёт без НДС.' },
-  { icon: 'upload', title: 'Макет', text: 'Перед печатью присылаем макет на согласование. Простой макет соберём бесплатно.' },
-  { icon: 'check', title: 'Гарантия', text: 'Если брак по нашей вине — переделаем бесплатно.' },
-] as const;
 
 const clients = [
   { src: '/img/clients/client-1.webp', alt: 'Россети' },
@@ -123,40 +117,106 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     </div>
   </section>
 
-  <!-- ABOUT: photo collage + values -->
-  <section class="section about" aria-labelledby="about-h">
-    <div class="wrap about-grid">
-      <div class="about-collage" aria-hidden="true">
-        <span class="ab-blob"></span>
-        <div class="ab ab-1"><img src="/portfolio/wedding-tshirts.webp" alt="" width="745" height="800" loading="lazy" decoding="async" /></div>
-        <div class="ab ab-2"><img src="/portfolio/corporate-polo.webp" alt="" width="745" height="800" loading="lazy" decoding="async" /></div>
-        <div class="ab ab-3"><img src="/portfolio/portfolio-2.webp" alt="" width="378" height="374" loading="lazy" decoding="async" /></div>
-        <span class="hand ab-hand">наши работы
-          <svg viewBox="0 0 60 48" width="60" height="48"><path d="M8 6c26 2 42 16 40 36m0 0-7-9m7 9 6-10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-        </span>
+  <!-- NEW YEAR strip: shown by script only from 1 November to 31 December -->
+  <section class="ny wrap" aria-labelledby="ny-h" hidden data-ny>
+    <div class="ny-card">
+      <span class="ny-dots" aria-hidden="true"></span>
+      <img class="ny-ball" src="/portfolio/portfolio-6.webp" alt="" width="378" height="373" decoding="async" />
+      <div class="ny-text">
+        <p class="ny-eyebrow mono">Новый год · 31 декабря</p>
+        <h2 id="ny-h">Подарки к Новому году <span class="serif">лучше заказать заранее</span></h2>
+        <p>Ёлочные шары с фото, календари на 2027 год, футболки и подарки коллегам — подскажем, что выбрать, и сделаем к нужной дате.</p>
       </div>
-      <div class="about-text">
-        <p class="eyebrow">Своя мастерская</p>
-        <h2 id="about-h">Печатаем то, что <span class="serif">хочется дарить</span></h2>
-        <p class="lead">
-          Свадебные футболки, поло для ресторана, кружки с видами города — каждый заказ делаем сами, в мастерской в ТЦ «Экватор». Перед печатью присылаем
-          макет на согласование, а простой соберём бесплатно.
-        </p>
-        <ul class="values">
-          {
-            values.map((v) => (
-              <li>
-                <span class="values-icon"><Icon name={v.icon} size={22} /></span>
-                <span>{v.label}</span>
-              </li>
-            ))
-          }
-        </ul>
+      <div class="ny-side">
+        <p class="ny-count"><b data-ny-days>—</b> <span data-ny-word>дней</span><small>до Нового года</small></p>
+        <div class="ny-actions">
+          <a class="btn btn-magenta btn-sm" href="#occ-h">Идеи подарков</a>
+          <a class="ny-link" href="/kalendari">Календари 2027 →</a>
+        </div>
       </div>
     </div>
   </section>
 
+  <div class="band">
+  <!-- CATEGORIES: text + filter chips on the left, photo cards on the right -->
+  <section class="section cats" aria-labelledby="cats-h">
+    <div class="wrap">
+      <div class="cats-grid">
+        <div class="cats-side">
+          <p class="eyebrow">Что печатаем</p>
+          <h2 id="cats-h">Изделия <span class="serif">и цены</span></h2>
+          <p>Цена «от» — за готовое изделие с печатью. Точную сумму покажет калькулятор на странице изделия.</p>
+          <div class="chips" role="group" aria-label="Показать группу">
+            {groups.map((g, i) => (<button type="button" class="chip" data-filter={g.id} aria-pressed={i === 0 ? 'true' : 'false'}>{g.label}</button>))}
+          </div>
+          <a class="cats-all" href="/uslugi"><span class="cats-all-go"><Icon name="arrow" size={18} /></span> Все услуги</a>
+          <span class="hand cats-hand" aria-hidden="true">нажмите, чтобы<br />посчитать</span>
+        </div>
+        <div class="pcards">
+          {
+            tiles.map((t) => {
+              const f = t.from ?? categoryFrom(t.cat).price;
+              return (
+                <a class={`pc ${t.size ? `pc-${t.size}` : ''}`} href={t.href} data-group={t.group}>
+                  <img src={t.img} alt={t.alt} width="320" height="320" loading="lazy" decoding="async" />
+                  <span class="pc-body">
+                    <span class="pc-price mono">от {rub(f)}</span>
+                    <h3>{t.title}</h3>
+                    <span class="pc-text">{t.text}</span>
+                  </span>
+                  <span class="pc-go"><Icon name="arrow" size={18} /></span>
+                </a>
+              );
+            })
+          }
+        </div>
+      </div>
+      <p class="cats-more">
+        А ещё: <a href="/breloki">брелоки</a>, <a href="/magnity">магниты</a>, <a href="/poligrafiya">листовки и блокноты</a>,
+        <a href="/shirokoformatnaya-pechat">широкоформатная печать</a>, <a href="/pechat-na-hudi">худи</a>, <a href="/pechat-na-shopperah">шопперы</a>.
+      </p>
+    </div>
+  </section>
+  </div>
+
   <div class="band band-tint">
+  <!-- OCCASIONS -->
+  <section class="section occasions" aria-labelledby="occ-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Идеи подарков</p>
+          <h2 id="occ-h">Подарки <span class="serif">к празднику</span></h2>
+        </div>
+        <span class="hand occ-hand" aria-hidden="true">лучше написать заранее!</span>
+        <p>Подскажем, что подарить, и сделаем к нужной дате. Перед праздниками лучше написать заранее.</p>
+      </div>
+      <ul class="occ-grid">
+        {
+          occasions.map((o) => (
+            <li>
+              <a class="occ" href={o.href}>
+                <img src={o.img} alt="" width="378" height="378" loading="lazy" decoding="async" />
+                <span class="occ-when mono">{o.when}</span>
+                <span class="occ-body">
+                  <h3>{o.title}</h3>
+                  <p>{o.text}</p>
+                </span>
+                <span class="occ-go" aria-hidden="true"><Icon name="arrow" size={18} /></span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+  </div>
+
+  <div class="band band-ink">
+  <PortfolioGrid />
+  </div>
+
+  <div class="band">
   <!-- POPULAR -->
   <section class="section popular" aria-labelledby="pop-h">
     <div class="wrap">
@@ -201,86 +261,50 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   </section>
   </div>
 
-  <div class="band">
-  <!-- CATEGORIES: text + filter chips on the left, photo cards on the right -->
-  <section class="section cats" aria-labelledby="cats-h">
-    <div class="wrap">
-      <div class="cats-grid">
-        <div class="cats-side">
-          <p class="eyebrow">Что печатаем</p>
-          <h2 id="cats-h">Изделия <span class="serif">и цены</span></h2>
-          <p>Цена «от» — за готовое изделие с печатью. Точную сумму покажет калькулятор на странице изделия.</p>
-          <div class="chips" role="group" aria-label="Показать группу">
-            {groups.map((g, i) => (<button type="button" class="chip" data-filter={g.id} aria-pressed={i === 0 ? 'true' : 'false'}>{g.label}</button>))}
-          </div>
-          <a class="cats-all" href="/uslugi"><span class="cats-all-go"><Icon name="arrow" size={18} /></span> Все услуги</a>
-          <span class="hand cats-hand" aria-hidden="true">нажмите, чтобы<br />посчитать</span>
-        </div>
-        <div class="pcards">
-          {
-            tiles.map((t) => {
-              const f = t.from ?? categoryFrom(t.cat).price;
-              return (
-                <a class={`pc ${t.size ? `pc-${t.size}` : ''}`} href={t.href} data-group={t.group}>
-                  <img src={t.img} alt={t.alt} width="320" height="320" loading="lazy" decoding="async" />
-                  <span class="pc-body">
-                    <span class="pc-price mono">от {rub(f)}</span>
-                    <h3>{t.title}</h3>
-                    <span class="pc-text">{t.text}</span>
-                  </span>
-                  <span class="pc-go"><Icon name="arrow" size={18} /></span>
-                </a>
-              );
-            })
-          }
-        </div>
-      </div>
-      <p class="cats-more">
-        А ещё: <a href="/breloki">брелоки</a>, <a href="/magnity">магниты</a>, <a href="/poligrafiya">листовки и блокноты</a>,
-        <a href="/shirokoformatnaya-pechat">широкоформатная печать</a>, <a href="/pechat-na-hudi">худи</a>, <a href="/pechat-na-shopperah">шопперы</a>.
-      </p>
-    </div>
-  </section>
-  </div>
-
-  <div class="band band-ink">
-  <PortfolioGrid />
-  </div>
-
-  <div class="band">
-  <!-- OCCASIONS -->
-  <section class="section occasions" aria-labelledby="occ-h">
-    <div class="wrap">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Идеи подарков</p>
-          <h2 id="occ-h">Подарки <span class="serif">к празднику</span></h2>
-        </div>
-        <span class="hand occ-hand" aria-hidden="true">лучше написать заранее!</span>
-        <p>Подскажем, что подарить, и сделаем к нужной дате. Перед праздниками лучше написать заранее.</p>
-      </div>
-      <ul class="occ-grid">
-        {
-          occasions.map((o) => (
-            <li>
-              <a class="occ" href={o.href}>
-                <img src={o.img} alt="" width="378" height="378" loading="lazy" decoding="async" />
-                <span class="occ-when mono">{o.when}</span>
-                <span class="occ-body">
-                  <h3>{o.title}</h3>
-                  <p>{o.text}</p>
-                </span>
-                <span class="occ-go" aria-hidden="true"><Icon name="arrow" size={18} /></span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
-  </div>
-
   <div class="band band-tint">
+  <!-- ABOUT: photo collage + values -->
+  <section class="section about" aria-labelledby="about-h">
+    <div class="wrap about-grid">
+      <div class="about-collage" aria-hidden="true">
+        <span class="ab-blob"></span>
+        <div class="ab ab-1"><img src="/portfolio/wedding-tshirts.webp" alt="" width="745" height="800" loading="lazy" decoding="async" /></div>
+        <div class="ab ab-2"><img src="/portfolio/corporate-polo.webp" alt="" width="745" height="800" loading="lazy" decoding="async" /></div>
+        <div class="ab ab-3"><img src="/portfolio/portfolio-2.webp" alt="" width="378" height="374" loading="lazy" decoding="async" /></div>
+        <span class="hand ab-hand">наши работы
+          <svg viewBox="0 0 60 48" width="60" height="48"><path d="M8 6c26 2 42 16 40 36m0 0-7-9m7 9 6-10" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        </span>
+      </div>
+      <div class="about-text">
+        <p class="eyebrow">Своя мастерская</p>
+        <h2 id="about-h">Печатаем то, что <span class="serif">хочется дарить</span></h2>
+        <p class="lead">
+          Свадебные футболки, поло для ресторана, кружки с видами города — каждый заказ делаем сами, в мастерской в ТЦ «Экватор». Перед печатью присылаем
+          макет на согласование, а простой соберём бесплатно.
+        </p>
+        <ul class="stats">
+          <li><b>10&nbsp;000+</b><span>заказов выполнено</span></li>
+          <li><b>с {site.founded}</b><span>мастерская в ТЦ «Экватор»</span></li>
+          <li><b>10+ лет</b><span>опыта в печати</span></li>
+        </ul>
+        <ul class="values">
+          {
+            values.map((v) => (
+              <li>
+                <span class="values-icon"><Icon name={v.icon} size={22} /></span>
+                <span>{v.label}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="pay">
+          <b>Оплата:</b> наличными, картой или по QR-коду. Частным лицам — предоплата 50%, остаток при получении. Организациям — счёт без НДС.
+        </p>
+      </div>
+    </div>
+  </section>
+  </div>
+
+  <div class="band">
   <Reviews />
   </div>
 
@@ -300,6 +324,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
           <div class="b2b-actions">
             <a class="btn btn-yellow" href="/korporativnym-klientam">Условия для компаний</a>
             <button type="button" class="btn b2b-ghost" data-order="Запрос расчёта для компании">Запросить расчёт</button>
+            <a class="b2b-kp" href="/kp-msuvenirov.pdf" download><Icon name="arrow" size={18} /> Скачать КП (PDF)</a>
           </div>
         </div>
         <ul class="b2b-list">
@@ -327,27 +352,13 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
 
   <div class="band band-tint">
   <HowItWorks />
-
-  <!-- TERMS -->
-  <section class="terms-band" aria-labelledby="terms-h">
-    <div class="wrap">
-      <h2 id="terms-h" class="sr-only">Сроки, оплата и гарантия</h2>
-      <ul class="terms">
-        {
-          terms.map((t) => (
-            <li>
-              <span class="terms-icon"><Icon name={t.icon} size={22} /></span>
-              <h3>{t.title}</h3>
-              <p>{t.text}</p>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
   </div>
 
   <div class="band">
+  <FaqSection items={homeFaq} />
+  </div>
+
+  <div class="band band-tint">
   <!-- SEO TEXT -->
   <section class="section seo-text" aria-labelledby="seo-h">
     <div class="wrap">
@@ -390,16 +401,29 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   </section>
   </div>
 
-  <div class="band band-tint">
-  <FaqSection items={homeFaq} />
-  </div>
-
   <div class="band">
   <ContactBlock />
   </div>
 </BaseLayout>
 
 <script>
+  // New Year strip: visible 1 November – 31 December, days counted to 1 January (visitor's date)
+  const ny = document.querySelector<HTMLElement>('[data-ny]');
+  if (ny) {
+    const now = new Date();
+    const m = now.getMonth();
+    if (m === 10 || m === 11) {
+      const target = new Date(now.getFullYear() + 1, 0, 1);
+      const today = new Date(now.getFullYear(), m, now.getDate());
+      const days = Math.round((target.getTime() - today.getTime()) / 86400000);
+      const n10 = days % 10, n100 = days % 100;
+      const word = n10 === 1 && n100 !== 11 ? 'день' : n10 >= 2 && n10 <= 4 && (n100 < 12 || n100 > 14) ? 'дня' : 'дней';
+      ny.querySelector('[data-ny-days]')!.textContent = String(days);
+      ny.querySelector('[data-ny-word]')!.textContent = word;
+      ny.hidden = false;
+    }
+  }
+
   // «Изделия и цены»: chips show one group; without JS every card stays visible
   const grid = document.querySelector<HTMLElement>('.pcards');
   document.querySelectorAll<HTMLButtonElement>('.chip[data-filter]').forEach((chip, _, all) => {
@@ -904,6 +928,25 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     flex-wrap: wrap;
     gap: 10px;
   }
+  .b2b-kp {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 48px;
+    padding-inline: 6px;
+    color: var(--paper);
+    font-weight: 700;
+    text-underline-offset: 4px;
+  }
+  .b2b-kp:hover {
+    color: var(--y);
+  }
+  .b2b-kp :global(svg) {
+    transform: rotate(90deg);
+  }
+  .b2b :global(.eyebrow)::before {
+    mix-blend-mode: normal;
+  }
   .b2b-ghost {
     --btn-bg: transparent;
     --btn-fg: var(--paper);
@@ -1276,6 +1319,9 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     .pc-xl .pc-text {
       display: block;
     }
+    .pcards:not(.is-filtered) .pc:last-child {
+      grid-column: 1 / -1;
+    }
     .cats-more {
       margin-top: 14px;
       font-size: 0.9rem;
@@ -1309,41 +1355,197 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     }
   }
 
-/* ---------------- terms */
-  .terms-band {
-    padding-bottom: var(--section);
+/* ---------------- new year strip */
+  .ny {
+    margin-top: clamp(18px, 3vw, 36px);
   }
-  .terms {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  .ny-card {
+    position: relative;
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 14px;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: clamp(16px, 3vw, 36px);
+    padding: clamp(18px, 2.4vw, 28px) clamp(18px, 3vw, 36px);
+    border-radius: 30px;
+    background: linear-gradient(120deg, #0f1d27 0%, #13303d 55%, #0f1d27 100%);
+    color: #fffcf5;
+    overflow: clip;
+    isolation: isolate;
   }
-  .terms li {
-    display: grid;
-    align-content: start;
-    gap: 8px;
-    padding: 20px;
-    border-radius: var(--radius-l);
-    border: 1.5px dashed var(--line-strong);
+  .ny-dots {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.55;
+    background:
+      radial-gradient(circle at 12% 20%, var(--y) 0 3px, transparent 4px),
+      radial-gradient(circle at 30% 85%, var(--c) 0 2.5px, transparent 3.5px),
+      radial-gradient(circle at 48% 12%, var(--m) 0 2.5px, transparent 3.5px),
+      radial-gradient(circle at 62% 78%, #fffcf5 0 2px, transparent 3px),
+      radial-gradient(circle at 76% 18%, var(--c) 0 3px, transparent 4px),
+      radial-gradient(circle at 90% 70%, var(--y) 0 2px, transparent 3px),
+      radial-gradient(circle at 6% 80%, var(--m) 0 2px, transparent 3px);
   }
-  .terms-icon {
-    display: grid;
-    place-items: center;
-    width: 42px;
-    height: 42px;
+  .ny-ball {
+    width: clamp(78px, 9vw, 112px);
+    aspect-ratio: 1;
     border-radius: 50%;
-    background: var(--y);
+    object-fit: cover;
+    border: 3px solid rgba(255, 252, 245, 0.85);
+    box-shadow: 0 0 0 6px rgba(255, 210, 31, 0.18);
   }
-  .terms h3 {
-    font-size: 1.1rem;
+  .ny-text {
+    display: grid;
+    gap: 6px;
   }
-  .terms p {
+  .ny-eyebrow {
     margin: 0;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--y);
+  }
+  .ny-text h2 {
+    font-size: clamp(1.3rem, 2.2vw, 1.75rem);
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+  .ny-text h2 .serif {
+    color: #9fe0f6;
+  }
+  .ny-text p:last-child {
+    margin: 0;
+    max-width: 60ch;
+    font-size: 0.94rem;
+    color: rgba(255, 252, 245, 0.8);
+  }
+  .ny-side {
+    display: grid;
+    gap: 12px;
+    justify-items: center;
+    text-align: center;
+  }
+  .ny-count {
+    margin: 0;
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: baseline;
+    justify-content: center;
+    column-gap: 6px;
+    font-variant-numeric: tabular-nums;
+  }
+  .ny-count b {
+    font-size: clamp(2.2rem, 3.6vw, 3rem);
+    line-height: 1;
+    color: var(--y);
+  }
+  .ny-count span {
+    font-weight: 700;
+  }
+  .ny-count small {
+    grid-column: 1 / -1;
+    font-size: 0.8rem;
+    color: rgba(255, 252, 245, 0.7);
+  }
+  .ny-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 6px 14px;
+  }
+  .ny-link {
+    color: #fffcf5;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+  .ny-link:hover {
+    color: var(--y);
+  }
+
+  /* ---------------- about: stats + payment */
+  .stats {
+    list-style: none;
+    margin: 4px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 32px;
+  }
+  .stats li {
+    display: grid;
+    gap: 2px;
+  }
+  .stats b {
+    font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--m-ink);
+  }
+  .stats span {
+    font-size: 0.86rem;
+    color: var(--muted);
+  }
+  .pay {
+    margin: 6px 0 0;
+    padding: 14px 18px;
+    border-radius: 18px;
+    border: 1.5px dashed var(--line-strong);
     font-size: 0.92rem;
     color: var(--ink-2);
+  }
+
+  @media (max-width: 1020px) {
+    .ny-card {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+    .ny-side {
+      grid-column: 1 / -1;
+      grid-template-columns: auto 1fr;
+      justify-items: start;
+      text-align: left;
+      align-items: center;
+      gap: 12px 24px;
+    }
+    .ny-actions {
+      justify-content: flex-start;
+    }
+  }
+  @media (max-width: 560px) {
+    .ny-card {
+      grid-template-columns: 1fr;
+      gap: 12px;
+      padding: 18px;
+      border-radius: 24px;
+    }
+    .ny-ball {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 64px;
+    }
+    .ny-text {
+      padding-right: 70px;
+    }
+    .ny-text p:last-child {
+      font-size: 0.86rem;
+    }
+    .ny-side {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .ny-count {
+      justify-content: start;
+    }
+    .stats {
+      gap: 10px 20px;
+    }
+    .pay {
+      font-size: 0.84rem;
+      padding: 12px 14px;
+    }
   }
 
   /* ---------------- seo text */
@@ -1372,9 +1574,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
       grid-template-columns: 1fr;
     }
     .pop-grid,
-    .terms {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
   }
   @media (max-width: 700px) {
     .seo-cols {
@@ -1404,18 +1603,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
       width: 100%;
       height: auto;
       aspect-ratio: 4 / 3;
-    }
-    .terms {
-      grid-template-columns: 1fr;
-      gap: 10px;
-    }
-    .terms li {
-      grid-template-columns: 42px 1fr;
-      column-gap: 14px;
-      padding: 14px;
-    }
-    .terms-icon {
-      grid-row: span 2;
     }
     .clients-row {
       gap: 14px 22px;
@@ -1474,6 +1661,10 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
       width: 100%;
       gap: 8px;
     }
+    .b2b-kp {
+      grid-column: 1 / -1;
+      justify-self: start;
+    }
     .b2b-actions .btn {
       justify-content: center;
       padding-inline: 8px;
@@ -1504,29 +1695,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     }
     .b2b-cmyk {
       display: none;
-    }
-    /* terms: 2×2, short */
-    .terms {
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-    .terms li {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 6px;
-      padding: 12px;
-    }
-    .terms-icon {
-      width: 32px;
-      height: 32px;
-      grid-row: auto;
-    }
-    .terms h3 {
-      font-size: 0.98rem;
-    }
-    .terms p {
-      font-size: 0.78rem;
-      line-height: 1.35;
     }
     /* seo text: first lines + «Читать полностью» */
     .seo-text h2 {
