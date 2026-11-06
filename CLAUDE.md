@@ -95,6 +95,8 @@
 - DTF-печать листами А3 (поле 28×38 см): 1–4 — 900, 5–9 — 700, 10–29 — 500, 30–50 — 400 ₽ за лист; сублимационные листы А3: 220 / 180 / 150 / 120, А4 — ровно половина А3; больше 50 листов — индивидуально. Категория `transfers` в pricing.ts (`dtf-sheet`, `sub-sheet`, `SHEET_MAX`).
 - Страница `src/pages/dtf-pechat.astro` (+ `src/data/transfersPage.ts`, SVG `components/sheet/SheetArt.astro` — kind dtf|sub, format a3|a4, layout one|four|logos|mix, dims). Раздел называется «DTF и сублимация без нанесения» (владелец, 06.11.2026) — в меню «Одежда», в калькуляторе и прайсе, заголовок страницы и staticPages sitemap.
 
+- Связки (06.11.2026): на `/dtf-pechat` блок «Нужно нанести? Сделаем сами» (ссылки на футболки, худи, свою вещь, спецодежду, форму, кепки, шопперы, сублимацию — `applyLinks` в transfersPage.ts); на странице сублимации — плашка «Нужны только листы?» со ссылкой на `/dtf-pechat?calc=transfers:sub-sheet`; на хабе «Печать на одежде» — блок `kind: 'links'` (новый вид блока в types.ts/ServiceBlocks.astro) «DTF-печать и сублимация» со ссылками. Отдельную страницу «DTF-печать» не делаем — запрос закрывает `/dtf-pechat`.
+
 ## Cookies (06.11.2026)
 - Плашка о cookies и сборе технических данных при первом входе — `src/components/CookieNotice.astro` в BaseLayout, «Понятно» запоминается в localStorage, ссылка «Подробнее» на /privacy-policy. Вышивку не делаем — на сайте не предлагать.
 

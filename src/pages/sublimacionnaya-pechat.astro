@@ -44,6 +44,10 @@ const tones = ['c', 'm', 'y'];
 // our t-shirt for sublimation: 10 pcs with A4 on the front
 const teeProd = findProduct('textile', 'tshirt-sub')!;
 const teeOne = teeProd.quote({ ...defaultSelection(teeProd), qty: 10 }).unit;
+// «Только листы»: sublimation sheets without application (page /dtf-pechat), prices from pricing.ts
+const sheetProd = findProduct('transfers', 'sub-sheet')!;
+const sheetAt = (variant: string, qty = 1) => sheetProd.quote({ ...defaultSelection(sheetProd), qty, options: { variant } }).unit;
+const sheetFrom = Math.min(...sheetProd.ladder!({ ...defaultSelection(sheetProd), options: { variant: 'a4' } }).map((t) => t.price));
 ---
 
 <BaseLayout
@@ -496,6 +500,25 @@ const teeOne = teeProd.quote({ ...defaultSelection(teeProd), qty: 10 }).unit;
             </div>
           ))
         }
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ sheets without application ============ -->
+  <section class="section shs" aria-labelledby="shs-h">
+    <div class="wrap">
+      <div class="shs-band">
+        <div class="shs-text">
+          <p class="eyebrow">Без нанесения</p>
+          <h2 id="shs-h">Нужны только листы — перенесёте сами?</h2>
+          <p>Печатаем ваши принты на сублимационной бумаге листами А3 и А4 — переносите на свои изделия термопрессом или утюгом. Есть и DTF-трансферы для хлопка и тёмных тканей.</p>
+        </div>
+        <ul class="shs-prices">
+          <li><small>лист А3</small><b class="mono">{rub(sheetAt('a3'))}</b></li>
+          <li><small>лист А4</small><b class="mono">{rub(sheetAt('a4'))}</b></li>
+          <li><small>от 30 листов</small><b class="mono">от {rub(sheetFrom)}</b></li>
+        </ul>
+        <a class="btn btn-yellow" href="/dtf-pechat?calc=transfers:sub-sheet#calc">DTF и сублимация без нанесения <Icon name="arrow" size={18} /></a>
       </div>
     </div>
   </section>
@@ -1967,6 +1990,86 @@ const teeOne = teeProd.quote({ ...defaultSelection(teeProd), qty: 10 }).unit;
     .tee-tbl th,
     .tee-tbl td {
       padding: 6px 10px;
+    }
+  }
+  /* ================= sheets without application ================= */
+  .shs-band {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) auto;
+    gap: 16px 28px;
+    align-items: center;
+    padding: 26px 28px;
+    border-radius: 34px 34px 34px 10px;
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .shs-band h2 {
+    color: var(--paper);
+    font-size: clamp(1.4rem, 2.6vw, 2rem);
+    margin-bottom: 8px;
+  }
+  .shs-band .eyebrow {
+    margin-bottom: 6px;
+    color: rgba(255, 252, 245, 0.75);
+  }
+  .shs-text p:last-child {
+    margin: 0;
+    color: rgba(255, 252, 245, 0.8);
+  }
+  .shs-prices {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 8px;
+  }
+  .shs-prices li {
+    display: grid;
+    padding: 10px 14px;
+    border-radius: 16px;
+    background: rgba(255, 252, 245, 0.08);
+  }
+  .shs-prices li:nth-child(1) { box-shadow: inset 0 -4px 0 var(--c); }
+  .shs-prices li:nth-child(2) { box-shadow: inset 0 -4px 0 var(--m); }
+  .shs-prices li:nth-child(3) { box-shadow: inset 0 -4px 0 var(--y); }
+  .shs-prices small {
+    font-size: 0.74rem;
+    color: rgba(255, 252, 245, 0.7);
+  }
+  .shs-prices b {
+    font-size: 1.3rem;
+  }
+  .shs-band .btn {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+  @media (max-width: 760px) {
+    .shs {
+      padding-block: 24px;
+    }
+    .shs-band {
+      grid-template-columns: 1fr;
+      gap: 12px;
+      padding: 18px 16px;
+      border-radius: 24px 24px 24px 8px;
+    }
+    .shs-text p:last-child {
+      font-size: 0.86rem;
+    }
+    .shs-prices {
+      gap: 6px;
+    }
+    .shs-prices li {
+      flex: 1 1 0;
+      padding: 8px;
+    }
+    .shs-prices b {
+      font-size: 1rem;
+    }
+    .shs-band .btn {
+      justify-self: stretch;
+      justify-content: center;
+      font-size: 0.86rem;
     }
   }
 </style>

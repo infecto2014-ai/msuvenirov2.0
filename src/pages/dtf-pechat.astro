@@ -49,6 +49,8 @@ const packages = page.packages.map((pk, i) => {
 const related = page.related.map((r) => services.find((s) => s.slug === r)).filter(Boolean) as ServicePage[];
 const hasReviews = reviews.some((r) => page.reviewKeywords.some((k) => r.text.toLowerCase().includes(k)));
 const tones = ['c', 'm', 'y'];
+// «Нужно нанести?»: «от» prices of the applied services, from pricing.ts
+const applyLinks = page.applyLinks.map((l) => ({ ...l, from: findProduct('textile', l.product)!.fromPrice }));
 ---
 
 <BaseLayout
@@ -206,6 +208,35 @@ const tones = ['c', 'm', 'y'];
           ))
         }
       </div>
+    </div>
+  </section>
+
+  <!-- ============ applied by us ============ -->
+  <section class="section apl" aria-labelledby="apl-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">С нанесением</p>
+          <h2 id="apl-h">Нужно нанести? Сделаем сами</h2>
+        </div>
+        <p>Нет пресса или не хочется возиться — перенесём принт на одежду и изделия в мастерской. Цена уже с нанесением.</p>
+      </div>
+      <ul class="apl-grid">
+        {
+          applyLinks.map((l, i) => (
+            <li>
+              <a class={`apl-card apl-${tones[i % 3]}`} href={l.href}>
+                <span class="apl-title">{l.title}</span>
+                <span class="apl-text">{l.text}</span>
+                <span class="apl-foot">
+                  <span class="apl-price mono">от {rub(l.from)}</span>
+                  <Icon name="arrow" size={18} />
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </section>
 
@@ -965,6 +996,52 @@ const tones = ['c', 'm', 'y'];
     color: var(--ink-2);
   }
 
+  /* ================= applied by us ================= */
+  .apl-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .apl-c { --tone: var(--c); --soft: var(--c-soft); }
+  .apl-m { --tone: var(--m); --soft: var(--m-soft); }
+  .apl-y { --tone: var(--y); --soft: var(--y-soft); }
+  .apl-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px 18px;
+    border-radius: 24px 24px 24px 8px;
+    background: var(--soft);
+    color: var(--ink);
+    text-decoration: none;
+    border: 1.5px solid transparent;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+  }
+  .apl-card:hover {
+    border-color: var(--ink);
+    box-shadow: 4px 4px 0 var(--tone);
+    transform: translateY(-2px);
+  }
+  .apl-title {
+    font-weight: 800;
+    font-size: 1.1rem;
+  }
+  .apl-text {
+    font-size: 0.88rem;
+    color: var(--ink-2);
+  }
+  .apl-foot {
+    margin-top: auto;
+    padding-top: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 700;
+  }
   /* ================= audience ================= */
   .aud-title {
     margin-bottom: 28px;
@@ -1405,6 +1482,7 @@ const tones = ['c', 'm', 'y'];
     /* tighter sections */
     .spk,
     .knd,
+    .apl,
     .ways,
     .plc,
     .aud,
@@ -1451,6 +1529,24 @@ const tones = ['c', 'm', 'y'];
     }
     .knd-grid-4 {
       grid-template-columns: 1fr;
+    }
+    .apl .section-head p {
+      font-size: 0.86rem;
+    }
+    .apl-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .apl-card {
+      padding: 12px;
+      border-radius: 18px 18px 18px 6px;
+    }
+    .apl-title {
+      font-size: 0.95rem;
+    }
+    .apl-text {
+      font-size: 0.78rem;
+      line-height: 1.35;
     }
     .tr-tiers {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1729,6 +1825,11 @@ const tones = ['c', 'm', 'y'];
     }
     .related-h {
       margin-bottom: 14px;
+    }
+  }
+  @media (min-width: 761px) and (max-width: 1180px) {
+    .apl-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 </style>

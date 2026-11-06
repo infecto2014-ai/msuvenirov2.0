@@ -12,7 +12,26 @@ const tones = ['var(--c-soft)', 'var(--m-soft)', 'var(--y-soft)'];
     <section class="section sblock" aria-label={b.title}>
       <div class="wrap">
         <h2 class="sblock-title">{b.title}</h2>
-        {b.kind === 'ideas' && b.lead && <p class="ideas-lead">{b.lead}</p>}
+        {(b.kind === 'ideas' || b.kind === 'links') && b.lead && <p class="ideas-lead">{b.lead}</p>}
+
+        {b.kind === 'links' && (
+          <div class="lcards">
+            {b.items.map((it, i) => (
+              <article class="lcard" style={`--tone:${['var(--c)', 'var(--m)', 'var(--y)'][i % 3]};--soft:${tones[i % 3]}`}>
+                {it.tag && <span class="idea-tag mono">{it.tag}</span>}
+                <h3>{it.title}</h3>
+                <p>{it.text}</p>
+                <ul class="lcard-links">
+                  {it.links.map((l) => (
+                    <li>
+                      <a href={l.href}>{l.label} →</a>
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
+        )}
 
         {b.kind === 'ideas' && (
           <div class="ideas">
@@ -233,6 +252,74 @@ const tones = ['var(--c-soft)', 'var(--m-soft)', 'var(--y-soft)'];
     }
   }
 
+  .lcards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .lcard {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 20px 22px;
+    border-radius: 28px 28px 28px 8px;
+    background: var(--soft);
+    border-top: 5px solid var(--tone);
+  }
+  .lcard h3 {
+    font-size: 1.2rem;
+  }
+  .lcard p {
+    margin: 0;
+    font-size: 0.93rem;
+    color: var(--ink-2);
+  }
+  .lcard-links {
+    list-style: none;
+    margin: auto 0 0;
+    padding: 8px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .lcard-links a {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .lcard-links a:hover {
+    border-color: var(--ink);
+    box-shadow: 3px 3px 0 var(--tone);
+  }
+  @media (max-width: 960px) {
+    .lcards {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+  }
+  @media (max-width: 760px) {
+    .lcard {
+      padding: 14px 16px;
+      border-radius: 22px 22px 22px 6px;
+    }
+    .lcard h3 {
+      font-size: 1.02rem;
+    }
+    .lcard p {
+      font-size: 0.84rem;
+    }
+    .lcard-links a {
+      padding: 4px 10px;
+      font-size: 0.78rem;
+    }
+  }
   .sblock-features {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));

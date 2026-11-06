@@ -13,7 +13,9 @@ export type ServiceBlock =
   | { kind: 'compare'; title: string; columns: string[]; rows: { label: string; values: string[] }[] }
   | { kind: 'steps'; title: string; items: { title: string; text: string }[] }
   /** editorial cards with a photo and a short tag, e.g. «Что чаще всего заказывают» */
-  | { kind: 'ideas'; title: string; lead?: string; items: { title: string; text: string; tag?: string; img?: string }[] };
+  | { kind: 'ideas'; title: string; lead?: string; items: { title: string; text: string; tag?: string; img?: string }[] }
+  /** cards that lead to other pages, e.g. «DTF-печать и сублимация» on the clothing hub */
+  | { kind: 'links'; title: string; lead?: string; items: { title: string; text: string; tag?: string; links: { href: string; label: string }[] }[] };
 
 export interface ServicePage {
   /** URL path without trailing slash, e.g. "/pechat-na-futbolkah" */

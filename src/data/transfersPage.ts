@@ -61,6 +61,18 @@ export const transfersPage = {
     },
   ],
 
+  /** «Нужно нанести? Сделаем сами» — the same DTF/sublimation, applied by us (links to product pages) */
+  applyLinks: [
+    { href: '/pechat-na-futbolkah', title: 'Футболки', product: 'tshirt-unisex', text: 'Наши футболки с печатью от 1 шт' },
+    { href: '/pechat-na-hudi', title: 'Худи', product: 'hoodie', text: 'Тёплый мерч и худи для команды' },
+    { href: '/pechat-na-odezhde?calc=textile:own-item#calc', title: 'Ваша вещь', product: 'own-item', text: 'Принесите свою — платите только за печать' },
+    { href: '/pechat-na-specodezhde', title: 'Спецодежда', product: 'own-item', text: 'Логотип на куртки, жилеты, фартуки' },
+    { href: '/pechat-na-sportivnoy-forme', title: 'Спортивная форма', product: 'own-item', text: 'Номера и фамилии по списку' },
+    { href: '/pechat-na-kepkah', title: 'Бейсболки', product: 'cap', text: 'Кепки с логотипом от 1 шт' },
+    { href: '/pechat-na-shopperah', title: 'Шопперы', product: 'shopper', text: 'Сумки с принтом и логотипом' },
+    { href: '/sublimacionnaya-pechat', title: 'Сублимация на изделиях', product: 'sub-print', text: 'Светлая синтетика, кружки, заготовки' },
+  ],
+
   /** «Какой макет подойдёт» */
   layout: {
     title: 'Какой макет подойдёт',
