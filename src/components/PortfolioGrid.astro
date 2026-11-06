@@ -34,7 +34,8 @@ const rot = [-2, 1.5, -1, 2, -1.5, 1, -2.5, 1.5];
     <ul class="works-grid">
       {
         items.map((w, i) => (
-          <li class="work" style={`--r:${rot[i % rot.length]}deg`}>
+          <li class="work rope-item" style={`--r:${rot[i % rot.length]}deg`}>
+            <span class="rope-pin" aria-hidden="true" />
             <figure>
               <img src={w.src} alt={w.title} width="480" height="480" loading="lazy" decoding="async" />
               <figcaption>
@@ -56,9 +57,21 @@ const rot = [-2, 1.5, -1, 2, -1.5, 1, -2.5, 1.5];
     padding: 0;
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 22px;
+    gap: 58px 22px;
+    padding-top: 36px;
+    --rope-gap: 22px;
+  }
+  .work {
+    --pin-c: var(--m);
+  }
+  .work:nth-child(4n + 2) {
+    --pin-c: var(--c);
+  }
+  .work:nth-child(4n + 3) {
+    --pin-c: var(--y);
   }
   .work figure {
+    transform-origin: 50% 0;
     margin: 0;
     padding: 10px 10px 14px;
     background: var(--card);
@@ -67,7 +80,8 @@ const rot = [-2, 1.5, -1, 2, -1.5, 1, -2.5, 1.5];
     transform: rotate(var(--r));
     transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
-  .work:hover figure {
+  .work:hover figure,
+  .work:focus-within figure {
     transform: rotate(0deg) translateY(-4px);
     box-shadow: 6px 6px 0 var(--m), var(--shadow);
   }
@@ -94,6 +108,11 @@ const rot = [-2, 1.5, -1, 2, -1.5, 1, -2.5, 1.5];
     font-size: 0.75rem;
     color: var(--muted);
   }
+  @media (prefers-reduced-motion: reduce) {
+    .work figure {
+      transition: none;
+    }
+  }
   @media (max-width: 980px) {
     .works-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -102,7 +121,8 @@ const rot = [-2, 1.5, -1, 2, -1.5, 1, -2.5, 1.5];
   @media (max-width: 640px) {
     .works-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
+      gap: 52px 14px;
+      --rope-gap: 14px;
     }
   }
   /* phones: flat 2×2 grid, four works, short captions */
@@ -121,7 +141,8 @@ const rot = [-2, 1.5, -1, 2, -1.5, 1, -2.5, 1.5];
       border-width: 1.5px;
     }
     .works-grid {
-      gap: 10px;
+      gap: 50px 10px;
+      --rope-gap: 10px;
     }
     .work:nth-child(n + 5) {
       display: none;

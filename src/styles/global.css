@@ -344,6 +344,40 @@ p {
 }
 .band-ink .eyebrow::before { mix-blend-mode: normal; }
 
+/* Rope with clothespins: photos hang on a jute rope (owner liked the polaroids, 06.11.2026).
+   .rope-item — the hanging element (li); its ::before draws a sagging piece of rope above it,
+   neighbours' pieces meet, so a row reads as one rope. --rope-gap must equal the column gap.
+   .rope-pin — the wooden clothespin (a span inside the item); --pin-c colours its spring. */
+.rope-item {
+  position: relative;
+  --rope-drop: 36px;
+}
+.rope-item::before {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  top: calc(var(--rope-drop) * -1);
+  left: calc(var(--rope-gap, 28px) / -2);
+  right: calc(var(--rope-gap, 28px) / -2);
+  height: 36px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 36' preserveAspectRatio='none'%3E%3Cg fill='none'%3E%3Cpath d='M-4 5Q160 47 324 5' stroke='%236f5128' stroke-width='9.5'/%3E%3Cpath d='M-4 5Q160 47 324 5' stroke='%23b88c4f' stroke-width='7'/%3E%3Cpath d='M-4 5Q160 47 324 5' stroke='%238a6533' stroke-width='7' stroke-dasharray='1.6 3.4'/%3E%3Cpath d='M-4 3.4Q160 45.4 324 3.4' stroke='%23ecd29c' stroke-width='1.6' stroke-dasharray='3 2' opacity='.9'/%3E%3C/g%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  filter: drop-shadow(0 3px 2px rgba(22, 20, 27, 0.28));
+  pointer-events: none;
+}
+.rope-pin {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--rope-drop) * -1 + 14px);
+  z-index: 3;
+  width: 12px;
+  height: 30px;
+  transform: translateX(-50%);
+  border-radius: 3px;
+  background: linear-gradient(90deg, #c99a5e, #a8743a);
+  box-shadow: inset 0 13px 0 -10px var(--pin-c, #c9a64e), 0 2px 3px rgba(0, 0, 0, 0.28);
+  pointer-events: none;
+}
+
 /* Misregistered heading accent: the word looks printed with a slight plate shift */
 .misreg {
   text-shadow: 0.045em 0.03em 0 rgba(0, 160, 220, 0.55), -0.035em -0.02em 0 rgba(229, 0, 125, 0.45);
