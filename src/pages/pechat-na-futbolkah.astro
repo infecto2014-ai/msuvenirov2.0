@@ -10,6 +10,9 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Calculator from '@/components/islands/Calculator';
 import AlsoOrder from '@/components/garment/AlsoOrder.astro';
 import ServiceBlocks from '@/components/ServiceBlocks.astro';
+import TshirtCompare from '@/components/tshirt/TshirtCompare.astro';
+import TshirtIdeas from '@/components/tshirt/TshirtIdeas.astro';
+import TshirtRelated from '@/components/tshirt/TshirtRelated.astro';
 import PortfolioGrid from '@/components/PortfolioGrid.astro';
 import Reviews from '@/components/Reviews.astro';
 import FaqSection from '@/components/FaqSection.astro';
@@ -18,7 +21,6 @@ import TshirtHero from '@/components/tshirt/TshirtHero.astro';
 import TshirtHead from '@/components/tshirt/TshirtHead.astro';
 import TshirtPackages from '@/components/tshirt/TshirtPackages.astro';
 import TshirtDetails from '@/components/tshirt/TshirtDetails.astro';
-import Icon from '@/components/Icon.astro';
 import { garmentBySlug } from '@/data/garments';
 import { reviews as allReviews } from '@/data/reviews';
 import { services } from '@/data/services';
@@ -42,15 +44,6 @@ const allPrices = cat.products.map((p) => p.fromPrice);
 const hasReviews = allReviews.some((r) => garment.reviewKeywords.some((k) => r.text.toLowerCase().includes(k)));
 const related = page.related.map((r) => services.find((s) => s.slug === r)).filter(Boolean) as ServicePage[];
 
-// Lower blocks are designed in separate components (TshirtCompare / TshirtIdeas / TshirtRelated in
-// src/components/tshirt/). They are picked up when present; until then the generic ServiceBlocks and a plain
-// «Ещё печатаем» strip are shown, so the page always builds.
-type Mod = { default: any };
-const lower = import.meta.glob<Mod>('../components/tshirt/Tshirt{Compare,Ideas,Related}.astro', { eager: true });
-const pick = (name: string) => Object.entries(lower).find(([k]) => k.endsWith(`/${name}.astro`))?.[1].default;
-const TshirtCompare = pick('TshirtCompare');
-const TshirtIdeas = pick('TshirtIdeas');
-const TshirtRelated = pick('TshirtRelated');
 const compare = page.blocks.find((b) => b.kind === 'compare');
 const ideas = page.blocks.find((b) => b.kind === 'ideas');
 const otherBlocks = page.blocks.filter((b) => b.kind !== 'compare' && b.kind !== 'ideas');
@@ -104,12 +97,12 @@ const polaroids = [
   </div>
 
   <!-- ============ the rest: paper and tinted bands alternate, so neighbours never merge ============ -->
-  {compare && (TshirtCompare ? <TshirtCompare block={compare} /> : <ServiceBlocks blocks={[compare]} />)}
+  {compare && <TshirtCompare block={compare} />}
 
   {
     ideas && (
       <div class="band band-tint">
-        {TshirtIdeas ? <TshirtIdeas block={ideas} /> : <ServiceBlocks blocks={[ideas]} />}
+        <TshirtIdeas block={ideas} />
       </div>
     )
   }
@@ -129,104 +122,13 @@ const polaroids = [
   <FaqSection items={page.faq} title="Вопросы: печать на футболках" />
 
   {
-    related.length > 0 &&
-      (TshirtRelated ? (
-        <TshirtRelated items={related} />
-      ) : (
-        <section class="section trel" aria-labelledby="trel-h">
-          <div class="wrap">
-            <h2 id="trel-h" class="trel-h">Ещё печатаем</h2>
-            <ul class="trel-grid">
-              {related.map((r) => (
-                <li>
-                  <a class="trel-card" href={r.slug}>
-                    <img src={r.image} alt="" width="320" height="320" loading="lazy" decoding="async" />
-                    <span>{r.name}</span>
-                    <Icon name="arrow" />
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-      ))
+    related.length > 0 && <TshirtRelated items={related} />
   }
 
   <CtaBand />
 </BaseLayout>
 
 <style>
-  /* fallback «Ещё печатаем»: photo tiles with the name on a strip */
-  .trel-h {
-    margin-bottom: 24px;
-  }
-  .trel-grid {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 14px;
-  }
-  .trel-card {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    min-height: 200px;
-    padding: 14px 16px;
-    border-radius: 26px 26px 26px 8px;
-    overflow: clip;
-    isolation: isolate;
-    color: #fff;
-    font-weight: 800;
-    text-decoration: none;
-    align-items: flex-end;
-  }
-  .trel-card img {
-    position: absolute;
-    inset: 0;
-    z-index: -2;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.4s ease;
-  }
-  .trel-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: linear-gradient(to top, rgba(15, 18, 26, 0.95) 0%, rgba(15, 18, 26, 0.75) 30%, rgba(15, 18, 26, 0) 70%);
-  }
-  .trel-card span {
-    flex: 1;
-  }
-  .trel-card:hover {
-    color: #fff;
-  }
-  @media (hover: hover) {
-    .trel-card:hover img {
-      transform: scale(1.05);
-    }
-  }
-  @media (max-width: 900px) {
-    .trel-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-    }
-    .trel-card {
-      min-height: 140px;
-      padding: 10px 12px;
-      border-radius: 20px 20px 20px 6px;
-      font-size: 0.9rem;
-    }
-  }
-  @media (max-width: 560px) {
-    .trel-h {
-      margin-bottom: 14px;
-    }
-  }
   .tcalc {
     position: relative;
   }

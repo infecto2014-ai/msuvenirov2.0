@@ -1,0 +1,333 @@
+---
+// «Что чаще всего заказывают» for the T-shirt page: a scrapbook board.
+// The heading sits on a sticky note in the first cell; every idea is a polaroid held by a strip of
+// washi tape (the tape carries the item's tag), the title is handwritten on the polaroid margin,
+// the description sits under it. Slightly chaotic tilts; they straighten on hover/focus.
+// Phones: polaroid on the left, tag and text on the right — compact list, no sideways scroll.
+import '@fontsource/caveat/600.css';
+import type { ServiceBlock } from '@/data/types';
+
+interface Props {
+  block: Extract<ServiceBlock, { kind: 'ideas' }>;
+}
+
+const { block } = Astro.props;
+
+// tape colours cycle through the process colours (soft tints keep ink text at ≥ 4.5:1)
+const tapes = ['#bfe6f5', '#f9c9e1', '#ffe98a'];
+const words = block.title.split(' ');
+const lastWord = words.pop();
+---
+
+<section class="section ti" aria-labelledby="ti-h">
+  <div class="wrap">
+    <div class="ti-board">
+      <div class="ti-intro">
+        <div class="ti-note">
+          <p class="eyebrow">Идеи для футболки</p>
+          <h2 id="ti-h">
+            {words.join(' ')}{' '}<span class="mark">{lastWord}</span>
+          </h2>
+          {block.lead && <p class="ti-lead">{block.lead}</p>}
+          <svg class="ti-arrow" viewBox="0 0 120 60" width="96" height="48" fill="none" aria-hidden="true">
+            <path d="M6 44C34 58 70 52 98 20" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+            <path d="M84 18l16-2-2 16" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+      </div>
+
+      <ul class="ti-list" role="list">
+        {
+          block.items.map((it, i) => (
+            <li class="ti-item" style={`--tape: ${tapes[i % tapes.length]}`}>
+              <figure class="ti-pola">
+                <div class:list={['ti-photo', { 'is-empty': !it.img }]}>
+                  {it.img ? (
+                    <img src={it.img} alt="" width="378" height="378" loading="lazy" decoding="async" />
+                  ) : (
+                    <svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true">
+                      <path
+                        d="M24 8c2 5 14 5 16 0l14 6 6 14-9 4-3-3v31H16V29l-3 3-9-4 6-14z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  )}
+                </div>
+                <figcaption>
+                  <h3 class="ti-title">{it.title}</h3>
+                </figcaption>
+              </figure>
+              <div class="ti-body">
+                {it.tag && <p class="ti-tape">{it.tag}</p>}
+                <p class="ti-text">{it.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ---------- board: intro note + polaroids share one 3-column grid */
+  .ti-board {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 56px clamp(28px, 3.4vw, 48px);
+  }
+  .ti-list {
+    display: contents;
+    list-style: none;
+  }
+
+  /* sticky note with the heading */
+  .ti-intro {
+    position: relative;
+    padding-top: 12px;
+  }
+  .ti-note {
+    position: relative;
+    height: 100%;
+    padding: clamp(24px, 2.6vw, 34px);
+    border-radius: 4px 4px 28px 4px;
+    background:
+      linear-gradient(135deg, transparent 0 calc(100% - 34px), rgba(22, 20, 27, 0.07) calc(100% - 34px)),
+      #fff5c9;
+    box-shadow: 0 18px 28px -22px rgba(22, 20, 27, 0.55);
+    transform: rotate(-1.4deg);
+  }
+  .ti-note h2 {
+    font-size: clamp(2rem, 3.2vw, 2.7rem);
+    color: #16141b;
+  }
+  .ti-note .eyebrow {
+    color: #3d3944;
+  }
+  .ti-lead {
+    margin-top: 16px;
+    font-family: 'Caveat', 'Segoe Print', cursive;
+    font-weight: 600;
+    font-size: clamp(1.45rem, 2vw, 1.7rem);
+    line-height: 1.15;
+    color: #3d3944;
+  }
+  .ti-arrow {
+    display: block;
+    margin: 14px 0 0 auto;
+    color: var(--m-ink);
+  }
+
+  /* ---------- one idea */
+  .ti-item {
+    --r: -2.2deg;
+    --dy: 0px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    min-width: 0;
+    padding-top: var(--dy);
+  }
+  .ti-item:nth-child(even) .ti-pola { margin-left: auto; }
+  .ti-item:nth-child(5n + 2) { --r: 1.8deg; --dy: 22px; }
+  .ti-item:nth-child(5n + 3) { --r: -1deg; --dy: 6px; }
+  .ti-item:nth-child(5n + 4) { --r: 2.4deg; --dy: 0px; }
+  .ti-item:nth-child(5n) { --r: -1.6deg; --dy: 18px; }
+
+  .ti-pola {
+    position: relative;
+    width: 92%;
+    margin: 0;
+    padding: 12px 12px 6px;
+    border-radius: 3px;
+    background: linear-gradient(170deg, #ffffff 0%, #fbf8f1 100%);
+    box-shadow:
+      0 0 0 1px rgba(22, 20, 27, 0.05),
+      0 22px 30px -22px rgba(22, 20, 27, 0.6);
+    transform: rotate(var(--r));
+    transition: transform 0.26s cubic-bezier(0.34, 1.35, 0.64, 1), box-shadow 0.26s ease;
+  }
+  /* washi tape across the top edge of the polaroid */
+  .ti-pola::before {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    top: -14px;
+    left: 50%;
+    width: 112px;
+    height: 28px;
+    margin-left: -56px;
+    background: var(--tape);
+    opacity: 0.88;
+    transform: rotate(calc(var(--r) * -2.2));
+    /* torn, zig-zag ends */
+    clip-path: polygon(
+      0 0, 100% 0, 96% 20%, 100% 40%, 96% 60%, 100% 80%, 96% 100%,
+      0 100%, 4% 80%, 0 60%, 4% 40%, 0 20%
+    );
+  }
+
+  .ti-photo {
+    position: relative;
+    aspect-ratio: 6 / 5;
+    overflow: hidden;
+    background: var(--paper-2);
+  }
+  .ti-photo img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.45s ease;
+  }
+  /* print finish: faint inner edge + gloss */
+  .ti-photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 0 1px rgba(22, 20, 27, 0.08), inset 0 0 22px rgba(22, 20, 27, 0.12);
+    background: linear-gradient(125deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 40%);
+    pointer-events: none;
+  }
+  .ti-photo.is-empty {
+    display: grid;
+    place-items: center;
+    color: color-mix(in srgb, var(--tape) 60%, #16141b);
+    background:
+      radial-gradient(circle, rgba(22, 20, 27, 0.12) 1.4px, transparent 1.7px) 0 0 / 12px 12px,
+      var(--tape);
+  }
+
+  .ti-title {
+    padding: 10px 4px 4px;
+    font-family: 'Caveat', 'Segoe Print', cursive;
+    font-weight: 600;
+    font-size: clamp(1.6rem, 2.1vw, 1.95rem);
+    line-height: 1.05;
+    letter-spacing: 0;
+    color: #16141b;
+    text-align: center;
+  }
+
+  .ti-body {
+    display: grid;
+    gap: 10px;
+    padding-inline: 6px;
+  }
+  /* the tag reads like a strip of tape */
+  .ti-tape {
+    justify-self: start;
+    padding: 4px 12px;
+    background: var(--tape);
+    color: #16141b;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1.4;
+    clip-path: polygon(0 0, 100% 0, calc(100% - 5px) 50%, 100% 100%, 0 100%, 5px 50%);
+    padding-inline: 14px;
+  }
+  .ti-text {
+    color: var(--ink-2);
+    line-height: 1.55;
+  }
+
+  @media (hover: hover) {
+    .ti-item:hover .ti-pola {
+      transform: rotate(0deg) translateY(-6px);
+      box-shadow:
+        0 0 0 1px rgba(22, 20, 27, 0.05),
+        0 30px 34px -22px rgba(22, 20, 27, 0.55);
+    }
+    .ti-item:hover .ti-photo img {
+      transform: scale(1.05);
+    }
+  }
+
+  /* ---------- tablet: two columns, the note spans the row */
+  @media (max-width: 960px) {
+    .ti-board {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 48px 28px;
+    }
+    .ti-intro {
+      grid-column: 1 / -1;
+    }
+    .ti-note {
+      transform: rotate(-0.8deg);
+    }
+    .ti-arrow {
+      display: none;
+    }
+  }
+
+  /* ---------- phone: compact rows — polaroid left, tag + text right */
+  @media (max-width: 560px) {
+    .ti-board {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 26px;
+    }
+    .ti-intro {
+      padding-top: 0;
+      margin-bottom: 6px;
+    }
+    .ti-note {
+      padding: 22px 20px;
+    }
+    .ti-item {
+      display: grid;
+      grid-template-columns: 128px minmax(0, 1fr);
+      align-items: start;
+      gap: 16px;
+      padding-top: 0;
+    }
+    .ti-item:nth-child(even) {
+      --r: 2deg;
+    }
+    .ti-item:nth-child(odd) {
+      --r: -2deg;
+    }
+    .ti-pola {
+      padding: 7px 7px 4px;
+      margin-top: 8px;
+    }
+    .ti-pola::before {
+      top: -10px;
+      width: 64px;
+      height: 18px;
+      margin-left: -32px;
+    }
+    .ti-title {
+      padding: 6px 0 2px;
+      font-size: 1.22rem;
+    }
+    .ti-body {
+      padding-inline: 0;
+      gap: 8px;
+    }
+    .ti-tape {
+      font-size: 0.75rem;
+      padding: 3px 12px;
+    }
+    .ti-text {
+      font-size: 0.97rem;
+      line-height: 1.5;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ti-pola,
+    .ti-photo img {
+      transition: none;
+    }
+    .ti-item:hover .ti-pola {
+      transform: rotate(var(--r));
+    }
+    .ti-item:hover .ti-photo img {
+      transform: none;
+    }
+  }
+</style>
