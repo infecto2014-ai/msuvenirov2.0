@@ -66,14 +66,17 @@ const values = [
 ] as const;
 
 
-const clients = [
+// white: white logo (made dark on the light first screen); square: round/square logo, shown larger so it
+// looks the same size as the wide ones; onLight: version with dark text for the light first screen
+type Client = { src: string; alt: string; white?: boolean; square?: boolean; onLight?: string };
+const clients: Client[] = [
   { src: '/img/clients/client-1.webp', alt: 'Россети', white: true },
   { src: '/img/clients/client-6.webp', alt: 'БФУ имени И. Канта', white: true },
   { src: '/img/clients/client-2.webp', alt: 'Арле Парк' },
-  { src: '/img/clients/client-4.webp', alt: 'Папаша Беппе' },
-  { src: '/img/clients/client-5.webp', alt: 'Бойцовский клуб «Неудержимые»' },
+  { src: '/img/clients/client-4.webp', alt: 'Папаша Беппе', square: true },
+  { src: '/img/clients/client-5.webp', alt: 'Бойцовский клуб «Неудержимые»', square: true },
   { src: '/img/clients/client-7.webp', alt: 'Systech', white: true },
-  { src: '/img/clients/client-8.webp', alt: 'Музей мороженого' },
+  { src: '/img/clients/client-8.webp', alt: 'Музей мороженого', square: true, onLight: '/img/clients/client-8-dark.webp' },
 ];
 
 const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
@@ -113,8 +116,8 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
           <ul>
             {
               clients.map((c) => (
-                <li class:list={{ 'is-white': c.white }}>
-                  <img src={c.src} alt={c.alt} title={c.alt} width="140" height="70" decoding="async" />
+                <li class:list={{ 'is-white': c.white, 'is-square': c.square }}>
+                  <img src={c.onLight ?? c.src} alt={c.alt} title={c.alt} width="140" height="70" decoding="async" />
                 </li>
               ))
             }
@@ -658,10 +661,29 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   .hero-light .hero-clients p {
     color: var(--ink-2);
   }
-  /* white logos turn dark on the light background */
-  .hero-light .hero-clients .is-white img {
+  /* «Нам доверяют» on the light background (owner, 06.11.2026): one calm grey row, colour on hover;
+     white logos become dark; round/square logos are larger so all of them look the same size */
+  .hero-light .hero-clients ul {
+    gap: 16px clamp(24px, 3.4vw, 48px);
+  }
+  .hero-light .hero-clients img {
+    height: 38px;
+    max-width: 150px;
+    filter: grayscale(1) contrast(1.1);
+    opacity: 0.72;
+    transition: filter 0.25s ease, opacity 0.25s ease;
+  }
+  .hero-light .hero-clients .is-square img {
+    height: 56px;
+  }
+  .hero-light .hero-clients li:hover img {
+    filter: none;
+    opacity: 1;
+  }
+  .hero-light .hero-clients .is-white img,
+  .hero-light .hero-clients .is-white:hover img {
     filter: brightness(0);
-    opacity: 0.75;
+    opacity: 0.7;
   }
   :global(.hero-light + .nyb)::before {
     display: none;
@@ -1338,6 +1360,16 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     .hero-clients img {
       height: 30px;
       max-width: 96px;
+    }
+    .hero-light .hero-clients img {
+      height: 28px;
+      max-width: 110px;
+    }
+    .hero-light .hero-clients .is-square img {
+      height: 42px;
+    }
+    .hero-light .hero-clients ul {
+      gap: 14px 22px;
     }
     /* the note sat on the trees and had no arrow on phones — hidden (owner, 06.11.2026) */
     .hero-hand {
