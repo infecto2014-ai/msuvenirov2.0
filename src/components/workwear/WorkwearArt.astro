@@ -75,7 +75,9 @@ const Z = {
 };
 const show = (p: WorkwearPlace) => printIn.includes(p) && (p === 'chest' ? !back : p === 'back' ? back : hasSleeves && type !== 'polo') && !(type === 'apron' && p === 'back');
 const label = title ?? `${C.label}: ${{ jacket: 'куртка', vest: 'жилет', signal: 'сигнальный жилет', overalls: 'комбинезон', apron: 'фартук', polo: 'поло' }[type as WorkwearType]}, ${back ? 'вид сзади' : 'вид спереди'}`;
-const tfs = Math.min(15, (Z.back.w * 1.55) / Math.max(4, text.length));
+// fitted to the print zone: the site font (Rubik, heavy) is ~0.74 of the font size per glyph; textLength caps it for any font
+const tfs = Math.min(15, (Z.back.w * 0.92) / (Math.max(1, text.length) * 0.74));
+const tlen = Math.min(Z.back.w * 0.92, text.length * tfs * 0.74);
 ---
 
 <svg
@@ -215,7 +217,7 @@ const tfs = Math.min(15, (Z.back.w * 1.55) / Math.max(4, text.length));
           <circle cx="11.4" cy="7.6" r="3.6" fill="#e5007d" />
           <circle cx="9" cy="11.6" r="3.6" fill="#ffd21f" />
         </g>
-        <text x={Z.back.w / 2} y={22 + tfs} font-size={tfs} font-weight="900" text-anchor="middle" fill={ink}>
+        <text x={Z.back.w / 2} y={22 + tfs} font-size={tfs} textLength={tlen} lengthAdjust="spacingAndGlyphs" font-weight="900" text-anchor="middle" fill={ink}>
           {text}
         </text>
         {type !== 'signal' && <rect x={Z.back.w * 0.22} y={26 + tfs + 2} width={Z.back.w * 0.56} height="3" rx="1.5" fill={accent} />}
