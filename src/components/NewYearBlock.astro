@@ -1,7 +1,7 @@
 ---
 /**
  * New Year block (owner chose the «night» look, 06.11.2026): a tilted red Christmas ball with a round photo
- * window (left), the text in a candy-cane frame (middle), Ded Moroz holding a sign with the countdown (right).
+ * window (left), the text on an envelope whose flap opens into a link to the article (middle), Ded Moroz holding a sign with the countdown (right).
  * The top edge repeats the hero's wave, so the two dark blocks read as one composition with a paper ribbon between.
  * Shown only from 1 November to 31 December (script). `link` — where the button leads (the New Year article later).
  */
@@ -26,14 +26,27 @@ const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Иде�
       <NyBall id="nyb" photo={photo} />
     </div>
 
-    <!-- text in a candy-cane frame -->
+    <!-- envelope (owner, 06.11.2026): the triangular flap is the "open" button → the New Year article,
+         the text sits on the front. Hover / focus opens the flap and a letter slides out. -->
     <div class="nyb-frame">
-      <div class="nyb-inner">
-        <p class="nyb-hand">Новый год уже близко!</p>
-        <h2 id="nyb-h">Подарки с вашим фото <span class="nyb-serif">и&nbsp;логотипом</span></h2>
-        <p class="nyb-text">Ёлочные шары, кружки, календари на 2027 год и мерч для коллег</p>
-        <a class="btn btn-magenta nyb-btn" href={link}>{linkLabel} <span aria-hidden="true">→</span></a>
-      </div>
+      <a class="env" href={link} aria-labelledby="nyb-h nyb-cta">
+        <span class="env-back" aria-hidden="true"></span>
+        <span class="env-letter">
+          <span class="env-letter-hand" aria-hidden="true">для вас</span>
+          <span id="nyb-cta" class="env-letter-cta">{linkLabel} <span aria-hidden="true">→</span></span>
+        </span>
+        <span class="env-front">
+          <span class="nyb-hand">Новый год уже близко!</span>
+          <h2 id="nyb-h">Подарки с вашим фото <span class="nyb-serif">и&nbsp;логотипом</span></h2>
+          <span class="nyb-text">Ёлочные шары, кружки, календари на 2027 год и мерч для коллег</span>
+        </span>
+        <span class="env-flap" aria-hidden="true">
+          <span class="env-seal">
+            <svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 2v20M3.3 7l17.4 10M3.3 17 20.7 7M9 3.5l3 2.5 3-2.5M9 20.5l3-2.5 3 2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </span>
+        </span>
+        <span class="env-open" aria-hidden="true">открыть</span>
+      </a>
     </div>
 
     <!-- Ded Moroz with the countdown on his sign -->
@@ -114,10 +127,10 @@ const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Иде�
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: minmax(150px, 0.85fr) minmax(0, 1.9fr) minmax(230px, 1.15fr);
+    grid-template-columns: minmax(170px, 1fr) minmax(0, 1.75fr) minmax(220px, 1fr);
     grid-template-areas: 'ball frame santa';
     align-items: center;
-    gap: clamp(14px, 2.4vw, 32px);
+    gap: clamp(24px, 4vw, 64px);
     /* full width like the hero (owner, 06.11.2026); content stays in the page column;
        soft wave at the bottom too, Ded Moroz's sign stays above it */
     padding: calc(var(--wave-h) + 4px) max(var(--gutter), calc((100% - var(--wrap)) / 2)) calc(var(--wave-h) * 0.75);
@@ -138,64 +151,141 @@ const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Иде�
   }
 
   /* ---------- ball: hangs from the wave */
+  /* the ball hangs on a long string that starts above the top wave (owner: «нитка из воздуха висит») */
   .nyb-ball {
+    --string: clamp(40px, 5vw, 70px);
     grid-area: ball;
     position: relative;
     z-index: 1;
     align-self: start;
-    margin-top: calc(var(--wave-h) * -0.55);
+    justify-self: center;
+    width: 100%;
+    max-width: 300px;
+    margin-top: calc((var(--wave-h) + 8px) * -1);
+    padding-top: calc(var(--wave-h) + var(--string));
     transform-origin: 50% 0;
     animation: nyb-swing 5s ease-in-out infinite alternate;
+  }
+  .nyb-ball::before {
+    content: '';
+    position: absolute;
+    left: calc(50% - 1px);
+    top: 0;
+    width: 2px;
+    height: calc(var(--wave-h) + var(--string) + 2px);
+    background: linear-gradient(#b9c4cc, #d6dde2);
   }
   .nyb-ball svg {
     display: block;
     width: 100%;
-    max-width: 260px;
+    max-width: 300px;
     height: auto;
     margin-inline: auto;
     filter: drop-shadow(0 20px 24px rgba(0, 0, 0, 0.4));
   }
   @keyframes nyb-swing {
     from {
-      transform: rotate(-14deg);
+      transform: rotate(-5deg);
     }
     to {
-      transform: rotate(-8deg);
+      transform: rotate(3deg);
     }
   }
 
-  /* ---------- candy-cane frame */
+  /* ---------- envelope: back (lining) → letter → front pocket → flap with a wax seal */
   .nyb-frame {
     grid-area: frame;
     position: relative;
-    z-index: 1;
-    margin-bottom: clamp(22px, 3vw, 38px);
-    padding: 10px;
-    border-radius: 30px;
-    background: repeating-linear-gradient(-45deg, var(--candy) 0 13px, #fff 13px 26px);
-    box-shadow: 0 20px 34px -22px rgba(0, 0, 0, 0.7);
+    z-index: 2;
+    width: 100%;
+    max-width: 620px;
+    justify-self: center;
+    margin-block: clamp(70px, 7vw, 96px) clamp(28px, 3vw, 40px);
   }
-  .nyb-inner {
+  .env {
+    --top: clamp(118px, 11vw, 150px); /* depth of the flap area */
+    --paper: #fffaf0;
+    position: relative;
+    display: block;
+    color: var(--ink);
+    text-decoration: none;
+    border-radius: 18px;
+    filter: drop-shadow(0 24px 30px rgba(0, 0, 0, 0.45));
+  }
+  .env:focus-visible {
+    outline: 3px solid #ffd21f;
+    outline-offset: 6px;
+  }
+  /* inside of the envelope, seen when the flap is open */
+  .env-back {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    border-radius: 18px;
+    background:
+      repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.08) 0 8px, transparent 8px 16px),
+      linear-gradient(180deg, #8e1626, #5c0c17);
+  }
+  /* the letter: hidden in the pocket, slides up when opened */
+  .env-letter {
+    position: absolute;
+    z-index: 1;
+    left: 7%;
+    right: 7%;
+    top: 14px;
+    height: calc(var(--top) + 30px);
     display: grid;
-    gap: 10px;
+    align-content: start;
+    justify-items: center;
+    gap: 4px;
+    padding-top: 18px;
+    border-radius: 10px;
+    background:
+      linear-gradient(transparent 31px, rgba(0, 111, 153, 0.12) 31px 32px) 0 6px / 100% 32px,
+      #fff;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.12);
+    transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) 0.12s;
+  }
+  .env-letter-hand {
+    font-family: 'Caveat', cursive;
+    font-weight: 600;
+    font-size: 1.3rem;
+    line-height: 1;
+    color: var(--c-ink);
+  }
+  .env-letter-cta {
+    font-weight: 800;
+    font-size: clamp(0.98rem, 1.2vw, 1.12rem);
+    color: var(--candy);
+    text-align: center;
+    padding-inline: 10px;
+  }
+  /* front pocket: airmail stripes on the edges, V-cut at the top, text at the bottom */
+  .env-front {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    gap: 8px;
     justify-items: center;
     text-align: center;
-    padding: clamp(20px, 2.6vw, 32px) clamp(18px, 2.6vw, 34px);
-    border-radius: 22px;
-    background: #fffcf5;
-    color: var(--ink);
+    padding: calc(var(--top) + 64px) clamp(22px, 3vw, 40px) clamp(24px, 2.6vw, 32px);
+    border: 9px solid transparent;
+    border-radius: 18px;
+    background:
+      linear-gradient(var(--paper), var(--paper)) padding-box,
+      repeating-linear-gradient(-45deg, var(--candy) 0 12px, #fff 12px 24px, #0072bc 24px 36px, #fff 36px 48px) border-box;
+    clip-path: polygon(0 0, 50% calc(var(--top) - 6px), 100% 0, 100% 100%, 0 100%);
   }
   .nyb-hand {
-    margin: 0;
     font-family: 'Caveat', 'Segoe Print', cursive;
     font-weight: 600;
-    font-size: clamp(1.4rem, 2vw, 1.75rem);
+    font-size: clamp(1.35rem, 1.8vw, 1.65rem);
     line-height: 1;
     color: var(--candy);
     transform: rotate(-2deg);
   }
   .nyb h2 {
-    font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+    font-size: clamp(1.5rem, 2.4vw, 2.15rem);
     line-height: 1.05;
     letter-spacing: -0.02em;
     text-wrap: balance;
@@ -209,19 +299,86 @@ const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Иде�
     color: var(--candy-ink);
   }
   .nyb-text {
-    margin: 0;
     max-width: 40ch;
-    font-size: 1rem;
+    font-size: 0.98rem;
     color: var(--ink-2);
   }
-  /* owner, 06.11.2026: the button is red, like the candy cane */
-  .nyb-btn {
-    --btn-bg: var(--candy);
-    --btn-fg: #fff;
-    margin-top: 6px;
+  /* the flap — the "open" button: hinge at the top edge */
+  .env-flap {
+    position: absolute;
+    z-index: 3;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: calc(var(--top) + 26px);
+    transform-origin: 50% 0;
+    transform: perspective(900px) rotateX(0deg);
+    transition: transform 0.45s cubic-bezier(0.3, 0.7, 0.2, 1), z-index 0s 0.2s;
   }
-  .nyb-btn:hover {
-    --btn-bg: var(--candy-ink);
+  .env-flap::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 18px 18px 0 0;
+    background: linear-gradient(180deg, #f3ead8, #e8dcc3);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+  }
+  .env-seal {
+    position: absolute;
+    left: 50%;
+    bottom: -18px;
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    margin-left: -27px;
+    border-radius: 47% 53% 50% 50% / 52% 48% 52% 48%;
+    color: #ffd9c2;
+    background: radial-gradient(circle at 35% 30%, #ef4a50, var(--candy) 45%, #8e1018);
+    box-shadow:
+      0 0 0 4px rgba(176, 20, 28, 0.55),
+      0 6px 12px rgba(0, 0, 0, 0.35);
+    transition: transform 0.25s ease;
+  }
+  .env-open {
+    position: absolute;
+    z-index: 4;
+    left: calc(50% + 34px);
+    top: calc(var(--top) + 22px);
+    font-family: 'Caveat', cursive;
+    font-weight: 600;
+    font-size: 1.25rem;
+    line-height: 1;
+    color: var(--candy-ink);
+    transform: rotate(-6deg);
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+  }
+  @media (hover: hover) {
+    .env:hover .env-seal {
+      transform: scale(1.08) rotate(-8deg);
+    }
+  }
+  /* opened: flap swings up behind the letter, the letter slides out */
+  .env:hover .env-flap,
+  .env:focus-visible .env-flap {
+    z-index: 0;
+    transform: perspective(900px) rotateX(180deg) translateZ(-1px);
+    transition: transform 0.45s cubic-bezier(0.3, 0.7, 0.2, 1), z-index 0s 0.22s;
+  }
+  .env:hover .env-letter,
+  .env:focus-visible .env-letter {
+    transform: translateY(calc(var(--top) * -0.95));
+  }
+  .env:hover .env-open,
+  .env:focus-visible .env-open {
+    opacity: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .env-flap,
+    .env-letter {
+      transition: none;
+    }
   }
 
   /* ---------- Ded Moroz + sign */
@@ -295,13 +452,13 @@ const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Иде�
       animation: none;
     }
     .nyb-ball {
-      transform: rotate(-12deg);
+      transform: rotate(-2deg);
     }
   }
 
   @media (max-width: 1020px) {
     .nyb-card {
-      grid-template-columns: minmax(120px, 0.8fr) minmax(0, 1.8fr) minmax(190px, 1fr);
+      grid-template-columns: minmax(130px, 0.85fr) minmax(0, 1.7fr) minmax(180px, 0.95fr);
     }
   }
 
@@ -316,36 +473,31 @@ const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Иде�
       padding-inline: var(--gutter);
     }
     .nyb-ball {
-      margin-top: -14px;
+      --string: 18px;
+      max-width: 180px;
     }
     .nyb-ball svg {
-      max-width: 170px;
+      max-width: 180px;
     }
     .nyb-santa {
       max-width: 230px;
       margin-bottom: 0;
     }
     .nyb-frame {
-      margin-bottom: 14px;
-      padding: 8px;
-      border-radius: 24px;
+      margin-block: 34px 18px;
     }
-    .nyb-inner {
-      padding: 18px 14px;
-      border-radius: 18px;
+    .env {
+      --top: 104px;
+    }
+    .env-front {
+      padding-inline: 16px;
+      border-width: 7px;
     }
     .nyb h2 {
       font-size: 1.45rem;
     }
     .nyb-text {
       font-size: 0.9rem;
-    }
-    .nyb-btn {
-      max-width: 100%;
-      padding-inline: 18px;
-      font-size: 0.92rem;
-      white-space: normal;
-      text-align: center;
     }
   }
 </style>
