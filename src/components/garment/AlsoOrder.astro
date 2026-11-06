@@ -1,5 +1,10 @@
 ---
-// «С этим заказывают» — a slim strip of links to other products, under the calculator on garment pages.
+// «С этим заказывают» — a shop shelf under the calculator: each product is a round die-cut photo
+// standing on a paper plank, with a misregistered CMYK plate and halftone dots behind it and a
+// yellow «от N ₽» sticker. The plank is drawn per item (pieces meet across the gap), so it stays
+// continuous while the row scrolls. Arrows scroll by two items; edges fade while there is more.
+import '@fontsource/caveat/600.css';
+import Icon from '@/components/Icon.astro';
 import { services } from '@/data/services';
 import { categoryFrom, findProduct, rub } from '@/data/pricing';
 
@@ -32,53 +37,92 @@ const items = slugs
     const from = p && !p.fromUnit ? p.fromPrice : categoryFrom(s!.calcCategory).price;
     return { href: s!.slug, name: short[s!.slug] ?? s!.name, img: s!.image, from };
   });
+const tones = ['c', 'm', 'y'] as const;
+/** a slight, repeatable tilt per item so the shelf looks hand-arranged */
+const tilts = [-4, 3, -2, 4, -3, 2];
 ---
 
 {
   items.length > 0 && (
     <nav class="also wrap" aria-label="С этим заказывают" data-also>
       <div class="also-head">
-        <span class="also-title">С этим заказывают</span>
+        <div class="also-heading">
+          <span class="also-note" aria-hidden="true">
+            часто берут вместе
+            <svg viewBox="0 0 40 30" width="34" height="26">
+              <path d="M4 4c10 2 20 8 24 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+              <path d="M21 20l7 5 3-8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+          <span class="also-title">
+            С этим <span class="also-mark">заказывают</span>
+          </span>
+        </div>
         <span class="also-arrows">
           <button type="button" class="also-arrow" data-dir="-1" aria-label="Назад">
-            ←
+            <span class="also-flip"><Icon name="arrow" size={20} /></span>
           </button>
           <button type="button" class="also-arrow" data-dir="1" aria-label="Вперёд">
-            →
+            <Icon name="arrow" size={20} />
           </button>
         </span>
       </div>
-      <ul class="also-list">
-        {items.map((it, i) => (
-          <li>
-            <a href={it.href} class={`also-card also-${['c', 'm', 'y'][i % 3]}`}>
-              <span class="also-img">
-                <img src={it.img} alt="" width="160" height="160" loading="lazy" decoding="async" />
-              </span>
-              <span class="also-name">{it.name}</span>
-              <span class="also-price mono">от {rub(it.from)}</span>
-            </a>
-          </li>
-        ))}
-      </ul>
+      <div class="also-viewport">
+        <ul class="also-list" role="list">
+          {items.map((it, i) => (
+            <li class={`also-item also-${tones[i % 3]}`} style={`--tilt: ${tilts[i % tilts.length]}deg`}>
+              <a href={it.href} class="also-card">
+                <span class="also-stage" aria-hidden="true">
+                  <span class="also-plate" />
+                  <span class="also-dots" />
+                  <span class="also-photo">
+                    <img src={it.img} alt="" width="160" height="160" loading="lazy" decoding="async" />
+                  </span>
+                </span>
+                <span class="also-shelf" aria-hidden="true" />
+                <span class="also-name">
+                  {it.name}
+                  <span class="also-go" aria-hidden="true">
+                    <Icon name="arrow" size={16} />
+                  </span>
+                </span>
+                {/* after the name in the DOM, so screen readers hear «Кружки, от 250 ₽» */}
+                <span class="also-price">
+                  <small>{'от '}</small>
+                  {rub(it.from)}
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
     </nav>
   )
 }
 
 <script>
-  // arrows scroll the carousel by about one card; they hide when the row fits or at the ends
+  // arrows scroll the shelf by about two items; they hide when the row fits or at the ends
+  const still = matchMedia('(prefers-reduced-motion: reduce)');
   for (const nav of document.querySelectorAll<HTMLElement>('[data-also]')) {
     const list = nav.querySelector<HTMLElement>('.also-list')!;
     const [prev, next] = nav.querySelectorAll<HTMLButtonElement>('.also-arrow');
     const update = () => {
-      prev.disabled = list.scrollLeft < 4;
-      next.disabled = list.scrollLeft + list.clientWidth > list.scrollWidth - 4;
+      const atStart = list.scrollLeft < 4;
+      const atEnd = list.scrollLeft + list.clientWidth > list.scrollWidth - 4;
+      prev.disabled = atStart;
+      next.disabled = atEnd;
+      nav.classList.toggle('at-start', atStart);
+      nav.classList.toggle('at-end', atEnd);
       nav.classList.toggle('fits', list.scrollWidth <= list.clientWidth + 4);
     };
     for (const b of [prev, next]) {
       b.addEventListener('click', () => {
         const card = list.querySelector('li');
-        list.scrollBy({ left: Number(b.dataset.dir) * ((card?.clientWidth ?? 200) + 14) * 2, behavior: 'smooth' });
+        const gap = parseFloat(getComputedStyle(list).columnGap) || 20;
+        list.scrollBy({
+          left: Number(b.dataset.dir) * ((card?.clientWidth ?? 180) + gap) * 2,
+          behavior: still.matches ? 'auto' : 'smooth',
+        });
       });
     }
     list.addEventListener('scroll', update, { passive: true });
@@ -89,152 +133,401 @@ const items = slugs
 
 <style>
   .also {
-    margin-top: 28px;
+    --photo: 150px;
+    --gap: 24px;
+    margin-top: clamp(28px, 4vw, 44px);
   }
+
+  /* ---------- head: handwritten note + title with a highlighter swash, arrows on the right */
   .also-head {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
-    margin-bottom: 14px;
+    gap: 16px;
+    margin-bottom: 6px;
+  }
+  .also-heading {
+    display: grid;
+    justify-items: start;
+  }
+  .also-note {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 2px;
+    margin: 0 0 -2px 6px;
+    font-family: 'Caveat', 'Segoe Print', cursive;
+    font-weight: 600;
+    font-size: 1.35rem;
+    line-height: 1;
+    color: var(--m-ink);
+    transform: rotate(-3deg);
+  }
+  .also-note svg {
+    margin-top: 8px;
   }
   .also-title {
     font-weight: 900;
-    font-size: clamp(1.25rem, 2.2vw, 1.6rem);
+    font-size: clamp(1.3rem, 2.3vw, 1.7rem);
     letter-spacing: -0.02em;
+    line-height: 1.2;
   }
+  .also-mark {
+    background: linear-gradient(transparent 58%, var(--y) 58%, var(--y) 92%, transparent 92%);
+    padding-inline: 0.08em;
+    border-radius: 4px;
+  }
+
   .also-arrows {
     display: flex;
-    gap: 8px;
+    gap: 10px;
   }
   .also.fits .also-arrows {
     visibility: hidden;
   }
   .also-arrow {
-    width: 44px;
-    height: 44px;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    padding: 0;
     border-radius: 50%;
-    border: 1.5px solid var(--ink);
-    background: var(--card);
-    font: inherit;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--ink);
+    border: 0;
+    background: var(--ink);
+    color: var(--paper);
     cursor: pointer;
-    transition: background 0.2s ease;
+    box-shadow: 3px 3px 0 var(--c);
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease,
+      background-color 0.18s ease,
+      color 0.18s ease;
+  }
+  .also-arrow:nth-child(2) {
+    box-shadow: 3px 3px 0 var(--m);
   }
   .also-arrow:hover:not(:disabled) {
     background: var(--y);
+    color: var(--ink);
+    transform: translate(-1px, -1px);
+  }
+  .also-arrow:active:not(:disabled) {
+    transform: translate(2px, 2px);
+    box-shadow: 0 0 0 transparent;
   }
   .also-arrow:disabled {
-    opacity: 0.3;
+    background: transparent;
+    color: var(--muted);
+    box-shadow: inset 0 0 0 1.5px var(--line-strong);
     cursor: default;
+  }
+  .also-arrow:focus-visible {
+    outline: 3px solid var(--c-ink);
+    outline-offset: 3px;
+  }
+  .also-flip {
+    display: grid;
+    transform: scaleX(-1);
+  }
+
+  /* ---------- the shelf row; edges fade while there is more to scroll */
+  .also-viewport {
+    position: relative;
   }
   .also-list {
     list-style: none;
     margin: 0;
-    padding: 4px 4px 10px;
+    padding: 22px 6px 14px;
     display: flex;
-    gap: 14px;
+    gap: var(--gap);
     overflow-x: auto;
     scroll-snap-type: x mandatory;
+    scroll-padding-inline: 6px;
     scrollbar-width: none;
+    --fade-l: 0px;
+    --fade-r: 0px;
+    mask-image: linear-gradient(90deg, transparent 0, #000 var(--fade-l), #000 calc(100% - var(--fade-r)), transparent 100%);
   }
   .also-list::-webkit-scrollbar {
     display: none;
   }
-  .also-list li {
-    flex: 0 0 200px;
+  .also:not(.at-start) .also-list {
+    --fade-l: 36px;
+  }
+  .also:not(.at-end):not(.fits) .also-list {
+    --fade-r: 56px;
+  }
+
+  .also-item {
+    position: relative;
+    isolation: isolate;
+    flex: 0 0 calc(var(--photo) + 34px);
     scroll-snap-align: start;
-  }
-  .also-card {
-    display: grid;
-    gap: 4px;
-    padding: 12px 12px 16px;
-    border-radius: 24px 24px 24px 8px;
-    background: var(--card);
-    border: 1.5px solid var(--line);
-    color: var(--ink);
-    text-decoration: none;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  .also-card:hover {
-    color: var(--ink);
-    transform: translateY(-3px);
-    box-shadow: 5px 5px 0 var(--tone);
   }
   .also-c { --tone: var(--c); --soft: var(--c-soft); }
   .also-m { --tone: var(--m); --soft: var(--m-soft); }
   .also-y { --tone: var(--y); --soft: var(--y-soft); }
-  .also-img {
-    display: block;
-    aspect-ratio: 1;
-    margin-bottom: 8px;
-    border-radius: 18px;
-    overflow: clip;
-    background: var(--soft);
+
+  .also-card {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    padding: 0 4px 6px;
+    border-radius: 22px;
+    color: var(--ink);
+    text-decoration: none;
   }
-  .also-img img {
+  .also-card:hover {
+    color: var(--ink);
+  }
+  .also-card:focus-visible {
+    outline: 3px solid var(--c-ink);
+    outline-offset: 4px;
+  }
+
+  /* ---------- the stage: CMYK plate + halftone dots behind a round die-cut photo */
+  .also-stage {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: var(--photo);
+    aspect-ratio: 1;
+  }
+  .also-plate,
+  .also-dots,
+  .also-photo {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .also-plate {
+    background: var(--tone);
+    transform: translate(9px, 8px);
+  }
+  .also-dots {
+    background: radial-gradient(circle, var(--tone) 1.6px, transparent 2px) 0 0 / 8px 8px;
+    opacity: 0.75;
+    transform: translate(-12px, -9px) scale(0.98);
+  }
+  .also-photo {
+    overflow: clip;
+    border: 5px solid #fff;
+    background: var(--soft);
+    box-shadow: 0 10px 22px -12px rgba(22, 20, 27, 0.55);
+    transform: rotate(var(--tilt));
+  }
+  .also-photo img {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    mix-blend-mode: multiply;
+    transition: transform 0.4s ease;
+  }
+
+  /* die-cut price sticker, stuck over the photo's upper-right edge */
+  .also-price {
+    position: absolute;
+    top: -10px;
+    right: -2px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.28em;
+    padding: 5px 11px 6px;
+    border-radius: 999px;
+    background: var(--y);
+    color: #16141b;
+    font-weight: 800;
+    font-size: 0.98rem;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    box-shadow:
+      0 0 0 3px #fff,
+      0 7px 12px -6px rgba(22, 20, 27, 0.55);
+    transform: rotate(calc(var(--tilt) * -1.6 + 4deg));
     transition: transform 0.3s ease;
   }
-  .also-card:hover .also-img img {
-    transform: scale(1.06);
+  .also-price small {
+    font-size: 0.78rem;
+    font-weight: 600;
   }
+  .also-y .also-price {
+    background: #fff;
+    box-shadow:
+      0 0 0 2px var(--ink),
+      0 7px 12px -6px rgba(22, 20, 27, 0.55);
+  }
+
+  /* ---------- the plank: one piece per item, overlapping into the gap so neighbours join */
+  .also-shelf {
+    position: absolute;
+    z-index: 0;
+    top: calc(var(--photo) - 7px);
+    left: calc(var(--gap) / -2 - 1px);
+    right: calc(var(--gap) / -2 - 1px);
+    height: 16px;
+    /* top surface, then the darker front edge of the plank */
+    background:
+      linear-gradient(180deg, var(--card) 0 6px, var(--line-strong) 6px 7.5px, color-mix(in srgb, var(--line-strong) 40%, var(--card)) 7.5px);
+    border-block: 1.5px solid var(--line-strong);
+    box-shadow: 0 14px 16px -12px rgba(22, 20, 27, 0.4);
+  }
+  .also-item:first-child .also-shelf {
+    left: -6px;
+    border-inline-start: 1.5px solid var(--line-strong);
+    border-start-start-radius: 6px;
+    border-end-start-radius: 6px;
+  }
+  .also-item:last-child .also-shelf {
+    right: -6px;
+    border-inline-end: 1.5px solid var(--line-strong);
+    border-start-end-radius: 6px;
+    border-end-end-radius: 6px;
+  }
+
   .also-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 16px;
     font-weight: 800;
-    font-size: 1.1rem;
+    font-size: 1.06rem;
+    line-height: 1.2;
+    text-align: center;
+    text-wrap: balance;
   }
-  .also-price {
-    justify-self: start;
-    padding: 3px 10px;
-    border-radius: 999px;
+  .also-go {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
     background: var(--soft);
-    font-size: 0.85rem;
-    font-weight: 700;
+    color: var(--ink);
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      transform 0.2s ease;
   }
-  @media (max-width: 760px) {
-    .also-list {
-      margin-inline: calc(var(--gutter) * -1);
-      padding-inline: var(--gutter);
-      scroll-padding-inline: var(--gutter);
+
+  /* ---------- hover / focus: the photo lifts and straightens, plates drift further apart */
+  @media (hover: hover) {
+    .also-card:hover .also-photo {
+      transform: translateY(-6px) rotate(0deg);
     }
+    .also-card:hover .also-photo img {
+      transform: scale(1.07);
+    }
+    .also-card:hover .also-plate {
+      transform: translate(13px, 6px);
+    }
+    .also-card:hover .also-dots {
+      transform: translate(-16px, -12px) scale(1);
+    }
+    .also-card:hover .also-price {
+      transform: translateY(-6px) rotate(-4deg);
+    }
+  }
+  .also-card:hover .also-go,
+  .also-card:focus-visible .also-go {
+    background: var(--red);
+    color: #fff;
+    transform: translateX(2px);
+  }
+  .also-card:focus-visible .also-photo {
+    transform: translateY(-6px) rotate(0deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .also-plate,
+    .also-dots,
+    .also-photo,
+    .also-photo img,
+    .also-price,
+    .also-go,
+    .also-arrow {
+      transition: none;
+    }
+    .also-card:hover .also-photo,
+    .also-card:focus-visible .also-photo {
+      transform: rotate(var(--tilt));
+    }
+    .also-card:hover .also-photo img {
+      transform: none;
+    }
+  }
+
+  /* ---------- phones */
+  @media (max-width: 760px) {
     .also {
-      margin-top: 22px;
+      --photo: 116px;
+      --gap: 16px;
+      margin-top: 24px;
     }
     .also-head {
-      margin-bottom: 8px;
+      margin-bottom: 0;
+    }
+    .also-note {
+      font-size: 1.2rem;
     }
     .also-title {
-      font-size: 1.1rem;
-    }
-    .also-list {
-      gap: 10px;
-      padding-bottom: 6px;
-    }
-    .also-list li {
-      flex-basis: 128px;
-    }
-    .also-card {
-      gap: 2px;
-      padding: 8px 8px 10px;
-      border-radius: 18px 18px 18px 6px;
-    }
-    .also-img {
-      margin-bottom: 6px;
-      border-radius: 12px;
-    }
-    .also-name {
-      font-size: 0.95rem;
-    }
-    .also-price {
-      padding: 2px 8px;
-      font-size: 0.75rem;
+      font-size: 1.2rem;
     }
     .also-arrows {
       display: none;
+    }
+    .also-list {
+      margin-inline: calc(var(--gutter) * -1);
+      padding: 18px var(--gutter) 10px;
+      scroll-padding-inline: var(--gutter);
+    }
+    .also:not(.at-start) .also-list {
+      --fade-l: 20px;
+    }
+    .also:not(.at-end):not(.fits) .also-list {
+      --fade-r: 36px;
+    }
+    .also-item {
+      flex-basis: calc(var(--photo) + 22px);
+    }
+    .also-photo {
+      border-width: 4px;
+    }
+    .also-plate {
+      transform: translate(7px, 6px);
+    }
+    .also-dots {
+      transform: translate(-9px, -7px) scale(0.98);
+    }
+    .also-price {
+      top: -8px;
+      right: -6px;
+      padding: 4px 9px 5px;
+      font-size: 0.86rem;
+    }
+    .also-price small {
+      font-size: 0.72rem;
+    }
+    .also-shelf {
+      height: 12px;
+    }
+    .also-name {
+      margin-top: 12px;
+      font-size: 0.96rem;
+    }
+    .also-go {
+      width: 22px;
+      height: 22px;
+    }
+  }
+  @media (max-width: 560px) {
+    .also {
+      --photo: 104px;
+      --gap: 14px;
+    }
+    .also-note {
+      font-size: 1.12rem;
     }
   }
 </style>
