@@ -1,0 +1,34 @@
+/* Минималистичные значки изделий в калькуляторе (вместо фото) */
+.calc-product-ico {
+  width: 48px;
+  height: 48px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--paper-2);
+  color: var(--ink);
+  transition: background-color 0.18s ease;
+}
+.calc-product-ico svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+.calc-product:hover .calc-product-ico {
+  background: var(--y-soft);
+}
+.calc-product.is-active .calc-product-ico {
+  background: var(--y-soft);
+}
+.calc-product.is-active .calc-product-ico svg .ico-acc {
+  filter: saturate(1.25);
+}
+@media (max-width: 560px) {
+  .calc-product-ico {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+  }
+}

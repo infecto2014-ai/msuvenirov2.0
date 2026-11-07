@@ -743,6 +743,8 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     color: var(--muted);
   }
   .cats-more a {
+    /* bigger tap area without moving the text (design review, 07.11.2026) */
+    padding-block: 12px;
     color: var(--ink);
     font-weight: 600;
   }

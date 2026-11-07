@@ -13,6 +13,7 @@ import {
 import { addToEstimate, FILES_EVENT, getOrderFiles, openOrder, setOrderFiles } from '@/lib/estimate';
 import { ACCEPT, MAX_FILES, validateFiles } from '@/lib/order';
 import { reachGoal } from '@/lib/metrika';
+import { ProductIcon } from './productIcons';
 import './Calculator.css';
 
 interface Props {
@@ -228,14 +229,20 @@ export default function Calculator({ category, product, only, hideCategories, lo
   const stickers = (() => {
     const top = ladder[0]?.price ?? 0;
     const out: { qty: number; pct: number; save: number; row: number }[] = [];
+    const lastAt = [-1, -1]; // where the last sticker of each row stands
+    const GAP = 0.13; // the least distance between two stickers in one row
     for (const t of ladder.slice(1)) {
       const pct = qtyToPos(t.from, qcfg) / sliderMax;
       const save = top > 0 ? Math.round((1 - t.price / top) * 100) : 0;
       if (save <= 0 || pct > 1) continue;
       const prev = out[out.length - 1];
+      // a sticker only where the discount really grows (the same «−20%» twice looked like a mistake)
+      if (prev && save <= prev.save) continue;
       if (prev && pct - prev.pct < 0.04) continue; // practically the same place
-      // close neighbours go to a second, higher row so the stickers never overlap
-      const row = prev && pct - prev.pct < 0.17 && prev.row === 0 ? 1 : 0;
+      // close neighbours go to a second, higher row; if both rows are taken there, skip it
+      const row = lastAt[0] < 0 || pct - lastAt[0] >= GAP ? 0 : lastAt[1] < 0 || pct - lastAt[1] >= GAP ? 1 : -1;
+      if (row < 0) continue;
+      lastAt[row] = pct;
       out.push({ qty: t.from, pct, save, row });
     }
     return out;
@@ -300,11 +307,9 @@ export default function Calculator({ category, product, only, hideCategories, lo
                     aria-pressed={p.id === prod.id}
                     onClick={() => pickProduct(p)}
                   >
-                    {p.image ? (
-                      <img src={p.image} alt="" width={56} height={56} loading="lazy" decoding="async" />
-                    ) : (
-                      <span class="calc-product-dot" aria-hidden="true" />
-                    )}
+                    <span class="calc-product-ico" aria-hidden="true">
+                      <ProductIcon id={p.id} cat={cat.id} />
+                    </span>
                     <span class="calc-product-text">
                       <span class="calc-product-name">{p.name}</span>
                       <span class="calc-product-from">{fromLabel(p)}</span>
@@ -347,7 +352,7 @@ export default function Calculator({ category, product, only, hideCategories, lo
                       )}
                     </legend>
                     <div
-                      class={`calc-chips calc-seg calc-tone-${(vi + first) % 3}${g.choices.every((c) => c.id === 'none' || c.label.length <= 3) ? ' calc-chips-short' : ''}`}
+                      class={`calc-chips calc-seg calc-tone-${(vi + first) % 3}${g.choices.every((c) => c.id === 'none' || c.label.length <= 3) ? ' calc-chips-short' : g.choices.length >= 5 ? ' calc-seg-grid' : ''}`}
                     >
                       {g.choices
                         .filter((c) => !(g.addable && c.id === 'none'))

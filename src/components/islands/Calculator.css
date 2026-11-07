@@ -1491,3 +1491,18 @@
 .calc-files-err {
   color: #ff9da1;
 }
+
+/* five or more long choices («Вид кружки») — an even 3-column grid instead of ragged rows (design review, 07.11.2026) */
+.calc-seg.calc-seg-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.calc-seg.calc-seg-grid .chip {
+  justify-content: center;
+  text-align: center;
+}
+@media (max-width: 560px) {
+  .calc-seg.calc-seg-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

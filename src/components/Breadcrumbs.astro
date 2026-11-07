@@ -36,6 +36,8 @@ const { items } = Astro.props;
   .crumbs a {
     color: var(--muted);
     text-decoration: none;
+    /* bigger tap area without moving the text (design review, 07.11.2026) */
+    padding-block: 12px;
   }
   .crumbs a:hover {
     color: var(--m-ink);
