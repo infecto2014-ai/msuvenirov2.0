@@ -302,3 +302,62 @@
     radial-gradient(circle at 50% 64%, var(--y) 20px, transparent 21px);
   mix-blend-mode: multiply;
 }
+
+/* quantity stepper in the estimate (owner, 07.11.2026): the price is recalculated by the calculator rules */
+.order-qty {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  color: var(--ink);
+}
+.order-qty button {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid var(--line);
+  border-radius: 50%;
+  background: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.order-qty button:hover:not(:disabled) {
+  border-color: var(--ink);
+}
+.order-qty button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.order-qty input {
+  width: 64px;
+  height: 36px;
+  padding: 0 6px;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  font: inherit;
+  font-weight: 700;
+  text-align: center;
+  -moz-appearance: textfield;
+}
+.order-qty input::-webkit-inner-spin-button,
+.order-qty input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+.order-qty > span {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.order-item-note {
+  color: #a3121a;
+}
+@media (pointer: coarse) {
+  .order-qty button {
+    width: 44px;
+    height: 44px;
+  }
+  .order-qty input {
+    height: 44px;
+  }
+}

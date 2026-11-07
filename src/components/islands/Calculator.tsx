@@ -218,6 +218,7 @@ export default function Calculator({ category, product, only, hideCategories, lo
       unitPrice: quote.unit,
       total: quote.total,
       from: quote.from,
+      calc: { cat: cat.id, product: prod.id, sel },
     });
     reachGoal(thenOrder ? 'calc_order' : 'calc_add', {
       product: prod.id,

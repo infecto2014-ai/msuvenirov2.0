@@ -6,12 +6,14 @@ import {
   estimateTotal,
   getEstimate,
   removeFromEstimate,
+  setEstimateQty,
+  stepQty,
   type EstimateItem,
 } from '@/lib/estimate';
 import { ACCEPT, MAX_FILES, phoneDigits, sendOrder, validateFiles, type ContactMethod } from '@/lib/order';
 import { formatPhone } from '@/lib/phone';
 import { reachGoal } from '@/lib/metrika';
-import { rub } from '@/data/pricing';
+import { findProduct, rub } from '@/data/pricing';
 import './OrderDialog.css';
 
 const methods: { id: ContactMethod; label: string }[] = [
@@ -153,25 +155,47 @@ export default function OrderDialog() {
 
               {items.length > 0 && (
                 <div class="order-items">
-                  {items.map((i) => (
-                    <div class="order-item">
-                      <div class="order-item-text">
-                        <b>{i.title}</b>
-                        <span>
-                          {i.details ? `${i.details} · ` : ''}
-                          {i.qty.toLocaleString('ru-RU')} шт × {i.from ? 'от ' : ''}
-                          {rub(i.unitPrice)}
+                  {items.map((i) => {
+                    const p = i.calc ? findProduct(i.calc.cat, i.calc.product) : undefined;
+                    return (
+                      <div class="order-item">
+                        <div class="order-item-text">
+                          <b>{i.title}</b>
+                          <span>
+                            {i.details}
+                            {!p && `${i.details ? ' · ' : ''}${i.qty.toLocaleString('ru-RU')} шт`}
+                            {!i.note && ` · ${i.from ? 'от ' : ''}${rub(i.unitPrice)} / шт`}
+                          </span>
+                          {i.note && <span class="order-item-note">{i.note}</span>}
+                          {p && (
+                            <span class="order-qty" role="group" aria-label={`Количество: ${i.title}`}>
+                              <button type="button" aria-label="Меньше" disabled={stepQty(p.qty, i.qty, -1) === i.qty} onClick={() => setEstimateQty(i.id, stepQty(p.qty, i.qty, -1))}>
+                                −
+                              </button>
+                              <input
+                                type="number"
+                                inputMode="numeric"
+                                min={p.qty.min}
+                                value={i.qty}
+                                aria-label="Количество, шт"
+                                onChange={(e) => setEstimateQty(i.id, Number((e.target as HTMLInputElement).value))}
+                              />
+                              <span>шт</span>
+                              <button type="button" aria-label="Больше" onClick={() => setEstimateQty(i.id, stepQty(p.qty, i.qty, 1))}>
+                                +
+                              </button>
+                            </span>
+                          )}
+                        </div>
+                        <span class="order-item-sum mono">
+                          {i.note ? '—' : `${i.from ? 'от ' : ''}${rub(i.total)}`}
                         </span>
+                        <button type="button" class="order-item-del" aria-label={`Удалить: ${i.title}`} onClick={() => removeFromEstimate(i.id)}>
+                          ×
+                        </button>
                       </div>
-                      <span class="order-item-sum mono">
-                        {i.from ? 'от ' : ''}
-                        {rub(i.total)}
-                      </span>
-                      <button type="button" class="order-item-del" aria-label={`Удалить: ${i.title}`} onClick={() => removeFromEstimate(i.id)}>
-                        ×
-                      </button>
-                    </div>
-                  ))}
+                    );
+                  })}
                   <div class="order-items-total">
                     <span>Итого по смете</span>
                     <b class="mono">
