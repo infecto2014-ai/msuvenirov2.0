@@ -111,6 +111,14 @@ export default function Calculator({ category, product, only, hideCategories, lo
   const prod = list.find((p) => p.id === prodId) ?? list[0];
   const showProducts = list.length > 1 && !lockProduct;
   const [sel, setSel] = useState<Selection>(() => defaultSelection(prod));
+  /** what the customer typed for «Другой цвет» (owner, 07.11.2026: «человек должен указать нужный»); not part of the price */
+  const [otherColor, setOtherColor] = useState('');
+  const otherPicked = (prod.options ?? []).some((g) => sel.options[g.id] === 'other');
+  const details = (() => {
+    const d = describe(prod, sel);
+    const c = otherColor.trim();
+    return otherPicked && c ? d.replace('Другой цвет', `Другой цвет: ${c}`) : d;
+  })();
   const [qtyText, setQtyText] = useState(String(sel.qty));
   const [toast, setToast] = useState('');
   // phone: the compact total bar hides while the full result panel is on screen
@@ -213,7 +221,7 @@ export default function Calculator({ category, product, only, hideCategories, lo
     if (quote.error) return;
     addToEstimate({
       title: prod.name,
-      details: describe(prod, sel),
+      details,
       qty: sel.qty,
       unitPrice: quote.unit,
       total: quote.total,
@@ -340,6 +348,19 @@ export default function Calculator({ category, product, only, hideCategories, lo
                           );
                         })}
                     </div>
+                    {sel.options[g.id] === 'other' && (
+                      <label class="calc-other">
+                        <span>Какой цвет нужен?</span>
+                        <input
+                          class="input"
+                          type="text"
+                          maxLength={60}
+                          placeholder="например, бордовый или как на фото"
+                          value={otherColor}
+                          onInput={(e) => setOtherColor((e.target as HTMLInputElement).value)}
+                        />
+                      </label>
+                    )}
                   </fieldset>
                 ))}
                 {nextAdd && (
@@ -464,7 +485,7 @@ export default function Calculator({ category, product, only, hideCategories, lo
               </div>
             </div>
             {presets && (
-              <div class="calc-chips calc-presets">
+              <div class="calc-chips calc-seg calc-presets">
                 {presets.map((q) => (
                   <button type="button" class="chip" aria-pressed={q === sel.qty} onClick={() => setQty(q)}>
                     {q.toLocaleString('ru-RU')} шт
@@ -572,7 +593,7 @@ export default function Calculator({ category, product, only, hideCategories, lo
                 <span />
               </span>
             </div>
-            <p class="calc-result-desc">{describe(prod, sel) || prod.short}</p>
+            <p class="calc-result-desc">{details || prod.short}</p>
 
             <dl class="calc-sum">
               <div>

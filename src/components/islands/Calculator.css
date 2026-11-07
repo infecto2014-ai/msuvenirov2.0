@@ -1259,3 +1259,158 @@
     transition: none;
   }
 }
+
+/* ---------- rest of the calculator in the same style (owner, 07.11.2026: «исправь калькуляторы на всех страницах») */
+/* «Другой цвет» → the customer types the colour */
+.calc-other {
+  display: grid;
+  gap: 6px;
+  max-width: 420px;
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--y) 22%, #fff);
+  box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--y) 70%, var(--line-strong));
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.calc-other .input {
+  min-height: 44px;
+  background: #fff;
+}
+/* products: tiles on the same paper track, the picked one raised with a stripe */
+.calc-products {
+  padding: 6px;
+  gap: 6px;
+  border-radius: 22px;
+  background: var(--paper-2);
+  box-shadow: inset 0 1px 3px rgba(22, 20, 27, 0.1);
+}
+.calc-product {
+  border: 0;
+  background: transparent;
+  border-radius: 16px;
+  box-shadow: none;
+  transition: background-color 0.18s ease, box-shadow 0.18s ease;
+}
+.calc-product:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+.calc-product.is-active {
+  background: #fff;
+  box-shadow:
+    0 1px 0 rgba(22, 20, 27, 0.06),
+    0 8px 16px -10px rgba(22, 20, 27, 0.5),
+    inset 0 -3px 0 var(--y);
+}
+.calc-product img,
+.calc-product-dot {
+  border-radius: 12px;
+}
+/* sizes: two fields inside one track */
+.calc-dims {
+  padding: 6px;
+  gap: 6px;
+  border-radius: 20px;
+  background: var(--paper-2);
+  box-shadow: inset 0 1px 3px rgba(22, 20, 27, 0.1);
+}
+.calc-dims .field {
+  gap: 2px;
+  padding: 6px 10px 8px;
+  border-radius: 15px;
+  background: #fff;
+}
+.calc-dims .label {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.calc-dims .input {
+  min-height: 36px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--mono);
+  font-size: 1.25rem;
+  font-weight: 700;
+  box-shadow: none;
+}
+.calc-dims .input:focus {
+  outline: none;
+}
+.calc-dims .field:focus-within {
+  box-shadow: 0 0 0 2.5px var(--c-ink);
+}
+/* checkboxes («Подгиб постера») — a ticked box in the chip */
+.calc-seg .calc-check {
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  border-color: var(--line-strong);
+  background: #fff;
+}
+.calc-seg .calc-check.on {
+  border-color: var(--ink);
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5' fill='none' stroke='%2316141b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 14px no-repeat,
+    var(--y);
+}
+.calc-seg .chip:has(.calc-check) {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  column-gap: 8px;
+  text-align: left;
+}
+.calc-seg .chip:has(.calc-check) small {
+  flex-basis: 100%;
+  padding-left: 26px;
+}
+/* category tabs (price page): one track, the picked tab white with a yellow stripe */
+.calc-cats {
+  gap: 4px;
+  padding: 5px;
+  border-radius: 24px;
+  background: var(--paper-2);
+  box-shadow: inset 0 1px 3px rgba(22, 20, 27, 0.1);
+}
+.calc-cat {
+  border: 0;
+  background: transparent;
+  color: var(--ink-2);
+}
+.calc-cat:hover {
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--ink);
+}
+.calc-cat.is-active {
+  background: #fff;
+  color: var(--ink);
+  box-shadow:
+    0 8px 16px -10px rgba(22, 20, 27, 0.5),
+    inset 0 -3px 0 var(--y);
+}
+@media (max-width: 760px) {
+  .calc-cats {
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .calc-products {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .calc-product {
+    min-width: 0;
+    gap: 8px;
+    padding: 6px 8px 6px 6px;
+  }
+  .calc-product img,
+  .calc-product-dot {
+    width: 40px;
+    height: 40px;
+  }
+  .calc-product-name {
+    font-size: 0.86rem;
+    overflow-wrap: anywhere;
+  }
+}
