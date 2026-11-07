@@ -965,3 +965,297 @@
   align-items: center;
   gap: 8px;
 }
+
+/* ============================================================ options panel, v2 (owner, 07.11.2026:
+   «не нравится эта менюшка», 21st + ui-ux-pro-max). Steps become a route with a dashed line; each group is a
+   segmented track (idea: 21st «Segmented Control»); the picked option is a raised white pill with a colour
+   stripe; print formats show a tiny sheet to scale; «Добавить принт» is a tear-off card; quantity is a big
+   counter on a thicker CMYK bar; the discount hint is an ink ticket with a yellow sticker. Logic unchanged. */
+.calc-config {
+  gap: 0;
+  padding: clamp(20px, 3vw, 34px) clamp(18px, 3vw, 34px) clamp(20px, 3vw, 30px);
+  border: 0;
+  box-shadow: 0 1px 0 rgba(22, 20, 27, 0.05), 0 22px 44px -30px rgba(22, 20, 27, 0.45);
+}
+.calc-config > .calc-group,
+.calc-config > .calc-add {
+  position: relative;
+  padding-left: 46px;
+  padding-bottom: 26px;
+}
+/* the route: a dashed line from one step to the next */
+.calc-config > .calc-group::before {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 38px;
+  bottom: -2px;
+  border-left: 2px dashed var(--line-strong);
+}
+.calc-config > .calc-group:last-of-type::before {
+  display: none;
+}
+.calc-config > .calc-group > .calc-legend {
+  margin-left: -46px;
+  margin-bottom: 14px;
+  gap: 14px;
+  font-size: 1.06rem;
+  letter-spacing: -0.01em;
+}
+.calc-step {
+  width: 32px;
+  height: 32px;
+  flex: none;
+  font-size: 0.85rem;
+  background: var(--ink);
+  box-shadow: 3px 3px 0 var(--y);
+}
+.calc-config > .calc-group:nth-of-type(3n + 2) .calc-step { box-shadow: 3px 3px 0 var(--c); }
+.calc-config > .calc-group:nth-of-type(3n + 3) .calc-step { box-shadow: 3px 3px 0 var(--m); }
+
+/* segmented track */
+.calc-seg {
+  --tone: var(--y);
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: 100%;
+  padding: 5px;
+  border-radius: 20px;
+  background: var(--paper-2);
+  box-shadow: inset 0 1px 3px rgba(22, 20, 27, 0.1);
+}
+.calc-tone-1 { --tone: var(--c); }
+.calc-tone-2 { --tone: var(--m); }
+.calc-seg .chip {
+  position: relative;
+  min-height: 48px;
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 15px;
+  background: transparent;
+  color: var(--ink-2);
+  transition: background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+.calc-seg .chip:hover {
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--ink);
+}
+.calc-seg .chip[aria-pressed='true'] {
+  background: #fff;
+  color: var(--ink);
+  box-shadow:
+    0 1px 0 rgba(22, 20, 27, 0.06),
+    0 8px 16px -10px rgba(22, 20, 27, 0.5),
+    inset 0 -3px 0 var(--tone);
+}
+.calc-seg .chip[aria-pressed='true'] small {
+  color: var(--muted);
+}
+.calc-seg .chip:focus-visible {
+  outline: 3px solid var(--c-ink);
+  outline-offset: 2px;
+}
+/* format chips: sheet icon + label + size in one row */
+.calc-seg .chip:has(.calc-size) {
+  display: inline-grid;
+  grid-template-columns: 26px auto;
+  grid-template-rows: auto auto;
+  column-gap: 10px;
+  align-items: center;
+  padding-left: 12px;
+}
+.calc-size {
+  grid-row: 1 / span 2;
+  justify-self: center;
+  border-radius: 2px;
+  border: 1.5px solid currentColor;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 3px, rgba(22, 20, 27, 0.08) 3px 4px),
+    #fff;
+  opacity: 0.55;
+}
+.chip[aria-pressed='true'] .calc-size {
+  opacity: 1;
+  border-color: var(--ink);
+  background:
+    repeating-linear-gradient(0deg, transparent 0 3px, rgba(22, 20, 27, 0.1) 3px 4px),
+    color-mix(in srgb, var(--tone) 35%, #fff);
+}
+
+/* «+ Добавить принт» — a tear-off card */
+.calc-config > .calc-add {
+  margin: 0 0 26px 46px;
+  width: calc(100% - 46px);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 4px 12px;
+  border: 2px dashed color-mix(in srgb, var(--m) 55%, var(--line-strong));
+  border-radius: 18px;
+  background:
+    radial-gradient(circle, rgba(229, 0, 125, 0.12) 1px, transparent 1.5px) 0 0 / 12px 12px,
+    #fff;
+}
+.calc-add span {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--m);
+  color: #fff;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+.calc-add:hover {
+  border-style: solid;
+  background: #fff;
+}
+
+/* quantity: a big counter and a thicker CMYK bar */
+.calc-stepper {
+  padding: 5px;
+  border: 0;
+  background: var(--paper-2);
+  box-shadow: inset 0 1px 3px rgba(22, 20, 27, 0.1);
+}
+.calc-stepper button {
+  width: 46px;
+  height: 46px;
+  background: #fff;
+  box-shadow: 0 6px 12px -8px rgba(22, 20, 27, 0.6);
+}
+.calc-stepper button:hover:not(:disabled) {
+  background: var(--y);
+}
+.calc-qty-input {
+  width: 110px;
+  font-size: 1.8rem;
+  letter-spacing: -0.04em;
+}
+.calc-slider::-webkit-slider-runnable-track {
+  height: 14px;
+  background: linear-gradient(90deg, var(--c), var(--m) calc(var(--p, 0%) * 0.7), var(--y) var(--p, 0%), #fff var(--p, 0%));
+  box-shadow: inset 0 0 0 1.5px var(--line-strong);
+}
+.calc-slider::-moz-range-track {
+  height: 14px;
+  background: linear-gradient(90deg, var(--c), var(--m) calc(var(--p, 0%) * 0.7), var(--y) var(--p, 0%), #fff var(--p, 0%));
+}
+.calc-slider::-webkit-slider-thumb {
+  width: 32px;
+  height: 32px;
+  margin-top: -9px;
+  background: #fff;
+  border: 3px solid var(--ink);
+  box-shadow: 0 0 0 4px rgba(255, 210, 31, 0.6), 0 6px 12px -4px rgba(22, 20, 27, 0.5);
+}
+.calc-slider::-moz-range-thumb {
+  background: #fff;
+  border: 3px solid var(--ink);
+}
+.calc-sticker {
+  border: 0;
+  border-radius: 8px 8px 8px 2px;
+  background: var(--y);
+  color: var(--ink);
+  box-shadow: 0 6px 10px -6px rgba(22, 20, 27, 0.6);
+}
+.calc-sticker.on {
+  background: var(--ink);
+  color: var(--y);
+}
+
+/* discount hint: an ink ticket with notches and a yellow sticker instead of the loud magenta bar */
+.calc-boost {
+  --notch: 10px;
+  margin-top: 18px;
+  padding: 14px 18px 14px 14px;
+  border-radius: 18px;
+  background: var(--ink);
+  box-shadow: none;
+  -webkit-mask:
+    radial-gradient(circle var(--notch) at 0 50%, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% 50%, transparent 98%, #000) right / 51% 100% no-repeat;
+  mask:
+    radial-gradient(circle var(--notch) at 0 50%, transparent 98%, #000) left / 51% 100% no-repeat,
+    radial-gradient(circle var(--notch) at 100% 50%, transparent 98%, #000) right / 51% 100% no-repeat;
+}
+.calc-boost:hover {
+  transform: translateY(-2px);
+  box-shadow: none;
+  background: #26222e;
+}
+.calc-boost-ink,
+.calc-boost-ink:hover {
+  box-shadow: none;
+}
+.calc-boost-pct {
+  margin-left: 6px;
+  box-shadow: 0 0 0 3px var(--ink), 0 0 0 5px var(--y);
+}
+.calc-boost-text {
+  padding-left: 14px;
+  border-left: 2px dashed rgba(255, 252, 245, 0.25);
+}
+
+@media (max-width: 760px) {
+  .calc-config {
+    padding: 18px 14px 16px;
+  }
+  .calc-config > .calc-group,
+  .calc-config > .calc-add {
+    padding-left: 32px;
+    padding-bottom: 20px;
+  }
+  .calc-config > .calc-add {
+    margin-left: 32px;
+    width: calc(100% - 32px);
+    padding-left: 14px;
+  }
+  .calc-config > .calc-group::before {
+    left: 11px;
+    top: 28px;
+  }
+  .calc-config > .calc-group > .calc-legend {
+    margin-left: -32px;
+    gap: 10px;
+  }
+  .calc-step {
+    width: 24px;
+    height: 24px;
+    font-size: 0.75rem;
+    box-shadow: 2px 2px 0 var(--y);
+  }
+  .calc-seg {
+    display: flex;
+  }
+  .calc-seg .chip {
+    flex: 1 1 auto;
+    min-height: 44px;
+    padding: 6px 10px;
+  }
+  /* formats go 2 × 2 on a phone so «21×28 см» never runs into the next one */
+  .calc-config .calc-seg.calc-chips-short:has(.calc-size) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .calc-config .calc-seg .chip:has(.calc-size) {
+    justify-content: start;
+    text-align: left;
+    grid-template-columns: 20px auto;
+    column-gap: 6px;
+    padding-left: 8px;
+  }
+  .calc-qty-input {
+    width: 84px;
+    font-size: 1.5rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .calc-seg .chip,
+  .calc-boost {
+    transition: none;
+  }
+}

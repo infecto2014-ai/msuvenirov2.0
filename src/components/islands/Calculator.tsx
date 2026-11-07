@@ -315,7 +315,7 @@ export default function Calculator({ category, product, only, hideCategories, lo
                       )}
                     </legend>
                     <div
-                      class={`calc-chips${g.choices.every((c) => c.id === 'none' || c.label.length <= 3) ? ' calc-chips-short' : ''}`}
+                      class={`calc-chips calc-seg calc-tone-${(vi + first) % 3}${g.choices.every((c) => c.id === 'none' || c.label.length <= 3) ? ' calc-chips-short' : ''}`}
                     >
                       {g.choices
                         .filter((c) => !(g.addable && c.id === 'none'))
@@ -324,6 +324,14 @@ export default function Calculator({ category, product, only, hideCategories, lo
                           const on = g.type === 'many' ? Array.isArray(v) && v.includes(c.id) : v === c.id;
                           return (
                             <button type="button" class="chip" aria-pressed={on} onClick={() => setOption(g.id, c.id, g.type === 'many')}>
+                              {(() => {
+                                // print formats («10×15 см»): a tiny sheet drawn to scale, A3 ≈ 26 px tall
+                                const m = c.hint?.match(/(\d+(?:[.,]\d+)?)\s*×\s*(\d+(?:[.,]\d+)?)\s*см/);
+                                if (!m) return null;
+                                const [w, h] = [parseFloat(m[1].replace(',', '.')), parseFloat(m[2].replace(',', '.'))];
+                                const k = 26 / 38;
+                                return <span class="calc-size" style={{ width: `${Math.max(6, w * k)}px`, height: `${Math.max(8, h * k)}px` }} aria-hidden="true" />;
+                              })()}
                               {c.swatch && <span class="calc-swatch" style={{ background: c.swatch }} aria-hidden="true" />}
                               {g.type === 'many' && <span class={`calc-check${on ? ' on' : ''}`} aria-hidden="true" />}
                               <span>{c.label}</span>
