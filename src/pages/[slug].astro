@@ -1,10 +1,7 @@
 ---
 // Service landing pages, generated from src/data/services.ts
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import Calculator from '@/components/islands/Calculator';
-import GarmentPackages from '@/components/garment/GarmentPackages.astro';
-import GarmentDetails from '@/components/garment/GarmentDetails.astro';
 import AlsoOrder from '@/components/garment/AlsoOrder.astro';
 import Reviews from '@/components/Reviews.astro';
 import { garmentBySlug } from '@/data/garments';
@@ -14,9 +11,16 @@ import ServiceBlocks from '@/components/ServiceBlocks.astro';
 import PortfolioGrid from '@/components/PortfolioGrid.astro';
 import FaqSection from '@/components/FaqSection.astro';
 import CtaBand from '@/components/CtaBand.astro';
-import Icon from '@/components/Icon.astro';
+import TshirtHero from '@/components/tshirt/TshirtHero.astro';
+import TshirtHead from '@/components/tshirt/TshirtHead.astro';
+import TshirtPackages from '@/components/tshirt/TshirtPackages.astro';
+import TshirtDetails from '@/components/tshirt/TshirtDetails.astro';
+import TshirtCompare from '@/components/tshirt/TshirtCompare.astro';
+import TshirtIdeas from '@/components/tshirt/TshirtIdeas.astro';
+import TshirtRelated from '@/components/tshirt/TshirtRelated.astro';
+import { portfolio } from '@/data/portfolio';
 import { services } from '@/data/services';
-import { categoryFrom, findCategory, findProduct, rub } from '@/data/pricing';
+import { categoryFrom, findCategory, findProduct } from '@/data/pricing';
 import { breadcrumbs, faqPage, service as serviceLd } from '@/lib/schema';
 import type { ServicePage } from '@/data/types';
 
@@ -48,6 +52,23 @@ const garmentReviews = garment?.reviewKeywords.length
   ? allReviews.filter((r) => garment.reviewKeywords.some((k) => r.text.toLowerCase().includes(k))).length
   : 0;
 const related = page.related.map((r) => services.find((s) => s.slug === r)).filter(Boolean) as ServicePage[];
+// ---- look of /pechat-na-futbolkah for every page of this template (owner, 07.11.2026)
+const h1Words = page.h1.replace(' в Калининграде', '').split(' ');
+const afterNa = h1Words[h1Words.indexOf('на') + 1];
+// marker word of the h1: «на худи» → худи, «Печать визиток» → визиток, «Брелоки на заказ» → Брелоки
+const markWord = h1Words.includes('на') && afterNa !== 'заказ' ? afterNa : h1Words[0] === 'Печать' ? h1Words[1] : h1Words[0];
+// facts that are true for the whole workshop (CLAUDE.md)
+const facts = [
+  { big: '10 000+', small: 'заказов с 2019 года' },
+  { big: '10–20', small: 'ежедневно, без выходных' },
+  { big: '0 ₽', small: 'простой макет соберём сами' },
+];
+const works = portfolio.filter((w) => w.tags.some((t) => page.portfolioTags.includes(t)) && !w.src.includes('portfolio-14'));
+const notes = ['наша работа', 'на заказ'];
+const polaroids = works.slice(0, 2).map((w, i) => ({ src: w.src, alt: w.title, note: notes[i] }));
+const compare = page.blocks.find((b) => b.kind === 'compare');
+const ideas = page.blocks.find((b) => b.kind === 'ideas');
+const otherBlocks = page.blocks.filter((b) => b.kind !== 'compare' && b.kind !== 'ideas');
 ---
 
 <BaseLayout
@@ -61,399 +82,97 @@ const related = page.related.map((r) => services.find((s) => s.slug === r)).filt
     faqPage(page.faq),
   ]}
 >
-  <section class="shero">
-    <div class="wrap shero-grid">
-      <div class="shero-text">
-        <Breadcrumbs items={crumbs} />
-        <h1>{page.h1}</h1>
-        <p class="lead">{page.lead}</p>
-        <ul class="shero-chips">
-          {page.highlights.map((h) => <li><Icon name="check" size={18} /> {h}</li>)}
-        </ul>
-        <div class="shero-actions">
-          <a class="btn btn-magenta" href="#calc"><Icon name="calc" size={20} /> <span>Рассчитать<span class="shero-long"> стоимость</span></span></a>
-          <button type="button" class="btn btn-ghost" data-order>Отправить макет</button>
-        </div>
+  <TshirtHero
+    page={page}
+    crumbs={crumbs}
+    from={from.price}
+    unit={from.unit !== 'шт' ? from.unit : undefined}
+    priceNote={garment ? `${page.name.replace('Печать на ', '').toLowerCase()} с печатью` : 'с печатью и макетом'}
+    kicker={`${page.name} · Калининград`}
+    mark={markWord}
+    facts={facts}
+    polaroids={polaroids}
+  />
+
+  <div class="band band-tint">
+    <section id="calc" class="section scalc" aria-labelledby="calc-h">
+      <div class="wrap">
+        <TshirtHead num="01" eyebrow="Калькулятор" id="calc-h" title={garment ? 'Посчитайте свой вариант' : 'Сколько стоит — посчитайте сами'} mark={garment ? 'свой' : 'посчитайте'} tone="y">
+          <p class="scalc-sub">
+            {garment
+              ? 'Выберите цвет, размеры принтов и количество — цена пересчитается сразу. Несколько принтов: самый дорогой по полной цене, следующий −30%, остальные −50%.'
+              : 'Цена меняется сразу. Добавьте позицию в смету или отправьте заявку — менеджер подтвердит стоимость и сроки.'}
+          </p>
+        </TshirtHead>
+        {
+          garment ? (
+            <Calculator client:visible category="textile" product={garment.productId} hideCategories lockProduct />
+          ) : (
+            <Calculator client:visible category={page.calcCategory} product={page.calcProduct} hideCategories={!isCorporate} />
+          )
+        }
       </div>
-      <div class="shero-media">
-        <div class="shero-frame crop">
-          <img src={page.image} alt={page.imageAlt} width="640" height="640" fetchpriority="high" decoding="async" />
-        </div>
-        <span class="sticker shero-price">
-          от <span class="mono">{rub(from.price)}</span>{from.unit !== 'шт' ? `/${from.unit}` : ''}
-        </span>
-        <span class="shero-dot shero-dot-c" aria-hidden="true"></span>
-        <span class="shero-dot shero-dot-m" aria-hidden="true"></span>
-      </div>
-    </div>
-  </section>
+      {garment?.alsoOrder && <AlsoOrder slugs={garment.alsoOrder} />}
+    </section>
+  </div>
 
   {
     garment && garmentProduct ? (
       <>
-        <section id="calc" class="section calc-sec" aria-labelledby="calc-h">
-          <div class="wrap">
-            <div class="section-head">
-              <div>
-                <p class="eyebrow">Калькулятор</p>
-                <h2 id="calc-h">Посчитайте свой вариант</h2>
-              </div>
-              <p class="calc-sub">Выберите цвет, размеры принтов и количество — цена пересчитается сразу. Несколько принтов: самый дорогой по полной цене, следующий −30%, остальные −50%.</p>
-            </div>
-            <Calculator client:visible category="textile" product={garment.productId} hideCategories lockProduct />
-          </div>
-          {garment.alsoOrder && <AlsoOrder slugs={garment.alsoOrder} />}
-        </section>
-        <GarmentPackages info={garment} productName={garmentProduct.name} />
-        <GarmentDetails info={garment} productName={garmentProduct.name} />
+        <TshirtPackages info={garment} num="02" />
+        <div class="band band-ink">
+          <TshirtDetails info={garment} productName={garmentProduct.name} num="03" />
+        </div>
       </>
     ) : (
-  <section id="calc" class="section calc-sec" aria-labelledby="calc-h">
-      <div class="wrap">
-        <div class="section-head">
-          <div>
-            <p class="eyebrow">Калькулятор</p>
-            <h2 id="calc-h">Сколько стоит — посчитайте сами</h2>
-          </div>
-          <p>Цена меняется сразу. Добавьте позицию в смету или отправьте заявку — менеджер подтвердит стоимость и сроки.</p>
-        </div>
-        <Calculator client:visible category={page.calcCategory} product={page.calcProduct} hideCategories={!isCorporate} />
-      </div>
-    </section>
-  
-    <section class="section prices-sec" aria-labelledby="prices-h">
-      <div class="wrap">
-        <div class="section-head">
-          <div>
-            <p class="eyebrow">Прайс</p>
-            <h2 id="prices-h">Цены: {cat.name.toLowerCase()}</h2>
-          </div>
-          <a class="btn btn-ghost btn-sm" href="/price">Весь прайс-лист →</a>
-        </div>
-        <PriceTables categoryId={page.calcCategory} />
-      </div>
-    </section>
-    )
-  }
-  <ServiceBlocks blocks={page.blocks} />
-
-  <PortfolioGrid tags={page.portfolioTags} title={`Примеры: ${page.name.toLowerCase()}`} />
-
-  {garment && garmentReviews > 0 && <Reviews keywords={garment.reviewKeywords} title={`Отзывы: ${page.name.toLowerCase()}`} />}
-  <FaqSection items={page.faq} title={`Вопросы: ${page.name.toLowerCase()}`} />
-
-  {
-    related.length > 0 && (
-      <section class="section related" aria-labelledby="rel-h">
+      <section class="section" aria-labelledby="prices-h">
         <div class="wrap">
-          <h2 id="rel-h" class="related-h">Ещё печатаем</h2>
-          <div class="related-grid">
-            {related.map((r) => (
-              <a class="related-card" href={r.slug}>
-                <img src={r.image} alt="" width="120" height="120" loading="lazy" />
-                <span>{r.name}</span>
-                <Icon name="arrow" />
-              </a>
-            ))}
-          </div>
+          <TshirtHead num="02" eyebrow="Прайс" id="prices-h" title={`Цены: ${cat.name.toLowerCase()}`} mark={cat.name.toLowerCase()} tone="m">
+            <a class="btn btn-ghost btn-sm" href="/price">Весь прайс-лист →</a>
+          </TshirtHead>
+          <PriceTables categoryId={page.calcCategory} />
         </div>
       </section>
     )
   }
 
+  {compare && <div class="band band-tint"><TshirtCompare block={compare} /></div>}
+
+  {ideas && <div class="band"><TshirtIdeas block={ideas} /></div>}
+
+  {otherBlocks.length > 0 && <div class="band band-tint"><ServiceBlocks blocks={otherBlocks} /></div>}
+
+  <div class="band">
+    <PortfolioGrid tags={page.portfolioTags} title={`Примеры: ${page.name.toLowerCase()}`} />
+  </div>
+
+  {
+    garment && garmentReviews > 0 && (
+      <div class="band band-tint">
+        <Reviews keywords={garment.reviewKeywords} title={`Отзывы: ${page.name.toLowerCase()}`} />
+      </div>
+    )
+  }
+
+  <div class="band">
+    <FaqSection items={page.faq} title={`Вопросы: ${page.name.toLowerCase()}`} />
+  </div>
+
+  {related.length > 0 && <div class="band band-tint"><TshirtRelated items={related} /></div>}
+
   <CtaBand />
 </BaseLayout>
 
 <style>
-  .shero {
-    padding-block: clamp(28px, 4vw, 48px) clamp(24px, 4vw, 40px);
-    overflow: clip;
+  .scalc-sub {
+    max-width: 52ch;
   }
-  .shero-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-    gap: clamp(28px, 5vw, 72px);
-    align-items: center;
-  }
-  .shero-text {
-    display: grid;
-    gap: 20px;
-    justify-items: start;
-  }
-  .shero-text h1 {
-    font-size: clamp(2.2rem, 5vw, 4rem);
-  }
-  .shero-chips {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .shero-chips li {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 14px;
-    border-radius: 999px;
-    background: var(--card);
-    border: 1.5px solid var(--line);
-    font-weight: 600;
-    font-size: 0.92rem;
-  }
-  .shero-chips :global(svg) {
-    color: var(--m-ink);
-  }
-  .shero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .shero-media {
-    position: relative;
-    padding: 24px;
-  }
-  .shero-frame {
-    border-radius: 40px 40px 40px 120px;
-    overflow: visible;
-  }
-  .shero-frame img {
-    width: 100%;
-    aspect-ratio: 1;
-    object-fit: cover;
-    border-radius: 40px 40px 40px 120px;
-    background: var(--paper-2);
-    position: relative;
-    z-index: 1;
-  }
-  .shero-price {
-    position: absolute;
-    right: 0;
-    bottom: 40px;
-    z-index: 2;
-    font-size: 1.25rem;
-  }
-  .shero-dot {
-    position: absolute;
-    border-radius: 50%;
-    mix-blend-mode: multiply;
-    z-index: 0;
-  }
-  .shero-dot-c {
-    width: 120px;
-    height: 120px;
-    background: var(--c);
-    top: -6px;
-    right: -10px;
-  }
-  .shero-dot-m {
-    width: 80px;
-    height: 80px;
-    background: var(--m);
-    top: 40px;
-    right: 60px;
-    opacity: 0.8;
-  }
-  .calc-sec {
-    background: var(--paper-2);
-    border-radius: 48px;
-    margin-inline: clamp(0px, 1.5vw, 20px);
-  }
-  .related-h {
-    margin-bottom: 24px;
-  }
-  .related-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 14px;
-  }
-  .related-card {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 10px 18px 10px 10px;
-    border-radius: 24px;
-    background: var(--card);
-    border: 1.5px solid var(--line);
-    font-weight: 700;
-    text-decoration: none;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
-  }
-  .related-card img {
-    width: 64px;
-    height: 64px;
-    border-radius: 18px;
-    object-fit: cover;
-  }
-  .related-card span {
-    flex: 1;
-  }
-  .related-card:hover {
-    border-color: var(--ink);
-    box-shadow: 4px 4px 0 var(--y);
-    color: var(--ink);
-  }
-  @media (max-width: 860px) {
-    .shero-grid {
-      grid-template-columns: 1fr;
-    }
-    .shero-media {
-      max-width: 340px;
-      justify-self: center;
-      padding: 12px;
-    }
-  }
-  /* ---- phone: compact first screen. Text and photo share one grid (shero-text becomes «contents»):
-     breadcrumbs, title, then the lead with a small photo on the right, chips in one scrolling line, two buttons in a row */
   @media (max-width: 760px) {
-    .shero {
-      padding-block: 14px 22px;
-    }
-    .shero-grid {
-      grid-template-columns: minmax(0, 1fr) 112px;
-      gap: 12px 14px;
-      align-items: start;
-    }
-    .shero-text {
-      display: contents;
-    }
-    .shero-text > :global(.crumbs),
-    .shero-text h1,
-    .shero-chips,
-    .shero-actions {
-      grid-column: 1 / -1;
-    }
-    .shero-text > :global(.crumbs) {
-      order: 1;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .shero-text > :global(.crumbs) :global(ol) {
-      flex-wrap: nowrap;
-      white-space: nowrap;
-      font-size: 0.78rem;
-    }
-    .shero-text h1 {
-      order: 2;
-      font-size: clamp(1.7rem, 7.6vw, 2.1rem);
-    }
-    .lead {
-      order: 3;
-      grid-column: 1;
-      margin: 0;
-      font-size: 0.95rem;
-      line-height: 1.45;
-    }
-    .shero-media {
-      order: 4;
-      grid-column: 2;
-      grid-row: 3;
-      max-width: none;
-      justify-self: stretch;
-      padding: 0 0 12px;
-    }
-    .shero-frame,
-    .shero-frame img {
-      border-radius: 20px 20px 20px 48px;
-    }
-    .shero-dot {
-      display: none;
-    }
-    .shero-price {
-      right: -4px;
-      bottom: 0;
-      padding: 5px 9px;
-      border-radius: 10px;
-      font-size: 0.82rem;
-    }
-    .shero-price::before {
-      display: none;
-    }
-    .shero-chips {
-      order: 5;
-      flex-wrap: nowrap;
-      gap: 6px;
-      overflow-x: auto;
-      margin-inline: calc(var(--gutter) * -1);
-      padding-inline: var(--gutter);
-      scrollbar-width: none;
-    }
-    .shero-chips::-webkit-scrollbar,
-    .shero-text > :global(.crumbs)::-webkit-scrollbar {
-      display: none;
-    }
-    .shero-chips li {
-      flex: none;
-      gap: 4px;
-      padding: 5px 10px;
-      font-size: 0.8rem;
-      white-space: nowrap;
-    }
-    .shero-chips :global(svg) {
-      width: 14px;
-      height: 14px;
-    }
-    .shero-actions {
-      order: 6;
-      flex-wrap: nowrap;
-      gap: 8px;
-    }
-    .shero-actions .btn {
-      flex: 1 1 0;
-      min-height: 46px;
-      padding: 0 12px;
-      gap: 6px;
-      font-size: 0.92rem;
-      white-space: nowrap;
-    }
-    .shero-actions .btn :global(svg) {
-      width: 18px;
-      height: 18px;
-    }
-    .shero-long {
-      display: none;
-    }
-    .calc-sec {
-      border-radius: 28px;
+    .scalc {
       padding-block: 28px 32px;
     }
-    .calc-sec .section-head {
-      margin-bottom: 16px;
-    }
-    .calc-sec .section-head .eyebrow {
-      margin-bottom: 6px;
-    }
-    .calc-sub {
+    .scalc-sub {
       display: none;
-    }
-  }
-  /* «Ещё печатаем» on phones: 2×2 tiles with the picture on top */
-  @media (max-width: 560px) {
-    .related-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-    }
-    .related-card {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 8px;
-      padding: 8px 10px 12px;
-      border-radius: 18px;
-      font-size: 0.88rem;
-      line-height: 1.25;
-    }
-    .related-card img {
-      width: 100%;
-      height: auto;
-      aspect-ratio: 16 / 10;
-      border-radius: 12px;
-    }
-    .related-card :global(svg) {
-      display: none;
-    }
-    .related-h {
-      margin-bottom: 14px;
     }
   }
 </style>

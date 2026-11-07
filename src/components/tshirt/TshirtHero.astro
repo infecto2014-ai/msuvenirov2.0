@@ -11,8 +11,12 @@ import type { ServicePage } from '@/data/types';
 interface Props {
   page: ServicePage;
   crumbs: { name: string; href: string }[];
-  /** lowest «from» price of a t-shirt with print, from pricing.ts */
+  /** lowest «from» price, from pricing.ts */
   from: number;
+  /** caption under the price sticker */
+  priceNote?: string;
+  /** unit after the price, e.g. «м²» (omit for pieces) */
+  unit?: string;
   /** short line over the title */
   kicker: string;
   /** word of the h1 to underline with the marker */
@@ -22,7 +26,7 @@ interface Props {
   /** two real works pinned next to the photo */
   polaroids: { src: string; alt: string; note: string }[];
 }
-const { page, crumbs, from, kicker, mark, facts, polaroids } = Astro.props;
+const { page, crumbs, from, kicker, mark, facts, polaroids, priceNote = 'футболка с печатью', unit } = Astro.props;
 const at = page.h1.indexOf(mark);
 const h1 = at >= 0 ? [page.h1.slice(0, at), mark, page.h1.slice(at + mark.length)] : [page.h1, '', ''];
 ---
@@ -72,8 +76,8 @@ const h1 = at >= 0 ? [page.h1.slice(0, at), mark, page.h1.slice(at + mark.length
         ))
       }
       <p class="th-price">
-        <span>от</span> <b class="mono">{rub(from)}</b>
-        <small>футболка с печатью</small>
+        <span>от</span> <b class="mono">{rub(from)}{unit && `/${unit}`}</b>
+        <small>{priceNote}</small>
       </p>
     </div>
   </div>
