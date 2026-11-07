@@ -87,6 +87,16 @@ export const clearEstimate = () => write([]);
 
 export const estimateTotal = (items: EstimateItem[]) => items.reduce((a, i) => a + (i.note ? 0 : i.total), 0);
 
+/** Files for the order, shared by the calculators and the order form (owner, 07.11.2026: attach files right in the
+ * calculator). Kept in memory only — a File cannot be stored; every change is broadcast with FILES_EVENT. */
+export const FILES_EVENT = 'orderfiles:change';
+let orderFiles: File[] = [];
+export const getOrderFiles = () => orderFiles;
+export const setOrderFiles = (files: File[]) => {
+  orderFiles = files;
+  window.dispatchEvent(new CustomEvent(FILES_EVENT, { detail: files }));
+};
+
 /** Open the order dialog from anywhere: buttons with [data-order] or code. */
 export const openOrder = (detail: { source?: string } = {}) =>
   window.dispatchEvent(new CustomEvent(ORDER_OPEN_EVENT, { detail }));

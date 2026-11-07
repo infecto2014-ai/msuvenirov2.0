@@ -6,6 +6,9 @@ import {
   estimateTotal,
   getEstimate,
   removeFromEstimate,
+  FILES_EVENT,
+  getOrderFiles,
+  setOrderFiles,
   setEstimateQty,
   stepQty,
   type EstimateItem,
@@ -34,7 +37,15 @@ export default function OrderDialog() {
   const [method, setMethod] = useState<ContactMethod>('phone');
   const [email, setEmail] = useState('');
   const [comment, setComment] = useState('');
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFilesState] = useState<File[]>([]);
+  // files live in a shared store so a calculator can attach them before the form opens
+  const setFiles = (f: File[]) => setOrderFiles(f);
+  useEffect(() => {
+    setFilesState(getOrderFiles());
+    const on = (e: Event) => setFilesState([...(e as CustomEvent<File[]>).detail]);
+    window.addEventListener(FILES_EVENT, on);
+    return () => window.removeEventListener(FILES_EVENT, on);
+  }, []);
   const [fileError, setFileError] = useState('');
   const [website, setWebsite] = useState('');
   const [touched, setTouched] = useState(false);

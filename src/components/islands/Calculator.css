@@ -1414,3 +1414,80 @@
     overflow-wrap: anywhere;
   }
 }
+
+/* attach files right in the calculator (owner, 07.11.2026); the order form gets the same files */
+.calc-files {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+.calc-attach {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1.5px dashed rgba(255, 252, 245, 0.45);
+  border-radius: 14px;
+  color: #fffcf5;
+  font-weight: 700;
+  font-size: 0.92rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.calc-attach:hover,
+.calc-attach:focus-within {
+  border-color: var(--y);
+  background: rgba(255, 210, 31, 0.08);
+}
+.calc-attach:focus-within {
+  outline: 2px solid var(--y);
+  outline-offset: 2px;
+}
+.calc-files-list {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.calc-files-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 4px 4px 12px;
+  border-radius: 10px;
+  background: rgba(255, 252, 245, 0.08);
+  color: #fffcf5;
+  font-size: 0.85rem;
+}
+.calc-files-list li span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.calc-files-list button {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #fffcf5;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+.calc-files-list button:hover {
+  background: rgba(255, 252, 245, 0.15);
+}
+.calc-files-note,
+.calc-files-err {
+  margin: 0;
+  font-size: 0.8rem;
+  color: rgba(255, 252, 245, 0.7);
+}
+.calc-files-err {
+  color: #ff9da1;
+}

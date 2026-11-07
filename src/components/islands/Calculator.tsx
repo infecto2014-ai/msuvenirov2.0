@@ -10,7 +10,8 @@ import {
   type QtyConfig,
   type Selection,
 } from '@/data/pricing';
-import { addToEstimate, openOrder } from '@/lib/estimate';
+import { addToEstimate, FILES_EVENT, getOrderFiles, openOrder, setOrderFiles } from '@/lib/estimate';
+import { ACCEPT, MAX_FILES, validateFiles } from '@/lib/order';
 import { reachGoal } from '@/lib/metrika';
 import './Calculator.css';
 
@@ -113,6 +114,22 @@ export default function Calculator({ category, product, only, hideCategories, lo
   const [sel, setSel] = useState<Selection>(() => defaultSelection(prod));
   /** what the customer typed for «Другой цвет» (owner, 07.11.2026: «человек должен указать нужный»); not part of the price */
   const [otherColor, setOtherColor] = useState('');
+  /** files attached right here; the order form gets the same list */
+  const [files, setFiles] = useState<File[]>([]);
+  const [fileError, setFileError] = useState('');
+  useEffect(() => {
+    setFiles(getOrderFiles());
+    const on = (e: Event) => setFiles([...(e as CustomEvent<File[]>).detail]);
+    window.addEventListener(FILES_EVENT, on);
+    return () => window.removeEventListener(FILES_EVENT, on);
+  }, []);
+  const attach = (list: FileList | null) => {
+    if (!list || !list.length) return;
+    const next = [...getOrderFiles(), ...Array.from(list)].slice(0, MAX_FILES);
+    const err = validateFiles(next);
+    setFileError(err ?? '');
+    if (!err) setOrderFiles(next);
+  };
   const otherPicked = (prod.options ?? []).some((g) => sel.options[g.id] === 'other');
   const details = (() => {
     const d = describe(prod, sel);
@@ -183,7 +200,14 @@ export default function Calculator({ category, product, only, hideCategories, lo
 
   const setOption = (groupId: string, value: string, multi: boolean) =>
     setSel((s) => {
-      if (!multi) return { ...s, options: { ...s.options, [groupId]: value } };
+      if (!multi) {
+        // a choice with a minimum run in its hint («Другой цвет — от 10 шт») lifts the quantity to that minimum
+        const hint = prod.options?.find((g) => g.id === groupId)?.choices.find((c) => c.id === value)?.hint ?? '';
+        const need = Number(hint.match(/от\s+(\d+)\s*шт/)?.[1] ?? 0);
+        const qty = need && s.qty < need ? need : s.qty;
+        if (qty !== s.qty) setQtyText(String(qty));
+        return { ...s, qty, options: { ...s.options, [groupId]: value } };
+      }
       const cur = Array.isArray(s.options[groupId]) ? (s.options[groupId] as string[]) : [];
       return {
         ...s,
@@ -642,6 +666,30 @@ export default function Calculator({ category, product, only, hideCategories, lo
               <button type="button" class="btn btn-yellow btn-block" disabled={!!quote.error} onClick={() => add(false)}>
                 + В смету
               </button>
+            </div>
+            <div class="calc-files">
+              <label class="calc-attach">
+                <input type="file" multiple accept={ACCEPT} class="sr-only" onChange={(e) => {
+                  attach((e.target as HTMLInputElement).files);
+                  (e.target as HTMLInputElement).value = '';
+                }} />
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M21 11.5l-8.6 8.6a5 5 0 0 1-7.1-7.1l8.6-8.6a3.3 3.3 0 0 1 4.7 4.7l-8.6 8.6a1.7 1.7 0 0 1-2.4-2.4l7.9-7.9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                <span>{files.length ? 'Добавить ещё файл' : 'Прикрепить макет или фото'}</span>
+              </label>
+              {fileError && <p class="calc-files-err" role="alert">{fileError}</p>}
+              {files.length > 0 && (
+                <ul class="calc-files-list">
+                  {files.map((f, i) => (
+                    <li>
+                      <span>{f.name}</span>
+                      <button type="button" aria-label={`Убрать файл ${f.name}`} onClick={() => setOrderFiles(files.filter((_, j) => j !== i))}>
+                        ×
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {files.length > 0 && <p class="calc-files-note">Файлы уйдут вместе с заявкой</p>}
             </div>
             <p class="calc-fine">Без наценки за срочность. Макет поможем подготовить бесплатно.</p>
           </div>
