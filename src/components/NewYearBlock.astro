@@ -30,12 +30,30 @@ const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Иде�
          article, the wax-seal button on the flap tip says where; the text sits on the front. -->
     <div class="nyb-frame">
       <a class="env" href={link} aria-labelledby="nyb-h nyb-cta">
+        <!-- envelope back: C5-like proportions (≈ 1.42 : 1), side flaps folded to the centre, top flap closed over them -->
+        <svg class="env-art" viewBox="0 0 142 100" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="env-flap-g" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#efe4cd" />
+              <stop offset="1" stop-color="#e3d4b5" />
+            </linearGradient>
+            <filter id="env-flap-sh" x="-10%" y="-10%" width="120%" height="140%">
+              <feDropShadow dx="0" dy="1.2" stdDeviation="1" flood-color="#5b4520" flood-opacity="0.28" />
+            </filter>
+          </defs>
+          <rect width="142" height="100" fill="#f4ecdb" />
+          <!-- side flaps (slightly darker) and the bottom flap -->
+          <path d="M0 0 L71 52 L0 100 Z" fill="#f4ecdb" />
+          <path d="M142 0 L71 52 L142 100 Z" fill="#f4ecdb" />
+          <path d="M0 100 L71 50 L142 100 Z" fill="#fbf6ea" />
+          <path d="M0 100 L71 50 L142 100" fill="none" stroke="#d8c8a6" stroke-width="0.35" />
+          <!-- top flap with a softly rounded tip -->
+          <path d="M0 0 H142 L76 47.5 Q71 51.5 66 47.5 Z" fill="url(#env-flap-g)" filter="url(#env-flap-sh)" />
+        </svg>
         <span class="env-front">
           <span class="nyb-hand">Новый год уже близко!</span>
           <h2 id="nyb-h">Подарки с вашим фото <span class="nyb-serif">и&nbsp;логотипом</span></h2>
-          <span class="nyb-text">Ёлочные шары, кружки, календари на 2027 год и мерч для коллег</span>
         </span>
-        <span class="env-flap" aria-hidden="true"></span>
         <!-- the button: a wax-seal pill on the tip of the closed flap -->
         <span class="env-seal">
           <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12 2v20M3.3 7l17.4 10M3.3 17 20.7 7M9 3.5l3 2.5 3-2.5M9 20.5l3-2.5 3 2.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
@@ -199,38 +217,37 @@ const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Иде�
     margin-block: clamp(28px, 3vw, 44px) clamp(28px, 3vw, 40px);
   }
   .env {
-    --top: clamp(118px, 11vw, 150px); /* depth of the flap area */
-    --paper: #fffaf0;
     position: relative;
-    display: block;
+    display: grid;
+    align-content: end;
+    aspect-ratio: 1.42;
+    padding: 9px; /* airmail border */
+    border-radius: 14px;
     color: var(--ink);
     text-decoration: none;
-    border-radius: 18px;
-    filter: drop-shadow(0 24px 30px rgba(0, 0, 0, 0.45));
+    background: repeating-linear-gradient(-45deg, var(--candy) 0 12px, #fff 12px 24px, #0072bc 24px 36px, #fff 36px 48px);
+    box-shadow: 0 26px 40px -18px rgba(0, 0, 0, 0.6);
   }
   .env:focus-visible {
     outline: 3px solid #ffd21f;
     outline-offset: 6px;
   }
-
-
-
-
-  /* front pocket: airmail stripes on the edges, V-cut at the top, text at the bottom */
+  .env-art {
+    position: absolute;
+    inset: 9px;
+    width: calc(100% - 18px);
+    height: calc(100% - 18px);
+    border-radius: 6px;
+  }
+  /* text sits on the bottom flap, under the seal */
   .env-front {
     position: relative;
-    z-index: 2;
+    z-index: 1;
     display: grid;
-    gap: 8px;
+    gap: 6px;
     justify-items: center;
     text-align: center;
-    padding: calc(var(--top) + 76px) clamp(22px, 3vw, 40px) clamp(24px, 2.6vw, 32px);
-    border: 9px solid transparent;
-    border-radius: 18px;
-    background:
-      linear-gradient(var(--paper), var(--paper)) padding-box,
-      repeating-linear-gradient(-45deg, var(--candy) 0 12px, #fff 12px 24px, #0072bc 24px 36px, #fff 36px 48px) border-box;
-    clip-path: polygon(0 0, 50% calc(var(--top) - 6px), 100% 0, 100% 100%, 0 100%);
+    padding: 0 clamp(18px, 3vw, 36px) clamp(16px, 2.4vw, 28px);
   }
   .nyb-hand {
     font-family: 'Caveat', 'Segoe Print', cursive;
@@ -241,7 +258,7 @@ const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Иде�
     transform: rotate(-2deg);
   }
   .nyb h2 {
-    font-size: clamp(1.5rem, 2.4vw, 2.15rem);
+    font-size: clamp(1.4rem, 2.1vw, 1.95rem);
     line-height: 1.05;
     letter-spacing: -0.02em;
     text-wrap: balance;
@@ -254,39 +271,18 @@ const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Иде�
     letter-spacing: 0;
     color: var(--candy-ink);
   }
-  .nyb-text {
-    max-width: 40ch;
-    font-size: 0.98rem;
-    color: var(--ink-2);
-  }
   /* the flap — the "open" button: hinge at the top edge */
-  .env-flap {
-    position: absolute;
-    z-index: 3;
-    left: 0;
-    right: 0;
-    top: 0;
-    height: calc(var(--top) + 26px);
-  }
-  .env-flap::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 18px 18px 0 0;
-    background: linear-gradient(180deg, #f3ead8, #e8dcc3);
-    clip-path: polygon(0 0, 100% 0, 50% 100%);
-  }
   .env-seal {
     position: absolute;
     z-index: 4;
     left: 50%;
-    top: calc(var(--top) + 2px);
+    top: 49%;
     display: inline-flex;
     align-items: center;
     gap: 8px;
     min-height: 50px;
     padding: 10px 22px 10px 16px;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     border-radius: 999px;
     color: #fff;
     font-weight: 800;
@@ -389,6 +385,15 @@ const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Иде�
     }
   }
 
+  @media (max-width: 1100px) {
+    .env {
+      aspect-ratio: 1.22;
+    }
+    .env-seal {
+      font-size: 0.9rem;
+      padding: 9px 16px 9px 12px;
+    }
+  }
   @media (max-width: 1020px) {
     .nyb-card {
       grid-template-columns: minmax(130px, 0.85fr) minmax(0, 1.7fr) minmax(180px, 0.95fr);
@@ -420,17 +425,23 @@ const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Иде�
       margin-block: 34px 18px;
     }
     .env {
-      --top: 104px;
+      aspect-ratio: 1.12;
+      padding: 7px;
+    }
+    .env-art {
+      inset: 7px;
+      width: calc(100% - 14px);
+      height: calc(100% - 14px);
     }
     .env-front {
-      padding-inline: 16px;
-      border-width: 7px;
+      padding: 0 14px 16px;
+    }
+    .env-seal {
+      font-size: 0.9rem;
+      padding: 9px 16px 9px 12px;
     }
     .nyb h2 {
       font-size: 1.45rem;
-    }
-    .nyb-text {
-      font-size: 0.9rem;
     }
   }
 </style>
