@@ -13,14 +13,21 @@ const items = badgesPage.packages.map((pk, i) => {
   const q = product.quote(sel);
   return { ...pk, unit: q.unit, total: q.total, from: q.from, tone: tones[i % tones.length] };
 });
+
+interface Props {
+  /** section number, «02» by default */
+  num?: string;
+}
+const { num = '02' } = Astro.props;
 ---
 
 <section class="section spk" aria-labelledby="spk-h">
   <div class="wrap">
     <div class="section-head">
-      <div>
+      <div class="sec-titled sec-m">
+        <span class="sec-num mono" aria-hidden="true">{num}</span>
         <p class="eyebrow">Популярное</p>
-        <h2 id="spk-h">Готовые варианты с ценой</h2>
+        <h2 id="spk-h">Готовые варианты с <span class="mark sec-mark">ценой</span></h2>
       </div>
       <p class="spk-sub">Цена вместе со значками и макетом. Другое количество или размер — в калькуляторе выше.</p>
     </div>
@@ -224,7 +231,7 @@ const items = badgesPage.packages.map((pk, i) => {
     .spk-tech {
       top: 8px;
       padding: 3px 8px;
-      font-size: 0.68rem;
+      font-size: 0.75rem;
     }
     .spk-qty {
       right: 8px;
@@ -250,7 +257,7 @@ const items = badgesPage.packages.map((pk, i) => {
       font-size: 1.1rem;
     }
     .spk-price small {
-      font-size: 0.72rem;
+      font-size: 0.75rem;
     }
     .spk-body .btn {
       min-height: 38px;

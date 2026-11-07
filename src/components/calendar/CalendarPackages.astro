@@ -13,14 +13,21 @@ const items = calendarsPage.packages.map((pk, i) => {
   const q = product.quote(sel);
   return { ...pk, unit: q.unit, total: q.total, from: q.from, tone: tones[i % tones.length] };
 });
+
+interface Props {
+  /** section number, «02» by default */
+  num?: string;
+}
+const { num = '02' } = Astro.props;
 ---
 
 <section class="section cpk" aria-labelledby="cpk-h">
   <div class="wrap">
     <div class="section-head">
-      <div>
+      <div class="sec-titled sec-m">
+        <span class="sec-num mono" aria-hidden="true">{num}</span>
         <p class="eyebrow">Популярное</p>
-        <h2 id="cpk-h">Готовые варианты с ценой</h2>
+        <h2 id="cpk-h">Готовые варианты с <span class="mark sec-mark">ценой</span></h2>
       </div>
       <p class="cpk-sub">Цена за весь тираж вместе с печатью и сборкой. Свой вариант — в калькуляторе выше.</p>
     </div>
@@ -195,7 +202,7 @@ const items = calendarsPage.packages.map((pk, i) => {
     .cpk-qty {
       right: 8px;
       bottom: 8px;
-      font-size: 0.72rem;
+      font-size: 0.75rem;
     }
     .cpk-body {
       gap: 2px;
@@ -215,7 +222,7 @@ const items = calendarsPage.packages.map((pk, i) => {
       font-size: 1.1rem;
     }
     .cpk-price small {
-      font-size: 0.72rem;
+      font-size: 0.75rem;
     }
     .cpk-body .btn {
       min-height: 38px;

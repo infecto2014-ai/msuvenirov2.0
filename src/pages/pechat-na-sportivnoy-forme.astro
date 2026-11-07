@@ -14,6 +14,7 @@ import Reviews from '@/components/Reviews.astro';
 import FaqSection from '@/components/FaqSection.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import Icon from '@/components/Icon.astro';
+import HeroFacts from '@/components/tshirt/HeroFacts.astro';
 import { sportPage as page, buildSportFaq } from '@/data/sportPage';
 import { services } from '@/data/services';
 import { reviews } from '@/data/reviews';
@@ -62,6 +63,9 @@ const placeArt = [
   { type: 'jersey', view: 'front', color: '#ffd21f', trim: '#16141b', name: '' },
   { type: 'shorts', view: 'front', color: '#16141b', trim: '#e5007d', name: '' },
 ] as const;
+
+// three facts under the buttons of the first screen (same row as on the t-shirt page)
+const heroFacts = [{ big: '1 комплект', small: 'можно заказать от одного' },{ big: 'по списку', small: 'фамилии и номера каждому' },{ big: '2 способа', small: 'DTF и сублимация' }];
 ---
 
 <BaseLayout
@@ -79,13 +83,11 @@ const placeArt = [
         <p class="eyebrow shero-eyebrow">{page.eyebrow}</p>
         <h1>{page.h1}</h1>
         <p class="lead">{page.lead}</p>
-        <ul class="shero-chips">
-          {page.highlights.map((h) => <li><Icon name="check" size={18} /> {h}</li>)}
-        </ul>
         <div class="shero-actions">
           <a class="btn btn-magenta" href="#calc"><Icon name="calc" size={20} /> <span>Рассчитать<span class="long"> форму</span></span></a>
-          <button type="button" class="btn btn-ghost" data-order="Спортивная форма — номера и фамилии по списку">Отправить список</button>
+          <button type="button" class="btn btn-ghost" data-order="Спортивная форма — номера и фамилии по списку"><Icon name="upload" size={20} /> <span>Отправить макет</span></button>
         </div>
+        <HeroFacts facts={heroFacts} />
       </div>
       <div class="shero-media" role="img" aria-label={page.heroAlt}>
         <span class="shero-dot shero-dot-c" aria-hidden="true"></span>
@@ -239,8 +241,11 @@ const placeArt = [
   <div class="band band-tint">
   <section class="section ways" aria-labelledby="ways-h">
     <div class="wrap">
-      <p class="eyebrow">Технология</p>
-      <h2 id="ways-h" class="ways-title">DTF-печать или сублимация</h2>
+      <div class="sec-titled sec-c">
+        <span class="sec-num mono" aria-hidden="true">05</span>
+        <p class="eyebrow">Технология</p>
+        <h2 id="ways-h" class="ways-title">DTF-печать или <span class="mark sec-mark">сублимация</span></h2>
+      </div>
       <div class="ways-grid">
         {
           page.tech.map((w, i) => (
@@ -486,7 +491,7 @@ const placeArt = [
     text-align: center;
   }
   .shero-price small {
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     font-weight: 700;
   }
   .shero-dot {
@@ -690,7 +695,7 @@ const placeArt = [
     .spk-tech {
       top: 8px;
       padding: 3px 8px;
-      font-size: 0.68rem;
+      font-size: 0.75rem;
     }
     .spk-qty {
       right: 8px;
@@ -716,7 +721,7 @@ const placeArt = [
       font-size: 1.1rem;
     }
     .spk-price small {
-      font-size: 0.72rem;
+      font-size: 0.75rem;
     }
     .spk-body .btn {
       min-height: 38px;
@@ -839,7 +844,7 @@ const placeArt = [
     border-radius: 999px;
     background: var(--card);
     color: var(--ink);
-    font-size: 0.74rem;
+    font-size: 0.75rem;
     font-weight: 700;
   }
   .ways-ink .ways-tag {
@@ -988,7 +993,7 @@ const placeArt = [
     border-radius: 999px;
     background: var(--tone);
     color: var(--ink);
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     font-weight: 700;
   }
   .plc-y .plc-tag {
@@ -1048,7 +1053,7 @@ const placeArt = [
     padding: 3px 10px;
     border-radius: 999px;
     background: var(--card);
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     font-weight: 700;
   }
   .aud-card h3 {
@@ -1397,7 +1402,7 @@ const placeArt = [
       line-height: 1.15;
     }
     .shero-price small {
-      font-size: 0.6rem;
+      font-size: 0.75rem;
     }
     .shero-price::before {
       display: none;
@@ -1606,7 +1611,7 @@ const placeArt = [
     }
     .plc-tag {
       padding: 2px 8px;
-      font-size: 0.62rem;
+      font-size: 0.75rem;
     }
     .plc-body h3 {
       font-size: 1.05rem;
@@ -1650,7 +1655,7 @@ const placeArt = [
     }
     .aud-tag {
       padding: 2px 8px;
-      font-size: 0.64rem;
+      font-size: 0.75rem;
     }
     .aud-num {
       right: 10px;

@@ -13,14 +13,21 @@ const items = mugsPage.packages.map((pk, i) => {
   const q = product.quote(sel);
   return { ...pk, unit: q.unit, total: q.total, from: q.from, tone: tones[i % tones.length] };
 });
+
+interface Props {
+  /** section number, «02» by default */
+  num?: string;
+}
+const { num = '02' } = Astro.props;
 ---
 
 <section class="section mpk" aria-labelledby="mpk-h">
   <div class="wrap">
     <div class="section-head">
-      <div>
+      <div class="sec-titled sec-m">
+        <span class="sec-num mono" aria-hidden="true">{num}</span>
         <p class="eyebrow">Популярное</p>
-        <h2 id="mpk-h">Готовые варианты с ценой</h2>
+        <h2 id="mpk-h">Готовые варианты с <span class="mark sec-mark">ценой</span></h2>
       </div>
       <p class="mpk-sub">Цена вместе с кружкой, печатью и макетом. Другое количество или покрытие — в калькуляторе выше.</p>
     </div>
@@ -191,7 +198,7 @@ const items = mugsPage.packages.map((pk, i) => {
     .mpk-qty {
       right: 8px;
       top: 8px;
-      font-size: 0.72rem;
+      font-size: 0.75rem;
     }
     .mpk-body {
       gap: 2px;
@@ -211,7 +218,7 @@ const items = mugsPage.packages.map((pk, i) => {
       font-size: 1.1rem;
     }
     .mpk-price small {
-      font-size: 0.72rem;
+      font-size: 0.75rem;
     }
     .mpk-body .btn {
       min-height: 38px;

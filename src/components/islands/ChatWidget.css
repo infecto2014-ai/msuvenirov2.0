@@ -136,7 +136,7 @@
   display: block;
   margin-top: 2px;
   text-align: right;
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   color: var(--muted);
 }
 .chatw-msg.is-visitor {
@@ -336,7 +336,7 @@
   font-weight: 700;
 }
 .chatw-legal {
-  font-size: 0.74rem !important;
+  font-size: 0.75rem !important;
   color: var(--muted) !important;
 }
 .chatw-back {
