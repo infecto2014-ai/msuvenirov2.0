@@ -79,7 +79,6 @@ const tilts = [-4, 3, -2, 4, -3, 2];
                     <img src={it.img} alt="" width="160" height="160" loading="lazy" decoding="async" />
                   </span>
                 </span>
-                <span class="also-shelf" aria-hidden="true" />
                 <span class="also-name">
                   {it.name}
                   <span class="also-go" aria-hidden="true">
@@ -358,33 +357,6 @@ const tilts = [-4, 3, -2, 4, -3, 2];
       0 7px 12px -6px rgba(22, 20, 27, 0.55);
   }
 
-  /* ---------- the plank: one piece per item, overlapping into the gap so neighbours join */
-  .also-shelf {
-    position: absolute;
-    z-index: 0;
-    top: calc(var(--photo) - 7px);
-    left: calc(var(--gap) / -2 - 1px);
-    right: calc(var(--gap) / -2 - 1px);
-    height: 16px;
-    /* top surface, then the darker front edge of the plank */
-    background:
-      linear-gradient(180deg, var(--card) 0 6px, var(--line-strong) 6px 7.5px, color-mix(in srgb, var(--line-strong) 40%, var(--card)) 7.5px);
-    border-block: 1.5px solid var(--line-strong);
-    box-shadow: 0 14px 16px -12px rgba(22, 20, 27, 0.4);
-  }
-  .also-item:first-child .also-shelf {
-    left: -6px;
-    border-inline-start: 1.5px solid var(--line-strong);
-    border-start-start-radius: 6px;
-    border-end-start-radius: 6px;
-  }
-  .also-item:last-child .also-shelf {
-    right: -6px;
-    border-inline-end: 1.5px solid var(--line-strong);
-    border-start-end-radius: 6px;
-    border-end-end-radius: 6px;
-  }
-
   .also-name {
     display: inline-flex;
     align-items: center;
@@ -508,9 +480,6 @@ const tilts = [-4, 3, -2, 4, -3, 2];
     }
     .also-price small {
       font-size: 0.72rem;
-    }
-    .also-shelf {
-      height: 12px;
     }
     .also-name {
       margin-top: 12px;
