@@ -3,7 +3,7 @@
 // an eyebrow and an h2 with one word underlined by a marker. Extra content (sub text, notes) goes in the slot.
 interface Props {
   /** «01», «02»… */
-  num: string;
+  num?: string;
   eyebrow: string;
   /** id of the h2, for aria-labelledby on the section */
   id: string;
@@ -18,8 +18,8 @@ const at = mark ? title.indexOf(mark) : -1;
 const parts = at >= 0 ? [title.slice(0, at), title.slice(at, at + mark!.length), title.slice(at + mark!.length)] : [title, '', ''];
 ---
 
-<header class={`thd thd-${tone}`}>
-  <span class="thd-num mono" aria-hidden="true">{num}</span>
+<header class:list={['thd', `thd-${tone}`, { 'thd-nonum': !num }]}>
+  {num && <span class="thd-num mono" aria-hidden="true">{num}</span>}
   <div class="thd-main">
     <p class="eyebrow thd-eyebrow">{eyebrow}</p>
     <h2 id={id}>
@@ -36,6 +36,9 @@ const parts = at >= 0 ? [title.slice(0, at), title.slice(at, at + mark!.length),
     align-items: end;
     gap: 12px clamp(18px, 3vw, 36px);
     margin-bottom: clamp(28px, 4vw, 48px);
+  }
+  .thd-nonum {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
   }
   .thd-c { --tone: var(--c); --mark: rgba(0, 160, 220, 0.32); }
   .thd-m { --tone: var(--m); --mark: rgba(229, 0, 125, 0.24); }

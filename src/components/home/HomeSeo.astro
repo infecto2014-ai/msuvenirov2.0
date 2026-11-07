@@ -1,0 +1,145 @@
+---
+// SEO text of the home page, reworked (owner, 07.11.2026: «смотрится не очень — переработать»): four numbered
+// cards with a colour tick, same words and links as before (they matter for search). On phones only the first
+// card is open, the rest unfold with «Читать полностью» (no JS).
+import TshirtHead from '@/components/tshirt/TshirtHead.astro';
+---
+
+<section class="section hs" aria-labelledby="seo-h">
+  <div class="wrap">
+    <TshirtHead eyebrow="О мастерской" id="seo-h" title="Печать на заказ в Калининграде" mark="в Калининграде" tone="y">
+      <p>Своя мастерская в ТЦ «Экватор»: печатаем от одной штуки до тиража для компании.</p>
+    </TshirtHead>
+    <input type="checkbox" id="seo-more" class="hs-toggle" />
+    <div class="hs-grid">
+      <article class="hs-card" style="--tone: var(--c)">
+        <span class="hs-n mono" aria-hidden="true">01</span>
+        <h3>Печать на футболках и худи</h3>
+        <p>
+          Печатаем на <a href="/pechat-na-futbolkah">футболках</a>, <a href="/pechat-na-hudi">худи</a>, свитшотах, поло и <a href="/pechat-na-shopperah">шопперах</a> от
+          одной штуки. Основная технология — DTF: яркий принт на ткани любого цвета, который выдерживает больше 50 стирок. Можно принести свою вещь или выбрать нашу — белые и
+          чёрные футболки всегда в наличии.
+        </p>
+      </article>
+      <article class="hs-card" style="--tone: var(--m)">
+        <span class="hs-n mono" aria-hidden="true">02</span>
+        <h3>Печать на кружках и фотоподарки</h3>
+        <p>
+          Делаем <a href="/pechat-na-kruzhkah">кружки с фото</a> и надписью: белые, цветные, хамелеон. Из фотографий получаются
+          <a href="/fotopodarki">подушки, пазлы, ёлочные шары</a> и <a href="/magnity">магниты</a> — подарок, который можно забрать в тот же день или к нужной дате.
+        </p>
+      </article>
+      <article class="hs-card" style="--tone: var(--y)">
+        <span class="hs-n mono" aria-hidden="true">03</span>
+        <h3>Мерч и сувениры с логотипом для компаний</h3>
+        <p>
+          Для компаний Калининграда делаем корпоративный мерч: футболки и поло с логотипом, <a href="/pechat-na-kepkah">бейсболки</a>, <a href="/znachki">значки</a>,
+          <a href="/breloki">брелоки</a>, подарки сотрудникам и партнёрам. Работаем по счёту без НДС, перед тиражом согласуем макет и показываем образец. Подробнее — в разделе
+          <a href="/korporativnym-klientam">для компаний</a>.
+        </p>
+      </article>
+      <article class="hs-card" style="--tone: var(--red)">
+        <span class="hs-n mono" aria-hidden="true">04</span>
+        <h3>Полиграфия и широкоформатная печать</h3>
+        <p>
+          Печатаем <a href="/vizitki">визитки</a>, <a href="/poligrafiya">листовки и блокноты</a>, <a href="/kalendari">календари</a> — квартальные, настенные и карманные.
+          Для вывесок и витрин — <a href="/shirokoformatnaya-pechat">широкоформатная печать</a> на плёнке и баннере. Нет макета — поможем его сделать.
+        </p>
+      </article>
+    </div>
+    <label for="seo-more" class="hs-more">Читать полностью</label>
+  </div>
+</section>
+
+<style>
+  .hs-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .hs-card {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    padding: 22px 22px 24px;
+    border-radius: 24px 24px 24px 8px;
+    background: #fff;
+    box-shadow: 0 1px 0 rgba(22, 20, 27, 0.06), 0 14px 30px -24px rgba(22, 20, 27, 0.5);
+  }
+  .hs-card::before {
+    content: '';
+    position: absolute;
+    left: 22px;
+    top: 0;
+    width: 44px;
+    height: 5px;
+    border-radius: 0 0 5px 5px;
+    background: var(--tone);
+  }
+  .hs-n {
+    font-family: var(--font);
+    font-size: 2.2rem;
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--ink);
+    text-shadow: 3px 3px 0 var(--tone);
+  }
+  .hs-card h3 {
+    font-size: 1.08rem;
+    line-height: 1.2;
+  }
+  .hs-card p {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 0.93rem;
+    line-height: 1.6;
+  }
+  .hs-card a {
+    color: var(--ink);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--tone) 80%, transparent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+  }
+  .hs-toggle,
+  .hs-more {
+    display: none;
+  }
+  @media (max-width: 1100px) {
+    .hs-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 560px) {
+    .hs-grid {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .hs-card {
+      padding: 16px 16px 18px;
+    }
+    .hs-card:not(:first-child) {
+      display: none;
+    }
+    .hs-toggle:checked + .hs-grid .hs-card {
+      display: grid;
+    }
+    .hs-more {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      margin-top: 8px;
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      cursor: pointer;
+    }
+    .hs-toggle:checked ~ .hs-more {
+      display: none;
+    }
+  }
+</style>

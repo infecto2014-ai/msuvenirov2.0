@@ -9,6 +9,9 @@ import FaqSection from '@/components/FaqSection.astro';
 import ContactBlock from '@/components/ContactBlock.astro';
 import Icon from '@/components/Icon.astro';
 import NewYearBlock from '@/components/NewYearBlock.astro';
+import OfferBento from '@/components/OfferBento.astro';
+import HomeB2B from '@/components/home/HomeB2B.astro';
+import HomeSeo from '@/components/home/HomeSeo.astro';
 import { categoryFrom, defaultSelection, findProduct, rub, type Selection } from '@/data/pricing';
 import { generalFaq } from '@/data/faq';
 import { site } from '@/data/site';
@@ -58,12 +61,6 @@ const groups = [
   { id: 'print', label: 'Полиграфия' },
 ];
 
-const values = [
-  { icon: 'calc', label: 'Цена сразу онлайн' },
-  { icon: 'clock', label: 'Срочно — без наценки' },
-  { icon: 'upload', label: 'Простой макет — бесплатно' },
-  { icon: 'check', label: 'Брак по нашей вине — переделаем' },
-] as const;
 
 
 // white: white logo (made dark on the light first screen); square: round/square logo, shown larger so it
@@ -206,48 +203,15 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   </div>
 
   <div class="band">
-  <!-- POPULAR -->
-  <section class="section popular" aria-labelledby="pop-h">
-    <div class="wrap">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Популярное</p>
-          <h2 id="pop-h">Что чаще всего заказывают</h2>
-        </div>
-        <p>Цена указана за готовое изделие с печатью. Другой тираж или размер — в калькуляторе.</p>
-      </div>
-      <ul class="pop-grid">
-        {
-          popular.map((it) => {
-            const label = `${it.title}, ${it.q.qty} шт — ${rub(it.q.total)}`;
-            return (
-              <li class="pop">
-                <img src={it.img} alt={it.title} width="320" height="320" loading="lazy" decoding="async" />
-                <div class="pop-body">
-                  <h3>{it.title}</h3>
-                  <p class="pop-note">
-                    {it.note} · {it.q.qty} шт
-                  </p>
-                  <p class="pop-price mono">
-                    {rub(it.q.total)}
-                    {it.q.qty > 1 && <small>{rub(it.q.unit)} / шт</small>}
-                  </p>
-                  <div class="pop-actions">
-                    <button type="button" class="btn btn-sm btn-magenta" data-order={label}>
-                      Заказать
-                    </button>
-                    <a class="pop-edit" href={`/price?calc=${it.calc}#calc`}>
-                      Другой тираж →
-                    </a>
-                  </div>
-                </div>
-              </li>
-            );
-          })
-        }
-      </ul>
-    </div>
-  </section>
+  <!-- POPULAR: the same photo bento as «Готовые варианты» on the t-shirt page (owner, 07.11.2026) -->
+  <OfferBento
+    id="pop-h"
+    title="Что чаще всего заказывают"
+    mark="заказывают"
+    tone="y"
+    sub="Цена указана за готовое изделие с печатью. Другой тираж или размер — в калькуляторе."
+    items={popular.map((it) => ({ title: it.title, note: it.note, img: it.img, qty: it.q.qty, total: it.q.total, unit: it.q.unit, from: it.q.from, more: `/price?calc=${it.calc}#calc` }))}
+  />
   </div>
 
   <div class="band band-tint">
@@ -267,24 +231,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
           Свадебные футболки, поло для ресторана, кружки с видами города — каждый заказ делаем сами, в мастерской в ТЦ «Экватор». Перед печатью присылаем
           макет на согласование, а простой соберём бесплатно.
         </p>
-        <ul class="stats">
-          <li><b>10&nbsp;000+</b><span>заказов выполнено</span></li>
-          <li><b>с {site.founded}</b><span>мастерская в ТЦ «Экватор»</span></li>
-          <li><b>10+ лет</b><span>опыта в печати</span></li>
-        </ul>
-        <ul class="values">
-          {
-            values.map((v) => (
-              <li>
-                <span class="values-icon"><Icon name={v.icon} size={22} /></span>
-                <span>{v.label}</span>
-              </li>
-            ))
-          }
-        </ul>
-        <p class="pay">
-          <b>Оплата:</b> наличными, картой или по QR-коду. Частным лицам — предоплата 50%, остаток при получении. Организациям — счёт без НДС.
-        </p>
       </div>
     </div>
   </section>
@@ -295,45 +241,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   </div>
 
   <div class="band">
-  <!-- B2B -->
-  <section class="section" aria-labelledby="b2b-h">
-    <div class="wrap">
-      <div class="b2b">
-        <div class="b2b-cmyk" aria-hidden="true"><span></span><span></span><span></span></div>
-        <div class="b2b-text">
-          <p class="eyebrow b2b-eyebrow">Компаниям</p>
-          <h2 id="b2b-h">Мерч и подарки с логотипом для компаний</h2>
-          <p>
-            Футболки для команды, подарки партнёрам, календари к Новому году, значки и брелоки для мероприятий. Работаем по счёту без НДС, с закрывающими документами. Соберём смету
-            на весь набор и подготовим макеты.
-          </p>
-          <div class="b2b-actions">
-            <a class="btn btn-yellow" href="/korporativnym-klientam">Условия для компаний</a>
-            <button type="button" class="btn b2b-ghost" data-order="Запрос расчёта для компании">Запросить расчёт</button>
-            <a class="b2b-kp" href="/kp-msuvenirov.pdf" download><Icon name="arrow" size={18} /> Скачать КП (PDF)</a>
-          </div>
-        </div>
-        <ul class="b2b-list">
-          <li><span class="mono">01</span> Счёт без НДС и закрывающие документы</li>
-          <li><span class="mono">02</span> Одна смета на футболки, кружки, значки и полиграфию</li>
-          <li><span class="mono">03</span> Макет по вашему брендбуку — согласуем до печати</li>
-          <li><span class="mono">04</span> Образец перед тиражом</li>
-        </ul>
-        <div class="clients">
-          <p class="clients-title mono">Нам доверяют</p>
-          <ul class="clients-row">
-            {
-              clients.map((c) => (
-                <li>
-                  <img src={c.src} alt={c.alt} title={c.alt} width="140" height="70" loading="lazy" decoding="async" />
-                </li>
-              ))
-            }
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
+  <HomeB2B />
   </div>
 
   <div class="band band-tint">
@@ -345,46 +253,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   </div>
 
   <div class="band band-tint">
-  <!-- SEO TEXT -->
-  <section class="section seo-text" aria-labelledby="seo-h">
-    <div class="wrap">
-      <h2 id="seo-h">Печать на заказ в Калининграде</h2>
-      <input type="checkbox" id="seo-more" class="seo-toggle" />
-      <div class="seo-cols">
-        <div>
-          <h3>Печать на футболках и худи</h3>
-          <p>
-            Печатаем на <a href="/pechat-na-futbolkah">футболках</a>, <a href="/pechat-na-hudi">худи</a>, свитшотах, поло и
-            <a href="/pechat-na-shopperah">шопперах</a> от одной штуки. Основная технология — DTF: яркий принт на ткани любого цвета, который выдерживает больше 50 стирок. Можно
-            принести свою вещь или выбрать нашу — белые и чёрные футболки всегда в наличии.
-          </p>
-        </div>
-        <div>
-          <h3>Печать на кружках и фотоподарки</h3>
-          <p>
-            Делаем <a href="/pechat-na-kruzhkah">кружки с фото</a> и надписью: белые, цветные, хамелеон. Из фотографий получаются
-            <a href="/fotopodarki">подушки, пазлы, ёлочные шары</a> и <a href="/magnity">магниты</a> — подарок, который можно забрать в тот же день или к нужной дате.
-          </p>
-        </div>
-        <div>
-          <h3>Мерч и сувениры с логотипом для компаний</h3>
-          <p>
-            Для компаний Калининграда делаем корпоративный мерч: футболки и поло с логотипом, <a href="/pechat-na-kepkah">бейсболки</a>,
-            <a href="/znachki">значки</a>, <a href="/breloki">брелоки</a>, подарки сотрудникам и партнёрам. Работаем по счёту без НДС, перед тиражом согласуем макет и
-            показываем образец. Подробнее — в разделе <a href="/korporativnym-klientam">для компаний</a>.
-          </p>
-        </div>
-        <div>
-          <h3>Полиграфия и широкоформатная печать</h3>
-          <p>
-            Печатаем <a href="/vizitki">визитки</a>, <a href="/poligrafiya">листовки и блокноты</a>, <a href="/kalendari">календари</a> — квартальные, настенные и
-            карманные. Для вывесок и витрин — <a href="/shirokoformatnaya-pechat">широкоформатная печать</a> на плёнке и баннере. Нет макета — поможем его сделать.
-          </p>
-        </div>
-      </div>
-      <label for="seo-more" class="seo-more-btn">Читать полностью</label>
-    </div>
-  </section>
+  <HomeSeo />
   </div>
 
   <div class="band">
@@ -632,29 +501,28 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   .hero-light .hero-clients p {
     color: var(--ink-2);
   }
-  /* «Нам доверяют» on the light background (owner, 06.11.2026): one calm grey row, colour on hover;
-     white logos become dark; round/square logos are larger so all of them look the same size */
+  /* «Нам доверяют» (owner, 07.11.2026): logos in colour with a soft white glow so they read over the photo too;
+     white logos are darkened (white on paper is invisible); round/square logos are shown larger */
   .hero-light .hero-clients ul {
     gap: 16px clamp(24px, 3.4vw, 48px);
   }
   .hero-light .hero-clients img {
     height: 38px;
     max-width: 150px;
-    filter: grayscale(1) contrast(1.1);
-    opacity: 0.72;
-    transition: filter 0.25s ease, opacity 0.25s ease;
+    filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 6px rgba(255, 255, 255, 0.95));
+    transition: transform 0.2s ease;
   }
   .hero-light .hero-clients .is-square img {
     height: 56px;
   }
-  .hero-light .hero-clients li:hover img {
-    filter: none;
-    opacity: 1;
+  .hero-light .hero-clients .is-white img {
+    filter: brightness(0) drop-shadow(0 0 1px #fff) drop-shadow(0 0 6px rgba(255, 255, 255, 0.95));
+    opacity: 0.85;
   }
-  .hero-light .hero-clients .is-white img,
-  .hero-light .hero-clients .is-white:hover img {
-    filter: brightness(0);
-    opacity: 0.7;
+  @media (hover: hover) {
+    .hero-light .hero-clients li:hover img {
+      transform: translateY(-2px);
+    }
   }
   :global(.hero-light + .nyb)::before {
     display: none;
@@ -733,34 +601,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   .cats-side h2 .serif,
   .occasions h2 .serif {
     color: var(--c-ink);
-  }
-  .values {
-    list-style: none;
-    margin: 12px 0 0;
-    padding: 0;
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 14px;
-  }
-  .values li {
-    display: grid;
-    justify-items: center;
-    gap: 10px;
-    text-align: center;
-    font-size: 0.88rem;
-    font-weight: 600;
-    line-height: 1.3;
-  }
-  .values-icon {
-    display: grid;
-    place-items: center;
-    width: 54px;
-    height: 54px;
-    border-radius: 50%;
-    border: 1.5px solid var(--line-strong);
-    color: var(--c-ink);
-    background: var(--card);
   }
 
   /* ---------------- categories: text + chips, photo cards */
@@ -939,203 +779,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   .cats-more a {
     color: var(--ink);
     font-weight: 600;
-  }
-
-/* ---------------- b2b */
-  .b2b {
-    position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-    gap: 32px 48px;
-    align-items: center;
-    padding: clamp(28px, 5vw, 64px);
-    border-radius: 48px 48px 48px 140px;
-    background: var(--ink);
-    color: var(--paper);
-    overflow: clip;
-    isolation: isolate;
-  }
-  .b2b-cmyk {
-    position: absolute;
-    right: -150px;
-    top: -190px;
-    width: 280px;
-    height: 280px;
-    z-index: -1;
-    opacity: 0.55;
-  }
-  .b2b-cmyk span {
-    position: absolute;
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    mix-blend-mode: screen;
-  }
-  .b2b-cmyk span:nth-child(1) { background: var(--c); left: 0; top: 20px; }
-  .b2b-cmyk span:nth-child(2) { background: var(--m); right: 0; top: 20px; }
-  .b2b-cmyk span:nth-child(3) { background: var(--y); left: 60px; bottom: 0; }
-  .b2b-eyebrow {
-    color: #cfc8ba;
-  }
-  .b2b-text {
-    display: grid;
-    gap: 18px;
-    justify-items: start;
-  }
-  .b2b-text p {
-    color: #d8d2c5;
-    font-size: 1.05rem;
-  }
-  .b2b-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .b2b-kp {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 48px;
-    padding-inline: 6px;
-    color: var(--paper);
-    font-weight: 700;
-    text-underline-offset: 4px;
-  }
-  .b2b-kp:hover {
-    color: var(--y);
-  }
-  .b2b-kp :global(svg) {
-    transform: rotate(90deg);
-  }
-  .b2b :global(.eyebrow)::before {
-    mix-blend-mode: normal;
-  }
-  .b2b-ghost {
-    --btn-bg: transparent;
-    --btn-fg: var(--paper);
-    border-color: #5a5462;
-  }
-  .b2b-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: 10px;
-  }
-  .b2b-list li {
-    display: flex;
-    gap: 14px;
-    align-items: center;
-    padding: 16px 18px;
-    border-radius: 20px;
-    background: rgba(255, 252, 245, 0.06);
-    border: 1px solid rgba(255, 252, 245, 0.12);
-    font-weight: 600;
-  }
-  .b2b-list .mono {
-    color: var(--y);
-    font-size: 0.85rem;
-  }
-  /* clients — inside the dark b2b block, so white logos are visible too */
-  .clients {
-    grid-column: 1 / -1;
-    padding-top: 28px;
-    border-top: 1px solid rgba(255, 252, 245, 0.14);
-  }
-  .clients-title {
-    margin: 0 0 16px;
-    font-size: 0.78rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #cfc8ba;
-  }
-  .clients-row {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 18px 34px;
-  }
-  .clients-row img {
-    display: block;
-    height: 48px;
-    width: auto;
-    max-width: 140px;
-    object-fit: contain;
-    opacity: 0.85;
-    transition: opacity 0.2s ease;
-  }
-  .clients-row img:hover {
-    opacity: 1;
-  }
-
-  /* ---------------- popular */
-  .pop-grid {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
-  }
-  .pop {
-    display: grid;
-    grid-template-columns: 132px minmax(0, 1fr);
-    gap: 16px;
-    align-items: center;
-    padding: 14px;
-    border-radius: var(--radius-l);
-    background: var(--card);
-    border: 1.5px solid var(--line);
-  }
-  .pop img {
-    width: 132px;
-    height: 132px;
-    object-fit: cover;
-    border-radius: 20px 20px 20px 56px;
-    background: var(--paper-2);
-  }
-  .pop-body {
-    display: grid;
-    gap: 4px;
-    justify-items: start;
-  }
-  .pop h3 {
-    font-size: 1.08rem;
-  }
-  .pop-note {
-    margin: 0;
-    font-size: 0.84rem;
-    color: var(--muted);
-  }
-  .pop-price {
-    margin: 4px 0 6px;
-    font-size: 1.35rem;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  .pop-price small {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--muted);
-    letter-spacing: 0;
-  }
-  .pop-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 6px 14px;
-  }
-  .pop-edit {
-    font-size: 0.86rem;
-    font-weight: 600;
-    color: var(--ink);
   }
 
   /* ---------------- occasions: photo cards */
@@ -1333,21 +976,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     .about-collage {
       width: 100%;
     }
-    .values {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px 10px;
-    }
-    .values li {
-      grid-template-columns: 44px 1fr;
-      justify-items: start;
-      align-items: center;
-      text-align: left;
-      font-size: 0.82rem;
-    }
-    .values-icon {
-      width: 44px;
-      height: 44px;
-    }
     .chips {
       flex-wrap: nowrap;
       overflow-x: auto;
@@ -1426,122 +1054,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     }
   }
 
-/* ---------------- about: stats + payment */
-  .stats {
-    list-style: none;
-    margin: 4px 0 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px 32px;
-  }
-  .stats li {
-    display: grid;
-    gap: 2px;
-  }
-  .stats b {
-    font-size: clamp(1.6rem, 2.6vw, 2.2rem);
-    font-weight: 800;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    color: var(--m-ink);
-  }
-  .stats span {
-    font-size: 0.86rem;
-    color: var(--muted);
-  }
-  .pay {
-    margin: 6px 0 0;
-    padding: 14px 18px;
-    border-radius: 18px;
-    border: 1.5px dashed var(--line-strong);
-    font-size: 0.92rem;
-    color: var(--ink-2);
-  }
-
-  @media (max-width: 560px) {
-    .stats {
-      gap: 10px 20px;
-    }
-    .pay {
-      font-size: 0.84rem;
-      padding: 12px 14px;
-    }
-  }
-
-  /* ---------------- seo text */
-  .seo-text h2 {
-    margin-bottom: 24px;
-    font-size: clamp(1.6rem, 3vw, 2.2rem);
-  }
-  .seo-cols {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px 48px;
-  }
-  .seo-cols h3 {
-    margin-bottom: 8px;
-    font-size: 1.1rem;
-  }
-  .seo-cols p {
-    margin: 0;
-    color: var(--ink-2);
-    font-size: 0.96rem;
-    line-height: 1.6;
-  }
-
-  @media (max-width: 1020px) {
-    .b2b {
-      grid-template-columns: 1fr;
-    }
-    .pop-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-  @media (max-width: 700px) {
-    .seo-cols {
-      grid-template-columns: 1fr;
-    }
-  }
-  @media (max-width: 560px) {
-    /* phones: popular items scroll sideways, picture on top */
-    .pop-grid {
-      display: flex;
-      gap: 12px;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      margin-inline: calc(var(--gutter) * -1);
-      padding: 0 var(--gutter) 8px;
-      scrollbar-width: none;
-    }
-    .pop {
-      flex: 0 0 72%;
-      scroll-snap-align: center;
-      grid-template-columns: 1fr;
-      align-content: start;
-      gap: 10px;
-      padding: 12px;
-    }
-    .pop img {
-      width: 100%;
-      height: auto;
-      aspect-ratio: 4 / 3;
-    }
-    .clients-row {
-      gap: 14px 22px;
-    }
-    .clients-row img {
-      height: 38px;
-      max-width: 110px;
-    }
-    .b2b {
-      border-radius: 32px 32px 32px 80px;
-    }
-  }
-
   /* ================= phones (≤ 560px): compact home, desktop untouched ================= */
-  .seo-toggle,
-  .seo-more-btn,
   .show-sm {
     display: none;
   }
@@ -1551,99 +1064,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     }
     .show-sm {
       display: inline;
-    }
-    /* popular: narrower cards */
-    .pop {
-      flex-basis: 62%;
-    }
-    .pop img {
-      aspect-ratio: 16 / 11;
-    }
-    .pop h3 {
-      font-size: 0.98rem;
-    }
-    .pop-price {
-      font-size: 1.15rem;
-      margin: 2px 0 4px;
-    }
-    /* companies */
-    .b2b {
-      gap: 16px;
-      padding: 22px 18px;
-      border-radius: 28px 28px 28px 60px;
-    }
-    .b2b-text {
-      gap: 12px;
-    }
-    .b2b-text p {
-      font-size: 0.92rem;
-    }
-    .b2b-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      width: 100%;
-      gap: 8px;
-    }
-    .b2b-kp {
-      grid-column: 1 / -1;
-      justify-self: start;
-    }
-    .b2b-actions .btn {
-      justify-content: center;
-      padding-inline: 8px;
-      font-size: 0.85rem;
-    }
-    .b2b-list {
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-    }
-    .b2b-list li {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 4px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      font-size: 0.8rem;
-      line-height: 1.3;
-    }
-    .clients {
-      padding-top: 16px;
-    }
-    .clients-row {
-      gap: 12px 18px;
-    }
-    .clients-row img {
-      height: 30px;
-      max-width: 92px;
-    }
-    .b2b-cmyk {
-      display: none;
-    }
-    /* seo text: first lines + «Читать полностью» */
-    .seo-text h2 {
-      margin-bottom: 14px;
-    }
-    .seo-cols {
-      gap: 14px;
-      max-height: 230px;
-      overflow: hidden;
-      -webkit-mask-image: linear-gradient(#000 60%, transparent);
-      mask-image: linear-gradient(#000 60%, transparent);
-    }
-    .seo-toggle:checked + .seo-cols {
-      max-height: none;
-      -webkit-mask-image: none;
-      mask-image: none;
-    }
-    .seo-more-btn {
-      display: inline-block;
-      margin-top: 8px;
-      font-weight: 700;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-    .seo-toggle:checked ~ .seo-more-btn {
-      display: none;
     }
   }
 </style>
