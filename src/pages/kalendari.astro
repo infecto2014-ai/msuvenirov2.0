@@ -2,6 +2,7 @@
 // «Печать календарей» — own page (like the t-shirt page): first screen, calculator, ready options, five quarterly models
 // drawn in one scale, options, anatomy, other calendars, audience, how to order, works, reviews, FAQ, SEO text.
 // Content — src/data/calendarsPage.ts; every price — src/data/pricing.ts. The services.ts entry stays for menus/sitemap.
+import TshirtRelated from '@/components/tshirt/TshirtRelated.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import Calculator from '@/components/islands/Calculator';
@@ -115,12 +116,14 @@ const tones = ['c', 'm', 'y'];
   </section>
 
   <!-- ============ calculator ============ -->
+  <div class="band band-tint">
   <section id="calc" class="section calc-sec" aria-labelledby="calc-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-y">
+          <span class="sec-num mono" aria-hidden="true">01</span>
           <p class="eyebrow">Калькулятор</p>
-          <h2 id="calc-h">Посчитайте свои календари</h2>
+          <h2 id="calc-h">Посчитайте свои <span class="mark sec-mark">календари</span></h2>
         </div>
         <p class="calc-sub">Выберите модель, планку и тираж — цена за штуку и за весь тираж пересчитается сразу. Настенные, домики и карманные — переключите вид календаря.</p>
       </div>
@@ -128,16 +131,21 @@ const tones = ['c', 'm', 'y'];
     </div>
     <AlsoOrder slugs={page.alsoOrder} />
   </section>
+  </div>
 
+  <div class="band">
   <CalendarPackages />
+  </div>
 
   <!-- ============ five quarterly models in one scale ============ -->
+  <div class="band band-tint">
   <section class="section kinds" aria-labelledby="kinds-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-m">
+          <span class="sec-num mono" aria-hidden="true">02</span>
           <p class="eyebrow">Виды календарей</p>
-          <h2 id="kinds-h">Квартальные календари МИДИ, МИНИ и «3 в 1»</h2>
+          <h2 id="kinds-h">Квартальные календари МИДИ, МИНИ и «3 в <span class="mark sec-mark">1»</span></h2>
         </div>
         <p class="kinds-sub">Все пять моделей нарисованы в одном масштабе — видно, какой календарь крупнее. Одна клетка на фоне — 10 × 10 см.</p>
       </div>
@@ -185,14 +193,17 @@ const tones = ['c', 'm', 'y'];
       </ul>
     </div>
   </section>
+  </div>
 
   <!-- ============ options ============ -->
+  <div class="band">
   <section class="section opts" aria-labelledby="opts-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-c">
+          <span class="sec-num mono" aria-hidden="true">03</span>
           <p class="eyebrow">Опции</p>
-          <h2 id="opts-h">Металлическая планка и подгиб постера</h2>
+          <h2 id="opts-h">Металлическая планка и подгиб <span class="mark sec-mark">постера</span></h2>
         </div>
         <p>Добавляются к любой квартальной модели. Доплата — за один календарь, в калькуляторе она учитывается сразу.</p>
       </div>
@@ -215,8 +226,10 @@ const tones = ['c', 'm', 'y'];
       </ul>
     </div>
   </section>
+  </div>
 
   <!-- ============ anatomy ============ -->
+  <div class="band">
   <section class="section anat" aria-labelledby="anat-h">
     <div class="wrap anat-grid">
       <figure class="anat-art">
@@ -229,7 +242,7 @@ const tones = ['c', 'm', 'y'];
       </figure>
       <div class="anat-text">
         <p class="eyebrow">Устройство</p>
-        <h2 id="anat-h">Из чего состоит квартальный календарь</h2>
+        <h2 id="anat-h">Из чего состоит квартальный <span class="mark">календарь</span></h2>
         <ol class="anat-list">
           {
             page.anatomy.map((a, i) => (
@@ -246,14 +259,17 @@ const tones = ['c', 'm', 'y'];
       </div>
     </div>
   </section>
+  </div>
 
   <!-- ============ other calendars ============ -->
+  <div class="band band-tint">
   <section class="section oth" aria-labelledby="oth-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-y">
+          <span class="sec-num mono" aria-hidden="true">04</span>
           <p class="eyebrow">Ещё календари</p>
-          <h2 id="oth-h">Настенные, настольные и карманные календари на заказ</h2>
+          <h2 id="oth-h">Настенные, настольные и карманные календари на <span class="mark sec-mark">заказ</span></h2>
         </div>
         <p class="oth-sub">Их можно заказать даже в одном экземпляре — например, перекидной календарь с семейными фото в подарок.</p>
       </div>
@@ -328,8 +344,10 @@ const tones = ['c', 'm', 'y'];
       </ul>
     </div>
   </section>
+  </div>
 
   <!-- ============ for whom ============ -->
+  <div class="band">
   <section class="section aud" aria-labelledby="aud-h">
     <div class="wrap">
       <p class="eyebrow">Для кого</p>
@@ -348,13 +366,15 @@ const tones = ['c', 'm', 'y'];
       </ul>
     </div>
   </section>
+  </div>
 
   <!-- ============ how to order ============ -->
+  <div class="band">
   <section class="section how" aria-labelledby="how-h">
     <div class="wrap how-grid">
       <div>
         <p class="eyebrow">Заказ</p>
-        <h2 id="how-h">Как заказать корпоративные календари с логотипом</h2>
+        <h2 id="how-h">Как заказать корпоративные календари с <span class="mark">логотипом</span></h2>
         <ol class="how-steps">
           {
             page.steps.map((s, i) => (
@@ -393,6 +413,7 @@ const tones = ['c', 'm', 'y'];
       </aside>
     </div>
   </section>
+  </div>
 
   <script is:inline>
     // «Макет и календарная сетка» is always open on a computer; on a phone it starts folded (tap to open), as on the t-shirt page
@@ -410,13 +431,20 @@ const tones = ['c', 'm', 'y'];
     })();
   </script>
 
+  <div class="band band-tint">
   <PortfolioGrid tags={page.portfolioTags} limit={4} title="Примеры: календари и магниты" />
+  </div>
 
+  <div class="band">
   <Reviews />
+  </div>
 
+  <div class="band band-tint">
   <FaqSection items={page.faq} title="Вопросы о календарях" />
+  </div>
 
   <!-- ============ SEO text (folded on phones) ============ -->
+  <div class="band">
   <section class="section seo-text" aria-labelledby="seo-h">
     <div class="wrap">
       <h2 id="seo-h">{page.seo.title}</h2>
@@ -441,30 +469,17 @@ const tones = ['c', 'm', 'y'];
       <label for="seo-more" class="seo-more-btn">Читать полностью</label>
     </div>
   </section>
+  </div>
 
-  {
-    related.length > 0 && (
-      <section class="section related" aria-labelledby="rel-h">
-        <div class="wrap">
-          <h2 id="rel-h" class="related-h">Ещё печатаем</h2>
-          <div class="related-grid">
-            {related.map((r) => (
-              <a class="related-card" href={r.slug}>
-                <img src={r.image} alt="" width="120" height="120" loading="lazy" />
-                <span>{r.name}</span>
-                <Icon name="arrow" />
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-    )
-  }
+  <div class="band band-tint">
+  {related.length > 0 && <TshirtRelated items={related} />}
+  </div>
 
   <CtaBand title="Нужны календари к Новому году?" text="Пришлите логотип и пожелания — подберём модель, посчитаем тираж и соберём макет с сеткой на 2027 год." />
 </BaseLayout>
 
 <style>
+  /* data-restyled: bands, numbered headings, hangers — like /pechat-na-futbolkah (owner, 07.11.2026) */
   /* ================= first screen ================= */
   .khero {
     padding-block: clamp(28px, 4vw, 48px) clamp(24px, 4vw, 40px);

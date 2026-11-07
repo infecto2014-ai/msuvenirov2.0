@@ -3,6 +3,7 @@
 // ready options, the cap itself (specs + 7 colours), where we print, audience, how to order, works, reviews, FAQ, SEO text.
 // Content — src/data/capsPage.ts; every price — src/data/pricing.ts ('cap', category 'textile');
 // drawings — src/components/cap/CapArt.astro + cap-geometry.ts. The services.ts entry stays for menus/sitemap.
+import TshirtRelated from '@/components/tshirt/TshirtRelated.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import Calculator from '@/components/islands/Calculator';
@@ -101,12 +102,14 @@ const tones = ['c', 'm', 'y'];
   </section>
 
   <!-- ============ calculator ============ -->
+  <div class="band band-tint">
   <section id="calc" class="section calc-sec" aria-labelledby="calc-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-y">
+          <span class="sec-num mono" aria-hidden="true">01</span>
           <p class="eyebrow">Калькулятор</p>
-          <h2 id="calc-h">Посчитайте свои кепки</h2>
+          <h2 id="calc-h">Посчитайте свои <span class="mark sec-mark">кепки</span></h2>
         </div>
         <p class="calc-sub">Выберите цвет, от одного до трёх мест печати и количество — цена за штуку и за весь заказ пересчитается сразу. Кепка, печать и макет уже в цене.</p>
       </div>
@@ -114,10 +117,14 @@ const tones = ['c', 'm', 'y'];
     </div>
     <AlsoOrder slugs={page.alsoOrder} />
   </section>
+  </div>
 
+  <div class="band">
   <CapPackages />
+  </div>
 
   <!-- ============ the cap itself ============ -->
+  <div class="band band-tint">
   <section class="section our" aria-labelledby="our-h">
     <div class="wrap our-grid">
       <div class="our-art">
@@ -180,14 +187,17 @@ const tones = ['c', 'm', 'y'];
       </div>
     </div>
   </section>
+  </div>
 
   <!-- ============ where we print ============ -->
+  <div class="band">
   <section class="section plc" aria-labelledby="plc-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-m">
+          <span class="sec-num mono" aria-hidden="true">02</span>
           <p class="eyebrow">Места печати</p>
-          <h2 id="plc-h">Где печатаем на кепке</h2>
+          <h2 id="plc-h">Где печатаем на <span class="mark sec-mark">кепке</span></h2>
         </div>
         <p>До трёх принтов на одной кепке. Второй принт стоит на {extraOff}% дешевле первого, третий — вдвое дешевле.</p>
       </div>
@@ -214,8 +224,10 @@ const tones = ['c', 'm', 'y'];
       </ul>
     </div>
   </section>
+  </div>
 
   <!-- ============ for whom ============ -->
+  <div class="band band-tint">
   <section class="section aud" aria-labelledby="aud-h">
     <div class="wrap">
       <p class="eyebrow">Для кого</p>
@@ -234,13 +246,15 @@ const tones = ['c', 'm', 'y'];
       </ul>
     </div>
   </section>
+  </div>
 
   <!-- ============ how to order ============ -->
+  <div class="band">
   <section class="section how" aria-labelledby="how-h">
     <div class="wrap how-grid">
       <div>
         <p class="eyebrow">Заказ</p>
-        <h2 id="how-h">Как заказать печать на кепке</h2>
+        <h2 id="how-h">Как заказать печать на <span class="mark">кепке</span></h2>
         <ol class="how-steps">
           {
             page.steps.map((s, i) => (
@@ -274,6 +288,7 @@ const tones = ['c', 'm', 'y'];
       </aside>
     </div>
   </section>
+  </div>
 
   <script is:inline>
     // folding cards are always open on a computer; on a phone they start folded (tap to open), as on the shoppers page
@@ -291,13 +306,20 @@ const tones = ['c', 'm', 'y'];
     })();
   </script>
 
+  <div class="band band-tint">
   <PortfolioGrid tags={page.portfolioTags} limit={4} title="Примеры: кепки и одежда" />
+  </div>
 
+  <div class="band">
   <Reviews keywords={hasCapReviews ? page.reviewKeywords : undefined} title={hasCapReviews ? 'Отзывы о кепках' : 'Что говорят клиенты'} />
+  </div>
 
+  <div class="band band-tint">
   <FaqSection items={faq} title="Вопросы о печати на кепках" />
+  </div>
 
   <!-- ============ SEO text (folded on phones) ============ -->
+  <div class="band">
   <section class="section seo-text" aria-labelledby="seo-h">
     <div class="wrap">
       <h2 id="seo-h">{page.seo.title}</h2>
@@ -323,30 +345,17 @@ const tones = ['c', 'm', 'y'];
       <label for="seo-more" class="seo-more-btn">Читать полностью</label>
     </div>
   </section>
+  </div>
 
-  {
-    related.length > 0 && (
-      <section class="section related" aria-labelledby="rel-h">
-        <div class="wrap">
-          <h2 id="rel-h" class="related-h">Ещё печатаем</h2>
-          <div class="related-grid">
-            {related.map((r) => (
-              <a class="related-card" href={r.slug}>
-                <img src={r.image} alt="" width="120" height="120" loading="lazy" />
-                <span>{r.name}</span>
-                <Icon name="arrow" />
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-    )
-  }
+  <div class="band band-tint">
+  {related.length > 0 && <TshirtRelated items={related} />}
+  </div>
 
   <CtaBand title="Хотите кепку со своим логотипом?" text="Пришлите логотип, надпись или идею — соберём макет, покажем, как он ляжет на кепку, и посчитаем цену." />
 </BaseLayout>
 
 <style>
+  /* data-restyled: bands, numbered headings, hangers — like /pechat-na-futbolkah (owner, 07.11.2026) */
   /* ================= first screen ================= */
   .shero {
     padding-block: clamp(28px, 4vw, 48px) clamp(24px, 4vw, 40px);

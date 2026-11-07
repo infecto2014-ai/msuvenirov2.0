@@ -4,6 +4,7 @@
 // how to prepare the picture, audience, how to order, works, reviews, FAQ, SEO text.
 // Content — src/data/badgesPage.ts; every price — src/data/pricing.ts (category 'badges');
 // drawings — src/components/badge/BadgeArt.astro. The services.ts entry stays for menus/sitemap.
+import TshirtRelated from '@/components/tshirt/TshirtRelated.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import Calculator from '@/components/islands/Calculator';
@@ -109,12 +110,14 @@ const SSCALE = 4;
   </section>
 
   <!-- ============ calculator ============ -->
+  <div class="band band-tint">
   <section id="calc" class="section calc-sec" aria-labelledby="calc-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-y">
+          <span class="sec-num mono" aria-hidden="true">01</span>
           <p class="eyebrow">Калькулятор</p>
-          <h2 id="calc-h">Посчитайте свои значки</h2>
+          <h2 id="calc-h">Посчитайте свои <span class="mark sec-mark">значки</span></h2>
         </div>
         <p class="calc-sub">Выберите вид значка, диаметр и количество — цена за штуку и за весь заказ пересчитается сразу. Первая скидка — уже с {discountFrom} штук.</p>
       </div>
@@ -122,16 +125,21 @@ const SSCALE = 4;
     </div>
     <AlsoOrder slugs={page.alsoOrder} />
   </section>
+  </div>
 
+  <div class="band">
   <BadgePackages />
+  </div>
 
   <!-- ============ all sizes on one grid, one scale ============ -->
+  <div class="band band-tint">
   <section class="section sz" aria-labelledby="sz-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-m">
+          <span class="sec-num mono" aria-hidden="true">02</span>
           <p class="eyebrow">Размеры</p>
-          <h2 id="sz-h">Шесть размеров: от 15 до 56 мм</h2>
+          <h2 id="sz-h">Шесть размеров: от 15 до 56 <span class="mark sec-mark">мм</span></h2>
         </div>
         <p class="sz-sub">Все значки нарисованы в одном масштабе — видно, какой больше. Одна клетка на фоне — 1 × 1 см.</p>
       </div>
@@ -154,14 +162,17 @@ const SSCALE = 4;
       </div>
     </div>
   </section>
+  </div>
 
   <!-- ============ roll or pin ============ -->
+  <div class="band">
   <section class="section typ" aria-labelledby="typ-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-c">
+          <span class="sec-num mono" aria-hidden="true">03</span>
           <p class="eyebrow">Виды значков</p>
-          <h2 id="typ-h">Закатной или на цанге</h2>
+          <h2 id="typ-h">Закатной или на <span class="mark sec-mark">цанге</span></h2>
         </div>
         <p>С {discountFrom} штук цена за значок ниже, дальше снижается с ростом тиража — цены в таблицах за 1 штуку.</p>
       </div>
@@ -212,8 +223,10 @@ const SSCALE = 4;
       </div>
     </div>
   </section>
+  </div>
 
   <!-- ============ how to prepare the picture ============ -->
+  <div class="band band-tint">
   <section class="section gd" aria-labelledby="gd-h">
     <div class="wrap gd-grid">
       <div class="gd-art" aria-hidden="true">
@@ -241,8 +254,10 @@ const SSCALE = 4;
       </div>
     </div>
   </section>
+  </div>
 
   <!-- ============ for whom ============ -->
+  <div class="band">
   <section class="section aud" aria-labelledby="aud-h">
     <div class="wrap">
       <p class="eyebrow">Для кого</p>
@@ -261,13 +276,15 @@ const SSCALE = 4;
       </ul>
     </div>
   </section>
+  </div>
 
   <!-- ============ how to order ============ -->
+  <div class="band band-tint">
   <section class="section how" aria-labelledby="how-h">
     <div class="wrap how-grid">
       <div>
         <p class="eyebrow">Заказ</p>
-        <h2 id="how-h">Как заказать значки</h2>
+        <h2 id="how-h">Как заказать <span class="mark">значки</span></h2>
         <ol class="how-steps">
           {
             page.steps.map((s, i) => (
@@ -294,6 +311,7 @@ const SSCALE = 4;
       </aside>
     </div>
   </section>
+  </div>
 
   <script is:inline>
     // folding cards are always open on a computer; on a phone they start folded (tap to open), as on the shoppers page
@@ -311,13 +329,20 @@ const SSCALE = 4;
     })();
   </script>
 
+  <div class="band">
   <PortfolioGrid tags={page.portfolioTags} limit={4} title="Примеры: значки и брелоки" />
+  </div>
 
+  <div class="band band-tint">
   <Reviews keywords={hasBadgeReviews ? page.reviewKeywords : undefined} title={hasBadgeReviews ? 'Отзывы о значках' : 'Что говорят клиенты'} />
+  </div>
 
+  <div class="band">
   <FaqSection items={faq} title="Вопросы о значках" />
+  </div>
 
   <!-- ============ SEO text (folded on phones) ============ -->
+  <div class="band band-tint">
   <section class="section seo-text" aria-labelledby="seo-h">
     <div class="wrap">
       <h2 id="seo-h">{page.seo.title}</h2>
@@ -343,30 +368,17 @@ const SSCALE = 4;
       <label for="seo-more" class="seo-more-btn">Читать полностью</label>
     </div>
   </section>
+  </div>
 
-  {
-    related.length > 0 && (
-      <section class="section related" aria-labelledby="rel-h">
-        <div class="wrap">
-          <h2 id="rel-h" class="related-h">Ещё печатаем</h2>
-          <div class="related-grid">
-            {related.map((r) => (
-              <a class="related-card" href={r.slug}>
-                <img src={r.image} alt="" width="120" height="120" loading="lazy" />
-                <span>{r.name}</span>
-                <Icon name="arrow" />
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-    )
-  }
+  <div class="band">
+  {related.length > 0 && <TshirtRelated items={related} />}
+  </div>
 
   <CtaBand title="Хотите значки со своим рисунком?" text="Пришлите картинку, логотип или идею — подгоним под круг, покажем макет и посчитаем цену." />
 </BaseLayout>
 
 <style>
+  /* data-restyled: bands, numbered headings, hangers — like /pechat-na-futbolkah (owner, 07.11.2026) */
   /* ================= first screen ================= */
   .shero {
     padding-block: clamp(28px, 4vw, 48px) clamp(24px, 4vw, 40px);

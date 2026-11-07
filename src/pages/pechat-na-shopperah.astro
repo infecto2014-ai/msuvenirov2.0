@@ -4,6 +4,7 @@
 // works, reviews, FAQ, SEO text.
 // Content — src/data/shoppersPage.ts; every price — src/data/pricing.ts ('shopper', 'shopper-sub');
 // drawings and sizes — src/components/shopper/ShopperArt.astro + shopper-geometry.ts. The services.ts entry stays for menus/sitemap.
+import TshirtRelated from '@/components/tshirt/TshirtRelated.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import Calculator from '@/components/islands/Calculator';
@@ -123,12 +124,14 @@ const KSCALE = 0.62;
   </section>
 
   <!-- ============ calculator ============ -->
+  <div class="band band-tint">
   <section id="calc" class="section calc-sec" aria-labelledby="calc-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-y">
+          <span class="sec-num mono" aria-hidden="true">01</span>
           <p class="eyebrow">Калькулятор</p>
-          <h2 id="calc-h">Посчитайте свои шопперы</h2>
+          <h2 id="calc-h">Посчитайте свои <span class="mark sec-mark">шопперы</span></h2>
         </div>
         <p class="calc-sub">Выберите шоппер, размер принта с каждой стороны и количество — цена за штуку и за весь заказ пересчитается сразу. Сумка, печать и макет уже в цене.</p>
       </div>
@@ -136,16 +139,21 @@ const KSCALE = 0.62;
     </div>
     <AlsoOrder slugs={page.alsoOrder} />
   </section>
+  </div>
 
+  <div class="band">
   <ShopperPackages />
+  </div>
 
   <!-- ============ two kinds side by side, one scale ============ -->
+  <div class="band band-tint">
   <section class="section kinds" aria-labelledby="kinds-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-m">
+          <span class="sec-num mono" aria-hidden="true">02</span>
           <p class="eyebrow">Какие шопперы печатаем</p>
-          <h2 id="kinds-h">Хлопковый шоппер и светлый шоппер цвета льна</h2>
+          <h2 id="kinds-h">Хлопковый шоппер и светлый шоппер цвета <span class="mark sec-mark">льна</span></h2>
         </div>
         <p class="kinds-sub">Оба нарисованы в одном масштабе. Одна клетка на фоне — 5 × 5 см.</p>
       </div>
@@ -224,14 +232,17 @@ const KSCALE = 0.62;
       </div>
     </div>
   </section>
+  </div>
 
   <!-- ============ print sizes, in scale ============ -->
+  <div class="band">
   <section class="section szs" aria-labelledby="szs-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-c">
+          <span class="sec-num mono" aria-hidden="true">03</span>
           <p class="eyebrow">Размер принта</p>
-          <h2 id="szs-h">А6, А5, А4 или А3 — как принт смотрится на сумке</h2>
+          <h2 id="szs-h">А6, А5, А4 или А3 — как принт смотрится на <span class="mark sec-mark">сумке</span></h2>
         </div>
         <p>Принты нарисованы в настоящем масштабе на светлом шоппере 36 × 42 см. На хлопковом шоппере — до А4.</p>
       </div>
@@ -262,12 +273,15 @@ const KSCALE = 0.62;
       </ul>
     </div>
   </section>
+  </div>
 
   <!-- ============ DTF vs sublimation (dark band) ============ -->
+  <div class="band">
   <section class="section vs" aria-labelledby="vs-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-y">
+          <span class="sec-num mono" aria-hidden="true">04</span>
           <p class="eyebrow">Технология</p>
           <h2 id="vs-h">{page.tech.title}</h2>
         </div>
@@ -304,8 +318,10 @@ const KSCALE = 0.62;
       </div>
     </div>
   </section>
+  </div>
 
   <!-- ============ for whom ============ -->
+  <div class="band band-tint">
   <section class="section aud" aria-labelledby="aud-h">
     <div class="wrap">
       <p class="eyebrow">Для кого</p>
@@ -324,13 +340,15 @@ const KSCALE = 0.62;
       </ul>
     </div>
   </section>
+  </div>
 
   <!-- ============ how to order ============ -->
+  <div class="band">
   <section class="section how" aria-labelledby="how-h">
     <div class="wrap how-grid">
       <div>
         <p class="eyebrow">Заказ</p>
-        <h2 id="how-h">Как заказать печать на шоппере</h2>
+        <h2 id="how-h">Как заказать печать на <span class="mark">шоппере</span></h2>
         <ol class="how-steps">
           {
             page.steps.map((s, i) => (
@@ -364,6 +382,7 @@ const KSCALE = 0.62;
       </aside>
     </div>
   </section>
+  </div>
 
   <script is:inline>
     // folding cards are always open on a computer; on a phone they start folded (tap to open), as on the mugs page
@@ -381,13 +400,20 @@ const KSCALE = 0.62;
     })();
   </script>
 
+  <div class="band band-tint">
   <PortfolioGrid tags={page.portfolioTags} limit={4} title="Примеры: шопперы и текстиль" />
+  </div>
 
+  <div class="band">
   <Reviews keywords={hasShopperReviews ? page.reviewKeywords : undefined} title={hasShopperReviews ? 'Отзывы о шопперах' : 'Что говорят клиенты'} />
+  </div>
 
+  <div class="band band-tint">
   <FaqSection items={faq} title="Вопросы о печати на шопперах" />
+  </div>
 
   <!-- ============ SEO text (folded on phones) ============ -->
+  <div class="band">
   <section class="section seo-text" aria-labelledby="seo-h">
     <div class="wrap">
       <h2 id="seo-h">{page.seo.title}</h2>
@@ -413,30 +439,17 @@ const KSCALE = 0.62;
       <label for="seo-more" class="seo-more-btn">Читать полностью</label>
     </div>
   </section>
+  </div>
 
-  {
-    related.length > 0 && (
-      <section class="section related" aria-labelledby="rel-h">
-        <div class="wrap">
-          <h2 id="rel-h" class="related-h">Ещё печатаем</h2>
-          <div class="related-grid">
-            {related.map((r) => (
-              <a class="related-card" href={r.slug}>
-                <img src={r.image} alt="" width="120" height="120" loading="lazy" />
-                <span>{r.name}</span>
-                <Icon name="arrow" />
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-    )
-  }
+  <div class="band band-tint">
+  {related.length > 0 && <TshirtRelated items={related} />}
+  </div>
 
   <CtaBand title="Хотите шоппер со своим принтом?" text="Пришлите рисунок, фото или логотип — соберём макет, покажем, как он ляжет на сумку, и посчитаем цену." />
 </BaseLayout>
 
 <style>
+  /* data-restyled: bands, numbered headings, hangers — like /pechat-na-futbolkah (owner, 07.11.2026) */
   /* ================= first screen ================= */
   .shero {
     padding-block: clamp(28px, 4vw, 48px) clamp(24px, 4vw, 40px);

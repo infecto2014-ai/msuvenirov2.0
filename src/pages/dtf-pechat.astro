@@ -3,6 +3,7 @@
 // 'transfers'), ready options, what fits on a sheet, DTF or sublimation, audience, how to order, works, reviews, FAQ, SEO.
 // Content — src/data/transfersPage.ts; prices — pricing.ts ('dtf-sheet', 'sub-sheet'); drawings —
 // src/components/sheet/SheetArt.astro. Listed in the «Одежда» menu and in the sitemap's static pages.
+import TshirtRelated from '@/components/tshirt/TshirtRelated.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import Calculator from '@/components/islands/Calculator';
@@ -95,12 +96,14 @@ const applyLinks = page.applyLinks.map((l) => ({ ...l, from: findProduct('textil
   </section>
 
   <!-- ============ calculator ============ -->
+  <div class="band band-tint">
   <section id="calc" class="section calc-sec" aria-labelledby="calc-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-y">
+          <span class="sec-num mono" aria-hidden="true">01</span>
           <p class="eyebrow">Калькулятор</p>
-          <h2 id="calc-h">Посчитайте листы</h2>
+          <h2 id="calc-h">Посчитайте <span class="mark sec-mark">листы</span></h2>
         </div>
         <p class="calc-sub">DTF-листы 28 × 38 см или сублимационные А3 и А4 — выберите и укажите количество листов. Больше {SHEET_MAX} листов — индивидуально.</p>
       </div>
@@ -108,14 +111,17 @@ const applyLinks = page.applyLinks.map((l) => ({ ...l, from: findProduct('textil
     </div>
     <AlsoOrder slugs={page.alsoOrder} />
   </section>
+  </div>
 
   <!-- ============ ready options ============ -->
+  <div class="band">
   <section class="section spk" aria-labelledby="spk-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-m">
+          <span class="sec-num mono" aria-hidden="true">02</span>
           <p class="eyebrow">Популярное</p>
-          <h2 id="spk-h">Готовые варианты с ценой</h2>
+          <h2 id="spk-h">Готовые варианты с <span class="mark sec-mark">ценой</span></h2>
         </div>
         <p class="spk-sub">Цена за листы с вашими принтами, без нанесения.</p>
       </div>
@@ -145,14 +151,17 @@ const applyLinks = page.applyLinks.map((l) => ({ ...l, from: findProduct('textil
       </ul>
     </div>
   </section>
+  </div>
 
   <!-- ============ what fits on a sheet ============ -->
+  <div class="band band-tint">
   <section class="section knd" aria-labelledby="knd-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-c">
+          <span class="sec-num mono" aria-hidden="true">03</span>
           <p class="eyebrow">Раскладка</p>
-          <h2 id="knd-h">Что поместится на лист 28 × 38 см</h2>
+          <h2 id="knd-h">Что поместится на лист 28 × 38 <span class="mark sec-mark">см</span></h2>
         </div>
         <p>Платите за лист, а не за картинку: разложите на нём сколько угодно принтов разного размера.</p>
       </div>
@@ -182,8 +191,10 @@ const applyLinks = page.applyLinks.map((l) => ({ ...l, from: findProduct('textil
       </ul>
     </div>
   </section>
+  </div>
 
   <!-- ============ DTF or sublimation ============ -->
+  <div class="band">
   <section class="section ways" aria-labelledby="ways-h">
     <div class="wrap">
       <p class="eyebrow">Технология</p>
@@ -210,14 +221,17 @@ const applyLinks = page.applyLinks.map((l) => ({ ...l, from: findProduct('textil
       </div>
     </div>
   </section>
+  </div>
 
   <!-- ============ applied by us ============ -->
+  <div class="band band-tint">
   <section class="section apl" aria-labelledby="apl-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-y">
+          <span class="sec-num mono" aria-hidden="true">04</span>
           <p class="eyebrow">С нанесением</p>
-          <h2 id="apl-h">Нужно нанести? Сделаем сами</h2>
+          <h2 id="apl-h">Нужно нанести? Сделаем <span class="mark sec-mark">сами</span></h2>
         </div>
         <p>Нет пресса или не хочется возиться — перенесём принт на одежду и изделия в мастерской. Цена уже с нанесением.</p>
       </div>
@@ -239,8 +253,10 @@ const applyLinks = page.applyLinks.map((l) => ({ ...l, from: findProduct('textil
       </ul>
     </div>
   </section>
+  </div>
 
   <!-- ============ for whom ============ -->
+  <div class="band">
   <section class="section aud" aria-labelledby="aud-h">
     <div class="wrap">
       <p class="eyebrow">Для кого</p>
@@ -259,13 +275,15 @@ const applyLinks = page.applyLinks.map((l) => ({ ...l, from: findProduct('textil
       </ul>
     </div>
   </section>
+  </div>
 
   <!-- ============ how to order ============ -->
+  <div class="band band-tint">
   <section class="section how" aria-labelledby="how-h">
     <div class="wrap how-grid">
       <div>
         <p class="eyebrow">Заказ</p>
-        <h2 id="how-h">Как заказать DTF-печать</h2>
+        <h2 id="how-h">Как заказать <span class="mark">DTF-печать</span></h2>
         <ol class="how-steps">
           {
             page.steps.map((s, i) => (
@@ -299,6 +317,7 @@ const applyLinks = page.applyLinks.map((l) => ({ ...l, from: findProduct('textil
       </aside>
     </div>
   </section>
+  </div>
 
   <script is:inline>
     // folding cards are always open on a computer; on a phone they start folded (tap to open), as on the shoppers page
@@ -316,13 +335,20 @@ const applyLinks = page.applyLinks.map((l) => ({ ...l, from: findProduct('textil
     })();
   </script>
 
+  <div class="band">
   <PortfolioGrid tags={page.portfolioTags} limit={4} title="Примеры: принты на одежде" />
+  </div>
 
+  <div class="band band-tint">
   <Reviews keywords={hasReviews ? page.reviewKeywords : undefined} title={hasReviews ? 'Отзывы о печати' : 'Что говорят клиенты'} />
+  </div>
 
+  <div class="band">
   <FaqSection items={faq} title="Вопросы о DTF-печати" />
+  </div>
 
   <!-- ============ SEO text (folded on phones) ============ -->
+  <div class="band band-tint">
   <section class="section seo-text" aria-labelledby="seo-h">
     <div class="wrap">
       <h2 id="seo-h">{page.seo.title}</h2>
@@ -348,25 +374,11 @@ const applyLinks = page.applyLinks.map((l) => ({ ...l, from: findProduct('textil
       <label for="seo-more" class="seo-more-btn">Читать полностью</label>
     </div>
   </section>
+  </div>
 
-  {
-    related.length > 0 && (
-      <section class="section related" aria-labelledby="rel-h">
-        <div class="wrap">
-          <h2 id="rel-h" class="related-h">Ещё печатаем</h2>
-          <div class="related-grid">
-            {related.map((r) => (
-              <a class="related-card" href={r.slug}>
-                <img src={r.image} alt="" width="120" height="120" loading="lazy" />
-                <span>{r.name}</span>
-                <Icon name="arrow" />
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-    )
-  }
+  <div class="band">
+  {related.length > 0 && <TshirtRelated items={related} />}
+  </div>
 
 
 
@@ -374,6 +386,7 @@ const applyLinks = page.applyLinks.map((l) => ({ ...l, from: findProduct('textil
 </BaseLayout>
 
 <style>
+  /* data-restyled: bands, numbered headings, hangers — like /pechat-na-futbolkah (owner, 07.11.2026) */
   /* ================= first screen ================= */
   .shero {
     padding-block: clamp(28px, 4vw, 48px) clamp(24px, 4vw, 40px);

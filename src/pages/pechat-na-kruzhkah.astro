@@ -4,6 +4,7 @@
 // audience, how to order, works, reviews, FAQ, SEO text.
 // Content — src/data/mugsPage.ts; every price — src/data/pricing.ts; sizes — src/components/mug/mug-geometry.ts.
 // The services.ts entry stays for menus/sitemap.
+import TshirtRelated from '@/components/tshirt/TshirtRelated.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import Calculator from '@/components/islands/Calculator';
@@ -100,12 +101,14 @@ const tones = ['c', 'm', 'y'];
   </section>
 
   <!-- ============ calculator ============ -->
+  <div class="band band-tint">
   <section id="calc" class="section calc-sec" aria-labelledby="calc-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-y">
+          <span class="sec-num mono" aria-hidden="true">01</span>
           <p class="eyebrow">Калькулятор</p>
-          <h2 id="calc-h">Посчитайте свои кружки</h2>
+          <h2 id="calc-h">Посчитайте свои <span class="mark sec-mark">кружки</span></h2>
         </div>
         <p class="calc-sub">Выберите кружку, покрытие и количество — цена за штуку и за весь заказ пересчитается сразу. Кружка, печать и макет уже в цене.</p>
       </div>
@@ -113,16 +116,21 @@ const tones = ['c', 'm', 'y'];
     </div>
     <AlsoOrder slugs={page.alsoOrder} />
   </section>
+  </div>
 
+  <div class="band">
   <MugPackages />
+  </div>
 
   <!-- ============ four models on one shelf, one scale ============ -->
+  <div class="band band-tint">
   <section class="section kinds" aria-labelledby="kinds-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-m">
+          <span class="sec-num mono" aria-hidden="true">02</span>
           <p class="eyebrow">Какие кружки печатаем</p>
-          <h2 id="kinds-h">Кружки 330 и 425 мл, кофейный набор и пивная кружка</h2>
+          <h2 id="kinds-h">Кружки 330 и 425 мл, кофейный набор и пивная <span class="mark sec-mark">кружка</span></h2>
         </div>
         <p class="kinds-sub">Все четыре нарисованы в одном масштабе — видно, какая больше. Одна клетка на фоне — 5 × 5 см.</p>
       </div>
@@ -167,14 +175,17 @@ const tones = ['c', 'm', 'y'];
       </ul>
     </div>
   </section>
+  </div>
 
   <!-- ============ coatings of the 330 ml mug ============ -->
+  <div class="band">
   <section class="section fin" aria-labelledby="fin-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-c">
+          <span class="sec-num mono" aria-hidden="true">03</span>
           <p class="eyebrow">Покрытия</p>
-          <h2 id="fin-h">Покрытия кружки 330 мл</h2>
+          <h2 id="fin-h">Покрытия кружки 330 <span class="mark sec-mark">мл</span></h2>
         </div>
         <p>Одна и та же кружка 330 мл в шести вариантах. Цена «от» — для тиража, ниже — за одну кружку с печатью.</p>
       </div>
@@ -216,8 +227,10 @@ const tones = ['c', 'm', 'y'];
       </ul>
     </div>
   </section>
+  </div>
 
   <!-- ============ what can be printed ============ -->
+  <div class="band">
   <section class="section prn" aria-labelledby="prn-h">
     <div class="wrap">
       <p class="eyebrow">Идеи</p>
@@ -245,8 +258,10 @@ const tones = ['c', 'm', 'y'];
       </ul>
     </div>
   </section>
+  </div>
 
   <!-- ============ technology and care ============ -->
+  <div class="band">
   <section class="section tech" aria-labelledby="tech-h">
     <div class="wrap tech-grid">
       <div>
@@ -285,8 +300,10 @@ const tones = ['c', 'm', 'y'];
       </details>
     </div>
   </section>
+  </div>
 
   <!-- ============ for whom ============ -->
+  <div class="band band-tint">
   <section class="section aud" aria-labelledby="aud-h">
     <div class="wrap">
       <p class="eyebrow">Для кого</p>
@@ -305,13 +322,15 @@ const tones = ['c', 'm', 'y'];
       </ul>
     </div>
   </section>
+  </div>
 
   <!-- ============ how to order ============ -->
+  <div class="band">
   <section class="section how" aria-labelledby="how-h">
     <div class="wrap how-grid">
       <div>
         <p class="eyebrow">Заказ</p>
-        <h2 id="how-h">Как заказать печать на кружке</h2>
+        <h2 id="how-h">Как заказать печать на <span class="mark">кружке</span></h2>
         <ol class="how-steps">
           {
             page.steps.map((s, i) => (
@@ -345,6 +364,7 @@ const tones = ['c', 'm', 'y'];
       </aside>
     </div>
   </section>
+  </div>
 
   <script is:inline>
     // folding cards are always open on a computer; on a phone they start folded (tap to open), as on the t-shirt page
@@ -362,13 +382,20 @@ const tones = ['c', 'm', 'y'];
     })();
   </script>
 
+  <div class="band band-tint">
   <PortfolioGrid tags={page.portfolioTags} limit={4} title="Примеры: кружки и кофейные наборы" />
+  </div>
 
+  <div class="band">
   <Reviews keywords={page.reviewKeywords} title="Отзывы о кружках" />
+  </div>
 
+  <div class="band band-tint">
   <FaqSection items={faq} title="Вопросы о печати на кружках" />
+  </div>
 
   <!-- ============ SEO text (folded on phones) ============ -->
+  <div class="band">
   <section class="section seo-text" aria-labelledby="seo-h">
     <div class="wrap">
       <h2 id="seo-h">{page.seo.title}</h2>
@@ -393,30 +420,17 @@ const tones = ['c', 'm', 'y'];
       <label for="seo-more" class="seo-more-btn">Читать полностью</label>
     </div>
   </section>
+  </div>
 
-  {
-    related.length > 0 && (
-      <section class="section related" aria-labelledby="rel-h">
-        <div class="wrap">
-          <h2 id="rel-h" class="related-h">Ещё печатаем</h2>
-          <div class="related-grid">
-            {related.map((r) => (
-              <a class="related-card" href={r.slug}>
-                <img src={r.image} alt="" width="120" height="120" loading="lazy" />
-                <span>{r.name}</span>
-                <Icon name="arrow" />
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-    )
-  }
+  <div class="band band-tint">
+  {related.length > 0 && <TshirtRelated items={related} />}
+  </div>
 
   <CtaBand title="Хотите кружку со своим фото?" text="Пришлите снимок, надпись или логотип — соберём макет, покажем, как он ляжет на кружку, и посчитаем цену." />
 </BaseLayout>
 
 <style>
+  /* data-restyled: bands, numbered headings, hangers — like /pechat-na-futbolkah (owner, 07.11.2026) */
   /* ================= first screen ================= */
   .mhero {
     padding-block: clamp(28px, 4vw, 48px) clamp(24px, 4vw, 40px);

@@ -156,26 +156,31 @@ const sheetFrom = Math.min(...sheetProd.ladder!({ ...defaultSelection(sheetProd)
   </section>
 
   <!-- ============ calculator ============ -->
+  <div class="band band-tint">
   <section id="calc" class="section calc-sec" aria-labelledby="calc-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-y">
+          <span class="sec-num mono" aria-hidden="true">01</span>
           <p class="eyebrow">Калькулятор</p>
-          <h2 id="calc-h">Посчитайте сублимационную печать</h2>
+          <h2 id="calc-h">Посчитайте сублимационную <span class="mark sec-mark">печать</span></h2>
         </div>
         <p class="calc-sub">Печать на вашем изделии или наш шоппер для сублимации: выберите формат и количество — цена за штуку и за весь заказ пересчитается сразу.</p>
       </div>
       <Calculator client:visible category="textile" product="sub-print" products={['sub-print', 'tshirt-sub', 'shopper-sub']} hideCategories />
     </div>
   </section>
+  </div>
 
   <!-- ============ price table ============ -->
+  <div class="band">
   <section id="prices" class="section prices" aria-labelledby="prices-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-m">
+          <span class="sec-num mono" aria-hidden="true">02</span>
           <p class="eyebrow">Цены</p>
-          <h2 id="prices-h">Цены на сублимационную печать</h2>
+          <h2 id="prices-h">Цены на сублимационную <span class="mark sec-mark">печать</span></h2>
         </div>
         <p>Цена за один отпечаток на вашем изделии. Чем больше тираж, тем дешевле каждый отпечаток.</p>
       </div>
@@ -252,12 +257,15 @@ const sheetFrom = Math.min(...sheetProd.ladder!({ ...defaultSelection(sheetProd)
       </div>
     </div>
   </section>
+  </div>
 
   <!-- ============ our t-shirt for sublimation ============ -->
+  <div class="band band-tint">
   <section class="section tee" aria-labelledby="tee-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-c">
+          <span class="sec-num mono" aria-hidden="true">03</span>
           <p class="eyebrow">Футболки</p>
           <h2 id="tee-h">{page.tee.title}</h2>
         </div>
@@ -308,14 +316,17 @@ const sheetFrom = Math.min(...sheetProd.ladder!({ ...defaultSelection(sheetProd)
       </div>
     </div>
   </section>
+  </div>
 
   <!-- ============ how it works (dark band) ============ -->
+  <div class="band">
   <section class="section proc" aria-labelledby="proc-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-y">
+          <span class="sec-num mono" aria-hidden="true">04</span>
           <p class="eyebrow">Технология</p>
-          <h2 id="proc-h">Как работает сублимация</h2>
+          <h2 id="proc-h">Как работает <span class="mark sec-mark">сублимация</span></h2>
         </div>
         <p>Это не наклейка и не плёнка: краска уходит внутрь материала.</p>
       </div>
@@ -382,8 +393,10 @@ const sheetFrom = Math.min(...sheetProd.ladder!({ ...defaultSelection(sheetProd)
       </ol>
     </div>
   </section>
+  </div>
 
   <!-- ============ what we print on ============ -->
+  <div class="band">
   <section class="section things" aria-labelledby="things-h">
     <div class="wrap">
       <p class="eyebrow">Изделия</p>
@@ -418,8 +431,10 @@ const sheetFrom = Math.min(...sheetProd.ladder!({ ...defaultSelection(sheetProd)
       </ul>
     </div>
   </section>
+  </div>
 
   <!-- ============ fits / does not fit ============ -->
+  <div class="band">
   <section class="section fit" aria-labelledby="fit-h">
     <div class="wrap">
       <p class="eyebrow">Перед заказом</p>
@@ -472,14 +487,17 @@ const sheetFrom = Math.min(...sheetProd.ladder!({ ...defaultSelection(sheetProd)
       <p class="fit-note">Не уверены в составе ткани — принесите изделие или пришлите фото ярлыка, подскажем.</p>
     </div>
   </section>
+  </div>
 
   <!-- ============ sublimation vs DTF ============ -->
+  <div class="band band-tint">
   <section class="section cmp" aria-labelledby="cmp-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-m">
+          <span class="sec-num mono" aria-hidden="true">05</span>
           <p class="eyebrow">Сравнение</p>
-          <h2 id="cmp-h">Сублимация или DTF</h2>
+          <h2 id="cmp-h">Сублимация или <span class="mark sec-mark">DTF</span></h2>
         </div>
         <p>Обе технологии дают яркий полноцветный рисунок — разница в материалах.</p>
       </div>
@@ -503,14 +521,16 @@ const sheetFrom = Math.min(...sheetProd.ladder!({ ...defaultSelection(sheetProd)
       </div>
     </div>
   </section>
+  </div>
 
   <!-- ============ sheets without application ============ -->
+  <div class="band">
   <section class="section shs" aria-labelledby="shs-h">
     <div class="wrap">
       <div class="shs-band">
         <div class="shs-text">
           <p class="eyebrow">Без нанесения</p>
-          <h2 id="shs-h">Нужны только листы — перенесёте сами?</h2>
+          <h2 id="shs-h">Нужны только листы — перенесёте <span class="mark">сами?</span></h2>
           <p>Печатаем ваши принты на сублимационной бумаге листами А3 и А4 — переносите на свои изделия термопрессом или утюгом. Есть и DTF-трансферы для хлопка и тёмных тканей.</p>
         </div>
         <ul class="shs-prices">
@@ -522,13 +542,15 @@ const sheetFrom = Math.min(...sheetProd.ladder!({ ...defaultSelection(sheetProd)
       </div>
     </div>
   </section>
+  </div>
 
   <!-- ============ how to order ============ -->
+  <div class="band band-tint">
   <section class="section how" aria-labelledby="how-h">
     <div class="wrap how-grid">
       <div>
         <p class="eyebrow">Заказ</p>
-        <h2 id="how-h">Как заказать сублимационную печать</h2>
+        <h2 id="how-h">Как заказать сублимационную <span class="mark">печать</span></h2>
         <ol class="how-steps">
           {
             page.order.map((s, i) => (
@@ -560,6 +582,7 @@ const sheetFrom = Math.min(...sheetProd.ladder!({ ...defaultSelection(sheetProd)
       </aside>
     </div>
   </section>
+  </div>
 
   <script is:inline>
     // the layout card is always open on a computer; on a phone it starts folded (tap to open), as on the mugs page
@@ -577,11 +600,16 @@ const sheetFrom = Math.min(...sheetProd.ladder!({ ...defaultSelection(sheetProd)
     })();
   </script>
 
+  <div class="band">
   <PortfolioGrid tech={page.portfolioTech} exclude={page.portfolioExclude} limit={8} title="Примеры сублимационной печати" />
+  </div>
 
+  <div class="band band-tint">
   <FaqSection items={faq} title="Вопросы о сублимационной печати" />
+  </div>
 
   <!-- ============ SEO text (folded on phones) ============ -->
+  <div class="band">
   <section class="section seo-text" aria-labelledby="seo-h">
     <div class="wrap">
       <h2 id="seo-h">{page.seo.title}</h2>
@@ -606,11 +634,13 @@ const sheetFrom = Math.min(...sheetProd.ladder!({ ...defaultSelection(sheetProd)
       <label for="seo-more" class="seo-more-btn">Читать полностью</label>
     </div>
   </section>
+  </div>
 
   <CtaBand title="Есть вещь для сублимации?" text="Расскажите, что за изделие и какой нужен рисунок, — подскажем, подойдёт ли сублимация, соберём макет и посчитаем цену." />
 </BaseLayout>
 
 <style>
+  /* data-restyled: bands, numbered headings, hangers — like /pechat-na-futbolkah (owner, 07.11.2026) */
   /* ================= first screen ================= */
   .shero {
     padding-block: clamp(28px, 4vw, 48px) clamp(24px, 4vw, 40px);

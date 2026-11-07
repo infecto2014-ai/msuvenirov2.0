@@ -839,3 +839,47 @@ textarea.input {
     animation: none;
   }
 }
+
+/* ---------- numbered section headings on service pages (owner, 07.11.2026: «как на странице футболок»):
+   a big outlined number with a colour offset left of the eyebrow + h2; the last word of h2 gets a marker */
+.sec-titled {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: clamp(14px, 2.6vw, 30px);
+  align-items: end;
+}
+.sec-titled > :not(.sec-num) {
+  grid-column: 2;
+}
+.sec-num {
+  grid-row: 1 / span 2;
+  align-self: end;
+  font-family: var(--font);
+  font-size: clamp(3.4rem, 7vw, 6rem);
+  font-weight: 900;
+  line-height: 0.78;
+  letter-spacing: -0.06em;
+  font-variant-numeric: tabular-nums;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--ink);
+  text-shadow: 6px 6px 0 var(--tone, var(--y));
+}
+.sec-c { --tone: var(--c); }
+.sec-m { --tone: var(--m); }
+.sec-y { --tone: var(--y); }
+.sec-c .sec-mark { background: linear-gradient(transparent 60%, rgba(0, 160, 220, 0.32) 60% 92%, transparent 92%); }
+.sec-m .sec-mark { background: linear-gradient(transparent 60%, rgba(229, 0, 125, 0.24) 60% 92%, transparent 92%); }
+.band-ink .sec-num { -webkit-text-stroke-color: #fffcf5; }
+@media (max-width: 760px) {
+  .sec-num {
+    font-size: 2.8rem;
+    -webkit-text-stroke-width: 1.5px;
+    text-shadow: 4px 4px 0 var(--tone, var(--y));
+  }
+}
+/* inside a tinted band the calculator section needs no own rounded ground */
+.band-tint > .calc-sec {
+  background: none !important;
+  border-radius: 0 !important;
+  margin-inline: 0 !important;
+}

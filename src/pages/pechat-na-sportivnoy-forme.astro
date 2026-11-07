@@ -3,6 +3,7 @@
 // form, sublimation T-shirt, cotton T-shirt), ready options, team list → form, what we print, DTF or sublimation,
 // audience, how to order, works, reviews, FAQ, SEO text. Content — src/data/sportPage.ts; prices — pricing.ts
 // (category 'textile'); drawings — src/components/sport/SportArt.astro. Listed in the «Одежда» menu and in the sitemap.
+import TshirtRelated from '@/components/tshirt/TshirtRelated.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import Calculator from '@/components/islands/Calculator';
@@ -105,12 +106,14 @@ const placeArt = [
   </section>
 
   <!-- ============ calculator ============ -->
+  <div class="band band-tint">
   <section id="calc" class="section calc-sec" aria-labelledby="calc-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-y">
+          <span class="sec-num mono" aria-hidden="true">01</span>
           <p class="eyebrow">Калькулятор</p>
-          <h2 id="calc-h">Посчитайте форму</h2>
+          <h2 id="calc-h">Посчитайте <span class="mark sec-mark">форму</span></h2>
         </div>
         <p class="calc-sub">Печать на вашей форме или наши футболки с печатью: номер с фамилией на спину, эмблема на грудь, количество — цена пересчитается сразу.</p>
       </div>
@@ -118,14 +121,17 @@ const placeArt = [
     </div>
     <AlsoOrder slugs={page.alsoOrder} />
   </section>
+  </div>
 
   <!-- ============ ready options ============ -->
+  <div class="band">
   <section class="section spk" aria-labelledby="spk-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-m">
+          <span class="sec-num mono" aria-hidden="true">02</span>
           <p class="eyebrow">Популярное</p>
-          <h2 id="spk-h">Готовые варианты с ценой</h2>
+          <h2 id="spk-h">Готовые варианты с <span class="mark sec-mark">ценой</span></h2>
         </div>
         <p class="spk-sub">Макет с фамилиями и номерами включён. На вашей форме — цена только за печать, на наших футболках — вместе с футболкой.</p>
       </div>
@@ -155,14 +161,17 @@ const placeArt = [
       </ul>
     </div>
   </section>
+  </div>
 
   <!-- ============ team list → form ============ -->
+  <div class="band band-tint">
   <section class="section rst" aria-labelledby="rst-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-c">
+          <span class="sec-num mono" aria-hidden="true">03</span>
           <p class="eyebrow">Фамилии и номера</p>
-          <h2 id="rst-h">Пришлите список — напечатаем каждому своё</h2>
+          <h2 id="rst-h">Пришлите список — напечатаем каждому <span class="mark sec-mark">своё</span></h2>
         </div>
         <p>Фамилия, номер и размер для каждого игрока — таблицей или просто сообщением. Подготовим макет на всю команду и ничего не перепутаем.</p>
       </div>
@@ -189,14 +198,17 @@ const placeArt = [
       </div>
     </div>
   </section>
+  </div>
 
   <!-- ============ what we print ============ -->
+  <div class="band">
   <section class="section plc" aria-labelledby="plc-h">
     <div class="wrap">
       <div class="section-head">
-        <div>
+        <div class="sec-titled sec-y">
+          <span class="sec-num mono" aria-hidden="true">04</span>
           <p class="eyebrow">Что наносим</p>
-          <h2 id="plc-h">Номер, фамилия, эмблема</h2>
+          <h2 id="plc-h">Номер, фамилия, <span class="mark sec-mark">эмблема</span></h2>
         </div>
         <p>До трёх принтов на одной вещи. Второй принт стоит на {extraOff}% дешевле первого, третий — вдвое дешевле.</p>
       </div>
@@ -221,8 +233,10 @@ const placeArt = [
       </ul>
     </div>
   </section>
+  </div>
 
   <!-- ============ DTF or sublimation ============ -->
+  <div class="band band-tint">
   <section class="section ways" aria-labelledby="ways-h">
     <div class="wrap">
       <p class="eyebrow">Технология</p>
@@ -254,8 +268,10 @@ const placeArt = [
       </details>
     </div>
   </section>
+  </div>
 
   <!-- ============ for whom ============ -->
+  <div class="band">
   <section class="section aud" aria-labelledby="aud-h">
     <div class="wrap">
       <p class="eyebrow">Для кого</p>
@@ -274,13 +290,15 @@ const placeArt = [
       </ul>
     </div>
   </section>
+  </div>
 
   <!-- ============ how to order ============ -->
+  <div class="band band-tint">
   <section class="section how" aria-labelledby="how-h">
     <div class="wrap how-grid">
       <div>
         <p class="eyebrow">Заказ</p>
-        <h2 id="how-h">Как заказать печать на форме</h2>
+        <h2 id="how-h">Как заказать печать на <span class="mark">форме</span></h2>
         <ol class="how-steps">
           {
             page.steps.map((s, i) => (
@@ -314,6 +332,7 @@ const placeArt = [
       </aside>
     </div>
   </section>
+  </div>
 
   <script is:inline>
     // folding cards are always open on a computer; on a phone they start folded (tap to open), as on the shoppers page
@@ -331,13 +350,20 @@ const placeArt = [
     })();
   </script>
 
+  <div class="band">
   <PortfolioGrid tags={page.portfolioTags} limit={4} title="Примеры: форма и футболки" />
+  </div>
 
+  <div class="band band-tint">
   <Reviews keywords={hasReviews ? page.reviewKeywords : undefined} title={hasReviews ? 'Отзывы о форме' : 'Что говорят клиенты'} />
+  </div>
 
+  <div class="band">
   <FaqSection items={faq} title="Вопросы о печати на спортивной форме" />
+  </div>
 
   <!-- ============ SEO text (folded on phones) ============ -->
+  <div class="band band-tint">
   <section class="section seo-text" aria-labelledby="seo-h">
     <div class="wrap">
       <h2 id="seo-h">{page.seo.title}</h2>
@@ -363,25 +389,11 @@ const placeArt = [
       <label for="seo-more" class="seo-more-btn">Читать полностью</label>
     </div>
   </section>
+  </div>
 
-  {
-    related.length > 0 && (
-      <section class="section related" aria-labelledby="rel-h">
-        <div class="wrap">
-          <h2 id="rel-h" class="related-h">Ещё печатаем</h2>
-          <div class="related-grid">
-            {related.map((r) => (
-              <a class="related-card" href={r.slug}>
-                <img src={r.image} alt="" width="120" height="120" loading="lazy" />
-                <span>{r.name}</span>
-                <Icon name="arrow" />
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-    )
-  }
+  <div class="band">
+  {related.length > 0 && <TshirtRelated items={related} />}
+  </div>
 
 
 
@@ -389,6 +401,7 @@ const placeArt = [
 </BaseLayout>
 
 <style>
+  /* data-restyled: bands, numbered headings, hangers — like /pechat-na-futbolkah (owner, 07.11.2026) */
   /* ================= first screen ================= */
   .shero {
     padding-block: clamp(28px, 4vw, 48px) clamp(24px, 4vw, 40px);
