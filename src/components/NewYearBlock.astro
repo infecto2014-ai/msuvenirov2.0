@@ -411,21 +411,38 @@ const { photo = '/img/ny/ball-photo.webp', link = '#occ-h', linkLabel = 'Иде�
       padding-inline: var(--gutter);
     }
     .nyb-ball {
-      --string: 18px;
-      max-width: 180px;
+      --string: 14px;
+      max-width: 136px;
     }
     .nyb-ball svg {
-      max-width: 180px;
+      max-width: 136px;
     }
     .nyb-santa {
-      max-width: 230px;
+      max-width: 170px;
       margin-bottom: 0;
     }
+    /* phone: only the days, large — hours/minutes were unreadably small (design review, 07.11.2026) */
+    .nyb-tiles {
+      grid-template-columns: 1fr;
+      justify-items: center;
+    }
+    .nyb-tiles > span:not(:first-child) {
+      display: none;
+    }
+    .nyb-tiles > span {
+      min-width: 52%;
+    }
+    .nyb-tiles b {
+      font-size: 17cqi;
+    }
+    .nyb-tiles small {
+      font-size: 7cqi;
+    }
     .nyb-frame {
-      margin-block: 34px 18px;
+      margin-block: 22px 14px;
     }
     .env {
-      aspect-ratio: 1.12;
+      aspect-ratio: 1.3;
       padding: 7px;
     }
     .env-art {

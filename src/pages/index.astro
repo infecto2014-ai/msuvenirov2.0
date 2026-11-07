@@ -9,10 +9,9 @@ import FaqSection from '@/components/FaqSection.astro';
 import ContactBlock from '@/components/ContactBlock.astro';
 import Icon from '@/components/Icon.astro';
 import NewYearBlock from '@/components/NewYearBlock.astro';
-import OfferBento from '@/components/OfferBento.astro';
 import HomeB2B from '@/components/home/HomeB2B.astro';
 import HomeSeo from '@/components/home/HomeSeo.astro';
-import { categoryFrom, defaultSelection, findProduct, rub, type Selection } from '@/data/pricing';
+import { categoryFrom, findProduct, rub } from '@/data/pricing';
 import { generalFaq } from '@/data/faq';
 import { site } from '@/data/site';
 import { faqPage } from '@/lib/schema';
@@ -26,22 +25,6 @@ const tiles = [
   { href: '/kalendari', group: 'print', title: 'Календари', text: 'квартальные, настенные, домики', img: '/img/showcase/stationery.webp', alt: 'Календари и полиграфия', cat: 'calendars' },
   { href: '/nakleyki', group: 'souv', title: 'Стикеры', text: '3D из смолы и виниловые', img: '/img/showcase/stickers-3d.webp', alt: 'Объёмные 3D-стикеры', cat: 'stickers' },
   { href: '/fotopodarki', group: 'gifts', title: 'Фотоподарки', text: 'подушки, пазлы, магниты', img: '/img/showcase/pillow.webp', alt: 'Подушка с фото', cat: 'gifts' },
-];
-
-/** Popular orders with a ready "turnkey" price — always computed from pricing.ts, never typed by hand. */
-const quoteOf = (cat: string, id: string, qty?: number, options: Selection['options'] = {}) => {
-  const p = findProduct(cat, id)!;
-  const base = defaultSelection(p);
-  const sel: Selection = { ...base, qty: qty ?? base.qty, options: { ...base.options, ...options } };
-  return { qty: sel.qty, ...p.quote(sel) };
-};
-const popular = [
-  { title: 'Футболка с вашим принтом', note: 'белая или чёрная, принт А4', img: '/portfolio/portfolio-21.webp', calc: 'textile:tshirt-unisex', q: quoteOf('textile', 'tshirt-unisex', 1) },
-  { title: 'Кружка с фото', note: 'белая, 330 мл', img: '/portfolio/portfolio-2.webp', calc: 'mugs:mug', q: quoteOf('mugs', 'mug', 1) },
-  { title: 'Ёлочный шар с фото', note: 'к Новому году, 70 мм', img: '/portfolio/portfolio-6.webp', calc: 'gifts:ball', q: quoteOf('gifts', 'ball', 1) },
-  { title: 'Визитки', note: '90×50 мм, бумага 300 г', img: '/img/showcase/business-cards.webp', calc: 'cards:business-cards', q: quoteOf('cards', 'business-cards', 96) },
-  { title: 'Значки с логотипом', note: 'закатные, 38 мм', img: '/img/showcase/keychains.webp', calc: 'badges:badge-roll', q: quoteOf('badges', 'badge-roll', 25) },
-  { title: 'Футболки для команды', note: 'с логотипом А4', img: '/portfolio/portfolio-20.webp', calc: 'textile:tshirt-unisex', q: quoteOf('textile', 'tshirt-unisex', 20) },
 ];
 
 const occasions = [
@@ -136,7 +119,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
             {groups.map((g, i) => (<button type="button" class="chip" data-filter={g.id} aria-pressed={i === 0 ? 'true' : 'false'}>{g.label}</button>))}
           </div>
           <a class="cats-all" href="/uslugi"><span class="cats-all-go"><Icon name="arrow" size={18} /></span> Все услуги</a>
-          <span class="hand cats-hand" aria-hidden="true">нажмите, чтобы<br />посчитать</span>
         </div>
         <div class="pcards">
           {
@@ -200,18 +182,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
 
   <div class="band band-ink">
   <PortfolioGrid />
-  </div>
-
-  <div class="band">
-  <!-- POPULAR: the same photo bento as «Готовые варианты» on the t-shirt page (owner, 07.11.2026) -->
-  <OfferBento
-    id="pop-h"
-    title="Что чаще всего заказывают"
-    mark="заказывают"
-    tone="y"
-    sub="Цена указана за готовое изделие с печатью. Другой тираж или размер — в калькуляторе."
-    items={popular.map((it) => ({ title: it.title, note: it.note, img: it.img, qty: it.q.qty, total: it.q.total, unit: it.q.unit, from: it.q.from, more: `/price?calc=${it.calc}#calc` }))}
-  />
   </div>
 
   <div class="band band-tint">
@@ -672,10 +642,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   .cats-all:hover .cats-all-go {
     transform: translateX(4px);
   }
-  .cats-hand {
-    margin-top: 10px;
-    transform: rotate(-4deg);
-  }
   .pcards {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -891,9 +857,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     }
     .cats-side {
       position: static;
-    }
-    .cats-hand {
-      display: none;
     }
     .occ-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
