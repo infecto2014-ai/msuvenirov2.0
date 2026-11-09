@@ -150,7 +150,9 @@ const year = new Date().getFullYear();
   .ftr-phone {
     font-family: var(--mono);
     font-weight: 700;
-    font-size: 1.1rem;
+    /* one line on laptops too (Hallmark audit, 09.11.2026) */
+    font-size: clamp(0.95rem, 1.15vw, 1.1rem);
+    white-space: nowrap;
     color: var(--y) !important;
   }
   .ftr-bottom {

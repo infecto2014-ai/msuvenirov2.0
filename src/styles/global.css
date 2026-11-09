@@ -6,6 +6,8 @@
 @import '@fontsource-variable/jetbrains-mono';
 
 :root {
+  /* keyboard focus ring: dark cyan on light grounds (3:1+), yellow on dark ones (Hallmark audit, 09.11.2026) */
+  --focus: var(--c-ink);
   --paper: #fffcf5;
   --paper-2: #f7f1e3;
   --card: #ffffff;
@@ -93,7 +95,7 @@ textarea {
 }
 
 :focus-visible {
-  outline: 3px solid var(--c);
+  outline: 3px solid var(--focus);
   outline-offset: 3px;
   border-radius: 6px;
 }
@@ -882,4 +884,15 @@ textarea.input {
   background: none !important;
   border-radius: 0 !important;
   margin-inline: 0 !important;
+}
+
+/* focus ring on dark and yellow grounds (Hallmark audit, 09.11.2026) */
+.band-ink,
+.ftr,
+.nyb,
+.calc-result-inner {
+  --focus: var(--y);
+}
+.cta {
+  --focus: var(--ink);
 }
