@@ -32,3 +32,4 @@ dist-ssr
 .astro
 
 __pycache__/
+.hallmark/
