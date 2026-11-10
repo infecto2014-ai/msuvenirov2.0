@@ -17,14 +17,14 @@ import { site } from '@/data/site';
 import { faqPage } from '@/lib/schema';
 
 const tiles = [
-  { href: '/pechat-na-futbolkah', group: 'wear', title: 'Печать на футболках и худи', text: 'от 1 шт, на нашей футболке или на вашей', img: '/img/showcase/tshirt.webp', alt: 'Футболки с печатью логотипа', cat: 'textile', size: 'xl', from: findProduct('textile', 'tshirt-unisex')!.fromPrice },
-  { href: '/pechat-na-kruzhkah', group: 'souv', title: 'Печать на кружках', text: 'белые, хамелеон, золото', img: '/img/showcase/colored-mugs.webp', alt: 'Цветные кружки с печатью', cat: 'mugs', size: 'tall' },
-  { href: '/znachki', group: 'souv', title: 'Значки', text: 'закатные и на цанге', img: '/img/showcase/keychains.webp', alt: 'Значки и брелоки с логотипом', cat: 'badges' },
-  { href: '/vizitki', group: 'print', title: 'Визитки', text: 'одно- и двусторонние', img: '/img/showcase/business-cards.webp', alt: 'Визитки', cat: 'cards' },
-  { href: '/pechat-na-kepkah', group: 'wear', title: 'Бейсболки и шопперы', text: 'печать логотипа', img: '/img/showcase/cap.webp', alt: 'Бейсболка с логотипом', cat: 'textile', from: findProduct('textile', 'shopper')!.fromPrice },
-  { href: '/kalendari', group: 'print', title: 'Календари', text: 'квартальные, настенные, домики', img: '/img/showcase/stationery.webp', alt: 'Календари и полиграфия', cat: 'calendars' },
-  { href: '/nakleyki', group: 'souv', title: 'Стикеры', text: '3D из смолы и виниловые', img: '/img/showcase/stickers-3d.webp', alt: 'Объёмные 3D-стикеры', cat: 'stickers' },
-  { href: '/fotopodarki', group: 'gifts', title: 'Фотоподарки', text: 'подушки, пазлы, магниты', img: '/img/showcase/pillow.webp', alt: 'Подушка с фото', cat: 'gifts' },
+  { href: '/pechat-na-futbolkah', group: 'wear', title: 'Печать на футболках и худи', text: 'от 1 шт, на нашей футболке или на вашей', img: '/img/products/tshirts', alt: 'Футболки разных цветов на вешалках', cat: 'textile', size: 'xl', from: findProduct('textile', 'tshirt-unisex')!.fromPrice },
+  { href: '/pechat-na-kruzhkah', group: 'souv', title: 'Печать на кружках', text: 'белые, хамелеон, золото', img: '/img/products/mugs', alt: 'Кружки для сублимационной печати', cat: 'mugs', size: 'tall' },
+  { href: '/znachki', group: 'souv', title: 'Значки', text: 'закатные и на цанге', img: '/img/products/badges', alt: 'Закатные значки и значки на цанге с логотипом', cat: 'badges' },
+  { href: '/vizitki', group: 'print', title: 'Визитки', text: 'одно- и двусторонние', img: '/img/products/business-cards', alt: 'Визитки', cat: 'cards' },
+  { href: '/pechat-na-kepkah', group: 'wear', title: 'Бейсболки и шопперы', text: 'печать логотипа', img: '/img/products/caps', alt: 'Бейсболки разных цветов', cat: 'textile', from: findProduct('textile', 'shopper')!.fromPrice },
+  { href: '/kalendari', group: 'print', title: 'Календари', text: 'квартальные, настенные, домики', img: '/img/products/calendar', alt: 'Настенный календарь', cat: 'calendars' },
+  { href: '/nakleyki', group: 'souv', title: 'Стикеры', text: '3D из смолы и виниловые', img: '/img/products/stickers', alt: 'Объёмные 3D-стикеры из эпоксидной смолы с логотипом', cat: 'stickers' },
+  { href: '/fotopodarki', group: 'gifts', title: 'Фотоподарки', text: 'подушки, пазлы, магниты', img: '/img/products/pillow', alt: 'Белая подушка для печати фото', cat: 'gifts' },
 ];
 
 const occasions = [
@@ -126,7 +126,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
               const f = t.from ?? categoryFrom(t.cat).price;
               return (
                 <a class={`pc ${t.size ? `pc-${t.size}` : ''}`} href={t.href} data-group={t.group}>
-                  <img src={t.img} alt={t.alt} width="320" height="320" loading="lazy" decoding="async" />
+                  <img src={`${t.img}-640.webp`} srcset={`${t.img}-640.webp 640w, ${t.img}-1200.webp 1200w`} sizes={t.size ? '(max-width: 760px) 100vw, 600px' : '(max-width: 760px) 50vw, 300px'} alt={t.alt} width="640" height="478" loading="lazy" decoding="async" />
                   <span class="pc-body">
                     <span class="pc-price mono">от {rub(f)}</span>
                     <h3>{t.title}</h3>
