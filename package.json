@@ -8,7 +8,8 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "test": "vitest run",
-    "kp": "node scripts/make-kp.mjs"
+    "kp": "node scripts/make-kp.mjs",
+    "check:agents": "node scripts/check-agents.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

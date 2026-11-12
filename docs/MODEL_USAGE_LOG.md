@@ -1,0 +1,11 @@
+# Журнал использования моделей
+
+Правила — `docs/MODEL_POLICY.md`. Новая строка на каждую существенную делегацию. Стоимость — из `total_cost_usd`/`modelUsage`, если доступна; иначе токены из отчёта агента.
+
+| Дата | Этап | Задача | Агент / модель | Причина выбора | Результат | Стоимость | Эскалация |
+|---|---|---|---|---|---|---|---|
+| 12.11.2026 | 0 | Проверка алиаса `fable` (пустое задание) | general-purpose / fable → claude-fable-5-2 | Проверка доступности | Ответил `claude-fable-5-2` | ~85 тыс. токенов (контекст агента) | — |
+| 12.11.2026 | 0 | Проверка алиаса `opus` | general-purpose / opus → claude-opus-5-5 | Проверка доступности | Ответил `claude-opus-5-5` | ~85 тыс. токенов | — |
+| 12.11.2026 | 0 | Проверка алиаса `sonnet` | general-purpose / sonnet → claude-sonnet-5-5 | Проверка доступности | Ответил `claude-sonnet-5-5` | ~85 тыс. токенов | — |
+| 12.11.2026 | 0 | Проверка полного ID в CLI (`--model claude-sonnet-5-5`) | headless / claude-sonnet-5-5 | Проверка ID | Работает, провайдер firstParty | 0,13 $ | — |
+| 12.11.2026 | 0 | Вызов агентов project-director, frontend-engineer, content-auditor из frontmatter | headless Sonnet → Fable / Opus / Sonnet | Проверка полных ID в YAML | Биллинг подтвердил все три модели | 0,57 $ (Sonnet 0,22; Fable 0,24; Opus 0,12) | — |
