@@ -1,228 +1,226 @@
 ---
-// «Компаниям» on the home page in the new style (owner, 07.11.2026): marker heading, four benefit cards with
-// big outlined numbers, red main button, and real corporate work as polaroids on push pins. No client logos here —
-// they are shown once, in the first screen.
-import TshirtHead from '@/components/tshirt/TshirtHead.astro';
+/**
+ * «Компаниям» on the home page (owner, 14.11.2026: «перерабатываем под наш дизайн», «цифры 01–04 смотрятся неудачно»).
+ * Sits on a navy rounded panel (band-ink): heading + four benefits as glass tiles with icons (no numbers), white main
+ * button, and real corporate work as a straight rounded photo mosaic. No client logos — they are under the first screen.
+ */
 import Icon from '@/components/Icon.astro';
 
 const points = [
-  { n: '01', t: 'Счёт без НДС', s: 'и закрывающие документы' },
-  { n: '02', t: 'Одна смета', s: 'на футболки, кружки, значки и полиграфию' },
-  { n: '03', t: 'Макет по брендбуку', s: 'согласуем до печати' },
-  { n: '04', t: 'Образец', s: 'перед тиражом' },
+  { t: 'Счёт без НДС', s: 'и закрывающие документы', icon: 'M7 3h7l4 4v14H7zM14 3v4h4M10 12h5M10 16h5' },
+  { t: 'Одна смета', s: 'на футболки, кружки, значки и полиграфию', icon: 'M5 6h14M5 12h14M5 18h9' },
+  { t: 'Макет по брендбуку', s: 'согласуем до печати', icon: 'M12 3l2.6 5.3 5.9.9-4.2 4.1 1 5.8L12 16.4 6.7 19.1l1-5.8-4.2-4.1 5.9-.9z' },
+  { t: 'Образец', s: 'перед тиражом', icon: 'M8 4l-4 3 2 3 2-1v11h8V9l2 1 2-3-4-3c-.5 1.5-2 2.5-4 2.5S8.5 5.5 8 4z' },
 ];
 const shots = [
-  { img: '/portfolio/corporate-polo.webp', cap: 'поло для команды', pin: 'var(--c)' },
-  { img: '/portfolio/branded-caps.webp', cap: 'кепки с логотипом', pin: 'var(--m)' },
-  { img: '/portfolio/portfolio-20.webp', cap: 'футболки на выезд', pin: 'var(--y)' },
+  { img: '/portfolio/corporate-polo.webp', alt: 'Поло с логотипом для команды' },
+  { img: '/portfolio/branded-caps.webp', alt: 'Кепки с логотипом компании' },
+  { img: '/portfolio/portfolio-20.webp', alt: 'Корпоративные футболки на выезде' },
 ];
 ---
 
-<section class="section hb" aria-labelledby="b2b-h">
-  <div class="wrap">
-    <TshirtHead eyebrow="Компаниям" id="b2b-h" title="Мерч и подарки с логотипом для компаний" mark="для компаний" tone="c">
-      <p>Футболки для команды, подарки партнёрам, календари к Новому году, значки для мероприятий. Соберём смету на весь набор и подготовим макеты.</p>
-    </TshirtHead>
+<section class="section hb lx-dark" aria-labelledby="b2b-h">
+  <div class="wrap hb-grid">
+    <div class="hb-main">
+      <p class="eyebrow">Компаниям</p>
+      <h2 id="b2b-h">Мерч и подарки с&nbsp;логотипом <span class="serif">для компаний</span></h2>
+      <p class="hb-lead">Футболки для команды, подарки партнёрам, календари к Новому году, значки для мероприятий. Соберём смету на весь набор и подготовим макеты.</p>
 
-    <div class="hb-grid">
-      <div class="hb-main">
-        <ul class="hb-points">
-          {
-            points.map((p) => (
-              <li>
-                <span class="hb-n mono" aria-hidden="true">{p.n}</span>
+      <ul class="hb-points">
+        {
+          points.map((p) => (
+            <li>
+              <span class="hb-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d={p.icon} />
+                </svg>
+              </span>
+              <span class="hb-txt">
                 <b>{p.t}</b>
                 <span>{p.s}</span>
-              </li>
-            ))
-          }
-        </ul>
-        <div class="hb-actions">
-          <button type="button" class="btn btn-magenta" data-order="Запрос расчёта для компании">Запросить расчёт</button>
-          <a class="btn btn-ghost" href="/korporativnym-klientam">Условия для компаний</a>
-          <a class="hb-kp" href="/kp-msuvenirov.pdf" download><Icon name="arrow" size={18} /> Скачать КП (PDF)</a>
-        </div>
-      </div>
-
-      <ul class="hb-wall" aria-hidden="true">
-        {
-          shots.map((s, i) => (
-            <li class={`hb-shot hb-shot-${i + 1}`} style={`--pin: ${s.pin}`}>
-              <span class="hb-pin" />
-              <img src={s.img} alt="" width="360" height="360" loading="lazy" decoding="async" />
-              <span class="hb-cap">{s.cap}</span>
+              </span>
             </li>
           ))
         }
       </ul>
+
+      <div class="hb-actions">
+        <button type="button" class="hb-btn" data-order="Запрос расчёта для компании">Запросить расчёт <span class="hb-btn-go" aria-hidden="true"><Icon name="arrow" size={16} /></span></button>
+        <a class="hb-link" href="/korporativnym-klientam">Условия для компаний</a>
+        <a class="hb-link" href="/kp-msuvenirov.pdf" download>Скачать КП (PDF)</a>
+      </div>
     </div>
+
+    <ul class="hb-mosaic">
+      {
+        shots.map((s, i) => (
+          <li class={`hb-shot hb-shot-${i + 1}`}>
+            <img src={s.img} alt={s.alt} width="480" height="480" loading="lazy" decoding="async" />
+          </li>
+        ))
+      }
+    </ul>
   </div>
 </section>
 
 <style>
   .hb-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
     gap: clamp(28px, 5vw, 72px);
     align-items: center;
   }
+  .hb-main h2 {
+    margin: 0;
+    color: #fff;
+    text-wrap: balance;
+  }
+  .hb-lead {
+    max-width: 36em;
+    margin: 16px 0 0;
+    color: rgba(255, 255, 255, 0.78);
+  }
+  /* four benefits: glass tiles with an icon in a white circle */
   .hb-points {
     list-style: none;
-    margin: 0;
+    margin: 28px 0 0;
     padding: 0;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
+    gap: 12px;
   }
   .hb-points li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.06);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+  }
+  .hb-ico {
+    flex: none;
     display: grid;
-    gap: 4px;
-    align-content: start;
-    padding: 20px 20px 22px;
-    border-radius: 22px 22px 22px 8px;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
     background: #fff;
-    box-shadow: 0 1px 0 rgba(22, 20, 27, 0.06), 0 14px 30px -22px rgba(22, 20, 27, 0.45);
+    color: var(--navy, #14213d);
   }
-  .hb-points li:nth-child(4n + 1) { --tone: var(--c); }
-  .hb-points li:nth-child(4n + 2) { --tone: var(--m); }
-  .hb-points li:nth-child(4n + 3) { --tone: var(--y); }
-  .hb-points li:nth-child(4n + 4) { --tone: var(--red); }
-  .hb-n {
-    margin-bottom: 6px;
-    font-family: var(--font);
-    font-size: 2.3rem;
-    font-weight: 900;
-    line-height: 0.9;
-    letter-spacing: -0.05em;
-    color: transparent;
-    -webkit-text-stroke: 1.5px var(--ink);
-    text-shadow: 3px 3px 0 var(--tone);
+  .hb-txt {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
   }
-  .hb-points b {
-    font-size: 1.08rem;
+  .hb-txt b {
+    color: #fff;
+    font-size: 0.98rem;
   }
-  .hb-points span:last-child {
-    color: var(--muted);
-    font-size: 0.92rem;
+  .hb-txt span {
+    font-size: 0.84rem;
     line-height: 1.4;
+    color: rgba(255, 255, 255, 0.7);
   }
   .hb-actions {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 12px 16px;
-    margin-top: 26px;
+    gap: 10px 22px;
+    margin-top: 28px;
   }
-  .hb-kp {
+  .hb-btn {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    min-height: 44px;
-    font-weight: 700;
-    color: var(--ink);
+    gap: 14px;
+    min-height: 54px;
+    padding: 6px 6px 6px 22px;
+    border: 0;
+    border-radius: 999px;
+    background: #fff;
+    color: #000;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  .hb-btn:hover {
+    background: #e5e5e5;
+  }
+  .hb-btn-go {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #000;
+    color: #fff;
+    transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .hb-btn:hover .hb-btn-go {
+    transform: translateX(3px);
+  }
+  .hb-link {
+    padding-block: 12px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.94rem;
     text-decoration: underline;
+    text-decoration-color: rgba(255, 255, 255, 0.4);
     text-underline-offset: 4px;
   }
-  .hb-kp :global(svg) {
-    transform: rotate(90deg);
+  .hb-link:hover {
+    color: #fff;
+    text-decoration-color: #fff;
   }
-
-  /* polaroids on push pins, slightly scattered */
-  .hb-wall {
-    position: relative;
+  /* photo mosaic: one tall, two square */
+  .hb-mosaic {
     list-style: none;
     margin: 0;
     padding: 0;
-    min-height: 540px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    aspect-ratio: 1.05;
   }
   .hb-shot {
-    position: absolute;
-    width: 54%;
-    padding: 10px 10px 0;
-    background: #fff;
-    box-shadow: 0 18px 30px -16px rgba(22, 20, 27, 0.45);
-    transform: rotate(var(--r));
+    border-radius: 22px;
+    overflow: clip;
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .hb-shot-1 {
+    grid-row: span 2;
   }
   .hb-shot img {
     display: block;
     width: 100%;
-    aspect-ratio: 1;
+    height: 100%;
     object-fit: cover;
   }
-  .hb-cap {
-    display: block;
-    padding: 8px 4px 12px;
-    font-family: 'Caveat', cursive;
-    font-weight: 600;
-    font-size: 1.3rem;
-    line-height: 1;
-    text-align: center;
-    color: var(--ink);
-  }
-  .hb-shot-1 { --r: -4deg; left: 0; top: 30px; }
-  .hb-shot-2 { --r: 3deg; right: 0; top: 0; z-index: 1; }
-  .hb-shot-3 { --r: -1.5deg; left: 30%; top: 270px; z-index: 2; width: 46%; }
-  .hb-pin {
-    position: absolute;
-    z-index: 3;
-    left: 50%;
-    top: -11px;
-    width: 26px;
-    height: 26px;
-    margin-left: -13px;
-    border-radius: 50%;
-    background:
-      radial-gradient(circle at 34% 30%, rgba(255, 255, 255, 0.9) 0 3px, transparent 5px),
-      radial-gradient(circle at 40% 38%, color-mix(in srgb, var(--pin) 60%, #fff), var(--pin) 55%, color-mix(in srgb, var(--pin) 70%, #000));
-    box-shadow: 3px 5px 6px rgba(22, 20, 27, 0.35);
-  }
-
   @media (max-width: 1020px) {
     .hb-grid {
       grid-template-columns: minmax(0, 1fr);
     }
-    .hb-wall {
-      width: min(100%, 520px);
-      justify-self: center;
+    .hb-mosaic {
+      max-width: 560px;
     }
   }
   @media (max-width: 560px) {
     .hb-points {
-      gap: 10px;
+      grid-template-columns: minmax(0, 1fr);
     }
-    .hb-points li {
-      padding: 14px;
+    .hb-btn {
+      width: 100%;
+      justify-content: space-between;
     }
-    .hb-n {
-      font-size: 1.8rem;
-    }
-    .hb-actions .btn {
-      flex: 1 1 100%;
-      justify-content: center;
-    }
-    .hb-wall {
-      min-height: 0;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 8px;
-    }
-    .hb-shot,
-    .hb-shot-3 {
-      position: relative;
-      inset: auto;
-      width: auto;
-      padding: 6px 6px 0;
-    }
-    .hb-cap {
-      font-size: 0.95rem;
-      padding: 6px 2px 8px;
-    }
-    .hb-pin {
-      width: 18px;
-      height: 18px;
-      margin-left: -9px;
-      top: -8px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hb-btn,
+    .hb-btn-go {
+      transition: none;
     }
   }
 </style>

@@ -1,5 +1,6 @@
 /* =====================================================================================
-   Home page — «Ink & Amber» glass concept (owner, 14.11.2026: palette #000000 / #14213D / #FCA311 /
+   Home page — «Ink» glass concept (owner, 14.11.2026: palette #000000 / #14213D / #E5E5E5 / #FFFFFF, accent white —
+   orange #FCA311 replaced by white the same day;
    #E5E5E5 / #FFFFFF, glass elements like the reference, every block in one concept, no envelope).
    Scoped to body.theme-lux, so the other pages stay CMYK 2.0.
 
@@ -16,8 +17,10 @@
 body.theme-lux {
   --navy: #14213d;
   --navy-2: #1c2c4f;
-  --amber: #fca311;
-  --amber-dark: #e08e00;
+  /* accent (owner, 14.11.2026: «делаем белый» — no colour): white on navy/black, navy/black on white.
+     --amber keeps its name for the dark-ground accent so older rules still work */
+  --amber: #ffffff;
+  --amber-dark: #e5e5e5;
   --grey: #e5e5e5;
 
   --paper: #ffffff;
@@ -31,16 +34,16 @@ body.theme-lux {
   --dot: rgba(20, 33, 61, 0.1);
 
   --c: #14213d;
-  --m: #fca311;
-  --y: #fca311;
+  --m: #14213d;
+  --y: #14213d;
   --k: #000000;
   --c-soft: #eef0f4;
-  --m-soft: #fff4e0;
-  --y-soft: #fff4e0;
+  --m-soft: #eef0f4;
+  --y-soft: #eef0f4;
   --c-ink: #14213d;
   --m-ink: #14213d;
-  --red: #fca311; /* main buttons: amber with black text */
-  --red-dark: #e08e00;
+  --red: #14213d; /* main buttons on light grounds: navy with white text; white with black text on dark ones */
+  --red-dark: #000000;
   --focus: #14213d;
 
   --radius: 24px;
@@ -68,13 +71,13 @@ body.theme-lux main h2 {
   font-size: clamp(2rem, 3.6vw, 3rem);
   line-height: 1.06;
 }
-/* accent word: an amber marker on light grounds, amber text on dark ones */
+/* accent word: a soft navy marker on light grounds; on dark ones it is simply part of the white headline */
 body.theme-lux :is(.serif, .mark, .sec-mark, .thd-mark) {
   font-family: inherit !important;
   font-style: normal !important;
   font-weight: inherit !important;
   color: inherit !important;
-  background: linear-gradient(transparent 64%, rgba(252, 163, 17, 0.6) 64%, rgba(252, 163, 17, 0.6) 92%, transparent 92%) !important;
+  background: linear-gradient(transparent 64%, rgba(20, 33, 61, 0.14) 64%, rgba(20, 33, 61, 0.14) 92%, transparent 92%) !important;
   padding-inline: 0.06em;
   border-radius: 0;
 }
@@ -94,7 +97,7 @@ body.theme-lux .eyebrow::before {
   width: 24px;
   height: 2px;
   border-radius: 2px;
-  background: var(--amber);
+  background: currentColor;
   mix-blend-mode: normal;
 }
 body.theme-lux .lead {
@@ -132,11 +135,18 @@ body.theme-lux .band-ink {
   border-radius: 32px;
   overflow: clip;
   background:
-    radial-gradient(60% 80% at 100% 0%, rgba(252, 163, 17, 0.1), transparent 60%),
+    radial-gradient(60% 80% at 100% 0%, rgba(255, 255, 255, 0.07), transparent 60%),
     linear-gradient(160deg, var(--navy) 0%, #0b1426 100%);
 }
 body.theme-lux .band-ink .eyebrow {
   color: #ffffff;
+}
+body.theme-lux .band-ink {
+  --red: #ffffff;
+  --red-dark: #e5e5e5;
+}
+body.theme-lux .band-ink .btn-magenta {
+  --btn-fg: #000000;
 }
 body.theme-lux .band-ink .btn-ghost {
   --btn-fg: #ffffff;
@@ -153,12 +163,12 @@ body.theme-lux .btn:hover {
   box-shadow: none;
 }
 body.theme-lux .btn-magenta {
-  --btn-fg: #000000;
+  --btn-fg: #ffffff;
 }
 body.theme-lux .btn-magenta:hover {
-  background: var(--amber-dark);
-  border-color: var(--amber-dark);
-  color: #000;
+  background: var(--red-dark);
+  border-color: var(--red-dark);
+  color: var(--btn-fg);
 }
 body.theme-lux .btn-ghost {
   --btn-fg: var(--navy);
@@ -170,14 +180,14 @@ body.theme-lux .btn-ghost:hover {
   color: #fff;
 }
 body.theme-lux .btn-yellow {
-  --btn-bg: var(--amber);
-  --btn-fg: #000;
-  border-color: var(--amber);
+  --btn-bg: var(--navy);
+  --btn-fg: #fff;
+  border-color: var(--navy);
 }
 body.theme-lux .sticker {
-  background: var(--amber);
-  color: #000;
-  border-color: var(--amber);
+  background: var(--navy);
+  color: #fff;
+  border-color: var(--navy);
   box-shadow: none;
 }
 
@@ -209,45 +219,20 @@ body.theme-lux .hdr-mega {
 body.theme-lux .hdr-mega li a:hover {
   color: var(--navy);
   text-decoration: underline;
-  text-decoration-color: var(--amber);
+  text-decoration-color: var(--navy);
   text-decoration-thickness: 2px;
-}
-body.theme-lux .hdr-cta {
-  color: #000 !important;
 }
 
 /* ---------------------------------------------------------------- shared home blocks */
 /* cards: white, hairline, soft navy shadow */
-body.theme-lux main :is(.rev, .rev-ratings a, .how-step, .faq-item, .contact-card, .hs-card, .hb-points li) {
+body.theme-lux main :is(.rev, .rev-ratings a, .faq-item, .contact-card) {
   background: #fff;
   border: 1px solid var(--line) !important;
   box-shadow: var(--shadow) !important;
 }
-body.theme-lux main .band-ink :is(.hb-points li) {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.14) !important;
-  box-shadow: none !important;
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-}
 body.theme-lux .rev-stars::after,
 body.theme-lux .rev-mini-stars {
-  color: var(--amber);
-}
-/* outlined numbers 01–04: amber outline */
-body.theme-lux :is(.hb-n, .hs-n) {
-  color: transparent !important;
-  -webkit-text-stroke-color: var(--amber) !important;
-}
-body.theme-lux .hs-card a {
-  text-decoration-color: var(--amber);
-}
-/* «Как заказать»: navy dots, the last step amber */
-body.theme-lux .how-step {
-  --tone: var(--navy) !important;
-}
-body.theme-lux .how-step:last-child {
-  --tone: var(--amber) !important;
+  color: var(--navy);
 }
 body.theme-lux .faq-more button,
 body.theme-lux .contact-list svg {
@@ -290,26 +275,13 @@ body.theme-lux .work-tech {
   color: var(--muted);
 }
 
-/* «Компаниям» photos: straight, rounded, no pins / handwriting */
-body.theme-lux .hb-shot {
-  --r: 0deg !important;
-  padding: 0 !important;
-  border-radius: 20px;
-  overflow: clip;
-  background: var(--navy-2) !important;
-  box-shadow: 0 24px 50px -24px rgba(0, 0, 0, 0.6) !important;
-}
-body.theme-lux :is(.hb-pin, .hb-cap) {
-  display: none !important;
-}
-
 /* ---------------------------------------------------------------- footer, chat, bottom bar */
 body.theme-lux .ftr {
   background: #000;
 }
 body.theme-lux .ftr-band {
-  background: var(--amber) !important;
-  height: 3px !important;
+  background: rgba(255, 255, 255, 0.16) !important;
+  height: 1px !important;
 }
 body.theme-lux .ftr-band > * {
   display: none;
@@ -320,9 +292,6 @@ body.theme-lux .ftr-phone {
 body.theme-lux .chatw-launch {
   background: var(--navy);
   box-shadow: 0 18px 30px -14px rgba(20, 33, 61, 0.6) !important;
-}
-body.theme-lux :is(.mbar .mbar-cta, .chatw-send) {
-  color: #000 !important;
 }
 
 @media (max-width: 760px) {
@@ -396,4 +365,12 @@ body.theme-lux :is(.btn, .lx-btn, .hny-btn, .cats-all, .lx-round):active {
   body.theme-lux .m-fade {
     opacity: 1 !important;
   }
+}
+
+/* footer on the home page: no yellow — white hairlines and headings */
+body.theme-lux .ftr :is(ul ul, .ftr-sub) {
+  border-left-color: rgba(255, 255, 255, 0.25) !important;
+}
+body.theme-lux .ftr {
+  --y: #ffffff;
 }

@@ -1,0 +1,156 @@
+---
+/**
+ * «Как это работает» for the home page (owner, 14.11.2026: «перерабатываем под наш дизайн», «цифры 01–04 смотрятся
+ * неудачно, заменяем подход»). A route: four stops on one line, each marked by an icon in a navy circle instead of a
+ * number; the last stop (pick-up) is the solid one. Texts are the same as in HowItWorks.astro (used elsewhere).
+ */
+const steps = [
+  {
+    t: 'Посчитайте цену',
+    d: 'Калькулятор на странице «Цены» покажет цену за штуку и за весь тираж. Можно собрать смету из нескольких изделий.',
+    icon: 'M7 3h10a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1ZM9 7h6M9 11h.01M12 11h.01M15 11h.01M9 14h.01M12 14h.01M15 14h.01M9 17h.01M12 17h.01M15 17h.01',
+  },
+  {
+    t: 'Пришлите макет',
+    d: 'Прикрепите файл к заявке или опишите идею. Нет макета — подготовим, в большинстве случаев бесплатно.',
+    icon: 'M12 16V4m-5 5 5-5 5 5M5 20h14',
+  },
+  {
+    t: 'Согласуем и оплатите',
+    d: 'Покажем, как будет выглядеть изделие. Частным лицам — предоплата 50%, компаниям — счёт без НДС.',
+    icon: 'M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM8 12.5l2.8 2.8L16 9.6',
+  },
+  {
+    t: 'Заберите заказ',
+    d: 'В ТЦ «Экватор» на Челнокова, 2 этаж. За срочность не доплачиваете — сделаем к нужной дате.',
+    icon: 'M5 8h14l-1.2 12H6.2zM9 8V6a3 3 0 0 1 6 0v2',
+  },
+];
+---
+
+<section class="section hst" aria-labelledby="hst-h">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Как это работает</p>
+        <h2 id="hst-h">Четыре шага от&nbsp;идеи до&nbsp;готового изделия</h2>
+      </div>
+      <a class="btn btn-magenta" href="/price">Посчитать цену</a>
+    </div>
+
+    <ol class="hst-route">
+      {
+        steps.map((s) => (
+          <li class="hst-stop">
+            <span class="hst-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d={s.icon} />
+              </svg>
+            </span>
+            <div class="hst-card">
+              <h3>{s.t}</h3>
+              <p>{s.d}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .hst-route {
+    --dot: 56px;
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+  /* the route line through the icon centres */
+  .hst-route::before {
+    content: '';
+    position: absolute;
+    top: calc(var(--dot) / 2);
+    left: calc(12.5% - 8px);
+    right: calc(12.5% - 8px);
+    height: 1px;
+    background: linear-gradient(90deg, rgba(20, 33, 61, 0.35), rgba(20, 33, 61, 0.15));
+  }
+  .hst-stop {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 18px;
+    text-align: center;
+  }
+  .hst-ico {
+    display: grid;
+    place-items: center;
+    width: var(--dot);
+    height: var(--dot);
+    border-radius: 50%;
+    background: var(--navy, #14213d);
+    color: #fff;
+    /* a ring in the band colour cuts the line around the icon */
+    box-shadow: 0 0 0 8px var(--band-bg, #f2f2f2);
+  }
+  .hst-stop:last-child .hst-ico {
+    background: #000;
+  }
+  .hst-card {
+    width: 100%;
+    height: 100%;
+    padding: 22px 20px 24px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.78);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
+  }
+  .hst-card h3 {
+    margin: 0 0 8px;
+    font-size: 1.08rem;
+    font-weight: 700;
+  }
+  .hst-card p {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  @media (max-width: 900px) {
+    .hst-route {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
+    }
+    .hst-route::before {
+      top: 0;
+      bottom: 0;
+      left: calc(var(--dot) / 2);
+      right: auto;
+      width: 1px;
+      height: auto;
+      background: linear-gradient(180deg, rgba(20, 33, 61, 0.35), rgba(20, 33, 61, 0.12));
+    }
+    .hst-stop {
+      grid-template-columns: var(--dot) minmax(0, 1fr);
+      justify-items: start;
+      align-items: start;
+      gap: 16px;
+      text-align: left;
+    }
+    .hst-card {
+      padding: 16px 18px 18px;
+    }
+  }
+  @media (max-width: 560px) {
+    .hst-route {
+      --dot: 46px;
+    }
+  }
+</style>
