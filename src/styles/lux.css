@@ -1,20 +1,184 @@
 /* =====================================================================================
-   «Lux» — glass interface of the home page.
-   14.11.2026: owner's reference (glass header pill, photo in a rounded frame, floating glass cards).
-   Same day: «put back the cathedral photo and the previous colours, keep the glass interface» —
-   so the palette, fonts, waves and push-pins stay CMYK 2.0; only the glass parts live here.
-   Glass by ui-ux-pro-max: blur 14–20px, translucent white, 1px light border, text ≥4.5:1 —
-   over a busy photo the glass is denser (≈0.66) so text keeps its contrast.
-   The warm beige version is on branch backup/home-lux-warm.
+   Home page — «Ink & Amber» glass concept (owner, 14.11.2026: palette #000000 / #14213D / #FCA311 /
+   #E5E5E5 / #FFFFFF, glass elements like the reference, every block in one concept, no envelope).
+   Scoped to body.theme-lux, so the other pages stay CMYK 2.0.
+
+   Rules (ui-ux-pro-max: glassmorphism + contrast ≥4.5:1):
+   - orange #FCA311 is never small text on white (2:1) — on light grounds it is a fill (buttons with
+     black text, marker under a word, lines, dots); as text it is used only on navy/black (8:1);
+   - glass = translucent white over photos/navy, blur 14–20px, 1px light border;
+   - dark blocks (hero, New Year, works, companies) are rounded navy panels with a 12px margin,
+     light blocks alternate white / light grey #E5E5E5-tint and stay flat;
+   - one sans family (Rubik, has Cyrillic; the skill's Outfit has no Cyrillic), bold tight headlines.
+   Earlier looks: backup/home-glass-cmyk (glass + CMYK), backup/home-lux-warm (warm beige).
    ===================================================================================== */
 
 body.theme-lux {
-  --serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
-  --accent-ink: var(--c-ink);
-  --glass: rgba(255, 252, 245, 0.66);
-  --glass-strong: rgba(255, 252, 245, 0.86);
-  --glass-line: rgba(255, 255, 255, 0.78);
-  --glass-shadow: 0 1px 0 rgba(255, 255, 255, 0.7) inset, 0 24px 60px -30px rgba(22, 20, 27, 0.45);
+  --navy: #14213d;
+  --navy-2: #1c2c4f;
+  --amber: #fca311;
+  --amber-dark: #e08e00;
+  --grey: #e5e5e5;
+
+  --paper: #ffffff;
+  --paper-2: #f2f2f2;
+  --card: #ffffff;
+  --ink: #000000;
+  --ink-2: #14213d;
+  --muted: #4b5568; /* 7.4:1 on white */
+  --line: #e5e5e5;
+  --line-strong: #c8ccd4;
+  --dot: rgba(20, 33, 61, 0.1);
+
+  --c: #14213d;
+  --m: #fca311;
+  --y: #fca311;
+  --k: #000000;
+  --c-soft: #eef0f4;
+  --m-soft: #fff4e0;
+  --y-soft: #fff4e0;
+  --c-ink: #14213d;
+  --m-ink: #14213d;
+  --red: #fca311; /* main buttons: amber with black text */
+  --red-dark: #e08e00;
+  --focus: #14213d;
+
+  --radius: 24px;
+  --radius-l: 32px;
+  --shadow: 0 1px 0 rgba(20, 33, 61, 0.04), 0 22px 44px -30px rgba(20, 33, 61, 0.35);
+  --shadow-print: none;
+
+  --glass: rgba(255, 255, 255, 0.86);
+  --glass-strong: rgba(255, 255, 255, 0.9);
+  --glass-line: rgba(255, 255, 255, 0.8);
+  --glass-shadow: 0 1px 0 rgba(255, 255, 255, 0.7) inset, 0 24px 60px -30px rgba(20, 33, 61, 0.45);
+  --glass-dark: rgba(20, 33, 61, 0.55);
+  --glass-dark-line: rgba(255, 255, 255, 0.16);
+
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* ---------------------------------------------------------------- type */
+body.theme-lux main :is(h1, h2) {
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+body.theme-lux main h2 {
+  font-size: clamp(2rem, 3.6vw, 3rem);
+  line-height: 1.06;
+}
+/* accent word: an amber marker on light grounds, amber text on dark ones */
+body.theme-lux :is(.serif, .mark, .sec-mark, .thd-mark) {
+  font-family: inherit !important;
+  font-style: normal !important;
+  font-weight: inherit !important;
+  color: inherit !important;
+  background: linear-gradient(transparent 64%, rgba(252, 163, 17, 0.6) 64%, rgba(252, 163, 17, 0.6) 92%, transparent 92%) !important;
+  padding-inline: 0.06em;
+  border-radius: 0;
+}
+body.theme-lux :is(.band-ink, .lx-dark) :is(.serif, .mark, .sec-mark) {
+  background: none !important;
+  padding: 0;
+  color: var(--amber) !important;
+}
+body.theme-lux .eyebrow {
+  font-family: var(--font);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: var(--ink-2);
+}
+body.theme-lux .eyebrow::before {
+  width: 24px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--amber);
+  mix-blend-mode: normal;
+}
+body.theme-lux .lead {
+  color: var(--muted);
+}
+body.theme-lux .hand {
+  display: none !important;
+}
+
+/* ---------------------------------------------------------------- bands */
+body.theme-lux :is(.band-tint, .band-ink) {
+  margin-block: 0;
+}
+body.theme-lux :is(.band-tint, .band-ink)::before,
+body.theme-lux :is(.band-tint, .band-ink)::after {
+  display: none;
+}
+body.theme-lux .band-tint {
+  --band-bg: #f2f2f2;
+  --line: #e5e5e5;
+}
+/* dark blocks are rounded navy panels, like the first screen */
+body.theme-lux .band-ink {
+  --band-bg: var(--navy);
+  --ink: #ffffff;
+  --ink-2: #dfe4ee;
+  --muted: #b4bccb;
+  --card: #1c2c4f;
+  --paper-2: #1c2c4f;
+  --line: rgba(255, 255, 255, 0.12);
+  --line-strong: rgba(255, 255, 255, 0.22);
+  --dot: rgba(255, 255, 255, 0.08);
+  --focus: var(--amber);
+  margin: 12px;
+  border-radius: 32px;
+  overflow: clip;
+  background:
+    radial-gradient(60% 80% at 100% 0%, rgba(252, 163, 17, 0.1), transparent 60%),
+    linear-gradient(160deg, var(--navy) 0%, #0b1426 100%);
+}
+body.theme-lux .band-ink .eyebrow {
+  color: #ffffff;
+}
+body.theme-lux .band-ink .btn-ghost {
+  --btn-fg: #ffffff;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* ---------------------------------------------------------------- buttons */
+body.theme-lux .btn {
+  border-width: 1px;
+  font-weight: 600;
+}
+body.theme-lux .btn:hover {
+  transform: none;
+  box-shadow: none;
+}
+body.theme-lux .btn-magenta {
+  --btn-fg: #000000;
+}
+body.theme-lux .btn-magenta:hover {
+  background: var(--amber-dark);
+  border-color: var(--amber-dark);
+  color: #000;
+}
+body.theme-lux .btn-ghost {
+  --btn-fg: var(--navy);
+  border-color: var(--line-strong);
+}
+body.theme-lux .btn-ghost:hover {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
+body.theme-lux .btn-yellow {
+  --btn-bg: var(--amber);
+  --btn-fg: #000;
+  border-color: var(--amber);
+}
+body.theme-lux .sticker {
+  background: var(--amber);
+  color: #000;
+  border-color: var(--amber);
+  box-shadow: none;
 }
 
 /* ---------------------------------------------------------------- header: a floating glass pill */
@@ -33,21 +197,132 @@ body.theme-lux .hdr .hdr-row {
   min-height: 64px;
   padding-inline: 10px 8px;
 }
-
-/* ---------------------------------------------------------------- New Year block: a rounded panel under the frame
-   (its wavy top was cut to the old hero's wave — with the framed hero it reads better as a card) */
-body.theme-lux .nyb {
-  margin: 28px 12px 0;
+body.theme-lux .hdr-link:hover,
+body.theme-lux .hdr-link.is-active {
+  background: rgba(20, 33, 61, 0.07);
+  box-shadow: none;
 }
-body.theme-lux .nyb::before {
+body.theme-lux .hdr-mega {
+  border: 1px solid var(--line);
+  box-shadow: 0 30px 70px -30px rgba(20, 33, 61, 0.45);
+}
+body.theme-lux .hdr-mega li a:hover {
+  color: var(--navy);
+  text-decoration: underline;
+  text-decoration-color: var(--amber);
+  text-decoration-thickness: 2px;
+}
+body.theme-lux .hdr-cta {
+  color: #000 !important;
+}
+
+/* ---------------------------------------------------------------- shared home blocks */
+/* cards: white, hairline, soft navy shadow */
+body.theme-lux main :is(.rev, .rev-ratings a, .how-step, .faq-item, .contact-card, .hs-card, .hb-points li) {
+  background: #fff;
+  border: 1px solid var(--line) !important;
+  box-shadow: var(--shadow) !important;
+}
+body.theme-lux main .band-ink :is(.hb-points li) {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+body.theme-lux .rev-stars::after,
+body.theme-lux .rev-mini-stars {
+  color: var(--amber);
+}
+/* outlined numbers 01–04: amber outline */
+body.theme-lux :is(.hb-n, .hs-n) {
+  color: transparent !important;
+  -webkit-text-stroke-color: var(--amber) !important;
+}
+body.theme-lux .hs-card a {
+  text-decoration-color: var(--amber);
+}
+/* «Как заказать»: navy dots, the last step amber */
+body.theme-lux .how-step {
+  --tone: var(--navy) !important;
+}
+body.theme-lux .how-step:last-child {
+  --tone: var(--amber) !important;
+}
+body.theme-lux .faq-more button,
+body.theme-lux .contact-list svg {
+  color: var(--navy);
+}
+body.theme-lux .contact-map {
+  background:
+    radial-gradient(circle, rgba(20, 33, 61, 0.12) 1.4px, transparent 1.6px) 0 0 / 16px 16px,
+    linear-gradient(135deg, #f2f2f2, #e5e5e5) !important;
+}
+
+/* «Наши работы»: straight rounded photos on the navy panel, no pins */
+body.theme-lux .work {
+  --tilt: 0;
+}
+body.theme-lux .work-pin,
+body.theme-lux .work-hang::before,
+body.theme-lux .work-hang::after {
+  display: none !important;
+}
+body.theme-lux .work-card {
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+body.theme-lux .work-frame {
+  border-radius: 20px;
+  overflow: clip;
+  background: var(--navy-2) !important;
+}
+body.theme-lux .work-frame::after {
   display: none;
 }
-body.theme-lux .nyb-card {
-  -webkit-mask: none;
-  mask: none;
-  border-radius: 32px;
-  padding-top: clamp(40px, 5vw, 64px);
-  padding-bottom: clamp(32px, 4vw, 48px);
+body.theme-lux .work-title {
+  color: var(--ink);
+  font-weight: 600;
+}
+body.theme-lux .work-tech {
+  font-family: var(--font);
+  color: var(--muted);
+}
+
+/* «Компаниям» photos: straight, rounded, no pins / handwriting */
+body.theme-lux .hb-shot {
+  --r: 0deg !important;
+  padding: 0 !important;
+  border-radius: 20px;
+  overflow: clip;
+  background: var(--navy-2) !important;
+  box-shadow: 0 24px 50px -24px rgba(0, 0, 0, 0.6) !important;
+}
+body.theme-lux :is(.hb-pin, .hb-cap) {
+  display: none !important;
+}
+
+/* ---------------------------------------------------------------- footer, chat, bottom bar */
+body.theme-lux .ftr {
+  background: #000;
+}
+body.theme-lux .ftr-band {
+  background: var(--amber) !important;
+  height: 3px !important;
+}
+body.theme-lux .ftr-band > * {
+  display: none;
+}
+body.theme-lux .ftr-phone {
+  color: var(--amber) !important;
+}
+body.theme-lux .chatw-launch {
+  background: var(--navy);
+  box-shadow: 0 18px 30px -14px rgba(20, 33, 61, 0.6) !important;
+}
+body.theme-lux :is(.mbar .mbar-cta, .chatw-send) {
+  color: #000 !important;
 }
 
 @media (max-width: 760px) {
@@ -59,16 +334,15 @@ body.theme-lux .nyb-card {
   body.theme-lux .hdr .hdr-row {
     min-height: 58px;
   }
-  body.theme-lux .nyb {
-    margin: 20px 8px 0;
-  }
-  body.theme-lux .nyb-card {
+  body.theme-lux .band-ink {
+    margin: 8px;
     border-radius: 24px;
   }
 }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   body.theme-lux {
-    --glass: rgba(255, 252, 245, 0.95);
+    --glass: rgba(255, 255, 255, 0.95);
+    --glass-dark: rgba(20, 33, 61, 0.92);
   }
 }

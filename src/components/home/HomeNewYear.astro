@@ -1,0 +1,320 @@
+---
+/**
+ * New Year block of the home page in the «Ink & Amber» glass concept (owner, 14.11.2026: «убираем конверт,
+ * новогодний блок должен соответствовать общей концепции»). A rounded navy panel with snow, like the first screen:
+ * text + glass countdown tiles + amber button on the left, the family photo in a glass «ornament» on the right.
+ * Shown only from 1 November to 31 December (script), honest countdown to 1 January by the visitor's clock.
+ * The old envelope block is src/components/NewYearBlock.astro (kept, not used on the home page).
+ */
+import Icon from '@/components/Icon.astro';
+
+interface Props {
+  photo?: string;
+  link?: string;
+}
+const { photo = '/img/ny/ball-photo.webp', link = '/stati/novogodnie-podarki' } = Astro.props;
+---
+
+<section class="hny lx-dark" aria-labelledby="hny-h" data-hny hidden>
+  <span class="ny-snow" aria-hidden="true"></span>
+  <div class="hny-inner">
+    <div class="hny-copy">
+      <p class="hny-kicker">Новый год уже близко</p>
+      <h2 id="hny-h">Подарки с&nbsp;вашим <span class="serif">фото и&nbsp;логотипом</span></h2>
+      <p class="hny-lead">Ёлочные шары, кружки, календари и&nbsp;футболки&nbsp;— для семьи, друзей и&nbsp;коллег. Перед праздниками лучше написать заранее.</p>
+
+      <div class="hny-cd" data-hny-cd role="timer" aria-label="До Нового года">
+        <span class="hny-tile"><b data-d>—</b><small data-dw>дней</small></span>
+        <span class="hny-tile"><b data-h>—</b><small>часов</small></span>
+        <span class="hny-tile"><b data-m>—</b><small>минут</small></span>
+        <span class="hny-cd-label">до&nbsp;Нового года</span>
+      </div>
+
+      <a class="hny-btn" href={link}>Идеи подарков к&nbsp;Новому году <span class="hny-btn-go" aria-hidden="true"><Icon name="arrow" size={16} /></span></a>
+    </div>
+
+    <figure class="hny-orn" aria-hidden="true">
+      <span class="hny-string"></span>
+      <span class="hny-cap"></span>
+      <span class="hny-ball">
+        <img src={photo} alt="" width="480" height="480" loading="lazy" decoding="async" />
+      </span>
+      <span class="hny-chip hny-chip-1">Шар с&nbsp;фото</span>
+      <span class="hny-chip hny-chip-2">Кружка с&nbsp;фото</span>
+    </figure>
+  </div>
+</section>
+
+<script>
+  // Season (1 Nov – 31 Dec) and the countdown to 1 January by the visitor's clock; updates every 30 s.
+  const plural = (n: number, one: string, few: string, many: string) => {
+    const a = n % 10, b = n % 100;
+    return a === 1 && b !== 11 ? one : a >= 2 && a <= 4 && (b < 12 || b > 14) ? few : many;
+  };
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const block = document.querySelector<HTMLElement>('[data-hny]');
+  const month = new Date().getMonth();
+  if (block && (month === 10 || month === 11)) {
+    block.hidden = false;
+    const el = block.querySelector<HTMLElement>('[data-hny-cd]')!;
+    const set = (sel: string, v: string) => {
+      const n = el.querySelector(sel);
+      if (n) n.textContent = v;
+    };
+    const tick = () => {
+      const now = new Date();
+      const ms = Math.max(0, new Date(now.getFullYear() + 1, 0, 1).getTime() - now.getTime());
+      const min = Math.floor(ms / 60000);
+      const d = Math.floor(min / 1440), h = Math.floor((min % 1440) / 60), m = min % 60;
+      set('[data-d]', String(d));
+      set('[data-dw]', plural(d, 'день', 'дня', 'дней'));
+      set('[data-h]', pad(h));
+      set('[data-m]', pad(m));
+      el.setAttribute('aria-label', `До Нового года ${d} ${plural(d, 'день', 'дня', 'дней')} ${h} ч ${m} мин`);
+    };
+    tick();
+    setInterval(tick, 30000);
+  }
+</script>
+
+<style>
+  .hny {
+    position: relative;
+    isolation: isolate;
+    margin: 28px 12px 0;
+    border-radius: 32px;
+    overflow: clip;
+    color: #fff;
+    background:
+      radial-gradient(50% 70% at 85% 10%, rgba(252, 163, 17, 0.16), transparent 65%),
+      linear-gradient(160deg, var(--navy, #14213d) 0%, #0b1426 100%);
+  }
+  .hny-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    align-items: center;
+    gap: clamp(28px, 5vw, 72px);
+    max-width: 1240px;
+    margin-inline: auto;
+    padding: clamp(48px, 6vw, 80px) clamp(20px, 4vw, 56px);
+  }
+  .hny-kicker {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 18px;
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--amber, #fca311);
+  }
+  .hny-kicker::before {
+    content: '';
+    width: 28px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--amber, #fca311);
+  }
+  .hny h2 {
+    margin: 0;
+    color: #fff;
+    font-size: clamp(2rem, 4vw, 3.4rem) !important;
+    line-height: 1.04 !important;
+    font-weight: 800 !important;
+    text-wrap: balance;
+  }
+  .hny-lead {
+    max-width: 34em;
+    margin: 18px 0 0;
+    font-size: 1.04rem;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.8);
+  }
+  /* countdown: three glass tiles */
+  .hny-cd {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 28px;
+    font-variant-numeric: tabular-nums;
+  }
+  .hny-tile {
+    display: grid;
+    justify-items: center;
+    gap: 4px;
+    min-width: 86px;
+    padding: 14px 12px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.08);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+  }
+  .hny-tile b {
+    font-size: 2.1rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--amber, #fca311);
+  }
+  .hny-tile small {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.72);
+  }
+  .hny-cd-label {
+    margin-left: 6px;
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.72);
+  }
+  .hny-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 56px;
+    margin-top: 28px;
+    padding: 7px 7px 7px 24px;
+    border-radius: 999px;
+    background: var(--amber, #fca311);
+    color: #000;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+  }
+  .hny-btn:hover {
+    background: var(--amber-dark, #e08e00);
+    color: #000;
+  }
+  .hny-btn-go {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #000;
+    color: #fff;
+    transition: transform 0.2s ease;
+  }
+  .hny-btn:hover .hny-btn-go {
+    transform: translateX(3px);
+  }
+  /* the photo as a glass ornament on a thin string */
+  .hny-orn {
+    position: relative;
+    justify-self: center;
+    width: min(100%, 340px);
+    margin: 0;
+    padding-top: 70px;
+  }
+  .hny-string {
+    position: absolute;
+    top: -200px;
+    left: 50%;
+    width: 1px;
+    height: 262px;
+    background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.55));
+  }
+  .hny-cap {
+    position: absolute;
+    top: 52px;
+    left: 50%;
+    width: 46px;
+    height: 24px;
+    transform: translateX(-50%);
+    border-radius: 8px 8px 4px 4px;
+    background: linear-gradient(90deg, #b87500, #fca311 45%, #ffd27a 55%, #b87500);
+    box-shadow: 0 6px 12px -6px rgba(0, 0, 0, 0.6);
+  }
+  .hny-ball {
+    display: block;
+    aspect-ratio: 1;
+    padding: 12px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    background: rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    box-shadow:
+      0 0 0 6px rgba(252, 163, 17, 0.9),
+      0 40px 80px -30px rgba(0, 0, 0, 0.7);
+  }
+  .hny-ball img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .hny-chip {
+    position: absolute;
+    padding: 9px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.82);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    color: #000;
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    box-shadow: 0 16px 30px -18px rgba(0, 0, 0, 0.6);
+  }
+  .hny-chip-1 {
+    left: -18%;
+    top: 46%;
+  }
+  .hny-chip-2 {
+    right: -12%;
+    bottom: 6%;
+  }
+
+  @media (max-width: 860px) {
+    .hny-inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .hny-orn {
+      order: -1;
+      width: min(64%, 240px);
+      padding-top: 40px;
+    }
+    .hny-cap {
+      top: 24px;
+    }
+    .hny-chip {
+      display: none;
+    }
+  }
+  @media (max-width: 560px) {
+    .hny {
+      margin: 20px 8px 0;
+      border-radius: 24px;
+    }
+    .hny-inner {
+      padding: 36px 18px 24px;
+      gap: 24px;
+    }
+    .hny-tile {
+      min-width: 0;
+      flex: 1;
+    }
+    .hny-tile b {
+      font-size: 1.7rem;
+    }
+    .hny-cd-label {
+      width: 100%;
+      margin: 0;
+    }
+    .hny-btn {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.94rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hny-btn,
+    .hny-btn-go {
+      transition: none;
+    }
+  }
+</style>

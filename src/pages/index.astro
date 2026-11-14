@@ -1,6 +1,4 @@
 ---
-import '@fontsource/caveat/600.css';
-import '@fontsource/cormorant-garamond/600-italic.css';
 import '@/styles/lux.css';
 import { portfolio } from '@/data/portfolio';
 import BaseLayout from '@/layouts/BaseLayout.astro';
@@ -10,7 +8,7 @@ import Reviews from '@/components/Reviews.astro';
 import FaqSection from '@/components/FaqSection.astro';
 import ContactBlock from '@/components/ContactBlock.astro';
 import Icon from '@/components/Icon.astro';
-import NewYearBlock from '@/components/NewYearBlock.astro';
+import HomeNewYear from '@/components/home/HomeNewYear.astro';
 import HomeB2B from '@/components/home/HomeB2B.astro';
 import HomeSeo from '@/components/home/HomeSeo.astro';
 import { categoryFrom, findProduct, rub } from '@/data/pricing';
@@ -72,13 +70,13 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   <!-- HERO (owner, 14.11.2026, by a reference): photo in a rounded frame, glass header over it, floating glass cards
        at the bottom. Photo — the man at the cathedral, colours — CMYK 2.0 (owner: «прошлое изображение и прошлую гамму»). -->
   <section class="lx-hero" aria-labelledby="hero-h">
-    <div class="lx-frame">
+    <div class="lx-frame lx-dark">
       <picture class="lx-photo">
         <img src="/img/hero-kaliningrad-1600.webp" srcset="/img/hero-kaliningrad-900.webp 900w, /img/hero-kaliningrad-1600.webp 1600w" sizes="100vw" alt="" width="1600" height="1074" fetchpriority="high" decoding="async" />
       </picture>
       <div class="lx-inner">
         <div class="lx-copy">
-          <p class="lx-kicker">Футболки <span aria-hidden="true">—</span> кружки <span aria-hidden="true">—</span> полиграфия</p>
+          <p class="lx-kicker">Футболки <span aria-hidden="true">/</span> кружки <span aria-hidden="true">/</span> полиграфия</p>
           <h1 id="hero-h" class="lx-title">Печать на&nbsp;одежде и&nbsp;сувенирах <span class="serif">в&nbsp;Калининграде</span></h1>
           <p class="lx-lead">Печатаем ваш дизайн от&nbsp;1&nbsp;штуки в&nbsp;своей мастерской в&nbsp;ТЦ «Экватор».</p>
           <div class="lx-actions">
@@ -144,7 +142,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     </div>
   </section>
 
-  <NewYearBlock link="/stati/novogodnie-podarki" />
+  <HomeNewYear link="/stati/novogodnie-podarki" />
 
   <div class="band">
   <!-- CATEGORIES: text on the left, photo cards on the right (filter chips removed by the owner, 14.11.2026) -->
@@ -246,7 +244,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   <Reviews />
   </div>
 
-  <div class="band">
+  <div class="band band-ink">
   <HomeB2B />
   </div>
 
@@ -305,7 +303,8 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     pointer-events: none;
   }
 
-  /* ---------------- first screen (owner, 14.11.2026): warm photo in a rounded frame, glass header and cards over it */
+  /* ---------------- first screen (owner, 14.11.2026): the cathedral photo in a rounded navy frame, white text on a navy
+     scrim, glass header and glass cards over it; amber main button with black text */
   .lx-hero {
     margin-top: -88px; /* slide under the floating glass header */
     padding-inline: 12px;
@@ -316,7 +315,8 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     min-height: min(100svh, 900px);
     border-radius: 32px;
     overflow: clip;
-    background: var(--paper-2);
+    background: var(--navy);
+    color: #fff;
   }
   .lx-photo img {
     position: absolute;
@@ -327,15 +327,14 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     object-fit: cover;
     object-position: 100% 28%;
   }
-  /* keeps the headline readable where the photo gets busy */
   .lx-frame::before {
     content: '';
     position: absolute;
     inset: 0;
     z-index: -1;
     background:
-      linear-gradient(90deg, rgba(255, 252, 245, 0.94) 0%, rgba(255, 252, 245, 0.78) 30%, rgba(255, 252, 245, 0) 56%),
-      linear-gradient(0deg, rgba(22, 20, 27, 0.22) 0%, rgba(22, 20, 27, 0) 32%);
+      linear-gradient(90deg, rgba(20, 33, 61, 0.94) 0%, rgba(20, 33, 61, 0.8) 32%, rgba(20, 33, 61, 0.15) 62%, rgba(20, 33, 61, 0) 75%),
+      linear-gradient(0deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0) 38%);
   }
   .lx-inner {
     position: relative;
@@ -350,39 +349,47 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   }
   .lx-copy {
     align-self: center;
-    max-width: 760px;
+    max-width: 720px;
   }
   .lx-kicker {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     margin: 0 0 22px;
     font-size: 0.74rem;
-    font-weight: 500;
-    letter-spacing: 0.26em;
+    font-weight: 600;
+    letter-spacing: 0.24em;
     text-transform: uppercase;
-    color: var(--ink-2);
+    color: rgba(255, 255, 255, 0.8);
+  }
+  .lx-kicker::before {
+    content: '';
+    width: 28px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--amber);
   }
   .lx-kicker span {
-    margin-inline: 0.5em;
-    color: var(--muted);
+    color: var(--amber);
   }
   .lx-title {
     margin: 0;
-    font-size: clamp(2.6rem, 4.8vw, 4.3rem);
+    font-size: clamp(2.6rem, 4.8vw, 4.4rem);
     line-height: 1.02;
-    letter-spacing: -0.02em;
-    color: var(--ink);
+    font-weight: 800 !important;
+    letter-spacing: -0.03em;
+    color: #fff;
     text-wrap: balance;
   }
   .lx-title .serif {
     display: block;
-    font-size: 1.08em;
-    line-height: 1;
   }
   .lx-lead {
-    margin: 24px 0 0;
+    margin: 22px 0 0;
     max-width: 30em;
     font-size: 1.08rem;
     line-height: 1.55;
-    color: var(--ink-2);
+    color: rgba(255, 255, 255, 0.82);
   }
   .lx-actions {
     display: flex;
@@ -394,74 +401,86 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     display: inline-flex;
     align-items: center;
     gap: 14px;
-    min-height: 54px;
+    min-height: 56px;
     border-radius: 999px;
     font: inherit;
     font-weight: 600;
     font-size: 0.98rem;
     text-decoration: none;
     cursor: pointer;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
   .lx-btn-main {
     padding: 7px 7px 7px 24px;
     border: 0;
-    background: var(--red);
-    color: #fff;
+    background: var(--amber);
+    color: #000;
   }
   .lx-btn-main:hover {
-    background: var(--red-dark);
-    color: #fff;
+    background: var(--amber-dark);
+    color: #000;
   }
   .lx-btn-go,
   .lx-btn-ico {
     display: grid;
     place-items: center;
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     flex: none;
     transition: transform 0.2s ease;
   }
   .lx-btn-go {
-    background: #fff;
-    color: var(--red);
+    background: #000;
+    color: #fff;
   }
   .lx-btn-main:hover .lx-btn-go {
     transform: translateX(3px);
   }
   .lx-btn-glass {
     padding: 7px 24px 7px 7px;
-    border: 1px solid var(--glass-line);
-    background: var(--glass);
+    border: 1px solid var(--glass-dark-line);
+    background: rgba(255, 255, 255, 0.1);
     -webkit-backdrop-filter: blur(14px);
     backdrop-filter: blur(14px);
-    color: var(--ink);
+    color: #fff;
   }
   .lx-btn-glass:hover {
-    background: var(--glass-strong);
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
   }
   .lx-btn-ico {
-    border: 1px solid var(--line-strong);
+    border: 1px solid rgba(255, 255, 255, 0.3);
   }
   .lx-side {
     align-self: start;
     margin: 0;
-    padding: 4px 0 4px 16px;
     list-style: none;
     display: grid;
-    gap: 8px;
-    padding: 12px 16px 12px 18px;
-    border: 1px solid var(--glass-line);
+    gap: 10px;
+    padding: 14px 18px;
+    border: 1px solid var(--glass-dark-line);
     border-radius: 20px;
-    background: var(--glass);
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
+    background: var(--glass-dark);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
     font-size: 0.72rem;
-    font-weight: 500;
-    letter-spacing: 0.2em;
+    font-weight: 600;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--ink);
+    color: #fff;
+  }
+  .lx-side li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .lx-side li::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--amber);
   }
   /* floating glass cards */
   .lx-cards {
@@ -471,14 +490,16 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     gap: 16px;
     align-items: stretch;
   }
+  /* dark navy glass over the photo — white text, amber accents */
   .lx-card {
     margin: 0;
     border-radius: 28px;
-    border: 1px solid var(--glass-line);
-    background: var(--glass);
+    border: 1px solid var(--glass-dark-line);
+    background: var(--glass-dark);
     -webkit-backdrop-filter: saturate(1.3) blur(18px);
     backdrop-filter: saturate(1.3) blur(18px);
-    box-shadow: var(--glass-shadow);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) inset, 0 24px 60px -30px rgba(0, 0, 0, 0.6);
+    color: #fff;
   }
   .lx-work {
     display: grid;
@@ -512,19 +533,21 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     justify-content: space-between;
     margin: 0 0 4px;
     font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.2em;
+    font-weight: 600;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: rgba(255, 255, 255, 0.7);
   }
   .lx-count {
     letter-spacing: 0.08em;
+    color: var(--amber);
   }
   .lx-work-title {
     margin: 0;
     font-size: 1.05rem;
     font-weight: 700;
     line-height: 1.3;
+    letter-spacing: -0.01em;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -533,7 +556,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   .lx-work-tech {
     margin: 0;
     font-size: 0.85rem;
-    color: var(--muted);
+    color: rgba(255, 255, 255, 0.7);
   }
   .lx-work-nav {
     display: flex;
@@ -552,7 +575,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     font-size: 0.88rem;
     font-weight: 600;
     text-decoration: none;
-    color: var(--ink);
+    color: #fff;
   }
   .lx-arrows {
     display: flex;
@@ -564,25 +587,25 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    border: 1px solid var(--line-strong);
-    background: rgba(255, 255, 255, 0.5);
-    color: var(--ink);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
     cursor: pointer;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
   }
   .lx-arrows .lx-round:first-child :global(svg) {
     transform: rotate(180deg);
   }
   .lx-round:hover {
-    background: #fff;
+    background: rgba(255, 255, 255, 0.16);
   }
   .lx-round-dark {
-    border-color: var(--ink);
-    background: var(--ink);
-    color: var(--paper);
+    border-color: var(--amber);
+    background: var(--amber);
+    color: #000;
   }
   .lx-round-dark:hover {
-    background: #000;
+    background: var(--amber-dark);
   }
   .lx-stats {
     display: grid;
@@ -599,31 +622,35 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     text-align: center;
   }
   .lx-stats li + li {
-    border-left: 1px solid rgba(22, 20, 27, 0.14);
+    border-left: 1px solid rgba(255, 255, 255, 0.16);
   }
   .lx-stats b {
     font-size: clamp(1.5rem, 2.2vw, 2rem);
     font-weight: 800;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
     line-height: 1;
+    color: #fff;
+  }
+  .lx-stats li:first-child b {
+    color: var(--amber);
   }
   .lx-stats span {
     font-size: 0.82rem;
-    color: var(--ink-2);
+    color: rgba(255, 255, 255, 0.72);
   }
   .lx-cta {
     display: grid;
     align-content: start;
     gap: 6px;
     padding: 16px 18px 20px;
-    border-color: rgba(255, 255, 255, 0.14);
-    background: rgba(22, 20, 27, 0.84);
-    color: #fffcf5;
+    border-color: var(--amber);
+    background: var(--amber);
+    color: #000;
     text-decoration: none;
   }
   .lx-cta:hover {
-    color: #fffcf5;
-    background: rgba(22, 20, 27, 0.94);
+    color: #000;
+    background: #ffb636;
   }
   .lx-cta-top {
     display: flex;
@@ -636,23 +663,24 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     height: 56px;
     border-radius: 50%;
     object-fit: cover;
+    border: 2px solid rgba(0, 0, 0, 0.12);
   }
   .lx-round-light {
     border-color: transparent;
-    background: var(--y);
-    color: var(--ink);
+    background: #000;
+    color: #fff;
   }
   .lx-cta:hover .lx-round-light {
     transform: rotate(-45deg);
   }
   .lx-cta b {
     font-size: 1.05rem;
-    font-weight: 600;
+    font-weight: 700;
   }
   .lx-cta > span:last-child {
     font-size: 0.85rem;
     line-height: 1.45;
-    color: #cfcad6;
+    color: rgba(0, 0, 0, 0.78);
   }
   /* «Нам доверяют» — a quiet greyscale row under the frame */
   .lx-clients {
@@ -662,13 +690,23 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     padding-block: 34px 10px;
   }
   .lx-clients p {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     margin: 0;
     flex: none;
     font-size: 0.72rem;
-    font-weight: 500;
-    letter-spacing: 0.22em;
+    font-weight: 600;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: var(--navy);
+  }
+  .lx-clients p::before {
+    content: '';
+    width: 24px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--amber);
   }
   .lx-clients ul {
     display: flex;
@@ -696,7 +734,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   }
   .lx-clients .is-white img {
     filter: brightness(0);
-    opacity: 0.45;
+    opacity: 0.5;
   }
   @media (hover: hover) {
     .lx-clients li:hover img {
@@ -705,7 +743,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     }
     .lx-clients li.is-white:hover img {
       filter: brightness(0);
-      opacity: 0.8;
+      opacity: 0.85;
     }
   }
 
@@ -732,6 +770,12 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
       min-height: 0;
       border-radius: 24px;
     }
+    .lx-photo {
+      display: block;
+      position: relative;
+      padding-top: 74px;
+      background: var(--navy);
+    }
     .lx-photo img {
       position: relative;
       z-index: auto;
@@ -739,22 +783,24 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
       height: 300px;
       object-position: 62% 30%;
     }
-    .lx-photo {
-      display: block;
-      padding-top: 74px;
-      background: var(--paper-2);
+    .lx-photo::after {
+      content: '';
+      position: absolute;
+      inset: auto 0 0;
+      height: 90px;
+      background: linear-gradient(180deg, rgba(20, 33, 61, 0), var(--navy));
     }
     .lx-frame::before {
       display: none;
     }
     .lx-inner {
-      padding: 22px 16px 16px;
+      padding: 10px 16px 16px;
       gap: 22px;
     }
     .lx-kicker {
       margin-bottom: 14px;
       font-size: 0.66rem;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.16em;
     }
     .lx-title {
       font-size: 2.2rem;
@@ -772,18 +818,16 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     }
     .lx-btn-glass {
       justify-content: flex-start;
-      background: rgba(255, 255, 255, 0.55);
     }
     .lx-cards {
       grid-template-columns: minmax(0, 1fr);
     }
+    /* over plain navy (no photo behind) — a lighter navy card */
+    .lx-card:not(.lx-cta) {
+      background: rgba(255, 255, 255, 0.06);
+    }
     .lx-work {
       grid-template-columns: 110px minmax(0, 1fr);
-    }
-    .lx-stats {
-      padding: 16px 4px;
-    }
-    .lx-work {
       padding: 10px 12px 10px 10px;
       gap: 12px;
     }
@@ -793,6 +837,9 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     .lx-round {
       width: 40px;
       height: 40px;
+    }
+    .lx-stats {
+      padding: 16px 4px;
     }
     .lx-clients {
       flex-direction: column;
@@ -966,7 +1013,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     isolation: isolate;
     color: #fff;
     text-decoration: none;
-    background: #2a2033;
+    background: var(--navy);
   }
   .pc img {
     position: absolute;
@@ -982,7 +1029,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(180deg, rgba(28, 25, 23, 0) 40%, rgba(28, 25, 23, 0.78) 100%);
+    background: linear-gradient(180deg, rgba(20, 33, 61, 0) 42%, rgba(20, 33, 61, 0.86) 100%);
   }
   .pc:hover {
     color: #fff;
@@ -1017,8 +1064,8 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   .pc-price {
     padding: 4px 10px;
     border-radius: 999px;
-    background: rgba(255, 252, 245, 0.95);
-    color: var(--ink);
+    background: #fff;
+    color: #000;
     font-size: 0.78rem;
     font-weight: 700;
   }
@@ -1031,8 +1078,8 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     width: 38px;
     height: 38px;
     border-radius: 50%;
-    background: #fffcf5;
-    color: var(--ink);
+    background: var(--amber);
+    color: #000;
     transition: transform 0.2s ease;
   }
   .pc:hover .pc-go {
