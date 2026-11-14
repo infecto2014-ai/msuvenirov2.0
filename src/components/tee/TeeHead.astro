@@ -1,0 +1,103 @@
+---
+// Section heading for the t-shirt page in the «Ink» look: an icon in a navy circle (white circle on dark bands),
+// eyebrow next to it, h2 below; the accent word gets span.serif (marker on light, white on dark — see lux.css).
+// API is shared by TeeHero's siblings (TeePackages, TeeDetails, TeeCompare, TeeIdeas, TeeRelated) — do not change.
+interface Props {
+  icon?: 'calc' | 'shirt' | 'ruler' | 'bulb' | 'tag' | 'star' | 'gift' | 'check' | 'layers' | 'heart' | 'camera' | 'help' | 'bag';
+  eyebrow: string;
+  id?: string;
+  title: string;
+  /** word (or phrase) of the title to wrap in span.serif */
+  mark?: string;
+  dark?: boolean;
+}
+const { icon = 'star', eyebrow, id, title, mark, dark = false } = Astro.props;
+const paths: Record<string, string> = {
+  calc: 'M7 3h10a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1ZM9 7h6M9 11h.01M12 11h.01M15 11h.01M9 14h.01M12 14h.01M15 14h.01M9 17h.01M12 17h.01M15 17h.01',
+  shirt: 'M8 3 3 6l2 4 3-1.2V21h8V8.8L19 10l2-4-5-3a4 4 0 0 1-8 0Z',
+  ruler: 'm14.5 3.5 6 6-11 11-6-6zM8 9l2 2M11 6l2 2M5 12l2 2M14 12l2 2',
+  bulb: 'M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1.1 2V16h5v-.2c.1-.8.5-1.5 1.1-2A6 6 0 0 0 12 3Z',
+  tag: 'M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9zM8 8h.01',
+  star: 'm12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9Z',
+  gift: 'M4 11h16v9H4zM3 7h18v4H3zM12 7v13M12 7c-2.5 0-4.5-1-4.5-2.5S9 2.5 12 7c3-4.5 4.5-3 4.5-1.5S14.5 7 12 7Z',
+  check: 'M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM8 12.5l2.8 2.8L16 9.6',
+  layers: 'm12 3 9 5-9 5-9-5zM3 13l9 5 9-5M3 17.5l9 5 9-5',
+  heart: 'M12 20s-8-4.6-8-10.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.4 12 20 12 20Z',
+  camera: 'M4 8h3l2-3h6l2 3h3v11H4zM12 17a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z',
+  help: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17h.01',
+  bag: 'M5 8h14l-1.2 12H6.2zM9 8V6a3 3 0 0 1 6 0v2',
+};
+const at = mark ? title.indexOf(mark) : -1;
+const parts = at >= 0 ? [title.slice(0, at), mark!, title.slice(at + mark!.length)] : [title, '', ''];
+---
+
+<header class:list={['teh', { 'teh-dark': dark }]}>
+  <div class="teh-top">
+    <span class="teh-ico" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d={paths[icon] ?? paths.star} />
+      </svg>
+    </span>
+    <p class="teh-eyebrow">{eyebrow}</p>
+  </div>
+  <h2 id={id}>{parts[0]}{parts[1] && <span class="serif">{parts[1]}</span>}{parts[2]}</h2>
+  <slot />
+</header>
+
+<style>
+  .teh {
+    display: grid;
+    gap: 14px;
+    justify-items: start;
+    margin-bottom: clamp(22px, 3vw, 36px);
+  }
+  .teh-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .teh-ico {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--navy, #14213d);
+    color: #fff;
+  }
+  .teh-dark .teh-ico {
+    background: #fff;
+    color: var(--navy, #14213d);
+  }
+  .teh-eyebrow {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-2, #14213d);
+  }
+  .teh-dark .teh-eyebrow {
+    color: #fff;
+  }
+  .teh h2 {
+    margin: 0;
+    max-width: 22ch;
+  }
+  .teh :global(p) {
+    margin: 0;
+  }
+  @media (max-width: 560px) {
+    .teh-ico {
+      width: 44px;
+      height: 44px;
+    }
+    .teh-eyebrow {
+      letter-spacing: 0.14em;
+    }
+    .teh h2 {
+      max-width: none;
+    }
+  }
+</style>

@@ -1,0 +1,298 @@
+/* =====================================================================================
+   Calculator in the «Ink» look (14.11.2026, t-shirt page; later — any page with body.theme-lux).
+   Only recolours Calculator.css: navy / black / white / grey, glass panels, no CMYK tones and no yellow.
+   Logic and markup of Calculator.tsx are untouched; Calculator.css is not edited.
+   The theme already maps --c/--m/--y to navy, so these rules fix what is hard-coded (rgba dots, yellow halos,
+   warm greys, the black ticket) and restyle the panels as glass.
+   ===================================================================================== */
+
+/* ---------------------------------------------------------------- options panel: white glass on the grey band */
+body.theme-lux .calc-config {
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.78);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
+}
+body.theme-lux .calc-step,
+body.theme-lux .calc-config > .calc-group:nth-of-type(n) .calc-step {
+  background: var(--navy);
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(20, 33, 61, 0.12);
+}
+body.theme-lux .calc-config > .calc-group::before {
+  border-left-color: rgba(20, 33, 61, 0.22);
+}
+
+/* segmented tracks: grey track, picked option = white pill with a navy stripe */
+body.theme-lux .calc-seg,
+body.theme-lux .calc-stepper,
+body.theme-lux .calc-products,
+body.theme-lux .calc-dims,
+body.theme-lux .calc-cats {
+  background: #eceef2;
+  box-shadow: inset 0 1px 3px rgba(20, 33, 61, 0.12);
+}
+body.theme-lux .calc-seg .chip[aria-pressed='true'],
+body.theme-lux .calc-product.is-active,
+body.theme-lux .calc-cat.is-active {
+  background: #fff;
+  color: var(--navy);
+  box-shadow: 0 1px 0 rgba(20, 33, 61, 0.06), 0 8px 16px -10px rgba(20, 33, 61, 0.5), inset 0 -3px 0 var(--navy);
+}
+body.theme-lux .calc-seg .chip:hover,
+body.theme-lux .calc-product:hover,
+body.theme-lux .calc-cat:hover {
+  background: rgba(255, 255, 255, 0.7);
+}
+body.theme-lux .calc-seg .chip:focus-visible {
+  outline: 3px solid var(--navy);
+}
+body.theme-lux .chip[aria-pressed='true'] .calc-size {
+  border-color: var(--navy);
+  background:
+    repeating-linear-gradient(0deg, transparent 0 3px, rgba(20, 33, 61, 0.1) 3px 4px),
+    #dfe3ec;
+}
+body.theme-lux .calc-size {
+  background:
+    repeating-linear-gradient(0deg, transparent 0 3px, rgba(20, 33, 61, 0.08) 3px 4px),
+    #fff;
+}
+body.theme-lux .calc-swatch {
+  border-color: rgba(20, 33, 61, 0.3);
+}
+
+/* «Другой цвет» note and tick boxes: no yellow */
+body.theme-lux .calc-other {
+  background: #eef0f4;
+  box-shadow: inset 0 0 0 1.5px var(--line-strong);
+}
+body.theme-lux .calc-seg .calc-check.on {
+  border-color: var(--navy);
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 14px no-repeat,
+    var(--navy);
+}
+body.theme-lux .calc-dims .field:focus-within {
+  box-shadow: 0 0 0 2.5px var(--navy);
+}
+
+/* «+ Добавить принт» */
+body.theme-lux .calc-config > .calc-add {
+  border-color: rgba(20, 33, 61, 0.35);
+  background:
+    radial-gradient(circle, rgba(20, 33, 61, 0.1) 1px, transparent 1.5px) 0 0 / 12px 12px,
+    #fff;
+}
+body.theme-lux .calc-add span {
+  background: var(--navy);
+  color: #fff;
+}
+body.theme-lux .calc-add:hover {
+  border-color: var(--navy);
+}
+body.theme-lux .calc-remove:hover {
+  border-color: var(--navy);
+  color: var(--navy);
+}
+
+/* ---------------------------------------------------------------- quantity */
+body.theme-lux .calc-stepper button {
+  background: #fff;
+  color: var(--navy);
+  box-shadow: 0 6px 12px -8px rgba(20, 33, 61, 0.6);
+}
+body.theme-lux .calc-stepper button:hover:not(:disabled) {
+  background: var(--navy);
+  color: #fff;
+}
+body.theme-lux .calc-qty-input:focus {
+  outline-color: var(--navy);
+}
+/* bar: solid navy fill up to the thumb */
+body.theme-lux .calc-slider::-webkit-slider-runnable-track {
+  background: linear-gradient(90deg, var(--navy) var(--p, 0%), #fff var(--p, 0%));
+  box-shadow: inset 0 0 0 1.5px rgba(20, 33, 61, 0.28);
+}
+body.theme-lux .calc-slider::-moz-range-track {
+  background: linear-gradient(90deg, var(--navy) var(--p, 0%), #fff var(--p, 0%));
+}
+body.theme-lux .calc-slider::-webkit-slider-thumb {
+  border-color: var(--navy);
+  box-shadow: 0 0 0 4px rgba(20, 33, 61, 0.2), 0 6px 12px -4px rgba(20, 33, 61, 0.5);
+}
+body.theme-lux .calc-slider::-moz-range-thumb {
+  border-color: var(--navy);
+}
+/* «−X%» stickers: white glass tags, picked ones navy */
+body.theme-lux .calc-sticker {
+  border: 1px solid rgba(20, 33, 61, 0.25);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--navy);
+  font-family: var(--font);
+  box-shadow: 0 6px 10px -6px rgba(20, 33, 61, 0.5);
+  transform: translateX(-50%);
+}
+body.theme-lux .calc-sticker::after {
+  background: rgba(20, 33, 61, 0.4);
+}
+body.theme-lux .calc-sticker:hover {
+  transform: translateX(-50%) scale(1.06);
+}
+body.theme-lux .calc-sticker.on {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
+
+/* discount hint: a navy ticket, white badge, white text */
+body.theme-lux .calc-boost {
+  background: var(--navy);
+  color: #fff;
+  box-shadow: none;
+}
+body.theme-lux .calc-boost:hover,
+body.theme-lux .calc-boost-ink:hover {
+  background: #000;
+  box-shadow: none;
+}
+body.theme-lux .calc-boost-ink {
+  background: var(--navy);
+}
+body.theme-lux .calc-boost-pct {
+  background: #fff;
+  color: var(--navy);
+  transform: none;
+  box-shadow: 0 0 0 3px var(--navy), 0 0 0 5px rgba(255, 255, 255, 0.55);
+}
+body.theme-lux .calc-boost-text {
+  border-left-color: rgba(255, 255, 255, 0.28);
+}
+body.theme-lux .calc-boost-text b {
+  color: #fff;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------- total: navy glass */
+body.theme-lux .calc-result-inner {
+  background:
+    radial-gradient(70% 60% at 100% 0%, rgba(255, 255, 255, 0.1), transparent 65%),
+    linear-gradient(160deg, var(--navy) 0%, #0b1426 100%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 24px 60px -30px rgba(20, 33, 61, 0.7);
+  color: #fff;
+}
+body.theme-lux .calc-result-inner::before {
+  display: none; /* CMYK dots */
+}
+body.theme-lux .calc-result-desc,
+body.theme-lux .calc-sum dt,
+body.theme-lux .calc-note {
+  color: #b4bccb;
+}
+body.theme-lux .calc-sum {
+  border-top-color: rgba(255, 255, 255, 0.22);
+}
+body.theme-lux .calc-total dd {
+  color: #fff;
+}
+body.theme-lux .calc-breakdown {
+  border-top-color: rgba(255, 255, 255, 0.14);
+  color: #dfe4ee;
+}
+body.theme-lux .calc-fine {
+  color: #9aa4b8;
+}
+body.theme-lux .calc-error {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+}
+/* buttons on navy: «Заказать» white with black text, «+ В смету» glass */
+body.theme-lux :is(.calc-result, .calc-dock) .btn-magenta {
+  background: #fff;
+  border-color: #fff;
+  color: #000;
+}
+body.theme-lux :is(.calc-result, .calc-dock) .btn-magenta:hover:not(:disabled) {
+  background: #e5e5e5;
+  border-color: #e5e5e5;
+  color: #000;
+}
+body.theme-lux .calc-result .btn-yellow {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #fff;
+}
+body.theme-lux .calc-result .btn-yellow:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #fff;
+  color: #fff;
+}
+body.theme-lux .calc-result .btn:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+/* attach files */
+body.theme-lux .calc-attach {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+}
+body.theme-lux .calc-attach:hover,
+body.theme-lux .calc-attach:focus-within {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+body.theme-lux .calc-attach:focus-within {
+  outline-color: #fff;
+}
+body.theme-lux .calc-files-list li {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+body.theme-lux .calc-files-list button {
+  color: #fff;
+}
+body.theme-lux .calc-files-note {
+  color: #b4bccb;
+}
+body.theme-lux .calc-files-err {
+  color: #fff;
+  text-decoration: underline;
+}
+/* «added to estimate» toast */
+body.theme-lux .calc-toast {
+  background: var(--navy);
+  color: #fff;
+}
+body.theme-lux .calc-toast button {
+  background: #fff;
+  color: var(--navy);
+}
+
+/* ---------------------------------------------------------------- phone: sticky total above the floating bottom bar */
+@media (max-width: 760px) {
+  body.theme-lux .calc-dock-bar {
+    background: rgba(20, 33, 61, 0.92);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) inset, 0 16px 30px -14px rgba(20, 33, 61, 0.7);
+  }
+  body.theme-lux .calc-dock-sum small {
+    color: #b4bccb;
+  }
+  body.theme-lux .calc-dock-sum b {
+    color: #fff;
+  }
+  body.theme-lux .calc-dock .btn {
+    border-radius: 999px;
+  }
+  body.theme-lux .calc-step {
+    box-shadow: 0 0 0 3px rgba(20, 33, 61, 0.12);
+  }
+}
