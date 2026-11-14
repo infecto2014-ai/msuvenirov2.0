@@ -20,9 +20,11 @@ interface Props {
   schema?: object[];
   /** hide header/footer chrome (link-in-bio page) */
   bare?: boolean;
+  /** page-wide look: 'lux' — warm glass style of the home page (owner, 14.11.2026) */
+  theme?: 'lux';
 }
 
-const { title, description, path, image = '/og-image.jpg', noindex = false, schema = [], bare = false } = Astro.props;
+const { title, description, path, image = '/og-image.jpg', noindex = false, schema = [], bare = false, theme } = Astro.props;
 const pathname = (path ?? Astro.url.pathname).replace(/\.html$/, '').replace(/\/$/, '') || '/';
 const canonical = `${site.url}${pathname === '/' ? '/' : pathname}`;
 const ogImage = image.startsWith('http') ? image : `${site.url}${image}`;
@@ -57,7 +59,7 @@ const ld = [localBusiness(), website(), ...schema];
     {ld.map((obj) => <script type="application/ld+json" set:html={JSON.stringify(obj)} />)}
     <slot name="head" />
   </head>
-  <body>
+  <body class:list={[theme && `theme-${theme}`]}>
     <a class="skip-link" href="#main">Перейти к содержимому</a>
     {!bare && <Header />}
     <main id="main">

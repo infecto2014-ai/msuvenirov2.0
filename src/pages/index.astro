@@ -1,6 +1,10 @@
 ---
 import '@fontsource/caveat/600.css';
 import '@fontsource/cormorant-garamond/600-italic.css';
+import '@fontsource/cormorant-garamond/500.css';
+import '@fontsource/cormorant-garamond/600.css';
+import '@/styles/lux.css';
+import { portfolio } from '@/data/portfolio';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import HowItWorks from '@/components/HowItWorks.astro';
 import PortfolioGrid from '@/components/PortfolioGrid.astro';
@@ -52,6 +56,11 @@ const clients: Client[] = [
   { src: '/img/clients/client-8.webp', alt: 'Музей мороженого', square: true, onLight: '/img/clients/client-8-dark.webp' },
 ];
 
+// works shown one by one in the glass card at the bottom of the first screen
+const featured = ['/portfolio/portfolio-20.webp', '/portfolio/portfolio-2.webp', '/portfolio/portfolio-23.webp', '/portfolio/portfolio-7.webp', '/portfolio/portfolio-6.webp', '/portfolio/portfolio-30.webp']
+  .map((src) => portfolio.find((p) => p.src === src)!)
+  .filter(Boolean);
+
 const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
 ---
 
@@ -60,41 +69,81 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   description="Печать на одежде, кружках, значках, визитках и календарях в Калининграде от 1 шт. Онлайн-калькулятор цен, срочно без наценки. ТЦ «Экватор», с 2019 года."
   path="/"
   schema={[faqPage(homeFaq)]}
+  theme="lux"
 >
-  <!-- HERO: full-width photo right under the header, text aligned with the page column, wave at the bottom -->
-  <section class="hero hero-light">
-    <div class="wrap">
-      <div class="hero-card">
-        <div class="hero-media">
-          <img class="hero-photo" src="/img/hero-kaliningrad-1600.webp" srcset="/img/hero-kaliningrad-900.webp 900w, /img/hero-kaliningrad-1600.webp 1600w" sizes="(max-width: 560px) 100vw, 70vw" alt="" width="1600" height="1074" fetchpriority="high" decoding="async" />
-        </div>
-        <div class="hero-text">
-          <h1 class="hero-title">Печать на&nbsp;одежде и&nbsp;сувенирах <span class="serif">в&nbsp;Калининграде</span></h1>
-          <p class="hero-lead">Футболки, кружки, значки и полиграфия с&nbsp;вашим дизайном&nbsp;— от&nbsp;1&nbsp;штуки.</p>
-          <div class="hero-actions">
-            <a class="btn btn-magenta" href="/price"><Icon name="calc" size={20} /> <span>Рассчитать<span class="hide-sm"> стоимость</span></span></a>
-            <button type="button" class="btn hero-ghost" data-order><Icon name="upload" size={20} /> <span class="hide-sm">Отправить макет</span><span class="show-sm">Макет</span></button>
+  <!-- HERO (owner, 14.11.2026, by a reference): one warm still-life photo in a rounded frame, glass header over it,
+       thin serif headline, floating glass cards at the bottom -->
+  <section class="lx-hero" aria-labelledby="hero-h">
+    <div class="lx-frame">
+      <picture class="lx-photo">
+        <img src="/img/hero-studio-1376.webp" srcset="/img/hero-studio-800.webp 800w, /img/hero-studio-1376.webp 1376w" sizes="100vw" alt="Футболки, худи и кружки без нанесения на каменной подставке в мастерской" width="1376" height="768" fetchpriority="high" decoding="async" />
+      </picture>
+      <div class="lx-inner">
+        <div class="lx-copy">
+          <p class="lx-kicker">Футболки <span aria-hidden="true">—</span> кружки <span aria-hidden="true">—</span> полиграфия</p>
+          <h1 id="hero-h" class="lx-title">Печать на&nbsp;одежде и&nbsp;сувенирах <em>в&nbsp;Калининграде</em></h1>
+          <p class="lx-lead">Печатаем ваш дизайн от&nbsp;1&nbsp;штуки в&nbsp;своей мастерской в&nbsp;ТЦ «Экватор».</p>
+          <div class="lx-actions">
+            <a class="lx-btn lx-btn-dark" href="/price">Рассчитать стоимость <span class="lx-btn-go" aria-hidden="true"><Icon name="arrow" size={16} /></span></a>
+            <button type="button" class="lx-btn lx-btn-glass" data-order><span class="lx-btn-ico" aria-hidden="true"><Icon name="upload" size={16} /></span> Отправить макет</button>
           </div>
-          <ul class="hero-facts">
-            <li><b>10&nbsp;000+</b><span>заказов с&nbsp;{site.founded} года<br />и&nbsp;10+ лет опыта в&nbsp;печати</span></li>
-            <li><Icon name="clock" size={22} /><span>{site.hours}<br />ТЦ «Экватор»</span></li>
-          </ul>
         </div>
-        <div class="hero-clients">
-          <p class="mono">Нам доверяют</p>
-          <ul>
-            {
-              clients.map((c) => (
-                <li class:list={{ 'is-white': c.white, 'is-square': c.square }}>
-                  <img src={c.onLight ?? c.src} alt={c.alt} title={c.alt} width="140" height="70" decoding="async" />
-                </li>
-              ))
-            }
+        <ul class="lx-side" aria-label="Коротко о мастерской">
+          <li>С&nbsp;{site.founded} года</li>
+          <li>От&nbsp;1&nbsp;штуки</li>
+          <li>Своя мастерская</li>
+          <li>{site.hours}</li>
+        </ul>
+
+        <div class="lx-cards">
+          <article class="lx-card lx-work" data-works={JSON.stringify(featured.map((w) => ({ title: w.title, tech: w.tech })))}>
+            <div class="lx-work-photo">
+              {featured.map((w, i) => <img src={w.src} alt="" width="320" height="320" loading="lazy" decoding="async" hidden={i > 0} data-work={i} />)}
+            </div>
+            <div class="lx-work-text">
+              <p class="lx-label">Наши работы <span class="lx-count"><span data-work-n>01</span> / {String(featured.length).padStart(2, '0')}</span></p>
+              <h2 class="lx-work-title" data-work-title>{featured[0].title}</h2>
+              <p class="lx-work-tech" data-work-tech>{featured[0].tech}</p>
+              <div class="lx-work-nav">
+                <a class="lx-link" href="/portfolio">Все работы <Icon name="arrow" size={14} /></a>
+                <span class="lx-arrows">
+                  <button type="button" class="lx-round" data-work-prev aria-label="Предыдущая работа"><Icon name="arrow" size={16} /></button>
+                  <button type="button" class="lx-round lx-round-dark" data-work-next aria-label="Следующая работа"><Icon name="arrow" size={16} /></button>
+                </span>
+              </div>
+            </div>
+          </article>
+
+          <ul class="lx-card lx-stats">
+            <li><b>10&nbsp;000+</b><span>заказов выполнено</span></li>
+            <li><b>10+</b><span>лет опыта в&nbsp;печати</span></li>
+            <li><b>1&nbsp;шт</b><span>минимальный заказ</span></li>
           </ul>
+
+          <a class="lx-card lx-cta" href="/price">
+            <span class="lx-cta-top">
+              <img src="/img/products/tshirts-640.webp" alt="" width="64" height="64" loading="lazy" decoding="async" />
+              <span class="lx-round lx-round-light" aria-hidden="true"><Icon name="arrow" size={16} /></span>
+            </span>
+            <b>Цена за минуту</b>
+            <span>Калькулятор сразу покажет цену за&nbsp;штуку и&nbsp;за&nbsp;тираж</span>
+          </a>
         </div>
       </div>
     </div>
-    <svg class="hero-wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true"><path d="M0 80V44c160-30 320-40 520-14s360 44 560 22 260-44 360-46v74z" /></svg>
+
+    <div class="wrap lx-clients">
+      <p>Нам доверяют</p>
+      <ul>
+        {
+          clients.map((c) => (
+            <li class:list={{ 'is-white': c.white, 'is-square': c.square }}>
+              <img src={c.onLight ?? c.src} alt={c.alt} title={c.alt} width="140" height="70" loading="lazy" decoding="async" />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
   </section>
 
   <NewYearBlock link="/stati/novogodnie-podarki" />
@@ -220,6 +269,25 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   </div>
 </BaseLayout>
 
+<script>
+  // «Наши работы» card on the first screen: arrows flip through a few works (without JS the first one stays)
+  const box = document.querySelector<HTMLElement>('[data-works]');
+  if (box) {
+    const imgs = [...box.querySelectorAll<HTMLImageElement>('[data-work]')];
+    const data = JSON.parse(box.dataset.works || '[]') as { title: string; tech: string }[];
+    let i = 0;
+    const show = (n: number) => {
+      i = (n + imgs.length) % imgs.length;
+      imgs.forEach((im, k) => (im.hidden = k !== i));
+      box.querySelector('[data-work-n]')!.textContent = String(i + 1).padStart(2, '0');
+      box.querySelector('[data-work-title]')!.textContent = data[i]?.title ?? '';
+      box.querySelector('[data-work-tech]')!.textContent = data[i]?.tech ?? '';
+    };
+    box.querySelector('[data-work-prev]')?.addEventListener('click', () => show(i - 1));
+    box.querySelector('[data-work-next]')?.addEventListener('click', () => show(i + 1));
+  }
+</script>
+
 <style>
   /* ---------------- shared accents (home only): serif italic word, handwritten notes */
   .serif {
@@ -239,237 +307,514 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     pointer-events: none;
   }
 
-  /* ---------------- hero: photo card with a wave edge */
-  /* full width under the header (owner, 06.11.2026); text stays in the page column (.wrap),
-     the photo runs from the column to the right edge of the screen */
-  .hero {
-    --hero-bg: #0f1d27;
+  /* ---------------- first screen (owner, 14.11.2026): warm photo in a rounded frame, glass header and cards over it */
+  .lx-hero {
+    margin-top: -88px; /* slide under the floating glass header */
+    padding-inline: 12px;
+  }
+  .lx-frame {
     position: relative;
-    background:
-      radial-gradient(40% 80% at 0% 100%, rgba(0, 160, 220, 0.24), transparent 70%),
-      var(--hero-bg);
-    color: #fffcf5;
-    overflow: clip;
     isolation: isolate;
+    min-height: min(100svh, 900px);
+    border-radius: 32px;
+    overflow: clip;
+    background: #e9dfd0;
   }
-  .hero-card {
-    position: relative;
-    display: grid;
-    grid-template-rows: 1fr auto;
-    align-items: center;
-    gap: clamp(24px, 3vw, 40px);
-    min-height: clamp(560px, 48vw, 700px);
-    padding: clamp(32px, 4.5vw, 64px) 0 clamp(64px, 7vw, 100px);
-  }
-  /* photo box: from the text column to the right edge of the screen */
-  .hero-media {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 36%;
-    right: calc((100% - 100vw) / 2);
-    container-type: size;
-    z-index: 0;
-  }
-  .hero-photo {
+  .lx-photo img {
     position: absolute;
     inset: 0;
+    z-index: -2;
     width: 100%;
-    max-width: none;
     height: 100%;
     object-fit: cover;
-    object-position: 100% 25%;
+    object-position: 70% 50%;
   }
-  .hero-media::after {
+  /* keeps the headline readable where the photo gets busy */
+  .lx-frame::before {
     content: '';
     position: absolute;
     inset: 0;
+    z-index: -1;
     background:
-      linear-gradient(0deg, rgba(15, 29, 39, 0.92) 0, rgba(15, 29, 39, 0.55) 22%, rgba(15, 29, 39, 0) 40%),
-      linear-gradient(90deg, var(--hero-bg) 0%, rgba(15, 29, 39, 0.8) 10%, rgba(15, 29, 39, 0.15) 26%, rgba(15, 29, 39, 0) 38%);
-    pointer-events: none;
+      linear-gradient(90deg, rgba(245, 240, 232, 0.88) 0%, rgba(245, 240, 232, 0.55) 34%, rgba(245, 240, 232, 0) 58%),
+      linear-gradient(0deg, rgba(28, 25, 23, 0.18) 0%, rgba(28, 25, 23, 0) 30%);
   }
-  /* client logos right under the first screen text (owner, 06.11.2026); dark background — some logos are white */
-  .hero-clients {
+  .lx-inner {
     position: relative;
-    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: 1fr auto;
+    gap: 40px;
+    min-height: inherit;
+    max-width: 1400px;
+    margin-inline: auto;
+    padding: 128px clamp(20px, 4vw, 56px) clamp(16px, 2.4vw, 28px);
+  }
+  .lx-copy {
+    align-self: center;
+    max-width: 640px;
+  }
+  .lx-kicker {
+    margin: 0 0 22px;
+    font-size: 0.74rem;
+    font-weight: 500;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .lx-kicker span {
+    margin-inline: 0.5em;
+    color: var(--muted);
+  }
+  .lx-title {
+    margin: 0;
+    font-size: clamp(2.8rem, 5.4vw, 4.9rem) !important;
+    line-height: 0.98 !important;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+  .lx-title em {
+    font-style: normal;
+    color: var(--gold-ink);
+  }
+  .lx-lead {
+    margin: 24px 0 0;
+    max-width: 30em;
+    font-size: 1.08rem;
+    line-height: 1.55;
+    color: var(--ink-2);
+  }
+  .lx-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 32px;
+  }
+  .lx-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 54px;
+    border-radius: 999px;
+    font: inherit;
+    font-weight: 600;
+    font-size: 0.98rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  .lx-btn-dark {
+    padding: 7px 7px 7px 24px;
+    border: 0;
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .lx-btn-dark:hover {
+    background: #000;
+    color: var(--paper);
+  }
+  .lx-btn-go,
+  .lx-btn-ico {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    flex: none;
+    transition: transform 0.2s ease;
+  }
+  .lx-btn-go {
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .lx-btn-dark:hover .lx-btn-go {
+    transform: translateX(3px);
+  }
+  .lx-btn-glass {
+    padding: 7px 24px 7px 7px;
+    border: 1px solid var(--glass-line);
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    color: var(--ink);
+  }
+  .lx-btn-glass:hover {
+    background: rgba(251, 248, 243, 0.9);
+  }
+  .lx-btn-ico {
+    border: 1px solid var(--line-strong);
+  }
+  .lx-side {
+    align-self: start;
+    margin: 0;
+    padding: 4px 0 4px 16px;
+    list-style: none;
+    display: grid;
+    gap: 8px;
+    border-left: 1px solid rgba(28, 25, 23, 0.25);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  /* floating glass cards */
+  .lx-cards {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1.05fr) minmax(0, 0.7fr);
+    gap: 16px;
+    align-items: stretch;
+  }
+  .lx-card {
+    margin: 0;
+    border-radius: 28px;
+    border: 1px solid var(--glass-line);
+    background: var(--glass);
+    -webkit-backdrop-filter: saturate(1.3) blur(18px);
+    backdrop-filter: saturate(1.3) blur(18px);
+    box-shadow: var(--glass-shadow);
+  }
+  .lx-work {
+    display: grid;
+    grid-template-columns: 128px minmax(0, 1fr);
+    gap: 18px;
+    padding: 12px 18px 12px 12px;
+  }
+  .lx-work-photo {
+    border-radius: 20px;
+    overflow: clip;
+    aspect-ratio: 1;
+  }
+  .lx-work-photo img[hidden] {
+    display: none;
+  }
+  .lx-work-photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .lx-work-text {
+    display: grid;
+    align-content: start;
+    gap: 4px;
+    min-width: 0;
+    padding-top: 6px;
+  }
+  .lx-label {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0 4px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .lx-count {
+    letter-spacing: 0.08em;
+  }
+  .lx-work-title {
+    margin: 0;
+    font-family: var(--font) !important;
+    font-size: 1.05rem !important;
+    font-weight: 600 !important;
+    line-height: 1.3 !important;
+    letter-spacing: 0 !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .lx-work-tech {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .lx-work-nav {
     display: flex;
     align-items: center;
-    gap: 14px clamp(20px, 3vw, 40px);
-    padding-top: 20px;
-    border-top: 1px solid rgba(255, 252, 245, 0.16);
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 10px;
   }
-  .hero-clients p {
-    flex: none;
+  .lx-link {
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding-block: 10px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .lx-arrows {
+    display: flex;
+    gap: 8px;
+  }
+  .lx-round {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    background: rgba(255, 255, 255, 0.5);
+    color: var(--ink);
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  .lx-arrows .lx-round:first-child :global(svg) {
+    transform: rotate(180deg);
+  }
+  .lx-round:hover {
+    background: #fff;
+  }
+  .lx-round-dark {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .lx-round-dark:hover {
+    background: #000;
+  }
+  .lx-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: center;
+    padding: 22px 8px;
+    list-style: none;
+  }
+  .lx-stats li {
+    display: grid;
+    gap: 6px;
+    justify-items: center;
+    padding: 6px 10px;
+    text-align: center;
+  }
+  .lx-stats li + li {
+    border-left: 1px solid rgba(28, 25, 23, 0.14);
+  }
+  .lx-stats b {
+    font-family: var(--serif);
+    font-variant-numeric: lining-nums;
+    font-size: clamp(1.8rem, 2.6vw, 2.4rem);
+    font-weight: 500;
+    line-height: 1;
+  }
+  .lx-stats span {
+    font-size: 0.82rem;
+    color: var(--ink-2);
+  }
+  .lx-cta {
+    display: grid;
+    align-content: start;
+    gap: 6px;
+    padding: 16px 18px 20px;
+    border-color: rgba(255, 255, 255, 0.12);
+    background: rgba(28, 25, 23, 0.82);
+    color: #f5f0e8;
+    text-decoration: none;
+  }
+  .lx-cta:hover {
+    color: #f5f0e8;
+    background: rgba(28, 25, 23, 0.92);
+  }
+  .lx-cta-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .lx-cta img {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .lx-round-light {
+    border-color: transparent;
+    background: #f5f0e8;
+    color: var(--ink);
+  }
+  .lx-cta:hover .lx-round-light {
+    transform: rotate(-45deg);
+  }
+  .lx-cta b {
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+  .lx-cta > span:last-child {
+    font-size: 0.85rem;
+    line-height: 1.45;
+    color: #cfc7bc;
+  }
+  /* «Нам доверяют» — a quiet greyscale row under the frame */
+  .lx-clients {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    padding-block: 34px 10px;
+  }
+  .lx-clients p {
     margin: 0;
-    font-size: 0.75rem;
-    letter-spacing: 0.12em;
+    flex: none;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: rgba(255, 252, 245, 0.6);
+    color: var(--muted);
   }
-  .hero-clients ul {
+  .lx-clients ul {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 14px clamp(20px, 3vw, 40px);
+    justify-content: space-between;
+    gap: 18px 34px;
+    flex: 1;
     margin: 0;
     padding: 0;
     list-style: none;
   }
-  .hero-clients img {
+  .lx-clients img {
     display: block;
+    height: 34px;
     width: auto;
-    height: 44px;
     max-width: 130px;
     object-fit: contain;
-    opacity: 0.9;
+    filter: grayscale(1) contrast(0.9);
+    opacity: 0.6;
+    transition: opacity 0.2s ease, filter 0.2s ease;
   }
-  .hero-text {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    gap: 18px;
-    justify-items: start;
-    max-width: 560px;
+  .lx-clients .is-square img {
+    height: 50px;
   }
-  .hero-title {
-    margin: 0;
-    font-size: clamp(2.1rem, 4.2vw, 3.7rem);
-    line-height: 1.04;
-    font-weight: 800;
-    letter-spacing: -0.025em;
-    text-wrap: balance;
-  }
-  .hero-title .serif {
-    color: #9fe0f6;
-  }
-  .hero-lead {
-    margin: 0;
-    max-width: 46ch;
-    font-size: clamp(1rem, 1.3vw, 1.15rem);
-    color: rgba(255, 252, 245, 0.82);
-  }
-  .hero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 4px;
-  }
-  .hero-ghost {
-    background: rgba(255, 252, 245, 0.1);
-    color: #fffcf5;
-    border: 1.5px solid rgba(255, 252, 245, 0.45);
-  }
-  .hero-ghost:hover {
-    background: #fffcf5;
-    color: var(--ink);
-  }
-  /* two facts instead of the tiny photo circles: orders count + hours */
-  .hero-facts {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 14px 28px;
-    margin: 8px 0 0;
-    padding: 18px 0 0;
-    list-style: none;
-    border-top: 1px solid rgba(255, 252, 245, 0.18);
-  }
-  .hero-facts li {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 0.88rem;
-    line-height: 1.3;
-    color: rgba(255, 252, 245, 0.78);
-  }
-  .hero-facts b {
-    font-size: clamp(1.6rem, 2.4vw, 2rem);
-    font-weight: 800;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    color: #fffcf5;
-  }
-  .hero-facts :global(svg) {
-    flex: none;
-    color: #9fe0f6;
-  }
-  .hero-wave {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -1px;
-    width: 100%;
-    height: clamp(40px, 6vw, 80px);
-    fill: var(--paper);
-  }
-
-  /* ---------------- light first screen (owner, 06.11.2026: try white instead of dark navy, no burgundy ribbon) */
-  .hero-light {
-    --hero-bg: var(--paper);
-    background: var(--paper);
-    color: var(--ink);
-  }
-  .hero-light .hero-media::after {
-    background:
-      linear-gradient(0deg, rgba(255, 252, 245, 0.92) 0, rgba(255, 252, 245, 0.45) 18%, rgba(255, 252, 245, 0) 32%),
-      linear-gradient(90deg, var(--paper) 0%, rgba(255, 252, 245, 0.85) 10%, rgba(255, 252, 245, 0.2) 26%, rgba(255, 252, 245, 0) 38%);
-  }
-  .hero-light .hero-title .serif {
-    color: var(--c-ink);
-  }
-  .hero-light .hero-lead {
-    color: var(--ink-2);
-  }
-  .hero-light .hero-ghost {
-    background: transparent;
-    color: var(--ink);
-    border-color: rgba(23, 21, 28, 0.35);
-  }
-  .hero-light .hero-ghost:hover {
-    background: var(--ink);
-    color: var(--paper);
-  }
-  .hero-light .hero-facts,
-  .hero-light .hero-clients {
-    border-top-color: rgba(23, 21, 28, 0.14);
-  }
-  .hero-light .hero-facts li {
-    color: var(--ink-2);
-  }
-  .hero-light .hero-facts b {
-    color: var(--ink);
-  }
-  .hero-light .hero-facts :global(svg) {
-    color: var(--c-ink);
-  }
-  .hero-light .hero-clients p {
-    color: var(--ink-2);
-  }
-  /* «Нам доверяют» (owner, 07.11.2026): logos in colour with a soft white glow so they read over the photo too;
-     white logos are darkened (white on paper is invisible); round/square logos are shown larger */
-  .hero-light .hero-clients ul {
-    gap: 16px clamp(24px, 3.4vw, 48px);
-  }
-  .hero-light .hero-clients img {
-    height: 38px;
-    max-width: 150px;
-    filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 6px rgba(255, 255, 255, 0.95));
-    transition: transform 0.2s ease;
-  }
-  .hero-light .hero-clients .is-square img {
-    height: 56px;
-  }
-  .hero-light .hero-clients .is-white img {
-    filter: brightness(0) drop-shadow(0 0 1px #fff) drop-shadow(0 0 6px rgba(255, 255, 255, 0.95));
-    opacity: 0.85;
+  .lx-clients .is-white img {
+    filter: brightness(0);
+    opacity: 0.45;
   }
   @media (hover: hover) {
-    .hero-light .hero-clients li:hover img {
-      transform: translateY(-2px);
+    .lx-clients li:hover img {
+      filter: none;
+      opacity: 1;
+    }
+    .lx-clients li.is-white:hover img {
+      filter: brightness(0);
+      opacity: 0.8;
     }
   }
-  :global(.hero-light + .nyb)::before {
-    display: none;
+
+  @media (max-width: 1100px) {
+    .lx-cards {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+    .lx-cta {
+      display: none;
+    }
+    .lx-side {
+      display: none;
+    }
+    .lx-inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  @media (max-width: 760px) {
+    .lx-hero {
+      margin-top: -74px;
+      padding-inline: 8px;
+    }
+    .lx-frame {
+      min-height: 0;
+      border-radius: 24px;
+    }
+    .lx-photo img {
+      position: relative;
+      z-index: auto;
+      display: block;
+      height: 300px;
+      object-position: 78% 50%;
+    }
+    .lx-photo {
+      display: block;
+      padding-top: 74px;
+      background: #e9dfd0;
+    }
+    .lx-frame::before {
+      display: none;
+    }
+    .lx-inner {
+      padding: 22px 16px 16px;
+      gap: 22px;
+    }
+    .lx-kicker {
+      margin-bottom: 14px;
+      font-size: 0.66rem;
+      letter-spacing: 0.18em;
+    }
+    .lx-title {
+      font-size: 2.6rem !important;
+    }
+    .lx-lead {
+      margin-top: 16px;
+      font-size: 1rem;
+    }
+    .lx-actions {
+      display: grid;
+      margin-top: 22px;
+    }
+    .lx-btn {
+      justify-content: space-between;
+    }
+    .lx-btn-glass {
+      justify-content: flex-start;
+      background: rgba(255, 255, 255, 0.55);
+    }
+    .lx-cards {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .lx-work {
+      grid-template-columns: 110px minmax(0, 1fr);
+    }
+    .lx-stats {
+      padding: 16px 4px;
+    }
+    .lx-work {
+      padding: 10px 12px 10px 10px;
+      gap: 12px;
+    }
+    .lx-arrows {
+      gap: 6px;
+    }
+    .lx-round {
+      width: 40px;
+      height: 40px;
+    }
+    .lx-clients {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      padding-top: 26px;
+    }
+    .lx-clients ul {
+      justify-content: flex-start;
+      gap: 14px 24px;
+    }
+    .lx-clients img {
+      height: 28px;
+    }
+    .lx-clients .is-square img {
+      height: 40px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lx-btn-go,
+    .lx-round,
+    .lx-clients img {
+      transition: none;
+    }
   }
 
   /* ---------------- about: collage + values */
@@ -635,7 +980,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(180deg, rgba(15, 29, 39, 0) 38%, rgba(15, 29, 39, 0.82) 100%);
+    background: linear-gradient(180deg, rgba(28, 25, 23, 0) 40%, rgba(28, 25, 23, 0.78) 100%);
   }
   .pc:hover {
     color: #fff;
@@ -779,9 +1124,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
 
   /* ---------------- tablets */
   @media (max-width: 1020px) {
-    .hero-media {
-      left: 30%;
-    }
       .about-grid,
     .cats-grid {
       grid-template-columns: minmax(0, 1fr);
@@ -800,74 +1142,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
 
   /* ---------------- phones */
   @media (max-width: 560px) {
-    .hero-card {
-      min-height: 0;
-      align-items: flex-end;
-      padding: 230px 0 64px;
-    }
-    .hero-media {
-      left: calc((100% - 100vw) / 2);
-      bottom: auto;
-      height: 330px;
-    }
-    .hero-photo {
-      object-position: 62% 30%;
-    }
-    .hero-media::after {
-      background: linear-gradient(180deg, rgba(15, 29, 39, 0) 90px, rgba(15, 29, 39, 0.85) 230px, var(--hero-bg) 300px);
-    }
-    .hero-light .hero-media::after {
-      background: linear-gradient(180deg, rgba(255, 252, 245, 0) 120px, rgba(255, 252, 245, 0.85) 250px, var(--paper) 310px);
-    }
-    .hero-text {
-      gap: 14px;
-    }
-    .hero-title {
-      font-size: 2rem;
-    }
-    .hero-lead {
-      font-size: 0.98rem;
-    }
-    .hero-actions {
-      display: grid;
-      grid-template-columns: 1.3fr 1fr;
-      width: 100%;
-      gap: 8px;
-    }
-    .hero-actions .btn {
-      justify-content: center;
-      padding-inline: 10px;
-    }
-    .hero-facts {
-      gap: 12px 20px;
-      padding-top: 14px;
-    }
-    .hero-facts li {
-      font-size: 0.8rem;
-    }
-    .hero-clients {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 12px;
-      padding-top: 16px;
-    }
-    .hero-clients ul {
-      gap: 12px 18px;
-    }
-    .hero-clients img {
-      height: 30px;
-      max-width: 96px;
-    }
-    .hero-light .hero-clients img {
-      height: 28px;
-      max-width: 110px;
-    }
-    .hero-light .hero-clients .is-square img {
-      height: 42px;
-    }
-    .hero-light .hero-clients ul {
-      gap: 14px 22px;
-    }
     .about-collage {
       width: 100%;
     }

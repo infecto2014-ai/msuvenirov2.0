@@ -1,0 +1,264 @@
+/* =====================================================================================
+   «Lux» — warm glass look of the home page (owner, 14.11.2026: by a reference picture —
+   one warm photo, glass panels, thin serif headlines, quiet beige-graphite palette).
+   Everything is scoped to body.theme-lux, so other pages keep CMYK 2.0.
+   Palette and type by ui-ux-pro-max: stone graphite #1C1917, warm greys, muted gold accent,
+   Cormorant for headlines, the site's Rubik for text.
+   ===================================================================================== */
+
+body.theme-lux {
+  --paper: #f5f0e8;
+  --paper-2: #ece5da;
+  --card: #fbf8f3;
+  --ink: #1c1917;
+  --ink-2: #44403c;
+  --muted: #5f5850;
+  --line: #e3dbcf;
+  --line-strong: #cbc1b3;
+  --gold: #a07a3c;
+  --gold-ink: #7d5e2a; /* 5:1 on paper — small text and links */
+  /* CMYK accents become warm neutrals on this page */
+  --c: #b9a68b;
+  --m: #a98a6c;
+  --y: #d9c39a;
+  --k: #1c1917;
+  --c-soft: #efe7da;
+  --m-soft: #efe5db;
+  --y-soft: #f3ead9;
+  --c-ink: #7d5e2a;
+  --m-ink: #7d5e2a;
+  --focus: #7d5e2a;
+  --red: #1c1917; /* main buttons are graphite here, like the reference */
+  --red-dark: #000;
+  --serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --glass: rgba(251, 248, 243, 0.62);
+  --glass-line: rgba(255, 255, 255, 0.7);
+  --glass-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 24px 60px -30px rgba(28, 25, 23, 0.45);
+  --radius: 24px;
+  --radius-l: 32px;
+  --shadow: 0 1px 0 rgba(28, 25, 23, 0.03), 0 24px 50px -32px rgba(28, 25, 23, 0.35);
+  background: var(--paper);
+}
+
+/* ---------------------------------------------------------------- type */
+body.theme-lux :is(h1, h2) {
+  font-family: var(--serif) !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.01em;
+  line-height: 1.04;
+}
+body.theme-lux main h2 {
+  font-size: clamp(2.2rem, 4vw, 3.4rem) !important;
+}
+body.theme-lux main h3 {
+  font-weight: 600;
+  letter-spacing: 0;
+}
+/* the eyebrow: thin spaced capitals after a hairline instead of the CMYK dots */
+body.theme-lux .eyebrow {
+  font-family: var(--font);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  color: var(--muted);
+}
+body.theme-lux .eyebrow::before {
+  width: 28px;
+  height: 1px;
+  background: currentColor;
+  mix-blend-mode: normal;
+}
+/* marker swashes and italic accents → a quiet gold italic */
+body.theme-lux :is(.mark, .sec-mark, .thd-mark) {
+  background: none !important;
+  padding: 0;
+  font-style: italic;
+  color: var(--gold-ink);
+}
+body.theme-lux .serif {
+  font-weight: 500;
+  color: var(--gold-ink) !important;
+}
+body.theme-lux .hand {
+  display: none;
+}
+
+/* ---------------------------------------------------------------- bands: no waves, quiet grounds */
+body.theme-lux :is(.band-tint, .band-ink) {
+  margin-block: 0;
+}
+body.theme-lux :is(.band-tint, .band-ink)::before,
+body.theme-lux :is(.band-tint, .band-ink)::after {
+  display: none;
+}
+body.theme-lux .band-tint {
+  --band-bg: #ece5da;
+  --line: #dcd2c4;
+}
+body.theme-lux .band-ink {
+  --band-bg: #1c1917;
+  --ink: #f5f0e8;
+  --ink-2: #d6cfc5;
+  --muted: #b3aa9f;
+  --card: #292524;
+  --paper-2: #2f2a27;
+  --line: #3a3431;
+  --line-strong: #4a433f;
+  --gold-ink: #d9c39a;
+  --focus: #d9c39a;
+}
+
+/* ---------------------------------------------------------------- buttons */
+body.theme-lux .btn {
+  font-weight: 600;
+  border-width: 1px;
+}
+body.theme-lux .btn:hover {
+  transform: none;
+  box-shadow: none;
+  background: var(--ink-2);
+  border-color: var(--ink-2);
+}
+body.theme-lux :is(.btn-ghost, .btn-yellow):hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+body.theme-lux .btn-yellow {
+  --btn-bg: var(--paper);
+  --btn-fg: var(--ink);
+}
+body.theme-lux .sticker {
+  background: var(--paper);
+  color: var(--ink);
+  border-color: var(--line-strong);
+  box-shadow: none;
+}
+
+/* ---------------------------------------------------------------- header: a floating glass pill */
+body.theme-lux .hdr {
+  top: 12px;
+  margin: 12px auto 0;
+  width: min(1400px, calc(100% - 24px));
+  border: 1px solid var(--glass-line);
+  border-radius: 999px;
+  background: var(--glass);
+  -webkit-backdrop-filter: saturate(1.3) blur(18px);
+  backdrop-filter: saturate(1.3) blur(18px);
+  box-shadow: var(--glass-shadow);
+}
+body.theme-lux .hdr .hdr-row {
+  min-height: 64px;
+  padding-inline: 10px 8px;
+}
+body.theme-lux .hdr-link {
+  font-weight: 500;
+}
+body.theme-lux .hdr-link:hover,
+body.theme-lux .hdr-link.is-active {
+  background: rgba(28, 25, 23, 0.06);
+  box-shadow: none;
+}
+body.theme-lux .hdr-mega {
+  border: 1px solid var(--line);
+  box-shadow: 0 30px 70px -30px rgba(28, 25, 23, 0.45);
+}
+body.theme-lux .hdr-cta {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+/* ---------------------------------------------------------------- shared blocks on the home page */
+body.theme-lux main :is(.card, .faq-item, .hs-card, .hb-points li, .step) {
+  border-color: var(--line) !important;
+  box-shadow: none !important;
+}
+/* polaroids on coloured push-pins → clean rounded photos, no tilt, no pins */
+body.theme-lux main :is(.pin, .push-pin, [class*='-pin']) {
+  display: none !important;
+}
+body.theme-lux main :is([class*='polaroid'], .pg-item, .pf-card) {
+  transform: none !important;
+}
+body.theme-lux .ftr {
+  background: #1c1917;
+}
+body.theme-lux .ftr-band {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  body.theme-lux .hdr {
+    top: 8px;
+    margin-top: 8px;
+    width: calc(100% - 16px);
+  }
+  body.theme-lux .hdr .hdr-row {
+    min-height: 58px;
+  }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  body.theme-lux {
+    --glass: rgba(251, 248, 243, 0.94);
+  }
+}
+
+/* ---------------------------------------------------------------- New Year block: a dark rounded panel like the hero frame */
+body.theme-lux .nyb {
+  margin: 28px 12px 0;
+}
+body.theme-lux .nyb::before {
+  display: none;
+}
+body.theme-lux .nyb-card {
+  -webkit-mask: none;
+  mask: none;
+  border-radius: 32px;
+  padding-top: clamp(40px, 5vw, 64px);
+  padding-bottom: clamp(32px, 4vw, 48px);
+  background:
+    radial-gradient(50% 70% at 50% 0%, rgba(217, 195, 154, 0.14), transparent 70%),
+    linear-gradient(180deg, #1c1917 0%, #2a2522 100%);
+}
+@media (max-width: 760px) {
+  body.theme-lux .nyb {
+    margin: 20px 8px 0;
+  }
+  body.theme-lux .nyb-card {
+    border-radius: 24px;
+  }
+}
+
+/* ---------------------------------------------------------------- «Наши работы»: straight rounded photos, no pins */
+body.theme-lux .work {
+  --tilt: 0;
+}
+body.theme-lux :is(.work-hang::before, .work-hang::after) {
+  display: none;
+}
+body.theme-lux .work-card {
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+body.theme-lux .work-frame {
+  border-radius: 18px;
+  overflow: clip;
+}
+body.theme-lux .work-card figcaption {
+  padding-inline: 2px !important;
+}
+body.theme-lux .hb-shot {
+  --r: 0deg !important;
+  border-radius: 18px;
+  overflow: clip;
+}
+body.theme-lux .work-title {
+  color: var(--ink);
+  font-weight: 600;
+}
+body.theme-lux .work-tech {
+  font-family: var(--font);
+  color: var(--muted);
+}
