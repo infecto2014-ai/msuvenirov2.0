@@ -1,11 +1,11 @@
 /* =====================================================================================
-   Home page button accent (owner, 14.11.2026: «переделай акценты кнопок на главной на такой цвет #E56B6F»).
-   Only the home page imports this file (index.astro). Main buttons are coral with white text; the arrow circles
+   Home page button accent (owner, 14.11.2026: «переделай акценты кнопок на главной на такой цвет #E56B6F», затем «#A83250 а такой попробуем»).
+   Only the home page imports this file (index.astro). Main buttons are raspberry #A83250 (was coral #E56B6F) with white text; the arrow circles
    inside them are white with a coral arrow; the small accent circles elsewhere are coral.
    ===================================================================================== */
 body.theme-lux {
-  --coral: #e56b6f;
-  --coral-dark: #cf5156;
+  --coral: #a83250;
+  --coral-dark: #8a2741;
 }
 
 /* main buttons, on light and dark grounds alike */
