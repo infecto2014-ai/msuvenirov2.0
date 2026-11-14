@@ -17,14 +17,14 @@ import { site } from '@/data/site';
 import { faqPage } from '@/lib/schema';
 
 const tiles = [
-  { href: '/pechat-na-futbolkah', group: 'wear', title: 'Печать на футболках и худи', text: 'от 1 шт, на нашей футболке или на вашей', img: '/img/products/tshirts', alt: 'Футболки разных цветов на вешалках', cat: 'textile', size: 'xl', from: findProduct('textile', 'tshirt-unisex')!.fromPrice },
-  { href: '/pechat-na-kruzhkah', group: 'souv', title: 'Печать на кружках', text: 'белые, хамелеон, золото', img: '/img/products/mugs', alt: 'Кружки для сублимационной печати', cat: 'mugs', size: 'tall' },
-  { href: '/znachki', group: 'souv', title: 'Значки', text: 'закатные и на цанге', img: '/img/products/badges', alt: 'Закатные значки и значки на цанге с логотипом', cat: 'badges' },
-  { href: '/vizitki', group: 'print', title: 'Визитки', text: 'одно- и двусторонние', img: '/img/products/business-cards', alt: 'Визитки', cat: 'cards' },
-  { href: '/pechat-na-kepkah', group: 'wear', title: 'Бейсболки и шопперы', text: 'печать логотипа', img: '/img/products/caps', alt: 'Бейсболки разных цветов', cat: 'textile', from: findProduct('textile', 'shopper')!.fromPrice },
-  { href: '/kalendari', group: 'print', title: 'Календари', text: 'квартальные, настенные, домики', img: '/img/products/calendar', alt: 'Настенный календарь', cat: 'calendars' },
-  { href: '/nakleyki', group: 'souv', title: 'Стикеры', text: '3D из смолы и виниловые', img: '/img/products/stickers', alt: 'Объёмные 3D-стикеры из эпоксидной смолы с логотипом', cat: 'stickers' },
-  { href: '/fotopodarki', group: 'gifts', title: 'Фотоподарки', text: 'подушки, пазлы, магниты', img: '/img/products/pillow', alt: 'Белая подушка для печати фото', cat: 'gifts' },
+  { href: '/pechat-na-futbolkah', title: 'Печать на футболках и худи', text: 'от 1 шт, на нашей футболке или на вашей', img: '/img/products/tshirts', alt: 'Футболки разных цветов на вешалках', cat: 'textile', size: 'xl', from: findProduct('textile', 'tshirt-unisex')!.fromPrice },
+  { href: '/pechat-na-kruzhkah', title: 'Печать на кружках', text: 'белые, хамелеон, золото', img: '/img/products/mugs', alt: 'Кружки для сублимационной печати', cat: 'mugs', size: 'tall' },
+  { href: '/znachki', title: 'Значки', text: 'закатные и на цанге', img: '/img/products/badges', alt: 'Закатные значки и значки на цанге с логотипом', cat: 'badges' },
+  { href: '/vizitki', title: 'Визитки', text: 'одно- и двусторонние', img: '/img/products/business-cards', alt: 'Визитки', cat: 'cards' },
+  { href: '/pechat-na-kepkah', title: 'Бейсболки и шопперы', text: 'печать логотипа', img: '/img/products/caps', alt: 'Бейсболки разных цветов', cat: 'textile', from: findProduct('textile', 'shopper')!.fromPrice },
+  { href: '/kalendari', title: 'Календари', text: 'квартальные, настенные, домики', img: '/img/products/calendar', alt: 'Настенный календарь', cat: 'calendars' },
+  { href: '/nakleyki', title: 'Стикеры', text: '3D из смолы и виниловые', img: '/img/products/stickers', alt: 'Объёмные 3D-стикеры из эпоксидной смолы с логотипом', cat: 'stickers' },
+  { href: '/fotopodarki', title: 'Фотоподарки', text: 'подушки, пазлы, магниты', img: '/img/products/pillow', alt: 'Белая подушка для печати фото', cat: 'gifts' },
 ];
 
 const occasions = [
@@ -36,13 +36,6 @@ const occasions = [
   { when: 'круглый год', title: 'Для компании', text: 'Мерч для сотрудников, форма, подарки партнёрам', href: '/korporativnym-klientam', img: '/portfolio/branded-caps.webp' },
 ];
 
-const groups = [
-  { id: 'all', label: 'Всё' },
-  { id: 'wear', label: 'Одежда' },
-  { id: 'souv', label: 'Сувениры' },
-  { id: 'gifts', label: 'Фотоподарки' },
-  { id: 'print', label: 'Полиграфия' },
-];
 
 
 
@@ -107,25 +100,22 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   <NewYearBlock link="/stati/novogodnie-podarki" />
 
   <div class="band">
-  <!-- CATEGORIES: text + filter chips on the left, photo cards on the right -->
+  <!-- CATEGORIES: text on the left, photo cards on the right (filter chips removed by the owner, 14.11.2026) -->
   <section class="section cats" aria-labelledby="cats-h">
     <div class="wrap">
       <div class="cats-grid">
         <div class="cats-side">
           <p class="eyebrow">Что печатаем</p>
-          <h2 id="cats-h">Изделия <span class="serif">и цены</span></h2>
+          <h2 id="cats-h">Изделия</h2>
           <p>Цена «от» — за готовое изделие с печатью. Точную сумму покажет калькулятор на странице изделия.</p>
-          <div class="chips" role="group" aria-label="Показать группу">
-            {groups.map((g, i) => (<button type="button" class="chip" data-filter={g.id} aria-pressed={i === 0 ? 'true' : 'false'}>{g.label}</button>))}
-          </div>
-          <a class="cats-all" href="/uslugi"><span class="cats-all-go"><Icon name="arrow" size={18} /></span> Все услуги</a>
+          <a class="cats-all" href="/uslugi">Все услуги <span class="cats-all-go" aria-hidden="true"><Icon name="arrow" size={16} /></span></a>
         </div>
         <div class="pcards">
           {
             tiles.map((t) => {
               const f = t.from ?? categoryFrom(t.cat).price;
               return (
-                <a class={`pc ${t.size ? `pc-${t.size}` : ''}`} href={t.href} data-group={t.group}>
+                <a class={`pc ${t.size ? `pc-${t.size}` : ''}`} href={t.href}>
                   <img src={`${t.img}-640.webp`} srcset={`${t.img}-640.webp 640w, ${t.img}-1200.webp 1200w`} sizes={t.size ? '(max-width: 760px) 100vw, 600px' : '(max-width: 760px) 50vw, 300px'} alt={t.alt} width="640" height="478" loading="lazy" decoding="async" />
                   <span class="pc-body">
                     <span class="pc-price mono">от {rub(f)}</span>
@@ -156,7 +146,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
           <p class="eyebrow">Идеи подарков</p>
           <h2 id="occ-h">Подарки <span class="serif">к празднику</span></h2>
         </div>
-        <span class="hand occ-hand" aria-hidden="true">лучше написать заранее!</span>
         <p>Подскажем, что подарить, и сделаем к нужной дате. Перед праздниками лучше написать заранее.</p>
       </div>
       <ul class="occ-grid">
@@ -164,13 +153,13 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
           occasions.map((o) => (
             <li>
               <a class="occ" href={o.href}>
-                <img src={o.img} alt="" width="378" height="378" loading="lazy" decoding="async" />
-                <span class="occ-when mono">{o.when}</span>
-                <span class="occ-body">
+                <span class="occ-media"><img src={o.img} alt="" width="378" height="378" loading="lazy" decoding="async" /></span>
+                <span class="occ-when">{o.when}</span>
+                <span class="occ-title">
                   <h3>{o.title}</h3>
-                  <p>{o.text}</p>
+                  <span class="occ-go" aria-hidden="true"><Icon name="arrow" size={16} /></span>
                 </span>
-                <span class="occ-go" aria-hidden="true"><Icon name="arrow" size={18} /></span>
+                <p>{o.text}</p>
               </a>
             </li>
           ))
@@ -230,21 +219,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   <ContactBlock />
   </div>
 </BaseLayout>
-
-<script>
-  // «Изделия и цены»: chips show one group; without JS every card stays visible
-  const grid = document.querySelector<HTMLElement>('.pcards');
-  document.querySelectorAll<HTMLButtonElement>('.chip[data-filter]').forEach((chip, _, all) => {
-    chip.addEventListener('click', () => {
-      const f = chip.dataset.filter;
-      all.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
-      grid?.classList.toggle('is-filtered', f !== 'all');
-      grid?.querySelectorAll<HTMLElement>('.pc').forEach((card) => {
-        card.hidden = f !== 'all' && card.dataset.group !== f;
-      });
-    });
-  });
-</script>
 
 <style>
   /* ---------------- shared accents (home only): serif italic word, handwritten notes */
@@ -573,7 +547,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     color: var(--c-ink);
   }
 
-  /* ---------------- categories: text + chips, photo cards */
+  /* ---------------- categories: text, photo cards */
   .cats-grid {
     display: grid;
     grid-template-columns: minmax(0, 0.8fr) minmax(0, 2.2fr);
@@ -595,52 +569,38 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     margin: 0;
     color: var(--muted);
   }
-  .chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .chip {
-    min-height: 40px;
-    padding: 0 16px;
-    border-radius: 999px;
-    border: 1.5px solid var(--line-strong);
-    background: var(--card);
-    color: var(--ink);
-    font: inherit;
-    font-size: 0.88rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-  }
-  .chip:hover {
-    border-color: var(--ink);
-  }
-  .chip[aria-pressed='true'] {
-    background: var(--ink);
-    border-color: var(--ink);
-    color: var(--paper);
-  }
+  /* «Все услуги»: one quiet ink pill, the arrow slides on hover (owner, 14.11.2026) */
   .cats-all {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
-    margin-top: 6px;
+    gap: 14px;
+    margin-top: 8px;
+    padding: 8px 8px 8px 22px;
+    min-height: 52px;
+    border-radius: 999px;
+    background: var(--ink);
+    color: var(--paper);
     font-weight: 700;
+    letter-spacing: 0.01em;
     text-decoration: none;
+    transition: background-color 0.2s ease;
+  }
+  .cats-all:hover {
+    color: var(--paper);
+    background: #000;
   }
   .cats-all-go {
     display: grid;
     place-items: center;
-    width: 46px;
-    height: 46px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    background: var(--ink);
-    color: var(--paper);
+    background: var(--paper);
+    color: var(--ink);
     transition: transform 0.2s ease;
   }
   .cats-all:hover .cats-all-go {
-    transform: translateX(4px);
+    transform: translateX(3px);
   }
   .pcards {
     display: grid;
@@ -731,13 +691,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   .pc:hover .pc-go {
     transform: rotate(-45deg);
   }
-  .pcards.is-filtered .pc {
-    grid-column: auto;
-    grid-row: auto;
-  }
-  .pcards .pc[hidden] {
-    display: none;
-  }
   .cats-more {
     margin-top: 22px;
     color: var(--muted);
@@ -749,99 +702,79 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     font-weight: 600;
   }
 
-  /* ---------------- occasions: photo cards */
-  .occasions .section-head {
-    position: relative;
-  }
-  .occ-hand {
-    position: absolute;
-    left: clamp(320px, 38vw, 470px);
-    top: 8px;
-    transform: rotate(-6deg);
-  }
+  /* ---------------- occasions: quiet editorial cards — photo, date, title, one line (owner, 14.11.2026: «минималистичнее, аккуратнее, дороже») */
   .occ-grid {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
+    gap: 40px 28px;
   }
   .occ {
-    position: relative;
-    display: flex;
-    align-items: flex-end;
-    min-height: 270px;
-    height: 100%;
-    padding: 20px;
-    border-radius: 26px;
-    overflow: clip;
-    isolation: isolate;
-    color: #fff;
+    display: grid;
+    gap: 6px;
+    align-content: start;
+    color: var(--ink);
     text-decoration: none;
-    background: #2a2033;
   }
-  .occ img {
-    position: absolute;
-    inset: 0;
+  .occ-media {
+    display: block;
+    aspect-ratio: 4 / 3;
+    margin-bottom: 12px;
+    border-radius: 18px;
+    overflow: clip;
+    background: var(--paper-2);
+  }
+  .occ-media img {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: -2;
-    transition: transform 0.4s ease;
+    transition: transform 0.6s ease;
   }
-  .occ::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: linear-gradient(180deg, rgba(15, 29, 39, 0.05) 30%, rgba(15, 29, 39, 0.85) 100%);
-  }
-  .occ:hover {
-    color: #fff;
-  }
-  .occ:hover img {
-    transform: scale(1.05);
+  .occ:hover .occ-media img {
+    transform: scale(1.03);
   }
   .occ-when {
-    position: absolute;
-    top: 16px;
-    left: 16px;
-    padding: 5px 12px;
-    border-radius: 999px;
-    background: rgba(255, 252, 245, 0.95);
-    color: var(--ink);
-    font-size: 0.76rem;
-    font-weight: 700;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--muted);
   }
-  .occ-body {
-    display: grid;
-    gap: 4px;
-    padding-right: 46px;
+  .occ-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
   }
   .occ h3 {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
+    line-height: 1.2;
   }
   .occ p {
-    margin: 0;
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.85);
+    margin: 4px 0 0;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: var(--muted);
   }
   .occ-go {
-    position: absolute;
-    right: 16px;
-    bottom: 18px;
+    flex: none;
     display: grid;
     place-items: center;
-    width: 38px;
-    height: 38px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
-    background: #fffcf5;
+    border: 1px solid var(--line-strong);
     color: var(--ink);
-    transition: transform 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
   .occ:hover .occ-go {
-    transform: rotate(-45deg);
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
   }
 
   /* ---------------- tablets */
@@ -862,9 +795,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     }
     .occ-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    .occ-hand {
-      display: none;
     }
   }
 
@@ -941,17 +871,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     .about-collage {
       width: 100%;
     }
-    .chips {
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      width: calc(100% + var(--gutter) * 2);
-      margin-inline: calc(var(--gutter) * -1);
-      padding: 0 var(--gutter) 4px;
-      scrollbar-width: none;
-    }
-    .chip {
-      flex: none;
-    }
     .pcards {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       grid-auto-rows: 168px;
@@ -983,7 +902,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     .pc-xl .pc-text {
       display: block;
     }
-    .pcards:not(.is-filtered) .pc:last-child {
+    .pcards .pc:last-child {
       grid-column: 1 / -1;
     }
     .cats-more {
@@ -1003,18 +922,16 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
       flex: 0 0 74%;
       scroll-snap-align: center;
     }
-    .occ {
-      min-height: 250px;
-      padding: 16px;
-      border-radius: 22px;
+    .occ h3 {
+      font-size: 1.1rem;
     }
     .occ p {
-      font-size: 0.84rem;
+      font-size: 0.86rem;
     }
   }
   @media (prefers-reduced-motion: reduce) {
     .pc img,
-    .occ img {
+    .occ-media img {
       transition: none;
     }
   }
