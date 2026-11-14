@@ -2,7 +2,6 @@
 // Service landing pages, generated from src/data/services.ts
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Calculator from '@/components/islands/Calculator';
-import AlsoOrder from '@/components/garment/AlsoOrder.astro';
 import Reviews from '@/components/Reviews.astro';
 import { garmentBySlug } from '@/data/garments';
 import { reviews as allReviews } from '@/data/reviews';
@@ -11,14 +10,13 @@ import ServiceBlocks from '@/components/ServiceBlocks.astro';
 import PortfolioGrid from '@/components/PortfolioGrid.astro';
 import FaqSection from '@/components/FaqSection.astro';
 import CtaBand from '@/components/CtaBand.astro';
-import TshirtHero from '@/components/tshirt/TshirtHero.astro';
-import TshirtHead from '@/components/tshirt/TshirtHead.astro';
-import TshirtPackages from '@/components/tshirt/TshirtPackages.astro';
-import TshirtDetails from '@/components/tshirt/TshirtDetails.astro';
-import TshirtCompare from '@/components/tshirt/TshirtCompare.astro';
-import TshirtIdeas from '@/components/tshirt/TshirtIdeas.astro';
-import TshirtRelated from '@/components/tshirt/TshirtRelated.astro';
-import { portfolio } from '@/data/portfolio';
+import TeeHero from '@/components/tee/TeeHero.astro';
+import TeeHead from '@/components/tee/TeeHead.astro';
+import TeeAlso from '@/components/tee/TeeAlso.astro';
+import TeePackages from '@/components/tee/TeePackages.astro';
+import TeeDetails from '@/components/tee/TeeDetails.astro';
+import TeeCompare from '@/components/tee/TeeCompare.astro';
+import TeeRelated from '@/components/tee/TeeRelated.astro';
 import { services } from '@/data/services';
 import { categoryFrom, findCategory, findProduct } from '@/data/pricing';
 import { breadcrumbs, faqPage, service as serviceLd } from '@/lib/schema';
@@ -63,12 +61,38 @@ const facts = [
   { big: '10–20', small: 'ежедневно, без выходных' },
   { big: '0 ₽', small: 'простой макет соберём сами' },
 ];
-const works = portfolio.filter((w) => w.tags.some((t) => page.portfolioTags.includes(t)) && !w.src.includes('portfolio-14'));
-const notes = ['наша работа', 'на заказ'];
-const polaroids = works.slice(0, 2).map((w, i) => ({ src: w.src, alt: w.title, note: notes[i] }));
-const compare = page.blocks.find((b) => b.kind === 'compare');
-const ideas = page.blocks.find((b) => b.kind === 'ideas');
-const otherBlocks = page.blocks.filter((b) => b.kind !== 'compare' && b.kind !== 'ideas');
+// First-screen photo: calm product photos from public/img/products (the neon «showcase» ones are not used)
+const heroPhotos: Record<string, { photo: string; alt: string; pos?: string }> = {
+  '/pechat-na-odezhde': { photo: 'tshirts', alt: 'Футболки разных цветов на вешалке — заготовки для печати' },
+  '/pechat-na-hudi': { photo: 'tshirts', alt: 'Одежда на вешалке — заготовки для печати', pos: '62% 40%' },
+  '/breloki': { photo: 'badges', alt: 'Значки и металлические заготовки на светлом фоне', pos: '60% 50%' },
+  '/magnity': { photo: 'stickers', alt: 'Прозрачные акриловые заготовки с логотипом', pos: '60% 50%' },
+  '/vizitki': { photo: 'business-cards', alt: 'Стопка визиток и листы плотной бумаги на камне', pos: '40% 55%' },
+  '/poligrafiya': { photo: 'business-cards', alt: 'Листы плотной бумаги на светлом камне', pos: '70% 60%' },
+  '/shirokoformatnaya-pechat': { photo: 'calendar', alt: 'Настенный календарь с пейзажем на светлом фоне', pos: '50% 40%' },
+  '/fotopodarki': { photo: 'pillow', alt: 'Белая подушка — заготовка для печати фотографии', pos: '60% 50%' },
+};
+const hero = heroPhotos[page.slug] ?? { photo: 'tshirts', alt: page.imageAlt };
+
+// Bands alternate white / light grey, navy panels sit in fixed places; two equal bands never touch.
+// The calculator is grey, so the next light band is white.
+let cur = 'tint';
+const band = (ink = false) => {
+  cur = ink ? 'ink' : cur === 'white' ? 'tint' : 'white';
+  return cur === 'white' ? 'band' : `band band-${cur}`;
+};
+// hoodie page: glossy cards «Где печатать» (TeeCompare); everywhere else the blocks are glass cards / tables (ServiceBlocks)
+const compare = garment ? page.blocks.find((b) => b.kind === 'compare') : undefined;
+const restBlocks = page.blocks.filter((b) => b !== compare);
+const cPack = garment ? band() : '';
+const cDet = garment ? band(true) : '';
+const cPrice = !garment ? band(true) : '';
+const cCompare = compare ? band() : '';
+const cBlocks = restBlocks.map(() => band());
+const cWorks = band(true);
+const cReviews = garment && garmentReviews > 0 ? band() : '';
+const cFaq = band();
+const cRelated = related.length > 0 ? band() : '';
 ---
 
 <BaseLayout
@@ -82,28 +106,29 @@ const otherBlocks = page.blocks.filter((b) => b.kind !== 'compare' && b.kind !==
     faqPage(page.faq),
   ]}
 >
-  <TshirtHero
+  <TeeHero
     page={page}
     crumbs={crumbs}
     from={from.price}
     unit={from.unit !== 'шт' ? from.unit : undefined}
     priceNote={garment ? `${page.name.replace('Печать на ', '').toLowerCase()} с печатью` : 'с печатью и макетом'}
-    kicker={`${page.name} · Калининград`}
     mark={markWord}
     facts={facts}
-    polaroids={polaroids}
+    photo={hero.photo}
+    photoAlt={hero.alt}
+    photoPos={hero.pos}
   />
 
   <div class="band band-tint">
     <section id="calc" class="section scalc" aria-labelledby="calc-h">
       <div class="wrap">
-        <TshirtHead num="01" eyebrow="Калькулятор" id="calc-h" title={garment ? 'Посчитайте свой вариант' : 'Сколько стоит — посчитайте сами'} mark={garment ? 'свой' : 'посчитайте'} tone="y">
+        <TeeHead icon="calc" eyebrow="Калькулятор" id="calc-h" title={garment ? 'Посчитайте свой вариант' : 'Сколько стоит — посчитайте сами'} mark={garment ? 'свой' : 'посчитайте'}>
           <p class="scalc-sub">
             {garment
               ? 'Выберите цвет, размеры принтов и количество — цена пересчитается сразу. Несколько принтов: самый дорогой по полной цене, следующий −30%, остальные −50%.'
               : 'Цена меняется сразу. Добавьте позицию в смету или отправьте заявку — менеджер подтвердит стоимость и сроки.'}
           </p>
-        </TshirtHead>
+        </TeeHead>
         {
           garment ? (
             <Calculator client:visible category="textile" product={garment.productId} hideCategories lockProduct />
@@ -112,53 +137,55 @@ const otherBlocks = page.blocks.filter((b) => b.kind !== 'compare' && b.kind !==
           )
         }
       </div>
-      {garment?.alsoOrder && <AlsoOrder slugs={garment.alsoOrder} />}
+      {garment?.alsoOrder && <TeeAlso slugs={garment.alsoOrder} />}
     </section>
   </div>
 
   {
     garment && garmentProduct ? (
       <>
-        <TshirtPackages info={garment} num="02" />
-        <div class="band band-ink">
-          <TshirtDetails info={garment} productName={garmentProduct.name} num="03" />
+        <div class={cPack}>
+          <TeePackages info={garment} />
+        </div>
+        <div class={cDet}>
+          <TeeDetails info={garment} productName={garmentProduct.name} />
         </div>
       </>
     ) : (
-      <section class="section" aria-labelledby="prices-h">
-        <div class="wrap">
-          <TshirtHead num="02" eyebrow="Прайс" id="prices-h" title={`Цены: ${cat.name.toLowerCase()}`} mark={cat.name.toLowerCase()} tone="m">
-            <a class="btn btn-ghost btn-sm" href="/price">Весь прайс-лист →</a>
-          </TshirtHead>
-          <PriceTables categoryId={page.calcCategory} />
-        </div>
-      </section>
+      <div class={cPrice}>
+        <section class="section" aria-labelledby="prices-h">
+          <div class="wrap">
+            <TeeHead dark icon="tag" eyebrow="Прайс" id="prices-h" title={`Цены: ${cat.name.toLowerCase()}`} mark={cat.name.toLowerCase()}>
+              <a class="btn btn-ghost btn-sm" href="/price">Весь прайс-лист →</a>
+            </TeeHead>
+            <PriceTables categoryId={page.calcCategory} />
+          </div>
+        </section>
+      </div>
     )
   }
 
-  {compare && <div class="band band-tint"><TshirtCompare block={compare} /></div>}
+  {compare && <div class={cCompare}><TeeCompare block={compare} /></div>}
 
-  {ideas && <div class="band"><TshirtIdeas block={ideas} /></div>}
+  {restBlocks.map((b, i) => <div class={cBlocks[i]}><ServiceBlocks blocks={[b]} /></div>)}
 
-  {otherBlocks.length > 0 && <div class="band band-tint"><ServiceBlocks blocks={otherBlocks} /></div>}
-
-  <div class="band">
+  <div class={cWorks}>
     <PortfolioGrid tags={page.portfolioTags} title={`Примеры: ${page.name.toLowerCase()}`} />
   </div>
 
   {
     garment && garmentReviews > 0 && (
-      <div class="band band-tint">
+      <div class={cReviews}>
         <Reviews keywords={garment.reviewKeywords} title={`Отзывы: ${page.name.toLowerCase()}`} />
       </div>
     )
   }
 
-  <div class="band">
+  <div class={cFaq}>
     <FaqSection items={page.faq} title={`Вопросы: ${page.name.toLowerCase()}`} />
   </div>
 
-  {related.length > 0 && <div class="band band-tint"><TshirtRelated items={related} /></div>}
+  {related.length > 0 && <div class={cRelated}><TeeRelated items={related} /></div>}
 
   <CtaBand />
 </BaseLayout>

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import InkHero from '@/components/ink/InkHero.astro';
+import Icon from '@/components/Icon.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import { portfolio } from '@/data/portfolio';
 import { breadcrumbs } from '@/lib/schema';
@@ -28,7 +29,6 @@ const tagNames: Record<string, string> = {
   fandom: 'Фандомы',
 };
 const used = Object.keys(tagNames).filter((t) => portfolio.some((p) => p.tags.includes(t)));
-const rot = [-1.5, 1, -1, 1.5, -2, 1];
 ---
 
 <BaseLayout
@@ -37,41 +37,55 @@ const rot = [-1.5, 1, -1, 1.5, -2, 1];
   path="/portfolio"
   schema={[breadcrumbs(crumbs)]}
 >
-  <section class="wrap ptop">
-    <Breadcrumbs items={crumbs} />
-    <h1>Наши <span class="mark">работы</span></h1>
-    <p class="lead">{portfolio.length} примеров печати — от одной футболки в подарок до партий мерча для компаний.</p>
-    <div class="filters" role="group" aria-label="Фильтр работ">
-      <button type="button" class="chip" aria-pressed="true" data-filter="all">Все</button>
-      {
-        used.map((t) => (
-          <button type="button" class="chip" aria-pressed="false" data-filter={t}>
-            {tagNames[t]}
-          </button>
-        ))
-      }
-    </div>
-  </section>
+  <InkHero
+    crumbs={crumbs}
+    h1="Наши работы"
+    mark="работы"
+    lead={`${portfolio.length} примеров печати — от одной футболки в подарок до партий мерча для компаний.`}
+    facts={[
+      { big: String(portfolio.length), small: 'примеров печати' },
+      { big: '1 шт', small: 'минимальный заказ на большинство изделий' },
+    ]}
+  >
+    <a class="ib ib-main" href="/price">Рассчитать стоимость <span class="ib-go" aria-hidden="true"><Icon name="arrow" size={16} /></span></a>
+    <button type="button" class="ib ib-glass" data-order><span class="ib-ico" aria-hidden="true"><Icon name="upload" size={16} /></span> Отправить макет</button>
+  </InkHero>
 
-  <section class="wrap pgrid-wrap">
-    <ul class="pgrid">
-      {
-        portfolio.map((w, i) => (
-          <li class="pw" data-tags={w.tags.join(' ')} style={`--r:${rot[i % rot.length]}deg`}>
-            <figure>
-              <img src={w.src} alt={w.title} width="480" height="480" loading={i < 8 ? 'eager' : 'lazy'} decoding="async" />
-              <figcaption>
-                <b>{w.title}</b>
-                <span class="mono">{w.tech}</span>
-              </figcaption>
-            </figure>
-          </li>
-        ))
-      }
-    </ul>
-  </section>
+  <div class="band">
+    <section class="section pgrid-sec" aria-label="Работы">
+      <div class="wrap">
+        <div class="filters" role="group" aria-label="Фильтр работ">
+          <button type="button" class="pchip" aria-pressed="true" data-filter="all">Все</button>
+          {
+            used.map((t) => (
+              <button type="button" class="pchip" aria-pressed="false" data-filter={t}>
+                {tagNames[t]}
+              </button>
+            ))
+          }
+        </div>
+        <ul class="pgrid">
+          {
+            portfolio.map((w, i) => (
+              <li class="pw" data-tags={w.tags.join(' ')}>
+                <figure>
+                  <img src={w.src} alt={w.title} width="480" height="480" loading={i < 8 ? 'eager' : 'lazy'} decoding="async" />
+                  <figcaption>
+                    <b>{w.title}</b>
+                    <span>{w.tech}</span>
+                  </figcaption>
+                </figure>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+  </div>
 
-  <CtaBand title="Хотите так же?" text="Пришлите идею или пример, который понравился, — сделаем похожее с вашим дизайном." />
+  <div class="band band-tint">
+    <CtaBand title="Хотите так же?" text="Пришлите идею или пример, который понравился, — сделаем похожее с вашим дизайном." />
+  </div>
 </BaseLayout>
 
 <script>
@@ -89,19 +103,43 @@ const rot = [-1.5, 1, -1, 1.5, -2, 1];
 </script>
 
 <style>
-  .ptop {
-    display: grid;
-    gap: 16px;
-    padding-top: clamp(28px, 4vw, 56px);
+  .pgrid-sec {
+    padding-block: clamp(32px, 4vw, 56px);
   }
+  /* filter: a glass track, the chosen one is a navy pill */
   .filters {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 8px;
+    gap: 4px;
+    width: fit-content;
+    max-width: 100%;
+    margin-bottom: 32px;
+    padding: 5px;
+    border-radius: 28px;
+    border: 1px solid #e5e5e5;
+    background: rgba(242, 242, 242, 0.8);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
   }
-  .pgrid-wrap {
-    padding-block: 40px 0;
+  .pchip {
+    min-height: 44px;
+    padding: 0 18px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink-2);
+    font: inherit;
+    font-weight: 600;
+    font-size: 0.94rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  .pchip:hover {
+    background: rgba(255, 255, 255, 0.9);
+  }
+  .pchip[aria-pressed='true'] {
+    background: var(--navy, #14213d);
+    color: #fff;
   }
   .pgrid {
     list-style: none;
@@ -112,34 +150,57 @@ const rot = [-1.5, 1, -1, 1.5, -2, 1];
   }
   .pw {
     break-inside: avoid;
-    margin-bottom: 22px;
+    margin-bottom: 20px;
   }
   .pw figure {
     margin: 0;
-    padding: 10px 10px 14px;
-    border-radius: 20px;
-    background: var(--card);
-    box-shadow: var(--shadow);
-    transform: rotate(var(--r));
-    transition: transform 0.25s ease;
-  }
-  .pw:hover figure {
-    transform: rotate(0);
+    overflow: clip;
+    border-radius: 24px;
+    border: 1px solid #e5e5e5;
+    background: #fff;
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
   }
   .pw img {
+    display: block;
     width: 100%;
     height: auto;
-    border-radius: 14px;
-    background: var(--paper-2);
+    background: #f2f2f2;
   }
   .pw figcaption {
     display: grid;
     gap: 2px;
-    padding: 10px 4px 0;
-    font-size: 0.92rem;
+    padding: 12px 16px 14px;
+    font-size: 0.94rem;
   }
   .pw figcaption span {
     color: var(--muted);
-    font-size: 0.76rem;
+    font-size: 0.78rem;
+  }
+  @media (max-width: 560px) {
+    .filters {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      scroll-snap-type: x proximity;
+    }
+    .pchip {
+      flex: none;
+      white-space: nowrap;
+      scroll-snap-align: start;
+    }
+    .pgrid {
+      columns: 2 150px;
+      column-gap: 10px;
+    }
+    .pw {
+      margin-bottom: 10px;
+    }
+    .pw figure {
+      border-radius: 18px;
+    }
+    .pw figcaption {
+      padding: 8px 10px 10px;
+      font-size: 0.82rem;
+    }
   }
 </style>

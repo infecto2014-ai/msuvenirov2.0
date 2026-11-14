@@ -15,10 +15,10 @@ const mapSrc = `https://yandex.ru/map-widget/v1/?ll=${site.address.lng}%2C${site
       <p class="eyebrow">Контакты</p>
       <H id="contact-h">Приходите в мастерскую</H>
       <ul class="contact-list">
-        <li><Icon name="pin" /> <span>г. {site.address.city}, {site.address.street}<br />{site.address.place}</span></li>
-        <li><Icon name="clock" /> <span>{site.hours}</span></li>
-        <li><Icon name="phone" /> <a class="mono" href={site.phoneHref}>{site.phone}</a></li>
-        <li><Icon name="mail" /> <a href={`mailto:${site.email}`}>{site.email}</a></li>
+        <li><span class="cl-ico" aria-hidden="true"><Icon name="pin" size={20} /></span> <span>г. {site.address.city}, {site.address.street}<br />{site.address.place}</span></li>
+        <li><span class="cl-ico" aria-hidden="true"><Icon name="clock" size={20} /></span> <span>{site.hours}</span></li>
+        <li><span class="cl-ico" aria-hidden="true"><Icon name="phone" size={20} /></span> <a class="mono" href={site.phoneHref}>{site.phone}</a></li>
+        <li><span class="cl-ico" aria-hidden="true"><Icon name="mail" size={20} /></span> <a href={`mailto:${site.email}`}>{site.email}</a></li>
       </ul>
       <div class="contact-actions">
         <a class="btn btn-magenta" href={site.social.telegram} target="_blank" rel="noopener"><Icon name="telegram" size={18} /> Telegram</a>
@@ -28,7 +28,7 @@ const mapSrc = `https://yandex.ru/map-widget/v1/?ll=${site.address.lng}%2C${site
     </div>
     <div class="contact-map" data-map={mapSrc}>
       <button type="button" class="contact-map-btn">
-        <span class="sticker">Показать на карте</span>
+        <span class="contact-map-pill">Показать на карте</span>
         <span class="contact-map-hint">Карта загрузится по нажатию</span>
       </button>
       <a class="contact-map-link" href={site.yandexMapsOrg} target="_blank" rel="noopener">Открыть в Яндекс Картах →</a>
@@ -58,27 +58,38 @@ const mapSrc = `https://yandex.ru/map-widget/v1/?ll=${site.address.lng}%2C${site
   }
   .contact-card {
     padding: clamp(26px, 4vw, 44px);
-    border-radius: var(--radius-l);
-    background: var(--card);
-    border: 1.5px solid var(--line);
+    border-radius: 32px;
   }
   .contact-list {
     list-style: none;
     margin: 24px 0;
     padding: 0;
     display: grid;
-    gap: 14px;
+    gap: 12px;
     font-size: 1.05rem;
   }
   .contact-list li {
     display: flex;
-    gap: 12px;
-    align-items: flex-start;
+    gap: 14px;
+    align-items: center;
+    padding: 12px 14px;
+    border-radius: 20px;
+    border: 1px solid #e5e5e5;
+    background: rgba(242, 242, 242, 0.6);
   }
-  .contact-list :global(svg) {
+  .cl-ico {
     flex: none;
-    margin-top: 3px;
-    color: var(--m-ink);
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--navy, #14213d);
+    color: #fff;
+  }
+  .contact-list .cl-ico :global(svg) {
+    margin: 0;
+    color: #fff;
   }
   .contact-actions {
     display: flex;
@@ -88,12 +99,10 @@ const mapSrc = `https://yandex.ru/map-widget/v1/?ll=${site.address.lng}%2C${site
   .contact-map {
     position: relative;
     min-height: 380px;
-    border-radius: var(--radius-l);
+    border-radius: 32px;
     overflow: clip;
-    border: 1.5px solid var(--line);
-    background:
-      radial-gradient(circle, rgba(22, 20, 27, 0.12) 1.4px, transparent 1.6px) 0 0 / 14px 14px,
-      linear-gradient(135deg, var(--c-soft), var(--y-soft));
+    border: 1px solid #e5e5e5;
+    background: linear-gradient(135deg, #f2f2f2, #e5e5e5);
   }
   .contact-map :global(iframe) {
     position: absolute;
@@ -113,8 +122,16 @@ const mapSrc = `https://yandex.ru/map-widget/v1/?ll=${site.address.lng}%2C${site
     background: none;
     cursor: pointer;
   }
-  .contact-map-btn .sticker {
-    font-size: 1.1rem;
+  .contact-map-pill {
+    padding: 14px 26px;
+    border-radius: 999px;
+    background: var(--navy, #14213d);
+    color: #fff;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+  }
+  .contact-map-btn:hover .contact-map-pill {
+    background: #000;
   }
   .contact-map-hint {
     color: var(--muted);
@@ -124,9 +141,15 @@ const mapSrc = `https://yandex.ru/map-widget/v1/?ll=${site.address.lng}%2C${site
     position: absolute;
     left: 16px;
     bottom: 14px;
-    padding: 8px 14px;
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 8px 16px;
     border-radius: 999px;
-    background: var(--card);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.82);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
     font-size: 0.88rem;
     font-weight: 600;
     text-decoration: none;
@@ -140,6 +163,10 @@ const mapSrc = `https://yandex.ru/map-widget/v1/?ll=${site.address.lng}%2C${site
   @media (max-width: 560px) {
     .contact-card {
       padding: 20px 18px;
+    }
+    .contact-list li {
+      padding: 10px 12px;
+      font-size: 0.98rem;
     }
     .contact-actions {
       display: grid;

@@ -1,0 +1,88 @@
+---
+// Section heading in the «Ink» look: icon in a navy circle (white circle on dark bands) + eyebrow, h2 below.
+// Same look as tee/TeeHead.astro but with a wider icon set (src/components/ink/icons.ts).
+import { ink } from './icons';
+interface Props {
+  icon?: string;
+  eyebrow?: string;
+  id?: string;
+  title: string;
+  /** word (or phrase) of the title to wrap in span.serif */
+  mark?: string;
+  dark?: boolean;
+}
+const { icon = 'star', eyebrow, id, title, mark, dark = false } = Astro.props;
+const at = mark ? title.indexOf(mark) : -1;
+const parts = at >= 0 ? [title.slice(0, at), mark!, title.slice(at + mark!.length)] : [title, '', ''];
+---
+
+<header class:list={['ih', { 'ih-dark': dark }]}>
+  <div class="ih-top">
+    <span class="ih-ico" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d={ink[icon] ?? ink.star} />
+      </svg>
+    </span>
+    {eyebrow && <p class="ih-eyebrow">{eyebrow}</p>}
+  </div>
+  <h2 id={id}>{parts[0]}{parts[1] && <span class="serif">{parts[1]}</span>}{parts[2]}</h2>
+  <slot />
+</header>
+
+<style>
+  .ih {
+    display: grid;
+    gap: 14px;
+    justify-items: start;
+    margin-bottom: clamp(22px, 3vw, 36px);
+  }
+  .ih-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .ih-ico {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--navy, #14213d);
+    color: #fff;
+  }
+  .ih-dark .ih-ico {
+    background: #fff;
+    color: var(--navy, #14213d);
+  }
+  .ih-eyebrow {
+    margin: 0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-2, #14213d);
+  }
+  .ih-dark .ih-eyebrow {
+    color: #fff;
+  }
+  .ih h2 {
+    margin: 0;
+    max-width: 22ch;
+  }
+  .ih :global(p) {
+    margin: 0;
+  }
+  @media (max-width: 560px) {
+    .ih-ico {
+      width: 44px;
+      height: 44px;
+    }
+    .ih-eyebrow {
+      letter-spacing: 0.14em;
+    }
+    .ih h2 {
+      max-width: none;
+    }
+  }
+</style>

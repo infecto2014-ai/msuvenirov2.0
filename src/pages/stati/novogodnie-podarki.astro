@@ -1,16 +1,15 @@
 ---
 // Article: New Year gift ideas (owner, 06.11.2026) — SEO and easy browsing, no calculator.
 // Ideas and prices — src/data/nyGiftsArticle.ts (prices quoted from pricing.ts).
-import '@fontsource/caveat/600.css';
-import '@fontsource/cormorant-garamond/600-italic.css';
+// Style «Ink» (14.11.2026): navy snow panel header, glass cards, icons instead of numbers, alternating bands.
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import FaqSection from '@/components/FaqSection.astro';
 import CtaBand from '@/components/CtaBand.astro';
+import Icon from '@/components/Icon.astro';
+import TeeHead from '@/components/tee/TeeHead.astro';
 import { articleBySlug, ruDate } from '@/data/articles';
-import NyBall from '@/components/ny/NyBall.astro';
-import NyGarland from '@/components/ny/NyGarland.astro';
-import PolaroidWall from '@/components/ny/PolaroidWall.astro';
+import IdeaCards from '@/components/ny/IdeaCards.astro';
 import { faq, groups, hoursNote, ideasCount, intro, introTitle, outro, steps, tips } from '@/data/nyGiftsArticle';
 import { site } from '@/data/site';
 import { BUSINESS_ID, breadcrumbs, faqPage } from '@/lib/schema';
@@ -35,14 +34,25 @@ const articleLd = {
   mainEntityOfPage: `${site.url}${slug}`,
 };
 
-// group colours: --acc decorates (bars, dots, pin heads), --acc-ink is the readable text tone (≥4.5:1 on paper)
-const tone = {
-  family: { acc: '#d7262e', ink: '#b81d24' },
-  kids: { acc: '#ffd21f', ink: '#7a5a00' },
-  friends: { acc: '#00a0dc', ink: '#006f99' },
-  work: { acc: '#e5007d', ink: '#b30062' },
-} as const;
-const num = (i: number) => String(i + 1).padStart(2, '0');
+const P = {
+  heart: 'M12 20s-8-4.6-8-10.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.4 12 20 12 20Z',
+  gift: 'M4 11h16v9H4zM3 7h18v4H3zM12 7v13M12 7c-2.5 0-4.5-1-4.5-2.5S9 2.5 12 7c3-4.5 4.5-3 4.5-1.5S14.5 7 12 7Z',
+  star: 'm12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9Z',
+  bag: 'M5 8h14l-1.2 12H6.2zM9 8V6a3 3 0 0 1 6 0v2',
+  bulb: 'M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1.1 2V16h5v-.2c.1-.8.5-1.5 1.1-2A6 6 0 0 0 12 3Z',
+  camera: 'M4 8h3l2-3h6l2 3h3v11H4zM12 17a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z',
+  chat: 'M4 5h16v11H9l-5 4zM8 9h8M8 12h5',
+  clock: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM12 7v5l3 2',
+  users: 'M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM2.5 20c.5-3.6 3-5.5 6.5-5.5s6 1.9 6.5 5.5M16 4.5a3.5 3.5 0 0 1 0 6.5M18 14.8c1.9.7 3.2 2.3 3.5 5.2',
+  upload: 'M12 16V4m-5 5 5-5 5 5M5 20h14',
+  ok: 'M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM8 12.5l2.8 2.8L16 9.6',
+  cal: 'M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM16 2v4M8 2v4M3 11h18',
+  doc: 'M7 3h7l4 4v14H7zM14 3v4h4M10 12h5M10 16h5',
+  layers: 'm12 3 9 5-9 5-9-5zM3 13l9 5 9-5M3 17.5l9 5 9-5',
+};
+const groupIcon = { family: 'heart', kids: 'gift', friends: 'star', work: 'bag' } as const;
+const stepIcon = [P.chat, P.upload, P.ok, P.bag];
+const tipIcon = [P.heart, P.camera, P.chat, P.clock, P.users];
 const ideasWord = (n: number) => {
   const d = n % 10, h = n % 100;
   return d === 1 && h !== 11 ? 'идея' : d >= 2 && d <= 4 && (h < 12 || h > 14) ? 'идеи' : 'идей';
@@ -60,46 +70,44 @@ const b2bPoints = ['Счёт без НДС', 'Закрывающие докум�
 
 <BaseLayout title={`${a.title} — Мастерская сувениров, Калининград`} description={a.description} path={slug} image={a.cover} schema={[articleLd, breadcrumbs(crumbs), faqPage(faq)]}>
   <article class="ng">
-    <!-- festive night header: garland, snow, red ball with a family photo, Ded Moroz with the countdown -->
-    <header class="ng-head">
+    <!-- night header: navy rounded panel with snow, the family photo in a glass ornament and the countdown -->
+    <header class="ng-head lx-dark">
       <span class="ny-snow" aria-hidden="true"></span>
-      <NyGarland class="ng-garland" />
       <div class="wrap ng-head-in">
         <Breadcrumbs items={crumbs} />
         <div class="ng-head-grid">
           <div class="ng-head-text">
-            <p class="ng-eyebrow mono">Статьи · {a.tag}</p>
-            <h1>Что подарить на Новый год: {ideasCount} идей подарков <span class="ng-serif">с&nbsp;фото и&nbsp;логотипом</span></h1>
+            <p class="ng-eyebrow">Статьи · {a.tag}</p>
+            <h1>Что подарить на Новый год: {ideasCount} идей подарков <span class="serif">с&nbsp;фото и&nbsp;логотипом</span></h1>
             <p class="ng-lead">
               Без носков с оленями и дежурных свечек. Собрали подарки, которые делают специально для человека, — с ценами, сроками и честными советами из
               мастерской.
             </p>
-            <p class="ng-meta mono">
+            <p class="ng-meta">
               <time datetime={a.published}>{ruDate(a.published)}</time> · {a.readMinutes} минут чтения
             </p>
           </div>
           <div class="ng-head-art" aria-hidden="true">
-            <div class="ng-ball"><NyBall id="ngb" photo="/img/ny/ball-photo.webp" /></div>
-            <span class="ng-hand">проверено<br />на родственниках!</span>
-            <div class="ng-santa">
-              <img src="/img/ny/ded-moroz-640.webp" srcset="/img/ny/ded-moroz-360.webp 360w, /img/ny/ded-moroz-640.webp 640w" sizes="(max-width: 760px) 46vw, 300px" alt="" width="640" height="640" />
-              <span class="ng-sign">
-                <span class="ng-sign-top">до Нового года</span>
-                <b data-ny-days>—</b>
-                <span data-ny-word>дней</span>
-              </span>
-            </div>
+            <figure class="ng-orn">
+              <span class="ng-string"></span>
+              <span class="ng-cap"></span>
+              <span class="ng-ball"><img src="/img/ny/ball-photo.webp" alt="" width="240" height="240" /></span>
+            </figure>
+            <p class="ng-days">
+              <span class="ng-days-top">до Нового года</span>
+              <b data-ny-days>—</b>
+              <span data-ny-word>дней</span>
+            </p>
           </div>
         </div>
       </div>
-      <svg class="ng-head-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 60V30C240 0 480 50 720 30s480-40 720-6v36z" /></svg>
     </header>
 
     <!-- intro: readable text column + "who are we gifting" contents card -->
     <section class="ng-intro" aria-labelledby="intro-h">
       <div class="wrap ng-intro-grid">
         <div class="ng-intro-text">
-          <p class="ng-kicker mono">Вместо вступления</p>
+          <p class="eyebrow">Вместо вступления</p>
           <h2 id="intro-h">{introTitle}</h2>
           {intro.map((p) => <p>{p}</p>)}
         </div>
@@ -107,15 +115,17 @@ const b2bPoints = ['Счёт без НДС', 'Закрывающие докум�
           <p class="ng-toc-title" id="toc-h">Кому дарим</p>
           <ol>
             {
-              groups.map((g, i) => (
-                <li style={`--acc:${tone[g.id].acc};--acc-ink:${tone[g.id].ink}`}>
+              groups.map((g) => (
+                <li>
                   <a href={`#${g.id}`}>
-                    <span class="ng-toc-n mono" aria-hidden="true">{num(i)}</span>
+                    <span class="ng-ico" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><path d={P[groupIcon[g.id]]} /></svg>
+                    </span>
                     <span class="ng-toc-name">{g.label}</span>
                     <span class="ng-toc-count">
                       {g.ideas.length} {ideasWord(g.ideas.length)}
                     </span>
-                    <svg class="ng-toc-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7" /></svg>
+                    <span class="ng-toc-go" aria-hidden="true"><Icon name="arrow" size={14} /></span>
                   </a>
                 </li>
               ))
@@ -129,11 +139,11 @@ const b2bPoints = ['Счёт без НДС', 'Закрывающие докум�
       <!-- compact section bar, sticks under the site header on tablets and desktops -->
       <nav class="ng-bar" aria-label="Разделы с идеями">
         <div class="wrap ng-bar-in">
-          <span class="ng-bar-label mono">Кому дарим</span>
+          <span class="ng-bar-label">Кому дарим</span>
           <ul>
             {
               groups.map((g) => (
-                <li style={`--acc:${tone[g.id].acc}`}>
+                <li>
                   <a href={`#${g.id}`} data-bar={g.id}>
                     {g.label} <span class="ng-bar-count">{g.ideas.length}</span>
                   </a>
@@ -146,107 +156,104 @@ const b2bPoints = ['Счёт без НДС', 'Закрывающие докум�
 
       {
         groups.map((g, i) => (
-          <section class={`section ng-group${i % 2 ? ' ng-group-alt' : ''}`} id={g.id} aria-labelledby={`${g.id}-h`} style={`--acc:${tone[g.id].acc};--acc-ink:${tone[g.id].ink}`}>
-            <div class="wrap">
-              <header class="ng-gh">
-                <span class="ng-gh-n" aria-hidden="true">{num(i)}</span>
-                <div class="ng-gh-title">
-                  <p class="ng-gh-eyebrow mono">
-                    <span class="ng-gh-dot" aria-hidden="true" />
-                    {g.label} · {g.ideas.length} {ideasWord(g.ideas.length)}
-                  </p>
-                  <h2 id={`${g.id}-h`}>
-                    Подарки <span class="ng-mark">{g.title.replace(/^Подарки\s+/, '')}</span>
-                  </h2>
-                </div>
-                <p class="ng-gh-intro">{g.intro}</p>
-              </header>
-              <PolaroidWall ideas={g.ideas} accent={tone[g.id].acc} />
-              <aside class="ng-note" aria-label="Совет мастерской">
-                <span class="ng-note-ico" aria-hidden="true">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" />
-                    <path d="M9 18h6M10 22h4" />
-                  </svg>
-                </span>
-                <div>
-                  <p class="ng-note-label mono">Совет мастерской</p>
-                  <p class="ng-note-text">{g.tip}</p>
-                </div>
-              </aside>
-            </div>
-          </section>
+          <div class={`band${i % 2 === 0 ? ' band-tint' : ''}`}>
+            <section class="section ng-group" id={g.id} aria-labelledby={`${g.id}-h`}>
+              <div class="wrap">
+                <TeeHead
+                  icon={groupIcon[g.id]}
+                  eyebrow={`${g.label} · ${g.ideas.length} ${ideasWord(g.ideas.length)}`}
+                  id={`${g.id}-h`}
+                  title={g.title}
+                  mark={g.title.replace(/^Подарки\s+/, '')}
+                >
+                  <p class="ng-gh-intro">{g.intro}</p>
+                </TeeHead>
+                <IdeaCards ideas={g.ideas} />
+                <aside class="ng-note" aria-label="Совет мастерской">
+                  <span class="ng-ico" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d={P.bulb} /></svg>
+                  </span>
+                  <div>
+                    <p class="ng-note-label">Совет мастерской</p>
+                    <p class="ng-note-text">{g.tip}</p>
+                  </div>
+                </aside>
+              </div>
+            </section>
+          </div>
         ))
       }
     </div>
 
-    <section class="section ng-tips" aria-labelledby="tips-h">
+    <div class="band band-ink ng-tips-band">
       <span class="ny-snow" aria-hidden="true"></span>
-      <NyGarland class="ng-garland ng-garland-tips" />
-      <div class="wrap">
-        <div class="ng-tips-head">
-          <p class="ng-kicker mono">{tips.length} правил от мастерской</p>
-          <h2 id="tips-h">Как выбрать подарок, который <span class="ng-serif">не&nbsp;передарят</span></h2>
+      <section class="section ng-tips" aria-labelledby="tips-h">
+        <div class="wrap">
+          <TeeHead dark icon="bulb" eyebrow={`${tips.length} правил от мастерской`} id="tips-h" title={`Как выбрать подарок, который не\u00a0передарят`} mark={`не\u00a0передарят`} />
+          <ol class="ng-tips-list">
+            {
+              tips.map((t, i) => (
+                <li>
+                  <span class="ng-ico ng-ico-light" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d={tipIcon[i]} /></svg>
+                  </span>
+                  <h3>{t.title}</h3>
+                  <p>{t.text}</p>
+                </li>
+              ))
+            }
+          </ol>
         </div>
-        <ol class="ng-tips-list">
-          {
-            tips.map((t, i) => (
-              <li>
-                <span class="ng-tip-n mono" aria-hidden="true">{num(i)}</span>
-                <h3>{t.title}</h3>
-                <p>{t.text}</p>
-              </li>
-            ))
-          }
-        </ol>
-      </div>
-    </section>
+      </section>
+    </div>
 
-    <section class="section ng-how" aria-labelledby="how-h">
-      <div class="wrap">
-        <div class="ng-sec-head">
-          <p class="ng-kicker mono">4 шага</p>
-          <h2 id="how-h">Как заказать подарок к Новому году</h2>
+    <div class="band band-tint">
+      <section class="section ng-how" aria-labelledby="how-h">
+        <div class="wrap">
+          <TeeHead icon="check" eyebrow="4 шага" id="how-h" title="Как заказать подарок к Новому году" mark="заказать" />
+          <ol class="ng-route">
+            {
+              steps.map((s, i) => (
+                <li class="ng-stop">
+                  <span class="ng-dot" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d={stepIcon[i]} /></svg>
+                  </span>
+                  <div class="ng-glass">
+                    <h3>{s.title}</h3>
+                    <p>{s.text}</p>
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
+          <div class="ng-facts">
+            <p class="ng-fact ng-fact-dark">
+              <span class="ng-ico ng-ico-light" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d={P.clock} /></svg>
+              </span>
+              <span>{hoursNote}</span>
+            </p>
+            <p class="ng-fact">
+              <span class="ng-ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d={P.cal} /></svg>
+              </span>
+              <span>
+                <b>Совет:</b> в декабре заказов больше, чем обычно. Если нужен тираж для коллег или подарок к конкретной дате — напишите заранее, и мы спокойно
+                всё успеем.
+              </span>
+            </p>
+          </div>
         </div>
-        <ol class="ng-steps">
-          {
-            steps.map((s, i) => (
-              <li>
-                <span class="ng-step-n mono" aria-hidden="true">{num(i)}</span>
-                <h3>{s.title}</h3>
-                <p>{s.text}</p>
-              </li>
-            ))
-          }
-        </ol>
-        <div class="ng-facts">
-          <p class="ng-fact ng-fact-dark">
-            <span class="ng-fact-ico" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
-            </span>
-            <span>{hoursNote}</span>
-          </p>
-          <p class="ng-fact">
-            <span class="ng-fact-ico" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3" /><path d="M16 3v4M8 3v4M3 11h18" /></svg>
-            </span>
-            <span>
-              <b>Совет:</b> в декабре заказов больше, чем обычно. Если нужен тираж для коллег или подарок к конкретной дате — напишите заранее, и мы спокойно
-              всё успеем.
-            </span>
-          </p>
-        </div>
-      </div>
-    </section>
+      </section>
+    </div>
 
-    <section class="section ng-b2b" aria-labelledby="b2b-h">
-      <div class="wrap">
-        <div class="ng-b2b-card">
-          <span class="ng-b2b-dots" aria-hidden="true"></span>
+    <div class="band band-ink">
+      <section class="section ng-b2b" aria-labelledby="b2b-h">
+        <div class="wrap ng-b2b-grid">
           <div class="ng-b2b-main">
-            <p class="ng-kicker mono">Компаниям</p>
-            <h2 id="b2b-h">Новогодние подарки сотрудникам и партнёрам</h2>
-            <p>Соберём набор под ваш бюджет: кружки, футболки, календари, бейсболки и значки с логотипом.</p>
+            <TeeHead dark icon="layers" eyebrow="Компаниям" id="b2b-h" title="Новогодние подарки сотрудникам и партнёрам" mark="сотрудникам и партнёрам">
+              <p class="ng-b2b-lead">Соберём набор под ваш бюджет: кружки, футболки, календари, бейсболки и значки с логотипом.</p>
+            </TeeHead>
             <ul class="ng-b2b-list">
               {
                 b2bPoints.map((t) => (
@@ -259,56 +266,55 @@ const b2bPoints = ['Счёт без НДС', 'Закрывающие докум�
             </ul>
           </div>
           <div class="ng-b2b-actions">
-            <button type="button" class="btn btn-yellow" data-order="Новогодние подарки для компании">Запросить расчёт</button>
-            <a class="btn ng-btn-line" href="/kp-msuvenirov.pdf" download>
+            <button type="button" class="btn btn-magenta" data-order="Новогодние подарки для компании">Запросить расчёт</button>
+            <a class="btn btn-ghost" href="/kp-msuvenirov.pdf" download>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14" /></svg>
               Скачать КП (PDF)
             </a>
             <a class="ng-b2b-link" href="/korporativnym-klientam">Условия для компаний <span aria-hidden="true">→</span></a>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
 
-    <section class="section ng-outro" aria-labelledby="outro-h">
-      <div class="wrap">
-        <div class="ng-outro-card">
-          <span class="ng-cmyk" aria-hidden="true"></span>
-          <div class="ng-outro-l">
-            <p class="ng-hand ng-hand-dark">С наступающим!</p>
-            <h2 id="outro-h">Итого</h2>
-          </div>
-          <div class="ng-outro-r">
-            <p>{outro}</p>
-            <button type="button" class="btn btn-magenta" data-order="Новогодний подарок">Подобрать подарок</button>
+    <div class="band band-tint">
+      <section class="section ng-outro" aria-labelledby="outro-h">
+        <div class="wrap">
+          <div class="ng-outro-card">
+            <div class="ng-outro-l">
+              <TeeHead icon="gift" eyebrow="С наступающим!" id="outro-h" title="Итого" />
+            </div>
+            <div class="ng-outro-r">
+              <p>{outro}</p>
+              <button type="button" class="btn btn-magenta" data-order="Новогодний подарок">Подобрать подарок</button>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
 
     <FaqSection items={faq} title="Вопросы о новогодних подарках" />
 
-    <section class="section ng-links" aria-labelledby="links-h">
-      <div class="wrap">
-        <div class="ng-sec-head">
-          <p class="ng-kicker mono">Читайте и смотрите</p>
-          <h2 id="links-h">Смотрите также</h2>
+    <div class="band band-tint">
+      <section class="section ng-links" aria-labelledby="links-h">
+        <div class="wrap">
+          <TeeHead icon="star" eyebrow="Читайте и смотрите" id="links-h" title="Смотрите также" />
+          <ul>
+            {
+              seeAlso.map((l) => (
+                <li>
+                  <a href={l.href}>
+                    <span class="ng-link-t">{l.title}</span>
+                    <span class="ng-link-d">{l.text}</span>
+                    <span class="ng-link-go" aria-hidden="true"><Icon name="arrow" size={14} /></span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
         </div>
-        <ul>
-          {
-            seeAlso.map((l) => (
-              <li>
-                <a href={l.href}>
-                  <span class="ng-link-t">{l.title}</span>
-                  <span class="ng-link-d">{l.text}</span>
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-                </a>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </section>
+      </section>
+    </div>
   </article>
 
   <CtaBand title="Не нашли подходящую идею?" text="Напишите, кому дарите и какой бюджет, — подскажем подарок и покажем макет." />
@@ -345,251 +351,233 @@ const b2bPoints = ['Счёт без НДС', 'Закрывающие докум�
     });
   }
 </script>
-
 <style>
-  /* ---------- festive header */
-  .ng {
-    --candy: #d7262e;
-    --candy-ink: #a3121a;
-    --night: #0f1d27;
-  }
+  /* ---------- night header: navy rounded panel with snow (as the home page New Year strip) */
   .ng-head {
     position: relative;
-    overflow: clip;
     isolation: isolate;
-    padding-block: clamp(48px, 4.6vw, 66px) clamp(50px, 6vw, 76px);
-    color: #fffcf5;
+    overflow: clip;
+    margin: 12px 12px 0;
+    padding-block: 18px clamp(40px, 5vw, 64px);
+    border-radius: 32px;
+    color: #fff;
     background:
-      radial-gradient(50% 70% at 50% 0%, rgba(80, 150, 200, 0.18), transparent 70%),
-      linear-gradient(180deg, var(--night) 0%, #142f3d 100%);
-  }
-  .ng-head :global(.ng-garland),
-  .ng-tips :global(.ng-garland) {
-    position: absolute;
-    left: 0;
-    top: -4px;
-    width: 100%;
-    height: clamp(46px, 4.4vw, 62px);
-    z-index: 0;
+      radial-gradient(50% 80% at 90% 0%, rgba(255, 255, 255, 0.09), transparent 65%),
+      linear-gradient(160deg, var(--navy, #14213d) 0%, #0b1426 100%);
   }
   .ng-head-in {
     position: relative;
-    z-index: 1;
   }
+  .ng-head :global(.crumbs ol),
   .ng-head :global(.crumbs a),
-  .ng-head :global(.crumbs span),
-  .ng-head :global(.crumbs li) {
-    color: rgba(255, 252, 245, 0.75);
+  .ng-head :global(.crumbs li),
+  .ng-head :global(.crumbs span) {
+    color: rgba(255, 255, 255, 0.78);
+  }
+  .ng-head :global(.crumbs li + li::before) {
+    color: rgba(255, 255, 255, 0.4);
   }
   .ng-head-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
     gap: clamp(24px, 4vw, 56px);
     align-items: center;
-    margin-top: 10px;
+    margin-top: 14px;
   }
   .ng-head-text {
     display: grid;
-    gap: 14px;
+    gap: 16px;
+    justify-items: start;
   }
   .ng-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     margin: 0;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--y);
+    color: #fff;
+  }
+  .ng-eyebrow::before {
+    content: '';
+    width: 24px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
   }
   .ng-head h1 {
+    margin: 0;
+    color: #fff;
     font-size: clamp(1.9rem, 3.6vw, 3.1rem);
-    line-height: 1.06;
+    line-height: 1.08;
     text-wrap: balance;
-  }
-  .ng-serif {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-style: italic;
-    font-weight: 600;
-    font-size: 1.1em;
-    letter-spacing: 0;
-    color: #ff8f94;
   }
   .ng-lead {
     margin: 0;
     max-width: 52ch;
-    font-size: clamp(1.02rem, 1.4vw, 1.18rem);
+    font-size: clamp(1.02rem, 1.4vw, 1.16rem);
     line-height: 1.6;
-    color: rgba(255, 252, 245, 0.85);
+    color: rgba(255, 255, 255, 0.86);
   }
   .ng-meta {
     margin: 0;
-    font-size: 0.82rem;
-    color: rgba(255, 252, 245, 0.6);
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
   }
+  /* the family photo in a glass ornament + glass countdown plate */
   .ng-head-art {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(18px, 3vw, 36px);
+    padding-top: 28px;
+  }
+  .ng-orn {
     position: relative;
-    aspect-ratio: 1 / 0.86;
-    width: 100%;
-    max-width: 440px;
-    justify-self: end;
+    flex: none;
+    width: clamp(130px, 14vw, 190px);
+    margin: 0;
+    padding-top: 22px;
+  }
+  .ng-string {
+    position: absolute;
+    top: -80px;
+    left: 50%;
+    width: 1px;
+    height: 100px;
+    background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.6));
+  }
+  .ng-cap {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    width: 30px;
+    height: 16px;
+    transform: translateX(-50%);
+    border-radius: 6px 6px 3px 3px;
+    background: linear-gradient(90deg, #9aa3b5, #e5e5e5 45%, #ffffff 55%, #9aa3b5);
   }
   .ng-ball {
-    position: absolute;
-    left: 2%;
-    top: -8%;
-    width: 44%;
-    transform: rotate(-12deg);
-    transform-origin: 50% 0;
-    filter: drop-shadow(0 20px 24px rgba(0, 0, 0, 0.45));
+    display: block;
+    aspect-ratio: 1;
+    padding: 7px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow:
+      0 0 0 4px rgba(255, 255, 255, 0.85),
+      0 24px 40px -18px rgba(0, 0, 0, 0.7);
   }
-  .ng-ball :global(svg) {
+  .ng-ball img {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
   }
-  .ng-hand {
-    margin: 0;
-    font-family: 'Caveat', 'Segoe Print', cursive;
-    font-weight: 600;
-    font-size: clamp(1.25rem, 1.8vw, 1.6rem);
-    line-height: 1.05;
-    color: var(--y);
-  }
-  .ng-head-art .ng-hand {
-    position: absolute;
-    left: -6%;
-    bottom: 26%;
-    transform: rotate(-7deg);
-  }
-  .ng-santa {
-    position: absolute;
-    right: 0;
-    /* sit on the header's bottom edge, but high enough that the wave never covers the sign */
-    bottom: calc(clamp(50px, 6vw, 76px) * -1 + clamp(22px, 3vw, 34px));
-    width: 62%;
-    container-type: inline-size;
-  }
-  .ng-santa img {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-  /* the blank sign in the picture: 13.5%–85% across, 56%–91.5% down */
-  .ng-sign {
-    position: absolute;
-    left: 13.5%;
-    width: 71.5%;
-    top: 56%;
-    height: 35.5%;
+  .ng-days {
     display: grid;
-    place-content: center;
     justify-items: center;
+    gap: 4px;
+    margin: 0;
+    padding: 16px 22px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.08);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
     line-height: 1;
-    color: var(--candy-ink);
     font-variant-numeric: tabular-nums;
   }
-  .ng-sign-top {
-    font-family: 'Caveat', cursive;
-    font-weight: 600;
-    font-size: 6.6cqi;
-    color: var(--ink-2);
+  .ng-days-top {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.72);
   }
-  .ng-sign b {
-    font-size: 17cqi;
-    font-weight: 900;
+  .ng-days b {
+    font-size: clamp(2.4rem, 4vw, 3.2rem);
+    font-weight: 800;
     letter-spacing: -0.03em;
   }
-  .ng-sign [data-ny-word] {
-    font-size: 5.4cqi;
-    font-weight: 700;
-  }
-  .ng-head-wave {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -1px;
-    width: 100%;
-    height: clamp(26px, 4vw, 54px);
-    fill: var(--paper);
-    z-index: 2;
+  .ng-days [data-ny-word] {
+    font-size: 0.9rem;
+    font-weight: 600;
   }
 
-
-  /* ---------- shared editorial bits */
-  .ng-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    margin: 0 0 12px;
-    font-size: 0.76rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
+  /* ---------- shared: icon in a circle */
+  .ng-ico {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--navy, #14213d);
+    color: #fff;
   }
-  .ng-kicker::before {
-    content: '';
-    width: 28px;
-    height: 2px;
-    background: currentColor;
+  .ng-ico-light {
+    background: #fff;
+    color: var(--navy, #14213d);
   }
-  .ng-sec-head {
-    margin-bottom: clamp(26px, 3.4vw, 40px);
+  .ng-ico svg,
+  .ng-dot svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
-  .ng-sec-head h2,
-  .ng-tips-head h2 {
-    font-size: clamp(1.7rem, 3vw, 2.5rem);
-    max-width: 22ch;
+  .ng-glass {
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.78);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
   }
 
   /* ---------- intro: text + contents card */
   .ng-intro {
-    padding-block: clamp(40px, 5.5vw, 76px) clamp(28px, 4vw, 52px);
+    padding-block: clamp(40px, 5.5vw, 76px) clamp(36px, 5vw, 64px);
   }
   .ng-intro-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 400px);
     gap: clamp(28px, 6vw, 88px);
     align-items: start;
   }
   .ng-intro-text {
     max-width: 66ch;
   }
+  .ng-intro-text .eyebrow {
+    margin: 0 0 14px;
+  }
   .ng-intro-text h2 {
-    margin-bottom: 18px;
+    margin: 0 0 18px;
     font-size: clamp(1.7rem, 3vw, 2.5rem);
   }
-  .ng-intro-text p:not(.ng-kicker) {
+  .ng-intro-text p:not(.eyebrow) {
     margin: 0 0 16px;
     font-size: 1.08rem;
     line-height: 1.75;
     color: var(--ink-2);
   }
-  /* editorial drop cap */
-  .ng-intro-text h2 + p::first-letter {
-    float: left;
-    margin: 0.06em 0.12em 0 0;
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-style: italic;
-    font-weight: 600;
-    font-size: 3.5em;
-    line-height: 0.82;
-    color: var(--candy);
-  }
   .ng-toc-card {
-    position: relative;
-    padding: 22px 22px 14px;
-    border-radius: 26px;
-    background: var(--card);
-    border: 1.5px solid var(--line);
-    box-shadow: var(--shadow);
+    padding: 22px 20px 12px;
+    border-radius: 28px;
+    border: 1px solid rgba(20, 33, 61, 0.1);
+    background: #f2f2f2;
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
   }
   .ng-toc-title {
-    margin: 0 0 8px;
-    font-family: 'Caveat', 'Segoe Print', cursive;
+    margin: 0 0 8px 4px;
+    font-size: 0.75rem;
     font-weight: 600;
-    font-size: 1.7rem;
-    line-height: 1;
-    color: var(--candy-ink);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-2);
   }
   .ng-toc-card ol {
     list-style: none;
@@ -597,32 +585,20 @@ const b2bPoints = ['Счёт без НДС', 'Закрывающие докум�
     padding: 0;
   }
   .ng-toc-card li + li {
-    border-top: 1.5px dashed var(--line);
+    border-top: 1px solid rgba(20, 33, 61, 0.1);
   }
   .ng-toc-card a {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto auto;
     align-items: center;
     gap: 14px;
-    min-height: 58px;
-    padding: 6px 4px;
+    min-height: 64px;
+    padding: 8px 4px;
     color: var(--ink);
     text-decoration: none;
   }
-  .ng-toc-n {
-    display: grid;
-    place-items: center;
-    width: 38px;
-    height: 38px;
-    border-radius: 12px;
-    background: color-mix(in srgb, var(--acc) 16%, #fff);
-    color: var(--acc-ink);
-    font-size: 0.82rem;
-    font-weight: 800;
-    box-shadow: inset 3px 0 0 var(--acc);
-  }
   .ng-toc-name {
-    font-weight: 700;
+    font-weight: 600;
     font-size: 1.06rem;
   }
   .ng-toc-count {
@@ -630,31 +606,29 @@ const b2bPoints = ['Счёт без НДС', 'Закрывающие докум�
     color: var(--muted);
     white-space: nowrap;
   }
-  .ng-toc-arrow {
-    width: 18px;
-    height: 18px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    transition: transform 0.2s ease;
+  .ng-toc-go {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--navy, #14213d);
+    color: #fff;
+    transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
   }
-  .ng-toc-card a:hover {
-    color: var(--acc-ink);
-  }
-  .ng-toc-card a:hover .ng-toc-arrow {
-    transform: translateY(3px);
+  .ng-toc-card a:hover .ng-toc-go {
+    transform: translateX(3px);
   }
 
-  /* ---------- sticky section bar (tablet/desktop) */
+  /* ---------- sticky section bar (tablet/desktop), glass */
   .ng-bar {
     position: sticky;
-    top: 75px;
+    top: 84px;
     z-index: 30;
-    background: color-mix(in srgb, var(--paper) 90%, transparent);
-    backdrop-filter: saturate(1.4) blur(10px);
-    border-block: 1.5px solid var(--line);
+    background: rgba(255, 255, 255, 0.82);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border-block: 1px solid rgba(20, 33, 61, 0.1);
   }
   .ng-bar-in {
     display: flex;
@@ -664,10 +638,10 @@ const b2bPoints = ['Счёт без НДС', 'Закрывающие докум�
   }
   .ng-bar-label {
     font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
+    font-weight: 600;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: var(--ink-2);
     white-space: nowrap;
   }
   .ng-bar ul {
@@ -697,176 +671,67 @@ const b2bPoints = ['Счёт без НДС', 'Закрывающие докум�
     height: 28px;
     padding-inline: 6px;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--acc) 22%, #fff);
+    background: #e5e5e5;
     font-size: 0.8rem;
     font-weight: 700;
-    color: var(--ink);
+    color: var(--navy, #14213d);
   }
   .ng-bar a:hover {
-    background: var(--paper-2);
-    color: var(--ink);
+    background: #f2f2f2;
   }
   .ng-bar a[aria-current] {
-    background: var(--ink);
-    color: var(--paper);
+    background: var(--navy, #14213d);
+    color: #fff;
   }
   .ng-bar a[aria-current] .ng-bar-count {
-    background: var(--acc);
-    color: var(--ink);
+    background: #fff;
   }
 
   /* ---------- idea groups */
   .ng-group {
     scroll-margin-top: 136px;
   }
-  .ng-group-alt {
-    background: color-mix(in srgb, var(--acc) 6%, var(--paper));
-  }
-  .ng-gh {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1.05fr) minmax(0, 0.95fr);
-    align-items: end;
-    gap: 14px clamp(20px, 3.4vw, 48px);
-    padding-bottom: clamp(20px, 2.6vw, 30px);
-    margin-bottom: clamp(8px, 1.4vw, 16px);
-    border-bottom: 1.5px solid var(--line-strong);
-    position: relative;
-  }
-  .ng-gh::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -1.5px;
-    width: 96px;
-    height: 4px;
-    border-radius: 4px;
-    background: var(--acc);
-  }
-  .ng-gh-n {
-    font-size: clamp(4.2rem, 8vw, 7.2rem);
-    font-weight: 900;
-    line-height: 0.78;
-    letter-spacing: -0.06em;
-    font-variant-numeric: tabular-nums;
-    color: transparent;
-    -webkit-text-stroke: 2px var(--ink);
-    /* slight misregistration in the group colour, as in print */
-    text-shadow: 6px 6px 0 var(--acc);
-  }
-  .ng-gh-eyebrow {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 0 0 10px;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--acc-ink);
-  }
-  .ng-gh-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--acc);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--acc) 22%, transparent);
-  }
-  .ng-gh h2 {
-    font-size: clamp(1.9rem, 3.6vw, 3rem);
-    line-height: 1.04;
-  }
-  /* marker highlight under the recipient words */
-  .ng-mark {
-    padding-inline: 0.06em;
-    background: linear-gradient(transparent 58%, color-mix(in srgb, var(--acc) 42%, transparent) 58% 90%, transparent 90%);
-    -webkit-box-decoration-break: clone;
-    box-decoration-break: clone;
-  }
   .ng-gh-intro {
-    margin: 0;
-    max-width: 52ch;
+    max-width: 62ch;
     font-size: 1.08rem;
     line-height: 1.65;
     color: var(--ink-2);
   }
-
-  /* master's tip: soft card with an accent edge and a lightbulb */
+  /* master's tip: glass inset with a lightbulb */
   .ng-note {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
     gap: 16px;
-    align-items: start;
+    align-items: center;
     max-width: 760px;
-    margin: clamp(30px, 4vw, 48px) auto 0;
-    padding: 20px 26px 20px 20px;
-    border-radius: 22px;
-    background: var(--card);
-    border: 1.5px solid var(--line);
-    box-shadow: 0 18px 36px -28px rgba(22, 20, 27, 0.4);
-    position: relative;
-  }
-  /* accent edge in the group colour */
-  .ng-note::before {
-    content: '';
-    position: absolute;
-    left: -1.5px;
-    top: 18px;
-    bottom: 18px;
-    width: 5px;
-    border-radius: 0 5px 5px 0;
-    background: var(--acc);
-  }
-  .ng-note-ico {
-    display: grid;
-    place-items: center;
-    width: 48px;
-    height: 48px;
-    margin-left: 6px;
-    border-radius: 50%;
-    background: color-mix(in srgb, var(--acc) 18%, #fff);
-    color: var(--acc-ink);
-  }
-  .ng-note-ico svg,
-  .ng-fact-ico svg {
-    width: 24px;
-    height: 24px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+    margin: clamp(28px, 4vw, 44px) auto 0;
+    padding: 18px 26px 18px 18px;
+    border-radius: 24px;
+    border: 1px solid rgba(20, 33, 61, 0.1);
+    background: rgba(255, 255, 255, 0.78);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
   }
   .ng-note-label {
-    margin: 2px 0 4px;
+    margin: 0 0 4px;
     font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
+    font-weight: 600;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--acc-ink);
+    color: var(--ink-2);
   }
   .ng-note-text {
     margin: 0;
-    font-size: 1.06rem;
+    font-size: 1.04rem;
     line-height: 1.6;
     color: var(--ink);
   }
 
-  /* ---------- tips: night band */
-  .ng-tips {
+  /* ---------- tips: navy panel with snow */
+  .ng-tips-band {
     position: relative;
-    overflow: clip;
     isolation: isolate;
-    padding-top: clamp(76px, 8.4vw, 110px);
-    color: #fffcf5;
-    background:
-      radial-gradient(50% 70% at 50% 0%, rgba(80, 150, 200, 0.16), transparent 70%),
-      linear-gradient(180deg, var(--night) 0%, #142f3d 100%);
-  }
-  .ng-tips-head {
-    margin-bottom: clamp(26px, 3.4vw, 40px);
-  }
-  .ng-tips .ng-kicker {
-    color: var(--y);
   }
   .ng-tips-list {
     list-style: none;
@@ -879,165 +744,130 @@ const b2bPoints = ['Счёт без НДС', 'Закрывающие докум�
   .ng-tips-list li {
     display: grid;
     align-content: start;
+    justify-items: start;
     gap: 10px;
-    padding: 22px 20px 24px;
-    border-radius: 22px;
-    background: rgba(255, 252, 245, 0.06);
-    border: 1px solid rgba(255, 252, 245, 0.14);
-    backdrop-filter: blur(2px);
+    padding: 20px 18px 24px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.14);
   }
-  .ng-tip-n {
-    font-size: 2rem;
-    font-weight: 800;
-    line-height: 1;
-    letter-spacing: -0.04em;
-    color: var(--y);
+  .ng-tips-list .ng-ico {
+    margin-bottom: 4px;
   }
   .ng-tips-list h3 {
+    margin: 0;
     font-size: 1.08rem;
     line-height: 1.25;
+    color: #fff;
   }
   .ng-tips-list p {
     margin: 0;
     font-size: 0.94rem;
     line-height: 1.6;
-    color: rgba(255, 252, 245, 0.82);
+    color: rgba(255, 255, 255, 0.78);
   }
 
-  /* ---------- how to order: numbered timeline */
-  .ng-steps {
+  /* ---------- how to order: route with icons */
+  .ng-route {
+    --dot: 56px;
+    position: relative;
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 28px;
+    gap: 16px;
   }
-  .ng-steps li {
-    position: relative;
-    display: grid;
-    align-content: start;
-    gap: 8px;
-  }
-  /* connector between the step dots */
-  .ng-steps li:not(:last-child)::after {
+  .ng-route::before {
     content: '';
     position: absolute;
-    top: 25px;
-    left: 64px;
-    right: -18px;
-    border-top: 2px dashed var(--line-strong);
+    top: calc(var(--dot) / 2);
+    left: calc(12.5% - 8px);
+    right: calc(12.5% - 8px);
+    height: 1px;
+    background: linear-gradient(90deg, rgba(20, 33, 61, 0.35), rgba(20, 33, 61, 0.15));
   }
-  .ng-step-n {
+  .ng-stop {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 18px;
+    text-align: center;
+  }
+  .ng-dot {
     display: grid;
     place-items: center;
-    width: 52px;
-    height: 52px;
-    margin-bottom: 8px;
+    width: var(--dot);
+    height: var(--dot);
     border-radius: 50%;
-    font-size: 0.95rem;
-    font-weight: 800;
-    background: var(--dot-bg, var(--ink));
-    color: var(--dot-fg, var(--paper));
+    background: var(--navy, #14213d);
+    color: #fff;
+    box-shadow: 0 0 0 8px var(--band-bg, #f2f2f2);
   }
-  .ng-steps li:nth-child(1) { --dot-bg: var(--c); --dot-fg: var(--ink); }
-  .ng-steps li:nth-child(2) { --dot-bg: var(--m); --dot-fg: #fff; }
-  .ng-steps li:nth-child(3) { --dot-bg: var(--y); --dot-fg: var(--ink); }
-  .ng-steps h3 {
-    font-size: 1.14rem;
+  .ng-stop:last-child .ng-dot {
+    background: #000;
   }
-  .ng-steps p {
+  .ng-stop .ng-glass {
+    width: 100%;
+    height: 100%;
+    padding: 22px 20px 24px;
+    border-radius: 24px;
+  }
+  .ng-stop h3 {
+    margin: 0 0 8px;
+    font-size: 1.08rem;
+    font-weight: 700;
+  }
+  .ng-stop p {
     margin: 0;
-    max-width: 34ch;
-    font-size: 0.96rem;
-    line-height: 1.6;
-    color: var(--ink-2);
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--muted);
   }
   .ng-facts {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
-    margin-top: clamp(30px, 4vw, 48px);
+    margin-top: clamp(28px, 4vw, 44px);
   }
   .ng-fact {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
-    gap: 14px;
+    gap: 16px;
     align-items: center;
     margin: 0;
-    padding: 18px 22px;
-    border-radius: 22px;
-    background: var(--y-soft);
+    padding: 16px 22px 16px 16px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.78);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
     line-height: 1.55;
   }
   .ng-fact-dark {
-    background: var(--night);
-    color: #fffcf5;
+    background: var(--navy, #14213d);
+    border-color: var(--navy, #14213d);
+    color: #fff;
     font-weight: 600;
   }
-  .ng-fact-ico {
-    display: grid;
-    place-items: center;
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    background: #fff;
-    color: var(--ink);
-  }
-  .ng-fact-dark .ng-fact-ico {
-    background: var(--candy);
-    color: #fff;
-  }
 
-  /* ---------- companies */
-  .ng-b2b {
-    padding-top: 0;
-  }
-  .ng-b2b-card {
-    position: relative;
-    overflow: clip;
-    isolation: isolate;
+  /* ---------- companies (navy panel, as the home «Компаниям») */
+  .ng-b2b-grid {
     display: grid;
     grid-template-columns: minmax(0, 1.6fr) minmax(240px, auto);
     gap: 28px 56px;
     align-items: center;
-    padding: clamp(26px, 4.4vw, 52px);
-    border-radius: var(--radius-l);
-    background: var(--night);
-    color: #fffcf5;
   }
-  /* halftone dots fading from the corner, as on a print */
-  .ng-b2b-dots {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 46%;
-    height: 100%;
-    z-index: -1;
-    background:
-      radial-gradient(circle, rgba(255, 210, 31, 0.55) 1.8px, transparent 2.3px) 0 0 / 16px 16px,
-      radial-gradient(circle, rgba(0, 160, 220, 0.45) 1.8px, transparent 2.3px) 8px 8px / 16px 16px;
-    -webkit-mask: radial-gradient(120% 90% at 100% 0, #000, transparent 62%);
-    mask: radial-gradient(120% 90% at 100% 0, #000, transparent 62%);
-  }
-  .ng-b2b .ng-kicker {
-    color: #9fe0f6;
-  }
-  .ng-b2b-card h2 {
-    margin: 0 0 12px;
-    font-size: clamp(1.6rem, 2.8vw, 2.3rem);
-    max-width: 20ch;
-  }
-  .ng-b2b-main > p:not(.ng-kicker) {
-    margin: 0;
+  .ng-b2b-lead {
     max-width: 58ch;
-    color: rgba(255, 252, 245, 0.82);
+    color: rgba(255, 255, 255, 0.82);
   }
   .ng-b2b-list {
-    display: grid;
-    grid-template-columns: repeat(2, max-content);
-    gap: 8px;
-    margin: 20px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 4px 0 0;
     padding: 0;
     list-style: none;
   }
@@ -1045,18 +875,22 @@ const b2bPoints = ['Счёт без НДС', 'Закрывающие докум�
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 14px 8px 10px;
+    min-height: 44px;
+    padding: 0 16px 0 12px;
     border-radius: 999px;
-    background: rgba(255, 252, 245, 0.08);
-    border: 1px solid rgba(255, 252, 245, 0.16);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
     font-size: 0.92rem;
     font-weight: 600;
+    color: #fff;
   }
   .ng-b2b-list svg {
     width: 18px;
     height: 18px;
     fill: none;
-    stroke: var(--y);
+    stroke: #fff;
     stroke-width: 2.6;
     stroke-linecap: round;
     stroke-linejoin: round;
@@ -1065,16 +899,7 @@ const b2bPoints = ['Счёт без НДС', 'Закрывающие докум�
     display: grid;
     gap: 12px;
   }
-  .ng-btn-line {
-    --btn-bg: transparent;
-    --btn-fg: #fffcf5;
-    border-color: rgba(255, 252, 245, 0.55);
-  }
-  .ng-btn-line:hover {
-    border-color: #fffcf5;
-    box-shadow: 4px 4px 0 var(--c);
-  }
-  .ng-btn-line svg {
+  .ng-b2b-actions .btn svg {
     width: 20px;
     height: 20px;
     fill: none;
@@ -1088,46 +913,33 @@ const b2bPoints = ['Счёт без НДС', 'Закрывающие докум�
     align-items: center;
     justify-content: center;
     min-height: 44px;
-    color: #fffcf5;
-    font-weight: 700;
+    color: #fff;
+    font-weight: 600;
   }
   .ng-b2b-link:hover {
-    color: var(--y);
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 
-  /* ---------- outro */
-  .ng-outro {
-    padding-top: 0;
-  }
+  /* ---------- outro: glass card */
   .ng-outro-card {
-    position: relative;
-    overflow: clip;
     display: grid;
     grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
     gap: 20px clamp(28px, 5vw, 72px);
     align-items: center;
-    padding: clamp(30px, 4.6vw, 56px);
-    border-radius: var(--radius-l);
-    background: var(--card);
-    border: 1.5px solid var(--line);
-    box-shadow: var(--shadow);
+    padding: clamp(28px, 4.4vw, 52px);
+    border-radius: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.78);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
   }
-  /* four group colours as a print colour bar on top */
-  .ng-cmyk {
-    position: absolute;
-    inset: 0 0 auto;
-    height: 8px;
-    background: linear-gradient(90deg, #d7262e 0 25%, #ffd21f 25% 50%, #00a0dc 50% 75%, #e5007d 75%);
+  .ng-outro-l :global(.teh) {
+    margin-bottom: 0;
   }
-  .ng-outro-l h2 {
+  .ng-outro-l :global(h2) {
     font-size: clamp(2.4rem, 5vw, 4rem);
-  }
-  .ng-hand-dark {
-    color: var(--candy);
-    transform: rotate(-3deg);
-    transform-origin: 0 100%;
-    margin-bottom: 6px;
-    font-size: clamp(1.5rem, 2.2vw, 1.9rem);
   }
   .ng-outro-r {
     display: grid;
@@ -1156,13 +968,16 @@ const b2bPoints = ['Счёт без НДС', 'Закрывающие докум�
     display: grid;
     gap: 4px;
     min-height: 92px;
-    padding: 18px 56px 18px 20px;
-    border-radius: 20px;
-    background: var(--card);
-    border: 1.5px solid var(--line);
+    padding: 18px 64px 18px 22px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.78);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
     color: var(--ink);
     text-decoration: none;
-    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    transition: background-color 0.2s ease;
   }
   .ng-link-t {
     font-weight: 700;
@@ -1172,40 +987,36 @@ const b2bPoints = ['Счёт без НДС', 'Закрывающие докум�
     font-size: 0.9rem;
     color: var(--muted);
   }
-  .ng-links svg {
+  .ng-link-go {
     position: absolute;
     right: 18px;
     top: 50%;
-    width: 22px;
-    height: 22px;
-    margin-top: -11px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    transition: transform 0.2s ease;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    margin-top: -16px;
+    border-radius: 50%;
+    background: var(--navy, #14213d);
+    color: #fff;
+    transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
   }
   .ng-links a:hover {
-    color: var(--ink);
-    border-color: var(--ink);
-    transform: translateY(-2px);
-    box-shadow: 0 14px 26px -20px rgba(22, 20, 27, 0.5);
+    background: #fff;
   }
-  .ng-links a:hover svg {
+  .ng-links a:hover .ng-link-go {
     transform: translateX(3px);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .ng-toc-arrow,
+    .ng-toc-go,
     .ng-bar a,
     .ng-links a,
-    .ng-links svg {
+    .ng-link-go {
       transition: none;
     }
-    .ng-toc-card a:hover .ng-toc-arrow,
-    .ng-links a:hover,
-    .ng-links a:hover svg {
+    .ng-toc-card a:hover .ng-toc-go,
+    .ng-links a:hover .ng-link-go {
       transform: none;
     }
   }
@@ -1216,40 +1027,43 @@ const b2bPoints = ['Счёт без НДС', 'Закрывающие докум�
     }
     .ng-toc-card ol {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
     }
     .ng-toc-card li + li {
       border-top: 0;
     }
+    .ng-toc-card li {
+      border-radius: 18px;
+      background: #fff;
+    }
     .ng-toc-card a {
-      grid-template-columns: auto minmax(0, 1fr);
-      grid-template-rows: auto auto;
-      gap: 0 10px;
-      padding: 10px;
-      border-radius: 16px;
-      background: color-mix(in srgb, var(--acc) 8%, #fff);
+      padding: 8px 10px;
     }
-    .ng-toc-n {
-      grid-row: span 2;
+    .ng-route {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 14px;
     }
-    .ng-toc-arrow {
-      display: none;
+    .ng-route::before {
+      top: 0;
+      bottom: 0;
+      left: calc(var(--dot) / 2);
+      right: auto;
+      width: 1px;
+      height: auto;
+      background: linear-gradient(180deg, rgba(20, 33, 61, 0.35), rgba(20, 33, 61, 0.12));
     }
-    .ng-gh {
-      grid-template-columns: auto minmax(0, 1fr);
+    .ng-stop {
+      grid-template-columns: var(--dot) minmax(0, 1fr);
+      justify-items: start;
+      align-items: start;
+      gap: 16px;
+      text-align: left;
     }
-    .ng-gh-intro {
-      grid-column: 1 / -1;
-      max-width: 66ch;
+    .ng-stop .ng-glass {
+      padding: 16px 18px 18px;
     }
-    .ng-steps {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    .ng-steps li:nth-child(2)::after {
-      display: none;
-    }
-    .ng-b2b-card {
+    .ng-b2b-grid {
       grid-template-columns: 1fr;
     }
     .ng-b2b-actions {
@@ -1264,16 +1078,16 @@ const b2bPoints = ['Счёт без НДС', 'Закрывающие докум�
     }
   }
   @media (max-width: 760px) {
-    .ng-toc-card ol {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    .ng-head {
+      margin: 8px 8px 0;
+      border-radius: 24px;
     }
     .ng-head-grid {
       grid-template-columns: 1fr;
     }
     .ng-head-art {
-      width: min(100%, 380px);
-      justify-self: center;
-      margin-top: 30px;
+      justify-content: flex-start;
+      padding-top: 40px;
     }
     /* phones: the contents card in the intro is enough, no sticky bar */
     .ng-bar {
@@ -1290,65 +1104,31 @@ const b2bPoints = ['Счёт без НДС', 'Закрывающие докум�
     }
   }
   @media (max-width: 560px) {
-    .ng-intro-text p:not(.ng-kicker) {
+    .ng-intro-text p:not(.eyebrow) {
       font-size: 1rem;
     }
     .ng-toc-card {
       padding: 18px 14px 14px;
     }
-    .ng-gh {
-      gap: 12px 14px;
+    .ng-toc-card ol {
+      grid-template-columns: 1fr;
     }
-    .ng-gh-n {
-      font-size: 3.4rem;
-      -webkit-text-stroke-width: 1.5px;
-      text-shadow: 4px 4px 0 var(--acc);
+    .ng-route {
+      --dot: 46px;
     }
-    .ng-gh h2 {
-      font-size: 1.7rem;
+    .ng-ico {
+      width: 44px;
+      height: 44px;
     }
     .ng-gh-intro {
       font-size: 1rem;
     }
     .ng-note {
       gap: 12px;
-      padding: 16px 18px 18px 16px;
-    }
-    .ng-note-ico {
-      width: 40px;
-      height: 40px;
-      margin-left: 4px;
-    }
-    .ng-note-ico svg {
-      width: 21px;
-      height: 21px;
+      padding: 16px;
     }
     .ng-note-text {
       font-size: 1rem;
-    }
-    .ng-steps {
-      grid-template-columns: 1fr;
-      gap: 22px;
-    }
-    /* vertical timeline */
-    .ng-steps li {
-      grid-template-columns: 52px minmax(0, 1fr);
-      column-gap: 16px;
-      row-gap: 4px;
-    }
-    .ng-step-n {
-      grid-row: span 2;
-      margin: 0;
-    }
-    .ng-steps li:not(:last-child)::after,
-    .ng-steps li:nth-child(2)::after {
-      display: block;
-      top: 60px;
-      bottom: -18px;
-      left: 25px;
-      right: auto;
-      border-top: 0;
-      border-left: 2px dashed var(--line-strong);
     }
     .ng-tips-list {
       grid-template-columns: 1fr;
@@ -1356,16 +1136,6 @@ const b2bPoints = ['Счёт без НДС', 'Закрывающие докум�
     }
     .ng-b2b-actions {
       grid-template-columns: 1fr;
-    }
-    .ng-b2b-dots {
-      width: 70%;
-      height: 50%;
-    }
-    .ng-b2b-list {
-      grid-template-columns: 1fr;
-    }
-    .ng-b2b-list li {
-      justify-self: start;
     }
     .ng-links ul {
       grid-template-columns: 1fr;
@@ -1375,7 +1145,7 @@ const b2bPoints = ['Счёт без НДС', 'Закрывающие докум�
       min-height: 76px;
     }
     .ng-fact {
-      padding: 16px 18px;
+      padding: 14px 16px;
       font-size: 0.96rem;
     }
   }

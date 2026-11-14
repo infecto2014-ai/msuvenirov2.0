@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import InkHero from '@/components/ink/InkHero.astro';
+import InkHead from '@/components/ink/InkHead.astro';
+import { ink } from '@/components/ink/icons';
 import CtaBand from '@/components/CtaBand.astro';
 import Icon from '@/components/Icon.astro';
 import { services } from '@/data/services';
@@ -12,6 +14,7 @@ const crumbs = [
   { name: 'Главная', href: '/' },
   { name: 'Услуги', href: '/uslugi' },
 ];
+const groupIcons: Record<string, string> = { 'Одежда': 'shirt', 'Подарки и сувениры': 'gift', 'Полиграфия': 'file' };
 const bySlug = new Map(services.map((s) => [s.slug, s]));
 const fromOf = (slug: string, calc?: { category: string; product: string }) => {
   const s = bySlug.get(slug);
@@ -32,61 +35,67 @@ const fromOf = (slug: string, calc?: { category: string; product: string }) => {
   path="/uslugi"
   schema={[breadcrumbs(crumbs)]}
 >
-  <section class="section-top wrap">
-    <Breadcrumbs items={crumbs} />
-    <h1>Услуги мастерской</h1>
-    <p class="lead">Печатаем на одежде, посуде, сувенирах и бумаге. Выберите изделие — внутри цены, калькулятор, примеры работ и ответы на вопросы.</p>
-  </section>
+  <InkHero
+    crumbs={crumbs}
+    h1="Услуги мастерской"
+    mark="мастерской"
+    lead="Печатаем на одежде, посуде, сувенирах и бумаге. Выберите изделие — внутри цены, калькулятор, примеры работ и ответы на вопросы."
+  >
+    <a class="ib ib-main" href="/price">Посчитать цену <span class="ib-go" aria-hidden="true"><Icon name="arrow" size={16} /></span></a>
+    <button type="button" class="ib ib-glass" data-order><span class="ib-ico" aria-hidden="true"><Icon name="upload" size={16} /></span> Отправить макет</button>
+  </InkHero>
 
   {
     serviceNav.map((g, gi) => (
-      <section class="section svc-group" aria-labelledby={`g-${gi}`}>
-        <div class="wrap">
-          <h2 id={`g-${gi}`}>{g.group}</h2>
-          <div class="svc-grid">
-            {flatLinks(g.links).map((l) => {
-              const s = bySlug.get(l.href);
-              return (
-                <a class="svc" href={l.href}>
-                  {(s?.image ?? l.image) && <img src={s?.image ?? l.image} alt="" width="320" height="220" loading="lazy" />}
-                  <span class="svc-body">
-                    <span class="svc-name">{l.label}</span>
-                    <span class="svc-from mono">{fromOf(l.href, l.calc)}</span>
-                  </span>
-                  <span class="svc-arrow">
-                    <Icon name="arrow" />
-                  </span>
-                </a>
-              );
-            })}
+      <div class={gi % 2 === 1 ? 'band band-tint' : 'band'}>
+        <section class="section svc-group" aria-labelledby={`g-${gi}`}>
+          <div class="wrap">
+            <InkHead icon={groupIcons[g.group] ?? 'star'} eyebrow="Услуги" id={`g-${gi}`} title={g.group} />
+            <div class="svc-grid">
+              {flatLinks(g.links).map((l) => {
+                const s = bySlug.get(l.href);
+                return (
+                  <a class="svc" href={l.href}>
+                    {(s?.image ?? l.image) && <img src={s?.image ?? l.image} alt="" width="320" height="220" loading="lazy" />}
+                    <span class="svc-body">
+                      <span class="svc-name">{l.label}</span>
+                      <span class="svc-from">{fromOf(l.href, l.calc)}</span>
+                    </span>
+                    <span class="svc-arrow">
+                      <Icon name="arrow" />
+                    </span>
+                  </a>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     ))
   }
 
-  <section class="wrap">
-    <a class="b2b-link" href="/korporativnym-klientam">
-      <span class="sticker">Компаниям</span>
-      <span class="b2b-link-text">Мерч и подарки с логотипом: счёт без НДС, одна смета на весь набор</span>
-      <Icon name="arrow" />
-    </a>
-  </section>
+  <div class={serviceNav.length % 2 === 1 ? 'band band-tint' : 'band'}>
+    <section class="section b2b-sec">
+      <div class="wrap">
+        <a class="b2b-link" href="/korporativnym-klientam">
+          <span class="b2b-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d={ink.building} /></svg>
+          </span>
+          <span class="b2b-link-text"><b>Компаниям</b>Мерч и подарки с логотипом: счёт без НДС, одна смета на весь набор</span>
+          <span class="b2b-go" aria-hidden="true"><Icon name="arrow" size={18} /></span>
+        </a>
+      </div>
+    </section>
+  </div>
 
-  <CtaBand />
+  <div class={serviceNav.length % 2 === 1 ? 'band' : 'band band-tint'}>
+    <CtaBand />
+  </div>
 </BaseLayout>
 
 <style>
-  .section-top {
-    display: grid;
-    gap: 16px;
-    padding-top: clamp(28px, 4vw, 56px);
-  }
   .svc-group {
-    padding-block: 36px;
-  }
-  .svc-group h2 {
-    margin-bottom: 20px;
+    padding-block: clamp(36px, 5vw, 64px);
   }
   .svc-grid {
     display: grid;
@@ -96,68 +105,128 @@ const fromOf = (slug: string, calc?: { category: string; product: string }) => {
   .svc {
     position: relative;
     display: grid;
-    border-radius: var(--radius-l);
-    background: var(--card);
-    border: 1.5px solid var(--line);
+    align-content: start;
+    border-radius: 28px;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
     overflow: clip;
     text-decoration: none;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    color: var(--ink);
+    transition: background-color 0.2s ease;
   }
   .svc:hover {
     color: var(--ink);
-    transform: translateY(-3px);
-    box-shadow: 5px 5px 0 var(--c);
+    background: #fafafa;
   }
   .svc img {
     width: 100%;
     height: 180px;
     object-fit: cover;
-    background: var(--paper-2);
+    background: #f2f2f2;
   }
   .svc-body {
     display: grid;
     gap: 4px;
-    padding: 16px 64px 18px 18px;
+    padding: 16px 68px 18px 20px;
   }
   .svc-name {
-    font-weight: 800;
+    font-weight: 700;
     font-size: 1.1rem;
+    line-height: 1.25;
   }
   .svc-from {
-    color: var(--m-ink);
-    font-weight: 700;
+    color: var(--muted);
+    font-weight: 600;
     font-size: 0.9rem;
+    font-variant-numeric: tabular-nums;
   }
   .svc-arrow {
     position: absolute;
     right: 14px;
-    bottom: 16px;
+    bottom: 14px;
     display: grid;
     place-items: center;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    background: var(--ink);
-    color: var(--paper);
+    background: var(--navy, #14213d);
+    color: #fff;
+    transition: transform 0.2s ease;
+  }
+  .svc:hover .svc-arrow {
+    transform: translateX(3px);
+  }
+  .b2b-sec {
+    padding-block: clamp(32px, 4vw, 56px);
   }
   .b2b-link {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     gap: 18px;
-    margin-top: 32px;
-    padding: 28px 32px;
-    border-radius: 32px 32px 32px 90px;
-    background: var(--ink);
-    color: var(--paper);
+    padding: 22px 26px;
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.78);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
+    outline: 1px solid #e5e5e5;
+    outline-offset: -1px;
+    color: var(--ink);
     text-decoration: none;
-    font-weight: 700;
-    font-size: 1.15rem;
   }
   .b2b-link:hover {
-    color: var(--y);
+    background: #fff;
+    color: var(--ink);
+  }
+  .b2b-ico,
+  .b2b-go {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--navy, #14213d);
+    color: #fff;
   }
   .b2b-link-text {
-    flex: 1 1 300px;
+    flex: 1 1 auto;
+    display: grid;
+    gap: 2px;
+    font-size: 1rem;
+    line-height: 1.4;
+    color: var(--ink-2);
+  }
+  .b2b-link-text b {
+    font-size: 1.2rem;
+    color: #000;
+  }
+  @media (max-width: 560px) {
+    .svc-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .svc {
+      border-radius: 20px;
+    }
+    .svc img {
+      height: 110px;
+    }
+    .svc-body {
+      padding: 12px 12px 56px;
+    }
+    .svc-name {
+      font-size: 0.98rem;
+    }
+    .svc-arrow {
+      right: 10px;
+      bottom: 10px;
+    }
+    .b2b-link {
+      padding: 16px;
+      gap: 12px;
+    }
   }
 </style>

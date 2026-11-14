@@ -1,0 +1,260 @@
+---
+// First screen of the inner pages in the «Ink» look: a light rounded frame, breadcrumbs, h1 with a marker word, lead,
+// buttons (default slot) and navy-glass fact cards (facts prop) or any custom content on the right (slot «aside»).
+// Facts are passed in by the page — nothing is invented here.
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+
+interface Props {
+  crumbs: { name: string; href: string }[];
+  h1: string;
+  /** word of the h1 to mark */
+  mark?: string;
+  eyebrow?: string;
+  lead?: string;
+  facts?: { big: string; small: string }[];
+  /** columns of the fact grid (default 2) */
+  cols?: number;
+}
+const { crumbs, h1, mark, eyebrow, lead, facts = [], cols = 2 } = Astro.props;
+const at = mark ? h1.indexOf(mark) : -1;
+const parts = at >= 0 ? [h1.slice(0, at), mark!, h1.slice(at + mark!.length)] : [h1, '', ''];
+const hasAside = Astro.slots.has('aside') || facts.length > 0;
+---
+
+<section class="ihero" aria-labelledby="ihero-h">
+  <div class:list={['ihero-frame', { 'ihero-solo': !hasAside }]}>
+    <div class="ihero-copy">
+      <Breadcrumbs items={crumbs} />
+      {eyebrow && <p class="eyebrow ihero-eyebrow">{eyebrow}</p>}
+      <h1 id="ihero-h">{parts[0]}{parts[1] && <span class="serif">{parts[1]}</span>}{parts[2]}</h1>
+      {lead && <p class="ihero-lead">{lead}</p>}
+      <div class="ihero-actions"><slot /></div>
+    </div>
+    {
+      hasAside && (
+        <div class="ihero-aside">
+          <slot name="aside">
+            <ul class="ihero-facts" style={`--cols:${cols}`}>
+              {facts.map((f) => (
+                <li>
+                  <b>{f.big}</b>
+                  <span>{f.small}</span>
+                </li>
+              ))}
+            </ul>
+          </slot>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .ihero {
+    margin-top: 12px;
+    padding-inline: 12px;
+  }
+  .ihero-frame {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: clamp(28px, 5vw, 72px);
+    align-items: center;
+    max-width: 1400px;
+    margin-inline: auto;
+    padding: clamp(20px, 3vw, 36px) clamp(20px, 4vw, 56px) clamp(32px, 4.5vw, 64px);
+    border-radius: 32px;
+    overflow: clip;
+    background:
+      radial-gradient(60% 90% at 100% 0%, rgba(20, 33, 61, 0.1), transparent 62%),
+      linear-gradient(135deg, #fff 0%, #f2f2f2 100%);
+    border: 1px solid #e5e5e5;
+    color: var(--ink);
+  }
+  .ihero-solo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .ihero-copy {
+    display: grid;
+    gap: 18px;
+    justify-items: start;
+    max-width: 760px;
+  }
+  .ihero-copy :global(.crumbs) {
+    margin-bottom: 4px;
+  }
+  .ihero-eyebrow {
+    margin: 0 0 -6px;
+  }
+  .ihero-copy h1 {
+    margin: 0;
+    font-size: clamp(2.4rem, 4.4vw, 3.8rem);
+    line-height: 1.04;
+    font-weight: 800 !important;
+    letter-spacing: -0.03em;
+    color: #000;
+    text-wrap: balance;
+  }
+  .ihero-lead {
+    margin: 0;
+    max-width: 34em;
+    font-size: 1.08rem;
+    line-height: 1.55;
+    color: var(--navy, #14213d);
+  }
+  .ihero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .ihero-actions:empty {
+    display: none;
+  }
+  /* hero buttons (slot): <a|button class="ib ib-main"> / <… class="ib ib-glass"> */
+  .ihero-actions :global(.ib) {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 56px;
+    border-radius: 999px;
+    font: inherit;
+    font-weight: 600;
+    font-size: 0.98rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  .ihero-actions :global(.ib-main) {
+    padding: 7px 7px 7px 24px;
+    border: 0;
+    background: var(--navy, #14213d);
+    color: #fff;
+  }
+  .ihero-actions :global(.ib-main:hover) {
+    background: #000;
+    color: #fff;
+  }
+  .ihero-actions :global(.ib-go),
+  .ihero-actions :global(.ib-ico) {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    flex: none;
+    transition: transform 0.2s ease;
+  }
+  .ihero-actions :global(.ib-go) {
+    background: #fff;
+    color: var(--navy, #14213d);
+  }
+  .ihero-actions :global(.ib-main:hover .ib-go) {
+    transform: translateX(3px);
+  }
+  .ihero-actions :global(.ib-glass) {
+    padding: 7px 24px 7px 7px;
+    border: 1px solid rgba(20, 33, 61, 0.18);
+    background: rgba(255, 255, 255, 0.6);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    color: var(--navy, #14213d);
+  }
+  .ihero-actions :global(.ib-glass:hover) {
+    background: #fff;
+    color: var(--navy, #14213d);
+  }
+  .ihero-actions :global(.ib-ico) {
+    border: 1px solid rgba(20, 33, 61, 0.25);
+  }
+  .ihero-aside {
+    min-width: 0;
+  }
+  .ihero-facts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    gap: 14px;
+  }
+  .ihero-facts li {
+    display: grid;
+    gap: 6px;
+    align-content: center;
+    padding: 22px 24px;
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(20, 33, 61, 0.9);
+    -webkit-backdrop-filter: saturate(1.3) blur(18px);
+    backdrop-filter: saturate(1.3) blur(18px);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) inset, 0 24px 60px -30px rgba(0, 0, 0, 0.6);
+    color: #fff;
+  }
+  .ihero-facts b {
+    font-size: clamp(1.6rem, 2.4vw, 2.2rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .ihero-facts span {
+    font-size: 0.88rem;
+    line-height: 1.35;
+    color: rgba(255, 255, 255, 0.78);
+  }
+  :global(html.motion-ready) .ihero-copy {
+    animation: lx-fade 0.7s cubic-bezier(0.23, 1, 0.32, 1) 0.1s both;
+  }
+  :global(html.motion-ready) .ihero-aside {
+    animation: lx-fade 0.7s cubic-bezier(0.23, 1, 0.32, 1) 0.25s both;
+  }
+  @media (max-width: 960px) {
+    .ihero-frame {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 26px;
+    }
+  }
+  @media (max-width: 760px) {
+    .ihero {
+      margin-top: 8px;
+      padding-inline: 8px;
+    }
+    .ihero-frame {
+      border-radius: 24px;
+      padding: 14px 16px 20px;
+    }
+    .ihero-copy :global(.crumbs ol) {
+      flex-wrap: nowrap;
+      white-space: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .ihero-copy h1 {
+      font-size: 2.1rem;
+    }
+    .ihero-lead {
+      font-size: 1rem;
+    }
+    .ihero-actions {
+      display: grid;
+      width: 100%;
+    }
+    .ihero-actions :global(.ib-main) {
+      justify-content: space-between;
+    }
+    .ihero-facts {
+      gap: 8px;
+    }
+    .ihero-facts li {
+      padding: 14px 14px;
+      border-radius: 20px;
+      background: var(--navy, #14213d);
+    }
+    .ihero-facts b {
+      font-size: 1.3rem;
+    }
+    .ihero-facts span {
+      font-size: 0.78rem;
+    }
+  }
+</style>

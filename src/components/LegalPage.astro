@@ -1,5 +1,6 @@
 ---
-import Breadcrumbs from '@/components/Breadcrumbs.astro';
+// Legal text (политика, оферта) in the «Ink» look: light first screen, then a calm reading column ≤ 72 characters.
+import InkHero from '@/components/ink/InkHero.astro';
 
 interface Props {
   /** H1 and last breadcrumb */
@@ -10,43 +11,55 @@ interface Props {
 
 const { title, updated } = Astro.props;
 const path = Astro.url.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
+const crumbs = [
+  { name: 'Главная', href: '/' },
+  { name: title, href: path },
+];
+const words = title.split(' ');
+const mark = words[words.length - 1];
 ---
 
-<section class="section">
-  <div class="wrap legal">
-    <Breadcrumbs
-      items={[
-        { name: 'Главная', href: '/' },
-        { name: title, href: path },
-      ]}
-    />
-    <h1>{title}</h1>
-    {updated && <p class="muted legal-updated">Редакция от {updated}</p>}
-    <article class="prose legal-body">
-      <slot />
-    </article>
-  </div>
-</section>
+<InkHero crumbs={crumbs} h1={title} mark={mark} lead={updated ? `Редакция от ${updated}` : undefined} />
+<div class="band">
+  <section class="section legal">
+    <div class="wrap">
+      <article class="legal-body">
+        <slot />
+      </article>
+    </div>
+  </section>
+</div>
 
 <style>
-  .legal h1 {
-    margin-top: 0.6em;
-    max-width: 780px;
-  }
-  .legal-updated {
-    margin-top: 0.5em;
-    font-size: 0.95rem;
+  .legal {
+    padding-block: clamp(36px, 5vw, 72px);
   }
   .legal-body {
-    max-width: 780px;
-    margin-top: 2em;
+    max-width: 72ch;
+    margin-inline: auto;
+    font-size: 1.04rem;
     line-height: 1.7;
+    color: var(--ink-2);
+  }
+  @media (min-width: 1100px) {
+    .legal-body {
+      margin-inline: 0;
+    }
+  }
+  .legal-body :global(.muted) {
+    padding: 14px 18px;
+    border-radius: 20px;
+    border: 1px solid #e5e5e5;
+    background: #f2f2f2;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: var(--muted);
   }
   .legal-body :global(h2) {
-    font-size: 1.35rem;
-    line-height: 1.3;
-    margin-top: 2em;
-    margin-bottom: 0.6em;
+    margin: 2em 0 0.6em;
+    font-size: 1.35rem !important;
+    line-height: 1.3 !important;
+    color: #000;
   }
   .legal-body :global(h2:first-child) {
     margin-top: 0;
@@ -76,6 +89,12 @@ const path = Astro.url.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/'
     margin-top: 0.9em;
   }
   .legal-body :global(a) {
-    color: var(--m-ink);
+    color: var(--navy, #14213d);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .legal-body :global(h2 + p.muted),
+  .legal-body :global(p.muted + h2) {
+    margin-top: 1.6em;
   }
 </style>

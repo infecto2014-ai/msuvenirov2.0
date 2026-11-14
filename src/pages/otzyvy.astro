@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import InkHero from '@/components/ink/InkHero.astro';
 import Reviews from '@/components/Reviews.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import { reviews } from '@/data/reviews';
@@ -17,18 +17,20 @@ const crumbs = [
   path="/otzyvy"
   schema={[breadcrumbs(crumbs)]}
 >
-  <section class="wrap rtop">
-    <Breadcrumbs items={crumbs} />
-    <h1>Отзывы клиентов</h1>
-  </section>
-  <Reviews limit={reviews.length} more={false} scroll={false} />
-  <CtaBand title="Заказывали у нас?" text="Будем благодарны за отзыв на Яндекс Картах, 2ГИС или Авито — это помогает другим найти мастерскую." />
+  <InkHero
+    crumbs={crumbs}
+    h1="Отзывы клиентов"
+    mark="клиентов"
+    lead="Настоящие отзывы с Авито, Яндекс Карт и 2ГИС — с площадкой и датой."
+    facts={[
+      { big: String(reviews.length), small: 'отзывов на этой странице' },
+      { big: '3', small: 'площадки: Авито, Яндекс Карты, 2ГИС' },
+    ]}
+  />
+  <div class="band">
+    <Reviews limit={reviews.length} more={false} scroll={false} />
+  </div>
+  <div class="band band-tint">
+    <CtaBand title="Заказывали у нас?" text="Будем благодарны за отзыв на Яндекс Картах, 2ГИС или Авито — это помогает другим найти мастерскую." />
+  </div>
 </BaseLayout>
-
-<style>
-  .rtop {
-    display: grid;
-    gap: 16px;
-    padding-top: clamp(28px, 4vw, 56px);
-  }
-</style>

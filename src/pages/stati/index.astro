@@ -3,6 +3,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import CtaBand from '@/components/CtaBand.astro';
+import Icon from '@/components/Icon.astro';
 import { articles, ruDate } from '@/data/articles';
 import { breadcrumbs } from '@/lib/schema';
 
@@ -19,73 +20,84 @@ const list = [...articles].sort((a, b) => b.published.localeCompare(a.published)
   path="/stati"
   schema={[breadcrumbs(crumbs)]}
 >
-  <section class="section st">
-    <div class="wrap">
-      <Breadcrumbs items={crumbs} />
-      <p class="eyebrow">Статьи</p>
-      <h1>Идеи подарков и советы по печати</h1>
-      <p class="lead">Подборки подарков к праздникам и полезное о печати на одежде и сувенирах — от мастерской в Калининграде.</p>
-      <ul class="st-grid">
-        {
-          list.map((a) => (
-            <li class="st-card">
-              <a class="st-pic" href={a.slug} tabindex="-1" aria-hidden="true">
-                <img src={a.cover} alt="" width="400" height="300" loading="lazy" decoding="async" />
-                <span class="st-tag">{a.tag}</span>
-              </a>
-              <div class="st-body">
-                <h2>
-                  <a href={a.slug}>{a.title}</a>
-                </h2>
-                <p>{a.description}</p>
-                <p class="st-meta mono">
-                  <time datetime={a.published}>{ruDate(a.published)}</time> · {a.readMinutes} мин
-                </p>
-              </div>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
+  <div class="band">
+    <section class="section st-top">
+      <div class="wrap">
+        <Breadcrumbs items={crumbs} />
+        <p class="eyebrow">Статьи</p>
+        <h1>Идеи подарков и <span class="serif">советы по печати</span></h1>
+        <p class="lead">Подборки подарков к праздникам и полезное о печати на одежде и сувенирах — от мастерской в Калининграде.</p>
+      </div>
+    </section>
+  </div>
+  <div class="band band-tint">
+    <section class="section st">
+      <div class="wrap">
+        <ul class="st-grid">
+          {
+            list.map((a) => (
+              <li class="st-card">
+                <a class="st-pic" href={a.slug} tabindex="-1" aria-hidden="true">
+                  <img src={a.cover} alt="" width="400" height="300" loading="lazy" decoding="async" />
+                  <span class="st-tag">{a.tag}</span>
+                </a>
+                <div class="st-body">
+                  <h2>
+                    <a href={a.slug}>{a.title}</a>
+                  </h2>
+                  <p>{a.description}</p>
+                  <div class="st-foot">
+                    <p class="st-meta">
+                      <time datetime={a.published}>{ruDate(a.published)}</time> · {a.readMinutes} мин
+                    </p>
+                    <a class="st-go" href={a.slug} aria-label={`Читать: ${a.title}`}><Icon name="arrow" size={16} /></a>
+                  </div>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+  </div>
   <CtaBand />
 </BaseLayout>
 
 <style>
-  .st h1 {
+  .st-top h1 {
     margin-top: 6px;
     font-size: clamp(1.9rem, 3.4vw, 2.8rem);
   }
-  .st .lead {
+  .st-top .lead {
     margin-top: 10px;
+    max-width: 62ch;
   }
   .st-grid {
     list-style: none;
-    margin: 32px 0 0;
+    margin: 0;
     padding: 0;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 18px;
+    gap: clamp(16px, 2vw, 24px);
   }
   .st-card {
     display: flex;
     flex-direction: column;
-    border-radius: 26px;
-    background: var(--card);
-    border: 1.5px solid var(--line);
-    overflow: clip;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  .st-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 22px 36px -26px rgba(15, 29, 39, 0.45);
+    padding: 10px;
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.78);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
   }
   .st-pic {
     position: relative;
     display: block;
     flex: none;
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 4 / 3;
     overflow: clip;
+    border-radius: 20px;
   }
   .st-pic img {
     position: absolute;
@@ -93,26 +105,38 @@ const list = [...articles].sort((a, b) => b.published.localeCompare(a.published)
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  @media (hover: hover) {
+    .st-card:hover .st-pic img {
+      transform: scale(1.03);
+    }
   }
   .st-tag {
     position: absolute;
-    left: 14px;
-    top: 14px;
-    padding: 5px 12px;
+    left: 12px;
+    bottom: 12px;
+    padding: 6px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
     border-radius: 999px;
-    background: #d7262e;
-    color: #fff;
-    font-size: 0.78rem;
-    font-weight: 700;
+    background: rgba(255, 255, 255, 0.86);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    color: var(--navy, #14213d);
+    font-size: 0.8rem;
+    font-weight: 600;
   }
   .st-body {
-    display: grid;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
     gap: 8px;
-    padding: 18px 20px 20px;
+    padding: 16px 10px 8px;
   }
   .st-body h2 {
-    font-size: 1.15rem;
-    line-height: 1.25;
+    margin: 0;
+    font-size: 1.15rem !important;
+    line-height: 1.25 !important;
   }
   .st-body h2 a {
     color: var(--ink);
@@ -120,15 +144,36 @@ const list = [...articles].sort((a, b) => b.published.localeCompare(a.published)
   }
   .st-body h2 a:hover {
     text-decoration: underline;
+    text-underline-offset: 3px;
   }
   .st-body p {
     margin: 0;
     font-size: 0.92rem;
-    color: var(--ink-2);
+    color: var(--muted);
+  }
+  .st-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 10px;
   }
   .st-body .st-meta {
-    font-size: 0.8rem;
-    color: var(--muted);
+    font-size: 0.82rem;
+  }
+  .st-go {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--navy, #14213d);
+    color: #fff;
+    transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .st-card:hover .st-go {
+    transform: translateX(3px);
   }
   @media (max-width: 1020px) {
     .st-grid {
@@ -138,6 +183,16 @@ const list = [...articles].sort((a, b) => b.published.localeCompare(a.published)
   @media (max-width: 560px) {
     .st-grid {
       grid-template-columns: 1fr;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .st-pic img,
+    .st-go {
+      transition: none;
+    }
+    .st-card:hover .st-go,
+    .st-card:hover .st-pic img {
+      transform: none;
     }
   }
 </style>

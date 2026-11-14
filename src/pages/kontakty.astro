@@ -1,12 +1,31 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import ContactBlock from '@/components/ContactBlock.astro';
+import Icon from '@/components/Icon.astro';
+import InkHero from '@/components/ink/InkHero.astro';
+import { ink } from '@/components/ink/icons';
 import { site } from '@/data/site';
 import { breadcrumbs } from '@/lib/schema';
 const crumbs = [
   { name: 'Главная', href: '/' },
   { name: 'Контакты', href: '/kontakty' },
+];
+const info = [
+  {
+    icon: 'pin',
+    title: 'Как нас найти',
+    html: 'ТЦ «Экватор» на улице Генерала Челнокова, 2 этаж. Перед визитом лучше написать или позвонить — подготовим образцы и сразу обсудим макет.',
+  },
+  {
+    icon: 'card',
+    title: 'Оплата',
+    html: 'Наличными, картой или по QR-коду. Частным лицам — предоплата 50%, остаток при получении. Организациям — оплата по счёту без НДС, с закрывающими документами.',
+  },
+  {
+    icon: 'file',
+    title: 'Реквизиты',
+    html: `${site.legal.name}<br />ОГРНИП ${site.legal.ogrnip}<br />ИНН ${site.legal.inn}`,
+  },
 ];
 ---
 
@@ -16,32 +35,48 @@ const crumbs = [
   path="/kontakty"
   schema={[breadcrumbs(crumbs)]}
 >
-  <section class="wrap ktop">
-    <Breadcrumbs items={crumbs} />
-    <h1>Контакты</h1>
-  </section>
-  <ContactBlock />
-  <section class="wrap kinfo">
-    <div class="card kcard">
-      <h2>Как нас найти</h2>
-      <p>ТЦ «Экватор» на улице Генерала Челнокова, 2 этаж. Перед визитом лучше написать или позвонить — подготовим образцы и сразу обсудим макет.</p>
-    </div>
-    <div class="card kcard">
-      <h2>Оплата</h2>
-      <p>Наличными, картой или по QR-коду. Частным лицам — предоплата 50%, остаток при получении. Организациям — оплата по счёту без НДС, с закрывающими документами.</p>
-    </div>
-    <div class="card kcard">
-      <h2>Реквизиты</h2>
-      <p>{site.legal.name}<br />ОГРНИП {site.legal.ogrnip}<br />ИНН {site.legal.inn}</p>
-    </div>
-  </section>
+  <InkHero
+    crumbs={crumbs}
+    h1="Контакты"
+    mark="Контакты"
+    lead="Приходите в мастерскую, звоните или пишите в мессенджеры — ответим и посчитаем заказ."
+    facts={[
+      { big: '10:00–20:00', small: 'ежедневно' },
+      { big: '2 этаж', small: 'ТЦ «Экватор», Калининград' },
+    ]}
+  >
+    <a class="ib ib-main" href={site.social.telegram} target="_blank" rel="noopener">Написать в Telegram <span class="ib-go" aria-hidden="true"><Icon name="arrow" size={16} /></span></a>
+    <a class="ib ib-glass" href={site.phoneHref}><span class="ib-ico" aria-hidden="true"><Icon name="phone" size={16} /></span> {site.phone}</a>
+  </InkHero>
+
+  <div class="band">
+    <ContactBlock />
+  </div>
+
+  <div class="band band-tint">
+    <section class="section kinfo-sec" aria-label="Как нас найти, оплата, реквизиты">
+      <div class="wrap kinfo">
+        {
+          info.map((c) => (
+            <article class="kcard">
+              <span class="kico" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d={ink[c.icon]} />
+                </svg>
+              </span>
+              <h2>{c.title}</h2>
+              <p set:html={c.html} />
+            </article>
+          ))
+        }
+      </div>
+    </section>
+  </div>
 </BaseLayout>
 
 <style>
-  .ktop {
-    display: grid;
-    gap: 16px;
-    padding-top: clamp(28px, 4vw, 56px);
+  .kinfo-sec {
+    padding-block: clamp(36px, 5vw, 64px);
   }
   .kinfo {
     display: grid;
@@ -49,14 +84,42 @@ const crumbs = [
     gap: 16px;
   }
   .kcard {
+    display: grid;
+    align-content: start;
+    gap: 10px;
     padding: 26px;
-    border-radius: var(--radius-l);
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.78);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
+    outline: 1px solid #e5e5e5;
+    outline-offset: -1px;
+  }
+  .kico {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--navy, #14213d);
+    color: #fff;
   }
   .kcard h2 {
-    font-size: 1.3rem;
-    margin-bottom: 10px;
+    margin: 4px 0 0;
+    font-size: 1.3rem !important;
+    line-height: 1.2 !important;
   }
   .kcard p {
+    margin: 0;
     color: var(--ink-2);
+    line-height: 1.55;
+  }
+  @media (max-width: 760px) {
+    .kcard {
+      padding: 18px;
+      border-radius: 22px;
+    }
   }
 </style>

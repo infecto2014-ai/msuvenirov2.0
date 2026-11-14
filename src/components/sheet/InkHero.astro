@@ -1,0 +1,395 @@
+---
+// First screen for the «Ink» service pages that have an SVG product instead of a photo (shoppers, sublimation, workwear,
+// sport, DTF sheets). Same skeleton as tee/TeeHero: white rounded frame, h1 with a marker word, lead, two buttons,
+// navy glass fact cards. The drawing goes into the default slot and sits on a light glass panel on the right.
+// A slotted «stage» (.shero-stage: fixed 440 × 440 box, zoomed by --hz) is scaled here, so a page only positions its items.
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Icon from '@/components/Icon.astro';
+import { rub } from '@/data/pricing';
+
+interface Props {
+  h1: string;
+  /** words of the h1 to mark */
+  mark?: string;
+  lead: string;
+  crumbs: { name: string; href: string }[];
+  /** «from» price from pricing.ts */
+  from: number;
+  priceNote: string;
+  facts: { big: string; small: string }[];
+  label: string;
+  /** text of the calculator button */
+  calcText?: string;
+  /** value of data-order for the «Отправить макет» button (empty = plain order form) */
+  order?: string;
+}
+const { h1, mark = '', lead, crumbs, from, priceNote, facts, label, calcText = 'Рассчитать стоимость', order = '' } = Astro.props;
+const at = mark ? h1.indexOf(mark) : -1;
+const parts = at >= 0 ? [h1.slice(0, at), mark, h1.slice(at + mark.length)] : [h1, '', ''];
+const nb = (s: string) => s.replace(/ (?=\S{1,3}(?: |$))/g, ' ');
+---
+
+<section class="ih" aria-labelledby="ih-h">
+  <div class="ih-frame">
+    <div class="ih-inner">
+      <div class="ih-copy">
+        <Breadcrumbs items={crumbs} />
+        <h1 id="ih-h" class="ih-title">{parts[0]}{parts[1] && <span class="serif">{parts[1]}</span>}{parts[2].replace(/ в /g, ' в ')}</h1>
+        <p class="ih-lead">{nb(lead)}</p>
+        <div class="ih-actions">
+          <a class="ih-btn ih-btn-main" href="#calc">{calcText} <span class="ih-btn-go" aria-hidden="true"><Icon name="arrow" size={16} /></span></a>
+          <button type="button" class="ih-btn ih-btn-glass" data-order={order}><span class="ih-btn-ico" aria-hidden="true"><Icon name="upload" size={16} /></span> Отправить макет</button>
+        </div>
+      </div>
+
+      <div class="ih-art" role="img" aria-label={label}>
+        <div class="ih-panel" aria-hidden="true">
+          <slot />
+        </div>
+        <p class="ih-price"><span>от</span> <b>{rub(from)}</b> <small>{priceNote}</small></p>
+      </div>
+
+      <ul class="ih-cards">
+        {
+          facts.map((f) => (
+            <li class="ih-card">
+              <b>{f.big}</b>
+              <span set:html={f.small} />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ih {
+    margin-top: 12px;
+    padding-inline: 12px;
+  }
+  .ih-frame {
+    position: relative;
+    isolation: isolate;
+    border-radius: 32px;
+    overflow: clip;
+    background: #fff;
+    color: var(--ink);
+  }
+  /* quiet navy-grey glow behind the drawing */
+  .ih-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(60% 80% at 82% 38%, rgba(20, 33, 61, 0.1), rgba(20, 33, 61, 0) 70%),
+      linear-gradient(0deg, rgba(242, 242, 242, 0.9), rgba(255, 255, 255, 0) 40%);
+  }
+  .ih-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    grid-template-areas: 'copy art' 'cards art2';
+    gap: 28px clamp(24px, 4vw, 64px);
+    align-items: center;
+    max-width: 1400px;
+    margin-inline: auto;
+    padding: clamp(20px, 3vw, 36px) clamp(20px, 4vw, 56px) clamp(16px, 2.4vw, 28px);
+  }
+  .ih-copy {
+    grid-area: copy;
+    max-width: 640px;
+  }
+  .ih-art {
+    grid-area: art;
+    grid-row: 1 / span 2;
+    position: relative;
+    justify-self: center;
+    width: min(100%, 520px);
+  }
+  .ih-cards {
+    grid-area: cards;
+  }
+  .ih-copy :global(.crumbs) {
+    margin-bottom: 18px;
+  }
+  .ih-title {
+    margin: 0;
+    font-size: clamp(2.3rem, 4.2vw, 3.7rem);
+    line-height: 1.04;
+    font-weight: 800 !important;
+    letter-spacing: -0.03em;
+    color: #000;
+    text-wrap: balance;
+  }
+  .ih-lead {
+    margin: 22px 0 0;
+    max-width: 32em;
+    font-size: 1.08rem;
+    line-height: 1.55;
+    color: var(--navy, #14213d);
+  }
+  .ih-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 30px;
+  }
+  .ih-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 56px;
+    border-radius: 999px;
+    font: inherit;
+    font-weight: 600;
+    font-size: 0.98rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  .ih-btn-main {
+    padding: 7px 7px 7px 24px;
+    border: 0;
+    background: var(--navy, #14213d);
+    color: #fff;
+  }
+  .ih-btn-main:hover {
+    background: #000;
+    color: #fff;
+  }
+  .ih-btn-go,
+  .ih-btn-ico {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    flex: none;
+    transition: transform 0.2s ease;
+  }
+  .ih-btn-go {
+    background: #fff;
+    color: var(--navy, #14213d);
+  }
+  .ih-btn-main:hover .ih-btn-go {
+    transform: translateX(3px);
+  }
+  .ih-btn-glass {
+    padding: 7px 24px 7px 7px;
+    border: 1px solid rgba(20, 33, 61, 0.18);
+    background: rgba(255, 255, 255, 0.6);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    color: var(--navy, #14213d);
+  }
+  .ih-btn-glass:hover {
+    background: #fff;
+    color: var(--navy, #14213d);
+  }
+  .ih-btn-ico {
+    border: 1px solid rgba(20, 33, 61, 0.25);
+  }
+
+  /* light glass panel with the drawing; the stage is 440 px wide and zoomed to the panel */
+  .ih-panel {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.92), rgba(229, 229, 229, 0.7));
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 30px 60px -40px rgba(20, 33, 61, 0.55);
+    overflow: clip;
+    --hz: 1.08;
+  }
+  .ih-panel :global(.shero-stage) {
+    zoom: var(--hz);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 440px;
+    height: 440px;
+    margin: -220px 0 0 -220px;
+  }
+
+  .ih-price {
+    position: absolute;
+    z-index: 2;
+    top: 18px;
+    right: 18px;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin: 0;
+    padding: 12px 20px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.85);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.5);
+    color: var(--navy, #14213d);
+    line-height: 1;
+  }
+  .ih-price b {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+  .ih-price span,
+  .ih-price small {
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+  .ih-price small {
+    color: var(--muted);
+  }
+
+  /* fact cards: navy glass */
+  .ih-cards {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .ih-card {
+    display: grid;
+    gap: 6px;
+    align-content: center;
+    padding: 20px 24px;
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(20, 33, 61, 0.84);
+    -webkit-backdrop-filter: saturate(1.3) blur(18px);
+    backdrop-filter: saturate(1.3) blur(18px);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) inset, 0 24px 60px -30px rgba(0, 0, 0, 0.6);
+    color: #fff;
+  }
+  .ih-card b {
+    font-size: clamp(1.25rem, 1.8vw, 1.7rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    color: #fff;
+  }
+  .ih-card span {
+    font-size: 0.85rem;
+    line-height: 1.35;
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  :global(html.motion-ready) .ih-art {
+    animation: lx-settle 1.2s cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+  :global(html.motion-ready) .ih-copy {
+    animation: lx-fade 0.7s cubic-bezier(0.23, 1, 0.32, 1) 0.15s both;
+  }
+  :global(html.motion-ready) .ih-cards {
+    animation: lx-fade 0.7s cubic-bezier(0.23, 1, 0.32, 1) 0.3s both;
+  }
+
+  @media (max-width: 1100px) {
+    .ih-panel {
+      --hz: 0.88;
+    }
+    .ih-inner {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr);
+    }
+  }
+  @media (max-width: 860px) {
+    .ih-inner {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: 'art' 'copy' 'cards';
+      gap: 22px;
+    }
+    .ih-art {
+      grid-row: auto;
+      width: min(100%, 420px);
+    }
+    .ih-panel {
+      --hz: 0.86;
+    }
+  }
+  @media (max-width: 760px) {
+    .ih {
+      margin-top: 8px;
+      padding-inline: 8px;
+    }
+    .ih-frame {
+      border-radius: 24px;
+    }
+    .ih-inner {
+      padding: 14px 16px 16px;
+    }
+    .ih-art {
+      width: 100%;
+    }
+    .ih-panel {
+      aspect-ratio: auto;
+      height: 270px;
+      border-radius: 22px;
+      --hz: 0.6;
+    }
+    .ih-price {
+      top: 10px;
+      right: 10px;
+      padding: 8px 14px;
+    }
+    .ih-price b {
+      font-size: 1.15rem;
+    }
+    .ih-price small {
+      display: none;
+    }
+    .ih-copy :global(.crumbs ol) {
+      flex-wrap: nowrap;
+      white-space: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .ih-copy :global(.crumbs) {
+      margin-bottom: 4px;
+    }
+    .ih-title {
+      font-size: 2.05rem;
+    }
+    .ih-lead {
+      margin-top: 14px;
+      font-size: 1rem;
+    }
+    .ih-actions {
+      display: grid;
+      margin-top: 22px;
+    }
+    .ih-btn {
+      justify-content: space-between;
+    }
+    .ih-btn-glass {
+      justify-content: flex-start;
+    }
+    .ih-cards {
+      gap: 8px;
+    }
+    .ih-card {
+      padding: 14px 12px;
+      border-radius: 20px;
+      background: var(--navy, #14213d);
+    }
+    .ih-card b {
+      font-size: 1.05rem;
+    }
+    .ih-card span {
+      font-size: 0.75rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ih-btn,
+    .ih-btn-go {
+      transition: none;
+    }
+  }
+</style>

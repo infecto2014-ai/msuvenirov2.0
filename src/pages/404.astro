@@ -1,36 +1,125 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
 ---
 
 <BaseLayout title="Страница не найдена — Мастерская сувениров" description="Такой страницы нет. Перейдите на главную или в каталог услуг." noindex path="/404">
-  <section class="wrap nf">
-    <p class="nf-code mono misreg" aria-hidden="true">404</p>
-    <h1>Эта страница не напечаталась</h1>
-    <p class="lead">Возможно, ссылка устарела. Посмотрите услуги или посчитайте цену в калькуляторе.</p>
-    <div class="nf-actions">
-      <a class="btn" href="/">На главную</a>
-      <a class="btn btn-ghost" href="/uslugi">Все услуги</a>
-      <a class="btn btn-ghost" href="/price">Калькулятор</a>
+  <section class="nf-wrap">
+    <div class="nf">
+      <p class="nf-code" aria-hidden="true">404</p>
+      <h1>Эта страница <span class="serif">не напечаталась</span></h1>
+      <p class="nf-lead">Возможно, ссылка устарела. Посмотрите услуги или посчитайте цену в калькуляторе.</p>
+      <div class="nf-actions">
+        <a class="nf-btn nf-main" href="/">На главную <span class="nf-go" aria-hidden="true"><Icon name="arrow" size={16} /></span></a>
+        <a class="nf-btn nf-glass" href="/uslugi">Все услуги</a>
+        <a class="nf-btn nf-glass" href="/price">Калькулятор</a>
+      </div>
     </div>
   </section>
 </BaseLayout>
 
 <style>
+  .nf-wrap {
+    margin-top: 12px;
+    padding-inline: 12px;
+  }
   .nf {
     display: grid;
     gap: 18px;
     justify-items: start;
-    padding-block: clamp(48px, 8vw, 120px);
+    max-width: 1400px;
+    margin-inline: auto;
+    padding: clamp(40px, 7vw, 110px) clamp(20px, 4vw, 56px);
+    border-radius: 32px;
+    border: 1px solid #e5e5e5;
+    background:
+      radial-gradient(60% 90% at 100% 0%, rgba(20, 33, 61, 0.1), transparent 62%),
+      linear-gradient(135deg, #fff 0%, #f2f2f2 100%);
   }
   .nf-code {
+    margin: 0;
     font-size: clamp(5rem, 18vw, 12rem);
-    font-weight: 700;
+    font-weight: 800;
     line-height: 0.9;
     letter-spacing: -0.06em;
+    color: var(--navy, #14213d);
+  }
+  .nf h1 {
+    margin: 0;
+    font-size: clamp(2.1rem, 4.4vw, 3.4rem);
+    line-height: 1.05;
+    font-weight: 800 !important;
+    letter-spacing: -0.03em;
+    color: #000;
+  }
+  .nf-lead {
+    margin: 0;
+    max-width: 34em;
+    font-size: 1.08rem;
+    color: var(--navy, #14213d);
   }
   .nf-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 12px;
+    margin-top: 10px;
+  }
+  .nf-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 56px;
+    border-radius: 999px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+  }
+  .nf-main {
+    padding: 7px 7px 7px 24px;
+    background: var(--navy, #14213d);
+    color: #fff;
+  }
+  .nf-main:hover {
+    background: #000;
+    color: #fff;
+  }
+  .nf-go {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--navy, #14213d);
+  }
+  .nf-glass {
+    padding: 0 26px;
+    border: 1px solid rgba(20, 33, 61, 0.18);
+    background: rgba(255, 255, 255, 0.6);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    color: var(--navy, #14213d);
+  }
+  .nf-glass:hover {
+    background: #fff;
+    color: var(--navy, #14213d);
+  }
+  @media (max-width: 760px) {
+    .nf-wrap {
+      padding-inline: 8px;
+    }
+    .nf {
+      border-radius: 24px;
+    }
+    .nf-actions {
+      display: grid;
+      width: 100%;
+    }
+    .nf-btn {
+      justify-content: center;
+    }
+    .nf-main {
+      justify-content: space-between;
+    }
   }
 </style>

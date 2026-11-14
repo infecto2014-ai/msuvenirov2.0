@@ -1,7 +1,9 @@
 ---
+// Content pages (О нас, Требования к макетам) in the «Ink» look: light first screen (InkHero), blocks as bands
+// (InkBlocks), then the page's own extra bands (slot «after»), FAQ and the closing navy panel.
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Breadcrumbs from '@/components/Breadcrumbs.astro';
-import ServiceBlocks from '@/components/ServiceBlocks.astro';
+import InkHero from '@/components/ink/InkHero.astro';
+import InkBlocks from '@/components/ink/InkBlocks.astro';
 import FaqSection from '@/components/FaqSection.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import type { ContentPage } from '@/data/pages';
@@ -11,8 +13,13 @@ interface Props {
   page: ContentPage;
   path: string;
   crumb: string;
+  /** word of the h1 to mark */
+  mark?: string;
+  facts?: { big: string; small: string }[];
+  /** tone of the FAQ band; the closing panel takes the other one */
+  faqTone?: 'plain' | 'tint';
 }
-const { page, path, crumb } = Astro.props;
+const { page, path, crumb, mark, facts, faqTone = 'tint' } = Astro.props;
 const crumbs = [
   { name: 'Главная', href: '/' },
   { name: crumb, href: path },
@@ -20,31 +27,21 @@ const crumbs = [
 ---
 
 <BaseLayout title={page.title} description={page.description} path={path} schema={[breadcrumbs(crumbs), ...(page.faq.length ? [faqPage(page.faq)] : [])]}>
-  <section class="chero">
-    <div class="wrap chero-inner">
-      <Breadcrumbs items={crumbs} />
-      <h1>{page.h1}</h1>
-      <p class="lead">{page.lead}</p>
-      <slot name="hero" />
-    </div>
-  </section>
+  <InkHero crumbs={crumbs} h1={page.h1} mark={mark} lead={page.lead} facts={facts}>
+    <slot name="hero" />
+    {Astro.slots.has('aside') && <slot name="aside" slot="aside" />}
+  </InkHero>
   <slot />
-  <ServiceBlocks blocks={page.blocks} />
+  <InkBlocks blocks={page.blocks} />
   <slot name="after" />
-  {page.faq.length > 0 && <FaqSection items={page.faq} />}
-  <CtaBand />
+  {
+    page.faq.length > 0 && (
+      <div class={faqTone === 'tint' ? 'band band-tint' : 'band'}>
+        <FaqSection items={page.faq} />
+      </div>
+    )
+  }
+  <div class={faqTone === 'tint' ? 'band' : 'band band-tint'}>
+    <CtaBand />
+  </div>
 </BaseLayout>
-
-<style>
-  .chero {
-    padding-block: clamp(28px, 4vw, 56px) 8px;
-  }
-  .chero-inner {
-    display: grid;
-    gap: 18px;
-    justify-items: start;
-  }
-  .chero-inner h1 {
-    max-width: 900px;
-  }
-</style>
