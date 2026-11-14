@@ -65,7 +65,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   <!-- HERO (owner, 14.11.2026, by a reference): photo in a rounded frame, glass header over it, floating glass cards
        at the bottom. Photo — the man at the cathedral, colours — CMYK 2.0 (owner: «прошлое изображение и прошлую гамму»). -->
   <section class="lx-hero" aria-labelledby="hero-h">
-    <div class="lx-frame lx-dark">
+    <div class="lx-frame">
       <picture class="lx-photo">
         <img src="/img/hero-kaliningrad-1600.webp" srcset="/img/hero-kaliningrad-900.webp 900w, /img/hero-kaliningrad-1600.webp 1600w" sizes="100vw" alt="" width="1600" height="1074" fetchpriority="high" decoding="async" />
       </picture>
@@ -249,8 +249,8 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     min-height: min(calc(100svh - 100px), 820px);
     border-radius: 32px;
     overflow: clip;
-    background: var(--navy);
-    color: #fff;
+    background: #fff;
+    color: var(--ink);
   }
   .lx-photo img {
     position: absolute;
@@ -267,8 +267,9 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     inset: 0;
     z-index: -1;
     background:
-      linear-gradient(90deg, rgba(20, 33, 61, 0.94) 0%, rgba(20, 33, 61, 0.8) 32%, rgba(20, 33, 61, 0.15) 62%, rgba(20, 33, 61, 0) 75%),
-      linear-gradient(0deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0) 38%);
+      /* white haze on the left (owner, 14.11.2026: «не синий оттенок слева, а белый») — dark text on it */
+      linear-gradient(90deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.86) 30%, rgba(255, 255, 255, 0.25) 58%, rgba(255, 255, 255, 0) 72%),
+      linear-gradient(0deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0) 30%);
   }
   .lx-inner {
     position: relative;
@@ -291,18 +292,20 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     line-height: 1.02;
     font-weight: 800 !important;
     letter-spacing: -0.03em;
-    color: #fff;
+    color: #000;
     text-wrap: balance;
   }
   .lx-title .serif {
     display: block;
+    background: none !important;
+    padding: 0;
   }
   .lx-lead {
     margin: 22px 0 0;
     max-width: 30em;
     font-size: 1.08rem;
     line-height: 1.55;
-    color: rgba(255, 255, 255, 0.82);
+    color: var(--navy);
   }
   .lx-actions {
     display: flex;
@@ -326,12 +329,12 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   .lx-btn-main {
     padding: 7px 7px 7px 24px;
     border: 0;
-    background: var(--amber);
-    color: #000;
+    background: var(--navy);
+    color: #fff;
   }
   .lx-btn-main:hover {
-    background: var(--amber-dark);
-    color: #000;
+    background: #000;
+    color: #fff;
   }
   .lx-btn-go,
   .lx-btn-ico {
@@ -344,26 +347,26 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     transition: transform 0.2s ease;
   }
   .lx-btn-go {
-    background: #000;
-    color: #fff;
+    background: #fff;
+    color: var(--navy);
   }
   .lx-btn-main:hover .lx-btn-go {
     transform: translateX(3px);
   }
   .lx-btn-glass {
     padding: 7px 24px 7px 7px;
-    border: 1px solid var(--glass-dark-line);
-    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(20, 33, 61, 0.18);
+    background: rgba(255, 255, 255, 0.6);
     -webkit-backdrop-filter: blur(14px);
     backdrop-filter: blur(14px);
-    color: #fff;
+    color: var(--navy);
   }
   .lx-btn-glass:hover {
-    background: rgba(255, 255, 255, 0.18);
-    color: #fff;
+    background: #fff;
+    color: var(--navy);
   }
   .lx-btn-ico {
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(20, 33, 61, 0.25);
   }
   /* floating glass cards */
   .lx-cards {
@@ -378,7 +381,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     margin: 0;
     border-radius: 28px;
     border: 1px solid var(--glass-dark-line);
-    background: var(--glass-dark);
+    background: rgba(20, 33, 61, 0.84);
     -webkit-backdrop-filter: saturate(1.3) blur(18px);
     backdrop-filter: saturate(1.3) blur(18px);
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) inset, 0 24px 60px -30px rgba(0, 0, 0, 0.6);
@@ -653,7 +656,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     .lx-photo {
       display: block;
       position: relative;
-      background: var(--navy);
+      background: #fff;
     }
     .lx-photo img {
       position: relative;
@@ -667,7 +670,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
       position: absolute;
       inset: auto 0 0;
       height: 90px;
-      background: linear-gradient(180deg, rgba(20, 33, 61, 0), var(--navy));
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0), #fff);
     }
     .lx-frame::before {
       display: none;
@@ -696,9 +699,13 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     .lx-cards {
       grid-template-columns: minmax(0, 1fr);
     }
-    /* over plain navy (no photo behind) — a lighter navy card */
+    /* on the white phone frame the cards are solid navy */
     .lx-card:not(.lx-cta) {
-      background: rgba(255, 255, 255, 0.06);
+      background: var(--navy);
+    }
+    .lx-cta {
+      border-color: var(--line) !important;
+      box-shadow: var(--shadow);
     }
     .lx-work {
       grid-template-columns: 110px minmax(0, 1fr);
