@@ -1,0 +1,51 @@
+/* =====================================================================================
+   Home page button accent (owner, 14.11.2026: «переделай акценты кнопок на главной на такой цвет #E56B6F»).
+   Only the home page imports this file (index.astro). Main buttons are coral with white text; the arrow circles
+   inside them are white with a coral arrow; the small accent circles elsewhere are coral.
+   ===================================================================================== */
+body.theme-lux {
+  --coral: #e56b6f;
+  --coral-dark: #cf5156;
+}
+
+/* main buttons, on light and dark grounds alike */
+body.theme-lux:not(#nav) :is(.lx-btn-main, .btn-magenta, .hdr-cta, .hny-btn, .hb-btn, .cats-all),
+body.theme-lux:not(#nav) .band-ink .btn-magenta {
+  --btn-bg: var(--coral);
+  --btn-fg: #fff;
+  background: var(--coral);
+  border-color: var(--coral);
+  color: #fff;
+}
+body.theme-lux:not(#nav) :is(.lx-btn-main, .btn-magenta, .hdr-cta, .hny-btn, .hb-btn, .cats-all):hover,
+body.theme-lux:not(#nav) .band-ink .btn-magenta:hover {
+  background: var(--coral-dark);
+  border-color: var(--coral-dark);
+  color: #fff;
+}
+/* arrow circles inside them */
+body.theme-lux:not(#nav) :is(.lx-btn-go, .hny-btn-go, .hb-btn-go, .cats-all-go) {
+  background: #fff;
+  color: var(--coral-dark);
+}
+/* phone bottom bar «Заявка» */
+@media (max-width: 1360px) {
+  body.theme-lux:not(#nav) .mbar .mbar-cta {
+    background: var(--coral);
+    color: #fff;
+  }
+  body.theme-lux:not(#nav) .mbar .mbar-cta:hover {
+    background: var(--coral-dark);
+  }
+}
+/* small accents: the arrow on «Цена за минуту», the «next work» arrow, the cookie button */
+body.theme-lux:not(#nav) :is(.lx-round-light, .lx-round-dark) {
+  background: var(--coral);
+  border-color: var(--coral);
+  color: #fff;
+}
+body.theme-lux:not(#nav) .cookie .btn-magenta {
+  background: var(--coral);
+  border-color: var(--coral);
+  color: #fff;
+}
