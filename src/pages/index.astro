@@ -1,8 +1,6 @@
 ---
 import '@fontsource/caveat/600.css';
 import '@fontsource/cormorant-garamond/600-italic.css';
-import '@fontsource/cormorant-garamond/500.css';
-import '@fontsource/cormorant-garamond/600.css';
 import '@/styles/lux.css';
 import { portfolio } from '@/data/portfolio';
 import BaseLayout from '@/layouts/BaseLayout.astro';
@@ -71,20 +69,20 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   schema={[faqPage(homeFaq)]}
   theme="lux"
 >
-  <!-- HERO (owner, 14.11.2026, by a reference): one warm still-life photo in a rounded frame, glass header over it,
-       thin serif headline, floating glass cards at the bottom -->
+  <!-- HERO (owner, 14.11.2026, by a reference): photo in a rounded frame, glass header over it, floating glass cards
+       at the bottom. Photo — the man at the cathedral, colours — CMYK 2.0 (owner: «прошлое изображение и прошлую гамму»). -->
   <section class="lx-hero" aria-labelledby="hero-h">
     <div class="lx-frame">
       <picture class="lx-photo">
-        <img src="/img/hero-studio-1376.webp" srcset="/img/hero-studio-800.webp 800w, /img/hero-studio-1376.webp 1376w" sizes="100vw" alt="Футболки, худи и кружки без нанесения на каменной подставке в мастерской" width="1376" height="768" fetchpriority="high" decoding="async" />
+        <img src="/img/hero-kaliningrad-1600.webp" srcset="/img/hero-kaliningrad-900.webp 900w, /img/hero-kaliningrad-1600.webp 1600w" sizes="100vw" alt="" width="1600" height="1074" fetchpriority="high" decoding="async" />
       </picture>
       <div class="lx-inner">
         <div class="lx-copy">
           <p class="lx-kicker">Футболки <span aria-hidden="true">—</span> кружки <span aria-hidden="true">—</span> полиграфия</p>
-          <h1 id="hero-h" class="lx-title">Печать на&nbsp;одежде и&nbsp;сувенирах <em>в&nbsp;Калининграде</em></h1>
+          <h1 id="hero-h" class="lx-title">Печать на&nbsp;одежде и&nbsp;сувенирах <span class="serif">в&nbsp;Калининграде</span></h1>
           <p class="lx-lead">Печатаем ваш дизайн от&nbsp;1&nbsp;штуки в&nbsp;своей мастерской в&nbsp;ТЦ «Экватор».</p>
           <div class="lx-actions">
-            <a class="lx-btn lx-btn-dark" href="/price">Рассчитать стоимость <span class="lx-btn-go" aria-hidden="true"><Icon name="arrow" size={16} /></span></a>
+            <a class="lx-btn lx-btn-main" href="/price">Рассчитать стоимость <span class="lx-btn-go" aria-hidden="true"><Icon name="arrow" size={16} /></span></a>
             <button type="button" class="lx-btn lx-btn-glass" data-order><span class="lx-btn-ico" aria-hidden="true"><Icon name="upload" size={16} /></span> Отправить макет</button>
           </div>
         </div>
@@ -318,7 +316,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     min-height: min(100svh, 900px);
     border-radius: 32px;
     overflow: clip;
-    background: #e9dfd0;
+    background: var(--paper-2);
   }
   .lx-photo img {
     position: absolute;
@@ -327,7 +325,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 70% 50%;
+    object-position: 100% 28%;
   }
   /* keeps the headline readable where the photo gets busy */
   .lx-frame::before {
@@ -336,8 +334,8 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     inset: 0;
     z-index: -1;
     background:
-      linear-gradient(90deg, rgba(245, 240, 232, 0.88) 0%, rgba(245, 240, 232, 0.55) 34%, rgba(245, 240, 232, 0) 58%),
-      linear-gradient(0deg, rgba(28, 25, 23, 0.18) 0%, rgba(28, 25, 23, 0) 30%);
+      linear-gradient(90deg, rgba(255, 252, 245, 0.94) 0%, rgba(255, 252, 245, 0.78) 30%, rgba(255, 252, 245, 0) 56%),
+      linear-gradient(0deg, rgba(22, 20, 27, 0.22) 0%, rgba(22, 20, 27, 0) 32%);
   }
   .lx-inner {
     position: relative;
@@ -352,7 +350,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   }
   .lx-copy {
     align-self: center;
-    max-width: 640px;
+    max-width: 760px;
   }
   .lx-kicker {
     margin: 0 0 22px;
@@ -368,14 +366,16 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   }
   .lx-title {
     margin: 0;
-    font-size: clamp(2.8rem, 5.4vw, 4.9rem) !important;
-    line-height: 0.98 !important;
+    font-size: clamp(2.6rem, 4.8vw, 4.3rem);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
     color: var(--ink);
     text-wrap: balance;
   }
-  .lx-title em {
-    font-style: normal;
-    color: var(--gold-ink);
+  .lx-title .serif {
+    display: block;
+    font-size: 1.08em;
+    line-height: 1;
   }
   .lx-lead {
     margin: 24px 0 0;
@@ -403,15 +403,15 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease;
   }
-  .lx-btn-dark {
+  .lx-btn-main {
     padding: 7px 7px 7px 24px;
     border: 0;
-    background: var(--ink);
-    color: var(--paper);
+    background: var(--red);
+    color: #fff;
   }
-  .lx-btn-dark:hover {
-    background: #000;
-    color: var(--paper);
+  .lx-btn-main:hover {
+    background: var(--red-dark);
+    color: #fff;
   }
   .lx-btn-go,
   .lx-btn-ico {
@@ -424,10 +424,10 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     transition: transform 0.2s ease;
   }
   .lx-btn-go {
-    background: var(--paper);
-    color: var(--ink);
+    background: #fff;
+    color: var(--red);
   }
-  .lx-btn-dark:hover .lx-btn-go {
+  .lx-btn-main:hover .lx-btn-go {
     transform: translateX(3px);
   }
   .lx-btn-glass {
@@ -439,7 +439,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     color: var(--ink);
   }
   .lx-btn-glass:hover {
-    background: rgba(251, 248, 243, 0.9);
+    background: var(--glass-strong);
   }
   .lx-btn-ico {
     border: 1px solid var(--line-strong);
@@ -451,7 +451,12 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     list-style: none;
     display: grid;
     gap: 8px;
-    border-left: 1px solid rgba(28, 25, 23, 0.25);
+    padding: 12px 16px 12px 18px;
+    border: 1px solid var(--glass-line);
+    border-radius: 20px;
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
     font-size: 0.72rem;
     font-weight: 500;
     letter-spacing: 0.2em;
@@ -517,11 +522,9 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   }
   .lx-work-title {
     margin: 0;
-    font-family: var(--font) !important;
-    font-size: 1.05rem !important;
-    font-weight: 600 !important;
-    line-height: 1.3 !important;
-    letter-spacing: 0 !important;
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.3;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -596,13 +599,12 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     text-align: center;
   }
   .lx-stats li + li {
-    border-left: 1px solid rgba(28, 25, 23, 0.14);
+    border-left: 1px solid rgba(22, 20, 27, 0.14);
   }
   .lx-stats b {
-    font-family: var(--serif);
-    font-variant-numeric: lining-nums;
-    font-size: clamp(1.8rem, 2.6vw, 2.4rem);
-    font-weight: 500;
+    font-size: clamp(1.5rem, 2.2vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
     line-height: 1;
   }
   .lx-stats span {
@@ -614,14 +616,14 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     align-content: start;
     gap: 6px;
     padding: 16px 18px 20px;
-    border-color: rgba(255, 255, 255, 0.12);
-    background: rgba(28, 25, 23, 0.82);
-    color: #f5f0e8;
+    border-color: rgba(255, 255, 255, 0.14);
+    background: rgba(22, 20, 27, 0.84);
+    color: #fffcf5;
     text-decoration: none;
   }
   .lx-cta:hover {
-    color: #f5f0e8;
-    background: rgba(28, 25, 23, 0.92);
+    color: #fffcf5;
+    background: rgba(22, 20, 27, 0.94);
   }
   .lx-cta-top {
     display: flex;
@@ -637,7 +639,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   }
   .lx-round-light {
     border-color: transparent;
-    background: #f5f0e8;
+    background: var(--y);
     color: var(--ink);
   }
   .lx-cta:hover .lx-round-light {
@@ -650,7 +652,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   .lx-cta > span:last-child {
     font-size: 0.85rem;
     line-height: 1.45;
-    color: #cfc7bc;
+    color: #cfcad6;
   }
   /* «Нам доверяют» — a quiet greyscale row under the frame */
   .lx-clients {
@@ -735,12 +737,12 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
       z-index: auto;
       display: block;
       height: 300px;
-      object-position: 78% 50%;
+      object-position: 62% 30%;
     }
     .lx-photo {
       display: block;
       padding-top: 74px;
-      background: #e9dfd0;
+      background: var(--paper-2);
     }
     .lx-frame::before {
       display: none;
@@ -755,7 +757,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
       letter-spacing: 0.18em;
     }
     .lx-title {
-      font-size: 2.6rem !important;
+      font-size: 2.2rem;
     }
     .lx-lead {
       margin-top: 16px;
