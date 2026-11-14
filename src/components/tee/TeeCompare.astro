@@ -1,0 +1,378 @@
+---
+// «Какой размер принта выбрать» for the T-shirt page, «Ink» look.
+// Left: a T-shirt drawn in centimetres with every print frame nested on the chest (true proportions, frames
+// centred and 10% larger — owner, 06.11.2026; the 10 cm scale bar uses the same ×1.1).
+// Right: a pill track of formats (radio buttons, no JS) and the card of the chosen format.
+// If the rows carry no «W×H см» values, the shirt and the track are skipped and only the cards are shown.
+import TeeHead from '@/components/tee/TeeHead.astro';
+import type { ServiceBlock } from '@/data/types';
+
+interface Props {
+  block: Extract<ServiceBlock, { kind: 'compare' }>;
+}
+
+const { block } = Astro.props;
+
+const DIM = /(\d+(?:[.,]\d+)?)\s*[×xх]\s*(\d+(?:[.,]\d+)?)/i;
+const dimCol = block.columns.findIndex((_, i) => block.rows.every((r) => DIM.test(r.values[i] ?? '')));
+const sizes =
+  dimCol >= 0
+    ? block.rows.map((r) => {
+        const m = (r.values[dimCol] ?? '').match(DIM)!;
+        return { w: parseFloat(m[1].replace(',', '.')), h: parseFloat(m[2].replace(',', '.')) };
+      })
+    : [];
+
+// shirt geometry in centimetres (adult M-ish: ~52 cm chest, ~72 cm length)
+const CX = 40;
+const K = 1.1;
+const maxH = sizes.length ? Math.max(...sizes.map((s) => s.h)) * K : 0;
+const shirtBottom = Math.max(78, 12 + maxH + 16);
+const CY = (10 + shirtBottom) / 2;
+const B = shirtBottom;
+const shirt =
+  `M30.5 5 C33.5 11 46.5 11 49.5 5 L61 7.2 C66 8.5 72 12 75.5 15.5 L79.5 26.5 C75.5 28.8 71.5 30 67.4 30.6 L66.2 26.8 ` +
+  `C66 40 66.4 ${B - 20} 66.8 ${B} Q40 ${B + 1.8} 13.2 ${B} C13.6 ${B - 20} 14 40 13.8 26.8 L12.6 30.6 ` +
+  `C8.5 30 4.5 28.8 0.5 26.5 L4.5 15.5 C8 12 14 8.5 19 7.2 Z`;
+const order = sizes.map((s, i) => ({ ...s, i })).sort((a, b) => b.w * b.h - a.w * a.h);
+
+const words = block.title.split(' ');
+const lastWord = words.pop()!;
+const otherCols = block.columns.map((c, i) => ({ c, i })).filter((x) => x.i !== dimCol);
+const initial = Math.min(2, block.rows.length - 1); // А4 by default
+const hasFig = dimCol >= 0;
+---
+
+<section class="section tc" aria-labelledby="tc-h">
+  <div class="wrap">
+    <TeeHead icon="ruler" eyebrow={hasFig ? 'Размеры принта · в сантиметрах' : 'Сравнение'} id="tc-h" title={block.title} mark={lastWord} />
+
+    <div class:list={['tc-grid', { 'no-fig': !hasFig }]}>
+      {
+        hasFig && (
+          <figure class="tc-fig">
+            <div class="tc-stage">
+              <svg
+                class="tc-svg"
+                viewBox={`0 0 80 ${shirtBottom + 4}`}
+                role="img"
+                aria-label={`Размеры принта на футболке в масштабе: ${block.rows.map((r) => `${r.label} — ${r.values[dimCol]}`).join(', ')}`}
+              >
+                <path d={shirt} transform="translate(0.9 1.6)" fill="#14213d" opacity="0.1" />
+                <path d={shirt} fill="#ffffff" />
+                <path d={shirt} fill="none" stroke="#c9ceda" stroke-width="0.45" stroke-linejoin="round" />
+                <path d="M30.5 5 C33.5 11 46.5 11 49.5 5" fill="none" stroke="#c9ceda" stroke-width="1.5" stroke-linecap="round" />
+                <path d="M19 7.2 Q15.6 17 13.8 26.8 M61 7.2 Q64.4 17 66.2 26.8" fill="none" stroke="#dde1ea" stroke-width="0.35" stroke-dasharray="0.9 0.7" />
+
+                {order.map(({ w, h, i }) => (
+                  <g class="tc-r" data-i={i}>
+                    <rect x={CX - (w * K) / 2} y={CY - (h * K) / 2} width={w * K} height={h * K} rx="0.8" class="tc-r-box" />
+                    <text x={CX} y={CY + (h * K) / 2 - 1.3} text-anchor="middle" class="tc-r-label">
+                      {block.rows[i].label}
+                    </text>
+                  </g>
+                ))}
+
+                <g transform={`translate(19 ${shirtBottom - 6})`}>
+                  <path d="M0 0 H11 M0 -1.1 V1.1 M5.5 -0.6 V0.6 M11 -1.1 V1.1" fill="none" stroke="#14213d" stroke-width="0.35" />
+                  <text x="12.6" y="1" class="tc-scale-t">10 см</text>
+                </g>
+              </svg>
+            </div>
+            <figcaption class="tc-cap">Это поле печати на одежде — оно не совпадает с бумажными листами А4 и А3.</figcaption>
+          </figure>
+        )
+      }
+
+      <div class="tc-side">
+        {
+          hasFig && (
+            <fieldset class="tc-track">
+              <legend class="sr-only">Формат принта</legend>
+              {block.rows.map((r, i) => (
+                <>
+                  <input class="tc-radio" type="radio" name="tc-size" id={`tc-r${i}`} checked={i === initial} />
+                  <label class="tc-seg" for={`tc-r${i}`}>
+                    {r.label}
+                  </label>
+                </>
+              ))}
+            </fieldset>
+          )
+        }
+
+        <div class="tc-panes">
+          {
+            block.rows.map((r, i) => (
+              <article class="tc-pane" data-i={i}>
+                <div class="tc-top">
+                  <h3 class="tc-label">{r.label}</h3>
+                  {hasFig && (
+                    <p class="tc-dim">
+                      <span class="tc-mini" aria-hidden="true" style={`--a: ${sizes[i].w / sizes[i].h}`} />
+                      <span class="sr-only">{block.columns[dimCol]}: </span>
+                      {r.values[dimCol]}
+                    </p>
+                  )}
+                </div>
+                <dl class="tc-dl">
+                  {otherCols.map(({ c, i: ci }) => (
+                    <div class="tc-row">
+                      <dt>{c}</dt>
+                      <dd>{r.values[ci]}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .tc-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(24px, 4vw, 56px);
+    align-items: start;
+  }
+  .tc-grid.no-fig {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* ---------- shirt on glass */
+  .tc-fig {
+    position: sticky;
+    top: 104px;
+    margin: 0;
+  }
+  .tc-stage {
+    padding: clamp(16px, 2.4vw, 30px);
+    border-radius: 28px;
+    background: linear-gradient(160deg, rgba(20, 33, 61, 0.09), rgba(20, 33, 61, 0.03)), rgba(255, 255, 255, 0.78);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
+  }
+  .tc-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .tc-r {
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+  }
+  .tc-r-box {
+    fill: transparent;
+    stroke: #14213d;
+    stroke-width: 0.3;
+    transition: fill 0.2s ease, stroke-width 0.2s ease;
+  }
+  .tc-r-label {
+    fill: #14213d;
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 2.6px;
+  }
+  .tc-scale-t {
+    fill: #14213d;
+    font-family: var(--mono, var(--font));
+    font-size: 2.3px;
+    font-weight: 600;
+  }
+  .tc-cap {
+    margin-top: 14px;
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.45;
+  }
+
+  /* chosen format → its frame is filled, the others stay thin */
+  .tc:has(#tc-r0:checked) .tc-r[data-i='0'],
+  .tc:has(#tc-r1:checked) .tc-r[data-i='1'],
+  .tc:has(#tc-r2:checked) .tc-r[data-i='2'],
+  .tc:has(#tc-r3:checked) .tc-r[data-i='3'],
+  .tc:has(#tc-r4:checked) .tc-r[data-i='4'],
+  .tc:has(#tc-r5:checked) .tc-r[data-i='5'] {
+    opacity: 1;
+  }
+  .tc:has(#tc-r0:checked) .tc-r[data-i='0'] .tc-r-box,
+  .tc:has(#tc-r1:checked) .tc-r[data-i='1'] .tc-r-box,
+  .tc:has(#tc-r2:checked) .tc-r[data-i='2'] .tc-r-box,
+  .tc:has(#tc-r3:checked) .tc-r[data-i='3'] .tc-r-box,
+  .tc:has(#tc-r4:checked) .tc-r[data-i='4'] .tc-r-box,
+  .tc:has(#tc-r5:checked) .tc-r[data-i='5'] .tc-r-box {
+    fill: rgba(20, 33, 61, 0.16);
+    stroke-width: 0.6;
+  }
+
+  /* ---------- pill track */
+  .tc-track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 4px;
+    margin: 0 0 18px;
+    padding: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 999px;
+    background: rgba(20, 33, 61, 0.07);
+  }
+  .tc-radio {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .tc-seg {
+    display: grid;
+    place-items: center;
+    min-height: 48px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--navy, #14213d);
+    cursor: pointer;
+    transition: background 0.18s ease, color 0.18s ease;
+  }
+  .tc-seg:hover {
+    background: rgba(255, 255, 255, 0.8);
+  }
+  .tc-radio:checked + .tc-seg {
+    background: var(--navy, #14213d);
+    color: #fff;
+  }
+  .tc-radio:focus-visible + .tc-seg {
+    outline: 2px solid var(--focus, #14213d);
+    outline-offset: 2px;
+  }
+
+  /* ---------- chosen format card */
+  .tc-pane {
+    display: none;
+    padding: clamp(22px, 3vw, 32px);
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.78);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
+  }
+  .tc-grid.no-fig .tc-panes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .tc-grid.no-fig .tc-pane,
+  .tc:has(#tc-r0:checked) .tc-pane[data-i='0'],
+  .tc:has(#tc-r1:checked) .tc-pane[data-i='1'],
+  .tc:has(#tc-r2:checked) .tc-pane[data-i='2'],
+  .tc:has(#tc-r3:checked) .tc-pane[data-i='3'],
+  .tc:has(#tc-r4:checked) .tc-pane[data-i='4'],
+  .tc:has(#tc-r5:checked) .tc-pane[data-i='5'] {
+    display: block;
+  }
+  .tc-top {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    margin-bottom: 18px;
+  }
+  .tc-label {
+    margin: 0;
+    font-size: clamp(2.6rem, 4vw, 3.4rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--navy, #14213d);
+  }
+  .tc-dim {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0;
+    padding: 6px 14px 6px 10px;
+    border-radius: 999px;
+    background: rgba(20, 33, 61, 0.08);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--navy, #14213d);
+    white-space: nowrap;
+  }
+  .tc-mini {
+    width: calc(18px * var(--a));
+    height: 18px;
+    border-radius: 3px;
+    border: 1.5px solid var(--navy, #14213d);
+    background: rgba(20, 33, 61, 0.16);
+  }
+  .tc-dl {
+    display: grid;
+    gap: 14px;
+    margin: 0;
+  }
+  .tc-row {
+    display: grid;
+    gap: 2px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(20, 33, 61, 0.1);
+  }
+  .tc-row dt {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .tc-row dd {
+    margin: 0;
+    line-height: 1.45;
+    color: var(--ink-2, #14213d);
+  }
+  .tc-row:first-child dd {
+    font-weight: 700;
+  }
+
+  @media (max-width: 960px) {
+    .tc-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .tc-fig {
+      position: static;
+      width: 100%;
+      max-width: 460px;
+      justify-self: center;
+    }
+  }
+  @media (max-width: 560px) {
+    .tc-fig {
+      max-width: 340px;
+    }
+    .tc-stage {
+      padding: 12px;
+      border-radius: 22px;
+    }
+    .tc-pane {
+      border-radius: 22px;
+      padding: 20px;
+    }
+    .tc-grid.no-fig .tc-panes {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tc-r,
+    .tc-r-box,
+    .tc-seg {
+      transition: none;
+    }
+  }
+</style>

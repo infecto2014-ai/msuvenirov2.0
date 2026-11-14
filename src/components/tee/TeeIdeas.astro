@@ -1,0 +1,181 @@
+---
+// «Что чаще всего заказывают» for the T-shirt page, «Ink» look: even rounded photo cards (like «Изделия» on the
+// home page) with a glass plate over the bottom of the photo (tag, title, text). No tape, tilt or stickers.
+// Phones: a horizontal strip with scroll-snap.
+import TeeHead from '@/components/tee/TeeHead.astro';
+import type { ServiceBlock } from '@/data/types';
+
+interface Props {
+  block: Extract<ServiceBlock, { kind: 'ideas' }>;
+}
+
+const { block } = Astro.props;
+const words = block.title.split(' ');
+const lastWord = words.pop()!;
+const n = block.items.length;
+// desktop: rows of three; a short last row is stretched (two cards of half width, one card full width)
+const span = (i: number) => {
+  const rest = n % 3;
+  if (rest === 1 && i === n - 1) return 6;
+  if (rest === 2 && i >= n - 2) return 3;
+  return 2;
+};
+---
+
+<section class="section ti" aria-labelledby="ti-h">
+  <div class="wrap">
+    <TeeHead icon="bulb" eyebrow="Идеи для футболки" id="ti-h" title={block.title} mark={lastWord}>
+      {block.lead && <p class="ti-lead">{block.lead}</p>}
+    </TeeHead>
+
+    <ul class="ti-list" role="list">
+      {
+        block.items.map((it, i) => (
+          <li class="ti-card" style={`--span: ${span(i)}`}>
+            {it.img ? (
+              <img src={it.img} alt="" width="378" height="378" loading="lazy" decoding="async" />
+            ) : (
+              <span class="ti-ph" aria-hidden="true">
+                <svg viewBox="0 0 64 64" width="72" height="72">
+                  <path d="M24 8c2 5 14 5 16 0l14 6 6 14-9 4-3-3v31H16V29l-3 3-9-4 6-14z" fill="currentColor" />
+                </svg>
+              </span>
+            )}
+            <div class="ti-plate">
+              {it.tag && <p class="ti-tag">{it.tag}</p>}
+              <h3 class="ti-title">{it.title}</h3>
+              <p class="ti-text">{it.text}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .ti-lead {
+    max-width: 52ch;
+    color: var(--muted);
+  }
+  .ti-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .ti-card {
+    position: relative;
+    grid-column: span var(--span);
+    display: flex;
+    align-items: flex-end;
+    min-height: 400px;
+    padding: 12px;
+    border-radius: 26px;
+    overflow: clip;
+    isolation: isolate;
+    background: var(--navy, #14213d);
+  }
+  .ti-card img,
+  .ti-ph {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+  .ti-card img {
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  .ti-card:hover img {
+    transform: scale(1.04);
+  }
+  .ti-ph {
+    display: grid;
+    place-items: center;
+    color: rgba(255, 255, 255, 0.35);
+  }
+  .ti-plate {
+    width: 100%;
+    display: grid;
+    gap: 6px;
+    justify-items: start;
+    padding: 16px 18px 18px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.82);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    color: var(--navy, #14213d);
+  }
+  .ti-tag {
+    margin: 0;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--navy, #14213d);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+  .ti-title {
+    margin: 0;
+    font-size: clamp(1.15rem, 1.6vw, 1.4rem);
+    line-height: 1.15;
+  }
+  .ti-text {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    color: var(--ink-2, #14213d);
+  }
+
+  @media (max-width: 960px) {
+    .ti-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .ti-card {
+      grid-column: span 1;
+      min-height: 380px;
+    }
+    .ti-card:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+    }
+  }
+  /* phones: swipeable strip */
+  @media (max-width: 560px) {
+    .ti-list {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      overscroll-behavior-x: contain;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+    }
+    .ti-list::-webkit-scrollbar {
+      display: none;
+    }
+    .ti-card {
+      flex: 0 0 82%;
+      min-height: 420px;
+      scroll-snap-align: start;
+      border-radius: 22px;
+    }
+    .ti-card:last-child:nth-child(odd) {
+      flex-basis: 82%;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ti-card img {
+      transition: none;
+    }
+    .ti-card:hover img {
+      transform: none;
+    }
+  }
+</style>

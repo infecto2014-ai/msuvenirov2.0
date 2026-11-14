@@ -1,0 +1,389 @@
+---
+// First screen of the t-shirt page in the «Ink» look of the home page (.lx-* → .th-*): the product photo in a rounded
+// frame fading into white on the left, h1 with a marker word, short lead, two buttons, navy glass fact cards at the bottom.
+// Numbers: «from» price comes from pricing.ts via props, facts from props.
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Icon from '@/components/Icon.astro';
+import { rub } from '@/data/pricing';
+import type { ServicePage } from '@/data/types';
+
+interface Props {
+  page: ServicePage;
+  crumbs: { name: string; href: string }[];
+  /** lowest «from» price, from pricing.ts */
+  from: number;
+  /** caption in the price chip */
+  priceNote?: string;
+  /** words of the h1 to mark (default: «футболках») */
+  mark?: string;
+  facts: { big: string; small: string }[];
+}
+const { page, crumbs, from, facts, priceNote = 'футболка с печатью', mark = 'футболках' } = Astro.props;
+const at = page.h1.indexOf(mark);
+const h1 = at >= 0 ? [page.h1.slice(0, at), mark, page.h1.slice(at + mark.length)] : [page.h1, '', ''];
+const nb = (s: string) => s.replace(/ (?=\S{1,3}(?: |$))/g, ' ');
+---
+
+<section class="th" aria-labelledby="th-h">
+  <div class="th-frame">
+    <picture class="th-photo">
+      <img
+        src="/img/products/tshirts-1200.webp"
+        srcset="/img/products/tshirts-640.webp 640w, /img/products/tshirts-1200.webp 1200w"
+        sizes="(max-width: 760px) 100vw, 72vw"
+        alt={page.imageAlt}
+        width="1200"
+        height="896"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </picture>
+    <p class="th-price"><span>от</span> <b>{rub(from)}</b> <small>{priceNote}</small></p>
+
+    <div class="th-inner">
+      <div class="th-copy">
+        <Breadcrumbs items={crumbs} />
+        <h1 id="th-h" class="th-title">{h1[0]}{h1[1] && <span class="serif">{h1[1]}</span>}{h1[2]}</h1>
+        <p class="th-lead">{nb(page.lead)}</p>
+        <div class="th-actions">
+          <a class="th-btn th-btn-main" href="#calc">Рассчитать стоимость <span class="th-btn-go" aria-hidden="true"><Icon name="arrow" size={16} /></span></a>
+          <button type="button" class="th-btn th-btn-glass" data-order><span class="th-btn-ico" aria-hidden="true"><Icon name="upload" size={16} /></span> Отправить макет</button>
+        </div>
+      </div>
+
+      <ul class="th-cards">
+        {
+          facts.map((f) => (
+            <li class="th-card">
+              <b>{f.big}</b>
+              <span set:html={f.small} />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .th {
+    margin-top: 12px;
+    padding-inline: 12px;
+  }
+  .th-frame {
+    position: relative;
+    isolation: isolate;
+    min-height: min(calc(100svh - 100px), 700px);
+    border-radius: 32px;
+    overflow: clip;
+    background: #fff;
+    color: var(--ink);
+  }
+  /* the photo sits on the right and melts into the white frame on its left edge */
+  .th-photo img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: -2;
+    width: 68%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 78% 45%;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.5) 26%, #000 52%);
+    mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.5) 26%, #000 52%);
+  }
+  .th-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(90deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.55) 30%, rgba(255, 255, 255, 0) 52%),
+      linear-gradient(0deg, rgba(0, 0, 0, 0.16) 0%, rgba(0, 0, 0, 0) 28%);
+  }
+  .th-inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 1fr auto;
+    gap: 36px;
+    min-height: inherit;
+    max-width: 1400px;
+    margin-inline: auto;
+    padding: clamp(20px, 3vw, 36px) clamp(20px, 4vw, 56px) clamp(16px, 2.4vw, 28px);
+  }
+  .th-copy {
+    align-self: center;
+    max-width: 600px;
+  }
+  .th-copy :global(.crumbs) {
+    margin-bottom: 18px;
+  }
+  .th-title {
+    margin: 0;
+    font-size: clamp(2.6rem, 4.6vw, 4rem);
+    line-height: 1.02;
+    font-weight: 800 !important;
+    letter-spacing: -0.03em;
+    color: #000;
+    text-wrap: balance;
+  }
+  .th-lead {
+    margin: 22px 0 0;
+    max-width: 30em;
+    font-size: 1.08rem;
+    line-height: 1.55;
+    color: var(--navy, #14213d);
+  }
+  .th-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 30px;
+  }
+  .th-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 56px;
+    border-radius: 999px;
+    font: inherit;
+    font-weight: 600;
+    font-size: 0.98rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  .th-btn-main {
+    padding: 7px 7px 7px 24px;
+    border: 0;
+    background: var(--navy, #14213d);
+    color: #fff;
+  }
+  .th-btn-main:hover {
+    background: #000;
+    color: #fff;
+  }
+  .th-btn-go,
+  .th-btn-ico {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    flex: none;
+    transition: transform 0.2s ease;
+  }
+  .th-btn-go {
+    background: #fff;
+    color: var(--navy, #14213d);
+  }
+  .th-btn-main:hover .th-btn-go {
+    transform: translateX(3px);
+  }
+  .th-btn-glass {
+    padding: 7px 24px 7px 7px;
+    border: 1px solid rgba(20, 33, 61, 0.18);
+    background: rgba(255, 255, 255, 0.6);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    color: var(--navy, #14213d);
+  }
+  .th-btn-glass:hover {
+    background: #fff;
+    color: var(--navy, #14213d);
+  }
+  .th-btn-ico {
+    border: 1px solid rgba(20, 33, 61, 0.25);
+  }
+
+  /* price chip on the photo */
+  .th-price {
+    position: absolute;
+    z-index: 2;
+    top: clamp(20px, 3vw, 36px);
+    right: clamp(20px, 4vw, 56px);
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin: 0;
+    padding: 12px 20px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.78);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.5);
+    color: var(--navy, #14213d);
+    line-height: 1;
+  }
+  .th-price b {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+  .th-price span,
+  .th-price small {
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+  .th-price small {
+    color: var(--muted);
+  }
+
+  /* fact cards: navy glass */
+  .th-cards {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    max-width: 760px;
+  }
+  .th-card {
+    display: grid;
+    gap: 6px;
+    align-content: center;
+    padding: 20px 24px;
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(20, 33, 61, 0.84);
+    -webkit-backdrop-filter: saturate(1.3) blur(18px);
+    backdrop-filter: saturate(1.3) blur(18px);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) inset, 0 24px 60px -30px rgba(0, 0, 0, 0.6);
+    color: #fff;
+  }
+  .th-card b {
+    font-size: clamp(1.5rem, 2.2vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .th-card span {
+    font-size: 0.85rem;
+    line-height: 1.35;
+    color: rgba(255, 255, 255, 0.78);
+  }
+  .th-card :global(b) {
+    color: #fff;
+  }
+
+  /* entrance, same as the home page's first screen (docs/MOTION.md); html.motion-ready only without reduced motion */
+  :global(html.motion-ready) .th-photo img {
+    animation: lx-settle 1.2s cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+  :global(html.motion-ready) .th-copy {
+    animation: lx-fade 0.7s cubic-bezier(0.23, 1, 0.32, 1) 0.15s both;
+  }
+  :global(html.motion-ready) .th-cards {
+    animation: lx-fade 0.7s cubic-bezier(0.23, 1, 0.32, 1) 0.3s both;
+  }
+
+  @media (max-width: 1100px) {
+    .th-frame::before {
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.6) 40%, rgba(255, 255, 255, 0) 70%),
+        linear-gradient(0deg, rgba(0, 0, 0, 0.16) 0%, rgba(0, 0, 0, 0) 28%);
+    }
+    .th-photo img {
+      width: 100%;
+    }
+  }
+  @media (max-width: 760px) {
+    .th {
+      margin-top: 8px;
+      padding-inline: 8px;
+    }
+    .th-frame {
+      min-height: 0;
+      border-radius: 24px;
+    }
+    .th-frame::before {
+      display: none;
+    }
+    .th-photo {
+      display: block;
+      position: relative;
+      background: #fff;
+    }
+    .th-photo img {
+      position: relative;
+      z-index: auto;
+      display: block;
+      width: 100%;
+      height: 250px;
+      object-position: 38% 50%;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+    .th-photo::after {
+      content: '';
+      position: absolute;
+      inset: auto 0 0;
+      height: 70px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0), #fff);
+    }
+    .th-price {
+      top: 14px;
+      right: 14px;
+      padding: 8px 14px;
+    }
+    .th-price b {
+      font-size: 1.15rem;
+    }
+    .th-price small {
+      display: none;
+    }
+    .th-inner {
+      padding: 0 16px 16px;
+      gap: 22px;
+    }
+    .th-copy :global(.crumbs) {
+      margin-bottom: 4px;
+    }
+    .th-copy :global(.crumbs ol) {
+      flex-wrap: nowrap;
+      white-space: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .th-title {
+      font-size: 2.1rem;
+    }
+    .th-lead {
+      margin-top: 14px;
+      font-size: 1rem;
+    }
+    .th-actions {
+      display: grid;
+      margin-top: 22px;
+    }
+    .th-btn {
+      justify-content: space-between;
+    }
+    .th-btn-glass {
+      justify-content: flex-start;
+    }
+    .th-cards {
+      gap: 8px;
+    }
+    .th-card {
+      padding: 14px 12px;
+      border-radius: 20px;
+      background: var(--navy, #14213d);
+    }
+    .th-card b {
+      font-size: 1.2rem;
+    }
+    .th-card span {
+      font-size: 0.75rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .th-btn,
+    .th-btn-go {
+      transition: none;
+    }
+  }
+</style>

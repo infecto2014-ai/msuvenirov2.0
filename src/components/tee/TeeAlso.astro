@@ -1,0 +1,221 @@
+---
+// «С этим заказывают» under the calculator, style «Ink»: a row of glass cards (rounded photo, name,
+// «от N ₽» in navy, arrow circle). Data and prices as in garment/AlsoOrder.astro (services.ts + pricing.ts).
+import Icon from '@/components/Icon.astro';
+import { services } from '@/data/services';
+import { categoryFrom, findProduct, rub } from '@/data/pricing';
+
+interface Props {
+  slugs: string[];
+}
+const { slugs } = Astro.props;
+/** short names for the strip (the service names are «Печать на кружках» etc.) */
+const short: Record<string, string> = {
+  '/pechat-na-futbolkah': 'Футболки',
+  '/pechat-na-hudi': 'Худи',
+  '/pechat-na-kruzhkah': 'Кружки',
+  '/pechat-na-kepkah': 'Кепки',
+  '/pechat-na-specodezhde': 'Спецодежда',
+  '/pechat-na-shopperah': 'Шопперы',
+  '/znachki': 'Значки',
+  '/breloki': 'Брелоки',
+  '/magnity': 'Магниты',
+  '/nakleyki': 'Стикеры',
+  '/fotopodarki': 'Фотоподарки',
+  '/vizitki': 'Визитки',
+  '/poligrafiya': 'Листовки и блокноты',
+  '/kalendari': 'Календари',
+};
+const items = slugs
+  .map((slug) => services.find((s) => s.slug === slug))
+  .filter((s) => !!s)
+  .map((s) => {
+    const p = s!.calcProduct ? findProduct(s!.calcCategory, s!.calcProduct) : undefined;
+    const from = p && !p.fromUnit ? p.fromPrice : categoryFrom(s!.calcCategory).price;
+    return { href: s!.slug, name: short[s!.slug] ?? s!.name, img: s!.image, from };
+  });
+---
+
+{
+  items.length > 0 && (
+    <nav class="tal wrap" aria-label="С этим заказывают">
+      <p class="tal-head">
+        <span class="tal-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 8h14l-1.2 12H6.2zM9 8V6a3 3 0 0 1 6 0v2" />
+          </svg>
+        </span>
+        <span class="tal-eyebrow">С этим заказывают</span>
+      </p>
+      <h3 class="tal-title">
+        Что ещё <span class="serif">напечатать</span>
+      </h3>
+      <ul class="tal-list" role="list">
+        {items.map((it) => (
+          <li>
+            <a href={it.href} class="tal-card">
+              <span class="tal-photo" aria-hidden="true">
+                <img src={it.img} alt="" width="160" height="160" loading="lazy" decoding="async" />
+              </span>
+              <span class="tal-text">
+                <span class="tal-name">{it.name}</span>
+                <span class="tal-price">
+                  <small>{'от '}</small>
+                  {rub(it.from)}
+                </span>
+              </span>
+              <span class="tal-go" aria-hidden="true">
+                <Icon name="arrow" size={16} />
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+<style>
+  .tal {
+    margin-top: clamp(28px, 4vw, 48px);
+  }
+  .tal-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 6px;
+  }
+  .tal-ico {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--navy, #14213d);
+    color: #fff;
+  }
+  .tal-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #4a4f5c;
+  }
+  .tal-title {
+    margin: 0 0 16px;
+    font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+    color: #000;
+  }
+  .tal-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 12px;
+  }
+  .tal-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 76px;
+    padding: 8px 10px 8px 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.78);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
+    color: #000;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+  }
+  .tal-card:hover {
+    background: #fff;
+  }
+  .tal-photo {
+    flex: none;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: clip;
+    background: #e5e5e5;
+  }
+  .tal-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .tal-text {
+    display: grid;
+    flex: 1;
+    min-width: 0;
+    gap: 2px;
+  }
+  .tal-name {
+    font-weight: 700;
+    font-size: 0.98rem;
+    line-height: 1.2;
+  }
+  .tal-price {
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: var(--navy, #14213d);
+    white-space: nowrap;
+  }
+  .tal-price small {
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  .tal-go {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--navy, #14213d);
+    color: #fff;
+    transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .tal-card:hover .tal-go {
+    transform: translateX(3px);
+  }
+  .tal-card:focus-visible {
+    outline: 2px solid var(--navy, #14213d);
+    outline-offset: 2px;
+  }
+
+  /* phone: a swipeable row */
+  @media (max-width: 760px) {
+    .tal {
+      margin-top: 24px;
+    }
+    .tal-list {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: var(--gutter);
+      margin-inline: calc(var(--gutter) * -1);
+      padding: 4px var(--gutter) 10px;
+      scrollbar-width: none;
+    }
+    .tal-list::-webkit-scrollbar {
+      display: none;
+    }
+    .tal-list li {
+      flex: 0 0 min(236px, 72%);
+      scroll-snap-align: start;
+    }
+    .tal-card {
+      height: 100%;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tal-go {
+      transition: none;
+    }
+  }
+</style>

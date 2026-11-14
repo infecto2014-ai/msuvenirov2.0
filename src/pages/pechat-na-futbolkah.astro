@@ -1,5 +1,9 @@
 ---
-// «Печать на футболках» — own page (owner, 06.11.2026: «блоки выглядят однородно скучно»), built in the spirit of
+// 14.11.2026 (owner: «в соответствии с наработками главной переделываем полностью страницу с футболками»):
+// the page now uses the home look «Ink» (theme="lux": navy / black / white, glass, Rubik, icons instead of numbers),
+// new components in src/components/tee/. The old tshirt/* components stay — [slug].astro still uses them.
+// Rollback point: branch backup/before-tshirt-ink.
+// Earlier: «Печать на футболках» — own page (owner, 06.11.2026: «блоки выглядят однородно скучно»), built in the spirit of
 // the home page and the gift article: bands of different grounds with waves, big outlined section numbers,
 // marker words, photo cards and polaroids.
 // Order of the top part is the owner's garment-page order (02.11.2026): first screen → calculator of this product →
@@ -8,19 +12,22 @@
 // every price — src/data/pricing.ts.
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Calculator from '@/components/islands/Calculator';
-import AlsoOrder from '@/components/garment/AlsoOrder.astro';
 import ServiceBlocks from '@/components/ServiceBlocks.astro';
-import TshirtCompare from '@/components/tshirt/TshirtCompare.astro';
-import TshirtIdeas from '@/components/tshirt/TshirtIdeas.astro';
-import TshirtRelated from '@/components/tshirt/TshirtRelated.astro';
+import TeeAlso from '@/components/tee/TeeAlso.astro';
+import TeeCompare from '@/components/tee/TeeCompare.astro';
+import TeeIdeas from '@/components/tee/TeeIdeas.astro';
+import TeeRelated from '@/components/tee/TeeRelated.astro';
 import PortfolioGrid from '@/components/PortfolioGrid.astro';
 import Reviews from '@/components/Reviews.astro';
 import FaqSection from '@/components/FaqSection.astro';
 import CtaBand from '@/components/CtaBand.astro';
-import TshirtHero from '@/components/tshirt/TshirtHero.astro';
-import TshirtHead from '@/components/tshirt/TshirtHead.astro';
-import TshirtPackages from '@/components/tshirt/TshirtPackages.astro';
-import TshirtDetails from '@/components/tshirt/TshirtDetails.astro';
+import TeeHero from '@/components/tee/TeeHero.astro';
+import TeeHead from '@/components/tee/TeeHead.astro';
+import TeePackages from '@/components/tee/TeePackages.astro';
+import TeeDetails from '@/components/tee/TeeDetails.astro';
+import '@/styles/lux.css';
+import '@/styles/lux-calc.css';
+import '@/styles/lux-tee.css';
 import { garmentBySlug } from '@/data/garments';
 import { reviews as allReviews } from '@/data/reviews';
 import { services } from '@/data/services';
@@ -54,10 +61,6 @@ const facts = [
   { big: 'XS–3XL', small: 'и детские <b>98–164</b>' },
   { big: '50+', small: 'стирок выдерживает принт' },
 ];
-const polaroids = [
-  { src: '/portfolio/kpop-tshirt.webp', alt: 'K-pop футболка с авторским дизайном', note: 'свой дизайн' },
-  { src: '/portfolio/portfolio-15.webp', alt: 'Парные футболки с авторским артом кота', note: 'парные' },
-];
 ---
 
 <BaseLayout
@@ -65,73 +68,94 @@ const polaroids = [
   description={page.description}
   path={page.slug}
   image={page.image}
+  theme="lux"
   schema={[
     breadcrumbs(crumbs),
     serviceLd({ name: page.h1, description: page.description, url: page.slug, lowPrice: Math.min(...allPrices), offerCount: cat.products.length }),
     faqPage(page.faq),
   ]}
 >
-  <TshirtHero page={page} crumbs={crumbs} from={product.fromPrice} kicker="DTF-печать · от 1 штуки" mark="футболках" facts={facts} polaroids={polaroids} />
+  <script is:inline slot="head">
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('motion-ready');
+  </script>
 
-  <!-- ============ 01 calculator (tinted band) ============ -->
+  <TeeHero page={page} crumbs={crumbs} from={product.fromPrice} facts={facts} />
+
+  <!-- calculator (light grey band) -->
   <div class="band band-tint">
     <section id="calc" class="section tcalc" aria-labelledby="calc-h">
       <div class="wrap">
-        <TshirtHead num="01" eyebrow="Калькулятор" id="calc-h" title="Посчитайте свой вариант" mark="свой" tone="y">
+        <TeeHead icon="calc" eyebrow="Калькулятор" id="calc-h" title="Посчитайте свой вариант" mark="свой">
           <p class="tcalc-sub">Выберите цвет, размеры принтов и количество — цена пересчитается сразу. Несколько принтов: самый дорогой по полной цене, следующий −30%, остальные −50%.</p>
-        </TshirtHead>
+        </TeeHead>
         <div class="tcalc-box">
           <Calculator client:visible category="textile" product={garment.productId} hideCategories lockProduct />
         </div>
       </div>
-      {garment.alsoOrder && <AlsoOrder slugs={garment.alsoOrder} />}
+      {garment.alsoOrder && <TeeAlso slugs={garment.alsoOrder} />}
     </section>
   </div>
 
-  <!-- ============ 02 ready options (paper) ============ -->
-  <TshirtPackages info={garment} num="02" />
-
-  <!-- ============ 03 the blank (dark band) ============ -->
-  <div class="band band-ink">
-    <TshirtDetails info={garment} productName={product.name} num="03" />
+  <!-- ready options (white) -->
+  <div class="band">
+    <TeePackages info={garment} />
   </div>
 
-  <!-- ============ the rest: paper and tinted bands alternate, so neighbours never merge ============ -->
-  {compare && <TshirtCompare block={compare} />}
+  <!-- the blank (navy panel) -->
+  <div class="band band-ink">
+    <TeeDetails info={garment} productName={product.name} />
+  </div>
 
   {
-    ideas && (
-      <div class="band band-tint">
-        <TshirtIdeas block={ideas} />
+    compare && (
+      <div class="band">
+        <TeeCompare block={compare} />
       </div>
     )
   }
 
-  {otherBlocks.length > 0 && <ServiceBlocks blocks={otherBlocks} />}
+  {
+    ideas && (
+      <div class="band band-tint">
+        <TeeIdeas block={ideas} />
+      </div>
+    )
+  }
 
-  <PortfolioGrid tags={page.portfolioTags} title="Примеры: печать на футболках" />
+  {otherBlocks.length > 0 && <div class="band"><ServiceBlocks blocks={otherBlocks} /></div>}
+
+  <div class="band band-ink">
+    <PortfolioGrid tags={page.portfolioTags} title="Примеры: печать на футболках" />
+  </div>
 
   {
     hasReviews && (
-      <div class="band band-tint">
+      <div class="band">
         <Reviews keywords={garment.reviewKeywords} title="Отзывы: печать на футболках" />
       </div>
     )
   }
 
-  <FaqSection items={page.faq} title="Вопросы: печать на футболках" />
+  <div class="band band-tint">
+    <FaqSection items={page.faq} title="Вопросы: печать на футболках" />
+  </div>
 
   {
-    related.length > 0 && <TshirtRelated items={related} />
+    related.length > 0 && (
+      <div class="band">
+        <TeeRelated items={related} />
+      </div>
+    )
   }
 
   <CtaBand />
 </BaseLayout>
 
+<script>
+  import '@/scripts/home-motion';
+</script>
+
 <style>
-  .tcalc {
-    position: relative;
-  }
   .tcalc-sub {
     max-width: 52ch;
   }

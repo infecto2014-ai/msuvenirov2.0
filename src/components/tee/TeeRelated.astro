@@ -1,0 +1,149 @@
+---
+// «Ещё печатаем» for the T-shirt page, «Ink» look: even rounded photo cards, glass plate with the name and
+// an arrow circle on the bottom of the photo. Phones: two columns.
+import TeeHead from '@/components/tee/TeeHead.astro';
+import Icon from '@/components/Icon.astro';
+import type { ServicePage } from '@/data/types';
+
+interface Props {
+  items: ServicePage[];
+  title?: string;
+}
+
+const { items, title = 'Ещё печатаем' } = Astro.props;
+const words = title.split(' ');
+const lastWord = words.pop()!;
+---
+
+{
+  items.length > 0 && (
+    <section class="section tr" aria-labelledby="tr-h">
+      <div class="wrap">
+        <TeeHead icon="star" eyebrow="Ещё печатаем" id="tr-h" title={title} mark={lastWord} />
+        <ul class="tr-list" role="list" style={`--n: ${Math.min(items.length, 4)}`}>
+          {items.map((r) => (
+            <li>
+              <a class="tr-card" href={r.slug}>
+                <img src={r.image} alt="" width="519" height="696" loading="lazy" decoding="async" />
+                <span class="tr-plate">
+                  <span class="tr-name">{r.name}</span>
+                  <span class="tr-go">
+                    <Icon name="arrow" size={18} />
+                  </span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .tr-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+    gap: 14px;
+  }
+  .tr-card {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    aspect-ratio: 3 / 4;
+    padding: 10px;
+    border-radius: 26px;
+    overflow: clip;
+    isolation: isolate;
+    background: var(--navy, #14213d);
+    text-decoration: none;
+  }
+  .tr-card img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    transition: transform 0.4s ease;
+  }
+  .tr-card:hover img {
+    transform: scale(1.04);
+  }
+  .tr-plate {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    min-height: 56px;
+    padding: 8px 8px 8px 16px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.82);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    color: var(--navy, #14213d);
+  }
+  .tr-name {
+    font-weight: 700;
+    line-height: 1.15;
+    min-width: 0;
+  }
+  .tr-go {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--navy, #14213d);
+    color: #fff;
+    transition: transform 0.2s ease;
+  }
+  .tr-card:hover .tr-go {
+    transform: translateX(3px);
+  }
+  .tr-card:focus-visible {
+    outline: 2px solid var(--focus, #14213d);
+    outline-offset: 3px;
+  }
+  @media (max-width: 760px) {
+    .tr-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .tr-card {
+      border-radius: 20px;
+      padding: 8px;
+    }
+  }
+  @media (max-width: 560px) {
+    .tr-plate {
+      border-radius: 22px;
+      padding: 8px 8px 8px 12px;
+    }
+    .tr-name {
+      font-size: 0.9rem;
+    }
+    .tr-go {
+      width: 36px;
+      height: 36px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tr-card img,
+    .tr-go {
+      transition: none;
+    }
+    .tr-card:hover img {
+      transform: none;
+    }
+    .tr-card:hover .tr-go {
+      transform: none;
+    }
+  }
+</style>

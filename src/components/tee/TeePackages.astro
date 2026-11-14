@@ -1,0 +1,265 @@
+---
+// «Готовые варианты» on the t-shirt page, style «Ink»: photo cards with rounded corners and a glass plate
+// (name, turnkey price, buttons). Prices are computed from pricing.ts exactly as in GarmentPackages.
+import TeeHead from './TeeHead.astro';
+import Icon from '@/components/Icon.astro';
+import { defaultSelection, findProduct, rub, type Selection } from '@/data/pricing';
+import type { GarmentInfo } from '@/data/types';
+
+interface Props {
+  info: GarmentInfo;
+}
+const { info } = Astro.props;
+const product = findProduct('textile', info.productId)!;
+const items = info.packages.map((pk) => {
+  const base = defaultSelection(product);
+  const sel: Selection = { ...base, qty: pk.qty, options: { ...base.options, print2: 'none', print3: 'none', ...pk.options } };
+  const q = product.quote(sel);
+  return { ...pk, unit: q.unit, total: q.total, from: q.from };
+});
+const more = `/price?calc=textile:${info.productId}#calc`;
+---
+
+<section class="section tpk" aria-labelledby="tpk-h">
+  <div class="wrap">
+    <TeeHead icon="tag" eyebrow="Готовые варианты" id="tpk-h" title="Готовые варианты с ценой" mark="с ценой">
+      <p>Цена указана за готовое изделие вместе с печатью. Свой вариант — в калькуляторе выше.</p>
+    </TeeHead>
+
+    <ul class="tpk-grid">
+      {
+        items.map((it) => {
+          const label = `${it.title} (${it.note}), ${it.qty} шт — ${it.from ? 'от ' : ''}${rub(it.total)}`;
+          return (
+            <li class="tpk-card">
+              <div class="tpk-photo">
+                <img src={it.img} alt={it.title} width="480" height="480" loading="lazy" decoding="async" />
+                <span class="tpk-qty">{it.qty} шт</span>
+              </div>
+              <div class="tpk-plate">
+                <h3>{it.title}</h3>
+                <p class="tpk-note">{it.note}</p>
+                <p class="tpk-price">
+                  <span class="sr-only">Цена: </span>
+                  <b>
+                    {it.from && 'от '}
+                    {rub(it.total)}
+                  </b>
+                  {it.qty > 1 && <small>{rub(it.unit)} / шт</small>}
+                </p>
+                <div class="tpk-actions">
+                  <button type="button" class="tpk-btn" data-order={label}>
+                    Заказать
+                    <span class="tpk-btn-go" aria-hidden="true">
+                      <Icon name="arrow" size={16} />
+                    </span>
+                  </button>
+                  <a class="tpk-more" href={more}>
+                    Другой тираж →
+                  </a>
+                </div>
+              </div>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .tpk-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .tpk-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    border-radius: 28px;
+    overflow: clip;
+    background: rgba(255, 255, 255, 0.78);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
+  }
+  .tpk-photo {
+    position: relative;
+    margin: 8px 8px 0;
+    aspect-ratio: 1;
+    border-radius: 21px;
+    overflow: clip;
+    background: #e5e5e5;
+  }
+  .tpk-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+  @media (hover: hover) {
+    .tpk-card:hover img {
+      transform: scale(1.04);
+    }
+  }
+  .tpk-qty {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--navy, #14213d);
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+  .tpk-plate {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 6px;
+    padding: 16px 18px 18px;
+  }
+  .tpk-plate h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #000;
+  }
+  .tpk-note {
+    margin: 0;
+    color: #4a4f5c;
+    font-size: 0.88rem;
+    line-height: 1.4;
+  }
+  .tpk-price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 10px;
+    margin: auto 0 0;
+    padding-top: 10px;
+  }
+  .tpk-price b {
+    font-size: 1.7rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--navy, #14213d);
+    white-space: nowrap;
+  }
+  .tpk-price small {
+    color: #4a4f5c;
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+  .tpk-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 14px;
+    margin-top: 8px;
+  }
+  .tpk-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 46px;
+    padding: 4px 4px 4px 18px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--navy, #14213d);
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    font-size: 0.94rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  .tpk-btn:hover {
+    background: #000;
+  }
+  .tpk-btn-go {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--navy, #14213d);
+    transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .tpk-btn:hover .tpk-btn-go {
+    transform: translateX(3px);
+  }
+  .tpk-more {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--navy, #14213d);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: underline;
+    text-decoration-color: rgba(20, 33, 61, 0.35);
+    text-underline-offset: 4px;
+  }
+  .tpk-more:hover {
+    text-decoration-color: currentColor;
+  }
+
+  @media (max-width: 1100px) {
+    .tpk-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  /* phone: a swipeable row of cards */
+  @media (max-width: 760px) {
+    .tpk {
+      padding-block: 32px;
+    }
+    .tpk-grid {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: var(--gutter);
+      margin-inline: calc(var(--gutter) * -1);
+      padding: 6px var(--gutter) 10px;
+      scrollbar-width: none;
+    }
+    .tpk-grid::-webkit-scrollbar {
+      display: none;
+    }
+    .tpk-card {
+      flex: 0 0 min(270px, 78%);
+      scroll-snap-align: start;
+      border-radius: 24px;
+    }
+    .tpk-photo {
+      margin: 6px 6px 0;
+      border-radius: 18px;
+    }
+    .tpk-plate {
+      padding: 12px 14px 14px;
+    }
+    .tpk-plate h3 {
+      font-size: 1rem;
+    }
+    .tpk-note {
+      font-size: 0.8rem;
+    }
+    .tpk-price b {
+      font-size: 1.45rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tpk-photo img,
+    .tpk-btn-go {
+      transition: none;
+    }
+  }
+</style>
