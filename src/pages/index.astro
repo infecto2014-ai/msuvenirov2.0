@@ -13,7 +13,6 @@ import HomeNewYear from '@/components/home/HomeNewYear.astro';
 import HomeB2B from '@/components/home/HomeB2B.astro';
 import { categoryFrom, findProduct, rub } from '@/data/pricing';
 import { generalFaq } from '@/data/faq';
-import { site } from '@/data/site';
 import { faqPage } from '@/lib/schema';
 
 const tiles = [
@@ -73,7 +72,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
       <div class="lx-inner">
         <div class="lx-copy">
           <h1 id="hero-h" class="lx-title">Печать на&nbsp;одежде и&nbsp;сувенирах <span class="serif">в&nbsp;Калининграде</span></h1>
-          <p class="lx-lead">Печатаем ваш дизайн от&nbsp;1&nbsp;штуки в&nbsp;своей мастерской в&nbsp;ТЦ «Экватор».</p>
+          <p class="lx-lead">Сельма, ТЦ «Экватор», 2&nbsp;этаж</p>
           <div class="lx-actions">
             <a class="lx-btn lx-btn-main" href="/price">Рассчитать стоимость <span class="lx-btn-go" aria-hidden="true"><Icon name="arrow" size={16} /></span></a>
             <button type="button" class="lx-btn lx-btn-glass" data-order><span class="lx-btn-ico" aria-hidden="true"><Icon name="upload" size={16} /></span> Отправить макет</button>
