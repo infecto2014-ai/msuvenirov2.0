@@ -49,6 +49,11 @@ const garmentProduct = garment ? findProduct('textile', garment.productId) : und
 const garmentReviews = garment?.reviewKeywords.length
   ? allReviews.filter((r) => garment.reviewKeywords.some((k) => r.text.toLowerCase().includes(k))).length
   : 0;
+// the neon «showcase» photos of the ready options are swapped for a real work (the old hoodie shots are pink/purple)
+const packInfo = garment && {
+  ...garment,
+  packages: garment.packages.map((pk) => ({ ...pk, img: pk.img.startsWith('/img/showcase/') ? '/portfolio/portfolio-5.webp' : pk.img })),
+};
 const related = page.related.map((r) => services.find((s) => s.slug === r)).filter(Boolean) as ServicePage[];
 // ---- look of /pechat-na-futbolkah for every page of this template (owner, 07.11.2026)
 const h1Words = page.h1.replace(' в Калининграде', '').split(' ');
@@ -145,7 +150,7 @@ const cRelated = related.length > 0 ? band() : '';
     garment && garmentProduct ? (
       <>
         <div class={cPack}>
-          <TeePackages info={garment} />
+          <TeePackages info={packInfo!} />
         </div>
         <div class={cDet}>
           <TeeDetails info={garment} productName={garmentProduct.name} />

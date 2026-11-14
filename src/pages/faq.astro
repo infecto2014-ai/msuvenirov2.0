@@ -45,7 +45,7 @@ const icons: Record<string, string> = {
 
   {
     generalFaq.map((g, i) => (
-      <div class={i % 2 === 1 ? 'band band-tint' : 'band'}>
+      <div class={i % 2 === 0 ? 'band band-tint' : 'band'}>
         <section id={`g${i}`} class="section fgroup" aria-labelledby={`g${i}-h`}>
           <div class="wrap fgrid">
             <InkHead icon={icons[g.group] ?? 'help'} eyebrow="Вопросы и ответы" id={`g${i}-h`} title={g.group} />
@@ -65,7 +65,7 @@ const icons: Record<string, string> = {
     ))
   }
 
-  <div class={generalFaq.length % 2 === 1 ? 'band band-tint' : 'band'}>
+  <div class={generalFaq.length % 2 === 1 ? 'band' : 'band band-tint'}>
     <CtaBand title="Остался вопрос?" text="Напишите нам в Telegram или оставьте заявку — ответим и посчитаем ваш заказ." />
   </div>
 </BaseLayout>

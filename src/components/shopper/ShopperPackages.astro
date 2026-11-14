@@ -1,6 +1,7 @@
 ---
 // «Готовые варианты» on /pechat-na-shopperah: ready orders with the turnkey price from pricing.ts (product.quote).
 // Same look as MugPackages, the picture is a shopper drawing.
+import TeeHead from '@/components/tee/TeeHead.astro';
 import ShopperArt from '@/components/shopper/ShopperArt.astro';
 import { defaultSelection, findProduct, rub, type Selection } from '@/data/pricing';
 import { shoppersPage } from '@/data/shoppersPage';
@@ -14,23 +15,13 @@ const items = shoppersPage.packages.map((pk, i) => {
   return { ...pk, unit: q.unit, total: q.total, from: q.from, tone: tones[i % tones.length] };
 });
 
-interface Props {
-  /** section number, «02» by default */
-  num?: string;
-}
-const { num = '02' } = Astro.props;
 ---
 
 <section class="section spk" aria-labelledby="spk-h">
   <div class="wrap">
-    <div class="section-head">
-      <div class="sec-titled sec-m">
-        <span class="sec-num mono" aria-hidden="true">{num}</span>
-        <p class="eyebrow">Популярное</p>
-        <h2 id="spk-h">Готовые варианты с <span class="mark sec-mark">ценой</span></h2>
-      </div>
+    <TeeHead icon="tag" eyebrow="Популярное" id="spk-h" title="Готовые варианты с ценой" mark="ценой">
       <p class="spk-sub">Цена вместе с шоппером, печатью и макетом. Другое количество или размер принта — в калькуляторе выше.</p>
-    </div>
+    </TeeHead>
     <ul class="spk-grid">
       {
         items.map((it) => {
@@ -82,7 +73,7 @@ const { num = '02' } = Astro.props;
   }
   .spk-card:hover {
     transform: translateY(-3px);
-    box-shadow: 5px 5px 0 var(--tone);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
   }
   .spk-c { --tone: var(--c); --soft: var(--c-soft); }
   .spk-m { --tone: var(--m); --soft: var(--m-soft); }
@@ -96,7 +87,6 @@ const { num = '02' } = Astro.props;
     align-items: center;
     overflow: clip;
     background:
-      radial-gradient(circle, rgba(22, 20, 27, 0.09) 1.3px, transparent 1.5px) 0 0 / 14px 14px,
       var(--soft);
   }
   .spk-art :global(svg) {
@@ -117,7 +107,7 @@ const { num = '02' } = Astro.props;
   }
   .spk-qty {
     right: 12px;
-    background: var(--ink);
+    background: var(--navy, #14213d);
     color: var(--paper);
   }
   .spk-tech {

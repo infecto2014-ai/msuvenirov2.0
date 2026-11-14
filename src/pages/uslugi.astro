@@ -3,6 +3,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import InkHero from '@/components/ink/InkHero.astro';
 import InkHead from '@/components/ink/InkHead.astro';
 import { ink } from '@/components/ink/icons';
+import { calmPhoto } from '@/components/tee/photos';
 import CtaBand from '@/components/CtaBand.astro';
 import Icon from '@/components/Icon.astro';
 import { services } from '@/data/services';
@@ -56,7 +57,7 @@ const fromOf = (slug: string, calc?: { category: string; product: string }) => {
                 const s = bySlug.get(l.href);
                 return (
                   <a class="svc" href={l.href}>
-                    {(s?.image ?? l.image) && <img src={s?.image ?? l.image} alt="" width="320" height="220" loading="lazy" />}
+                    {(s?.image ?? l.image) && <img src={calmPhoto(l.href, (s?.image ?? l.image)!)} alt="" width="320" height="220" loading="lazy" />}
                     <span class="svc-body">
                       <span class="svc-name">{l.label}</span>
                       <span class="svc-from">{fromOf(l.href, l.calc)}</span>

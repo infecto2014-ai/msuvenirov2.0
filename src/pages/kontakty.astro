@@ -41,7 +41,7 @@ const info = [
     mark="Контакты"
     lead="Приходите в мастерскую, звоните или пишите в мессенджеры — ответим и посчитаем заказ."
     facts={[
-      { big: '10:00–20:00', small: 'ежедневно' },
+      { big: 'Ежедневно', small: 'с 10:00 до 20:00' },
       { big: '2 этаж', small: 'ТЦ «Экватор», Калининград' },
     ]}
   >
@@ -49,11 +49,11 @@ const info = [
     <a class="ib ib-glass" href={site.phoneHref}><span class="ib-ico" aria-hidden="true"><Icon name="phone" size={16} /></span> {site.phone}</a>
   </InkHero>
 
-  <div class="band">
+  <div class="band band-tint">
     <ContactBlock />
   </div>
 
-  <div class="band band-tint">
+  <div class="band">
     <section class="section kinfo-sec" aria-label="Как нас найти, оплата, реквизиты">
       <div class="wrap kinfo">
         {

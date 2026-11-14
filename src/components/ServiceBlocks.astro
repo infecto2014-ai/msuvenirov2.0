@@ -29,6 +29,16 @@ const stepIcons = [
   'M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9zM8 8h.01',
   'M5 12.5 10 17.5 19 7',
 ];
+// feature grids on 12 columns: 4 in a row; 3 per row for 3, 5, 6 and more (a short last row is stretched)
+const cardSpan = (i: number, n: number) => {
+  if (n === 1) return 12;
+  if (n === 2) return 6;
+  if (n === 4) return 3;
+  const rest = n % 3;
+  if (rest === 1 && i === n - 1) return 12;
+  if (rest === 2 && i >= n - 2) return 6;
+  return 4;
+};
 const lastWord = (t: string) => t.trim().split(/\s+/).pop()!.replace(/[?!.,:;]+$/, '');
 ---
 
@@ -87,17 +97,17 @@ const lastWord = (t: string) => t.trim().split(/\s+/).pop()!.replace(/[?!.,:;]+$
         )}
 
         {b.kind === 'text' && (
-          <div class="sb-text prose">
+          <div class={`sb-text${b.paragraphs.length > 1 ? ' sb-text-2' : ''}`}>
             {b.paragraphs.map((p) => (
-              <p>{p}</p>
+              <p class="sb-card">{p}</p>
             ))}
           </div>
         )}
 
         {b.kind === 'features' && (
-          <div class="sb-features">
+          <div class="sb-features" data-n={b.items.length}>
             {b.items.map((it, i) => (
-              <article class="sb-card sb-feature">
+              <article class="sb-card sb-feature" style={`--s:${cardSpan(i, b.items.length)}`}>
                 <span class="sb-ico" aria-hidden="true">
                   <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                     <path d={cardIcons[i % cardIcons.length]} />
@@ -165,7 +175,7 @@ const lastWord = (t: string) => t.trim().split(/\s+/).pop()!.replace(/[?!.,:;]+$
   .sb {
     /* light glass by default; a navy band (.band-ink) switches the variables */
     --sb-glass: rgba(255, 255, 255, 0.78);
-    --sb-bd: rgba(255, 255, 255, 0.9);
+    --sb-bd: rgba(20, 33, 61, 0.09);
     --sb-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
     --sb-fg: var(--navy, #14213d);
     --sb-fg-2: var(--ink-2, #14213d);
@@ -242,22 +252,29 @@ const lastWord = (t: string) => t.trim().split(/\s+/).pop()!.replace(/[?!.,:;]+$
 
   /* ---- text */
   .sb-text {
-    max-width: 72ch;
-    font-size: 1.06rem;
-    line-height: 1.65;
-    color: var(--sb-fg-2);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    max-width: 860px;
   }
-  .sb-text :global(p + p) {
-    margin-top: 1em;
+  .sb-text-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: none;
+  }
+  .sb-text .sb-card {
+    padding: 24px 26px;
+    font-size: 1.03rem;
+    line-height: 1.6;
   }
 
   /* ---- features */
   .sb-features {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(12, minmax(0, 1fr));
     gap: 16px;
   }
   .sb-feature {
+    grid-column: span var(--s);
     display: grid;
     align-content: start;
     gap: 10px;
@@ -279,8 +296,8 @@ const lastWord = (t: string) => t.trim().split(/\s+/).pop()!.replace(/[?!.,:;]+$
   .sb-steps li {
     position: relative;
     display: grid;
+    grid-template-rows: auto 1fr;
     gap: 14px;
-    align-content: start;
   }
   .sb-steps li:not(:last-child)::before {
     content: '';
@@ -421,6 +438,18 @@ const lastWord = (t: string) => t.trim().split(/\s+/).pop()!.replace(/[?!.,:;]+$
   }
 
   @media (max-width: 1020px) {
+    .sb-features {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .sb-feature {
+      grid-column: auto;
+    }
+    .sb-features[data-n='5'] .sb-feature:last-child {
+      grid-column: 1 / -1;
+    }
+    .sb-text-2 {
+      grid-template-columns: minmax(0, 1fr);
+    }
     .sb-ideas,
     .sb-links {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -435,6 +464,13 @@ const lastWord = (t: string) => t.trim().split(/\s+/).pop()!.replace(/[?!.,:;]+$
 
   /* ---- phone: the table turns into cards (row name, then «column: value»), steps go down a line */
   @media (max-width: 760px) {
+    .sb-features {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 10px;
+    }
+    .sb-features[data-n='5'] .sb-feature:last-child {
+      grid-column: auto;
+    }
     .sb-ideas,
     .sb-links {
       grid-template-columns: minmax(0, 1fr);
@@ -442,6 +478,18 @@ const lastWord = (t: string) => t.trim().split(/\s+/).pop()!.replace(/[?!.,:;]+$
     .sb-feature,
     .sb-link {
       padding: 20px;
+    }
+    .sb-feature {
+      grid-template-columns: 44px minmax(0, 1fr);
+      column-gap: 14px;
+      row-gap: 6px;
+      align-items: start;
+    }
+    .sb-feature .sb-ico {
+      grid-row: span 2;
+      width: 44px;
+      height: 44px;
+      margin: 0;
     }
     .sb-card {
       border-radius: 20px;

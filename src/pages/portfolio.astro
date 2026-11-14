@@ -43,7 +43,7 @@ const used = Object.keys(tagNames).filter((t) => portfolio.some((p) => p.tags.in
     mark="работы"
     lead={`${portfolio.length} примеров печати — от одной футболки в подарок до партий мерча для компаний.`}
     facts={[
-      { big: String(portfolio.length), small: 'примеров печати' },
+      { big: String(used.length), small: 'направлений: от одежды до подарков' },
       { big: '1 шт', small: 'минимальный заказ на большинство изделий' },
     ]}
   >
@@ -51,7 +51,7 @@ const used = Object.keys(tagNames).filter((t) => portfolio.some((p) => p.tags.in
     <button type="button" class="ib ib-glass" data-order><span class="ib-ico" aria-hidden="true"><Icon name="upload" size={16} /></span> Отправить макет</button>
   </InkHero>
 
-  <div class="band">
+  <div class="band band-tint">
     <section class="section pgrid-sec" aria-label="Работы">
       <div class="wrap">
         <div class="filters" role="group" aria-label="Фильтр работ">
@@ -83,7 +83,7 @@ const used = Object.keys(tagNames).filter((t) => portfolio.some((p) => p.tags.in
     </section>
   </div>
 
-  <div class="band band-tint">
+  <div class="band">
     <CtaBand title="Хотите так же?" text="Пришлите идею или пример, который понравился, — сделаем похожее с вашим дизайном." />
   </div>
 </BaseLayout>

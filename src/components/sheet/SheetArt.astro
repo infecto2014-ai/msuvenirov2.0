@@ -59,9 +59,9 @@ const L: Record<SheetLayout, Item[]> = {
   ],
 };
 const items = L[layout as SheetLayout].map((it) => ({ ...it, x: x0 + it.x * W, y: y0 + it.y * H, w: it.w * W, h: it.h * H }));
-const C = '#00a0dc';
-const M = '#e5007d';
-const Y = '#ffd21f';
+const C = '#5b7bd5';
+const M = '#14213d';
+const Y = '#9fb0d4';
 const K = '#16141b';
 const fade = sub ? 0.62 : 1; // на сублимационной бумаге краски бледнее
 const curl = Math.min(W, H) * 0.12;
@@ -196,12 +196,12 @@ const curl = Math.min(W, H) * 0.12;
     dims && (
       <g font-weight="800" fill="#16141b" class="mono">
         <path d={`M ${x0} ${y0 + H + 10} H ${x0 + W} M ${x0} ${y0 + H + 6} v 8 M ${x0 + W} ${y0 + H + 6} v 8`} stroke="#16141b" stroke-width={1.2 * u} />
-        <rect x={x0 + W / 2 - 34 * u} y={y0 + H + 10 - 9 * u} width={68 * u} height={18 * u} rx={6 * u} fill="#ffd21f" />
+        <rect x={x0 + W / 2 - 34 * u} y={y0 + H + 10 - 9 * u} width={68 * u} height={18 * u} rx={6 * u} fill="#9fb0d4" />
         <text x={x0 + W / 2} y={y0 + H + 10 + 4 * u} font-size={12 * u} text-anchor="middle">
           {String(W / 10).replace(".", ",")} см
         </text>
         <path d={`M ${x0 + W + 10} ${y0} V ${y0 + H} M ${x0 + W + 6} ${y0} h 8 M ${x0 + W + 6} ${y0 + H} h 8`} stroke="#16141b" stroke-width={1.2 * u} />
-        <rect x={x0 + W + 10 - 9 * u} y={y0 + H / 2 - 34 * u} width={18 * u} height={68 * u} rx={6 * u} fill="#ffd21f" />
+        <rect x={x0 + W + 10 - 9 * u} y={y0 + H / 2 - 34 * u} width={18 * u} height={68 * u} rx={6 * u} fill="#9fb0d4" />
         <text x={x0 + W + 10} y={y0 + H / 2} font-size={12 * u} text-anchor="middle" transform={`rotate(-90 ${x0 + W + 10} ${y0 + H / 2})`} dy={4 * u}>
           {String(H / 10).replace(".", ",")} см
         </text>

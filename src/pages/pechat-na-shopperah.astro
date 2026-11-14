@@ -137,7 +137,6 @@ const heroFacts = [{ big: '1 шт', small: 'можно заказать один
         </TeeHead>
       <div class="kinds-grid">
         <div class="kinds-wall" style={`--cell:${50 * KSCALE}px`}>
-          <span class="kinds-rail" aria-hidden="true"></span>
           <ol class="kinds-row">
             {
               kinds.map((k, i) => (
@@ -252,7 +251,7 @@ const heroFacts = [{ big: '1 шт', small: 'можно заказать один
   <div class="band">
   <section class="section vs" aria-labelledby="vs-h">
     <div class="wrap">
-      <TeeHead icon="layers" eyebrow="Технология" id="vs-h" title={page.tech.title}>
+      <TeeHead dark icon="layers" eyebrow="Технология" id="vs-h" title={page.tech.title}>
           <p>Обе технологии дают полноцветный принт. Разница — в ткани, тираже и ощущении рисунка.</p>
         </TeeHead>
       <div class="vs-grid">
@@ -476,15 +475,6 @@ const heroFacts = [{ big: '1 шт', small: 'можно заказать один
       var(--paper-2);
     overflow: clip;
   }
-  .kinds-rail {
-    position: absolute;
-    left: 6%;
-    right: 6%;
-    top: 64px;
-    height: 8px;
-    border-radius: 999px;
-    background: var(--ink);
-  }
   .kinds-row {
     position: relative;
     z-index: 1;
@@ -522,7 +512,8 @@ const heroFacts = [{ big: '1 шт', small: 'можно заказать один
   .kinds-tech {
     padding: 3px 12px;
     border-radius: 999px;
-    background: var(--tone);
+    background: var(--navy, #14213d);
+    color: #fff;
     font-size: 0.8rem;
     font-weight: 700;
   }
@@ -542,7 +533,7 @@ const heroFacts = [{ big: '1 шт', small: 'можно заказать один
   .kinds-legend i {
     width: var(--cz);
     height: 6px;
-    border: 1.5px solid var(--ink);
+    border: 1px solid rgba(20, 33, 61, 0.22);
     border-top: 0;
   }/* comparison table */
   
@@ -578,7 +569,6 @@ const heroFacts = [{ big: '1 шт', small: 'можно заказать один
     font-weight: 600;
   }
   .cmp-head {
-    border-top: 6px solid var(--tone);
     background: var(--soft);
     scroll-margin-top: 90px;
   }
@@ -636,7 +626,7 @@ const heroFacts = [{ big: '1 шт', small: 'можно заказать один
   .szs-card {
     display: grid;
     grid-template-rows: auto 1fr;
-    border-radius: 26px 26px 26px 8px;
+    border-radius: 26px;
     background: var(--card);
     border: 1.5px solid var(--line);
     overflow: clip;
@@ -648,7 +638,6 @@ const heroFacts = [{ big: '1 шт', small: 'можно заказать один
     align-items: flex-end;
     padding: 18px 10px 14px;
     background:
-      radial-gradient(circle, rgba(22, 20, 27, 0.08) 1.3px, transparent 1.5px) 0 0 / 14px 14px,
       var(--soft);
   }
   .szs-art :global(svg) {
@@ -664,11 +653,11 @@ const heroFacts = [{ big: '1 шт', small: 'можно заказать один
     width: 54px;
     height: 54px;
     border-radius: 50%;
-    background: var(--ink);
+    background: var(--navy, #14213d);
     color: var(--paper);
     font-weight: 900;
     font-size: 1.2rem;
-    box-shadow: 3px 3px 0 var(--tone);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
   }
   .szs-body {
     display: grid;
@@ -709,7 +698,7 @@ const heroFacts = [{ big: '1 шт', small: 'можно заказать один
 
   
   .vs {
-    background: var(--ink);
+    background: var(--navy, #14213d);
     color: var(--paper);
     border-radius: 48px;
     margin-inline: clamp(0px, 1.5vw, 20px);
@@ -718,7 +707,7 @@ const heroFacts = [{ big: '1 шт', small: 'можно заказать один
   .vs .eyebrow {
     color: var(--paper);
   }
-  .vs .section-head p {
+  .vs :global(.teh p) {
     color: rgba(255, 252, 245, 0.72);
   }
   .vs-grid {
@@ -727,8 +716,10 @@ const heroFacts = [{ big: '1 шт', small: 'можно заказать один
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 28px;
   }
-  .vs-c { --tone: var(--c); }
-  .vs-y { --tone: var(--y); }
+  .vs-c,
+  .vs-y {
+    --tone: #fff;
+  }
   .vs-card {
     display: flex;
     flex-direction: column;
@@ -737,8 +728,7 @@ const heroFacts = [{ big: '1 шт', small: 'можно заказать один
     padding: 24px;
     border-radius: var(--radius-l);
     background: rgba(255, 252, 245, 0.06);
-    border: 1.5px solid rgba(255, 252, 245, 0.14);
-    border-top: 6px solid var(--tone);
+    border: 1px solid rgba(255, 255, 255, 0.14);
   }
   .vs-top {
     display: grid;
@@ -816,17 +806,17 @@ const heroFacts = [{ big: '1 шт', small: 'можно заказать один
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%) rotate(-8deg);
+    transform: translate(-50%, -50%);
     display: grid;
     place-items: center;
     width: 64px;
     height: 64px;
     border-radius: 50%;
-    background: var(--m);
-    color: #fff;
+    background: #fff;
+    color: var(--navy, #14213d);
     font-weight: 800;
     font-size: 1rem;
-    box-shadow: 0 0 0 6px var(--ink);
+    box-shadow: 0 0 0 6px var(--navy, #14213d);
   }/* ================= audience ================= */
 
   
@@ -848,15 +838,19 @@ const heroFacts = [{ big: '1 шт', small: 'можно заказать один
     align-content: start;
     justify-items: start;
     gap: 8px;
-    padding: 22px 22px 56px;
-    border-radius: 26px 26px 26px 8px;
-    background: var(--soft);
+    padding: 22px;
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.78);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(20, 33, 61, 0.1);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
     overflow: clip;
   }
   .aud-tag {
     padding: 3px 10px;
     border-radius: 999px;
-    background: var(--card);
+    background: #eef0f4;
     font-size: 0.75rem;
     font-weight: 700;
   }
@@ -916,13 +910,13 @@ const heroFacts = [{ big: '1 шт', small: 'можно заказать один
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    border: 2px solid var(--ink);
+    border: 1px solid rgba(20, 33, 61, 0.14);
     background: var(--card);
     font-weight: 700;
   }
-  .how-steps li:nth-child(3n + 1) .how-dot { box-shadow: 3px 3px 0 var(--c); }
-  .how-steps li:nth-child(3n + 2) .how-dot { box-shadow: 3px 3px 0 var(--m); }
-  .how-steps li:nth-child(3n + 3) .how-dot { box-shadow: 3px 3px 0 var(--y); }
+  .how-steps li:nth-child(3n + 1) .how-dot { box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4); }
+  .how-steps li:nth-child(3n + 2) .how-dot { box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4); }
+  .how-steps li:nth-child(3n + 3) .how-dot { box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4); }
   .how-steps h3 {
     margin: 10px 0 4px;
     font-size: 1.1rem;
@@ -951,7 +945,7 @@ const heroFacts = [{ big: '1 шт', small: 'можно заказать один
     color: var(--ink-2);
   }
   .how-card {
-    background: var(--y-soft);
+    background: #eef0f4;
   }
   .how-card summary {
     list-style: none;
@@ -967,26 +961,26 @@ const heroFacts = [{ big: '1 шт', small: 'можно заказать один
     gap: 6px;
   }
   .how-list li::marker {
-    color: var(--m);
+    color: var(--navy, #14213d);
   }
   .how-more {
     font-weight: 700;
     color: var(--m-ink);
   }
   .how-b2b {
-    background: var(--ink);
+    background: var(--navy, #14213d);
     color: var(--paper);
   }
   .how-b2b h3 {
     color: var(--paper);
   }
   .how-b2b .how-more {
-    color: var(--y);
+    color: #fff;
   }
   .how-b2b-btn {
-    background: var(--y);
-    color: var(--ink);
-    border-color: var(--y);
+    background: #fff;
+    color: var(--navy, #14213d);
+    border-color: #fff;
   }
   .how-chips {
     list-style: none;
@@ -1007,7 +1001,7 @@ const heroFacts = [{ big: '1 шт', small: 'можно заказать один
     font-weight: 600;
   }
   .how-chips :global(svg) {
-    color: var(--y);
+    color: #fff;
   }/* ================= seo text ================= */
 
   
@@ -1066,8 +1060,8 @@ const heroFacts = [{ big: '1 шт', small: 'можно заказать один
     flex: 1;
   }
   .related-card:hover {
-    border-color: var(--ink);
-    box-shadow: 4px 4px 0 var(--y);
+    border-color: rgba(20, 33, 61, 0.3);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
     color: var(--ink);
   }/* ================= tablets ================= */
 
@@ -1165,7 +1159,7 @@ const heroFacts = [{ big: '1 шт', small: 'можно заказать один
     }
 
     .szs .section-head p,
-    .vs .section-head p {
+    .vs :global(.teh p) {
       font-size: 0.86rem;
     }
 
@@ -1186,307 +1180,7 @@ const heroFacts = [{ big: '1 шт', small: 'можно заказать один
       border-radius: 24px;
     }
 
-    .kinds-rail {
-      top: 40px;
-      height: 6px;
-    }
-
-    .kinds-item {
-      gap: 5px;
-    }
-
-    .kinds-name {
-      font-size: 0.78rem;
-      max-width: 150px;
-      line-height: 1.2;
-    }
-
-    .kinds-tech {
-      padding: 2px 8px;
-      font-size: 0.75rem;
-    }
-
-    .kinds-legend {
-      right: 10px;
-      bottom: 8px;
-      font-size: 0.75rem;
-    }
-
-    .cmp {
-      margin-inline: calc(var(--gutter) * -0.5);
-      border-radius: 22px;
-    }
-
-    .cmp-table {
-      font-size: 0.78rem;
-    }
-
-    .cmp-table th:first-child {
-      width: 25%;
-    }
-
-    .cmp-table th,
-    .cmp-table td {
-      padding: 7px 8px;
-      line-height: 1.32;
-    }
-
-    .cmp-name {
-      font-size: 0.86rem;
-    }
-
-    .cmp-tag {
-      font-size: 0.75rem;
-      padding: 1px 7px;
-    }
-
-    .cmp-price b {
-      font-size: 1.05rem;
-    }
-
-    .cmp-price small {
-      font-size: 0.75rem;
-      margin-bottom: 8px;
-    }
-
-    .cmp-price .btn {
-      min-height: 34px;
-      padding: 0 10px;
-      font-size: 0.78rem;
-    }
-
-
-    /* sizes: 2×2 compact tiles */
-    .szs-grid {
-      gap: 8px;
-    }
-
-    .szs-card {
-      border-radius: 20px 20px 20px 6px;
-    }
-
-    .szs-art {
-      padding: 10px 6px 8px;
-    }
-
-    .szs-art :global(svg) {
-      zoom: 0.56;
-    }
-
-    .szs-badge {
-      left: 8px;
-      top: 8px;
-      width: 36px;
-      height: 36px;
-      font-size: 0.86rem;
-      box-shadow: 2px 2px 0 var(--tone);
-    }
-
-    .szs-body {
-      gap: 5px;
-      padding: 8px 10px 12px;
-    }
-
-    .szs-dims {
-      font-size: 0.75rem;
-    }
-
-    .szs-dims div {
-      flex-wrap: wrap;
-      gap: 0 6px;
-    }
-
-    .szs-body p {
-      font-size: 0.76rem;
-      line-height: 1.35;
-    }
-
-
-    /* DTF vs sublimation */
-    .vs {
-      border-radius: 28px;
-    }
-
-    .vs-grid {
-      gap: 10px;
-    }
-
-    .vs-card {
-      gap: 10px;
-      padding: 14px 14px 16px;
-      border-radius: 22px;
-    }
-
-    .vs-top {
-      gap: 12px;
-    }
-
-    .vs-art {
-      width: 76px;
-      height: 104px;
-      border-radius: 18px;
-    }
-
-    .vs-art :global(svg) {
-      zoom: 0.6;
-    }
-
-    .vs-card h3 {
-      font-size: 1.15rem;
-    }
-
-    .vs-from {
-      font-size: 0.8rem;
-    }
-
-    .vs-list {
-      gap: 5px;
-    }
-
-    .vs-list li {
-      font-size: 0.82rem;
-    }
-
-    .vs-best {
-      padding: 8px 10px;
-      font-size: 0.8rem;
-    }
-
-    .vs-btn {
-      min-height: 38px;
-      font-size: 0.85rem;
-    }
-
-
-    /* audience: compact 2×2 */
-    .aud-title {
-      margin-bottom: 14px;
-    }
-
-    .aud .eyebrow {
-      margin-bottom: 6px;
-    }
-
-    .aud-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-    }
-
-    .aud-card {
-      gap: 4px;
-      padding: 12px 12px 30px;
-      border-radius: 20px 20px 20px 6px;
-    }
-
-    .aud-card h3 {
-      font-size: 0.95rem;
-      line-height: 1.2;
-    }
-
-    .aud-card p {
-      font-size: 0.78rem;
-      line-height: 1.38;
-    }
-
-    .aud-tag {
-      padding: 2px 8px;
-      font-size: 0.75rem;
-    }
-
-    .aud-num {
-      right: 10px;
-      bottom: -8px;
-      font-size: 2.4rem;
-    }
-
-
-    /* how to order */
-    .how-grid h2 {
-      margin-bottom: 16px;
-    }
-
-    .how-steps li {
-      grid-template-columns: 36px 1fr;
-      gap: 12px;
-      padding-bottom: 14px;
-    }
-
-    .how-steps li:not(:last-child)::before {
-      left: 17px;
-      top: 36px;
-    }
-
-    .how-dot {
-      width: 36px;
-      height: 36px;
-      font-size: 0.85rem;
-    }
-
-    .how-steps h3 {
-      margin: 6px 0 2px;
-      font-size: 0.98rem;
-    }
-
-    .how-steps p {
-      font-size: 0.84rem;
-      line-height: 1.4;
-    }
-
-    .how-side {
-      gap: 10px;
-    }
-
-    .how-card,
-    .how-b2b {
-      gap: 6px;
-      padding: 16px;
-      border-radius: 24px;
-    }
-
-    .how-card li {
-      font-size: 0.82rem;
-    }
-
-    .how-card summary {
-      cursor: pointer;
-    }
-
-    .how-card summary h3 {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      font-size: 1rem;
-    }
-
-    .how-card summary h3::after {
-      content: '+';
-      display: grid;
-      place-items: center;
-      width: 26px;
-      height: 26px;
-      flex: none;
-      border-radius: 50%;
-      border: 1.5px solid var(--ink);
-      font-size: 1rem;
-    }
-
-    .how-card[open] summary h3::after {
-      content: '−';
-    }
-
-    .how-side h3 {
-      font-size: 1rem;
-    }
-
-    .how-chips li {
-      padding: 4px 9px;
-      font-size: 0.76rem;
-    }
-
   
-  }
-
   @media (max-width: 560px) {
     /* seo text: first lines + «Читать полностью» */
     .seo-text h2 {
@@ -1577,5 +1271,22 @@ const heroFacts = [{ big: '1 шт', small: 'можно заказать один
 
   
   
+  }
+
+  /* «Ink» phone tweaks */
+  @media (max-width: 560px) {
+    .aud-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .aud-card {
+      padding: 18px;
+    }
+  }
+  @media (max-width: 560px) {
+    .szs-dims > div {
+      display: grid;
+      gap: 0;
+      justify-content: start;
+    }
   }
 </style>

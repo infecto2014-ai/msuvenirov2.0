@@ -27,8 +27,8 @@ const dark = isDark(base);
 const shade = mix(base, '#000000', dark ? 0.28 : 0.14);
 const edge = mix(base, '#000000', dark ? 0.55 : 0.38);
 const seam = dark ? mix(base, '#ffffff', 0.28) : mix(base, '#000000', 0.25);
-const ink = type === 'signal' ? '#16141b' : dark ? '#fffcf5' : '#16141b';
-const accent = type === 'signal' || color === 'red' ? '#16141b' : '#e5007d';
+const ink = type === 'signal' ? '#16141b' : dark ? '#ffffff' : '#16141b';
+const accent = type === 'signal' || color === 'red' ? '#16141b' : '#14213d';
 const hasSleeves = type === 'jacket' || type === 'overalls' || type === 'polo';
 const back = view === 'back';
 
@@ -200,9 +200,9 @@ const tlen = Math.min(Z.back.w * 0.92, text.length * tfs * 0.74);
     show('chest') && (
       <g transform={`translate(${Z.chest.x} ${Z.chest.y})`}>
         <circle cx={Z.chest.h / 2} cy={Z.chest.h / 2} r={Z.chest.h / 2 - 1} fill="none" stroke={ink} stroke-width="1.8" />
-        <circle cx={Z.chest.h / 2 - 2.4} cy={Z.chest.h / 2 - 1.2} r={Z.chest.h / 5} fill="#00a0dc" />
-        <circle cx={Z.chest.h / 2 + 2.4} cy={Z.chest.h / 2 - 1.2} r={Z.chest.h / 5} fill="#e5007d" />
-        <circle cx={Z.chest.h / 2} cy={Z.chest.h / 2 + 2.4} r={Z.chest.h / 5} fill="#ffd21f" />
+        <circle cx={Z.chest.h / 2 - 2.4} cy={Z.chest.h / 2 - 1.2} r={Z.chest.h / 5} fill="#5b7bd5" />
+        <circle cx={Z.chest.h / 2 + 2.4} cy={Z.chest.h / 2 - 1.2} r={Z.chest.h / 5} fill="#14213d" />
+        <circle cx={Z.chest.h / 2} cy={Z.chest.h / 2 + 2.4} r={Z.chest.h / 5} fill="#9fb0d4" />
         <rect x={Z.chest.h + 1.5} y={Z.chest.h / 2 - 3.6} width={Z.chest.w - Z.chest.h - 1.5} height="3" rx="1" fill={ink} />
         <rect x={Z.chest.h + 1.5} y={Z.chest.h / 2 + 1.2} width={(Z.chest.w - Z.chest.h - 1.5) * 0.7} height="2.2" rx="1" fill={ink} fill-opacity="0.7" />
       </g>
@@ -213,9 +213,9 @@ const tlen = Math.min(Z.back.w * 0.92, text.length * tfs * 0.74);
       <g transform={`translate(${Z.back.x} ${Z.back.y})`}>
         <g transform={`translate(${Z.back.w / 2 - 9} 0)`}>
           <circle cx="9" cy="9" r="8.4" fill="none" stroke={ink} stroke-width="2" />
-          <circle cx="6.6" cy="7.6" r="3.6" fill="#00a0dc" />
-          <circle cx="11.4" cy="7.6" r="3.6" fill="#e5007d" />
-          <circle cx="9" cy="11.6" r="3.6" fill="#ffd21f" />
+          <circle cx="6.6" cy="7.6" r="3.6" fill="#5b7bd5" />
+          <circle cx="11.4" cy="7.6" r="3.6" fill="#14213d" />
+          <circle cx="9" cy="11.6" r="3.6" fill="#9fb0d4" />
         </g>
         <text x={Z.back.w / 2} y={22 + tfs} font-size={tfs} textLength={tlen} lengthAdjust="spacingAndGlyphs" font-weight="900" text-anchor="middle" fill={ink}>
           {text}
@@ -228,9 +228,9 @@ const tlen = Math.min(Z.back.w * 0.92, text.length * tfs * 0.74);
     show('sleeve') && !back && (
       <g transform={`translate(${Z.sleeve.x} ${Z.sleeve.y}) rotate(10)`}>
         <circle cx="6.5" cy="6.5" r="5.8" fill="none" stroke={ink} stroke-width="1.4" />
-        <circle cx="4.9" cy="5.6" r="2.4" fill="#00a0dc" />
-        <circle cx="8.1" cy="5.6" r="2.4" fill="#e5007d" />
-        <circle cx="6.5" cy="8.3" r="2.4" fill="#ffd21f" />
+        <circle cx="4.9" cy="5.6" r="2.4" fill="#5b7bd5" />
+        <circle cx="8.1" cy="5.6" r="2.4" fill="#14213d" />
+        <circle cx="6.5" cy="8.3" r="2.4" fill="#9fb0d4" />
       </g>
     )
   }
@@ -264,8 +264,8 @@ const tlen = Math.min(Z.back.w * 0.92, text.length * tfs * 0.74);
                   stroke-dasharray="3 2"
                   transform={p === 'sleeve' ? `rotate(10 ${z.x} ${z.y})` : undefined}
                 />
-                <circle cx={z.x - pad} cy={z.y - pad} r="6" fill="#16141b" stroke="#fffcf5" stroke-width="1.2" />
-                <text x={z.x - pad} y={z.y - pad + 3} font-size="8" font-weight="800" text-anchor="middle" fill="#fffcf5">
+                <circle cx={z.x - pad} cy={z.y - pad} r="6" fill="#16141b" stroke="#ffffff" stroke-width="1.2" />
+                <text x={z.x - pad} y={z.y - pad + 3} font-size="8" font-weight="800" text-anchor="middle" fill="#ffffff">
                   {n}
                 </text>
               </g>

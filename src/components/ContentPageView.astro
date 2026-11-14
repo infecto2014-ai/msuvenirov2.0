@@ -18,8 +18,10 @@ interface Props {
   facts?: { big: string; small: string }[];
   /** tone of the FAQ band; the closing panel takes the other one */
   faqTone?: 'plain' | 'tint';
+  /** tone of the first block band */
+  startTone?: 'plain' | 'tint';
 }
-const { page, path, crumb, mark, facts, faqTone = 'tint' } = Astro.props;
+const { page, path, crumb, mark, facts, faqTone = 'tint', startTone = 'plain' } = Astro.props;
 const crumbs = [
   { name: 'Главная', href: '/' },
   { name: crumb, href: path },
@@ -27,12 +29,20 @@ const crumbs = [
 ---
 
 <BaseLayout title={page.title} description={page.description} path={path} schema={[breadcrumbs(crumbs), ...(page.faq.length ? [faqPage(page.faq)] : [])]}>
-  <InkHero crumbs={crumbs} h1={page.h1} mark={mark} lead={page.lead} facts={facts}>
-    <slot name="hero" />
-    {Astro.slots.has('aside') && <slot name="aside" slot="aside" />}
-  </InkHero>
+  {
+    Astro.slots.has('aside') ? (
+      <InkHero crumbs={crumbs} h1={page.h1} mark={mark} lead={page.lead} facts={facts}>
+        <slot name="hero" />
+        <slot name="aside" slot="aside" />
+      </InkHero>
+    ) : (
+      <InkHero crumbs={crumbs} h1={page.h1} mark={mark} lead={page.lead} facts={facts}>
+        <slot name="hero" />
+      </InkHero>
+    )
+  }
   <slot />
-  <InkBlocks blocks={page.blocks} />
+  <InkBlocks blocks={page.blocks} start={startTone} />
   <slot name="after" />
   {
     page.faq.length > 0 && (

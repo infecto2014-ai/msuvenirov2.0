@@ -300,7 +300,7 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
     })();
   </script>
 
-  <div class="band">
+  <div class="band band-ink">
   <PortfolioGrid tags={page.portfolioTags} limit={4} title="Примеры: принты на одежде" />
   </div>
 
@@ -410,7 +410,7 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
   }
   .spk-card:hover {
     transform: translateY(-3px);
-    box-shadow: 5px 5px 0 var(--tone);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
   }
   .spk-c { --tone: var(--c); --soft: var(--c-soft); }
   .spk-m { --tone: var(--m); --soft: var(--m-soft); }
@@ -424,7 +424,6 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
     align-items: center;
     overflow: clip;
     background:
-      radial-gradient(circle, rgba(22, 20, 27, 0.09) 1.3px, transparent 1.5px) 0 0 / 14px 14px,
       var(--soft);
   }
   .spk-art :global(svg) {
@@ -445,7 +444,7 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
   }
   .spk-qty {
     right: 12px;
-    background: var(--ink);
+    background: var(--navy, #14213d);
     color: var(--paper);
   }
   .spk-tech {
@@ -620,7 +619,7 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
     display: grid;
     padding: 10px 14px;
     border-radius: 18px;
-    background: var(--ink);
+    background: var(--navy, #14213d);
     color: var(--paper);
   }
   .tr-tiers li:nth-child(1) { box-shadow: inset 0 -4px 0 var(--c); }
@@ -655,7 +654,7 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
     gap: 16px;
     align-items: center;
     padding: 12px 18px 12px 12px;
-    border-radius: 28px 28px 28px 8px;
+    border-radius: 28px;
     background: var(--card);
     border: 1.5px solid var(--line);
   }
@@ -665,7 +664,6 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
     padding: 8px;
     border-radius: 20px;
     background:
-      radial-gradient(circle, rgba(22, 20, 27, 0.08) 1.3px, transparent 1.5px) 0 0 / 12px 12px,
       var(--soft);
   }
   .knd-art :global(svg) {
@@ -698,13 +696,13 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
     align-items: flex-start;
     gap: 10px;
     padding: 24px;
-    border-radius: 34px 34px 34px 10px;
+    border-radius: 34px;
   }
   .ways-y {
     background: var(--y-soft);
   }
   .ways-ink {
-    background: var(--ink);
+    background: var(--navy, #14213d);
     color: var(--paper);
   }
   .ways-ink h3 {
@@ -719,7 +717,7 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
     font-weight: 700;
   }
   .ways-ink .ways-tag {
-    background: var(--y);
+    background: #fff;
   }
   .ways-card h3 {
     font-size: 1.4rem;
@@ -754,15 +752,15 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
     color: var(--m-ink);
   }
   .ways-ink li :global(svg) {
-    color: var(--y);
+    color: #fff;
   }
   .ways-card .btn {
     margin-top: auto;
   }
   .ways-btn {
-    background: var(--y);
+    background: #fff;
     color: var(--ink);
-    border-color: var(--y);
+    border-color: #fff;
   }
   .ways-care {
     margin-top: 16px;
@@ -812,7 +810,7 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;
     align-items: start;
-    border-radius: 34px 34px 34px 10px;
+    border-radius: 34px;
     background: var(--card);
     border: 1.5px solid var(--line);
     overflow: clip;
@@ -824,7 +822,6 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
     min-height: 220px;
     padding: 18px 10px;
     background:
-      radial-gradient(circle, rgba(22, 20, 27, 0.08) 1.3px, transparent 1.5px) 0 0 / 14px 14px,
       var(--soft);
   }
   .plc-art :global(svg) {
@@ -839,11 +836,11 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
     width: 46px;
     height: 46px;
     border-radius: 50%;
-    background: var(--ink);
+    background: var(--navy, #14213d);
     color: var(--paper);
     font-weight: 800;
     font-size: 1.1rem;
-    box-shadow: 3px 3px 0 var(--tone);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
   }
   .plc-body {
     display: grid;
@@ -855,12 +852,12 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
     padding: 3px 10px;
     border-radius: 999px;
     background: var(--tone);
-    color: var(--ink);
+    color: #fff;
     font-size: 0.75rem;
     font-weight: 700;
   }
   .plc-y .plc-tag {
-    background: var(--y);
+    background: #eef0f4;
     color: var(--ink);
   }
   .plc-m .plc-tag {
@@ -906,7 +903,7 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
     flex-direction: column;
     gap: 6px;
     padding: 16px 18px;
-    border-radius: 24px 24px 24px 8px;
+    border-radius: 24px;
     background: var(--soft);
     color: var(--ink);
     text-decoration: none;
@@ -914,8 +911,8 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
     transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
   }
   .apl-card:hover {
-    border-color: var(--ink);
-    box-shadow: 4px 4px 0 var(--tone);
+    border-color: rgba(20, 33, 61, 0.3);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
     transform: translateY(-2px);
   }
   .apl-title {
@@ -953,15 +950,19 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
     align-content: start;
     justify-items: start;
     gap: 8px;
-    padding: 22px 22px 56px;
-    border-radius: 26px 26px 26px 8px;
-    background: var(--soft);
+    padding: 22px;
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.78);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(20, 33, 61, 0.1);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
     overflow: clip;
   }
   .aud-tag {
     padding: 3px 10px;
     border-radius: 999px;
-    background: var(--card);
+    background: #eef0f4;
     font-size: 0.75rem;
     font-weight: 700;
   }
@@ -1021,13 +1022,13 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    border: 2px solid var(--ink);
+    border: 1px solid rgba(20, 33, 61, 0.14);
     background: var(--card);
     font-weight: 700;
   }
-  .how-steps li:nth-child(3n + 1) .how-dot { box-shadow: 3px 3px 0 var(--c); }
-  .how-steps li:nth-child(3n + 2) .how-dot { box-shadow: 3px 3px 0 var(--m); }
-  .how-steps li:nth-child(3n + 3) .how-dot { box-shadow: 3px 3px 0 var(--y); }
+  .how-steps li:nth-child(3n + 1) .how-dot { box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4); }
+  .how-steps li:nth-child(3n + 2) .how-dot { box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4); }
+  .how-steps li:nth-child(3n + 3) .how-dot { box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4); }
   .how-steps h3 {
     margin: 10px 0 4px;
     font-size: 1.1rem;
@@ -1056,7 +1057,7 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
     color: var(--ink-2);
   }
   .how-card {
-    background: var(--y-soft);
+    background: #fff;
   }
   .how-card summary {
     list-style: none;
@@ -1072,26 +1073,26 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
     gap: 6px;
   }
   .how-list li::marker {
-    color: var(--m);
+    color: var(--navy, #14213d);
   }
   .how-more {
     font-weight: 700;
     color: var(--m-ink);
   }
   .how-b2b {
-    background: var(--ink);
+    background: var(--navy, #14213d);
     color: var(--paper);
   }
   .how-b2b h3 {
     color: var(--paper);
   }
   .how-b2b .how-more {
-    color: var(--y);
+    color: #fff;
   }
   .how-b2b-btn {
-    background: var(--y);
-    color: var(--ink);
-    border-color: var(--y);
+    background: #fff;
+    color: var(--navy, #14213d);
+    border-color: #fff;
   }
   .how-chips {
     list-style: none;
@@ -1112,7 +1113,7 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
     font-weight: 600;
   }
   .how-chips :global(svg) {
-    color: var(--y);
+    color: #fff;
   }/* ================= seo text ================= */
 
   
@@ -1171,8 +1172,8 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
     flex: 1;
   }
   .related-card:hover {
-    border-color: var(--ink);
-    box-shadow: 4px 4px 0 var(--y);
+    border-color: rgba(20, 33, 61, 0.3);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
     color: var(--ink);
   }/* ================= tablets ================= */
 
@@ -1281,7 +1282,7 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
       grid-template-columns: 92px minmax(0, 1fr);
       gap: 12px;
       padding: 8px 12px 8px 8px;
-      border-radius: 20px 20px 20px 6px;
+      border-radius: 20px;
     }
 
     .knd-card h3 {
@@ -1308,7 +1309,7 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
 
     .apl-card {
       padding: 12px;
-      border-radius: 18px 18px 18px 6px;
+      border-radius: 18px;
     }
 
     .apl-title {
@@ -1349,7 +1350,7 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
     .ways-card {
       gap: 8px;
       padding: 16px;
-      border-radius: 24px 24px 24px 8px;
+      border-radius: 24px;
     }
 
     .ways-card h3 {
@@ -1386,7 +1387,7 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
       height: 26px;
       flex: none;
       border-radius: 50%;
-      border: 1.5px solid var(--ink);
+      border: 1px solid rgba(20, 33, 61, 0.22);
       font-size: 1rem;
     }
 
@@ -1409,7 +1410,7 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
       grid-template-columns: 128px minmax(0, 1fr);
       grid-template-rows: auto;
       align-items: stretch;
-      border-radius: 20px 20px 20px 6px;
+      border-radius: 20px;
     }
 
     .plc-art {
@@ -1433,7 +1434,7 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
       width: 30px;
       height: 30px;
       font-size: 0.8rem;
-      box-shadow: 2px 2px 0 var(--tone);
+      box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
     }
 
     .plc-body {
@@ -1483,7 +1484,7 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
     .aud-card {
       gap: 4px;
       padding: 12px 12px 30px;
-      border-radius: 20px 20px 20px 6px;
+      border-radius: 20px;
     }
 
     .aud-card h3 {
@@ -1575,7 +1576,7 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
       height: 26px;
       flex: none;
       border-radius: 50%;
-      border: 1.5px solid var(--ink);
+      border: 1px solid rgba(20, 33, 61, 0.22);
       font-size: 1rem;
     }
 
@@ -1680,5 +1681,15 @@ const heroFacts = [{ big: '28×38 см', small: 'поле DTF-листа' },{ bi
 
   
   
+  }
+
+  /* «Ink» phone tweaks */
+  @media (max-width: 560px) {
+    .aud-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .aud-card {
+      padding: 18px;
+    }
   }
 </style>

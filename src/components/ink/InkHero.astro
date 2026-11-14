@@ -14,15 +14,17 @@ interface Props {
   facts?: { big: string; small: string }[];
   /** columns of the fact grid (default 2) */
   cols?: number;
+  /** long h1 (4+ lines at full size): smaller type */
+  long?: boolean;
 }
-const { crumbs, h1, mark, eyebrow, lead, facts = [], cols = 2 } = Astro.props;
+const { crumbs, h1, mark, eyebrow, lead, facts = [], cols = 2, long = false } = Astro.props;
 const at = mark ? h1.indexOf(mark) : -1;
 const parts = at >= 0 ? [h1.slice(0, at), mark!, h1.slice(at + mark!.length)] : [h1, '', ''];
 const hasAside = Astro.slots.has('aside') || facts.length > 0;
 ---
 
 <section class="ihero" aria-labelledby="ihero-h">
-  <div class:list={['ihero-frame', { 'ihero-solo': !hasAside }]}>
+  <div class:list={['ihero-frame', { 'ihero-solo': !hasAside, 'ihero-long': long }]}>
     <div class="ihero-copy">
       <Breadcrumbs items={crumbs} />
       {eyebrow && <p class="eyebrow ihero-eyebrow">{eyebrow}</p>}
@@ -95,6 +97,9 @@ const hasAside = Astro.slots.has('aside') || facts.length > 0;
     letter-spacing: -0.03em;
     color: #000;
     text-wrap: balance;
+  }
+  .ihero-long .ihero-copy h1 {
+    font-size: clamp(2.1rem, 3.5vw, 3.1rem);
   }
   .ihero-lead {
     margin: 0;
@@ -231,6 +236,9 @@ const hasAside = Astro.slots.has('aside') || facts.length > 0;
     }
     .ihero-copy h1 {
       font-size: 2.1rem;
+    }
+    .ihero-long .ihero-copy h1 {
+      font-size: 1.85rem;
     }
     .ihero-lead {
       font-size: 1rem;

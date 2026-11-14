@@ -24,7 +24,7 @@ const {
   type = 'jersey',
   view = 'back',
   color = '#1f4fd1',
-  trim = '#ffd21f',
+  trim = '#9fb0d4',
   number = 10,
   name = 'ИВАНОВ',
   emblem = true,
@@ -38,7 +38,7 @@ const {
 const dark = isDark(color);
 const shade = mix(color, '#000000', dark ? 0.25 : 0.12);
 const edge = mix(color, '#000000', dark ? 0.55 : 0.4);
-const ink = dark ? '#fffcf5' : '#16141b';
+const ink = dark ? '#ffffff' : '#16141b';
 const outline = isDark(trim) === dark ? edge : trim;
 const back = view === 'back';
 const num = String(number);
@@ -144,9 +144,9 @@ if (type === 'shorts' && !back) zoneList.push({ x: 56, y: 134, w: 30, h: 30, n: 
         {emblem && (
           <g transform={`translate(110 ${type === 'tank' ? 66 : 44})`}>
             <path d="M 12 0 L 24 4 V 13 Q 24 22 12 26 Q 0 22 0 13 V 4 Z" fill={trim} stroke={ink} stroke-width="1.4" />
-            <circle cx="9.5" cy="11" r="3.4" fill="#00a0dc" />
-            <circle cx="14.5" cy="11" r="3.4" fill="#e5007d" />
-            <circle cx="12" cy="15.2" r="3.4" fill="#ffd21f" stroke={ink} stroke-width="0.4" />
+            <circle cx="9.5" cy="11" r="3.4" fill="#5b7bd5" />
+            <circle cx="14.5" cy="11" r="3.4" fill="#14213d" />
+            <circle cx="12" cy="15.2" r="3.4" fill="#9fb0d4" stroke={ink} stroke-width="0.4" />
           </g>
         )}
         {type !== 'tank' && (
@@ -181,8 +181,8 @@ if (type === 'shorts' && !back) zoneList.push({ x: 56, y: 134, w: 30, h: 30, n: 
       zoneList.map((z) => (
         <g>
           <rect x={z.x - 3} y={z.y - 3} width={z.w + 6} height={z.h + 6} rx="3" fill="none" stroke={ink} stroke-width="1.1" stroke-dasharray="3 2" />
-          <circle cx={z.x - 3} cy={z.y - 3} r="6" fill="#16141b" stroke="#fffcf5" stroke-width="1.2" />
-          <text x={z.x - 3} y={z.y} font-size="8" font-weight="800" text-anchor="middle" fill="#fffcf5">
+          <circle cx={z.x - 3} cy={z.y - 3} r="6" fill="#16141b" stroke="#ffffff" stroke-width="1.2" />
+          <text x={z.x - 3} y={z.y} font-size="8" font-weight="800" text-anchor="middle" fill="#ffffff">
             {z.n}
           </text>
         </g>

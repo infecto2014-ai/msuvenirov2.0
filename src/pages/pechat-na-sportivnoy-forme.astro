@@ -52,16 +52,16 @@ const related = page.related.map((r) => services.find((s) => s.slug === r)).filt
 const hasReviews = reviews.some((r) => page.reviewKeywords.some((k) => r.text.toLowerCase().includes(k)));
 const tones = ['c', 'm', 'y'];
 const teamColors = [
-  { color: '#1f4fd1', trim: '#ffd21f' },
-  { color: '#1f4fd1', trim: '#ffd21f' },
-  { color: '#1f4fd1', trim: '#ffd21f' },
-  { color: '#1f4fd1', trim: '#ffd21f' },
+  { color: '#1f4fd1', trim: '#9fb0d4' },
+  { color: '#1f4fd1', trim: '#9fb0d4' },
+  { color: '#1f4fd1', trim: '#9fb0d4' },
+  { color: '#1f4fd1', trim: '#9fb0d4' },
 ];
 const placeArt = [
-  { type: 'jersey', view: 'back', color: '#1f4fd1', trim: '#ffd21f', name: '' },
+  { type: 'jersey', view: 'back', color: '#1f4fd1', trim: '#9fb0d4', name: '' },
   { type: 'jersey', view: 'back', color: '#c8202a', trim: '#ffffff', name: 'КУЗНЕЦОВ' },
-  { type: 'jersey', view: 'front', color: '#ffd21f', trim: '#16141b', name: '' },
-  { type: 'shorts', view: 'front', color: '#16141b', trim: '#e5007d', name: '' },
+  { type: 'jersey', view: 'front', color: '#9fb0d4', trim: '#14213d', name: '' },
+  { type: 'shorts', view: 'front', color: '#14213d', trim: '#14213d', name: '' },
 ] as const;
 
 // three facts under the buttons of the first screen (same row as on the t-shirt page)
@@ -88,9 +88,9 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
     calcText="Рассчитать форму" order="Спортивная форма — номера и фамилии по списку"
   >
     <div class="shero-stage">
-            <SportArt type="tank" color="#e5007d" trim="#ffffff" number={23} name="ПЕТРОВ" scale={1.05} class="shero-sp shero-tank" />
-            <SportArt type="shorts" view="front" color="#16141b" trim="#ffd21f" number={7} scale={1} class="shero-sp shero-shorts" />
-            <SportArt type="jersey" color="#1f4fd1" trim="#ffd21f" number={10} name="ИВАНОВ" scale={1.6} class="shero-sp shero-jersey" />
+            <SportArt type="tank" color="#8ea0c4" trim="#ffffff" number={23} name="ПЕТРОВ" scale={1.05} class="shero-sp shero-tank" />
+            <SportArt type="shorts" view="front" color="#14213d" trim="#ffffff" number={7} scale={1} class="shero-sp shero-shorts" />
+            <SportArt type="jersey" color="#14213d" trim="#ffffff" number={10} name="ИВАНОВ" scale={1.6} class="shero-sp shero-jersey" />
           </div>
   </InkHero>
 
@@ -315,7 +315,7 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
     })();
   </script>
 
-  <div class="band">
+  <div class="band band-ink">
   <PortfolioGrid tags={page.portfolioTags} limit={4} title="Примеры: форма и футболки" />
   </div>
 
@@ -424,7 +424,7 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
   }
   .spk-card:hover {
     transform: translateY(-3px);
-    box-shadow: 5px 5px 0 var(--tone);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
   }
   .spk-c { --tone: var(--c); --soft: var(--c-soft); }
   .spk-m { --tone: var(--m); --soft: var(--m-soft); }
@@ -438,7 +438,6 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
     align-items: center;
     overflow: clip;
     background:
-      radial-gradient(circle, rgba(22, 20, 27, 0.09) 1.3px, transparent 1.5px) 0 0 / 14px 14px,
       var(--soft);
   }
   .spk-art :global(svg) {
@@ -459,7 +458,7 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
   }
   .spk-qty {
     right: 12px;
-    background: var(--ink);
+    background: var(--navy, #14213d);
     color: var(--paper);
   }
   .spk-tech {
@@ -617,10 +616,10 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
   .rst-list {
     margin: 0;
     padding: 18px;
-    border-radius: 28px 28px 28px 8px;
+    border-radius: 28px;
     background: var(--card);
     border: 1.5px solid var(--line);
-    box-shadow: 6px 6px 0 var(--y);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
     transform: rotate(-1.5deg);
   }
   .rst-list table {
@@ -670,7 +669,6 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
     gap: 4px;
     border-radius: 34px;
     background:
-      radial-gradient(circle, rgba(22, 20, 27, 0.08) 1.3px, transparent 1.5px) 0 0 / 14px 14px,
       var(--c-soft);
   }
   .rst-team :global(svg) {
@@ -701,13 +699,13 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
     align-items: flex-start;
     gap: 10px;
     padding: 24px;
-    border-radius: 34px 34px 34px 10px;
+    border-radius: 34px;
   }
   .ways-y {
     background: var(--y-soft);
   }
   .ways-ink {
-    background: var(--ink);
+    background: var(--navy, #14213d);
     color: var(--paper);
   }
   .ways-ink h3 {
@@ -722,7 +720,7 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
     font-weight: 700;
   }
   .ways-ink .ways-tag {
-    background: var(--y);
+    background: #fff;
   }
   .ways-card h3 {
     font-size: 1.4rem;
@@ -757,15 +755,15 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
     color: var(--m-ink);
   }
   .ways-ink li :global(svg) {
-    color: var(--y);
+    color: #fff;
   }
   .ways-card .btn {
     margin-top: auto;
   }
   .ways-btn {
-    background: var(--y);
+    background: #fff;
     color: var(--ink);
-    border-color: var(--y);
+    border-color: #fff;
   }
   .ways-care {
     margin-top: 16px;
@@ -827,7 +825,7 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr;
     align-items: start;
-    border-radius: 34px 34px 34px 10px;
+    border-radius: 34px;
     background: var(--card);
     border: 1.5px solid var(--line);
     overflow: clip;
@@ -839,7 +837,6 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
     min-height: 220px;
     padding: 18px 10px;
     background:
-      radial-gradient(circle, rgba(22, 20, 27, 0.08) 1.3px, transparent 1.5px) 0 0 / 14px 14px,
       var(--soft);
   }
   .plc-art :global(svg) {
@@ -854,11 +851,11 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
     width: 46px;
     height: 46px;
     border-radius: 50%;
-    background: var(--ink);
+    background: var(--navy, #14213d);
     color: var(--paper);
     font-weight: 800;
     font-size: 1.1rem;
-    box-shadow: 3px 3px 0 var(--tone);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
   }
   .plc-body {
     display: grid;
@@ -870,12 +867,12 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
     padding: 3px 10px;
     border-radius: 999px;
     background: var(--tone);
-    color: var(--ink);
+    color: #fff;
     font-size: 0.75rem;
     font-weight: 700;
   }
   .plc-y .plc-tag {
-    background: var(--y);
+    background: #eef0f4;
     color: var(--ink);
   }
   .plc-m .plc-tag {
@@ -922,15 +919,19 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
     align-content: start;
     justify-items: start;
     gap: 8px;
-    padding: 22px 22px 56px;
-    border-radius: 26px 26px 26px 8px;
-    background: var(--soft);
+    padding: 22px;
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.78);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(20, 33, 61, 0.1);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
     overflow: clip;
   }
   .aud-tag {
     padding: 3px 10px;
     border-radius: 999px;
-    background: var(--card);
+    background: #eef0f4;
     font-size: 0.75rem;
     font-weight: 700;
   }
@@ -990,13 +991,13 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    border: 2px solid var(--ink);
+    border: 1px solid rgba(20, 33, 61, 0.14);
     background: var(--card);
     font-weight: 700;
   }
-  .how-steps li:nth-child(3n + 1) .how-dot { box-shadow: 3px 3px 0 var(--c); }
-  .how-steps li:nth-child(3n + 2) .how-dot { box-shadow: 3px 3px 0 var(--m); }
-  .how-steps li:nth-child(3n + 3) .how-dot { box-shadow: 3px 3px 0 var(--y); }
+  .how-steps li:nth-child(3n + 1) .how-dot { box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4); }
+  .how-steps li:nth-child(3n + 2) .how-dot { box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4); }
+  .how-steps li:nth-child(3n + 3) .how-dot { box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4); }
   .how-steps h3 {
     margin: 10px 0 4px;
     font-size: 1.1rem;
@@ -1025,7 +1026,7 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
     color: var(--ink-2);
   }
   .how-card {
-    background: var(--y-soft);
+    background: #fff;
   }
   .how-card summary {
     list-style: none;
@@ -1041,26 +1042,26 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
     gap: 6px;
   }
   .how-list li::marker {
-    color: var(--m);
+    color: var(--navy, #14213d);
   }
   .how-more {
     font-weight: 700;
     color: var(--m-ink);
   }
   .how-b2b {
-    background: var(--ink);
+    background: var(--navy, #14213d);
     color: var(--paper);
   }
   .how-b2b h3 {
     color: var(--paper);
   }
   .how-b2b .how-more {
-    color: var(--y);
+    color: #fff;
   }
   .how-b2b-btn {
-    background: var(--y);
-    color: var(--ink);
-    border-color: var(--y);
+    background: #fff;
+    color: var(--navy, #14213d);
+    border-color: #fff;
   }
   .how-chips {
     list-style: none;
@@ -1081,7 +1082,7 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
     font-weight: 600;
   }
   .how-chips :global(svg) {
-    color: var(--y);
+    color: #fff;
   }/* ================= seo text ================= */
 
   
@@ -1140,8 +1141,8 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
     flex: 1;
   }
   .related-card:hover {
-    border-color: var(--ink);
-    box-shadow: 4px 4px 0 var(--y);
+    border-color: rgba(20, 33, 61, 0.3);
+    box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
     color: var(--ink);
   }/* ================= tablets ================= */
 
@@ -1248,7 +1249,7 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
     .rst-list {
       width: 100%;
       padding: 12px;
-      border-radius: 20px 20px 20px 6px;
+      border-radius: 20px;
       transform: none;
     }
 
@@ -1290,7 +1291,7 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
     .ways-card {
       gap: 8px;
       padding: 16px;
-      border-radius: 24px 24px 24px 8px;
+      border-radius: 24px;
     }
 
     .ways-card h3 {
@@ -1327,7 +1328,7 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
       height: 26px;
       flex: none;
       border-radius: 50%;
-      border: 1.5px solid var(--ink);
+      border: 1px solid rgba(20, 33, 61, 0.22);
       font-size: 1rem;
     }
 
@@ -1350,7 +1351,7 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
       grid-template-columns: 128px minmax(0, 1fr);
       grid-template-rows: auto;
       align-items: stretch;
-      border-radius: 20px 20px 20px 6px;
+      border-radius: 20px;
     }
 
     .plc-art {
@@ -1374,7 +1375,7 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
       width: 30px;
       height: 30px;
       font-size: 0.8rem;
-      box-shadow: 2px 2px 0 var(--tone);
+      box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
     }
 
     .plc-body {
@@ -1424,7 +1425,7 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
     .aud-card {
       gap: 4px;
       padding: 12px 12px 30px;
-      border-radius: 20px 20px 20px 6px;
+      border-radius: 20px;
     }
 
     .aud-card h3 {
@@ -1516,7 +1517,7 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
       height: 26px;
       flex: none;
       border-radius: 50%;
-      border: 1.5px solid var(--ink);
+      border: 1px solid rgba(20, 33, 61, 0.22);
       font-size: 1rem;
     }
 
@@ -1612,5 +1613,15 @@ const heroFacts = [{ big: '1 комплект', small: 'можно заказа�
 
   
   
+  }
+
+  /* «Ink» phone tweaks */
+  @media (max-width: 560px) {
+    .aud-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .aud-card {
+      padding: 18px;
+    }
   }
 </style>
