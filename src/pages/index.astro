@@ -68,12 +68,8 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   theme="lux"
 >
   <script is:inline slot="head">
-    // motion pre-state (docs/MOTION.md): hide the first-screen pieces before paint so GSAP can bring them in;
-    // skipped for reduced motion; fail-safe shows everything if the motion script hasn't started in 2.5 s
-    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      document.documentElement.classList.add('motion-ready');
-      setTimeout(function () { if (!window.__motion) document.documentElement.classList.remove('motion-ready'); }, 2500);
-    }
+    // first-screen entrance (docs/MOTION.md): only when the visitor hasn't asked for reduced motion
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('motion-ready');
   </script>
   <!-- HERO (owner, 14.11.2026, by a reference): photo in a rounded frame, glass header over it, floating glass cards
        at the bottom. Photo — the man at the cathedral, colours — CMYK 2.0 (owner: «прошлое изображение и прошлую гамму»). -->

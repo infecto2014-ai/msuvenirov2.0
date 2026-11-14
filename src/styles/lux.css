@@ -347,23 +347,53 @@ body.theme-lux :is(.mbar .mbar-cta, .chatw-send) {
   }
 }
 
-/* ---------------------------------------------------------------- motion (docs/MOTION.md, src/scripts/home-motion.ts) */
-/* html.motion-ready is set in <head> before paint (unless reduced motion); the first-screen pieces wait hidden until
-   GSAP takes them over (html.motion-on). A 2.5s fail-safe in <head> drops the class if the script never runs. */
-html.motion-ready:not(.motion-on) body.theme-lux :is(.lx-title, .lx-lead, .lx-actions, .lx-card, .hdr) {
+/* ---------------------------------------------------------------- motion (docs/MOTION.md, src/scripts/home-motion.ts)
+   Reduced 14.11.2026 (owner + skill remove-animations): one quiet first-screen entrance, one soft fade per block,
+   press feedback. No slides from below, no curtains, no parallax, no loops. */
+
+/* first screen: the photo settles from a 3% zoom while fading in, the text and cards fade in right after it.
+   html.motion-ready is set in <head> before paint, and only when reduced motion is off. */
+@keyframes lx-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes lx-settle {
+  from {
+    opacity: 0;
+    transform: scale(1.03);
+  }
+}
+html.motion-ready body.theme-lux .lx-photo img {
+  animation: lx-settle 1.2s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+html.motion-ready body.theme-lux .lx-copy {
+  animation: lx-fade 0.7s cubic-bezier(0.23, 1, 0.32, 1) 0.15s both;
+}
+html.motion-ready body.theme-lux .lx-cards {
+  animation: lx-fade 0.7s cubic-bezier(0.23, 1, 0.32, 1) 0.3s both;
+}
+
+/* blocks below the first screen: one soft fade each, opacity only */
+html.motion-on body.theme-lux .m-fade {
   opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
-/* SplitText line masks: room for descenders (у, р, д) so they aren't clipped */
-body.theme-lux .m-line-mask {
-  padding-bottom: 0.14em;
-  margin-bottom: -0.14em;
+html.motion-on body.theme-lux .m-fade.is-in {
+  opacity: 1;
 }
-/* GSAP drives these photos — no CSS transition fighting it */
-html.motion-on body.theme-lux .pc img {
-  transition: none;
-}
-/* press feedback: a short squeeze (CSS — tens of times a day, must stay instant) */
-body.theme-lux :is(.btn, .lx-btn-glass, .hny-btn, .cats-all, .lx-round):active {
+
+/* press feedback: a short squeeze (instant, every button) */
+body.theme-lux :is(.btn, .lx-btn, .hny-btn, .cats-all, .lx-round):active {
   transform: scale(0.97);
   transition: transform 0.12s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.theme-lux * {
+    animation: none !important;
+  }
+  body.theme-lux .m-fade {
+    opacity: 1 !important;
+  }
 }
