@@ -11,7 +11,7 @@
 const root = document.documentElement;
 const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-if (!reduce && 'IntersectionObserver' in window) {
+if (!reduce && 'IntersectionObserver' in window && document.body.classList.contains('theme-lux')) {
   const blocks = document.querySelectorAll<HTMLElement>('main > .band, main > .hny, .lx-clients');
   const io = new IntersectionObserver(
     (entries) => {

@@ -25,9 +25,6 @@ import TeeHero from '@/components/tee/TeeHero.astro';
 import TeeHead from '@/components/tee/TeeHead.astro';
 import TeePackages from '@/components/tee/TeePackages.astro';
 import TeeDetails from '@/components/tee/TeeDetails.astro';
-import '@/styles/lux.css';
-import '@/styles/lux-calc.css';
-import '@/styles/lux-tee.css';
 import { garmentBySlug } from '@/data/garments';
 import { reviews as allReviews } from '@/data/reviews';
 import { services } from '@/data/services';
@@ -68,16 +65,12 @@ const facts = [
   description={page.description}
   path={page.slug}
   image={page.image}
-  theme="lux"
   schema={[
     breadcrumbs(crumbs),
     serviceLd({ name: page.h1, description: page.description, url: page.slug, lowPrice: Math.min(...allPrices), offerCount: cat.products.length }),
     faqPage(page.faq),
   ]}
 >
-  <script is:inline slot="head">
-    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('motion-ready');
-  </script>
 
   <TeeHero page={page} crumbs={crumbs} from={product.fromPrice} facts={facts} />
 
@@ -151,9 +144,6 @@ const facts = [
   <CtaBand />
 </BaseLayout>
 
-<script>
-  import '@/scripts/home-motion';
-</script>
 
 <style>
   .tcalc-sub {

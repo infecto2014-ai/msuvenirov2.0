@@ -1,6 +1,4 @@
 ---
-import '@/styles/lux.css';
-import '@/styles/home-accent.css';
 import { portfolio } from '@/data/portfolio';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import HomeSteps from '@/components/home/HomeSteps.astro';
@@ -57,12 +55,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   description="Печать на одежде, кружках, значках, визитках и календарях в Калининграде от 1 шт. Онлайн-калькулятор цен, срочно без наценки. ТЦ «Экватор», с 2019 года."
   path="/"
   schema={[faqPage(homeFaq)]}
-  theme="lux"
 >
-  <script is:inline slot="head">
-    // first-screen entrance (docs/MOTION.md): only when the visitor hasn't asked for reduced motion
-    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('motion-ready');
-  </script>
   <!-- HERO (owner, 14.11.2026, by a reference): photo in a rounded frame, glass header over it, floating glass cards
        at the bottom. Photo — the man at the cathedral, colours — CMYK 2.0 (owner: «прошлое изображение и прошлую гамму»). -->
   <section class="lx-hero" aria-labelledby="hero-h">
@@ -203,9 +196,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   </div>
 </BaseLayout>
 
-<script>
-  import '@/scripts/home-motion';
-</script>
 
 <script>
   // «Наши работы» card on the first screen: arrows flip through a few works (without JS the first one stays)
