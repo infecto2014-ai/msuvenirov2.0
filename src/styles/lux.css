@@ -346,3 +346,24 @@ body.theme-lux :is(.mbar .mbar-cta, .chatw-send) {
     --glass-dark: rgba(20, 33, 61, 0.92);
   }
 }
+
+/* ---------------------------------------------------------------- motion (docs/MOTION.md, src/scripts/home-motion.ts) */
+/* html.motion-ready is set in <head> before paint (unless reduced motion); the first-screen pieces wait hidden until
+   GSAP takes them over (html.motion-on). A 2.5s fail-safe in <head> drops the class if the script never runs. */
+html.motion-ready:not(.motion-on) body.theme-lux :is(.lx-title, .lx-lead, .lx-actions, .lx-card, .hdr) {
+  opacity: 0;
+}
+/* SplitText line masks: room for descenders (у, р, д) so they aren't clipped */
+body.theme-lux .m-line-mask {
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
+/* GSAP drives these photos — no CSS transition fighting it */
+html.motion-on body.theme-lux .pc img {
+  transition: none;
+}
+/* press feedback: a short squeeze (CSS — tens of times a day, must stay instant) */
+body.theme-lux :is(.btn, .lx-btn-glass, .hny-btn, .cats-all, .lx-round):active {
+  transform: scale(0.97);
+  transition: transform 0.12s cubic-bezier(0.23, 1, 0.32, 1);
+}

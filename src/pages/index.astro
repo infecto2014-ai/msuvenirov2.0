@@ -67,6 +67,14 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   schema={[faqPage(homeFaq)]}
   theme="lux"
 >
+  <script is:inline slot="head">
+    // motion pre-state (docs/MOTION.md): hide the first-screen pieces before paint so GSAP can bring them in;
+    // skipped for reduced motion; fail-safe shows everything if the motion script hasn't started in 2.5 s
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('motion-ready');
+      setTimeout(function () { if (!window.__motion) document.documentElement.classList.remove('motion-ready'); }, 2500);
+    }
+  </script>
   <!-- HERO (owner, 14.11.2026, by a reference): photo in a rounded frame, glass header over it, floating glass cards
        at the bottom. Photo — the man at the cathedral, colours — CMYK 2.0 (owner: «прошлое изображение и прошлую гамму»). -->
   <section class="lx-hero" aria-labelledby="hero-h">
@@ -76,7 +84,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
       </picture>
       <div class="lx-inner">
         <div class="lx-copy">
-          <p class="lx-kicker">Футболки <span aria-hidden="true">/</span> кружки <span aria-hidden="true">/</span> полиграфия</p>
           <h1 id="hero-h" class="lx-title">Печать на&nbsp;одежде и&nbsp;сувенирах <span class="serif">в&nbsp;Калининграде</span></h1>
           <p class="lx-lead">Печатаем ваш дизайн от&nbsp;1&nbsp;штуки в&nbsp;своей мастерской в&nbsp;ТЦ «Экватор».</p>
           <div class="lx-actions">
@@ -84,12 +91,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
             <button type="button" class="lx-btn lx-btn-glass" data-order><span class="lx-btn-ico" aria-hidden="true"><Icon name="upload" size={16} /></span> Отправить макет</button>
           </div>
         </div>
-        <ul class="lx-side" aria-label="Коротко о мастерской">
-          <li>С&nbsp;{site.founded} года</li>
-          <li>От&nbsp;1&nbsp;штуки</li>
-          <li>Своя мастерская</li>
-          <li>{site.hours}</li>
-        </ul>
 
         <div class="lx-cards">
           <article class="lx-card lx-work" data-works={JSON.stringify(featured.map((w) => ({ title: w.title, tech: w.tech })))}>
@@ -266,6 +267,10 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
 </BaseLayout>
 
 <script>
+  import '@/scripts/home-motion';
+</script>
+
+<script>
   // «Наши работы» card on the first screen: arrows flip through a few works (without JS the first one stays)
   const box = document.querySelector<HTMLElement>('[data-works]');
   if (box) {
@@ -306,13 +311,13 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   /* ---------------- first screen (owner, 14.11.2026): the cathedral photo in a rounded navy frame, white text on a navy
      scrim, glass header and glass cards over it; amber main button with black text */
   .lx-hero {
-    margin-top: -88px; /* slide under the floating glass header */
+    margin-top: 12px; /* starts under the floating header, not behind it (owner, 14.11.2026) */
     padding-inline: 12px;
   }
   .lx-frame {
     position: relative;
     isolation: isolate;
-    min-height: min(100svh, 900px);
+    min-height: min(calc(100svh - 100px), 820px);
     border-radius: 32px;
     overflow: clip;
     background: var(--navy);
@@ -345,32 +350,11 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     min-height: inherit;
     max-width: 1400px;
     margin-inline: auto;
-    padding: 128px clamp(20px, 4vw, 56px) clamp(16px, 2.4vw, 28px);
+    padding: clamp(40px, 6vw, 72px) clamp(20px, 4vw, 56px) clamp(16px, 2.4vw, 28px);
   }
   .lx-copy {
     align-self: center;
     max-width: 720px;
-  }
-  .lx-kicker {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 0 0 22px;
-    font-size: 0.74rem;
-    font-weight: 600;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.8);
-  }
-  .lx-kicker::before {
-    content: '';
-    width: 28px;
-    height: 2px;
-    border-radius: 2px;
-    background: var(--amber);
-  }
-  .lx-kicker span {
-    color: var(--amber);
   }
   .lx-title {
     margin: 0;
@@ -451,36 +435,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   }
   .lx-btn-ico {
     border: 1px solid rgba(255, 255, 255, 0.3);
-  }
-  .lx-side {
-    align-self: start;
-    margin: 0;
-    list-style: none;
-    display: grid;
-    gap: 10px;
-    padding: 14px 18px;
-    border: 1px solid var(--glass-dark-line);
-    border-radius: 20px;
-    background: var(--glass-dark);
-    -webkit-backdrop-filter: blur(16px);
-    backdrop-filter: blur(16px);
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #fff;
-  }
-  .lx-side li {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .lx-side li::before {
-    content: '';
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--amber);
   }
   /* floating glass cards */
   .lx-cards {
@@ -754,16 +708,13 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     .lx-cta {
       display: none;
     }
-    .lx-side {
-      display: none;
-    }
     .lx-inner {
       grid-template-columns: minmax(0, 1fr);
     }
   }
   @media (max-width: 760px) {
     .lx-hero {
-      margin-top: -74px;
+      margin-top: 8px;
       padding-inline: 8px;
     }
     .lx-frame {
@@ -773,7 +724,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     .lx-photo {
       display: block;
       position: relative;
-      padding-top: 74px;
       background: var(--navy);
     }
     .lx-photo img {
@@ -796,11 +746,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     .lx-inner {
       padding: 10px 16px 16px;
       gap: 22px;
-    }
-    .lx-kicker {
-      margin-bottom: 14px;
-      font-size: 0.66rem;
-      letter-spacing: 0.16em;
     }
     .lx-title {
       font-size: 2.2rem;
