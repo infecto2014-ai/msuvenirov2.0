@@ -230,9 +230,60 @@ body.theme-lux main :is(.rev, .rev-ratings a, .faq-item, .contact-card) {
   border: 1px solid var(--line) !important;
   box-shadow: var(--shadow) !important;
 }
+/* reviews: the only place with a little yellow (owner, 14.11.2026) — stars, quote marks, avatars */
+body.theme-lux .reviews {
+  --yel: #fca311;
+}
 body.theme-lux .rev-stars::after,
 body.theme-lux .rev-mini-stars {
-  color: var(--navy);
+  color: var(--yel);
+}
+body.theme-lux .rev-quote {
+  color: var(--yel);
+  opacity: 0.9;
+}
+body.theme-lux .rev::before {
+  display: none;
+}
+body.theme-lux .rev-avatar {
+  background: #fff3dc;
+  color: #6b4500;
+}
+body.theme-lux .rev-rating {
+  font-variant-numeric: tabular-nums;
+}
+/* stars fill left to right once the ratings are on screen (clip-path, no layout work) */
+body.theme-lux .rev-stars::after {
+  width: 100%;
+  clip-path: inset(0 calc(100% - var(--r)) 0 0);
+  transition: clip-path 1.1s cubic-bezier(0.23, 1, 0.32, 1);
+}
+html.motion-on body.theme-lux .rev-ratings:not(.is-on) .rev-stars::after {
+  clip-path: inset(0 100% 0 0);
+}
+body.theme-lux .rev-ratings li:nth-child(2) .rev-stars::after {
+  transition-delay: 0.12s;
+}
+body.theme-lux .rev-ratings li:nth-child(3) .rev-stars::after {
+  transition-delay: 0.24s;
+}
+/* review cards: each one settles in place (fade + 3% scale, no slide), a short wave */
+html.motion-on body.theme-lux .rev {
+  transition:
+    opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1) var(--d, 0s),
+    transform 0.6s cubic-bezier(0.23, 1, 0.32, 1) var(--d, 0s);
+}
+html.motion-on body.theme-lux .rev-grid:not(.is-on) .rev {
+  opacity: 0;
+  transform: scale(0.97);
+}
+@media (prefers-reduced-motion: reduce) {
+  body.theme-lux .rev,
+  body.theme-lux .rev-stars::after {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 body.theme-lux .faq-more button,
 body.theme-lux .contact-list svg {

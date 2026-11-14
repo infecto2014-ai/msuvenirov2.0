@@ -3,6 +3,7 @@ import '@/styles/lux.css';
 import { portfolio } from '@/data/portfolio';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import HomeSteps from '@/components/home/HomeSteps.astro';
+import HomeSeo from '@/components/home/HomeSeo.astro';
 import PortfolioGrid from '@/components/PortfolioGrid.astro';
 import Reviews from '@/components/Reviews.astro';
 import FaqSection from '@/components/FaqSection.astro';
@@ -116,18 +117,6 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
       </div>
     </div>
 
-    <div class="wrap lx-clients">
-      <p>Нам доверяют</p>
-      <ul>
-        {
-          clients.map((c) => (
-            <li class:list={{ 'is-white': c.white, 'is-square': c.square }}>
-              <img src={c.onLight ?? c.src} alt={c.alt} title={c.alt} width="140" height="70" loading="lazy" decoding="async" />
-            </li>
-          ))
-        }
-      </ul>
-    </div>
   </section>
 
   <div class="band">
@@ -179,11 +168,30 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
   </div>
 
   <div class="band">
+  <section class="wrap lx-clients" aria-label="Нам доверяют">
+      <p>Нам доверяют</p>
+      <ul>
+        {
+          clients.map((c) => (
+            <li class:list={{ 'is-white': c.white, 'is-square': c.square }}>
+              <img src={c.onLight ?? c.src} alt={c.alt} title={c.alt} width="140" height="70" loading="lazy" decoding="async" />
+            </li>
+          ))
+        }
+      </ul>
+  </section>
+  </div>
+
+  <div class="band">
   <Reviews />
   </div>
 
   <div class="band band-ink">
   <PortfolioGrid />
+  </div>
+
+  <div class="band">
+  <HomeSeo />
   </div>
 
   <div class="band">
@@ -573,7 +581,7 @@ const homeFaq = generalFaq.flatMap((g) => g.items).slice(0, 6);
     display: flex;
     align-items: center;
     gap: 32px;
-    padding-block: 34px 10px;
+    padding-block: clamp(40px, 5vw, 64px) 8px;
   }
   .lx-clients p {
     display: flex;
