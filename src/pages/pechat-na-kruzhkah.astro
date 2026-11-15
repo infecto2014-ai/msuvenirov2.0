@@ -6,9 +6,16 @@
 // The services.ts entry stays for menus/sitemap.
 import TshirtRelated from '@/components/tshirt/TshirtRelated.astro';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Breadcrumbs from '@/components/Breadcrumbs.astro';
 import Calculator from '@/components/islands/Calculator';
 import AlsoOrder from '@/components/garment/AlsoOrder.astro';
+import TeeHead from '@/components/tee/TeeHead.astro';
+import PpHero from '@/components/product-page/PpHero.astro';
+import PpSteps from '@/components/product-page/PpSteps.astro';
+import PpAudience from '@/components/product-page/PpAudience.astro';
+import PpHow from '@/components/product-page/PpHow.astro';
+import PpSeo from '@/components/product-page/PpSeo.astro';
+import FoldScript from '@/components/product-page/FoldScript.astro';
+import '@/components/product-page/pp.css';
 import MugArt from '@/components/mug/MugArt.astro';
 import MugPackages from '@/components/mug/MugPackages.astro';
 import { MODELS } from '@/components/mug/mug-geometry';
@@ -17,7 +24,6 @@ import Reviews from '@/components/Reviews.astro';
 import FaqSection from '@/components/FaqSection.astro';
 import CtaBand from '@/components/CtaBand.astro';
 import Icon from '@/components/Icon.astro';
-import HeroFacts from '@/components/tshirt/HeroFacts.astro';
 import { mugsPage as page, buildMugFaq } from '@/data/mugsPage';
 import { services } from '@/data/services';
 import { defaultSelection, findCategory, findProduct, rub, type Product, type Selection } from '@/data/pricing';
@@ -52,7 +58,6 @@ const related = page.related.map((r) => services.find((s) => s.slug === r)).filt
 // ---- «Какие кружки печатаем»: one scale for all four drawings (px per mm); 5 cm grid behind them
 const SSCALE = 1.5;
 const tallest = Math.max(...models.map((m) => m.h));
-const tones = ['c', 'm', 'y'];
 
 // three facts under the buttons of the first screen (same row as on the t-shirt page)
 const heroFacts = [{ big: '1 шт', small: 'можно заказать одну кружку' },{ big: '4 вида', small: '330 и 425 мл, кофейный набор, пивная' },{ big: '0 ₽', small: 'простой макет соберём сами' }];
@@ -74,538 +79,266 @@ const splitTail = (t: string): [string, string] => {
   ]}
 >
   <!-- ============ first screen ============ -->
-  <section class="mhero">
-    <div class="wrap mhero-grid">
-      <div class="mhero-text">
-        <Breadcrumbs items={crumbs} />
-        <p class="eyebrow mhero-eyebrow">{page.eyebrow}</p>
-        <h1>{page.h1}</h1>
-        <p class="lead">{page.lead}</p>
-        <div class="mhero-actions">
-          <a class="btn btn-magenta" href="#calc"><Icon name="calc" size={20} /> <span>Рассчитать<span class="long"> стоимость</span></span></a>
-          <button type="button" class="btn btn-ghost" data-order><Icon name="upload" size={20} /> <span>Отправить макет</span></button>
-        </div>
-        <HeroFacts facts={heroFacts} />
-      </div>
-      <div class="mhero-media" role="img" aria-label={page.heroAlt}>
-        <span class="mhero-dot mhero-dot-c" aria-hidden="true"></span>
-        <span class="mhero-dot mhero-dot-m" aria-hidden="true"></span>
-        <span class="mhero-dot mhero-dot-y" aria-hidden="true"></span>
-        <div class="mhero-table halftone" aria-hidden="true">
-          <div class="mhero-stage">
-            <MugArt type="beer600" print="logo" scale={1.5} class="mhero-mug mhero-beer" />
-            <MugArt type="mug330" finish="chameleon" print="photo" scale={1.5} class="mhero-mug mhero-cham" />
-            <MugArt type="mug330" print="photo" scale={1.5} class="mhero-mug mhero-main" />
-            <MugArt type="coffee" print="text" scale={1.5} class="mhero-mug mhero-coffee" />
-          </div>
-        </div>
-        <span class="sticker mhero-price">
-          от <span class="mono">{rub(mug.fromPrice)}</span><small>кружка 330 мл</small>
-        </span>
-      </div>
-    </div>
-  </section>
+  <PpHero eyebrow={page.eyebrow} h1={page.h1} lead={page.lead} crumbs={crumbs} mark="кружках" heroAlt={page.heroAlt} facts={heroFacts} price={{ pre: 'от', value: rub(mug.fromPrice), note: 'кружка 330 мл' }}>
+    <MugArt type="beer600" print="logo" scale={1.5} class="mhero-mug mhero-beer" />
+    <MugArt type="mug330" finish="chameleon" print="photo" scale={1.5} class="mhero-mug mhero-cham" />
+    <MugArt type="mug330" print="photo" scale={1.5} class="mhero-mug mhero-main" />
+    <MugArt type="coffee" print="text" scale={1.5} class="mhero-mug mhero-coffee" />
+  </PpHero>
 
-  <!-- ============ calculator ============ -->
+  <!-- ============ calculator (light grey) ============ -->
   <div class="band band-tint">
-  <section id="calc" class="section calc-sec" aria-labelledby="calc-h">
-    <div class="wrap">
-      <div class="section-head">
-        <div class="sec-titled sec-y">
-          <span class="sec-num mono" aria-hidden="true">01</span>
-          <p class="eyebrow">Калькулятор</p>
-          <h2 id="calc-h">Посчитайте свои <span class="mark sec-mark">кружки</span></h2>
-        </div>
-        <p class="calc-sub">Выберите кружку, покрытие и количество — цена за штуку и за весь заказ пересчитается сразу. Кружка, печать и макет уже в цене.</p>
+    <section id="calc" class="section calc-sec" aria-labelledby="calc-h">
+      <div class="wrap">
+        <TeeHead icon="calc" eyebrow="Калькулятор" id="calc-h" title="Посчитайте свои кружки" mark="кружки">
+          <p class="calc-sub">Выберите кружку, покрытие и количество — цена за штуку и за весь заказ пересчитается сразу. Кружка, печать и макет уже в цене.</p>
+        </TeeHead>
+        <Calculator client:visible category="mugs" product="mug" hideCategories />
       </div>
-      <Calculator client:visible category="mugs" product="mug" hideCategories />
-    </div>
-    <AlsoOrder slugs={page.alsoOrder} />
-  </section>
+      <AlsoOrder slugs={page.alsoOrder} />
+    </section>
   </div>
 
+  <!-- ============ ready options (white) ============ -->
   <div class="band">
-  <MugPackages />
+    <MugPackages />
   </div>
 
-  <!-- ============ four models on one shelf, one scale ============ -->
+  <!-- ============ four models on one shelf, one scale (light grey) ============ -->
   <div class="band band-tint">
-  <section class="section kinds" aria-labelledby="kinds-h">
-    <div class="wrap">
-      <div class="section-head">
-        <div class="sec-titled sec-m">
-          <span class="sec-num mono" aria-hidden="true">03</span>
-          <p class="eyebrow">Какие кружки печатаем</p>
-          <h2 id="kinds-h">Кружки 330 и 425 мл, кофейный набор и пивная <span class="mark sec-mark">кружка</span></h2>
+    <section class="section kinds pp-sec" aria-labelledby="kinds-h">
+      <div class="wrap">
+        <TeeHead icon="ruler" eyebrow="Какие кружки печатаем" id="kinds-h" title="Кружки 330 и 425 мл, кофейный набор и пивная кружка" mark="кружка">
+          <p class="pp-sub">Все четыре нарисованы в одном масштабе — видно, какая больше. Одна клетка на фоне — 5 × 5 см.</p>
+        </TeeHead>
+        <div class="kinds-shelf" style={`--cell:${50 * SSCALE}px;--wall:${Math.round(tallest * SSCALE) + 24}px`}>
+          <ol class="kinds-row">
+            {
+              models.map((m, i) => (
+                <li class="kinds-item">
+                  <a class="kinds-art" href={`#kind-${m.art}`} aria-label={m.name}>
+                    <MugArt type={m.art} print={i === 3 ? 'text' : i === 2 ? 'logo' : 'photo'} scale={SSCALE} title={`${m.name}, диаметр ${m.d} мм`} />
+                  </a>
+                  <span class="kinds-vol">{m.vol} мл</span>
+                </li>
+              ))
+            }
+          </ol>
+          <span class="kinds-legend" aria-hidden="true"><i></i> 5 см</span>
         </div>
-        <p class="kinds-sub">Все четыре нарисованы в одном масштабе — видно, какая больше. Одна клетка на фоне — 5 × 5 см.</p>
-      </div>
-      <div class="kinds-shelf" style={`--cell:${50 * SSCALE}px;--wall:${Math.round(tallest * SSCALE) + 24}px`}>
-        <ol class="kinds-row">
+        <ul class="kinds-cards">
           {
-            models.map((m, i) => (
-              <li class={`kinds-item kinds-${tones[i % 3]}`}>
-                <a class="kinds-art" href={`#kind-${m.art}`} aria-label={m.name}>
-                  <MugArt type={m.art} print={i === 3 ? 'text' : i === 2 ? 'logo' : 'photo'} scale={SSCALE} title={`${m.name}, диаметр ${m.d} мм`} />
-                </a>
-                <span class="kinds-vol mono">{m.vol} мл</span>
-              </li>
-            ))
-          }
-        </ol>
-        <span class="kinds-legend mono" aria-hidden="true"><i></i> 5 см</span>
-      </div>
-      <ul class="kinds-cards">
-        {
-          models.map((m, i) => (
-            <li id={`kind-${m.art}`} class={`kcard kinds-${tones[i % 3]}`}>
-              <div class="kcard-top">
-                <span class="kinds-num mono" aria-hidden="true">{i + 1}</span>
-                <span class="kcard-tag">{m.tag}</span>
-              </div>
-              <h3>{m.name}</h3>
-              <dl class="kcard-specs">
-                <div><dt>Объём</dt><dd class="mono">{m.vol} мл</dd></div>
-                <div><dt>Диаметр</dt><dd class="mono">{m.d} мм</dd></div>
-                <div><dt>Высота</dt><dd class="mono">≈ {m.h} мм</dd></div>
-                <div><dt>1 шт</dt><dd class="mono">{rub(m.one)}</dd></div>
-              </dl>
-              <p>{m.text}</p>
-              <div class="kcard-foot">
-                <span class="kcard-price mono">от {rub(m.from)}<small>/шт</small></span>
-                <a class="btn btn-sm btn-ghost" href={`${page.slug}?calc=mugs:${m.product}#calc`}>Рассчитать</a>
-              </div>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
-  </div>
-
-  <!-- ============ coatings of the 330 ml mug ============ -->
-  <div class="band">
-  <section class="section fin" aria-labelledby="fin-h">
-    <div class="wrap">
-      <div class="section-head">
-        <div class="sec-titled sec-c">
-          <span class="sec-num mono" aria-hidden="true">04</span>
-          <p class="eyebrow">Покрытия</p>
-          <h2 id="fin-h">Покрытия кружки 330 <span class="mark sec-mark">мл</span></h2>
-        </div>
-        <p>Одна и та же кружка 330 мл в шести вариантах. Цена «от» — для тиража, ниже — за одну кружку с печатью.</p>
-      </div>
-      <ul class="fin-grid">
-        {
-          finishes.map((f) => (
-            <li class={`fin-card fin-${f.id}`}>
-              <div class="fin-art" aria-hidden="true">
-                {f.id === 'chameleon' ? (
-                  <span class="cham">
-                    <MugArt type="mug330" finish="chameleon" print="none" scale={1.25} class="cham-cold" />
-                    <MugArt type="mug330" finish="chameleon" print="photo" scale={1.25} class="cham-hot" />
-                    <span class="cham-label mono"><b class="cham-l-cold">холодная</b><b class="cham-l-hot">горячая</b></span>
-                  </span>
-                ) : (
-                  <MugArt type="mug330" finish={f.id} print={f.print} tint={f.id === 'glitter' ? 'turquoise' : f.id === 'marble' ? 'pink' : undefined} scale={1.25} />
-                )}
-              </div>
-              <div class="fin-body">
-                <h3>{f.title}</h3>
-                <p>{f.text}</p>
-                {(f.id === 'color' || f.id === 'glitter' || f.id === 'marble') && (
-                  <ul class="fin-colors" aria-label="Цвета">
-                    {(f.id === 'color' ? page.innerColors : f.id === 'glitter' ? page.glitterColors : page.marbleColors).map((c) => (
-                      <li title={c.name} style={`--sw:${c.hex}`}>
-                        <span class="sr-only">{c.name}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                <p class="fin-meta">
-                  <span class="fin-price mono">от {rub(f.from)}</span>
-                  <span class="fin-one">1 шт — <b class="mono">{rub(f.one)}</b></span>
-                </p>
-              </div>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
-  </div>
-
-  <!-- ============ what can be printed ============ -->
-  <div class="band">
-  <section class="section prn" aria-labelledby="prn-h">
-    <div class="wrap">
-      <div class="sec-titled sec-y">
-        <span class="sec-num mono" aria-hidden="true">05</span>
-        <p class="eyebrow">Идеи</p>
-        <h2 id="prn-h" class="prn-title">Что можно напечатать на <span class="mark sec-mark">кружке</span></h2>
-      </div>
-      <ul class="prn-grid">
-        {
-          page.prints.map((p, i) => (
-            <li class={`prn-card kinds-${tones[i % 3]}`}>
-              <div class="prn-art" aria-hidden={p.photo ? undefined : 'true'}>
-                {p.photo ? (
-                  <img src={p.photo} alt={p.photoAlt} width="480" height="480" loading="lazy" decoding="async" />
-                ) : (
-                  <MugArt type="mug330" finish={p.finish} print={p.print} scale={1.1} />
-                )}
-                {p.photo && <span class="prn-real mono">наша работа</span>}
-              </div>
-              <div class="prn-body">
-                <span class="prn-tag mono">{p.tag}</span>
-                <h3>{p.title}</h3>
-                <p>{p.text}</p>
-              </div>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
-  </div>
-
-  <!-- ============ technology and care ============ -->
-  <div class="band">
-  <section class="section tech" aria-labelledby="tech-h">
-    <div class="wrap tech-grid">
-      <div>
-        <div class="sec-titled sec-c">
-          <span class="sec-num mono" aria-hidden="true">06</span>
-          <p class="eyebrow">Технология</p>
-          <h2 id="tech-h">{splitTail(page.tech.title)[0]}<span class="mark sec-mark">{splitTail(page.tech.title)[1]}</span></h2>
-        </div>
-        <ol class="tech-steps">
-          {
-            page.tech.steps.map((s, i) => (
-              <li class={`tech-${tones[i % 3]}`}>
-                <span class="tech-num mono">{i + 1}</span>
-                <div>
-                  <h3>{s.title}</h3>
-                  <p>{s.text}</p>
+            models.map((m) => (
+              <li id={`kind-${m.art}`} class="kcard pp-card">
+                <span class="pp-tag">{m.tag}</span>
+                <h3>{m.name}</h3>
+                <dl class="kcard-specs">
+                  <div><dt>Объём</dt><dd>{m.vol} мл</dd></div>
+                  <div><dt>Диаметр</dt><dd>{m.d} мм</dd></div>
+                  <div><dt>Высота</dt><dd>≈ {m.h} мм</dd></div>
+                  <div><dt>1 шт</dt><dd>{rub(m.one)}</dd></div>
+                </dl>
+                <p class="kcard-text">{m.text}</p>
+                <div class="kcard-foot">
+                  <span class="kcard-price">от {rub(m.from)}<small>/шт</small></span>
+                  <a class="btn btn-sm btn-ghost" href={`${page.slug}?calc=mugs:${m.product}#calc`}>Рассчитать</a>
                 </div>
               </li>
             ))
           }
-        </ol>
-        <ul class="tech-facts">
-          {page.tech.facts.map((t) => <li><Icon name="check" size={16} /> {t}</li>)}
         </ul>
       </div>
-      <details class="care" open data-fold>
-        <summary><h3>Как ухаживать за кружкой</h3></summary>
-        <ul class="care-list">
-          {
-            page.care.map((c) => (
-              <li class={c.ok ? 'care-ok' : 'care-no'}>
-                <span class="care-ico mono" aria-hidden="true">{c.ok ? '✓' : '✕'}</span>
-                <span>{c.text}</span>
-              </li>
-            ))
-          }
-        </ul>
-        <p class="care-note">Сомневаетесь, подойдёт ли кружка для вашего случая, — спросите у мастера при заказе.</p>
-      </details>
-    </div>
-  </section>
+    </section>
   </div>
 
-  <!-- ============ for whom ============ -->
-  <div class="band band-tint">
-  <section class="section aud" aria-labelledby="aud-h">
-    <div class="wrap">
-      <p class="eyebrow">Для кого</p>
-      <h2 id="aud-h" class="aud-title">Кому дарят и заказывают кружки с печатью</h2>
-      <ul class="aud-grid">
-        {
-          page.audience.map((a, i) => (
-            <li class={`aud-card kinds-${tones[i % 3]}`}>
-              <span class="aud-tag mono">{a.tag}</span>
-              <h3>{a.title}</h3>
-              <p>{a.text}</p>
-              <span class="aud-num mono" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
-  </div>
-
-  <!-- ============ how to order ============ -->
-  <div class="band">
-  <section class="section how" aria-labelledby="how-h">
-    <div class="wrap how-grid">
-      <div>
-        <p class="eyebrow">Заказ</p>
-        <h2 id="how-h">Как заказать печать на <span class="mark">кружке</span></h2>
-        <ol class="how-steps">
+  <!-- ============ coatings of the 330 ml mug (navy panel) ============ -->
+  <div class="band band-ink">
+    <section class="section fin pp-sec" aria-labelledby="fin-h">
+      <div class="wrap">
+        <TeeHead icon="layers" eyebrow="Покрытия" id="fin-h" title="Покрытия кружки 330 мл" mark="мл" dark>
+          <p class="pp-sub">Одна и та же кружка 330 мл в шести вариантах. Цена «от» — для тиража, ниже — за одну кружку с печатью.</p>
+        </TeeHead>
+        <ul class="fin-grid">
           {
-            page.steps.map((s, i) => (
-              <li>
-                <span class="how-dot mono">{i + 1}</span>
-                <div>
-                  <h3>{s.title}</h3>
-                  <p>{s.text}</p>
+            finishes.map((f) => (
+              <li class={`fin-card pp-card fin-${f.id}`}>
+                <div class="fin-art pp-art" aria-hidden="true">
+                  {f.id === 'chameleon' ? (
+                    <span class="cham">
+                      <MugArt type="mug330" finish="chameleon" print="none" scale={1.25} class="cham-cold" />
+                      <MugArt type="mug330" finish="chameleon" print="photo" scale={1.25} class="cham-hot" />
+                      <span class="cham-label"><b class="cham-l-cold">холодная</b><b class="cham-l-hot">горячая</b></span>
+                    </span>
+                  ) : (
+                    <MugArt type="mug330" finish={f.id} print={f.print} tint={f.id === 'glitter' ? 'turquoise' : f.id === 'marble' ? 'pink' : undefined} scale={1.25} />
+                  )}
+                </div>
+                <div class="fin-body">
+                  <h3>{f.title}</h3>
+                  <p class="fin-text">{f.text}</p>
+                  {(f.id === 'color' || f.id === 'glitter' || f.id === 'marble') && (
+                    <ul class="fin-colors" aria-label="Цвета">
+                      {(f.id === 'color' ? page.innerColors : f.id === 'glitter' ? page.glitterColors : page.marbleColors).map((c) => (
+                        <li title={c.name} style={`--sw:${c.hex}`}>
+                          <span class="sr-only">{c.name}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  <p class="fin-meta">
+                    <span class="fin-price">от {rub(f.from)}</span>
+                    <span class="fin-one">1 шт — <b>{rub(f.one)}</b></span>
+                  </p>
                 </div>
               </li>
             ))
           }
-        </ol>
+        </ul>
       </div>
-      <aside class="how-side">
-        <details class="how-card" open data-fold>
-          <summary><h3>{page.layout.title}</h3></summary>
-          <ul class="how-list">
-            {page.layout.items.map((t) => <li>{t}</li>)}
-          </ul>
-          <a class="how-more" href="/trebovaniya-k-maketam">Требования к макетам →</a>
-        </details>
-        <div class="how-b2b">
-          <h3>{page.b2b.title}</h3>
-          <ul class="how-chips">
-            {page.b2b.items.map((t) => <li><Icon name="check" size={16} /> {t}</li>)}
-          </ul>
-          <button type="button" class="btn btn-sm how-b2b-btn" data-order="Кружки с логотипом для компании — рассчитать тираж">Рассчитать тираж</button>
-          <a class="how-more" href="/korporativnym-klientam">Корпоративным клиентам →</a>
-        </div>
-      </aside>
-    </div>
-  </section>
+    </section>
   </div>
 
-  <script is:inline>
-    // folding cards are always open on a computer; on a phone they start folded (tap to open), as on the t-shirt page
-    (function () {
-      var m = matchMedia('(max-width: 760px)');
-      document.querySelectorAll('.tech [data-fold], .how [data-fold]').forEach(function (d) {
-        if (m.matches) d.open = false;
-        d.querySelector('summary').addEventListener('click', function (e) {
-          if (!m.matches) e.preventDefault();
-        });
-        m.addEventListener('change', function (e) {
-          d.open = !e.matches;
-        });
-      });
-    })();
-  </script>
-
-  <div class="band band-tint">
-  <PortfolioGrid tags={page.portfolioTags} limit={4} title="Примеры: кружки и кофейные наборы" />
-  </div>
-
+  <!-- ============ what can be printed (white) ============ -->
   <div class="band">
-  <Reviews keywords={page.reviewKeywords} title="Отзывы о кружках" />
+    <section class="section prn pp-sec" aria-labelledby="prn-h">
+      <div class="wrap">
+        <TeeHead icon="bulb" eyebrow="Идеи" id="prn-h" title="Что можно напечатать на кружке" mark="кружке" />
+        <ul class="prn-grid">
+          {
+            page.prints.map((p) => (
+              <li class="prn-card pp-card">
+                <div class="prn-art pp-art" aria-hidden={p.photo ? undefined : 'true'}>
+                  {p.photo ? (
+                    <img src={p.photo} alt={p.photoAlt} width="480" height="480" loading="lazy" decoding="async" />
+                  ) : (
+                    <MugArt type="mug330" finish={p.finish} print={p.print} scale={1.1} />
+                  )}
+                  {p.photo && <span class="prn-real">наша работа</span>}
+                </div>
+                <div class="prn-body">
+                  <span class="pp-tag">{p.tag}</span>
+                  <h3>{p.title}</h3>
+                  <p>{p.text}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
   </div>
 
+  <!-- ============ technology and care (light grey) ============ -->
   <div class="band band-tint">
-  <FaqSection items={faq} title="Вопросы о печати на кружках" />
-  </div>
-
-  <!-- ============ SEO text (folded on phones) ============ -->
-  <div class="band">
-  <section class="section seo-text" aria-labelledby="seo-h">
-    <div class="wrap">
-      <h2 id="seo-h">{page.seo.title}</h2>
-      <input type="checkbox" id="seo-more" class="seo-toggle" />
-      <div class="seo-cols">
-        {
-          page.seo.sections.map((s) => (
-            <div>
-              <h3>{s.h}</h3>
-              <p>{s.p}</p>
-            </div>
-          ))
-        }
+    <section class="section tech pp-sec" aria-labelledby="tech-h">
+      <div class="wrap tech-grid">
         <div>
-          <h3>Смотрите также</h3>
-          <p>
-            <a href="/fotopodarki">фотоподарки</a> · <a href="/pechat-na-futbolkah">печать на футболках</a> · <a href="/magnity">магниты с фото</a> ·
-            <a href="/korporativnym-klientam">корпоративным клиентам</a> · <a href="/trebovaniya-k-maketam">требования к макетам</a> · <a href="/price">все цены</a>
-          </p>
+          <TeeHead icon="layers" eyebrow="Технология" id="tech-h" title={page.tech.title} mark={splitTail(page.tech.title)[1]} />
+          <PpSteps items={page.tech.steps} />
+          <ul class="pp-ticks tech-facts">
+            {page.tech.facts.map((t) => <li>{t}</li>)}
+          </ul>
         </div>
+        <details class="care pp-card" open data-fold>
+          <summary><h3>Как ухаживать за кружкой</h3></summary>
+          <ul class="care-list">
+            {
+              page.care.map((c) => (
+                <li class={c.ok ? 'care-ok' : 'care-no'}>
+                  <span class="care-ico" aria-hidden="true">{c.ok ? '✓' : '✕'}</span>
+                  <span>{c.text}</span>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="care-note">Сомневаетесь, подойдёт ли кружка для вашего случая, — спросите у мастера при заказе.</p>
+        </details>
       </div>
-      <label for="seo-more" class="seo-more-btn">Читать полностью</label>
-    </div>
-  </section>
+    </section>
+  </div>
+
+  <!-- ============ for whom (white) ============ -->
+  <div class="band">
+    <PpAudience title="Кому дарят и заказывают кружки с печатью" mark="кружки" items={page.audience} />
+  </div>
+
+  <!-- ============ how to order (light grey) ============ -->
+  <div class="band band-tint">
+    <PpHow title="Как заказать печать на кружке" mark="кружке" steps={page.steps} layout={page.layout} b2b={page.b2b} b2bOrder="Кружки с логотипом для компании — рассчитать тираж" />
+  </div>
+
+  <FoldScript />
+
+  <div class="band band-ink">
+    <PortfolioGrid tags={page.portfolioTags} limit={4} title="Примеры: кружки и кофейные наборы" />
+  </div>
+
+  <div class="band">
+    <Reviews keywords={page.reviewKeywords} title="Отзывы о кружках" />
   </div>
 
   <div class="band band-tint">
-  {related.length > 0 && <TshirtRelated items={related} />}
+    <FaqSection items={faq} title="Вопросы о печати на кружках" />
+  </div>
+
+  <!-- ============ SEO text (white; folded on phones) ============ -->
+  <div class="band">
+    <PpSeo title={page.seo.title} sections={page.seo.sections}>
+      <a href="/fotopodarki">фотоподарки</a> · <a href="/pechat-na-futbolkah">печать на футболках</a> · <a href="/magnity">магниты с фото</a> ·
+      <a href="/korporativnym-klientam">корпоративным клиентам</a> · <a href="/trebovaniya-k-maketam">требования к макетам</a> · <a href="/price">все цены</a>
+    </PpSeo>
+  </div>
+
+  <div class="band band-tint">
+    {related.length > 0 && <TshirtRelated items={related} />}
   </div>
 
   <CtaBand title="Хотите кружку со своим фото?" text="Пришлите снимок, надпись или логотип — соберём макет, покажем, как он ляжет на кружку, и посчитаем цену." />
 </BaseLayout>
 
 <style>
-  /* data-restyled: bands, numbered headings, hangers — like /pechat-na-futbolkah (owner, 07.11.2026) */
-  /* ================= first screen ================= */
-  .mhero {
-    padding-block: clamp(28px, 4vw, 48px) clamp(24px, 4vw, 40px);
-    overflow: clip;
+  .calc-sub {
+    max-width: 52ch;
   }
-  .mhero-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-    gap: clamp(28px, 5vw, 72px);
-    align-items: center;
-  }
-  .mhero-text {
-    display: grid;
-    gap: 20px;
-    justify-items: start;
-  }
-  .mhero-eyebrow {
-    margin: 0 0 -8px;
-  }
-  .mhero-text h1 {
-    font-size: clamp(2.2rem, 5vw, 4rem);
-  }
-  .mhero-chips {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .mhero-chips li {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 14px;
-    border-radius: 999px;
-    background: var(--card);
-    border: 1.5px solid var(--line);
-    font-weight: 600;
-    font-size: 0.92rem;
-  }
-  .mhero-chips :global(svg) {
-    color: var(--m-ink);
-  }
-  .mhero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .mhero-media {
-    position: relative;
-    padding: 24px;
-  }
-  /* a table top with four mugs; the stage is drawn at a fixed size and zoomed with the column */
-  .mhero-table {
-    position: relative;
-    z-index: 1;
-    aspect-ratio: 1;
-    border-radius: 40px 40px 40px 120px;
-    background-color: var(--paper-2);
-    --dot: rgba(22, 20, 27, 0.1);
-    overflow: clip;
-  }
-  .mhero-table::after {
-    content: '';
+
+  /* ---- first screen: mugs on the stage (440 × 440, zoomed with the panel) */
+  .ph-stage :global(.mhero-mug) {
     position: absolute;
-    inset: 66% 0 0;
-    background: linear-gradient(rgba(22, 20, 27, 0.07), rgba(22, 20, 27, 0.02));
-    border-top: 2px solid rgba(22, 20, 27, 0.08);
+    filter: drop-shadow(0 16px 18px rgba(20, 33, 61, 0.2));
   }
-  .mhero-stage {
-    --hz: 1;
-    zoom: var(--hz);
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 440px;
-    height: 440px;
-    margin: -220px 0 0 -220px;
-    z-index: 1;
-  }
-  .mhero-stage :global(.mhero-mug) {
-    position: absolute;
-    filter: drop-shadow(0 16px 18px rgba(22, 20, 27, 0.2));
-  }
-  .mhero-stage :global(.mhero-beer) {
+  .ph-stage :global(.mhero-beer) {
     left: 22px;
     bottom: 150px;
   }
-  .mhero-stage :global(.mhero-cham) {
+  .ph-stage :global(.mhero-cham) {
     right: 26px;
     bottom: 168px;
   }
-  .mhero-stage :global(.mhero-main) {
+  .ph-stage :global(.mhero-main) {
     left: 92px;
     bottom: 48px;
     z-index: 2;
   }
-  .mhero-stage :global(.mhero-coffee) {
+  .ph-stage :global(.mhero-coffee) {
     right: -6px;
     bottom: 34px;
     z-index: 3;
   }
-  .mhero-price {
-    position: absolute;
-    right: 0;
-    bottom: 40px;
-    z-index: 3;
-    display: grid;
-    font-size: 1.25rem;
-    text-align: center;
-  }
-  .mhero-price small {
-    font-size: 0.75rem;
-    font-weight: 700;
-  }
-  .mhero-dot {
-    position: absolute;
-    border-radius: 50%;
-    mix-blend-mode: multiply;
-    z-index: 0;
-  }
-  .mhero-dot-c {
-    width: 120px;
-    height: 120px;
-    background: var(--c);
-    top: -6px;
-    right: -10px;
-  }
-  .mhero-dot-m {
-    width: 80px;
-    height: 80px;
-    background: var(--m);
-    top: 40px;
-    right: 60px;
-    opacity: 0.8;
-  }
-  .mhero-dot-y {
-    width: 110px;
-    height: 110px;
-    background: var(--y);
-    bottom: 0;
-    left: 0;
-  }
-  .calc-sec {
-    background: var(--paper-2);
-    border-radius: 48px;
-    margin-inline: clamp(0px, 1.5vw, 20px);
-  }
 
-  /* ================= kinds: four mugs on one shelf ================= */
-  /* --kz: zoom of the drawings on smaller screens; the 5 cm grid and the legend follow it, so the scale stays true */
+  /* ---- four mugs on one shelf */
   .kinds-shelf {
     --kz: 1;
     --cz: calc(var(--cell) * var(--kz));
-    --gy: calc(100% - 73px); /* the grid starts at the top of the shelf board */
+    --gy: calc(100% - 73px);
     position: relative;
     padding: 44px 0 22px;
-    border-radius: var(--radius-l);
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.95);
     background:
-      linear-gradient(0deg, rgba(22, 20, 27, 0.07) 1px, transparent 1px) 0 var(--gy) / 100% var(--cz),
-      linear-gradient(90deg, rgba(22, 20, 27, 0.07) 1px, transparent 1px) 50% 0 / var(--cz) 100%,
-      var(--paper-2);
+      linear-gradient(0deg, rgba(20, 33, 61, 0.07) 1px, transparent 1px) 0 var(--gy) / 100% var(--cz),
+      linear-gradient(90deg, rgba(20, 33, 61, 0.07) 1px, transparent 1px) 50% 0 / var(--cz) 100%,
+      radial-gradient(80% 70% at 50% 35%, #ffffff 0%, #eef0f4 100%);
+    box-shadow: 0 30px 60px -40px rgba(20, 33, 61, 0.45);
     overflow: clip;
   }
   .kinds-row {
@@ -616,7 +349,6 @@ const splitTail = (t: string): [string, string] => {
     padding: 0;
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 0;
     align-items: end;
   }
   .kinds-item {
@@ -624,55 +356,33 @@ const splitTail = (t: string): [string, string] => {
     justify-items: center;
     gap: 12px;
   }
-  .kinds-c { --tone: var(--c); --soft: var(--c-soft); }
-  .kinds-m { --tone: var(--m); --soft: var(--m-soft); }
-  .kinds-y { --tone: var(--y); --soft: var(--y-soft); }
-  /* each mug stands on its piece of the shelf board; the pieces join into one board across the row */
   .kinds-art {
     display: flex;
     justify-content: center;
     align-items: flex-end;
     width: 100%;
     height: calc(var(--wall) * var(--kz));
-    border-bottom: 12px solid var(--ink);
+    border-bottom: 12px solid var(--navy, #14213d);
     color: inherit;
   }
   .kinds-art :global(svg) {
+    flex: none;
     zoom: var(--kz);
+    filter: drop-shadow(0 12px 12px rgba(20, 33, 61, 0.18));
     transition: transform 0.2s ease;
   }
   .kinds-art:hover :global(svg) {
     transform: translateY(-4px);
   }
-  .kinds-art :global(svg) {
-    flex: none;
-    filter: drop-shadow(0 12px 12px rgba(22, 20, 27, 0.18));
-  }
   .kinds-vol {
     position: relative;
     z-index: 2;
-    padding: 4px 12px;
+    padding: 5px 14px;
     border-radius: 999px;
-    background: var(--tone);
+    background: var(--navy, #14213d);
+    color: #fff;
     font-size: 0.85rem;
     font-weight: 700;
-  }
-  .kinds-m .kinds-vol {
-    color: #fff;
-  }
-  .kinds-num {
-    display: grid;
-    place-items: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: var(--tone);
-    color: var(--ink);
-    font-weight: 700;
-    font-size: 0.82rem;
-  }
-  .kinds-m .kinds-num {
-    color: #fff;
   }
   .kinds-legend {
     position: absolute;
@@ -681,68 +391,51 @@ const splitTail = (t: string): [string, string] => {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 4px 10px;
+    padding: 5px 12px;
     border-radius: 999px;
-    background: var(--card);
-    font-size: 0.75rem;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--navy, #14213d);
+    font-size: 0.78rem;
     font-weight: 700;
   }
   .kinds-legend i {
     width: var(--cz);
     height: 6px;
-    border: 1.5px solid var(--ink);
+    border: 1.5px solid var(--navy, #14213d);
     border-top: 0;
   }
   .kinds-cards {
     list-style: none;
-    margin: 16px 0 0;
+    margin: 14px 0 0;
     padding: 0;
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 12px;
+    gap: 14px;
   }
   .kcard {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    padding: 16px;
-    border-radius: 24px 24px 24px 8px;
-    background: var(--card);
-    border: 1.5px solid var(--line);
-    border-top: 5px solid var(--tone);
+    align-items: flex-start;
+    gap: 10px;
+    padding: 20px;
     scroll-margin-top: 90px;
   }
   .kcard:target {
-    box-shadow: 5px 5px 0 var(--tone);
-  }
-  .kcard-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-  }
-  .kcard-tag {
-    padding: 3px 10px;
-    border-radius: 999px;
-    background: var(--soft);
-    font-size: 0.75rem;
-    font-weight: 700;
-  }
-  .kcard h3 {
-    font-size: 1.1rem;
+    box-shadow: 0 0 0 2px var(--navy, #14213d);
   }
   .kcard-specs {
+    width: 100%;
     margin: 0;
     display: grid;
     gap: 3px;
-    font-size: 0.84rem;
+    font-size: 0.86rem;
   }
   .kcard-specs div {
     display: flex;
     justify-content: space-between;
     gap: 8px;
     padding-bottom: 3px;
-    border-bottom: 1px dashed var(--line);
+    border-bottom: 1px dashed rgba(20, 33, 61, 0.2);
   }
   .kcard-specs dt {
     color: var(--muted);
@@ -752,13 +445,13 @@ const splitTail = (t: string): [string, string] => {
     font-weight: 700;
     white-space: nowrap;
   }
-  .kcard p {
-    margin: 0;
-    font-size: 0.88rem;
-    color: var(--ink-2);
+  .kcard-text {
+    color: var(--muted);
+    font-size: 0.9rem;
     line-height: 1.45;
   }
   .kcard-foot {
+    width: 100%;
     margin-top: auto;
     padding-top: 6px;
     display: flex;
@@ -768,20 +461,55 @@ const splitTail = (t: string): [string, string] => {
     gap: 8px;
   }
   .kcard-price {
-    font-size: 1.2rem;
-    font-weight: 700;
+    font-size: 1.3rem;
+    font-weight: 800;
     letter-spacing: -0.03em;
+    color: var(--navy, #14213d);
   }
   .kcard-price small {
-    font-size: 0.75rem;
+    font-size: 0.78rem;
+    font-weight: 600;
     color: var(--muted);
     letter-spacing: 0;
   }
 
-  /* colour dots on the «цветная ручка и внутри» card */
+  /* ---- coatings */
+  .fin-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .fin-card {
+    display: grid;
+    grid-template-columns: 170px minmax(0, 1fr);
+    gap: 4px;
+    padding: 8px;
+  }
+  .fin-art {
+    min-height: 170px;
+  }
+  .fin-art :global(svg) {
+    max-width: 150px;
+    filter: drop-shadow(0 12px 14px rgba(0, 0, 0, 0.4));
+  }
+  .fin-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 12px 12px 10px 10px;
+  }
+  .fin-text {
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
   .fin-colors {
     list-style: none;
-    margin: 4px 0 8px;
+    margin: 4px 0 4px;
     padding: 0;
     display: flex;
     flex-wrap: wrap;
@@ -792,71 +520,10 @@ const splitTail = (t: string): [string, string] => {
     height: 18px;
     border-radius: 50%;
     background: var(--sw);
-    box-shadow: 0 0 0 1.5px rgba(255, 252, 245, 0.55);
-  }
-  /* ================= coatings (dark band) ================= */
-  .fin {
-    background: var(--ink);
-    color: var(--paper);
-    border-radius: 48px;
-    margin-inline: clamp(0px, 1.5vw, 20px);
-  }
-  .fin h2,
-  .fin .eyebrow {
-    color: var(--paper);
-  }
-  .fin .section-head p {
-    color: rgba(255, 252, 245, 0.72);
-  }
-  .fin-grid {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
-  }
-  .fin-card {
-    display: grid;
-    grid-template-columns: 170px minmax(0, 1fr);
-    border-radius: var(--radius-l);
-    background: rgba(255, 252, 245, 0.06);
-    border: 1.5px solid rgba(255, 252, 245, 0.14);
-    overflow: clip;
-  }
-  .fin-art {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 170px;
-    background: radial-gradient(circle at 50% 45%, rgba(255, 252, 245, 0.2), transparent 68%);
-  }
-  .fin-art :global(svg) {
-    flex: none;
-    max-width: 150px;
-    height: auto;
-    filter: drop-shadow(0 12px 14px rgba(0, 0, 0, 0.45));
-  }
-  .fin-body {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-    padding: 18px 18px 18px 4px;
-  }
-  .fin-body h3 {
-    color: var(--paper);
-    font-size: 1.08rem;
-  }
-  .fin-body > p:not(.fin-meta) {
-    margin: 0;
-    color: rgba(255, 252, 245, 0.78);
-    font-size: 0.88rem;
-    line-height: 1.45;
+    box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.6);
   }
   .fin-meta {
-    margin: auto 0 0;
+    margin-top: auto !important;
     padding-top: 8px;
     display: flex;
     flex-wrap: wrap;
@@ -864,31 +531,21 @@ const splitTail = (t: string): [string, string] => {
     gap: 6px 12px;
   }
   .fin-price {
-    padding: 3px 11px;
+    padding: 4px 12px;
     border-radius: 999px;
-    background: var(--y);
-    color: var(--ink);
+    background: #fff;
+    color: var(--navy, #14213d);
     font-weight: 700;
     font-size: 0.9rem;
   }
-  .fin-chameleon .fin-price { background: var(--m); color: #fff; }
-  .fin-glitter .fin-price { background: #f4b6dc; }
-  .fin-marble .fin-price,
-  .fin-gold .fin-price { background: #e9d08a; }
-  .fin-white .fin-price { background: var(--paper); }
-  .fin-color .fin-price { background: var(--c); }
   .fin-one {
     font-size: 0.82rem;
-    color: rgba(255, 252, 245, 0.7);
+    color: rgba(255, 255, 255, 0.72);
   }
   .fin-one b {
-    color: var(--paper);
+    color: #fff;
   }
-  .fin-chameleon {
-    border-color: rgba(229, 0, 125, 0.6);
-    box-shadow: 0 0 0 1px rgba(229, 0, 125, 0.3) inset;
-  }
-  /* chameleon: cold (dark) and hot (print shows) states fade into each other, with steam */
+  /* chameleon: cold (dark) and hot (print shows) states fade into each other */
   .cham {
     position: relative;
     display: grid;
@@ -902,26 +559,26 @@ const splitTail = (t: string): [string, string] => {
   .cham-label {
     position: absolute;
     left: 50%;
-    bottom: -18px;
+    bottom: -20px;
     transform: translateX(-50%);
     display: grid;
     font-size: 0.75rem;
   }
   .cham-label b {
     grid-area: 1 / 1;
-    padding: 2px 8px;
+    padding: 2px 10px;
     border-radius: 999px;
     text-align: center;
     white-space: nowrap;
   }
   .cham-l-cold {
-    background: rgba(255, 252, 245, 0.16);
-    color: var(--paper);
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
     animation: cham-cold 5s ease-in-out infinite;
   }
   .cham-l-hot {
-    background: var(--m);
-    color: #fff;
+    background: #fff;
+    color: var(--navy, #14213d);
     animation: cham-hot 5s ease-in-out infinite;
   }
   @keyframes cham-hot {
@@ -944,13 +601,12 @@ const splitTail = (t: string): [string, string] => {
       animation: none;
       opacity: 0;
     }
+    .kinds-art :global(svg) {
+      transition: none;
+    }
   }
 
-  /* ================= what can be printed ================= */
-  .prn-title {
-    margin-bottom: 28px;
-    max-width: 820px;
-  }
+  /* ---- what can be printed */
   .prn-grid {
     list-style: none;
     margin: 0;
@@ -960,22 +616,12 @@ const splitTail = (t: string): [string, string] => {
     gap: 14px;
   }
   .prn-card {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    border-radius: 26px 26px 26px 8px;
-    background: var(--card);
-    border: 1.5px solid var(--line);
-    overflow: clip;
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
   }
   .prn-art {
-    position: relative;
-    height: 180px;
-    display: grid;
-    place-items: center;
-    background: var(--soft);
-  }
-  .prn-art {
-    overflow: clip;
+    height: 170px;
   }
   .prn-art img {
     position: absolute;
@@ -985,16 +631,16 @@ const splitTail = (t: string): [string, string] => {
     object-fit: cover;
   }
   .prn-art :global(svg) {
-    filter: drop-shadow(0 10px 12px rgba(22, 20, 27, 0.16));
+    filter: drop-shadow(0 10px 12px rgba(20, 33, 61, 0.16));
   }
   .prn-real {
     position: absolute;
     left: 10px;
     bottom: 10px;
-    padding: 3px 9px;
+    padding: 4px 10px;
     border-radius: 999px;
-    background: var(--ink);
-    color: var(--paper);
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--navy, #14213d);
     font-size: 0.75rem;
     font-weight: 700;
   }
@@ -1002,108 +648,34 @@ const splitTail = (t: string): [string, string] => {
     display: grid;
     align-content: start;
     justify-items: start;
-    gap: 6px;
-    padding: 14px 16px 18px;
-  }
-  .prn-tag {
-    padding: 2px 9px;
-    border-radius: 999px;
-    background: var(--soft);
-    font-size: 0.75rem;
-    font-weight: 700;
-  }
-  .prn-body h3 {
-    font-size: 1.08rem;
+    gap: 8px;
+    padding: 14px 10px 12px;
   }
   .prn-body p {
-    margin: 0;
+    color: var(--muted);
     font-size: 0.88rem;
-    color: var(--ink-2);
     line-height: 1.45;
   }
 
-  /* ================= technology and care ================= */
-  .tech {
-    background: var(--paper-2);
-    border-radius: 48px;
-    margin-inline: clamp(0px, 1.5vw, 20px);
-  }
+  /* ---- technology and care */
   .tech-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
-    gap: clamp(28px, 5vw, 64px);
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: clamp(24px, 4vw, 56px);
     align-items: start;
   }
-  .tech-grid h2 {
+  .tech-grid :global(.teh) {
     margin-bottom: 22px;
   }
-  .tech-steps {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-  }
-  .tech-steps li {
-    display: grid;
-    align-content: start;
-    gap: 10px;
-    padding: 16px;
-    border-radius: 22px 22px 22px 6px;
-    background: var(--card);
-    border: 1.5px solid var(--line);
-  }
-  .tech-c { --tone: var(--c); }
-  .tech-m { --tone: var(--m); }
-  .tech-y { --tone: var(--y); }
-  .tech-num {
-    display: grid;
-    place-items: center;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: var(--ink);
-    color: var(--paper);
-    font-weight: 700;
-    box-shadow: 3px 3px 0 var(--tone);
-  }
-  .tech-steps h3 {
-    margin: 0 0 4px;
-    font-size: 1.02rem;
-  }
-  .tech-steps p {
-    margin: 0;
-    font-size: 0.88rem;
-    color: var(--ink-2);
-    line-height: 1.45;
-  }
   .tech-facts {
-    list-style: none;
-    margin: 16px 0 0;
-    padding: 0;
-    display: grid;
-    gap: 8px;
+    margin-top: 18px !important;
   }
   .tech-facts li {
-    display: flex;
-    gap: 8px;
-    align-items: flex-start;
-    font-size: 0.93rem;
-  }
-  .tech-facts :global(svg) {
-    flex: none;
-    margin-top: 3px;
-    color: var(--m-ink);
+    color: var(--ink);
   }
   .care {
-    display: grid;
-    gap: 12px;
-    padding: 24px;
-    border-radius: 30px 30px 30px 8px;
-    background: var(--card);
-    border: 2px solid var(--ink);
-    box-shadow: 6px 6px 0 var(--c);
+    padding: 22px 24px 20px;
+    margin-top: clamp(0px, 5vw, 76px);
   }
   .care summary {
     list-style: none;
@@ -1112,289 +684,49 @@ const splitTail = (t: string): [string, string] => {
   .care summary::-webkit-details-marker {
     display: none;
   }
-  .care h3 {
-    font-size: 1.25rem;
+  .care[open] summary {
+    margin-bottom: 14px;
   }
   .care-list {
     list-style: none;
-    margin: 12px 0 0;
+    margin: 0;
     padding: 0;
     display: grid;
     gap: 10px;
   }
   .care-list li {
-    display: grid;
-    grid-template-columns: 30px 1fr;
+    display: flex;
     gap: 10px;
-    align-items: start;
+    align-items: flex-start;
     font-size: 0.93rem;
-    line-height: 1.4;
+    line-height: 1.45;
   }
   .care-ico {
     display: grid;
     place-items: center;
-    width: 30px;
-    height: 30px;
+    flex: none;
+    width: 22px;
+    height: 22px;
+    margin-top: 1px;
     border-radius: 50%;
-    font-weight: 700;
-  }
-  .care-ok .care-ico {
-    background: var(--c-soft);
-    color: var(--ink);
-  }
-  .care-no .care-ico {
-    background: var(--m-soft);
-    color: var(--m-ink);
-  }
-  .care-note {
-    margin: 12px 0 0;
-    font-size: 0.85rem;
-    color: var(--muted);
-  }
-
-  /* ================= audience ================= */
-  .aud-title {
-    margin-bottom: 28px;
-    max-width: 820px;
-  }
-  .aud-grid {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 16px;
-  }
-  .aud-card {
-    position: relative;
-    display: grid;
-    align-content: start;
-    justify-items: start;
-    gap: 8px;
-    padding: 22px 22px 56px;
-    border-radius: 26px 26px 26px 8px;
-    background: var(--soft);
-    overflow: clip;
-  }
-  .aud-tag {
-    padding: 3px 10px;
-    border-radius: 999px;
-    background: var(--card);
     font-size: 0.75rem;
     font-weight: 700;
   }
-  .aud-card h3 {
-    font-size: 1.2rem;
+  .care-ok .care-ico {
+    background: var(--navy, #14213d);
+    color: #fff;
   }
-  .aud-card p {
-    margin: 0;
-    font-size: 0.93rem;
-    color: var(--ink-2);
+  .care-no .care-ico {
+    border: 1.5px solid var(--navy, #14213d);
+    color: var(--navy, #14213d);
   }
-  .aud-num {
-    position: absolute;
-    right: 16px;
-    bottom: -14px;
-    font-size: 4rem;
-    font-weight: 800;
-    color: var(--tone);
-    opacity: 0.5;
-    line-height: 1;
+  .care-note {
+    margin-top: 14px !important;
+    color: var(--muted);
+    font-size: 0.88rem;
   }
 
-  /* ================= how to order ================= */
-  .how-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-    gap: clamp(28px, 5vw, 64px);
-    align-items: start;
-  }
-  .how-grid h2 {
-    margin-bottom: 26px;
-  }
-  .how-steps {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-  }
-  .how-steps li {
-    position: relative;
-    display: grid;
-    grid-template-columns: 48px 1fr;
-    gap: 16px;
-    padding-bottom: 22px;
-  }
-  .how-steps li:not(:last-child)::before {
-    content: '';
-    position: absolute;
-    left: 23px;
-    top: 48px;
-    bottom: 4px;
-    border-left: 2px dashed var(--line-strong);
-  }
-  .how-dot {
-    display: grid;
-    place-items: center;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    border: 2px solid var(--ink);
-    background: var(--card);
-    font-weight: 700;
-  }
-  .how-steps li:nth-child(3n + 1) .how-dot { box-shadow: 3px 3px 0 var(--c); }
-  .how-steps li:nth-child(3n + 2) .how-dot { box-shadow: 3px 3px 0 var(--m); }
-  .how-steps li:nth-child(3n + 3) .how-dot { box-shadow: 3px 3px 0 var(--y); }
-  .how-steps h3 {
-    margin: 10px 0 4px;
-    font-size: 1.1rem;
-  }
-  .how-steps p {
-    margin: 0;
-    color: var(--ink-2);
-    font-size: 0.95rem;
-  }
-  .how-side {
-    display: grid;
-    gap: 14px;
-  }
-  .how-card,
-  .how-b2b {
-    position: relative;
-    display: grid;
-    justify-items: start;
-    gap: 8px;
-    padding: 22px;
-    border-radius: var(--radius-l);
-  }
-  .how-card li {
-    margin: 0;
-    font-size: 0.92rem;
-    color: var(--ink-2);
-  }
-  .how-card {
-    background: var(--y-soft);
-  }
-  .how-card summary {
-    list-style: none;
-    cursor: default;
-  }
-  .how-card summary::-webkit-details-marker {
-    display: none;
-  }
-  .how-list {
-    margin: 0;
-    padding-left: 18px;
-    display: grid;
-    gap: 6px;
-  }
-  .how-list li::marker {
-    color: var(--m);
-  }
-  .how-more {
-    font-weight: 700;
-    color: var(--m-ink);
-  }
-  .how-b2b {
-    background: var(--ink);
-    color: var(--paper);
-  }
-  .how-b2b h3 {
-    color: var(--paper);
-  }
-  .how-b2b .how-more {
-    color: var(--y);
-  }
-  .how-b2b-btn {
-    background: var(--y);
-    color: var(--ink);
-    border-color: var(--y);
-  }
-  .how-chips {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .how-chips li {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 5px 11px;
-    border-radius: 999px;
-    border: 1.5px solid rgba(255, 252, 245, 0.25);
-    font-size: 0.84rem;
-    font-weight: 600;
-  }
-  .how-chips :global(svg) {
-    color: var(--y);
-  }
-
-  /* ================= seo text ================= */
-  .seo-text h2 {
-    margin-bottom: 24px;
-    font-size: clamp(1.6rem, 3vw, 2.2rem);
-  }
-  .seo-cols {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px 48px;
-  }
-  .seo-cols h3 {
-    margin-bottom: 8px;
-    font-size: 1.1rem;
-  }
-  .seo-cols p {
-    margin: 0;
-    color: var(--ink-2);
-    font-size: 0.96rem;
-    line-height: 1.6;
-  }
-  .seo-toggle,
-  .seo-more-btn {
-    display: none;
-  }
-
-  /* ================= related ================= */
-  .related-h {
-    margin-bottom: 24px;
-  }
-  .related-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 14px;
-  }
-  .related-card {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 10px 18px 10px 10px;
-    border-radius: 24px;
-    background: var(--card);
-    border: 1.5px solid var(--line);
-    font-weight: 700;
-    text-decoration: none;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
-  }
-  .related-card img {
-    width: 64px;
-    height: 64px;
-    border-radius: 18px;
-    object-fit: cover;
-  }
-  .related-card span {
-    flex: 1;
-  }
-  .related-card:hover {
-    border-color: var(--ink);
-    box-shadow: 4px 4px 0 var(--y);
-    color: var(--ink);
-  }
-
-  /* ================= tablets ================= */
+  /* ---- tablets */
   @media (max-width: 1180px) {
     .fin-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1402,338 +734,56 @@ const splitTail = (t: string): [string, string] => {
     .prn-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
-    .aud-grid,
     .kinds-cards {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-    .mhero-stage {
-      --hz: 0.85;
-    }
   }
   @media (max-width: 960px) {
-    .tech-grid,
-    .how-grid {
-      grid-template-columns: 1fr;
+    .tech-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .care {
+      margin-top: 0;
     }
   }
   @media (max-width: 860px) {
-    .mhero-grid {
-      grid-template-columns: 1fr;
-    }
-    .mhero-media {
-      max-width: 400px;
-      justify-self: center;
-      padding: 12px;
-    }
-    .mhero-stage {
-      --hz: 0.82;
-    }
     .kinds-shelf {
       --kz: 0.7;
     }
   }
 
-  /* ================= phones (≤ 760px): compact, desktop untouched ================= */
+  /* ---- phones */
   @media (max-width: 760px) {
-    .mhero {
-      padding-block: 14px 22px;
-    }
-    .mhero-grid {
-      grid-template-columns: minmax(0, 1fr) 118px;
-      gap: 12px 14px;
-      align-items: start;
-    }
-    .mhero-text {
-      display: contents;
-    }
-    .mhero-text > :global(.crumbs),
-    .mhero-text h1,
-    .mhero-chips,
-    .mhero-actions {
-      grid-column: 1 / -1;
-    }
-    .mhero-eyebrow {
-      display: none;
-    }
-    .mhero-text > :global(.crumbs) {
-      order: 1;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .mhero-text > :global(.crumbs) :global(ol) {
-      flex-wrap: nowrap;
-      white-space: nowrap;
-      font-size: 0.78rem;
-    }
-    .mhero-text h1 {
-      order: 2;
-      font-size: clamp(1.7rem, 7.6vw, 2.1rem);
-    }
-    .lead {
-      order: 3;
-      grid-column: 1;
-      margin: 0;
-      font-size: 0.95rem;
-      line-height: 1.45;
-    }
-    .mhero-media {
-      order: 4;
-      grid-column: 2;
-      grid-row: 3;
-      max-width: none;
-      justify-self: stretch;
-      padding: 0 0 12px;
-    }
-    .mhero-table {
-      aspect-ratio: 3 / 4.2;
-      border-radius: 20px 20px 20px 48px;
-    }
-    .mhero-table::after {
-      inset: 62% 0 0;
-    }
-    /* phone: only the photo mug and the chameleon, stacked */
-    .mhero-stage {
-      --hz: 1;
-      zoom: 1;
-      inset: 0;
-      width: auto;
-      height: auto;
-      margin: 0;
-    }
-    .mhero-stage :global(.mhero-beer),
-    .mhero-stage :global(.mhero-coffee) {
-      display: none;
-    }
-    .mhero-stage :global(.mhero-mug) {
-      height: auto;
-      filter: drop-shadow(0 8px 8px rgba(22, 20, 27, 0.2));
-    }
-    .mhero-stage :global(.mhero-cham) {
-      width: 64%;
-      right: 2%;
-      top: 4%;
-      bottom: auto;
-    }
-    .mhero-stage :global(.mhero-main) {
-      width: 80%;
-      left: 2%;
-      bottom: 20%;
-    }
-    .mhero-dot {
-      display: none;
-    }
-    .mhero-price {
-      right: -4px;
-      bottom: 0;
-      padding: 5px 9px;
-      border-radius: 10px;
-      font-size: 0.82rem;
-    }
-    .mhero-price small {
-      font-size: 0.75rem;
-    }
-    .mhero-price::before {
-      display: none;
-    }
-    .mhero-chips {
-      order: 5;
-      flex-wrap: nowrap;
-      gap: 6px;
-      overflow-x: auto;
-      margin-inline: calc(var(--gutter) * -1);
-      padding-inline: var(--gutter);
-      scrollbar-width: none;
-    }
-    .mhero-chips::-webkit-scrollbar,
-    .mhero-text > :global(.crumbs)::-webkit-scrollbar {
-      display: none;
-    }
-    .mhero-chips li {
-      flex: none;
-      gap: 4px;
-      padding: 5px 10px;
-      font-size: 0.8rem;
-      white-space: nowrap;
-    }
-    .mhero-chips :global(svg) {
-      width: 14px;
-      height: 14px;
-    }
-    .mhero-actions {
-      order: 6;
-      flex-wrap: nowrap;
-      gap: 8px;
-    }
-    .mhero-actions .btn {
-      flex: 1 1 0;
-      min-height: 46px;
-      padding: 0 12px;
-      gap: 6px;
-      font-size: 0.92rem;
-      white-space: nowrap;
-    }
-    .mhero-actions .btn :global(svg) {
-      width: 18px;
-      height: 18px;
-    }
-    .long {
-      display: none;
-    }
-    .calc-sec {
-      border-radius: 28px;
-      padding-block: 28px 32px;
-    }
-    .calc-sec .section-head {
-      margin-bottom: 16px;
-    }
-    .calc-sec .section-head .eyebrow {
-      margin-bottom: 6px;
-    }
     .calc-sub {
       display: none;
     }
-
-    /* tighter sections */
-    .kinds,
-    .fin,
-    .prn,
-    .tech,
-    .aud,
-    .how,
-    .seo-text,
-    .related {
-      padding-block: 32px;
+    .calc-sec {
+      padding-block: 28px 32px;
     }
-    .kinds .section-head,
-    .fin .section-head {
-      margin-bottom: 14px;
-      gap: 6px;
-    }
-    .kinds .section-head .eyebrow,
-    .fin .section-head .eyebrow {
-      margin-bottom: 6px;
-    }
-    .fin .section-head p {
-      display: none;
-    }
-    .kinds-sub {
-      font-size: 0.86rem;
-    }
-
-    /* shelf: all four still side by side, smaller (same scale); cards below become a carousel */
     .kinds-shelf {
-      margin-inline: calc(var(--gutter) * -0.5);
-      padding: 30px 0 14px;
-      border-radius: 24px;
-      --kz: 0.42;
-      --gy: calc(100% - 49px);
-    }
-    .kinds-art {
-      border-bottom-width: 7px;
-    }
-    .kinds-item {
-      gap: 8px;
+      --kz: 0.52;
+      padding-top: 40px;
     }
     .kinds-vol {
-      padding: 2px 7px;
-      font-size: 0.75rem;
-    }
-    .kinds-legend {
-      right: 10px;
-      top: 8px;
+      padding: 3px 8px;
       font-size: 0.75rem;
     }
     .kinds-cards {
-      display: flex;
+      grid-template-columns: minmax(0, 1fr);
       gap: 10px;
-      margin-top: 12px;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      scroll-padding-inline: var(--gutter);
-      margin-inline: calc(var(--gutter) * -1);
-      padding: 0 var(--gutter) 8px;
-      scrollbar-width: none;
-    }
-    .kinds-cards::-webkit-scrollbar {
-      display: none;
-    }
-    .kcard {
-      flex: 0 0 min(250px, 74%);
-      scroll-snap-align: start;
-      gap: 6px;
-      padding: 12px 14px 14px;
-    }
-    .kcard h3 {
-      font-size: 0.98rem;
-    }
-    .kcard p {
-      font-size: 0.8rem;
-    }
-    .kcard .btn {
-      min-height: 36px;
-      padding: 0 14px;
-      font-size: 0.82rem;
-    }
-
-    /* coatings: 2-column compact tiles, picture on top */
-    .fin {
-      border-radius: 28px;
     }
     .fin-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 10px;
     }
     .fin-card {
-      grid-template-columns: none;
-      grid-template-rows: auto 1fr;
-      border-radius: 20px;
+      grid-template-columns: 120px minmax(0, 1fr);
     }
     .fin-art {
-      min-height: 0;
-      height: 104px;
+      min-height: 130px;
     }
     .fin-art :global(svg) {
-      max-width: none;
-      zoom: 0.62;
-    }
-    .cham-label {
-      bottom: -10px;
-      font-size: 0.85rem;
-    }
-    .fin-body {
-      gap: 4px;
-      padding: 8px 10px 12px;
-    }
-    .fin-body h3 {
-      font-size: 0.9rem;
-      line-height: 1.2;
-    }
-    .fin-body > p:not(.fin-meta) {
-      font-size: 0.76rem;
-      line-height: 1.35;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .fin-meta {
-      gap: 4px 8px;
-      padding-top: 4px;
-    }
-    .fin-price {
-      padding: 2px 8px;
-      font-size: 0.76rem;
-    }
-    .fin-one {
-      font-size: 0.75rem;
-    }
-
-    /* prints: carousel */
-    .prn-title {
-      margin-bottom: 14px;
-    }
-    .prn .eyebrow {
-      margin-bottom: 6px;
+      max-width: 100px;
     }
     .prn-grid {
       display: flex;
@@ -1742,271 +792,38 @@ const splitTail = (t: string): [string, string] => {
       scroll-snap-type: x mandatory;
       scroll-padding-inline: var(--gutter);
       margin-inline: calc(var(--gutter) * -1);
-      padding: 0 var(--gutter) 8px;
+      padding: 4px var(--gutter) 10px;
       scrollbar-width: none;
     }
     .prn-grid::-webkit-scrollbar {
       display: none;
     }
     .prn-card {
-      flex: 0 0 min(200px, 56%);
+      flex: 0 0 min(240px, 72%);
       scroll-snap-align: start;
-      border-radius: 20px 20px 20px 6px;
-    }
-    .prn-art {
-      height: 120px;
-    }
-    .prn-art :global(svg) {
-      zoom: 0.7;
-    }
-    .prn-body {
-      gap: 3px;
-      padding: 10px 12px 12px;
-    }
-    .prn-body h3 {
-      font-size: 0.95rem;
-    }
-    .prn-body p {
-      font-size: 0.78rem;
-      line-height: 1.35;
-    }
-    .prn-tag {
-      font-size: 0.75rem;
-    }
-
-    /* technology: steps as a compact list; care folded */
-    .tech {
-      border-radius: 28px;
-    }
-    .tech-grid {
-      gap: 16px;
-    }
-    .tech-grid h2 {
-      margin-bottom: 14px;
-    }
-    .tech .eyebrow {
-      margin-bottom: 6px;
-    }
-    .tech-steps {
-      grid-template-columns: 1fr;
-      gap: 6px;
-    }
-    .tech-steps li {
-      grid-template-columns: 28px 1fr;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 16px 16px 16px 6px;
-    }
-    .tech-num {
-      width: 28px;
-      height: 28px;
-      font-size: 0.8rem;
-      box-shadow: 2px 2px 0 var(--tone);
-    }
-    .tech-steps h3 {
-      margin: 3px 0 2px;
-      font-size: 0.92rem;
-    }
-    .tech-steps p {
-      font-size: 0.8rem;
-      line-height: 1.38;
-    }
-    .tech-facts {
-      margin-top: 12px;
-      gap: 6px;
-    }
-    .tech-facts li {
-      font-size: 0.82rem;
     }
     .care {
-      gap: 0;
-      padding: 14px 16px;
-      border-radius: 22px 22px 22px 6px;
-      box-shadow: 4px 4px 0 var(--c);
+      padding: 14px 18px;
     }
     .care summary {
-      cursor: pointer;
-    }
-    .care summary h3,
-    .how-card summary h3 {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      gap: 10px;
-      font-size: 1rem;
-    }
-    .care summary h3::after,
-    .how-card summary h3::after {
-      content: '+';
-      display: grid;
-      place-items: center;
-      width: 26px;
-      height: 26px;
-      flex: none;
-      border-radius: 50%;
-      border: 1.5px solid var(--ink);
-      font-size: 1rem;
-    }
-    .care[open] summary h3::after,
-    .how-card[open] summary h3::after {
-      content: '−';
-    }
-    .care-list li {
-      grid-template-columns: 24px 1fr;
-      gap: 8px;
-      font-size: 0.82rem;
-    }
-    .care-ico {
-      width: 24px;
-      height: 24px;
-      font-size: 0.75rem;
-    }
-    .care-note {
-      font-size: 0.78rem;
-    }
-
-    /* audience: compact list */
-    .aud-title {
-      margin-bottom: 14px;
-    }
-    .aud .eyebrow {
-      margin-bottom: 6px;
-    }
-    .aud-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-    }
-    .aud-card {
-      gap: 4px;
-      padding: 12px 12px 30px;
-      border-radius: 20px 20px 20px 6px;
-    }
-    .aud-card h3 {
-      font-size: 0.95rem;
-      line-height: 1.2;
-    }
-    .aud-card p {
-      font-size: 0.78rem;
-      line-height: 1.38;
-    }
-    .aud-tag {
-      padding: 2px 8px;
-      font-size: 0.75rem;
-    }
-    .aud-num {
-      right: 10px;
-      bottom: -8px;
-      font-size: 2.4rem;
-    }
-
-    /* how to order */
-    .how-grid h2 {
-      margin-bottom: 16px;
-    }
-    .how-steps li {
-      grid-template-columns: 36px 1fr;
+      justify-content: space-between;
       gap: 12px;
-      padding-bottom: 14px;
-    }
-    .how-steps li:not(:last-child)::before {
-      left: 17px;
-      top: 36px;
-    }
-    .how-dot {
-      width: 36px;
-      height: 36px;
-      font-size: 0.85rem;
-    }
-    .how-steps h3 {
-      margin: 6px 0 2px;
-      font-size: 0.98rem;
-    }
-    .how-steps p {
-      font-size: 0.84rem;
-      line-height: 1.4;
-    }
-    .how-side {
-      gap: 10px;
-    }
-    .how-card,
-    .how-b2b {
-      gap: 6px;
-      padding: 16px;
-      border-radius: 24px;
-    }
-    .how-card li {
-      font-size: 0.82rem;
-    }
-    .how-card summary {
+      min-height: 44px;
       cursor: pointer;
     }
-    .how-side h3 {
-      font-size: 1rem;
+    .care summary::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      margin-right: 4px;
+      border-right: 2px solid currentColor;
+      border-bottom: 2px solid currentColor;
+      transform: rotate(45deg);
     }
-    .how-chips li {
-      padding: 4px 9px;
-      font-size: 0.76rem;
-    }
-  }
-
-  @media (max-width: 560px) {
-    /* seo text: first lines + «Читать полностью» */
-    .seo-text h2 {
-      margin-bottom: 14px;
-    }
-    .seo-cols {
-      grid-template-columns: 1fr;
-      gap: 14px;
-      max-height: 230px;
-      overflow: hidden;
-      -webkit-mask-image: linear-gradient(#000 60%, transparent);
-      mask-image: linear-gradient(#000 60%, transparent);
-    }
-    .seo-toggle:checked + .seo-cols {
-      max-height: none;
-      -webkit-mask-image: none;
-      mask-image: none;
-    }
-    .seo-more-btn {
-      display: inline-block;
-      margin-top: 8px;
-      font-weight: 700;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-    .seo-toggle:checked ~ .seo-more-btn {
-      display: none;
-    }
-    /* «Ещё печатаем»: 2×2 tiles with the picture on top */
-    .related-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-    }
-    .related-card {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 8px;
-      padding: 8px 10px 12px;
-      border-radius: 18px;
-      font-size: 0.88rem;
-      line-height: 1.25;
-    }
-    .related-card img {
-      width: 100%;
-      height: auto;
-      aspect-ratio: 16 / 10;
-      border-radius: 12px;
-    }
-    .related-card :global(svg) {
-      display: none;
-    }
-    .related-h {
-      margin-bottom: 14px;
-    }
-  }
-  @media (max-width: 380px) {
-    .kinds-shelf {
-      --kz: 0.38;
+    .care[open] summary::after {
+      transform: rotate(-135deg);
     }
   }
 </style>

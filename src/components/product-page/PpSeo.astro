@@ -1,0 +1,97 @@
+---
+// SEO text at the end of a page (texts from the page data, «Смотрите также» links from the slot):
+// glass cards in two columns; on phones the text is folded («Читать полностью», a checkbox, no JS).
+import './pp.css';
+import TeeHead from '@/components/tee/TeeHead.astro';
+
+interface Props {
+  title: string;
+  sections: { h: string; p: string }[];
+}
+const { title, sections } = Astro.props;
+---
+
+<section class="section seo-text pp-sec" aria-labelledby="seo-h">
+  <div class="wrap">
+    <TeeHead icon="layers" eyebrow="Подробнее" id="seo-h" title={title} />
+    <input type="checkbox" id="seo-more" class="seo-toggle" />
+    <div class="seo-cols">
+      {
+        sections.map((s) => (
+          <div class="seo-card pp-card">
+            <h3>{s.h}</h3>
+            <p>{s.p}</p>
+          </div>
+        ))
+      }
+      <div class="seo-card pp-card">
+        <h3>Смотрите также</h3>
+        <p class="seo-links"><slot /></p>
+      </div>
+    </div>
+    <label for="seo-more" class="seo-more-btn">Читать полностью</label>
+  </div>
+</section>
+
+<style>
+  .seo-cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .seo-card {
+    display: grid;
+    gap: 8px;
+    align-content: start;
+    padding: 22px 24px 24px;
+  }
+  .seo-card :global(p) {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  .seo-links :global(a) {
+    display: inline-block;
+    padding-block: 6px;
+    color: var(--navy, #14213d);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: rgba(20, 33, 61, 0.35);
+    text-underline-offset: 3px;
+  }
+  .seo-toggle,
+  .seo-more-btn {
+    display: none;
+  }
+  @media (max-width: 760px) {
+    .seo-cols {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 10px;
+      max-height: 260px;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(#000 60%, transparent);
+      mask-image: linear-gradient(#000 60%, transparent);
+    }
+    .seo-toggle:checked + .seo-cols {
+      max-height: none;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+    .seo-card {
+      padding: 16px 18px 18px;
+    }
+    .seo-more-btn {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      margin-top: 8px;
+      font-weight: 700;
+      color: var(--navy, #14213d);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .seo-toggle:checked ~ .seo-more-btn {
+      display: none;
+    }
+  }
+</style>

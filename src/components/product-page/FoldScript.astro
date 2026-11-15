@@ -1,0 +1,18 @@
+---
+// Folding cards (<details data-fold>) are always open on a computer; on a phone they start folded (tap to open).
+---
+
+<script is:inline>
+  (function () {
+    var m = matchMedia('(max-width: 760px)');
+    document.querySelectorAll('[data-fold]').forEach(function (d) {
+      if (m.matches) d.open = false;
+      d.querySelector('summary').addEventListener('click', function (e) {
+        if (!m.matches) e.preventDefault();
+      });
+      m.addEventListener('change', function (e) {
+        d.open = !e.matches;
+      });
+    });
+  })();
+</script>

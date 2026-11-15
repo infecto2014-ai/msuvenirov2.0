@@ -1,0 +1,352 @@
+/* Shared look of the standalone product pages (mugs, caps, badges, stickers, calendars) in the «Ink» style
+   (docs/INK.md): glass cards, navy circles with icons instead of section numbers, quiet grey art panels,
+   tables, ready options. Everything is scoped under body.theme-lux. 14.11.2026. */
+
+/* ---------- glass card */
+body.theme-lux .pp-card {
+  min-width: 0;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.78);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(20, 33, 61, 0.08);
+  box-shadow: 0 22px 44px -32px rgba(20, 33, 61, 0.4);
+  color: #000;
+}
+body.theme-lux .band-ink .pp-card {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: none;
+  color: #fff;
+}
+body.theme-lux .pp-card h3 {
+  margin: 0;
+  color: inherit;
+  font-size: 1.1rem;
+  line-height: 1.25;
+}
+body.theme-lux .pp-card p {
+  margin: 0;
+}
+/* icon circle: navy on light, white on dark */
+body.theme-lux .pp-ico {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--navy, #14213d);
+  color: #fff;
+}
+body.theme-lux .band-ink .pp-ico {
+  background: #fff;
+  color: var(--navy, #14213d);
+}
+/* small pill with a short label */
+body.theme-lux .pp-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #eef0f4;
+  color: var(--navy, #14213d);
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.3;
+}
+body.theme-lux .band-ink .pp-tag {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+/* quiet grey panel under a drawing */
+body.theme-lux .pp-art {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 22px;
+  overflow: clip;
+  background: radial-gradient(75% 70% at 50% 40%, #ffffff 0%, #eef0f4 100%);
+}
+body.theme-lux .band-ink .pp-art {
+  background: radial-gradient(75% 70% at 50% 40%, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+}
+body.theme-lux .pp-art :is(svg) {
+  flex: none;
+  max-width: 100%;
+  height: auto;
+}
+/* tick list */
+body.theme-lux .pp-ticks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+body.theme-lux .pp-ticks li {
+  position: relative;
+  padding-left: 26px;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+body.theme-lux .pp-ticks li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.2em;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: var(--navy, #14213d) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12.5 4 4L18 8'/%3E%3C/svg%3E") center / 11px no-repeat;
+}
+body.theme-lux .band-ink .pp-ticks li::before {
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2314213d' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12.5 4 4L18 8'/%3E%3C/svg%3E");
+}
+/* link with underline */
+body.theme-lux .pp-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: inherit;
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-decoration: underline;
+  text-decoration-color: rgba(20, 33, 61, 0.35);
+  text-underline-offset: 4px;
+}
+body.theme-lux .band-ink .pp-link {
+  text-decoration-color: rgba(255, 255, 255, 0.5);
+}
+body.theme-lux .pp-link:hover {
+  text-decoration-color: currentColor;
+}
+body.theme-lux .pp-sub {
+  max-width: 56ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.02rem;
+  line-height: 1.55;
+}
+
+/* ---------- price tables */
+body.theme-lux .pp-tbl-wrap {
+  overflow-x: auto;
+  border-radius: 18px;
+  border: 1px solid rgba(20, 33, 61, 0.1);
+  background: rgba(255, 255, 255, 0.7);
+  -webkit-overflow-scrolling: touch;
+}
+body.theme-lux .band-ink .pp-tbl-wrap {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.05);
+}
+body.theme-lux .pp-tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+body.theme-lux .pp-tbl caption {
+  padding: 14px 16px 6px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 1rem;
+}
+body.theme-lux .pp-tbl th,
+body.theme-lux .pp-tbl td {
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid rgba(20, 33, 61, 0.1);
+  font-weight: 500;
+  vertical-align: top;
+}
+body.theme-lux .band-ink .pp-tbl th,
+body.theme-lux .band-ink .pp-tbl td {
+  border-bottom-color: rgba(255, 255, 255, 0.14);
+}
+body.theme-lux .pp-tbl thead th {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  white-space: nowrap;
+}
+body.theme-lux .pp-tbl tbody th {
+  font-weight: 700;
+}
+body.theme-lux .pp-tbl tbody th small,
+body.theme-lux .pp-tbl thead th small {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0;
+}
+body.theme-lux .pp-tbl td {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+body.theme-lux .pp-tbl tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+
+/* ---------- ready options (like TeePackages, the picture is a drawing) */
+body.theme-lux .pk-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 5), minmax(0, 1fr));
+  gap: 14px;
+}
+body.theme-lux .pk-card {
+  display: flex;
+  flex-direction: column;
+  overflow: clip;
+}
+body.theme-lux .pk-art {
+  margin: 8px 8px 0;
+  height: var(--art-h, 220px);
+}
+body.theme-lux .pk-qty,
+body.theme-lux .pk-tech {
+  position: absolute;
+  z-index: 1;
+  top: 12px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+body.theme-lux .pk-qty {
+  right: 12px;
+  background: var(--navy, #14213d);
+  color: #fff;
+}
+body.theme-lux .pk-tech {
+  left: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--navy, #14213d);
+}
+body.theme-lux .pk-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 16px 18px 18px;
+}
+body.theme-lux .pk-note {
+  color: #4a4f5c;
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+body.theme-lux .pk-price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 10px;
+  margin: auto 0 0 !important;
+  padding-top: 10px;
+}
+body.theme-lux .pk-price b {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--navy, #14213d);
+  white-space: nowrap;
+}
+body.theme-lux .pk-price small {
+  color: #4a4f5c;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+body.theme-lux .pk-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  margin-top: 8px;
+  padding: 4px 4px 4px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--navy, #14213d);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.94rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+body.theme-lux .pk-btn:hover {
+  background: #000;
+}
+body.theme-lux .pk-go {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--navy, #14213d);
+  transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+}
+body.theme-lux .pk-btn:hover .pk-go {
+  transform: translateX(3px);
+}
+@media (max-width: 1180px) {
+  body.theme-lux .pk-grid {
+    grid-template-columns: repeat(min(var(--cols, 5), 3), minmax(0, 1fr));
+  }
+}
+@media (max-width: 760px) {
+  body.theme-lux .pk-grid {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    margin-inline: calc(var(--gutter) * -1);
+    padding: 6px var(--gutter) 10px;
+    scrollbar-width: none;
+  }
+  body.theme-lux .pk-grid::-webkit-scrollbar {
+    display: none;
+  }
+  body.theme-lux .pk-card {
+    flex: 0 0 min(250px, 74%);
+    scroll-snap-align: start;
+    border-radius: 24px;
+  }
+  body.theme-lux .pk-art {
+    margin: 6px 6px 0;
+    height: calc(var(--art-h, 220px) * 0.72);
+    border-radius: 18px;
+  }
+  body.theme-lux .pk-body {
+    padding: 12px 14px 14px;
+  }
+  body.theme-lux .pk-price b {
+    font-size: 1.4rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.theme-lux .pk-go,
+  body.theme-lux .pk-btn {
+    transition: none;
+  }
+}
+
+/* ---------- section padding on phones */
+@media (max-width: 760px) {
+  body.theme-lux .pp-sec {
+    padding-block: 32px;
+  }
+}

@@ -1,0 +1,95 @@
+---
+// Numbered route (steps, layers, anatomy): a number in a navy circle on a dashed line, glass card with the text.
+// These are real steps (order matters), not section numbers.
+import './pp.css';
+interface Props {
+  items: { title: string; text: string }[];
+  /** extra class for the list */
+  class?: string;
+}
+const { items, class: cls } = Astro.props;
+---
+
+<ol class:list={['ps', cls]}>
+  {
+    items.map((s, i) => (
+      <li class="ps-item">
+        <span class="ps-num" aria-hidden="true">{i + 1}</span>
+        <div class="ps-card pp-card">
+          <h3>{s.title}</h3>
+          <p>{s.text}</p>
+        </div>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .ps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+    position: relative;
+  }
+  .ps::before {
+    content: '';
+    position: absolute;
+    left: 21px;
+    top: 24px;
+    bottom: 24px;
+    border-left: 2px dashed rgba(20, 33, 61, 0.25);
+  }
+  :global(.band-ink) .ps::before {
+    border-left-color: rgba(255, 255, 255, 0.3);
+  }
+  .ps-item {
+    position: relative;
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 14px;
+    align-items: start;
+  }
+  .ps-num {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--navy, #14213d);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+  }
+  :global(.band-ink) .ps-num {
+    background: #fff;
+    color: var(--navy, #14213d);
+  }
+  .ps-card {
+    display: grid;
+    gap: 4px;
+    padding: 14px 18px 16px;
+    border-radius: 22px;
+  }
+  .ps-card :global(p) {
+    color: var(--muted);
+    font-size: 0.93rem;
+    line-height: 1.5;
+  }
+  @media (max-width: 560px) {
+    .ps-item {
+      grid-template-columns: 38px minmax(0, 1fr);
+      gap: 10px;
+    }
+    .ps-num {
+      width: 38px;
+      height: 38px;
+      font-size: 0.92rem;
+    }
+    .ps::before {
+      left: 18px;
+    }
+  }
+</style>
