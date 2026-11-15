@@ -71,6 +71,16 @@ body.theme-lux .pp-art {
   overflow: clip;
   background: radial-gradient(75% 70% at 50% 40%, #ffffff 0%, #eef0f4 100%);
 }
+/* the drawings use the page variables; on navy bands they must keep their own light colours */
+body.theme-lux .pp-art {
+  --card: #ffffff;
+  --paper: #ffffff;
+  --paper-2: #f2f2f2;
+  --ink: #000000;
+  --ink-2: #14213d;
+  --muted: #4b5568;
+  --line-strong: #c8ccd4;
+}
 body.theme-lux .band-ink .pp-art {
   background: radial-gradient(75% 70% at 50% 40%, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
 }
@@ -349,4 +359,179 @@ body.theme-lux .pk-btn:hover .pk-go {
   body.theme-lux .pp-sec {
     padding-block: 32px;
   }
+}
+
+/* ---------- type cards: a drawing on top, text and a table below (badges, stickers) */
+body.theme-lux .typ-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  align-items: stretch;
+}
+body.theme-lux .typ-card {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  overflow: clip;
+}
+body.theme-lux .typ-art {
+  gap: 6%;
+  height: 290px;
+  padding: 24px 16px 44px;
+}
+body.theme-lux .typ-art svg {
+  filter: drop-shadow(0 12px 12px rgba(20, 33, 61, 0.2));
+}
+body.theme-lux .typ-art .typ-back {
+  transform: rotate(-10deg);
+}
+body.theme-lux .typ-flip {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--navy, #14213d);
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+body.theme-lux .typ-body {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 14px 14px;
+}
+body.theme-lux .typ-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+  width: 100%;
+}
+body.theme-lux .typ-top h3 {
+  font-size: 1.25rem;
+}
+body.theme-lux .typ-sizes {
+  font-weight: 700;
+  color: var(--navy, #14213d);
+  font-size: 0.92rem;
+}
+body.theme-lux .typ-text {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+body.theme-lux .typ-body .pp-tbl-wrap {
+  width: 100%;
+}
+body.theme-lux .typ-body .pk-btn,
+body.theme-lux .typ-body .btn {
+  margin-top: auto;
+}
+body.theme-lux .typ-body > .btn {
+  align-self: flex-start;
+}
+@media (max-width: 960px) {
+  body.theme-lux .typ-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 760px) {
+  body.theme-lux .typ-art {
+    height: 210px;
+    padding: 14px 10px 38px;
+  }
+  body.theme-lux .typ-art svg {
+    zoom: 0.68;
+  }
+  body.theme-lux .typ-body {
+    padding: 14px 8px 8px;
+  }
+}
+
+/* ---------- a drawing beside a numbered list (badge layout, sticker layers, calendar anatomy) */
+body.theme-lux .gd-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(24px, 5vw, 64px);
+  align-items: center;
+}
+body.theme-lux .gd-art {
+  padding: 30px;
+  min-height: 320px;
+  border-radius: 28px;
+}
+body.theme-lux .gd-art svg {
+  width: min(100%, 340px);
+  filter: drop-shadow(0 16px 16px rgba(20, 33, 61, 0.22));
+}
+body.theme-lux .gd-info {
+  display: grid;
+  gap: 16px;
+  justify-items: start;
+  min-width: 0;
+}
+body.theme-lux .gd-info > .teh {
+  margin-bottom: 0;
+}
+body.theme-lux .gd-lead {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.55;
+}
+body.theme-lux .gd-info .ps {
+  width: 100%;
+}
+body.theme-lux .gd-note {
+  width: 100%;
+  margin: 0;
+  padding: 14px 18px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+body.theme-lux .gd-note b {
+  display: block;
+  margin-bottom: 6px;
+}
+@media (max-width: 960px) {
+  body.theme-lux .gd-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  body.theme-lux .gd-art {
+    max-width: 420px;
+    width: 100%;
+    justify-self: center;
+  }
+}
+@media (max-width: 760px) {
+  body.theme-lux .gd-art {
+    padding: 18px;
+    min-height: 240px;
+  }
+}
+
+/* tables inside type cards: tighter, so six price columns fit */
+body.theme-lux .typ-body .pp-tbl th,
+body.theme-lux .typ-body .pp-tbl td {
+  padding: 9px 7px;
+  font-size: 0.84rem;
+}
+body.theme-lux .typ-body .pp-tbl thead th {
+  white-space: normal;
+  letter-spacing: 0;
+  font-size: 0.75rem;
+}
+body.theme-lux .typ-body .pp-tbl td {
+  white-space: normal;
 }

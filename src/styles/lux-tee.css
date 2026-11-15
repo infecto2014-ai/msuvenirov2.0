@@ -1,7 +1,7 @@
 /* =====================================================================================
    Shared blocks on lux pages (t-shirt page), «Ink» look — 14.11.2026.
    CtaBand (end of page) is drawn in CMYK by its own scoped styles; here it becomes a navy panel with white
-   text and a white pill button, no crop marks or halftone. Component files are untouched.
+   text and a cobalt pill button, no crop marks or halftone. Component files are untouched.
    ===================================================================================== */
 body.theme-lux:not(#nav) .cta {
   background: var(--navy, #14213d);
@@ -20,17 +20,18 @@ body.theme-lux:not(#nav) .cta-text h2 {
 body.theme-lux:not(#nav) .cta-text p {
   color: rgba(255, 255, 255, 0.82);
 }
+/* main button — the site accent (cobalt, accent.css), as on the navy panels of the home page */
 body.theme-lux:not(#nav) .cta .btn-magenta {
-  --btn-bg: #fff;
-  --btn-fg: #000;
-  background: #fff;
-  border-color: #fff;
-  color: #000;
+  --btn-bg: var(--coral, #2f5bea);
+  --btn-fg: #fff;
+  background: var(--coral, #2f5bea);
+  border-color: var(--coral, #2f5bea);
+  color: #fff;
 }
 body.theme-lux:not(#nav) .cta .btn-magenta:hover {
-  background: #e5e5e5;
-  border-color: #e5e5e5;
-  color: #000;
+  background: var(--coral-dark, #2346c4);
+  border-color: var(--coral-dark, #2346c4);
+  color: #fff;
 }
 body.theme-lux:not(#nav) .cta .btn-ghost {
   --btn-fg: #fff;

@@ -23,7 +23,6 @@ import PortfolioGrid from '@/components/PortfolioGrid.astro';
 import Reviews from '@/components/Reviews.astro';
 import FaqSection from '@/components/FaqSection.astro';
 import CtaBand from '@/components/CtaBand.astro';
-import Icon from '@/components/Icon.astro';
 import { mugsPage as page, buildMugFaq } from '@/data/mugsPage';
 import { services } from '@/data/services';
 import { defaultSelection, findCategory, findProduct, rub, type Product, type Selection } from '@/data/pricing';
@@ -302,24 +301,24 @@ const splitTail = (t: string): [string, string] => {
   }
 
   /* ---- first screen: mugs on the stage (440 × 440, zoomed with the panel) */
-  .ph-stage :global(.mhero-mug) {
+  :global(.ph-stage .mhero-mug) {
     position: absolute;
     filter: drop-shadow(0 16px 18px rgba(20, 33, 61, 0.2));
   }
-  .ph-stage :global(.mhero-beer) {
+  :global(.ph-stage .mhero-beer) {
     left: 22px;
     bottom: 150px;
   }
-  .ph-stage :global(.mhero-cham) {
+  :global(.ph-stage .mhero-cham) {
     right: 26px;
     bottom: 168px;
   }
-  .ph-stage :global(.mhero-main) {
+  :global(.ph-stage .mhero-main) {
     left: 92px;
     bottom: 48px;
     z-index: 2;
   }
-  .ph-stage :global(.mhero-coffee) {
+  :global(.ph-stage .mhero-coffee) {
     right: -6px;
     bottom: 34px;
     z-index: 3;
